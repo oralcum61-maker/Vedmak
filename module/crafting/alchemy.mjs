@@ -17,6 +17,8 @@ import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zo
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
+import { alchemyAuto } from "../config/alchemy-auto.mjs";
+import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -82,32 +84,75 @@ export async function drink(actor, item) {
     lines.push(`Отменено эликсиров и отваров: ${ids.length}.`);
   }
 
-  for (const st of u.removeStatuses ?? []) {
+  // Справочник автоматики по названию (config/alchemy-auto.mjs)
+  const auto = alchemyAuto(item.name) ?? {};
+
+  for (const st of new Set([...(u.removeStatuses ?? []), ...(auto.immune ?? [])])) {
     if (actor.statuses.has(st)) {
       await actor.toggleStatusEffect(st, { active: false });
-      lines.push(`Снято: ${CONFIG.statusEffects[st]?.name ?? st}.`);
+      lines.push(`Снято: ${CONFIG.statusEffects.find(e => e.id === st)?.name ?? st}.`);
     }
   }
 
+  // Мгновенное: Выносливость, лечение крита
+  if (auto.restore?.sta) {
+    const r = await new Roll(auto.restore.sta).evaluate();
+    rolls.push(r);
+    const sta = Math.min(actor.system.sta.max, actor.system.sta.value + r.total);
+    await actor.update({ "system.sta.value": sta });
+    lines.push(`+${r.total} Вын (${sta} из ${actor.system.sta.max}).`);
+  }
+  if (auto.healCrit) lines.push(...await healCritDialog(actor));
+
+  // Изменения эффекта: из предмета и из справочника; ПБ и вес считаются в момент приёма
+  const changes = [...foundry.utils.deepClone(s.changes), ...(auto.changes ?? [])];
+  const fx = (key, value) => changes.push({ key, type: "add", value, phase: "initial" });
+  if (auto.spPerFreeEnc) {
+    const d = actor.system.derived;
+    const free = Math.max(0, (d.enc ?? 0) - (d.carried ?? 0));
+    const sp = Math.floor(free / 10) * auto.spPerFreeEnc;
+    if (sp) fx("system.fx.sp", sp);
+    lines.push(`Свободно ${free} ед. веса: +${sp} ПБ всех частей тела.`);
+  }
+  if (auto.doubleEnc) {
+    fx("system.fx.enc", actor.system.derived.enc ?? 0);
+    lines.push(`Переносимый вес: ${(actor.system.derived.enc ?? 0) * 2}.`);
+  }
+  let rounds = s.durationRounds;
+  if (!rounds && !s.durationMinutes && auto.rounds) {
+    rounds = Number.isFinite(Number(auto.rounds)) ? Number(auto.rounds) : (await new Roll(String(auto.rounds)).evaluate()).total;
+    lines.push(`Действует ${rounds} раундов.`);
+  }
+  const minutes = s.durationMinutes || auto.minutes || 0;
+  const regen = u.regen || auto.regen || 0;
+  const triggers = Object.fromEntries(["immune", "onKill", "onHit", "onDamaged", "untilHit", "doubleAdrenaline"]
+    .filter(k => auto[k]).map(k => [k, foundry.utils.deepClone(auto[k])]));
+
   // Эффект с длительностью
-  const hasEffect = s.durationRounds || s.durationMinutes || s.toxicity || s.changes.length || u.regen || u.heal;
+  const hasEffect = rounds || minutes || s.toxicity || changes.length || regen || u.heal
+    || auto.regen !== undefined || auto.vision || Object.keys(triggers).length;
   if (hasEffect) {
     // Одинаковые эликсиры не суммируются — старый заменяется
     const same = alchemyEffects(actor).filter(e => e.flags.vedmak.alchemy.itemName === item.name).map(e => e.id);
     if (same.length) await actor.deleteEmbeddedDocuments("ActiveEffect", same);
     const effect = {
       name: item.name, img: item.img,
-      system: { changes: foundry.utils.deepClone(s.changes) },
-      flags: { vedmak: { alchemy: { toxicity: s.toxicity, kind: s.kind, itemName: item.name, at: Date.now() } } }
+      system: { changes },
+      flags: { vedmak: { alchemy: { toxicity: s.toxicity, kind: s.kind, itemName: item.name, at: Date.now() }, ...triggers } }
     };
-    if (s.durationMinutes) effect.duration = { value: s.durationMinutes, units: "minutes" };
-    if (s.durationRounds || u.regen) {
-      effect.flags.vedmak.timed = { rounds: s.durationRounds || 0, key: "alchemy" };
-      if (u.regen) effect.flags.vedmak.regen = u.regen;
+    if (minutes) effect.duration = { value: minutes, units: "minutes" };
+    if (rounds || regen || auto.regen !== undefined) {
+      effect.flags.vedmak.timed = { rounds: rounds || 0, key: "alchemy" };
+      effect.flags.vedmak.regen = regen;
     }
-    await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
+    const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
     if (s.duration) lines.push(`Длительность: ${s.duration}.`);
+    if (auto.vision && created) {
+      const n = await applyVision(actor, created, auto.vision);
+      if (n) lines.push(`Зрение токена: ${auto.vision.visionMode === "darkvision" ? "в темноте" : auto.vision.visionMode}, ${auto.vision.range} м.`);
+    }
   }
+  if (auto.note) lines.push(auto.note);
   if (u.heal) {
     await actor.update({ "system.hp.value": actor.system.hp.value + u.heal });
     lines.push(`+${u.heal} временных ПЗ.`);

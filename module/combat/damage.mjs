@@ -8,6 +8,7 @@ import {
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { resolveActor, asGM, registerGMHandler, userOwnsAny, rollFormula, postCard } from "./common.mjs";
+import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 import { markDead } from "./saves.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
@@ -145,6 +146,11 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const rolls = [];
   const parts = [];
   const notes = [];
+  // Бонусы атакующего от алхимии: место крита (отвар катакана), шанс стихийных эффектов («Буря»)
+  const attackerActor = resolveActor(attack.attacker?.tokenUuid) ?? resolveActor(attack.attacker?.actorUuid);
+  const critLocBonus = attackerActor?.system.fx?.critLocation ?? 0;
+  const elementalBonus = attackerActor?.system.fx?.statusChance ?? 0;
+  const ELEMENTAL = ["burning", "frozen", "prone"];
 
   // Часть тела
   let locRoll = null;
@@ -241,7 +247,8 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     } else {
       // «Сбалансированное (+5)» у реликвий — свой бонус вместо +2
       const bonusLoc = parseInt((w.effects ?? []).find(x => x.key === "balanced")?.value, 10) || 2;
-      const r = await new Roll(balanced ? `2d6+${bonusLoc}` : "2d6").evaluate();
+      const extra = (balanced ? bonusLoc : 0) + critLocBonus;
+      const r = await new Roll(extra ? `2d6+${extra}` : "2d6").evaluate();
       rolls.push(r); critRoll = r.total;
       wound = critWoundFor(critLevel, r.total);
     }
@@ -261,8 +268,9 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   // Эффекты оружия: шанс в % (стр. 72, 161)
   const effects = [];
   for (const [key, status] of Object.entries(EFFECT_STATUS)) {
-    const chance = effChance(key);
+    let chance = effChance(key);
     if (!chance) continue;
+    if (ELEMENTAL.includes(status)) chance = Math.min(100, chance + elementalBonus);
     const needsWound = key === "bleeding" || key === "poison";
     const resistKey = EFFECT_RESIST_KEY[key];
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
@@ -278,9 +286,10 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
     const r = await new Roll("1d100").evaluate();
     rolls.push(r);
-    const success = !immuneTo && r.total <= st.chance;
+    const chance = ELEMENTAL.includes(st.status) ? Math.min(100, st.chance + elementalBonus) : st.chance;
+    const success = !immuneTo && r.total <= chance;
     effects.push({ key: st.status, status: st.status, label: CONFIG.statusEffects[st.status]?.name ?? st.status,
-      chance: st.chance, roll: r.total, success, immune: !!immuneTo, rounds: spell.statusRounds });
+      chance, roll: r.total, success, immune: !!immuneTo, rounds: spell.statusRounds });
   }
 
   // Урон Выносливости (Аньяльх)
@@ -314,7 +323,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     parts, rawDamage, coverSp,
     sp: armor.sp, effectiveSp: sp, ap, improvedAP, afterArmor, penetrated,
     resistReasons: reasons, susceptible, immune, typeMult,
-    final, nonLethal: !!attack.nonLethal, crit, effects, stunSave, ablate, notes, staLoss,
+    final, nonLethal: !!attack.nonLethal, crit, effects, stunSave, ablate, notes, staLoss, spell: !!spell,
     blockable: spell ? spell.defense === "dodgeBlock" : true,
     rolls
   };
@@ -414,8 +423,10 @@ export async function applyDamageToActor(actor, dmg) {
   }
 
   // Эффекты оружия
+  const immune = immuneStatuses(actor);
   for (const e of dmg.effects ?? []) {
     if (!e.success) continue;
+    if (immune.has(e.status)) { lines.push(`${e.label}: невосприимчив.`); continue; }
     await applyStatus(actor, e.status, e.rounds);
     lines.push(`Эффект: ${e.label}${e.rounds ? ` (${e.rounds} раундов)` : ""}.`);
   }
@@ -501,12 +512,16 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   }
   applyingMessages.add(messageId);
   try {
+    const hpBefore = actor.system.hp.value;
     const report = await applyDamageToActor(actor, dmg);
-    // Адреналин: каждый нанесённый крит — кость d6, не больше Тел атакующего
+    // Алхимия: отвары грифона и виверны, «Молния», убийства
+    const dealt = dmg.nonLethal ? 0 : Math.max(0, hpBefore - actor.system.hp.value);
+    report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell }));
+    // Адреналин: каждый нанесённый крит — кость d6 («Лес Марибора» — две), не больше Тел атакующего
     if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {
       if (attacker?.type === "character") {
         const max = attacker.system.stats.body.total;
-        const value = Math.min(max, (attacker.system.adrenaline?.value ?? 0) + 1);
+        const value = Math.min(max, (attacker.system.adrenaline?.value ?? 0) + adrenalinePerCrit(attacker));
         await attacker.update({ "system.adrenaline.value": value });
         report.lines.push(`${attacker.name}: кость адреналина (${value}/${max}).`);
       }

@@ -48,7 +48,15 @@ export function resourcesSchema() {
     // не записало временный бонус в данные.
     fx: new SchemaField({
       hp: int(0), sta: int(0), vigor: int(0), stun: int(0), rec: int(0), run: int(0), enc: int(0),
-      damage: int(0), meleeDamage: int(0)
+      damage: int(0), meleeDamage: int(0),
+      // ПБ всех частей тела (отвары главоглаза и грифона): как врождённая броня, не разрушается
+      sp: int(0),
+      // Больше 0 — штрафов порога ранения нет («Зелье живучести»)
+      ignoreWound: int(0),
+      // +% к шансу поджечь, заморозить, сбить с ног своими атаками и заклинаниями («Буря»)
+      statusChance: int(0),
+      // + к броску места критического ранения (отвар катакана)
+      critLocation: int(0)
     })
   };
 }
@@ -152,7 +160,7 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0 } = {}) {
   const actor = system.parent;
   const crit = collectCritMods(actor);
-  const armor = computeArmor(actor, { natural: naturalArmor, innate: innateArmor, bodyType });
+  const armor = computeArmor(actor, { natural: naturalArmor, innate: innateArmor + (system.fx?.sp ?? 0), bodyType });
   const ev = Math.max(0, armor.encumbrance + (armor.encumbrance ? evMod : 0));
   const d = system.derived ??= {};
   const bonus = key => (system.bonus[key] ?? 0) + (extra[key] ?? 0) + (system.fx?.[key] ?? 0);
@@ -235,7 +243,7 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   // при смерти (ПЗ < 0) — все параметры ×⅓ (стр. 162).
   const hp = system.hp.value;
   d.dying = hp < 0;
-  d.wounded = !d.dying && hp < d.woundThreshold;
+  d.wounded = !d.dying && hp < d.woundThreshold && !(system.fx?.ignoreWound > 0);
   for (const [key, stat] of Object.entries(system.stats)) {
     let eff = stat.total;
     if (d.dying) eff = Math.floor(eff / 3);

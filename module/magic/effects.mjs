@@ -52,11 +52,14 @@ async function applySpellEffectsNow(messageId, userId) {
     const label = CONFIG.statusEffects[st.status]?.name ?? st.status;
     if (resistKey && actor.system.immunities?.includes?.(resistKey)) { lines.push(`${label}: невосприимчив.`); continue; }
     let ok = true, rollText = "";
-    if (st.chance < 100) {
+    // «Буря» у заклинателя: +10% поджечь, заморозить, сбить с ног
+    const chance = ["burning", "frozen", "prone"].includes(st.status)
+      ? Math.min(100, st.chance + (caster?.system.fx?.statusChance ?? 0)) : st.chance;
+    if (chance < 100) {
       const r = await new Roll("1d100").evaluate();
       rolls.push(r);
-      ok = r.total <= st.chance;
-      rollText = ` (${st.chance}%: ${r.total})`;
+      ok = r.total <= chance;
+      rollText = ` (${chance}%: ${r.total})`;
     }
     if (ok) await applyStatus(actor, st.status, spell.statusRounds);
     lines.push(`${label}${rollText}: ${ok ? "да" : "нет"}.`);

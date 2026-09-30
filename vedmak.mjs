@@ -26,6 +26,7 @@ import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
 import { registerCombatAutomation } from "./module/combat/auto.mjs";
 import { registerZoneHooks } from "./module/combat/zones.mjs";
+import { registerAlchemyHooks } from "./module/crafting/alchemy-triggers.mjs";
 import { initSocket } from "./module/combat/common.mjs";
 import { attack } from "./module/combat/attack.mjs";
 import { computeDamage, applyDamageToActor } from "./module/combat/damage.mjs";
@@ -147,6 +148,7 @@ Hooks.once("init", () => {
   registerChatListeners();
   registerCombatAutomation();
   registerZoneHooks();
+  registerAlchemyHooks();
   CombatHud.registerHooks();
 
   // API для макросов
