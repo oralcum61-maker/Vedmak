@@ -18331,8 +18331,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Танцующая звезда",
-    "type": "weapon",
+    "name": "«Танцующая звезда»",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,
@@ -18764,8 +18764,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Лунная пыль",
-    "type": "weapon",
+    "name": "«Лунная пыль»",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,
@@ -19329,8 +19329,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Самум",
-    "type": "weapon",
+    "name": "«Самум»",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,
@@ -19454,8 +19454,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Северный ветер",
-    "type": "weapon",
+    "name": "«Северный ветер»",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,
@@ -20036,7 +20036,7 @@
    },
    "result": {
     "name": "Двимеритовая бомба",
-    "type": "weapon",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,
@@ -21467,8 +21467,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Эльфский ввинчивающийся боеприпас",
-    "type": "weapon",
+    "name": "Эльфские ввинчивающиеся боеприпасы",
+    "type": "gear",
     "quantity": 5
    },
    "surcharge": 0,
@@ -21881,8 +21881,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Сон дракона",
-    "type": "weapon",
+    "name": "«Сон дракона»",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,
@@ -22432,8 +22432,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Картечь",
-    "type": "weapon",
+    "name": "«Картечь»",
+    "type": "alchemical",
     "quantity": 1
    },
    "surcharge": 0,

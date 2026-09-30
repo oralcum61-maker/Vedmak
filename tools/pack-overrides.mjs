@@ -35,9 +35,8 @@ export const OVERRIDES = [
   { op: "set", pack: "weapons", name: "Стилет", set: { img: `${W}t3-knife-assassin.webp` } },
   // Орион — метательная звезда, а не меч
   { op: "set", pack: "weapons", name: "Орион", set: { img: "icons/weapons/thrown/throwing-star-quad-steel.webp" } },
-  // Ловушки — не метательное оружие
-  ...["Кусач", "Когтезуб", "Пожарище", "Бешенство", "Метка", "Талгарская зима"]
-    .map(name => ({ op: "set", pack: "weapons", name, set: { folder: ["Ловушки"] } })),
+  // Ловушки и бомбы в «Оружии» были копиями алхимических из-за ошибки bs_items.py — исправлено в генераторе,
+  // теперь они только в «Алхимии»
   { op: "copy", pack: "weapons", from: "Корд", name: "Сабля", set: {
     img: "icons/weapons/swords/scimitar-guard.webp",
     "system.description": p("Изогнутый однолезвийный клинок. Хорош для рубящих ударов с оттягом, особенно верхом.")

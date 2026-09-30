@@ -7674,7 +7674,7 @@
   "_id": "kz3rT1kPHo2hsMHc",
   "name": "Мутаген: Альп",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/blue-mutagen.webp",
+  "img": "icons/consumables/potions/potion-bottle-fumes-blue.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7738,7 +7738,7 @@
   "_id": "nC4sND0v8j0ssaz4",
   "name": "Мутаген: Прибожек",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/green-mutagen.webp",
+  "img": "icons/consumables/potions/potion-jar-corked-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7802,7 +7802,7 @@
   "_id": "t8B4AwnOSXRdBXZj",
   "name": "Мутаген: Котолак",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/red-mutagen.webp",
+  "img": "icons/consumables/potions/flask-corked-red-glow.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7860,7 +7860,7 @@
   "_id": "6WNcKrx1ow0r1AFQ",
   "name": "Мутаген: Ослизг",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/red-mutagen.webp",
+  "img": "icons/consumables/potions/potion-tube-corked-glowing-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7919,7 +7919,7 @@
   "_id": "yQnkDWMhR5l0ZoyN",
   "name": "Мутаген: Жагница",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/green-mutagen.webp",
+  "img": "icons/consumables/potions/bottle-conical-fumes-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8037,7 +8037,7 @@
   "_id": "b5rlCo37W5ie7jdC",
   "name": "Мутаген: Кающийся",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/blue-mutagen.webp",
+  "img": "icons/consumables/potions/flask-corked-blue-glow.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8095,7 +8095,7 @@
   "_id": "sR7hQPkqA1rlNpX5",
   "name": "Мутаген: Циклоп",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/green-mutagen.webp",
+  "img": "icons/consumables/potions/potion-tube-corked-bubbling-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8154,7 +8154,7 @@
   "_id": "sR1VRE8KTK2ZLELu",
   "name": "Мутаген: Гигаскорпион",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/green-mutagen.webp",
+  "img": "icons/consumables/potions/potion-round-corked-glowing-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8213,7 +8213,7 @@
   "_id": "QosI77G3TgAfdCOL",
   "name": "Мутаген: Химера",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/green-mutagen.webp",
+  "img": "icons/consumables/potions/flask-ornate-skull-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8389,7 +8389,7 @@
   "_id": "fokJj1K9hQpk1Ee3",
   "name": "Мутаген: Хим",
   "type": "alchemical",
-  "img": "systems/vedmak/assets/fan/bs/mutagen/blue-mutagen.webp",
+  "img": "icons/consumables/potions/potion-faceted-corked-blue.webp",
   "system": {
    "description": "",
    "quantity": 1,
