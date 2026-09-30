@@ -59,6 +59,9 @@ function actorFrom(button) {
 
 export function registerChatListeners() {
   Hooks.on("renderChatMessageHTML", (message, html) => {
+    // Сообщение с карточкой системы — отдельный класс: раньше CSS искал её селектором :has(),
+    // и браузер перепроверял его на каждое изменение в чате
+    if (html.querySelector(".vedmak-card")) html.classList.add("vedmak-message");
     for (const button of html.querySelectorAll("[data-vedmak]")) {
       button.addEventListener("click", async event => {
         event.preventDefault();

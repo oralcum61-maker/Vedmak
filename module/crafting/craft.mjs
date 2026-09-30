@@ -11,7 +11,7 @@ import { STATS } from "../config/stats.mjs";
 import { SUBSTANCES, CRAFTING, RECIPE_CATEGORIES } from "../config/crafting.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
-import { renderTemplate } from "../util.mjs";
+import { renderTemplate, compareRu } from "../util.mjs";
 import { resolveActor, postCard } from "../combat/common.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 
@@ -36,7 +36,7 @@ export function countNamed(actor, name) {
 /** Ингредиенты с нужной субстанцией, дешёвые — первыми. */
 export function substanceItems(actor, key) {
   return actor.items.filter(i => i.type === "component" && i.system.substance === key && i.system.quantity > 0)
-    .sort((a, b) => (a.system.cost - b.system.cost) || a.name.localeCompare(b.name, "ru"));
+    .sort((a, b) => (a.system.cost - b.system.cost) || compareRu(a.name, b.name));
 }
 
 export function substanceCount(actor, key) {

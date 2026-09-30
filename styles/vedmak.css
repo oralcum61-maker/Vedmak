@@ -1376,15 +1376,15 @@
 
 /* Сообщение Foundry вокруг карточки: без пергамента и толстой рамки, иначе тёмная карточка
    сидит вставкой в светлом листе. Трогаем только сообщения с карточкой системы. */
-.chat-message:has(.vedmak-card) {
+.chat-message.vedmak-message {
   padding: .3rem .35rem .35rem;
   background: #16120d; border: 1px solid #0d0a07; border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
 }
-.chat-message:has(.vedmak-card) .message-header { color: #97886c; margin-bottom: .2rem; }
-.chat-message:has(.vedmak-card) .message-header .message-sender { color: #ded3bb; font-family: "Vedmak Display", "Forum", serif; }
-.chat-message:has(.vedmak-card) .message-header a, .chat-message:has(.vedmak-card) .message-header .message-timestamp { color: #6b5c42; }
-.chat-message:has(.vedmak-card) .message-header .whisper-to { color: #b4914e; }
+.chat-message.vedmak-message .message-header { color: #97886c; margin-bottom: .2rem; }
+.chat-message.vedmak-message .message-header .message-sender { color: #ded3bb; font-family: "Vedmak Display", "Forum", serif; }
+.chat-message.vedmak-message .message-header a, .chat-message.vedmak-message .message-header .message-timestamp { color: #6b5c42; }
+.chat-message.vedmak-message .message-header .whisper-to { color: #b4914e; }
 
 /* Шапка: что бросали и чем кончилось — итог справа, как «основа» в окне броска */
 .vedmak-card .card-head {
@@ -2469,3 +2469,16 @@
 .vedmak-card .lp-chat-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .03em; color: var(--vd-text-dim); }
 .vedmak-card .lp-chat-result b { color: var(--vd-silver); }
 .vedmak-card .lp-chat-result i { color: var(--vd-gold); }
+
+/* --------------------------- Облегчённая графика --------------------------- */
+/* Настройка клиента «Облегчённая графика»: фактуры и их наложение на цвет (overlay, soft-light) — самое
+   дорогое в отрисовке листа. Без них окна, чат и худ рисуются заметно быстрее на слабых машинах. */
+body.vedmak-lite .vedmak, body.vedmak-lite .vedmak-card {
+  --vd-tex-leather: none; --vd-tex-tooled: none; --vd-tex-iron: none; --vd-tex-steel: none; --vd-tex-bronze: none;
+  --vd-tex-brass: none; --vd-tex-canvas: none; --vd-tex-cloth: none; --vd-tex-parchment: none; --vd-tex-paper: none;
+  --vd-tex-stone: none; --vd-tex-slate: none; --vd-tex-wood: none;
+  --vd-material: none;
+}
+body.vedmak-lite .vedmak *, body.vedmak-lite .vedmak.sheet .window-content, body.vedmak-lite .vedmak-card,
+body.vedmak-lite .vedmak-card * { background-blend-mode: normal !important; }
+body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }

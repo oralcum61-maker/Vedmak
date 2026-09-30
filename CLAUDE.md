@@ -75,7 +75,9 @@
 - `vedmak.mjs` — точка входа: `CONFIG.VEDMAK`, `game.vedmak`, регистрация листов и хуков.
 - `module/config/` — справочники: параметры, навыки, бой, магия, персонаж, ремесло, эффекты, таблицы жизненного пути.
 - `module/data/` — модели данных (`TypeDataModel`); `module/documents/` — классы Actor и Item.
-- `module/sheets/` — листы: персонаж, чудовище, предмет, активный эффект.
+- `module/sheets/` — листы: персонаж, чудовище, предмет, активный эффект. Лист актора перерисовывает только открытую
+  вкладку (PLAN 4.34): слушатели в `_onRender` вешать через `this._listen`, тяжёлое для одной вкладки считать в
+  `_preparePartContext`. Сортировка по-русски — `compareRu` из `util.mjs`, не `localeCompare`.
 - `module/dice/` — проверка d10 и окна бросков. Общая часть окон — `dialog-ui.mjs`: живой пересчёт по `data-base`/`data-mod`/`data-dc`.
 - `module/combat/` — атака, защита, урон, испытания, состояния, ход, словесная дуэль, верховой бой.
 - `module/magic/`, `module/character/` (развитие, жизненный путь, мастер создания), `module/crafting/`, `module/apps/combat-hud.mjs`.

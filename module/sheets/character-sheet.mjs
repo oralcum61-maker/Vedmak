@@ -14,7 +14,7 @@ import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY
 import { craft, readiness, requirements, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement, detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
-import { signed } from "../util.mjs";
+import { signed, compareRu } from "../util.mjs";
 import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
@@ -215,23 +215,6 @@ export class CharacterSheet extends VedmakActorSheet {
 
     context.race = system.race;
     context.profession = system.profession;
-    context.enrichedBiography = await this.enrich(system.biography);
-
-    // Жизненный путь карточками: броски хранятся в system.lifepath, разделы собираются заново.
-    // Путь бросается по шагу: next — следующий бросок, пока путь не брошен до конца
-    const saved = readLifepath(system.lifepath);
-    if (saved) {
-      const lp = buildFromSaved(foundry.utils.deepClone(saved));
-      context.lifepath = {
-        cards: lifepathCards(lp.sections, {
-          editable: this.lifepathEdit && this.isEditable, action: "lifepathReroll", nextAction: this.isEditable ? "lifepathStep" : null
-        }),
-        summary: lp.next ? [] : lifepathSummary(lp.effects), edit: this.lifepathEdit, age: saved.age, next: lp.next
-      };
-    } else {
-      context.lifepath = null;
-    }
-    context.enrichedNotes = await this.enrich(system.notes);
     context.advanceMode = this.advanceMode;
 
     // Социальный статус
@@ -254,8 +237,6 @@ export class CharacterSheet extends VedmakActorSheet {
       for (const g of context.statGroups) for (const s of g.stats) s.offer = statOffer(actor, s.key);
       for (const g of context.skillGroups) for (const s of g.skills) s.offer = skillOffer(actor, s.key);
     }
-
-    context.craft = this.#craftContext();
 
     // Профессия и древо
     const prof = system.profession;
@@ -293,10 +274,40 @@ export class CharacterSheet extends VedmakActorSheet {
     return context;
   }
 
+  /**
+   * То, что нужно одной вкладке, считается только при её отрисовке: «Дневник» обогащает HTML и собирает
+   * жизненный путь, «Ремесло» проверяет готовность каждого рецепта.
+   */
+  async _preparePartContext(partId, context, options) {
+    context = await super._preparePartContext(partId, context, options);
+    const system = this.actor.system;
+    if (partId === "bio") {
+      context.enrichedBiography = await this.enrich(system.biography);
+      context.enrichedNotes = await this.enrich(system.notes);
+      context.lifepath = this.#lifepathContext();
+    }
+    if (partId === "craft") context.craft = this.#craftContext();
+    return context;
+  }
+
+  /** Жизненный путь карточками: броски хранятся в system.lifepath, разделы собираются заново. */
+  #lifepathContext() {
+    const saved = readLifepath(this.actor.system.lifepath);
+    if (!saved) return null;
+    // Путь бросается по шагу: next — следующий бросок, пока путь не брошен до конца
+    const lp = buildFromSaved(foundry.utils.deepClone(saved));
+    return {
+      cards: lifepathCards(lp.sections, {
+        editable: this.lifepathEdit && this.isEditable, action: "lifepathReroll", nextAction: this.isEditable ? "lifepathStep" : null
+      }),
+      summary: lp.next ? [] : lifepathSummary(lp.effects), edit: this.lifepathEdit, age: saved.age, next: lp.next
+    };
+  }
+
   /** Вкладка «Ремесло»: алхимия, рецепты, компоненты, усиления. */
   #craftContext() {
     const actor = this.actor;
-    const items = type => actor.itemTypes[type]?.slice().sort((a, b) => a.name.localeCompare(b.name, "ru")) ?? [];
+    const items = type => actor.itemTypes[type]?.slice().sort((a, b) => compareRu(a.name, b.name)) ?? [];
     const ACTION_ICONS = { drink: "fa-solid fa-wine-bottle", apply: "fa-solid fa-hand-holding-droplet", throw: "fa-solid fa-bomb",
       oil: "fa-solid fa-droplet", mutagen: "fa-solid fa-dna", trap: "fa-solid fa-dharmachakra" };
 
@@ -363,28 +374,23 @@ export class CharacterSheet extends VedmakActorSheet {
   _onRender(context, options) {
     super._onRender(context, options);
     // Жизненный путь: свой результат из списка, поведение ведьмака в десятилетии, возраст
-    const onLifepath = (selector, fn) => {
-      for (const el of this.element.querySelectorAll(selector)) {
-        el.addEventListener("change", event => {
-          event.stopPropagation();
-          this.#saveLifepath(data => fn(data, el));
-        });
-      }
-    };
+    const onLifepath = (selector, fn) => this._listen(selector, "change", (event, el) => {
+      event.stopPropagation();
+      this.#saveLifepath(data => fn(data, el));
+    });
     onLifepath("select[data-roll-path]", (data, el) => choosePath(data.rolls, el.dataset.rollPath, el.value, el.dataset.mod));
     onLifepath("select[data-lp-risk]", (data, el) => setDecadeRisk(data.rolls, el.dataset.lpRisk, el.value));
     onLifepath("input[data-lp-age]", (data, el) => { data.age = Math.max(0, Math.min(1000, Number(el.value) || 0)); });
-    const prof = this.actor.system.profession;
-    // Значения древа хранятся в предмете профессии — меняем их напрямую
-    for (const input of this.element.querySelectorAll("input.ability-value")) {
-      input.addEventListener("change", event => {
-        event.stopPropagation();
-        if (prof) setAbilityValue(prof, Number(input.dataset.branch), Number(input.dataset.index), input.value);
-      });
-    }
-    this.element.querySelector("input.defining-value")?.addEventListener("change", event => {
+    // Значения древа хранятся в предмете профессии — меняем их напрямую.
+    // Профессию берём в момент правки: вкладка могла не перерисовываться с тех пор, как её сменили
+    this._listen("input.ability-value", "change", (event, input) => {
       event.stopPropagation();
-      prof?.update({ "system.definingSkill.value": Math.max(0, Number(event.currentTarget.value) || 0) });
+      const prof = this.actor.system.profession;
+      if (prof) setAbilityValue(prof, Number(input.dataset.branch), Number(input.dataset.index), input.value);
+    });
+    this._listen("input.defining-value", "change", (event, input) => {
+      event.stopPropagation();
+      this.actor.system.profession?.update({ "system.definingSkill.value": Math.max(0, Number(input.value) || 0) });
     });
   }
 

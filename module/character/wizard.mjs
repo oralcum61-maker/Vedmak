@@ -13,6 +13,7 @@ import {
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
+import { compareRu } from "../util.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
@@ -111,7 +112,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const i of game.items.filter(i => i.type === "spell")) {
       magic.push({ _id: i.id, uuid: i.uuid, name: i.name, img: i.img, type: "spell", system: i.system });
     }
-    const byName = (x, y) => x.name.localeCompare(y.name, "ru");
+    const byName = (x, y) => compareRu(x.name, y.name);
     this.data = { races: (await docsOf("race")).sort(byName), professions: (await docsOf("profession")).sort(byName), magic };
     return this.data;
   }
@@ -372,9 +373,19 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /** Группы стартовой магии по квоте профессии. */
+  /** Стартовая магия профессии — считается один раз на профессию: список сотен заклинаний не меняется. */
+  #magicCache = null;
+
   #magicGroups() {
     const prof = this.profession;
     if (!prof) return [];
+    if (this.#magicCache?.prof === prof) return this.#magicCache.groups;
+    const groups = this.#buildMagicGroups(prof);
+    this.#magicCache = { prof, groups };
+    return groups;
+  }
+
+  #buildMagicGroups(prof) {
     const q = prof.system.magicQuota;
     const all = this.data.magic;
     const novice = e => {
@@ -384,7 +395,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     };
     const pick = kind => all.filter(e => e.system?.kind === kind && novice(e))
       .map(e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(kind, e.system.level), cost: e.system.staCost }))
-      .sort((a, b) => a.name.localeCompare(b.name, "ru"));
+      .sort((a, b) => compareRu(a.name, b.name));
     const groups = [];
     if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true, items: pick("sign") });
     const labels = { spell: "Заклинания новичка", invocation: "Инвокации новичка", ritual: "Ритуалы новичка", hex: "Порча низкой опасности", sign: "Знаки" };

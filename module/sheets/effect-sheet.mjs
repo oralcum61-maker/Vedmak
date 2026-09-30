@@ -1,6 +1,7 @@
 // Лист активного эффекта: вместо путей данных — выпадающий список целей, и всё по-русски.
 
 import { CHANGE_TYPES, effectTargets, targetLabel } from "../config/effects.mjs";
+import { compareRu } from "../util.mjs";
 
 const { ActiveEffectConfig } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
@@ -57,7 +58,7 @@ export class VedmakEffectConfig extends ActiveEffectConfig {
 
     context.statusChoices = CONFIG.statusEffects
       .map(s => ({ value: s.id, label: game.i18n.localize(s.name) }))
-      .sort((a, b) => a.label.localeCompare(b.label, "ru"));
+      .sort((a, b) => compareRu(a.label, b.label));
     context.durationUnits = DURATION_UNITS;
     context.expiryEvents = EXPIRY_EVENTS;
     context.enrichedDescription = await TextEditor.enrichHTML(source.description ?? "", { relativeTo: effect });

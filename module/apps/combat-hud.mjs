@@ -82,12 +82,26 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const actor = doc?.documentName === "Actor" ? doc : doc?.parent;
     if (!CombatHud.#instance?.rendered) return;
     if (actor && CombatHud.#instance.actor && actor.id !== CombatHud.#instance.actor.id) return;
-    CombatHud.refresh();
+    CombatHud.schedule();
+  }
+
+  static #timer = null;
+
+  /**
+   * Перерисовать одним разом после пачки изменений. Один удар — это обновление ПЗ, эффект состояния
+   * и смена хода; раньше худ перестраивался на каждое из них. Заодно хуки боя срабатывают до того,
+   * как game.combat обновится, — к моменту перерисовки состояние уже новое.
+   */
+  static schedule(delay = 50) {
+    clearTimeout(CombatHud.#timer);
+    CombatHud.#timer = setTimeout(() => {
+      CombatHud.#timer = null;
+      CombatHud.refresh();
+    }, delay);
   }
 
   static registerHooks() {
-    // Хуки боя срабатывают до того, как game.combat обновится — смотрим состояние следующим тиком
-    const refresh = () => setTimeout(() => CombatHud.refresh(), 30);
+    const refresh = () => CombatHud.schedule();
     for (const hook of ["ready", "createCombat", "deleteCombat", "updateCombat", "createCombatant",
       "deleteCombatant", "updateCombatant", "controlToken"]) Hooks.on(hook, refresh);
     for (const hook of ["updateActor", "createItem", "updateItem", "deleteItem",

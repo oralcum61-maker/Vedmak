@@ -13,6 +13,7 @@ import { castSpell, vigorUsed, maintainedSpells } from "../magic/cast.mjs";
 import { endMaintained } from "../magic/effects.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
+import { compareRu } from "../util.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -54,6 +55,67 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /** Показывать только изученные навыки (состояние окна, не документа). */
   trainedOnly = false;
+
+  /* ------------------------- Перерисовка видимого ------------------------- */
+
+  /** Вкладки, которые изменились, пока были скрыты: дорисуются, когда их откроют. */
+  #staleParts = new Set();
+
+  /**
+   * Повторная перерисовка без явного списка частей (изменился актор, его предмет или эффект, действие листа)
+   * рисует только шапку, полосу вкладок и открытую вкладку. Остальные вкладки помечаются устаревшими:
+   * раньше каждое изменение поля перестраивало все семь-девять вкладок, и лист подвисал на каждой правке.
+   */
+  _configureRenderOptions(options) {
+    const firstRender = options.isFirstRender ?? !this.rendered;
+    const lazy = !firstRender && !options.parts;
+    super._configureRenderOptions(options);
+    const parts = options.parts ??= Object.keys(this.constructor.PARTS);
+    if (!lazy) {
+      for (const p of parts) this.#staleParts.delete(p);
+      return;
+    }
+    const tabIds = new Set(this.constructor.TABS?.primary?.tabs?.map(t => t.id) ?? []);
+    const active = this.tabGroups.primary;
+    if (!active) return;
+    options.parts = parts.filter(p => {
+      if (!tabIds.has(p) || p === active) {
+        this.#staleParts.delete(p);
+        return true;
+      }
+      this.#staleParts.add(p);
+      return false;
+    });
+  }
+
+  /** Открыли вкладку, которая менялась в скрытом виде, — дорисовать её. */
+  changeTab(tab, group, options = {}) {
+    super.changeTab(tab, group, options);
+    if (group === "primary" && this.#staleParts.has(tab)) {
+      this.#staleParts.delete(tab);
+      this.render({ parts: [tab] });
+    }
+  }
+
+  /** Какие слушатели уже висят на элементе: элементы вкладок, которые не перерисовывались, второй не получают. */
+  #bound = new WeakMap();
+
+  /**
+   * Повесить слушатель на элементы листа по селектору — по одному разу на элемент.
+   * @param {string} selector
+   * @param {string} type — событие
+   * @param {(event: Event, el: HTMLElement) => any} handler
+   */
+  _listen(selector, type, handler) {
+    const key = `${type} ${selector}`;
+    for (const el of this.element.querySelectorAll(selector)) {
+      let keys = this.#bound.get(el);
+      if (!keys) this.#bound.set(el, keys = new Set());
+      if (keys.has(key)) continue;
+      keys.add(key);
+      el.addEventListener(type, event => handler(event, el));
+    }
+  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -164,7 +226,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.spellGroups = Object.entries(CONFIG.VEDMAK.MAGIC_KINDS).map(([kind, label]) => ({
       kind, label,
       items: context.items.spells.filter(s => s.system.kind === kind)
-        .sort((a, b) => (LEVEL_ORDER[a.system.level] - LEVEL_ORDER[b.system.level]) || a.name.localeCompare(b.name))
+        .sort((a, b) => (LEVEL_ORDER[a.system.level] - LEVEL_ORDER[b.system.level]) || compareRu(a.name, b.name))
         .map(item => ({
           id: item.id, name: item.name, img: item.img, system: item.system,
           levelLabel: levelLabel(kind, item.system.level),
@@ -285,28 +347,24 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     // Поля предметов прямо в списках (количество): пишем в предмет, а не в актора
-    for (const input of this.element.querySelectorAll("input.item-field")) {
-      input.addEventListener("change", async event => {
-        event.stopPropagation();
-        const item = this.actor.items.get(input.closest("[data-item-id]")?.dataset.itemId);
-        if (item) await item.update({ [input.dataset.field]: Number(input.value) || 0 });
-      });
-    }
+    this._listen("input.item-field", "change", async (event, input) => {
+      event.stopPropagation();
+      const item = this.actor.items.get(input.closest("[data-item-id]")?.dataset.itemId);
+      if (item) await item.update({ [input.dataset.field]: Number(input.value) || 0 });
+    });
     // Состояние критического ранения меняется прямо в списке
-    for (const select of this.element.querySelectorAll("select.crit-state")) {
-      select.addEventListener("change", async event => {
-        const item = this.actor.items.get(select.closest("[data-item-id]")?.dataset.itemId);
-        if (!item) return;
-        const state = event.currentTarget.value;
-        const update = { "system.state": state };
-        if (state === "treated") {
-          const body = Math.max(3, Math.min(13, this.actor.system.stats.body.raw));
-          const idx = ["simple", "complex", "difficult"].indexOf(item.system.level);
-          update["system.healingDays"] = idx >= 0 ? HEALING_DAYS[body][idx] : 0;
-        }
-        await item.update(update);
-      });
-    }
+    this._listen("select.crit-state", "change", async (event, select) => {
+      const item = this.actor.items.get(select.closest("[data-item-id]")?.dataset.itemId);
+      if (!item) return;
+      const state = select.value;
+      const update = { "system.state": state };
+      if (state === "treated") {
+        const body = Math.max(3, Math.min(13, this.actor.system.stats.body.raw));
+        const idx = ["simple", "complex", "difficult"].indexOf(item.system.level);
+        update["system.healingDays"] = idx >= 0 ? HEALING_DAYS[body][idx] : 0;
+      }
+      await item.update(update);
+    });
   }
 
   /* ------------------------------ Действия ------------------------------ */
