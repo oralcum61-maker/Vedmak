@@ -1,5 +1,6 @@
 {{!-- Жизненный путь карточками — общий для мастера создания и «Дневника». Контекст: cards (lifepathCards).
-      Строка: подпись, результат; если можно править — кость (переброс) и список (свой результат). --}}
+      Строка: подпись, результат; если можно править — кость (переброс) и список (свой результат).
+      Путь бросается по шагу: следующий бросок — строкой с кнопкой в конце своей карточки (card.pending). --}}
 {{#*inline "lpValue"}}
   <span class="lp-v">{{#if title}}<b>{{title}}.</b> {{/if}}{{text}}{{#if detail}} <i class="lp-detail">{{detail}}</i>{{/if}}</span>
   {{#if editable}}
@@ -45,6 +46,14 @@
         </tbody>
       </table>
       {{/if}}
+    {{/if}}
+
+    {{#if c.pending}}
+    <div class="lp-row lp-pending">
+      <span class="lp-k">{{c.pending.label}}</span>
+      <span class="lp-ctl">{{#if c.pending.action}}<a class="roll-btn lp-next" data-action="{{c.pending.action}}" data-tooltip="Бросок уйдёт в чат">
+        <i class="fa-solid fa-dice"></i> Бросить d{{c.pending.sides}}</a>{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
+    </div>
     {{/if}}
   </article>
   {{/each}}

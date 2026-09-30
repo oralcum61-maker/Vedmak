@@ -3,10 +3,13 @@
 // Все броски хранятся в плоском словаре `rolls` (путь → число). Функция `buildLifepath` по нему
 // строит разделы с результатами и собирает механические последствия (кроны, навыки, предметы…).
 // Недостающие броски делаются на лету, поэтому переброс одного результата пересобирает только
-// зависящие от него строки.
+// зависящие от него строки. В пошаговом режиме (`step`) сборка останавливается на первом
+// недостающем броске и сообщает, какой бросок следующий: так путь бросается по одному броску,
+// и каждый уходит в чат (`rollLifepathStep`).
 
 import { LIFEPATH_TABLES as T } from "../config/lifepath-tables.mjs";
 import { SKILLS } from "../config/skills.mjs";
+import { renderTemplate } from "../util.mjs";
 
 /** Бросок кости с `sides` гранями. */
 export function rollDie(sides = 10) {
@@ -76,10 +79,16 @@ const OUTCOME_LABELS = { benefit: "Выгода", ally: "Союзник", hunt: 
 /**
  * Построитель: оборачивает словарь бросков и копит разделы и последствия.
  */
+/** Сигнал пошаговой сборки: дальше нужен бросок, которого ещё нет. */
+const PENDING = Symbol("lifepath-pending");
+
 class Builder {
-  constructor(rolls, { column = 0 } = {}) {
+  constructor(rolls, { column = 0, step = false } = {}) {
     this.rolls = rolls;
     this.column = column;
+    this.step = step;
+    this.next = null;
+    this.owners = {};    // бросок без своей строки («1d10 × 100 крон») → строка, куда записан его итог
     this.sections = [];
     this.effects = {
       crowns: 0, reputation: 0, luck: 0, hpBonus: 0, staBonus: 0, vigorBonus: 0, feared: false,
@@ -95,9 +104,20 @@ class Builder {
     };
   }
 
-  /** Значение броска: сохранённое или новое. */
-  roll(path, sides = 10) {
-    if (!(path in this.rolls)) this.rolls[path] = rollDie(sides);
+  /**
+   * Значение броска: сохранённое или новое. В пошаговом режиме недостающий бросок не делается:
+   * в раздел ставится строка-заглушка, и сборка останавливается.
+   */
+  roll(path, sides = 10, { label = "", section = null, owner = null } = {}) {
+    if (owner) this.owners[path] = owner;
+    if (!(path in this.rolls)) {
+      if (this.step) {
+        this.next = { path, sides, label, section: section?.title ?? "" };
+        section?.entries.push({ path, label, sides, pending: true, text: "" });
+        throw PENDING;
+      }
+      this.rolls[path] = rollDie(sides);
+    }
     return this.rolls[path];
   }
 
@@ -109,12 +129,13 @@ class Builder {
 
   /** Строка по таблице книги. */
   table(section, path, tableKey, { label, col = 0, sides = 10, mod = 0 } = {}) {
-    const raw = this.roll(path, sides);
+    label ??= T[tableKey].label;
+    const raw = this.roll(path, sides, { label, section });
     const value = Math.max(1, Math.min(10, raw + mod));
     const row = lookup(tableKey, value);
     const cell = cellOf(row, col);
     const entry = {
-      path, label: label ?? T[tableKey].label, value: raw, shown: value, mod, sides,
+      path, label, value: raw, shown: value, mod, sides,
       options: tableOptions(tableKey, col), title: cell.title, text: cell.text, row
     };
     section.entries.push(entry);
@@ -123,7 +144,7 @@ class Builder {
 
   /** Строка по подтаблице из текста. */
   sub(section, path, key, label) {
-    const value = this.roll(path);
+    const value = this.roll(path, 10, { label, section });
     const entry = { path, label, value, sides: 10, options: subOptions(key), title: "", text: subLookup(key, value), sub: true };
     section.entries.push(entry);
     return entry;
@@ -131,7 +152,7 @@ class Builder {
 
   /** Строка «чёт/нечет» или произвольный бросок без таблицы. */
   plain(section, path, label, text, { sides = 10, options = null } = {}) {
-    const value = this.roll(path, sides);
+    const value = this.roll(path, sides, { label, section });
     const describe = v => (typeof text === "function" ? text(v) : text);
     if (!options && sides <= 10) options = Array.from({ length: sides }, (_, i) => ({ value: i + 1, label: `${i + 1}: ${describe(i + 1)}`.slice(0, 90) }));
     const entry = { path, label, value, sides, options, title: "", text: describe(value), sub: true };
@@ -197,9 +218,10 @@ function buildRegular(b, { age = 25, region = "north", race = "human" }) {
   });
   const count = siblingsCount(countEntry.value, race, region);
   for (let i = 0; i < count; i++) {
-    const parts = ["Пол", "Возраст", "Отношение", "Черта"].map((label, c) =>
-      b.table(sib, `sibling.${i}.${c}`, "siblings", { col: c, label: `${i + 1}-й: ${label.toLowerCase()}` }));
-    parts.forEach(p => (p.group = i));
+    // Строка таблицы — сразу после броска: в пошаговом режиме брат или сестра бывает брошен не до конца
+    ["Пол", "Возраст", "Отношение", "Черта"].forEach((label, c) => {
+      b.table(sib, `sibling.${i}.${c}`, "siblings", { col: c, label: `${i + 1}-й: ${label.toLowerCase()}` }).group = i;
+    });
   }
 
   // Важные события — за каждые полные 10 лет
@@ -249,7 +271,7 @@ function fortune(b, section, base, fx) {
   const e = b.table(section, `${base}.fortune`, "fortune");
   const v = e.row?.min;
   if (v === 1) {
-    const n = b.roll(`${base}.fortune.d10`);
+    const n = b.roll(`${base}.fortune.d10`, 10, { label: "Сколько крон (1d10 × 100)", section, owner: e });
     e.detail = `Получено ${n * 100} крон (1d10 = ${n}).`;
     fx.crowns += n * 100;
   } else if (v === 2) {
@@ -273,11 +295,11 @@ function misfortune(b, section, base, fx) {
   const e = b.table(section, `${base}.misfortune`, "misfortune");
   const v = e.row?.min;
   if (v === 1) {
-    const n = b.roll(`${base}.misfortune.d10`);
+    const n = b.roll(`${base}.misfortune.d10`, 10, { label: "Сколько долга (1d10 × 100 крон)", section, owner: e });
     e.detail = `Долг: ${n * 100} крон (1d10 = ${n}).`;
     fx.notes.push(e.detail);
   } else if (v === 2) {
-    const n = b.roll(`${base}.misfortune.d10`);
+    const n = b.roll(`${base}.misfortune.d10`, 10, { label: "Сколько месяцев в тюрьме", section, owner: e });
     e.detail = `В тюрьме ${n} мес.`;
   } else if (v === 3) {
     fx.addictions.push("");
@@ -286,7 +308,7 @@ function misfortune(b, section, base, fx) {
     if (v === 8 && sub.value <= 4) fx.feared = true;
     if (v === 9 && sub.value <= 3) fx.hpBonus -= 5;
     if (v === 8 && (sub.value === 5 || sub.value === 6 || sub.value === 7 || sub.value === 8)) {
-      sub.detail = `${b.roll(`${base}.misfortune.months`)} мес.`;
+      sub.detail = `${b.roll(`${base}.misfortune.months`, 10, { label: "Сколько месяцев", section, owner: sub })} мес.`;
     }
   } else if (v === 10) {
     fx.notes.push("Проклятие (стр. 230)");
@@ -357,9 +379,9 @@ function buildWitcher(b, { age = 80 }) {
         const e = b.table(sec, `${base}.event`, "wEventsWounds", { col: 0, label: "Событие" });
         const ev = e.row?.min;
         if (SUB[`wEvents.${ev}`]) b.sub(sec, `${base}.event.sub`, `wEvents.${ev}`, "Подробности");
-        if (ev === 1) e.detail = `Долг: ${b.roll(`${base}.event.d10`) * 100} крон.`;
+        if (ev === 1) e.detail = `Долг: ${b.roll(`${base}.event.d10`, 10, { label: "Сколько долга (1d10 × 100 крон)", section: sec, owner: e }) * 100} крон.`;
         if (ev === 3) fx.addictions.push("");
-        if (ev === 4) e.detail = `В тюрьме ${b.roll(`${base}.event.d10`)} лет.`;
+        if (ev === 4) e.detail = `В тюрьме ${b.roll(`${base}.event.d10`, 10, { label: "Сколько лет в тюрьме", section: sec, owner: e })} лет.`;
         if (ev === 1) fx.notes.push(e.detail);
       } else if (k === 4) {
         const w = b.table(sec, `${base}.wound`, "wEventsWounds", { col: 1, label: "Рана" });
@@ -388,7 +410,7 @@ function buildWitcher(b, { age = 80 }) {
         if (v === 1) fx.notes.push(`Право Неожиданности: ${sub.text}`);
       }
       if (v === 3) {
-        const n = b.roll(`${base}.benefit.d10`);
+        const n = b.roll(`${base}.benefit.d10`, 10, { label: "Сколько крон (1d10 × 100)", section: sec, owner: e });
         e.detail = `Получено ${n * 100} крон (1d10 = ${n}).`;
         fx.crowns += n * 100;
       }
@@ -439,14 +461,26 @@ function witcherWound(v, fx) {
 
 /**
  * Собрать жизненный путь.
- * @param {object} rolls — словарь бросков (изменяется: дописываются недостающие)
- * @param {object} opts — {witcher, age, region: north|nilfgaard|elder, race}
+ * @param {object} rolls — словарь бросков (изменяется: дописываются недостающие, кроме пошагового режима)
+ * @param {object} opts — {witcher, age, region: north|nilfgaard|elder, race, step}
+ * @returns {{sections: object[], effects: object, next: {path, sides, label, section}|null, resultOf: Function}}
+ *   next — следующий бросок в пошаговом режиме; null — путь брошен до конца;
+ *   resultOf(path) — что выпало по броску: {title, text, detail}
  */
 export function buildLifepath(rolls, opts) {
-  const b = new Builder(rolls);
-  if (opts.witcher) buildWitcher(b, opts);
-  else buildRegular(b, opts);
-  return { sections: b.sections, effects: b.effects };
+  const b = new Builder(rolls, { step: !!opts.step });
+  try {
+    if (opts.witcher) buildWitcher(b, opts);
+    else buildRegular(b, opts);
+  } catch (err) {
+    if (err !== PENDING) throw err;
+  }
+  const resultOf = path => {
+    const own = b.sections.flatMap(sec => sec.entries).find(e => e.path === path && !e.pending);
+    if (own) return { title: own.title ?? "", text: own.text ?? "", detail: own.detail ?? "" };
+    return { title: "", text: b.owners[path]?.detail ?? "", detail: "" };
+  };
+  return { sections: b.sections, effects: b.effects, next: b.next, resultOf };
 }
 
 /** Удалить бросок и все зависящие от него (пути, начинающиеся с него). */
@@ -509,9 +543,14 @@ export function writeLifepath({ rolls, witcher = false, age = 25, region = "nort
   return JSON.stringify({ rolls, witcher, age, region, race });
 }
 
-/** Собрать жизненный путь из сохранённого; недостающие броски дописываются в `data.rolls`. */
+/** Параметры сборки из сохранённого жизненного пути. */
+export function savedOpts(data) {
+  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race };
+}
+
+/** Собрать сохранённый жизненный путь пошагово: недостающие броски не делаются, `next` — следующий. */
 export function buildFromSaved(data) {
-  return buildLifepath(data.rolls, { witcher: data.witcher, age: data.age, region: data.region, race: data.race });
+  return buildLifepath(data.rolls, { ...savedOpts(data), step: true });
 }
 
 /** Переброс: убрать бросок и всё, что от него зависит (новые значения бросит сборка). */
@@ -561,38 +600,46 @@ const SIBLING_COLS = ["Пол", "Возраст", "Отношение", "Чер�
  * Разделы жизненного пути → карточки для показа:
  * семья — строками, братья и сёстры — таблицей, события — карточкой на каждое десятилетие,
  * стиль и ценности — сеткой, десятилетия ведьмака — каждое своей карточкой.
+ * Следующий бросок (пошаговый режим) — строкой с кнопкой в конце своей карточки.
  * @param {object[]} sections — из buildLifepath
- * @param {object} [opts] — editable: показать кости и списки; action — data-action переброса
+ * @param {object} [opts] — editable: показать кости и списки; action — data-action переброса;
+ *   nextAction — data-action следующего броска
  */
-export function lifepathCards(sections, { editable = false, action = "reroll" } = {}) {
+export function lifepathCards(sections, { editable = false, action = "reroll", nextAction = "lifepathStep" } = {}) {
   const ctx = { editable, action };
+  // «20 лет: событие» → «Событие»: год уже в заголовке карточки
+  const short = label => label.replace(/^\d+ лет:\s*/, "").replace(/^./, c => c.toUpperCase());
+  const pendingOf = entries => {
+    const e = entries.find(x => x.pending);
+    return e ? { label: short(e.label), sides: e.sides, action: nextAction } : null;
+  };
   const cards = [];
   for (const sec of sections) {
+    const done = sec.entries.filter(e => !e.pending);
     if (sec.title === "Братья и сёстры") {
-      const rows = sec.entries.filter(e => e.group === undefined).map(e => entryView(e, ctx));
+      const rows = done.filter(e => e.group === undefined).map(e => entryView(e, ctx));
       const byGroup = new Map();
-      for (const e of sec.entries.filter(x => x.group !== undefined)) {
+      for (const e of done.filter(x => x.group !== undefined)) {
         if (!byGroup.has(e.group)) byGroup.set(e.group, []);
         byGroup.get(e.group).push(entryView(e, ctx, ""));
       }
-      cards.push({ title: sec.title, icon: "fa-people-group", rows,
+      cards.push({ title: sec.title, icon: "fa-people-group", rows, pending: pendingOf(sec.entries),
         table: byGroup.size ? { cols: SIBLING_COLS, rows: [...byGroup.entries()].map(([i, cells]) => ({ n: i + 1, cells })) } : null });
       continue;
     }
     if (sec.title === "Важные события") {
       const byDecade = new Map();
       for (const e of sec.entries) {
-        const i = e.path?.match(/^event\.(\d+)/)?.[1];
-        const key = i ?? "none";
+        const key = e.path?.match(/^event\.(\d+)/)?.[1] ?? "none";
         if (!byDecade.has(key)) byDecade.set(key, []);
-        // «20 лет: событие» → «Событие»: год уже в заголовке карточки
-        const label = e.label.replace(/^\d+ лет:\s*/, "").replace(/^./, c => c.toUpperCase());
-        byDecade.get(key).push(entryView(e, ctx, label));
+        byDecade.get(key).push(e);
       }
-      for (const [i, rows] of byDecade) {
+      for (const [i, list] of byDecade) {
+        const rows = list.filter(e => !e.pending).map(e => entryView(e, ctx, short(e.label)));
+        const pending = pendingOf(list);
         cards.push(i === "none"
-          ? { title: sec.title, icon: "fa-hourglass", rows }
-          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", icon: "fa-hourglass-half", cls: "event", rows });
+          ? { title: sec.title, icon: "fa-hourglass", rows, pending }
+          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", icon: "fa-hourglass-half", cls: "event", rows, pending });
       }
       continue;
     }
@@ -603,8 +650,11 @@ export function lifepathCards(sections, { editable = false, action = "reroll" } 
       title: sec.title, icon, grid, cls: sec.risk ? "event" : grid ? "grid" : "",
       subtitle: sec.risk ? WITCHER_RISK[sec.risk]?.label ?? "" : "",
       decade: sec.decade ?? null,
-      riskOptions: editable && sec.risk ? Object.entries(WITCHER_RISK).map(([k, v]) => ({ key: k, label: v.label, selected: k === sec.risk })) : null,
-      rows: sec.entries.map(e => entryView(e, ctx))
+      // Поведение ведьмака выбирают в правке и пока десятилетие бросается: от него шанс опасности
+      riskOptions: sec.risk && (editable || (nextAction && sec.entries.some(e => e.pending)))
+        ? Object.entries(WITCHER_RISK).map(([k, v]) => ({ key: k, label: v.label, selected: k === sec.risk })) : null,
+      rows: done.map(e => entryView(e, ctx)),
+      pending: pendingOf(sec.entries)
     });
   }
   return cards;
@@ -625,4 +675,75 @@ export function lifepathSummary(fx) {
   for (const i of fx.items ?? []) lines.push(`Предмет: ${i}`);
   for (const n of fx.notes ?? []) lines.push(n);
   return lines;
+}
+
+/* ------------------------------------------------------------------------- */
+/*  Бросок за броском: каждый — в чат                                         */
+/* ------------------------------------------------------------------------- */
+
+function firstSentence(text = "") {
+  const m = text.match(/^.{20,}?[.!?](?=\s|$)/);
+  return m && m[0].length < text.length ? `${m[0]} …` : text;
+}
+
+function plural(n, one, few, many) {
+  const a = n % 10, b = n % 100;
+  return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+}
+
+function stepRow(next, value, lp) {
+  return { ...next, value, ...lp.resultOf(next.path) };
+}
+
+/**
+ * Сделать следующий бросок жизненного пути (настоящий бросок Foundry — его видно в чате и в Dice So Nice).
+ * @param {object} rolls — словарь бросков, дописывается
+ * @param {object} opts — как у buildLifepath
+ * @returns {Promise<{lp, roll: Roll, rows: object[]}|null>} null — бросать нечего
+ */
+export async function rollLifepathStep(rolls, opts) {
+  const { next } = buildLifepath(rolls, { ...opts, step: true });
+  if (!next) return null;
+  const roll = await new Roll(`1d${next.sides}`).evaluate();
+  rolls[next.path] = roll.total;
+  const lp = buildLifepath(rolls, { ...opts, step: true });
+  return { lp, roll, rows: [stepRow(next, roll.total, lp)] };
+}
+
+/** Добросить всё, что осталось, — по порядку, как при пошаговом броске. */
+export function rollLifepathRest(rolls, opts) {
+  const done = [];
+  // Предел — на случай ошибки в таблицах: путь ведьмака в 260 лет — около 400 бросков
+  for (let i = 0; i < 1000; i++) {
+    const { next } = buildLifepath(rolls, { ...opts, step: true });
+    if (!next) break;
+    rolls[next.path] = rollDie(next.sides);
+    done.push(next);
+  }
+  const lp = buildLifepath(rolls, { ...opts, step: true });
+  return { lp, rows: done.map(n => stepRow(n, rolls[n.path], lp)) };
+}
+
+/**
+ * Броски жизненного пути — карточкой в чат: по разделам, у каждого броска кость, подпись и что выпало.
+ * @param {Actor} actor
+ * @param {object[]} rows — из rollLifepathStep / rollLifepathRest
+ * @param {object} [opts] — roll: бросок Foundry (для одного броска), name: имя персонажа в подзаголовке
+ */
+export async function postLifepathRolls(actor, rows, { roll = null, name = "" } = {}) {
+  if (!rows.length) return null;
+  // Много бросков разом — коротко: заголовок строки или первое предложение; полный текст — в «Дневнике»
+  const brief = rows.length > 1;
+  const groups = [];
+  for (let r of rows) {
+    if (brief) r = { ...r, text: r.title ? "" : firstSentence(r.text) };
+    const last = groups.at(-1);
+    if (last?.section === r.section) last.rows.push(r);
+    else groups.push({ section: r.section, rows: [r] });
+  }
+  const content = await renderTemplate("systems/vedmak/templates/chat/lifepath.hbs", {
+    title: brief ? `Жизненный путь — ${rows.length} ${plural(rows.length, "бросок", "броска", "бросков")}` : "Жизненный путь",
+    subtitle: name || actor?.name || "", groups
+  });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls: roll ? [roll] : [] });
 }

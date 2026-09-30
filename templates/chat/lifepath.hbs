@@ -1,0 +1,25 @@
+{{!-- Броски жизненного пути (module/character/lifepath.mjs → postLifepathRolls): по разделам,
+      у каждого броска — кость, что бросали и что выпало. --}}
+<div class="vedmak-card lifepath-roll">
+  <header class="card-head">
+    <span class="card-glyph"><i class="fa-solid fa-scroll"></i></span>
+    <div class="card-ident">
+      <span class="card-name">{{title}}</span>
+      {{#if subtitle}}<span class="card-sub">{{subtitle}}</span>{{/if}}
+    </div>
+  </header>
+  <div class="card-body">
+    {{#each groups as |g|}}
+    {{#if g.section}}<div class="lp-chat-section">{{g.section}}</div>{{/if}}
+    {{#each g.rows as |r|}}
+    <div class="lp-chat-row">
+      <span class="die{{#if (eq r.sides 100)}} d100{{/if}}" data-tooltip="d{{r.sides}}">{{r.value}}</span>
+      <div class="lp-chat-text">
+        <span class="lp-chat-label">{{r.label}}</span>
+        <span class="lp-chat-result">{{#if r.title}}<b>{{r.title}}.</b> {{/if}}{{r.text}}{{#if r.detail}} <i>{{r.detail}}</i>{{/if}}</span>
+      </div>
+    </div>
+    {{/each}}
+    {{/each}}
+  </div>
+</div>

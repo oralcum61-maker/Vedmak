@@ -18,7 +18,8 @@ import { signed } from "../util.mjs";
 import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
-  readLifepath, writeLifepath, buildFromSaved, lifepathCards, lifepathSummary, rerollPath, choosePath, setDecadeRisk
+  readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
+  rollLifepathStep, rollLifepathRest, postLifepathRolls
 } from "../character/lifepath.mjs";
 
 export class CharacterSheet extends VedmakActorSheet {
@@ -60,6 +61,8 @@ export class CharacterSheet extends VedmakActorSheet {
       lifepathReroll: CharacterSheet.#onLifepathReroll,
       lifepathRerollAll: CharacterSheet.#onLifepathRerollAll,
       lifepathRoll: CharacterSheet.#onLifepathRoll,
+      lifepathStep: CharacterSheet.#onLifepathStep,
+      lifepathRest: CharacterSheet.#onLifepathRest,
       lifepathClear: CharacterSheet.#onLifepathClear
     }
   };
@@ -213,13 +216,16 @@ export class CharacterSheet extends VedmakActorSheet {
     context.profession = system.profession;
     context.enrichedBiography = await this.enrich(system.biography);
 
-    // Жизненный путь карточками: броски хранятся в system.lifepath, разделы собираются заново
+    // Жизненный путь карточками: броски хранятся в system.lifepath, разделы собираются заново.
+    // Путь бросается по шагу: next — следующий бросок, пока путь не брошен до конца
     const saved = readLifepath(system.lifepath);
     if (saved) {
       const lp = buildFromSaved(foundry.utils.deepClone(saved));
       context.lifepath = {
-        cards: lifepathCards(lp.sections, { editable: this.lifepathEdit, action: "lifepathReroll" }),
-        summary: lifepathSummary(lp.effects), edit: this.lifepathEdit, age: saved.age
+        cards: lifepathCards(lp.sections, {
+          editable: this.lifepathEdit && this.isEditable, action: "lifepathReroll", nextAction: this.isEditable ? "lifepathStep" : null
+        }),
+        summary: lp.next ? [] : lifepathSummary(lp.effects), edit: this.lifepathEdit, age: saved.age, next: lp.next
       };
     } else {
       context.lifepath = null;
@@ -447,34 +453,71 @@ export class CharacterSheet extends VedmakActorSheet {
 
   /* --------------------------- Жизненный путь --------------------------- */
 
-  /** Поменять сохранённый жизненный путь: недостающие после правки броски досыпает сборка. */
+  /** Поменять сохранённый жизненный путь. Недостающие после правки броски делаются кнопкой «Бросить». */
   async #saveLifepath(mutate) {
     const data = readLifepath(this.actor.system.lifepath);
     if (!data) return;
     mutate(data);
-    buildFromSaved(data);
     await this.actor.update({ "system.lifepath": writeLifepath(data) });
   }
+
+  /**
+   * Следующий бросок пути — в чат. `data` — уже прочитанный путь (или новый),
+   * `mutate` — что поменять перед броском (переброс строки, сброс всего).
+   */
+  async #stepLifepath(data = readLifepath(this.actor.system.lifepath), mutate = null) {
+    if (!data || this.#lifepathBusy) return;
+    this.#lifepathBusy = true;
+    try {
+      mutate?.(data);
+      const res = await rollLifepathStep(data.rolls, savedOpts(data));
+      await this.actor.update({ "system.lifepath": writeLifepath(data) });
+      if (res) await postLifepathRolls(this.actor, res.rows, { roll: res.roll });
+    } finally {
+      this.#lifepathBusy = false;
+    }
+  }
+
+  /** Идёт бросок пути: второй щелчок не бросает ту же строку дважды. */
+  #lifepathBusy = false;
 
   static #onLifepathEdit() {
     this.lifepathEdit = !this.lifepathEdit;
     this.render();
   }
 
+  /** Переброс строки: она бросается заново (в чат), зависящие от неё — следующими шагами. */
   static async #onLifepathReroll(event, target) {
-    await this.#saveLifepath(data => rerollPath(data.rolls, target.dataset.path));
+    await this.#stepLifepath(undefined, data => rerollPath(data.rolls, target.dataset.path));
   }
 
   static async #onLifepathRerollAll() {
     const ok = await foundry.applications.api.DialogV2.confirm({
-      window: { title: "Жизненный путь" }, content: "<p>Перебросить весь жизненный путь? Поведение ведьмака по десятилетиям сохранится.</p>"
+      window: { title: "Жизненный путь" },
+      content: "<p>Перебросить весь жизненный путь? Он начнётся заново с первого броска; поведение ведьмака по десятилетиям сохранится.</p>"
     });
-    if (ok) await this.#saveLifepath(data => {
+    if (ok) await this.#stepLifepath(undefined, data => {
       data.rolls = Object.fromEntries(Object.entries(data.rolls).filter(([k]) => k.endsWith(".risk")));
     });
   }
 
-  /** Бросить жизненный путь персонажу без него: по расе, происхождению и возрасту с листа. */
+  static async #onLifepathStep() {
+    await this.#stepLifepath();
+  }
+
+  /** Добросить остаток пути разом — все броски одной карточкой в чат. */
+  static async #onLifepathRest() {
+    const data = readLifepath(this.actor.system.lifepath);
+    if (!data) return;
+    const res = rollLifepathRest(data.rolls, savedOpts(data));
+    await this.actor.update({ "system.lifepath": writeLifepath(data) });
+    await postLifepathRolls(this.actor, res.rows);
+  }
+
+  /**
+   * Начать жизненный путь персонажу без него: по расе, происхождению и возрасту с листа.
+   * Первый бросок — сразу, остальные — кнопкой «Бросить» по одному.
+   */
   static async #onLifepathRoll() {
     const actor = this.actor;
     const witcher = actor.system.raceKey === "witcher" || actor.system.professionKey === "witcher";
@@ -484,9 +527,7 @@ export class CharacterSheet extends VedmakActorSheet {
       region: actor.system.details.origin || "north",
       race: actor.system.raceKey || "human"
     };
-    buildFromSaved(data);
-    this.lifepathEdit = true;
-    await actor.update({ "system.lifepath": writeLifepath(data) });
+    await this.#stepLifepath(data);
   }
 
   static async #onLifepathClear() {

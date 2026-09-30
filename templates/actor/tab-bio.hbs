@@ -24,6 +24,10 @@
       {{#if editable}}
       <div class="panel-tools">
         {{#if lifepath}}
+          {{#if lifepath.next}}
+          <a class="roll-btn" data-action="lifepathStep" data-tooltip="Следующий бросок — в чат"><i class="fa-solid fa-dice"></i> Бросить: {{lifepath.next.label}}</a>
+          <a data-action="lifepathRest" data-tooltip="Добросить всё оставшееся — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i></a>
+          {{/if}}
           {{#if lifepath.edit}}
           <label class="lp-age" data-tooltip="Возраст для событий: по одному на каждые полные 10 лет (у ведьмака — десятилетия странствий)">Возраст
             <input type="number" data-lp-age value="{{lifepath.age}}" min="0"></label>
@@ -33,7 +37,7 @@
           <a data-action="lifepathEdit" data-tooltip="{{#if lifepath.edit}}Готово{{else}}Перебросить или выбрать результаты{{/if}}">
             <i class="fa-solid {{#if lifepath.edit}}fa-check{{else}}fa-pen{{/if}}"></i></a>
         {{else}}
-          <a class="roll-btn" data-action="lifepathRoll" data-tooltip="Бросить по таблицам корника: раса, происхождение и возраст — с листа"><i class="fa-solid fa-dice"></i> Бросить</a>
+          <a class="roll-btn" data-action="lifepathRoll" data-tooltip="Бросать по таблицам корника, по одному броску — каждый в чат. Раса, происхождение и возраст — с листа"><i class="fa-solid fa-dice"></i> Бросить</a>
         {{/if}}
       </div>
       {{/if}}
@@ -49,7 +53,7 @@
       {{/if}}
     {{else}}
       <p class="hint">Жизненного пути нет. Его бросает мастер создания персонажа, а можно бросить и здесь — по таблицам корника
-        (стр. 25–36, у ведьмака — 238–245). Кроны, навыки и предметы из него впишите на лист сами.</p>
+        (стр. 25–36, у ведьмака — 238–245), по одному броску, каждый уходит в чат. Кроны, навыки и предметы из него впишите на лист сами.</p>
     {{/if}}
   </div>
 

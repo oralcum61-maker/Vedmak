@@ -8,7 +8,10 @@ import {
   creationSkillCost, HEX_DANGER_LEVEL
 } from "../config/character.mjs";
 import { levelLabel } from "../config/magic.mjs";
-import { buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath } from "./lifepath.mjs";
+import {
+  buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath,
+  rollLifepathStep, rollLifepathRest, postLifepathRolls
+} from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
@@ -67,6 +70,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       rollOrigin: CharacterWizard.#onRollOrigin,
       reroll: CharacterWizard.#onReroll,
       rerollAll: CharacterWizard.#onRerollAll,
+      lpStep: CharacterWizard.#onLifepathStep,
+      lpRest: CharacterWizard.#onLifepathRest,
       rollStats: CharacterWizard.#onRollStats,
       rollMoney: CharacterWizard.#onRollMoney,
       apply: CharacterWizard.#onApply
@@ -115,11 +120,35 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   get raceKey() { return this.race?.system.key ?? ""; }
   get isWitcher() { return this.raceKey === "witcher"; }
 
-  /** Жизненный путь по текущим броскам (пересобирается при каждом рендере). */
+  /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса. */
+  get #lifepathOpts() {
+    const s = this.wiz;
+    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey };
+  }
+
+  /**
+   * Жизненный путь по текущим броскам (пересобирается при каждом рендере). Пошагово: недостающие
+   * броски не делаются, `next` — какой бросок следующий.
+   */
   #lifepath() {
     const s = this.wiz;
-    if (!s.lifepath || !this.race) return { sections: [], effects: null };
-    return buildLifepath(s.rolls, { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey });
+    if (!s.lifepath || !this.race) return { sections: [], effects: null, next: null };
+    return buildLifepath(s.rolls, { ...this.#lifepathOpts, step: true });
+  }
+
+  /** Идёт бросок пути: второй щелчок не бросает ту же строку дважды. */
+  #lifepathBusy = false;
+
+  /** Следующий бросок пути — в чат. */
+  async #lifepathStep() {
+    if (this.#lifepathBusy) return;
+    this.#lifepathBusy = true;
+    try {
+      const res = await rollLifepathStep(this.wiz.rolls, this.#lifepathOpts);
+      if (res) await postLifepathRolls(this.actor, res.rows, { roll: res.roll, name: this.wiz.name });
+    } finally {
+      this.#lifepathBusy = false;
+    }
   }
 
   /** Модификаторы параметров от расы и жизненного пути. */
@@ -238,7 +267,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     if (s.step === "lifepath") {
-      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll" });
+      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep" });
+      context.lifepathNext = lp.next;
       context.lifeChoices = (lp.effects?.skillChoices ?? []).map(c => ({
         ...c, options: choiceSkillOptions(c).map(o => ({ ...o, selected: s.rolls[c.path] === o.value }))
       }));
@@ -408,8 +438,9 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     } else {
       out.skills = out.magic = out.gear = "Сначала выберите профессию.";
     }
+    if (s.lifepath && race && lp.next) out.lifepath = "Жизненный путь брошен не до конца.";
     for (const k of Object.keys(out)) if (!out[k]) delete out[k];
-    const blocking = ["race", "origin", "profession", "stats", "skills", "magic", "gear"].find(k => out[k]);
+    const blocking = ["race", "origin", "lifepath", "profession", "stats", "skills", "magic", "gear"].find(k => out[k]);
     if (blocking) out.summary = `Не завершён шаг «${STEPS.find(x => x.id === blocking).label}».`;
     return out;
   }
@@ -610,17 +641,32 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
-  static #onReroll(event, target) {
-    const path = target.dataset.path;
-    this.#clearDependents(path);
+  /** Переброс строки: она бросается заново (в чат), зависящие от неё — следующими шагами. */
+  static async #onReroll(event, target) {
+    this.#clearDependents(target.dataset.path);
+    await this.#lifepathStep();
     this.render();
   }
 
+  /** Весь путь заново: первый бросок сразу, остальные — по шагу. Поведение ведьмака сохраняется. */
   static async #onRerollAll() {
     const ok = await DialogV2.confirm({ window: { title: "Жизненный путь" }, content: "<p>Перебросить весь жизненный путь?</p>" });
     if (!ok) return;
     const risks = Object.fromEntries(Object.entries(this.wiz.rolls).filter(([k]) => k.endsWith(".risk")));
     this.wiz.rolls = risks;
+    await this.#lifepathStep();
+    this.render();
+  }
+
+  static async #onLifepathStep() {
+    await this.#lifepathStep();
+    this.render();
+  }
+
+  /** Добросить остаток пути разом — все броски одной карточкой в чат. */
+  static async #onLifepathRest() {
+    const res = rollLifepathRest(this.wiz.rolls, this.#lifepathOpts);
+    await postLifepathRolls(this.actor, res.rows, { name: this.wiz.name });
     this.render();
   }
 
