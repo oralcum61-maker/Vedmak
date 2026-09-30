@@ -47,7 +47,9 @@
 Навыки проекта (`.claude/skills/`):
 - `/check` — проверки и что делать с каждой ошибкой;
 - `/sync` — выгрузка в Foundry;
-- `/build-packs` — порядок сборки компендиумов. `/sync` и `/build-packs` работают только на компьютере автора.
+- `/build-packs` — порядок сборки компендиумов. `/sync` и `/build-packs` работают только на компьютере автора;
+- `/release` — выпуск версии: тег `vX.Y.Z` запускает сборку на GitHub. Ссылка для установки в Foundry —
+  `https://github.com/oralcum61-maker/Vedmak/releases/latest/download/system.json`.
 
 На GitHub `tools/check.mjs` запускается сам на каждую отправку (`.github/workflows/check.yml`).
 Проверки без запроса разрешены в `.claude/settings.json`.
@@ -59,7 +61,9 @@
   (без `template.json`), листы на `ApplicationV2`.
 - Интерфейс, комментарии и коммиты — по-русски.
 - Ассеты по играм принадлежат CD Projekt RED, их правила описаны в `assets/fan/О-ПРАВАХ.txt`.
-  Жетоны в `assets/tokens/` раздавать нельзя. Репозиторий приватный: так и должно оставаться.
+  Жетоны в `assets/tokens/` раздавать нельзя: в выпуски они не входят (`tools/release.mjs`).
+- **Репозиторий публичный** — так решил автор 30.09, чтобы систему можно было ставить в Foundry по ссылке.
+  Не клади в него секреты, книги и конспекты книг.
 
 ## Карта кода
 - `vedmak.mjs` — точка входа: `CONFIG.VEDMAK`, `game.vedmak`, регистрация листов и хуков.
@@ -73,7 +77,7 @@
   работает, только если его путь есть в `TEMPLATE_PATHS` в `module/helpers.mjs`.
 - `module/character/race.mjs` — черты расы при появлении на листе: естественное оружие, выбор навыков гнома.
 - `tools/build-packs.mjs` — сборка компендиумов; `tools/check.mjs` — статические проверки;
-  `tools/sync-to-foundry.ps1` — выгрузка в Foundry.
+  `tools/sync-to-foundry.ps1` — выгрузка в Foundry; `tools/release.mjs` — сборка выпуска в `dist/`.
 
 ## Дизайн
 Лист оформлен в стиле «кожа и железо» (PLAN 4.9, 4.15):

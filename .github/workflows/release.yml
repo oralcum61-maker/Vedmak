@@ -1,0 +1,56 @@
+# Выпуск системы по тегу vX.Y.Z: проверка → сборка без жетонов → архив → GitHub Release
+# с system.json и vedmak.zip. Ссылка для установки в Foundry (манифест):
+#   https://github.com/oralcum61-maker/Vedmak/releases/latest/download/system.json
+name: Выпуск
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Handlebars и classic-level
+        run: |
+          npm install --no-save --no-package-lock --prefix "$RUNNER_TEMP/hbs" handlebars@4
+          mkdir -p "$RUNNER_TEMP/foundry"
+          echo '{"name":"foundry-stub","private":true}' > "$RUNNER_TEMP/foundry/package.json"
+          npm install --no-package-lock --prefix "$RUNNER_TEMP/foundry" classic-level@1
+
+      - name: Версия тега совпадает с system.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          ver="$(node -p "require('./system.json').version")"
+          if [ "$tag" != "$ver" ]; then
+            echo "::error::Тег $GITHUB_REF_NAME, а в system.json версия $ver — поднимите версию в system.json"
+            exit 1
+          fi
+
+      - name: tools/check.mjs
+        run: node tools/check.mjs
+        env:
+          NODE_PATH: ${{ runner.temp }}/hbs/node_modules
+
+      - name: Сборка выпуска
+        run: node tools/release.mjs "${GITHUB_REF_NAME#v}"
+        env:
+          FOUNDRY_APP: ${{ runner.temp }}/foundry
+
+      - name: Архив
+        run: cd dist/vedmak && zip -qr ../vedmak.zip .
+
+      - name: GitHub Release
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/system.json dist/vedmak.zip \
+            --title "Ведьмак: НРИ ${GITHUB_REF_NAME#v}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

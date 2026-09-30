@@ -35,7 +35,7 @@ const rel = f => path.relative(ROOT, f).split(path.sep).join("/");
 
 /** Файлы с расширением, без служебных папок, макетов и собранных пакетов. */
 function listFiles(dir, ext) {
-  const skip = new Set([".git", "node_modules", "design", "packs", "packs-src", "assets", "fonts"]);
+  const skip = new Set([".git", "node_modules", "dist", "design", "packs", "packs-src", "assets", "fonts"]);
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) { if (!skip.has(entry.name)) out.push(...listFiles(path.join(dir, entry.name), ext)); }

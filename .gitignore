@@ -2,3 +2,4 @@ packs/*/LOCK
 packs/*/LOG
 packs/*/LOG.old
 node_modules/
+dist/
