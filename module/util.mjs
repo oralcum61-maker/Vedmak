@@ -38,6 +38,19 @@ export function signed(n) {
   return n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : "0";
 }
 
+/** Идёт ли бой, в котором участвует актор. */
+export function inCombat(actor) {
+  return !!actor && game.combats.some(c => c.started && c.combatants.some(cb => cb.actor === actor));
+}
+
+/**
+ * Срок в раундах, но временем: вне боя раунды отсчитывать некому (свой счётчик `flags.vedmak.timed` убывает
+ * в начале хода), а время мира Foundry переводит в срок эффекта сама. Раунд — `CONFIG.time.roundTime` секунд.
+ */
+export function roundsAsTime(rounds) {
+  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds" };
+}
+
 /** Словарь {key: label|{label}} → массив опций для selectOptions. */
 export function toOptions(map) {
   return Object.fromEntries(Object.entries(map).map(([k, v]) => [k, typeof v === "string" ? v : v.label]));
