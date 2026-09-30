@@ -8,7 +8,7 @@ import {
   creationSkillCost, HEX_DANGER_LEVEL
 } from "../config/character.mjs";
 import { levelLabel } from "../config/magic.mjs";
-import { buildLifepath, clearRoll, dependents, lifepathHtml, choiceSkillOptions, rollDie, WITCHER_RISK } from "./lifepath.mjs";
+import { buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
@@ -238,15 +238,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     if (s.step === "lifepath") {
-      context.lifepath = lp.sections.map(sec => ({
-        ...sec,
-        riskOptions: sec.risk ? Object.entries(WITCHER_RISK).map(([k, v]) => ({ key: k, label: v.label, selected: k === sec.risk })) : null,
-        entries: sec.entries.map(e => ({
-          ...e,
-          selectValue: e.mod ? e.shown : e.value,
-          options: e.options?.map(o => ({ ...o, selected: e.mod ? o.value === lookupMin(e) : o.value === optionValue(e) }))
-        }))
-      }));
+      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll" });
       context.lifeChoices = (lp.effects?.skillChoices ?? []).map(c => ({
         ...c, options: choiceSkillOptions(c).map(o => ({ ...o, selected: s.rolls[c.path] === o.value }))
       }));
@@ -475,6 +467,13 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         this.render();
       });
     }
+    // Поведение ведьмака в десятилетии
+    for (const el of this.element.querySelectorAll("select[data-lp-risk]")) {
+      el.addEventListener("change", () => {
+        setDecadeRisk(s.rolls, el.dataset.lpRisk, el.value);
+        this.render();
+      });
+    }
     // Своё значение броска из списка
     for (const el of this.element.querySelectorAll("select[data-roll-path]")) {
       el.addEventListener("change", () => {
@@ -678,18 +677,6 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 }
 
-function optionValue(e) {
-  if (!e.options) return e.value;
-  // Для чёт/нечет: 2 — чёт, 1 — нечет
-  if (e.options.length === 2 && e.options[0].value === 2) return e.value % 2 === 0 ? 2 : 1;
-  const opt = [...e.options].reverse().find(o => e.value >= o.value);
-  return opt?.value ?? e.value;
-}
-
-function lookupMin(e) {
-  return e.row?.min ?? e.shown;
-}
-
 /* ----------------------------- Применение ----------------------------- */
 
 /** Найти предмет снаряжения по названию в компендиумах; иначе — простой предмет. */
@@ -762,11 +749,13 @@ async function applyCharacter(wizard, lp) {
   const style = lp.sections.find(x => x.title === "Личный стиль")?.entries ?? [];
   const values = lp.sections.find(x => x.title === "Ценности")?.entries ?? [];
   const styleText = i => style[i]?.text ?? "";
-  let bio = "";
-  if (s.lifepath && lp.sections.length) {
-    bio = lifepathHtml(lp.sections);
-    if (fx.notes.length) bio += `<h3>Итоги</h3><ul>${fx.notes.map(n => `<li>${foundry.utils.escapeHTML(n)}</li>`).join("")}</ul>`;
-  }
+  // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
+  // Прежний мастер писал путь в биографию HTML-ом — такую биографию убираем, чтобы путь не задвоился.
+  const lifepath = s.lifepath && lp.sections.length
+    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "" })
+    : "";
+  const oldBio = actor.system.biography ?? "";
+  const generatedBio = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/.test(oldBio.trim());
 
   const update = {
     name: s.name || actor.name,
@@ -793,7 +782,8 @@ async function applyCharacter(wizard, lp) {
     "system.toxicity.value": 0,
     "system.adrenaline.value": 0
   };
-  if (bio) update["system.biography"] = bio;
+  update["system.lifepath"] = lifepath;
+  if (generatedBio) update["system.biography"] = "";
   for (const k of STAT_KEYS) {
     update[`system.stats.${k}.base`] = stats[k] + (k === "luck" ? fx.luck : 0);
   }

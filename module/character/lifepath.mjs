@@ -192,7 +192,8 @@ function buildRegular(b, { age = 25, region = "north", race = "human" }) {
   const sib = b.section("Братья и сёстры");
   const countEntry = b.plain(sib, "siblingsCount", "Сколько братьев и сестёр", v => {
     const n = siblingsCount(v, race, region);
-    return n ? `${n}` : "Единственный ребёнок";
+    if (!n) return "Единственный ребёнок";
+    return n === 1 ? "Один брат или сестра" : n <= 4 ? `${n} брата или сестры` : `${n} братьев или сестёр`;
   });
   const count = siblingsCount(countEntry.value, race, region);
   for (let i = 0; i < count; i++) {
@@ -477,22 +478,151 @@ export function dependents(path) {
   return [];
 }
 
-/** Биография в HTML из разделов. */
-export function lifepathHtml(sections) {
-  const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
-  return sections.map(s => {
-    const items = s.entries.map(e => {
-      const head = e.title ? `<b>${esc(e.title)}.</b> ` : "";
-      const detail = e.detail ? ` <i>${esc(e.detail)}</i>` : "";
-      return `<li><span class="lp-label">${esc(e.label)}:</span> ${head}${esc(e.text)}${detail}</li>`;
-    }).join("");
-    return `<h3>${esc(s.title)}${s.risk ? ` — ${esc(WITCHER_RISK[s.risk]?.label ?? "")}` : ""}</h3><ul>${items}</ul>`;
-  }).join("");
-}
-
 /** Навыки для выбора «+1 или новый +2»: Инт-навыки или боевые. */
 export function choiceSkillOptions(choice) {
   return Object.entries(SKILLS)
     .filter(([, s]) => (choice.combat ? s.combat : s.stat === choice.stat))
     .map(([key, s]) => ({ value: key, label: s.label }));
+}
+
+/* ------------------------------------------------------------------------- */
+/*  Хранение в персонаже, переброс и показ карточками — общее для мастера      */
+/*  создания и «Дневника»                                                     */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Жизненный путь персонажа — JSON в `system.lifepath`: броски и то, от чего они зависят.
+ * В строке, а не в объекте: пути бросков содержат точки («event.0.kind»), а Foundry при обновлении
+ * разворачивает такие ключи во вложенные объекты.
+ * @returns {{rolls: object, witcher: boolean, age: number, region: string, race: string}|null}
+ */
+export function readLifepath(json) {
+  try {
+    const data = JSON.parse(json || "null");
+    return data?.rolls && typeof data.rolls === "object" ? data : null;
+  } catch {
+    return null;
+  }
+}
+
+export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human" }) {
+  return JSON.stringify({ rolls, witcher, age, region, race });
+}
+
+/** Собрать жизненный путь из сохранённого; недостающие броски дописываются в `data.rolls`. */
+export function buildFromSaved(data) {
+  return buildLifepath(data.rolls, { witcher: data.witcher, age: data.age, region: data.region, race: data.race });
+}
+
+/** Переброс: убрать бросок и всё, что от него зависит (новые значения бросит сборка). */
+export function rerollPath(rolls, path) {
+  delete rolls[path];
+  for (const d of dependents(path)) clearRoll(rolls, d);
+}
+
+/** Выбор результата из списка: значение строки таблицы минус поправка броска. */
+export function choosePath(rolls, path, value, mod = 0) {
+  rerollPath(rolls, path);
+  rolls[path] = Number(value) - (Number(mod) || 0);
+}
+
+/** Смена поведения ведьмака в десятилетии: всё десятилетие бросается заново. */
+export function setDecadeRisk(rolls, decade, risk) {
+  for (const key of Object.keys(rolls)) if (key.startsWith(`decade.${decade}.`)) delete rolls[key];
+  rolls[`decade.${decade}.risk`] = risk;
+}
+
+/** Какой пункт списка выбран для строки. */
+function selectedOption(e) {
+  if (!e.options) return e.value;
+  if (e.mod) return e.row?.min ?? e.shown;
+  // Чёт/нечет: 2 — чёт, 1 — нечет
+  if (e.options.length === 2 && e.options[0].value === 2) return e.value % 2 === 0 ? 2 : 1;
+  const opt = [...e.options].reverse().find(o => e.value >= o.value);
+  return opt?.value ?? e.value;
+}
+
+/** Строка для шаблона: текст результата и, если можно править, кость и список. */
+function entryView(e, { editable, action }, label = e.label) {
+  const view = { label, title: e.title ?? "", text: e.text ?? "", detail: e.detail ?? "", static: !!e.static || !e.path };
+  if (editable && e.path) {
+    const picked = selectedOption(e);
+    Object.assign(view, {
+      editable: true, action, path: e.path, value: e.value, sides: e.sides ?? 10, mod: e.mod ?? 0,
+      options: e.options?.map(o => ({ ...o, selected: o.value === picked })) ?? null
+    });
+  }
+  return view;
+}
+
+const SIBLING_COLS = ["Пол", "Возраст", "Отношение", "Черта"];
+
+/**
+ * Разделы жизненного пути → карточки для показа:
+ * семья — строками, братья и сёстры — таблицей, события — карточкой на каждое десятилетие,
+ * стиль и ценности — сеткой, десятилетия ведьмака — каждое своей карточкой.
+ * @param {object[]} sections — из buildLifepath
+ * @param {object} [opts] — editable: показать кости и списки; action — data-action переброса
+ */
+export function lifepathCards(sections, { editable = false, action = "reroll" } = {}) {
+  const ctx = { editable, action };
+  const cards = [];
+  for (const sec of sections) {
+    if (sec.title === "Братья и сёстры") {
+      const rows = sec.entries.filter(e => e.group === undefined).map(e => entryView(e, ctx));
+      const byGroup = new Map();
+      for (const e of sec.entries.filter(x => x.group !== undefined)) {
+        if (!byGroup.has(e.group)) byGroup.set(e.group, []);
+        byGroup.get(e.group).push(entryView(e, ctx, ""));
+      }
+      cards.push({ title: sec.title, icon: "fa-people-group", rows,
+        table: byGroup.size ? { cols: SIBLING_COLS, rows: [...byGroup.entries()].map(([i, cells]) => ({ n: i + 1, cells })) } : null });
+      continue;
+    }
+    if (sec.title === "Важные события") {
+      const byDecade = new Map();
+      for (const e of sec.entries) {
+        const i = e.path?.match(/^event\.(\d+)/)?.[1];
+        const key = i ?? "none";
+        if (!byDecade.has(key)) byDecade.set(key, []);
+        // «20 лет: событие» → «Событие»: год уже в заголовке карточки
+        const label = e.label.replace(/^\d+ лет:\s*/, "").replace(/^./, c => c.toUpperCase());
+        byDecade.get(key).push(entryView(e, ctx, label));
+      }
+      for (const [i, rows] of byDecade) {
+        cards.push(i === "none"
+          ? { title: sec.title, icon: "fa-hourglass", rows }
+          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", icon: "fa-hourglass-half", cls: "event", rows });
+      }
+      continue;
+    }
+    const grid = sec.title === "Личный стиль" || sec.title === "Ценности";
+    const icon = { "Семья": "fa-house-chimney", "Личный стиль": "fa-shirt", "Ценности": "fa-scale-balanced",
+      "Школа и испытания": "fa-flask", "Жизнь ведьмака": "fa-road" }[sec.title] ?? (sec.risk ? "fa-hourglass-half" : "fa-scroll");
+    cards.push({
+      title: sec.title, icon, grid, cls: sec.risk ? "event" : grid ? "grid" : "",
+      subtitle: sec.risk ? WITCHER_RISK[sec.risk]?.label ?? "" : "",
+      decade: sec.decade ?? null,
+      riskOptions: editable && sec.risk ? Object.entries(WITCHER_RISK).map(([k, v]) => ({ key: k, label: v.label, selected: k === sec.risk })) : null,
+      rows: sec.entries.map(e => entryView(e, ctx))
+    });
+  }
+  return cards;
+}
+
+/** Итоги жизненного пути словами: деньги, предметы, заметки (механику мастер применил при создании). */
+export function lifepathSummary(fx) {
+  if (!fx) return [];
+  const lines = [];
+  if (fx.crowns) lines.push(`+${fx.crowns} крон`);
+  if (fx.reputation) lines.push(`+${fx.reputation} к репутации`);
+  if (fx.luck) lines.push(`+${fx.luck} к Удаче`);
+  if (fx.hpBonus) lines.push(`${fx.hpBonus} ПЗ навсегда`);
+  if (fx.staBonus) lines.push(`${fx.staBonus} Вын навсегда`);
+  if (fx.vigorBonus) lines.push(`${fx.vigorBonus} к Энергии`);
+  if (fx.feared) lines.push("Социальный статус: опасение");
+  if (fx.addictions?.length) lines.push(`Зависимость (${fx.addictions.length})`);
+  for (const i of fx.items ?? []) lines.push(`Предмет: ${i}`);
+  for (const n of fx.notes ?? []) lines.push(n);
+  return lines;
 }

@@ -79,31 +79,7 @@
       <span class="hint">{{#if isWitcher}}Ведьмак живёт от 50 до 260 лет; события — за каждое десятилетие странствий (стр. 241).{{else}}Событие — за каждые полные 10 лет жизни (стр. 31).{{/if}} Результат можно перебросить или выбрать из списка.</span>
     </div>
     {{#if state.lifepath}}
-      {{#each lifepath as |sec|}}
-      <div class="vd-panel lifepath-section">
-        <h3>{{sec.title}}
-          {{#if sec.riskOptions}}
-          <label class="inline">Поведение
-            <select data-field="risk.{{sec.decade}}">{{#each sec.riskOptions}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-          </label>
-          {{/if}}
-        </h3>
-        {{#each sec.entries as |e|}}
-        <div class="lp-entry{{#if e.sub}} sub{{/if}}">
-          <div class="lp-label">{{e.label}}</div>
-          <div class="lp-roll">
-            {{#if e.path}}
-              {{#if e.options}}
-              <select data-roll-path="{{e.path}}" data-mod="{{e.mod}}">{{#each e.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-              {{else}}<span class="die-value">{{e.value}}</span>{{/if}}
-              <a data-action="reroll" data-path="{{e.path}}" data-tooltip="Перебросить (d{{e.sides}}: {{e.value}})"><i class="fa-solid fa-certificate"></i></a>
-            {{/if}}
-          </div>
-          <div class="lp-text">{{#if e.title}}<b>{{e.title}}.</b> {{/if}}{{e.text}}{{#if e.detail}} <i>{{e.detail}}</i>{{/if}}</div>
-        </div>
-        {{/each}}
-      </div>
-      {{/each}}
+      {{> "systems/vedmak/templates/parts/lifepath-cards.hbs" cards=lifepathCards}}
 
       {{#if lifeChoices.length}}
       <div class="vd-panel">

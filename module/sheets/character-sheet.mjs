@@ -17,6 +17,9 @@ import { attachEnhancement, detachEnhancement, detachCrossbowMod } from "../craf
 import { signed } from "../util.mjs";
 import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 import { exchangeDialog } from "../character/money.mjs";
+import {
+  readLifepath, writeLifepath, buildFromSaved, lifepathCards, lifepathSummary, rerollPath, choosePath, setDecadeRisk
+} from "../character/lifepath.mjs";
 
 export class CharacterSheet extends VedmakActorSheet {
 
@@ -52,7 +55,12 @@ export class CharacterSheet extends VedmakActorSheet {
       repairItem: CharacterSheet.#onRepairItem,
       disassembleItem: CharacterSheet.#onDisassembleItem,
       endAlchemyEffect: CharacterSheet.#onEndAlchemyEffect,
-      moneyExchange: CharacterSheet.#onMoneyExchange
+      moneyExchange: CharacterSheet.#onMoneyExchange,
+      lifepathEdit: CharacterSheet.#onLifepathEdit,
+      lifepathReroll: CharacterSheet.#onLifepathReroll,
+      lifepathRerollAll: CharacterSheet.#onLifepathRerollAll,
+      lifepathRoll: CharacterSheet.#onLifepathRoll,
+      lifepathClear: CharacterSheet.#onLifepathClear
     }
   };
 
@@ -107,6 +115,9 @@ export class CharacterSheet extends VedmakActorSheet {
 
   /** Режим развития: кнопки «+» со стоимостью в О.У (состояние окна). */
   advanceMode = false;
+
+  /** «Дневник»: жизненный путь в режиме правки (кости и списки у каждой строки). */
+  lifepathEdit = false;
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -201,6 +212,18 @@ export class CharacterSheet extends VedmakActorSheet {
     context.race = system.race;
     context.profession = system.profession;
     context.enrichedBiography = await this.enrich(system.biography);
+
+    // Жизненный путь карточками: броски хранятся в system.lifepath, разделы собираются заново
+    const saved = readLifepath(system.lifepath);
+    if (saved) {
+      const lp = buildFromSaved(foundry.utils.deepClone(saved));
+      context.lifepath = {
+        cards: lifepathCards(lp.sections, { editable: this.lifepathEdit, action: "lifepathReroll" }),
+        summary: lifepathSummary(lp.effects), edit: this.lifepathEdit, age: saved.age
+      };
+    } else {
+      context.lifepath = null;
+    }
     context.enrichedNotes = await this.enrich(system.notes);
     context.advanceMode = this.advanceMode;
 
@@ -332,6 +355,18 @@ export class CharacterSheet extends VedmakActorSheet {
 
   _onRender(context, options) {
     super._onRender(context, options);
+    // Жизненный путь: свой результат из списка, поведение ведьмака в десятилетии, возраст
+    const onLifepath = (selector, fn) => {
+      for (const el of this.element.querySelectorAll(selector)) {
+        el.addEventListener("change", event => {
+          event.stopPropagation();
+          this.#saveLifepath(data => fn(data, el));
+        });
+      }
+    };
+    onLifepath("select[data-roll-path]", (data, el) => choosePath(data.rolls, el.dataset.rollPath, el.value, el.dataset.mod));
+    onLifepath("select[data-lp-risk]", (data, el) => setDecadeRisk(data.rolls, el.dataset.lpRisk, el.value));
+    onLifepath("input[data-lp-age]", (data, el) => { data.age = Math.max(0, Math.min(1000, Number(el.value) || 0)); });
     const prof = this.actor.system.profession;
     // Значения древа хранятся в предмете профессии — меняем их напрямую
     for (const input of this.element.querySelectorAll("input.ability-value")) {
@@ -409,6 +444,59 @@ export class CharacterSheet extends VedmakActorSheet {
   }
 
   /* ------------------------------ Действия ------------------------------ */
+
+  /* --------------------------- Жизненный путь --------------------------- */
+
+  /** Поменять сохранённый жизненный путь: недостающие после правки броски досыпает сборка. */
+  async #saveLifepath(mutate) {
+    const data = readLifepath(this.actor.system.lifepath);
+    if (!data) return;
+    mutate(data);
+    buildFromSaved(data);
+    await this.actor.update({ "system.lifepath": writeLifepath(data) });
+  }
+
+  static #onLifepathEdit() {
+    this.lifepathEdit = !this.lifepathEdit;
+    this.render();
+  }
+
+  static async #onLifepathReroll(event, target) {
+    await this.#saveLifepath(data => rerollPath(data.rolls, target.dataset.path));
+  }
+
+  static async #onLifepathRerollAll() {
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Жизненный путь" }, content: "<p>Перебросить весь жизненный путь? Поведение ведьмака по десятилетиям сохранится.</p>"
+    });
+    if (ok) await this.#saveLifepath(data => {
+      data.rolls = Object.fromEntries(Object.entries(data.rolls).filter(([k]) => k.endsWith(".risk")));
+    });
+  }
+
+  /** Бросить жизненный путь персонажу без него: по расе, происхождению и возрасту с листа. */
+  static async #onLifepathRoll() {
+    const actor = this.actor;
+    const witcher = actor.system.raceKey === "witcher" || actor.system.professionKey === "witcher";
+    const data = {
+      rolls: {}, witcher,
+      age: Number.parseInt(actor.system.details.age) || (witcher ? 80 : 25),
+      region: actor.system.details.origin || "north",
+      race: actor.system.raceKey || "human"
+    };
+    buildFromSaved(data);
+    this.lifepathEdit = true;
+    await actor.update({ "system.lifepath": writeLifepath(data) });
+  }
+
+  static async #onLifepathClear() {
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Жизненный путь" }, content: "<p>Убрать жизненный путь с листа? Биография и то, что мастер уже выдал, останутся.</p>"
+    });
+    if (!ok) return;
+    this.lifepathEdit = false;
+    await this.actor.update({ "system.lifepath": "" });
+  }
 
   static async #onMoneyExchange() {
     await exchangeDialog(this.actor);

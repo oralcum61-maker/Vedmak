@@ -2097,18 +2097,6 @@
 .vedmak-wizard .lifepath-toolbar label { display: flex; align-items: center; gap: .3rem; }
 .vedmak-wizard .lifepath-toolbar input[type="number"] { width: 4rem; }
 .vedmak-wizard .lifepath-toolbar .hint { flex-basis: 100%; margin: 0; }
-.vedmak-wizard .lp-entry {
-  display: grid; grid-template-columns: 11rem 14rem 1fr; gap: .5rem; align-items: start;
-  padding: .2rem 0; border-bottom: 1px dotted var(--vd-line-soft); font-size: .84rem;
-}
-.vedmak-wizard .lp-entry .lp-label { color: var(--vd-text-dim); }
-.vedmak-wizard .lp-entry .lp-roll { display: flex; gap: .3rem; align-items: center; }
-.vedmak-wizard .lp-entry .lp-roll select { flex: 1; min-width: 0; height: 1.5rem; font-size: .78rem; }
-.vedmak-wizard .lp-entry .lp-roll .die-value { flex: 1; font-weight: bold; color: var(--vd-gold); }
-.vedmak-wizard .lp-entry .lp-roll a { color: var(--vd-steel); }
-.vedmak-wizard .lp-entry .lp-roll a:hover { color: var(--vd-gold); }
-.vedmak-wizard .lp-entry .lp-text b { color: var(--vd-silver); }
-.vedmak-wizard .lp-entry .lp-text i { color: var(--vd-gold); }
 .vedmak-wizard .choice-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .3rem; font-size: .85rem; }
 .vedmak-wizard .choice-row select { width: 16rem; }
 .vedmak-wizard .effects-list { margin: 0; padding-left: 1.2rem; columns: 2; font-size: .84rem; }
@@ -2410,3 +2398,54 @@
 /* Добыча чудовища: монеты — в кошелёк героя */
 .vedmak .loot-list .loot-coins { margin-left: .35rem; color: var(--vd-gold); }
 .vedmak .loot-list .loot-coins:hover { color: var(--vd-gold-lite); }
+
+/* Жизненный путь карточками — мастер создания и «Дневник» (templates/parts/lifepath-cards.hbs).
+   Результат — главное; кость и список появляются только в режиме правки, под текстом. */
+.vedmak .lp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .6rem; align-items: start; }
+.vedmak .lp-card {
+  min-width: 0; background: rgba(0, 0, 0, .22); border: 1px solid var(--vd-line); border-radius: 3px;
+  padding: .45rem .65rem .5rem;
+}
+.vedmak .lp-card.event { border-left: 3px solid var(--vd-gold); }
+.vedmak .lp-card-head {
+  display: flex; align-items: center; gap: .45rem;
+  margin-bottom: .25rem; padding-bottom: .25rem; border-bottom: 1px solid var(--vd-line-soft);
+}
+.vedmak .lp-card-head i { color: var(--vd-gold); font-size: .85rem; }
+.vedmak .lp-card-head h4 {
+  flex: 1; margin: 0; border: none; font-family: var(--vd-font-head); font-size: 1.08rem;
+  color: var(--vd-text); text-transform: none; letter-spacing: 0;
+}
+.vedmak .lp-card-head .lp-sub { font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; color: var(--vd-text-dim); }
+.vedmak .lp-card-head .lp-risk { width: auto; max-width: 11.5rem; height: 1.5rem; font-size: .76rem; }
+.vedmak .lp-row { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .1rem .6rem; align-items: baseline; padding: .2rem 0; font-size: .86rem; }
+.vedmak .lp-row + .lp-row { border-top: 1px dotted var(--vd-line-soft); }
+.vedmak .lp-row .lp-ctl { grid-column: 2; }
+.vedmak .lp-k { font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--vd-text-dim); }
+.vedmak .lp-v { color: var(--vd-text); line-height: 1.35; }
+.vedmak .lp-v b { color: var(--vd-silver); }
+.vedmak .lp-detail { color: var(--vd-gold); }
+.vedmak .lp-ctl { display: flex; gap: .3rem; align-items: center; min-width: 0; margin-top: .15rem; }
+.vedmak .lp-ctl select { flex: 1; width: 0; min-width: 0; max-width: 16rem; height: 1.45rem; font-size: .74rem; }
+.vedmak .lp-die {
+  display: inline-flex; align-items: center; justify-content: center; gap: .2rem; flex: none;
+  min-width: 2.5rem; height: 1.45rem; padding: 0 .35rem;
+  border: 1px solid var(--vd-line); border-radius: 2px;
+  font-family: var(--vd-font-head); color: var(--vd-gold);
+}
+.vedmak .lp-die i { font-size: .7rem; color: var(--vd-steel); }
+.vedmak .lp-die:hover { border-color: var(--vd-gold); color: var(--vd-gold-lite); }
+.vedmak .lp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem .9rem; }
+.vedmak .lp-cell { display: flex; flex-direction: column; gap: .1rem; min-width: 0; font-size: .86rem; }
+.vedmak .lp-table { width: 100%; margin-top: .3rem; border-collapse: collapse; table-layout: fixed; font-size: .82rem; }
+.vedmak .lp-table th { padding: .1rem .3rem; text-align: left; font-weight: normal; font-size: .68rem; text-transform: uppercase; color: var(--vd-text-dim); }
+.vedmak .lp-table td { padding: .22rem .3rem; border-top: 1px dotted var(--vd-line-soft); vertical-align: top; }
+.vedmak .lp-table th:first-child, .vedmak .lp-table td.n { width: 1.2rem; }
+.vedmak .lp-table td.n { font-family: var(--vd-font-head); color: var(--vd-gold); }
+/* В таблице узко: вместо кости и списка — только список во всю ширину ячейки */
+.vedmak .lp-table .lp-ctl select { max-width: none; }
+.vedmak .lp-table .lp-ctl select + .lp-die { display: none; }
+.vedmak .lp-summary { margin-top: .6rem; }
+.vedmak .lp-summary ul { margin: .2rem 0 0; padding-left: 1.1rem; columns: 2; font-size: .84rem; }
+.vedmak .lifepath-panel .lp-age { display: flex; align-items: center; gap: .3rem; }
+.vedmak .lifepath-panel .lp-age input { width: 3.6rem; height: 1.4rem; }

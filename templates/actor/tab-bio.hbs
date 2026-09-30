@@ -17,6 +17,42 @@
     {{#if schoolHint}}<p class="hint">{{schoolHint}}</p>{{/if}}
   </div>
 
+  {{!-- Жизненный путь карточками: броски в system.lifepath, общий подшаблон с мастером создания --}}
+  <div class="vd-panel lifepath-panel">
+    <div class="panel-head">
+      <h3>Жизненный путь</h3>
+      {{#if editable}}
+      <div class="panel-tools">
+        {{#if lifepath}}
+          {{#if lifepath.edit}}
+          <label class="lp-age" data-tooltip="Возраст для событий: по одному на каждые полные 10 лет (у ведьмака — десятилетия странствий)">Возраст
+            <input type="number" data-lp-age value="{{lifepath.age}}" min="0"></label>
+          <a data-action="lifepathRerollAll" data-tooltip="Перебросить весь путь"><i class="fa-solid fa-dice"></i></a>
+          <a data-action="lifepathClear" data-tooltip="Убрать жизненный путь"><i class="fa-solid fa-trash"></i></a>
+          {{/if}}
+          <a data-action="lifepathEdit" data-tooltip="{{#if lifepath.edit}}Готово{{else}}Перебросить или выбрать результаты{{/if}}">
+            <i class="fa-solid {{#if lifepath.edit}}fa-check{{else}}fa-pen{{/if}}"></i></a>
+        {{else}}
+          <a class="roll-btn" data-action="lifepathRoll" data-tooltip="Бросить по таблицам корника: раса, происхождение и возраст — с листа"><i class="fa-solid fa-dice"></i> Бросить</a>
+        {{/if}}
+      </div>
+      {{/if}}
+    </div>
+    {{#if lifepath}}
+      {{#if lifepath.edit}}<p class="hint">Правка меняет историю. Кроны, навыки и предметы из жизненного пути мастер создания выдал один раз — их поправьте на листе сами.</p>{{/if}}
+      {{> "systems/vedmak/templates/parts/lifepath-cards.hbs" cards=lifepath.cards}}
+      {{#if lifepath.summary.length}}
+      <div class="lp-summary">
+        <span class="lp-k">Итоги</span>
+        <ul>{{#each lifepath.summary}}<li>{{this}}</li>{{/each}}</ul>
+      </div>
+      {{/if}}
+    {{else}}
+      <p class="hint">Жизненного пути нет. Его бросает мастер создания персонажа, а можно бросить и здесь — по таблицам корника
+        (стр. 25–36, у ведьмака — 238–245). Кроны, навыки и предметы из него впишите на лист сами.</p>
+    {{/if}}
+  </div>
+
   {{#if race.system.traits.length}}
   <div class="vd-panel traits-panel">
     <h3>{{race.name}} <span class="hint-inline">особенности расы</span></h3>
@@ -46,7 +82,7 @@
   </div>
 
   <div class="vd-panel editor-panel">
-    <h3>Жизненный путь</h3>
+    <h3>История</h3>
     {{formInput systemFields.biography value=system.biography enriched=enrichedBiography toggled=true}}
   </div>
 

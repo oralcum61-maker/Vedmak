@@ -19,6 +19,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       reputation: new SchemaField({ value: int(0), fame: str("") }),
       improvementPoints: new SchemaField({ value: int(0), total: int(0) }),
       // Кошелёк по валютам (config/money.mjs): крона — основная, остальные меняются по курсу
+      // Жизненный путь: JSON с бросками (character/lifepath.mjs → readLifepath); показывается в «Дневнике»
+      lifepath: str(""),
       money: new SchemaField({
         crowns: int(0), orens: int(0, { min: 0 }), florens: int(0, { min: 0 }), ducats: int(0, { min: 0 }),
         marks: int(0, { min: 0 }), lintars: int(0, { min: 0 }), bizants: int(0, { min: 0 })

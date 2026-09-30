@@ -1,0 +1,51 @@
+{{!-- Жизненный путь карточками — общий для мастера создания и «Дневника». Контекст: cards (lifepathCards).
+      Строка: подпись, результат; если можно править — кость (переброс) и список (свой результат). --}}
+{{#*inline "lpValue"}}
+  <span class="lp-v">{{#if title}}<b>{{title}}.</b> {{/if}}{{text}}{{#if detail}} <i class="lp-detail">{{detail}}</i>{{/if}}</span>
+  {{#if editable}}
+  <span class="lp-ctl">
+    {{#if options}}
+    <select data-roll-path="{{path}}" data-mod="{{mod}}" data-tooltip="Выбрать результат">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+    {{/if}}
+    <a class="lp-die" data-action="{{action}}" data-path="{{path}}" data-tooltip="Перебросить (d{{sides}})"><i class="fa-solid fa-dice-d20"></i>{{value}}</a>
+  </span>
+  {{/if}}
+{{/inline}}
+
+<div class="lp-cards">
+  {{#each cards as |c|}}
+  <article class="lp-card {{c.cls}}">
+    <header class="lp-card-head">
+      <i class="fa-solid {{c.icon}}"></i>
+      <h4>{{c.title}}</h4>
+      {{#if c.riskOptions}}
+      <select class="lp-risk" data-lp-risk="{{c.decade}}" data-tooltip="Поведение в это десятилетие: от него шанс опасности (стр. 241)">
+        {{#each c.riskOptions}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+      {{else}}{{#if c.subtitle}}<span class="lp-sub">{{c.subtitle}}</span>{{/if}}{{/if}}
+    </header>
+
+    {{#if c.grid}}
+    <div class="lp-grid">
+      {{#each c.rows as |r|}}
+      <div class="lp-cell"><span class="lp-k">{{r.label}}</span>{{> lpValue r}}</div>
+      {{/each}}
+    </div>
+    {{else}}
+      {{#each c.rows as |r|}}
+      <div class="lp-row{{#if r.static}} static{{/if}}"><span class="lp-k">{{r.label}}</span>{{> lpValue r}}</div>
+      {{/each}}
+      {{#if c.table}}
+      <table class="lp-table">
+        <thead><tr><th></th>{{#each c.table.cols}}<th>{{this}}</th>{{/each}}</tr></thead>
+        <tbody>
+        {{#each c.table.rows as |row|}}
+          <tr><td class="n">{{row.n}}</td>{{#each row.cells as |cell|}}<td>{{> lpValue cell}}</td>{{/each}}</tr>
+        {{/each}}
+        </tbody>
+      </table>
+      {{/if}}
+    {{/if}}
+  </article>
+  {{/each}}
+</div>
