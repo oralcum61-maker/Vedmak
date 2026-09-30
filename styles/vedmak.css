@@ -2494,3 +2494,10 @@ body.vedmak-lite .vedmak, body.vedmak-lite .vedmak-card {
 body.vedmak-lite .vedmak *, body.vedmak-lite .vedmak.sheet .window-content, body.vedmak-lite .vedmak-card,
 body.vedmak-lite .vedmak-card * { background-blend-mode: normal !important; }
 body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
+
+/* Замер скорости листа (module/apps/perf.mjs) — таблица в карточке чата */
+.vedmak-card .perf-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
+.vedmak-card .perf-table th { font-weight: normal; color: var(--vd-text-dim); text-align: left; padding: .1rem .2rem; border-bottom: 1px solid var(--vd-line); }
+.vedmak-card .perf-table td { padding: .1rem .2rem; border-bottom: 1px dotted var(--vd-line-soft); }
+.vedmak-card .perf-table td + td, .vedmak-card .perf-table th + th { text-align: right; font-family: var(--vd-font-head); }
+.vedmak-card.perf-report .note { margin: .2rem 0; font-size: .74rem; }

@@ -41,6 +41,7 @@ import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
+import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 
 Hooks.once("init", () => {
@@ -194,6 +195,7 @@ Hooks.once("init", () => {
     manualDamage, restTurn, restDays, controlCheck, castSpell,
     advancement, crafting, alchemy, enhancements,
     openWizard: actor => new CharacterWizard({ actor }).render(true),
+    profileSheet,
     hud: CombatHud,
     config: CONFIG.VEDMAK
   };

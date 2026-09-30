@@ -14,6 +14,7 @@ import { endMaintained } from "../magic/effects.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
 import { compareRu, balanceColumns } from "../util.mjs";
+import { profileSheet } from "../apps/perf.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -49,9 +50,21 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       controlCheck: VedmakActorSheet.#onControlCheck,
       ram: VedmakActorSheet.#onRam,
       castSpell: VedmakActorSheet.#onCastSpell,
-      endMaintained: VedmakActorSheet.#onEndMaintained
+      endMaintained: VedmakActorSheet.#onEndMaintained,
+      profileSheet: VedmakActorSheet.#onProfileSheet
     }
   };
+
+  /** В меню «…» заголовка — замер скорости листа (module/apps/perf.mjs): цифры с компьютера игрока. */
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+    controls.push({ icon: "fa-solid fa-gauge-high", label: "Замер скорости листа", action: "profileSheet" });
+    return controls;
+  }
+
+  static async #onProfileSheet() {
+    await profileSheet(this);
+  }
 
   /** Показывать только изученные навыки (состояние окна, не документа). */
   trainedOnly = false;
