@@ -84,6 +84,33 @@ function defenseBase(actor, typeKey, item) {
   return Math.max(0, base);
 }
 
+/**
+ * Лучшая защита для автоматического броска (НИП ведущего): самая высокая основа среди доступных.
+ * Магия — только защиты заклинания; «Воля ×3» и «без защиты» не бросаются, их и берём, если других нет.
+ * @returns {string} ключ защиты для defend()
+ */
+export function bestDefense(actor, attack) {
+  const spellDefenses = attack.spell?.defenses;
+  if (spellDefenses) {
+    const rolled = spellDefenses.filter(k => DEFENSE_TYPES[k]);
+    if (!rolled.length) return spellDefenses.includes("willx3") ? "willx3" : spellDefenses[0] ?? "auto";
+  }
+  let best = { key: "dodge", value: -Infinity };
+  for (const [key, type] of Object.entries(DEFENSE_TYPES)) {
+    if (spellDefenses ? !spellDefenses.includes(key) : type.magicOnly) continue;
+    if (key === "brawlBlock") continue;
+    if (key === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) continue;
+    let item = null;
+    if (key === "block" || key === "parry") {
+      item = defenseItems(actor, attack, key)[0] ?? null;
+      if (!item) continue;
+    }
+    const value = defenseBase(actor, key, item) + (type.mod ?? 0) - (key === "parry" && attack.weapon?.isThrown ? 5 : 0);
+    if (value > best.value) best = { key, value };
+  }
+  return best.key;
+}
+
 async function defenseDialog(actor, attack, cfg, items) {
   const spellDefenses = attack.spell?.defenses;
   const allowed = Object.entries(DEFENSE_TYPES).filter(([k, t]) => {
