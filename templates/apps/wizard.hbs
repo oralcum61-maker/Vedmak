@@ -76,6 +76,7 @@
         <label>Возраст <input type="number" data-field="age" value="{{state.age}}" min="0"></label>
         {{#if lifepathNext}}
         <a class="roll-btn" data-action="lpStep" data-tooltip="Бросок уйдёт в чат"><i class="fa-solid fa-dice"></i> Бросить: {{lifepathNext.label}}</a>
+        <a class="roll-btn" data-action="lpSection" data-tooltip="Все броски раздела по очереди — каждый в чат"><i class="fa-solid fa-forward-step"></i> Раздел: {{lifepathNext.cardTitle}}</a>
         <a class="roll-btn" data-action="lpRest" data-tooltip="Все оставшиеся броски — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i> До конца</a>
         {{else}}
         <a class="roll-btn" data-action="rerollAll"><i class="fa-solid fa-dice"></i> Перебросить всё</a>

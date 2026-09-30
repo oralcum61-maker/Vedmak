@@ -26,6 +26,7 @@
         {{#if lifepath}}
           {{#if lifepath.next}}
           <a class="roll-btn" data-action="lifepathStep" data-tooltip="Следующий бросок — в чат"><i class="fa-solid fa-dice"></i> Бросить: {{lifepath.next.label}}</a>
+          <a data-action="lifepathSection" data-tooltip="Бросить раздел «{{lifepath.next.cardTitle}}» — каждый бросок в чат"><i class="fa-solid fa-forward-step"></i></a>
           <a data-action="lifepathRest" data-tooltip="Добросить всё оставшееся — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i></a>
           {{/if}}
           {{#if lifepath.edit}}

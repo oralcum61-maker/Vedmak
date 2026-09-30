@@ -10,7 +10,7 @@ import {
 import { levelLabel } from "../config/magic.mjs";
 import {
   buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath,
-  rollLifepathStep, rollLifepathRest, postLifepathRolls
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 
@@ -71,6 +71,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       reroll: CharacterWizard.#onReroll,
       rerollAll: CharacterWizard.#onRerollAll,
       lpStep: CharacterWizard.#onLifepathStep,
+      lpSection: CharacterWizard.#onLifepathSection,
       lpRest: CharacterWizard.#onLifepathRest,
       rollStats: CharacterWizard.#onRollStats,
       rollMoney: CharacterWizard.#onRollMoney,
@@ -267,7 +268,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     if (s.step === "lifepath") {
-      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep" });
+      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep", sectionAction: "lpSection" });
       context.lifepathNext = lp.next;
       context.lifeChoices = (lp.effects?.skillChoices ?? []).map(c => ({
         ...c, options: choiceSkillOptions(c).map(o => ({ ...o, selected: s.rolls[c.path] === o.value }))
@@ -660,6 +661,21 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static async #onLifepathStep() {
     await this.#lifepathStep();
+    this.render();
+  }
+
+  /** Бросить раздел: броски карточки по одному — каждый в чат и сразу на экран. */
+  static async #onLifepathSection() {
+    if (this.#lifepathBusy) return;
+    this.#lifepathBusy = true;
+    try {
+      await rollLifepathSection(this.wiz.rolls, this.#lifepathOpts, async res => {
+        await postLifepathRolls(this.actor, res.rows, { roll: res.roll, name: this.wiz.name });
+        this.render();
+      });
+    } finally {
+      this.#lifepathBusy = false;
+    }
     this.render();
   }
 

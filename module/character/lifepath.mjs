@@ -88,6 +88,7 @@ class Builder {
     this.column = column;
     this.step = step;
     this.next = null;
+    this.pendingEntry = null;
     this.owners = {};    // бросок без своей строки («1d10 × 100 крон») → строка, куда записан его итог
     this.sections = [];
     this.effects = {
@@ -113,7 +114,8 @@ class Builder {
     if (!(path in this.rolls)) {
       if (this.step) {
         this.next = { path, sides, label, section: section?.title ?? "" };
-        section?.entries.push({ path, label, sides, pending: true, text: "" });
+        this.pendingEntry = { path, label, sides, pending: true, text: "" };
+        section?.entries.push(this.pendingEntry);
         throw PENDING;
       }
       this.rolls[path] = rollDie(sides);
@@ -460,6 +462,20 @@ function witcherWound(v, fx) {
 /* ------------------------------------------------------------------------- */
 
 /**
+ * Раздел броска для «Бросить раздел»: десятилетие важных событий, один брат или сестра или раздел целиком.
+ * @returns {{card: string, cardTitle: string}} card — ключ, cardTitle — коротко для кнопки
+ */
+function cardOf(next) {
+  const decade = next.path.match(/^event\.(\d+)/)?.[1];
+  if (decade !== undefined) return { card: `event.${decade}`, cardTitle: `${(Number(decade) + 1) * 10} лет` };
+  // Братьев и сестёр бывает до восьми, по четыре броска: раздел — каждый отдельно
+  const sib = next.path.match(/^sibling\.(\d+)/)?.[1];
+  if (sib !== undefined) return { card: `sibling.${sib}`, cardTitle: `${Number(sib) + 1}-й брат или сестра` };
+  // «Десятилетие 1 (29–39 лет)» → «Десятилетие 1»
+  return { card: next.section, cardTitle: next.section.replace(/\s*\(.*\)$/, "") };
+}
+
+/**
  * Собрать жизненный путь.
  * @param {object} rolls — словарь бросков (изменяется: дописываются недостающие, кроме пошагового режима)
  * @param {object} opts — {witcher, age, region: north|nilfgaard|elder, race, step}
@@ -480,6 +496,10 @@ export function buildLifepath(rolls, opts) {
     if (own) return { title: own.title ?? "", text: own.text ?? "", detail: own.detail ?? "" };
     return { title: "", text: b.owners[path]?.detail ?? "", detail: "" };
   };
+  if (b.next) {
+    Object.assign(b.next, cardOf(b.next));
+    Object.assign(b.pendingEntry, { cardTitle: b.next.cardTitle });
+  }
   return { sections: b.sections, effects: b.effects, next: b.next, resultOf };
 }
 
@@ -603,15 +623,20 @@ const SIBLING_COLS = ["Пол", "Возраст", "Отношение", "Чер�
  * Следующий бросок (пошаговый режим) — строкой с кнопкой в конце своей карточки.
  * @param {object[]} sections — из buildLifepath
  * @param {object} [opts] — editable: показать кости и списки; action — data-action переброса;
- *   nextAction — data-action следующего броска
+ *   nextAction — data-action следующего броска (null — бросать нельзя); sectionAction — «Бросить раздел»
  */
-export function lifepathCards(sections, { editable = false, action = "reroll", nextAction = "lifepathStep" } = {}) {
+export function lifepathCards(sections, {
+  editable = false, action = "reroll", nextAction = "lifepathStep", sectionAction = "lifepathSection"
+} = {}) {
   const ctx = { editable, action };
   // «20 лет: событие» → «Событие»: год уже в заголовке карточки
   const short = label => label.replace(/^\d+ лет:\s*/, "").replace(/^./, c => c.toUpperCase());
   const pendingOf = entries => {
     const e = entries.find(x => x.pending);
-    return e ? { label: short(e.label), sides: e.sides, action: nextAction } : null;
+    return e ? {
+      label: short(e.label), sides: e.sides, cardTitle: e.cardTitle ?? "",
+      action: nextAction, sectionAction: nextAction ? sectionAction : null
+    } : null;
   };
   const cards = [];
   for (const sec of sections) {
@@ -708,6 +733,25 @@ export async function rollLifepathStep(rolls, opts) {
   rolls[next.path] = roll.total;
   const lp = buildLifepath(rolls, { ...opts, step: true });
   return { lp, roll, rows: [stepRow(next, roll.total, lp)] };
+}
+
+/**
+ * Бросить раздел — все броски текущей карточки (семья, десятилетие, стиль…) по одному.
+ * @param {Function} [onRoll] — после каждого броска (карточка в чат, показ на листе)
+ * @returns {Promise<object[]>} результаты rollLifepathStep
+ */
+export async function rollLifepathSection(rolls, opts, onRoll = null) {
+  const card = buildLifepath(rolls, { ...opts, step: true }).next?.card;
+  const done = [];
+  if (!card) return done;
+  for (let i = 0; i < 200; i++) {
+    const { next } = buildLifepath(rolls, { ...opts, step: true });
+    if (!next || next.card !== card) break;
+    const res = await rollLifepathStep(rolls, opts);
+    done.push(res);
+    await onRoll?.(res);
+  }
+  return done;
 }
 
 /** Добросить всё, что осталось, — по порядку, как при пошаговом броске. */

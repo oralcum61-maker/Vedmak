@@ -52,7 +52,9 @@
     <div class="lp-row lp-pending">
       <span class="lp-k">{{c.pending.label}}</span>
       <span class="lp-ctl">{{#if c.pending.action}}<a class="roll-btn lp-next" data-action="{{c.pending.action}}" data-tooltip="Бросок уйдёт в чат">
-        <i class="fa-solid fa-dice"></i> Бросить d{{c.pending.sides}}</a>{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
+        <i class="fa-solid fa-dice"></i> Бросить d{{c.pending.sides}}</a>
+        <a class="roll-btn lp-next" data-action="{{c.pending.sectionAction}}" data-tooltip="Бросить раздел «{{c.pending.cardTitle}}» по очереди — каждый бросок в чат">
+        <i class="fa-solid fa-forward-step"></i> Раздел</a>{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
     </div>
     {{/if}}
   </article>

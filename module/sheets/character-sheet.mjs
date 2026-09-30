@@ -19,7 +19,7 @@ import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
-  rollLifepathStep, rollLifepathRest, postLifepathRolls
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
 } from "../character/lifepath.mjs";
 
 export class CharacterSheet extends VedmakActorSheet {
@@ -62,6 +62,7 @@ export class CharacterSheet extends VedmakActorSheet {
       lifepathRerollAll: CharacterSheet.#onLifepathRerollAll,
       lifepathRoll: CharacterSheet.#onLifepathRoll,
       lifepathStep: CharacterSheet.#onLifepathStep,
+      lifepathSection: CharacterSheet.#onLifepathSection,
       lifepathRest: CharacterSheet.#onLifepathRest,
       lifepathClear: CharacterSheet.#onLifepathClear
     }
@@ -503,6 +504,21 @@ export class CharacterSheet extends VedmakActorSheet {
 
   static async #onLifepathStep() {
     await this.#stepLifepath();
+  }
+
+  /** Бросить раздел: броски карточки по одному — каждый в чат и сразу на лист. */
+  static async #onLifepathSection() {
+    const data = readLifepath(this.actor.system.lifepath);
+    if (!data || this.#lifepathBusy) return;
+    this.#lifepathBusy = true;
+    try {
+      await rollLifepathSection(data.rolls, savedOpts(data), async res => {
+        await this.actor.update({ "system.lifepath": writeLifepath(data) });
+        await postLifepathRolls(this.actor, res.rows, { roll: res.roll });
+      });
+    } finally {
+      this.#lifepathBusy = false;
+    }
   }
 
   /** Добросить остаток пути разом — все броски одной карточкой в чат. */

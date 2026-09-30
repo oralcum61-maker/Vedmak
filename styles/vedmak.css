@@ -2452,7 +2452,7 @@
 /* Следующий бросок пути — строка с кнопкой в конце карточки */
 .vedmak .lp-row.lp-pending { align-items: center; }
 .vedmak .lp-row.lp-pending .lp-k { color: var(--vd-gold); }
-.vedmak .lp-row.lp-pending .lp-ctl { grid-column: 2; margin: 0; }
+.vedmak .lp-row.lp-pending .lp-ctl { grid-column: 2; flex-wrap: wrap; margin: 0; }
 .vedmak .lp-next { padding: .1rem .55rem; font-size: .78rem; }
 .vedmak .lp-step-bar { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin: 0 0 .5rem; }
 .vedmak .lp-step-bar .hint { margin: 0; }
