@@ -6,13 +6,13 @@
 
 ## Где что лежит на компьютере автора
 
-Репозиторий пока собран из **копии** системы для игры, а не из рабочей папки. Поэтому части файлов здесь нет.
+Репозиторий живёт в рабочей папке `D:\Witcher\vedmak`: корень репозитория — это корень системы.
 
 | Путь | Что там | В репозитории? |
 |---|---|---|
-| `D:\Witcher\vedmak` | рабочие исходники системы | нет — отсюда только копия |
-| `D:\Witcher\vedmak\packs-src\*.json` | источники компендиумов | **нет** |
-| `D:\FoundryVTT-WindowsPortable-14.365\Data\systems\vedmak` | копия для игры, её делает `tools\sync-to-foundry.ps1` (robocopy `/MIR` без `.git`, `node_modules`, `packs-src`) | да, коммит `45613a6` |
+| `D:\Witcher\vedmak` | рабочие исходники системы | да, весь репозиторий |
+| `D:\Witcher\vedmak\packs-src\*.json` | источники компендиумов | да |
+| `D:\FoundryVTT-WindowsPortable-14.365\Data\systems\vedmak` | копия для игры, её делает `tools\sync-to-foundry.ps1` (robocopy `/MIR` без `.git`, `node_modules`, `packs-src`). Git там нет и быть не должно | — |
 | `D:\Witcher\_notes\kornik.md` | конспект корника; «стр. N» в коде — страница русского корника | нет |
 | `D:\Witcher\_tools\*.py` | генераторы `packs-src`: извлечение из PDF, значки, папки | нет |
 | `D:\Witcher\_ref\` | чужие системы для сверки: TheWitcherTRPG (GPL-3.0 — **код не копировать**), Deathmarch | нет |
@@ -26,6 +26,11 @@
 5. `node tools/build-packs.mjs` — Foundry при этом должен быть остановлен.
 
 **LevelDB в `packs/` руками не править**: меняется `packs-src`, потом пакеты пересобираются.
+Пересобранные `packs/` коммитятся вместе с `packs-src`.
+
+Правки из облачной сессии доходят до игры так: коммит → `git pull` в `D:\Witcher\vedmak` →
+`tools\sync-to-foundry.ps1`. Пакеты пересобираются только на компьютере автора: `build-packs.mjs`
+берёт `classic-level` из установленного Foundry.
 
 ## Принципы (из PLAN.md)
 - Правила как в книге (RAW). Необязательные правила включаются переключателями в настройках.
