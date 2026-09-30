@@ -685,6 +685,167 @@ export function lifepathCards(sections, {
   return cards;
 }
 
+/* ------------------------------------------------------------------------- */
+/*  Летопись: жизненный путь для чтения в «Дневнике»                          */
+/* ------------------------------------------------------------------------- */
+
+/** Броски-развилки: их смысл виден по следующей строке («Удача или неудача» → сама удача). */
+const STRUCTURAL = /\.(kind|luck|side|danger|dangerKind|outcome)$/;
+
+/** Что за запись в событии десятилетия — по пути броска после «event.N.» / «decade.N.». */
+const FACETS = {
+  fortune: "Удача", misfortune: "Неудача", love: "Любовь", tragedy: "Любовь", problem: "Любовь",
+  ally: "Союзник", enemy: "Враг", event: "Беда", wound: "Рана", benefit: "Выгода", hunt: "Охота"
+};
+
+const LONG = 70;
+const lowerFirst = t => (t ? t.charAt(0).toLowerCase() + t.slice(1) : t);
+const GENDER = { "Мужской": "мужчина", "Женский": "женщина" };
+
+/** Длинный текст строки — заголовок (первое предложение) и остальное. */
+function splitText(text = "") {
+  if (text.length <= LONG) return { head: text, body: "" };
+  const m = text.match(/^.{15,}?[.!?](?=\s|$)/);
+  return m && m[0].length < text.length ? { head: m[0], body: text.slice(m[0].length).trim() } : { head: text, body: "" };
+}
+
+/** Подпись без механики броска: «Жив ли враг (d100)» → «Жив ли враг». */
+const plainLabel = label => String(label ?? "").replace(/\s*\(d\d+\)/, "");
+
+/** Строка для чтения: подпись, заголовок, пояснение, подробность. */
+function fact(e, label = plainLabel(e.label)) {
+  if (e.title) return { label, head: e.title, body: e.text, detail: e.detail ?? "" };
+  return { label, ...splitText(e.text), detail: e.detail ?? "" };
+}
+
+/** Строкой в абзаце: заголовок и пояснение подряд — после заголовка точка. */
+function inlineFact(e) {
+  const f = fact(e);
+  if (f.body && !/[.!?…]$/.test(f.head)) f.head += ".";
+  return f;
+}
+
+/** Записи десятилетия: соседние строки одного рода (союзник, враг, охота…) — одной записью. */
+function facetsOf(entries, base) {
+  const facets = [];
+  let cur = null;
+  for (const e of entries) {
+    if (STRUCTURAL.test(e.path ?? "")) continue;
+    const kind = (e.path ?? "").slice(base.length + 1).split(".")[0];
+    const title = FACETS[kind] ?? "";
+    if (!cur || cur.title !== title) facets.push(cur = { title, entries: [] });
+    cur.entries.push(e);
+  }
+  return facets.map(({ title, entries }) => {
+    // Главная строка: «кто» у союзника и врага, цель у охоты, иначе первая
+    const lead = entries.find(e => /: кто$/.test(e.label)) ?? entries.find(e => /\.hunt\.target$/.test(e.path)) ?? entries[0];
+    const main = fact(lead);
+    const gender = entries.find(e => e !== lead && /: пол$/.test(e.label));
+    if (gender) main.head += ` (${GENDER[gender.text] ?? lowerFirst(gender.text)})`;
+    const meta = [], notes = [];
+    if (main.body) notes.push(main.body);
+    if (main.detail) notes.push(main.detail);
+    const prefix = new RegExp(`^${title}:\\s*`, "i");
+    for (const e of entries) {
+      if (e === lead || e === gender) continue;
+      const value = e.title || e.text;
+      const k = lowerFirst(plainLabel(e.label).replace(prefix, ""));
+      if (value.length > LONG) notes.push(`${e.title ? `${e.title}. ${e.text}` : value}`);
+      else meta.push({ k, v: lowerFirst(value) });
+      if (e.detail) notes.push(e.detail);
+    }
+    return { title, head: main.head, meta, notes };
+  });
+}
+
+/**
+ * Жизненный путь для чтения — «летописью»: происхождение, братья и сёстры, хроника по десятилетиям
+ * на линии времени, облик и нрав. Служебные броски-развилки не показываются, строки одного события
+ * собраны в одну запись. Правка — прежними карточками (lifepathCards).
+ * @param {object[]} sections — из buildLifepath
+ * @param {object} [opts] — nextAction / sectionAction: data-action следующего броска и раздела (null — бросать нельзя)
+ */
+export function lifepathStory(sections, { nextAction = null, sectionAction = null } = {}) {
+  const blocks = [];
+  const chronicle = [];
+  const traits = [];
+  let pending = null;
+  for (const sec of sections) {
+    const pend = sec.entries.find(e => e.pending);
+    if (pend && nextAction) pending = { label: pend.label, sides: pend.sides, cardTitle: pend.cardTitle ?? sec.title, action: nextAction, sectionAction };
+    const done = sec.entries.filter(e => !e.pending);
+    const has = path => done.some(e => e.path === path);
+
+    if (sec.title === "Семья" || sec.title === "Школа и испытания" || sec.title === "Жизнь ведьмака") {
+      // Развилка «с семьёй что-то случилось» не нужна, если следом сказано, что именно
+      const rows = done.filter(e => !(e.path === "family" && has("familyFate")) && !(e.path === "parents" && has("parentsFate")));
+      const featuredPaths = { "Семья": ["familyStatus", "friend"], "Школа и испытания": ["wSchool"], "Жизнь ведьмака": ["wSituation"] }[sec.title];
+      const featured = rows.filter(e => featuredPaths.includes(e.path)).map(e => fact(e));
+      const facts = rows.filter(e => !featuredPaths.includes(e.path)).map(inlineFact);
+      const title = { "Семья": "Происхождение", "Школа и испытания": "Школа и испытания", "Жизнь ведьмака": "Жизнь ведьмака" }[sec.title];
+      if (featured.length || facts.length) blocks.push({ kind: "facts", title, featured, facts });
+      continue;
+    }
+    if (sec.title === "Братья и сёстры") {
+      const count = done.find(e => e.path === "siblingsCount");
+      const byGroup = new Map();
+      for (const e of done.filter(x => x.group !== undefined)) {
+        if (!byGroup.has(e.group)) byGroup.set(e.group, []);
+        byGroup.get(e.group)[Number(e.path.split(".").pop())] = e.title || e.text;
+      }
+      const people = [...byGroup.values()].map(([gender, age, attitude, trait]) => ({
+        icon: gender === "Женский" ? "fa-venus" : gender === "Мужской" ? "fa-mars" : "fa-user",
+        who: gender === "Женский" ? "Сестра" : gender === "Мужской" ? "Брат" : "Брат или сестра",
+        meta: [age && lowerFirst(age), attitude && lowerFirst(attitude), trait && lowerFirst(trait)].filter(Boolean)
+      }));
+      blocks.push({ kind: "siblings", title: "Братья и сёстры", subtitle: count ? count.text : "", people });
+      continue;
+    }
+    if (sec.title === "Важные события") {
+      const byDecade = new Map();
+      for (const e of done) {
+        const i = e.path?.match(/^event\.(\d+)/)?.[1];
+        if (i === undefined) continue;
+        if (!byDecade.has(i)) byDecade.set(i, []);
+        byDecade.get(i).push(e);
+      }
+      for (const [i, entries] of byDecade) {
+        const facets = facetsOf(entries, `event.${i}`);
+        if (facets.length) chronicle.push({ age: `${(Number(i) + 1) * 10}`, unit: "лет", facets });
+      }
+      const none = done.find(e => e.static);
+      if (none && !byDecade.size) chronicle.push({ age: "—", facets: [{ title: "", head: none.text, meta: [], notes: [], quiet: true }] });
+      continue;
+    }
+    if (sec.risk) {
+      // Десятилетие ведьмака: возраст «22–32», поведение — подписью
+      const years = sec.title.match(/\((\d+)–(\d+)/);
+      let facets = facetsOf(done, `decade.${sec.decade}`);
+      const rolledOutcome = done.some(e => /\.outcome$/.test(e.path));
+      if (!facets.length && rolledOutcome) facets = [{ title: "", head: "Спокойное десятилетие", meta: [], notes: [], quiet: true }];
+      if (!facets.length) continue;
+      const risk = WITCHER_RISK[sec.risk]?.label ?? "";
+      const era = { from: years?.[1], to: years?.[2], unit: "лет", hint: `Поведение: ${risk}`,
+        sub: sec.risk === "normal" ? "" : risk, quiet: facets.length === 1 && facets[0].quiet, risk: sec.risk, facets };
+      // Спокойные десятилетия подряд с тем же поведением — одной записью: «23–53»
+      const last = chronicle.at(-1);
+      if (era.quiet && last?.quiet && last.risk === era.risk && last.to === era.from) {
+        last.to = era.to;
+        last.facets[0].head = "Спокойные десятилетия";
+      } else chronicle.push(era);
+      continue;
+    }
+    if (sec.title === "Личный стиль" || sec.title === "Ценности") {
+      traits.push({ title: sec.title === "Личный стиль" ? "Облик" : "Ценности",
+        items: done.map(e => ({ k: e.label, v: e.title || e.text })) });
+    }
+  }
+  for (const era of chronicle) if (era.from) era.age = `${era.from}–${era.to}`;
+  if (chronicle.length) blocks.push({ kind: "chronicle", title: "Хроника", eras: chronicle });
+  if (traits.length) blocks.push({ kind: "traits", title: "Облик и нрав", groups: traits });
+  return { blocks, pending };
+}
+
 /** Итоги жизненного пути словами: деньги, предметы, заметки (механику мастер применил при создании). */
 export function lifepathSummary(fx) {
   if (!fx) return [];

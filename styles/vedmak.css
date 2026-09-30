@@ -2457,8 +2457,91 @@
 /* В таблице узко: вместо кости и списка — только список во всю ширину ячейки */
 .vedmak .lp-table .lp-ctl select { max-width: none; }
 .vedmak .lp-table .lp-ctl select + .lp-die { display: none; }
-.vedmak .lp-summary { margin-top: .6rem; }
-.vedmak .lp-summary ul { margin: .2rem 0 0; padding-left: 1.1rem; columns: 2; font-size: .84rem; }
+/* Итоги пути — бирками под летописью */
+.vedmak .lp-summary { margin-top: .8rem; }
+.vedmak .lp-summary ul { list-style: none; margin: .3rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .3rem; }
+.vedmak .lp-summary li {
+  padding: .12rem .5rem; font-size: .78rem; color: var(--vd-text);
+  background: rgba(0, 0, 0, .25); border: 1px solid var(--vd-line); border-radius: 2px;
+}
+
+/* ------------------------ Жизненный путь: летопись ------------------------ */
+/* Для чтения (templates/parts/lifepath-story.hbs): происхождение, братья и сёстры, хроника на линии времени,
+   облик и нрав. Главное — заголовками шрифтом листа, пояснения таблиц — приглушённым текстом. */
+.vedmak .lp-story { display: flex; flex-direction: column; gap: 1rem; }
+.vedmak .lp-block .group-head { margin-bottom: .45rem; }
+.vedmak .lp-block .lp-sub { font-size: .74rem; font-style: italic; color: var(--vd-text-dim); }
+.vedmak .lp-cap {
+  display: block; font-family: var(--vd-font-head); font-size: .62rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--vd-gold);
+}
+.vedmak .lp-head { margin: 0; border: none; font-family: var(--vd-font-head); font-weight: normal; font-size: 1.08rem; line-height: 1.25; color: var(--vd-silver); }
+.vedmak .lp-body { margin: 0; font-size: .82rem; line-height: 1.5; color: var(--vd-text-dim); }
+.vedmak .lp-gold { margin: 0; font-size: .8rem; font-style: italic; color: var(--vd-gold); }
+
+/* Происхождение и школа: главное — плашками с золотой кромкой, остальное — строками */
+.vedmak .lp-featured { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .6rem; margin-bottom: .45rem; }
+.vedmak .lp-feature {
+  display: flex; flex-direction: column; gap: .25rem; padding: .5rem .7rem .6rem;
+  background: rgba(0, 0, 0, .2); border: 1px solid var(--vd-line-soft); border-left: 3px solid var(--vd-gold); border-radius: 2px;
+}
+.vedmak .lp-fact { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: .7rem; padding: .35rem 0; border-top: 1px dotted var(--vd-line-soft); }
+.vedmak .lp-fact .lp-cap { padding-top: .25rem; color: var(--vd-text-dim); letter-spacing: .1em; }
+.vedmak .lp-fact p { margin: 0; font-size: .85rem; line-height: 1.5; }
+.vedmak .lp-fact .lp-head { font-family: var(--vd-font-body); font-size: .88rem; font-weight: bold; color: var(--vd-text); }
+
+/* Братья и сёстры — строками: кто, возраст, отношение, черта */
+.vedmak .lp-people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 0 1rem; }
+.vedmak .lp-people li {
+  display: grid; grid-template-columns: 1rem auto minmax(0, 1fr); align-items: baseline; gap: .45rem;
+  padding: .25rem 0; border-bottom: 1px dotted var(--vd-line-soft); font-size: .84rem;
+}
+.vedmak .lp-people li i { width: .9rem; text-align: center; font-size: .8rem; color: var(--vd-gold); }
+.vedmak .lp-people li b { font-family: var(--vd-font-head); font-weight: normal; font-size: 1rem; color: var(--vd-silver); }
+.vedmak .lp-person { color: var(--vd-text-dim); }
+.vedmak .lp-person span + span::before { content: " · "; color: var(--vd-steel); }
+
+/* Хроника: линия времени, возраст — клеймом на ней */
+.vedmak .lp-timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+.vedmak .lp-timeline::before {
+  content: ""; position: absolute; left: calc(1.6rem - 1px); top: .8rem; bottom: .8rem; width: 2px;
+  background: linear-gradient(180deg, var(--vd-gold), var(--vd-line)); opacity: .5;
+}
+.vedmak .lp-era { position: relative; display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: .8rem; padding: .3rem 0 .6rem; }
+.vedmak .lp-age {
+  position: relative; z-index: 1; align-self: start;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 3.2rem; min-height: 3rem; padding: .2rem .1rem;
+  background: #191309; border: 1px solid var(--vd-gold); border-radius: 2px;
+  box-shadow: 0 0 0 3px var(--vd-panel), inset 0 0 0 1px rgba(0, 0, 0, .6);
+}
+.vedmak .lp-age b { font-family: var(--vd-font-head); font-weight: normal; font-size: 1.1rem; line-height: 1; color: var(--vd-gold-lite); white-space: nowrap; }
+.vedmak .lp-age small { margin-top: .1rem; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-text-dim); }
+.vedmak .lp-era-body { display: flex; flex-direction: column; gap: .5rem; min-width: 0; padding-top: .1rem; }
+.vedmak .lp-risk-note { font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--vd-steel); }
+.vedmak .lp-event { display: flex; flex-direction: column; gap: .15rem; }
+.vedmak .lp-event-head { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .5rem; }
+.vedmak .lp-event-head .lp-cap { display: inline; }
+.vedmak .lp-event-head b { font-family: var(--vd-font-head); font-weight: normal; font-size: 1.08rem; color: var(--vd-silver); }
+.vedmak .lp-event.quiet .lp-event-head b { font-size: .95rem; color: var(--vd-text-dim); }
+.vedmak .lp-meta { margin: 0; font-size: .82rem; line-height: 1.5; color: var(--vd-text); }
+.vedmak .lp-meta span + span::before { content: " · "; color: var(--vd-steel); }
+.vedmak .lp-meta i, .vedmak .lp-traits dd i { font-style: normal; color: var(--vd-text-dim); }
+
+/* Облик и нрав */
+.vedmak .lp-traits { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .4rem 1.4rem; }
+.vedmak .lp-traits dl { margin: 0; }
+.vedmak .lp-traits dt { margin-bottom: .15rem; }
+.vedmak .lp-traits dd { margin: 0; padding: .2rem 0; font-size: .86rem; border-top: 1px dotted var(--vd-line-soft); }
+.vedmak .lp-traits dd i::after { content: " —"; }
+
+/* Следующий бросок, пока путь не брошен до конца */
+.vedmak .lp-next-bar {
+  display: flex; align-items: center; gap: .5rem; padding: .45rem .65rem; font-size: .86rem;
+  background: rgba(180, 145, 78, .07); border: 1px dashed var(--vd-gold); border-radius: 2px;
+}
+.vedmak .lp-next-bar > i { color: var(--vd-gold); }
+.vedmak .lp-next-bar .grow { flex: 1; }
 .vedmak .lifepath-panel .lp-age { display: flex; align-items: center; gap: .3rem; }
 .vedmak .lifepath-panel .lp-age input { width: 3.6rem; height: 1.4rem; }
 /* Следующий бросок пути — строка с кнопкой в конце карточки */

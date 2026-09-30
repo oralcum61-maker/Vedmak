@@ -85,6 +85,7 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/chat/verbal.hbs",
   "systems/vedmak/templates/chat/verbal-outcome.hbs",
   "systems/vedmak/templates/parts/lifepath-cards.hbs",
+  "systems/vedmak/templates/parts/lifepath-story.hbs",
   "systems/vedmak/templates/actor/tab-effects.hbs",
   "systems/vedmak/templates/actor/tab-skills.hbs",
   "systems/vedmak/templates/actor/tab-gear.hbs",

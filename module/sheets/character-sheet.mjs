@@ -18,7 +18,7 @@ import { signed, compareRu } from "../util.mjs";
 import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
-  readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
+  readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
 } from "../character/lifepath.mjs";
 
@@ -309,11 +309,14 @@ export class CharacterSheet extends VedmakActorSheet {
     if (!saved) return null;
     // Путь бросается по шагу: next — следующий бросок, пока путь не брошен до конца
     const lp = buildFromSaved(foundry.utils.deepClone(saved));
+    const nextAction = this.isEditable ? "lifepathStep" : null;
+    // Для чтения — летопись; в правке — карточки со списками и костями у каждой строки
+    const edit = this.lifepathEdit && this.isEditable;
     return {
-      cards: lifepathCards(lp.sections, {
-        editable: this.lifepathEdit && this.isEditable, action: "lifepathReroll", nextAction: this.isEditable ? "lifepathStep" : null
-      }),
-      summary: lp.next ? [] : lifepathSummary(lp.effects), edit: this.lifepathEdit, age: saved.age, next: lp.next
+      edit, age: saved.age, next: lp.next,
+      cards: edit ? lifepathCards(lp.sections, { editable: true, action: "lifepathReroll", nextAction }) : null,
+      story: edit ? null : lifepathStory(lp.sections, { nextAction, sectionAction: nextAction && "lifepathSection" }),
+      summary: lp.next ? [] : lifepathSummary(lp.effects)
     };
   }
 

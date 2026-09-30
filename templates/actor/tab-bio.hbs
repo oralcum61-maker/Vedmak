@@ -25,7 +25,6 @@
       <div class="panel-tools">
         {{#if lifepath}}
           {{#if lifepath.next}}
-          <a class="roll-btn" data-action="lifepathStep" data-tooltip="Следующий бросок — в чат"><i class="fa-solid fa-dice"></i> Бросить: {{lifepath.next.label}}</a>
           <a data-action="lifepathSection" data-tooltip="Бросить раздел «{{lifepath.next.cardTitle}}» — каждый бросок в чат"><i class="fa-solid fa-forward-step"></i></a>
           <a data-action="lifepathRest" data-tooltip="Добросить всё оставшееся — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i></a>
           {{/if}}
@@ -45,10 +44,14 @@
     </div>
     {{#if lifepath}}
       {{#if lifepath.edit}}<p class="hint">Правка меняет историю. Кроны, навыки и предметы из жизненного пути мастер создания выдал один раз — их поправьте на листе сами.</p>{{/if}}
+      {{#if lifepath.edit}}
       {{> "systems/vedmak/templates/parts/lifepath-cards.hbs" cards=lifepath.cards}}
+      {{else}}
+      {{> "systems/vedmak/templates/parts/lifepath-story.hbs" story=lifepath.story}}
+      {{/if}}
       {{#if lifepath.summary.length}}
       <div class="lp-summary">
-        <span class="lp-k">Итоги</span>
+        <span class="lp-cap">Итоги</span>
         <ul>{{#each lifepath.summary}}<li>{{this}}</li>{{/each}}</ul>
       </div>
       {{/if}}
