@@ -3,7 +3,7 @@
 
 import { STATUS_RESIST_KEY } from "../config/combat.mjs";
 import { resolveActor, registerGMHandler, asGM, postCard } from "../combat/common.mjs";
-import { applyStatus, removeShieldEffects } from "../combat/damage.mjs";
+import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
@@ -20,6 +20,17 @@ export async function requestSpellEffects(message) {
 }
 
 registerGMHandler("applySpellEffects", async ({ messageId }) => {
+  // Флаг effectsApplied ставится только в конце — не даём второму запросу наложить эффекты повторно
+  if (applyingMessages.has(messageId)) return;
+  applyingMessages.add(messageId);
+  try {
+    await applySpellEffectsNow(messageId);
+  } finally {
+    applyingMessages.delete(messageId);
+  }
+});
+
+async function applySpellEffectsNow(messageId) {
   const message = game.messages.get(messageId);
   const def = message?.flags.vedmak?.defense;
   if (!def || def.effectsApplied) return;
@@ -59,7 +70,7 @@ registerGMHandler("applySpellEffects", async ({ messageId }) => {
     data: { title: `${def.attack.label} → ${actor.name}`, img: def.attack.img, round: null, lines, buttons: [] },
     actor, rolls, flags: { spellEffects: { messageId } }
   });
-});
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Начало хода                                                               */

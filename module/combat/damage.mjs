@@ -478,26 +478,39 @@ export async function removeShieldEffects(actor) {
   if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
 }
 
+/**
+ * Карточки, которые ведущий применяет прямо сейчас. Флаг `applied` ставится только в конце,
+ * а игрок получает управление сразу после отправки запроса, поэтому второй клик (или клик
+ * атакующего и владельца цели разом) иначе нанёс бы урон дважды.
+ */
+export const applyingMessages = new Set();
+
 registerGMHandler("applyDamage", async ({ messageId }) => {
+  if (applyingMessages.has(messageId)) return;
   const message = game.messages.get(messageId);
   const dmg = message?.flags.vedmak?.damage;
   if (!dmg || dmg.applied) return;
   const actor = resolveActor(dmg.target.tokenUuid) ?? resolveActor(dmg.target.actorUuid);
   if (!actor) return ui.notifications.warn("Цель урона не найдена.");
-  const report = await applyDamageToActor(actor, dmg);
-  // Адреналин: каждый нанесённый крит — кость d6, не больше Тел атакующего
-  if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {
-    const attacker = resolveActor(dmg.attacker.tokenUuid) ?? resolveActor(dmg.attacker.actorUuid);
-    if (attacker?.type === "character") {
-      const max = attacker.system.stats.body.total;
-      const value = Math.min(max, (attacker.system.adrenaline?.value ?? 0) + 1);
-      await attacker.update({ "system.adrenaline.value": value });
-      report.lines.push(`${attacker.name}: кость адреналина (${value}/${max}).`);
+  applyingMessages.add(messageId);
+  try {
+    const report = await applyDamageToActor(actor, dmg);
+    // Адреналин: каждый нанесённый крит — кость d6, не больше Тел атакующего
+    if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {
+      const attacker = resolveActor(dmg.attacker.tokenUuid) ?? resolveActor(dmg.attacker.actorUuid);
+      if (attacker?.type === "character") {
+        const max = attacker.system.stats.body.total;
+        const value = Math.min(max, (attacker.system.adrenaline?.value ?? 0) + 1);
+        await attacker.update({ "system.adrenaline.value": value });
+        report.lines.push(`${attacker.name}: кость адреналина (${value}/${max}).`);
+      }
     }
+    const data = { ...dmg, applied: true, report };
+    const content = await renderTemplate("systems/vedmak/templates/chat/damage.hbs", data);
+    await message.update({ content, "flags.vedmak.damage.applied": true, "flags.vedmak.damage.report": report });
+  } finally {
+    applyingMessages.delete(messageId);
   }
-  const data = { ...dmg, applied: true, report };
-  const content = await renderTemplate("systems/vedmak/templates/chat/damage.hbs", data);
-  await message.update({ content, "flags.vedmak.damage.applied": true, "flags.vedmak.damage.report": report });
 });
 
 registerGMHandler("setStatus", async ({ uuid, status, active }) => {
