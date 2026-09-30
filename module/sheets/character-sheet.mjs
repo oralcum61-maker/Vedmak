@@ -15,7 +15,7 @@ import { craft, readiness, requirements, forage, repair, disassemble, toggleMemo
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement, detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
 import { signed } from "../util.mjs";
-import { verbalAction, verbalContext } from "../combat/verbal.mjs";
+import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 
 export class CharacterSheet extends VedmakActorSheet {
 
@@ -412,9 +412,9 @@ export class CharacterSheet extends VedmakActorSheet {
     await verbalAction(this.actor, target.dataset.verbal, { skipDialog: event.shiftKey });
   }
 
-  /** Новая словесная дуэль: Решительность снова полная. */
+  /** Новая словесная дуэль: Решительность снова полная, накопленные бонусы противников сброшены. */
   static async #onDuelReset() {
-    await this.actor.unsetFlag("vedmak", "duelResolve");
+    await resetDuel(this.actor);
   }
 
   static async #onRollDefining(event) {

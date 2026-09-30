@@ -1,14 +1,20 @@
 // Словесная дуэль (корник стр. 176–177): Решительность вместо ПЗ, эмпатические и антагонистические
-// атаки, защиты и рычаги давления. Проведение как у боя: у кого результат больше, тот и наносит урон
-// Решительности противнику; при успешной защите урон получает атакующий.
+// атаки, защиты и рычаги давления. Проведение как у боя: атака с выбранными целями даёт карточку
+// с кнопками защиты у каждой цели; атака больше защиты — урон Решительности цели, иначе успешная
+// защита бьёт атакующего. Исход применяется через ведущего (сам — настройкой «применять сразу»).
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { rollDialog } from "../dice/roll-dialog.mjs";
 import { statusRollMods } from "./statuses.mjs";
-import { asGM, registerGMHandler, resolveActor, postCard, rollFormula, fallbackDefender } from "./common.mjs";
+import { renderTemplate } from "../util.mjs";
+import {
+  asGM, registerGMHandler, resolveActor, postCard, rollFormula, fallbackDefender, currentTargets, actorToken, userOwnsAny
+} from "./common.mjs";
 import { registerChatAction } from "./chat.mjs";
+
+const { DialogV2 } = foundry.applications.api;
 
 /**
  * Действия дуэли. `damage` — формула урона Решительности (@emp, @int, @will — параметры действующего),
@@ -130,40 +136,128 @@ export function verbalContext(actor) {
   };
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Атака                                                                     */
+/* -------------------------------------------------------------------------- */
+
+const isAttack = def => def.group === "empathic" || def.group === "antagonistic";
+
+/** Кнопки защиты у цели в карточке атаки. */
+export const DUEL_DEFENSES = [
+  { key: "ignore", icon: "fa-ear-deaf", short: "Игнор", label: "Игнорировать — Сопротивление убеждению; успех бьёт атакующего" },
+  { key: "changeSubject", icon: "fa-shuffle", short: "Тема", label: "Смена темы — Убеждение; успех бьёт атакующего" },
+  { key: "counter", icon: "fa-reply", short: "Ответ", label: "Контраргумент — ответная атака: выше — атака отменена, ваша наносит урон" },
+  { key: "disengage", icon: "fa-door-open", short: "Уйти", label: "Прекращение — успех: спор окончен, никто не выиграл" },
+  { key: "none", icon: "fa-comment-dots", short: "Принять", label: "Без защиты — атака проходит" }
+];
+
+/** Ключ пары «кто бьёт» для флагов накопления (в пути флага не должно быть точек). */
+const pairKey = actor => actor.uuid.replaceAll(".", "_");
+
+/** Что копит успешное действие: +2 за Соблазнение, +4 за Запугивание, +1 к эмпатическим за довод. */
+const STACKS = { seduce: 2, intimidate: 4, reason: 1 };
+
+/** Накопленный бонус урона от прошлых успехов этого действующего против этой цели. */
+function stackBonus(dealer, action, victim) {
+  const st = victim?.getFlag("vedmak", `duelStacks.${pairKey(dealer)}`) ?? {};
+  const why = [];
+  let bonus = 0;
+  if (action.key === "seduce" && st.seduce) { bonus += STACKS.seduce * st.seduce; why.push(`смущение +${STACKS.seduce * st.seduce}`); }
+  if (action.key === "intimidate" && st.intimidate) { bonus += STACKS.intimidate * st.intimidate; why.push(`страх +${STACKS.intimidate * st.intimidate}`); }
+  if (action.empathic && st.reason) { bonus += st.reason; why.push(`доводы +${st.reason}`); }
+  return { bonus, why };
+}
+
+/** Урон Решительности: формула действия с параметрами действующего, накопление и правка из окна. */
+async function rollDuelDamage(dealer, action, victim, extraMod = 0) {
+  if (!action?.damage) return null;
+  const { bonus, why } = stackBonus(dealer, action, victim);
+  const mod = (Number(extraMod) || 0) + bonus;
+  const s = dealer.system.stats;
+  const formula = mod ? `${action.damage} ${mod > 0 ? "+" : "-"} ${Math.abs(mod)}` : action.damage;
+  const res = await rollFormula(formula, { emp: s.emp.effective, int: s.int.effective, will: s.will.effective });
+  return {
+    total: Math.max(0, res.total), roll: res.roll, why,
+    formula: damageText(dealer, action) + (mod ? ` ${mod > 0 ? "+" : "−"} ${Math.abs(mod)}` : "")
+  };
+}
+
 /**
- * Действие словесной дуэли: окно броска, проверка навыка, урон Решительности, карточка.
- * @param {Actor} actor
- * @param {string} key — ключ действия из VERBAL_GROUPS
- * @param {object} [opts] — {skipDialog}
+ * Состояние противника меняет дуэль: ранен — −3 к эмпатическим атакам и +3 к Запугиванию,
+ * ниже порога ранения — −10 и +10 (стр. 177). Галочкой в окне, включена сама.
  */
-export async function verbalAction(actor, key, { skipDialog = false } = {}) {
-  const def = ACTIONS[key];
-  if (!def) return null;
+function targetStateParts(def, target) {
+  const sys = target?.system;
+  if (!sys?.hp || sys.hp.value >= sys.hp.max) return [];
+  const badly = sys.hp.value < (sys.derived?.woundThreshold ?? 0);
+  const n = badly ? 10 : 3;
+  const label = `${target.name} ${badly ? "ниже порога ранения" : "ранен"}`;
+  if (def.empathic) return [{ label, value: -n, checked: true }];
+  if (def.key === "intimidate") return [{ label, value: n, checked: true }];
+  return [];
+}
+
+/** Проверка действия: окно броска (кроме Shift) и бросок без карточки. */
+async function duelRoll(actor, def, { skipDialog = false, title = def.label, optional = [] } = {}) {
   const parts = duelParts(actor, def);
-  const optional = actor.socialParts?.(def.skill) ?? [];
-  let choice = { mod: 0, damageMod: 0, luck: 0, messageMode: undefined, optional: optional.filter(o => o.checked) };
+  const all = [...(actor.socialParts?.(def.skill) ?? []), ...optional];
+  let choice = { mod: 0, damageMod: 0, luck: 0, messageMode: undefined, optional: all.filter(o => o.checked) };
   if (!skipDialog) {
-    choice = await rollDialog({
-      title: `${def.label} · словесная дуэль`, parts, luckMax: actor.luckAvailable ?? 0, optional,
-      damage: damageText(actor, def)
-    });
+    choice = await rollDialog({ title: `${title} · словесная дуэль`, parts, luckMax: actor.luckAvailable ?? 0, optional: all,
+      damage: damageText(actor, def) });
     if (!choice) return null;
   }
   parts.push(...choice.optional);
   if (choice.mod) parts.push({ label: "Модификатор", value: choice.mod });
-  const roll = await performCheck({ actor, title: def.label, parts, luck: choice.luck, toChat: false });
+  const roll = await performCheck({ actor, title, parts, luck: choice.luck, toChat: false });
+  return { roll, choice };
+}
+
+const refOf = (actor, tokenUuid = null) => ({
+  actorUuid: actor.uuid, tokenUuid: tokenUuid ?? actor.token?.uuid ?? actorToken(actor)?.document.uuid ?? null,
+  name: actor.name, img: actor.img
+});
+
+/**
+ * Действие словесной дуэли. Атака (эмпатическая или антагонистическая) — карточка с кнопками защиты
+ * у каждой выбранной цели. Защита и рычаги вне обмена — просто проверка с уроном, как раньше.
+ * @param {Actor} actor
+ * @param {string} key — ключ действия из VERBAL_GROUPS
+ * @param {object} [opts] — {skipDialog, targets}
+ */
+export async function verbalAction(actor, key, { skipDialog = false, targets: forced = null } = {}) {
+  const def = ACTIONS[key];
+  if (!def) return null;
+  const attack = isAttack(def);
+  const targets = attack ? (forced ?? currentTargets()) : [];
+  const single = targets.length === 1 ? resolveActor(targets[0].tokenUuid) ?? resolveActor(targets[0].actorUuid) : null;
+  const res = await duelRoll(actor, def, { skipDialog, optional: attack ? targetStateParts(def, single) : [] });
+  if (!res) return null;
+  const { roll, choice } = res;
+
+  if (attack) {
+    const damageMod = choice.damageMod ?? 0;
+    const data = {
+      ...roll, label: def.label, groupLabel: def.groupLabel, skillLabel: SKILLS[def.skill]?.label ?? "",
+      kind: def.group, effect: def.effect, isAttack: true,
+      damageHint: damageText(actor, def) + (damageMod ? ` ${damageMod > 0 ? "+" : "−"} ${Math.abs(damageMod)}` : ""),
+      targets, hasTargets: targets.length > 0, defenses: DUEL_DEFENSES
+    };
+    return postCard({
+      template: "systems/vedmak/templates/chat/verbal.hbs", data, actor,
+      flags: { verbal: { kind: "attack", key, label: def.label, total: roll.total, damageMod, empathic: !!def.empathic,
+        attacker: refOf(actor), targets, actorUuid: actor.uuid } },
+      rolls: roll.rolls ?? [], messageMode: choice.messageMode
+    });
+  }
 
   let damage = null;
   const rolls = [...(roll.rolls ?? [])];
   if (def.damage) {
-    const s = actor.system.stats;
-    let formula = def.damage;
-    if (choice.damageMod) formula = `${formula} ${choice.damageMod > 0 ? "+" : "-"} ${Math.abs(choice.damageMod)}`;
-    const res = await rollFormula(formula, { emp: s.emp.effective, int: s.int.effective, will: s.will.effective });
-    if (res.roll) rolls.push(res.roll);
-    damage = { total: Math.max(0, res.total), formula: damageText(actor, def) + (choice.damageMod ? ` ${choice.damageMod > 0 ? "+" : "−"} ${Math.abs(choice.damageMod)}` : "") };
+    const dmg = await rollDuelDamage(actor, def, null, choice.damageMod);
+    if (dmg.roll) rolls.push(dmg.roll);
+    damage = { total: dmg.total, formula: dmg.formula };
   }
-
   const data = {
     ...roll, label: def.label, groupLabel: def.groupLabel, skillLabel: SKILLS[def.skill]?.label ?? "",
     kind: def.group, damage, effect: def.effect, actorUuid: actor.uuid
@@ -175,7 +269,112 @@ export async function verbalAction(actor, key, { skipDialog = false } = {}) {
   });
 }
 
-/** Снять Решительность у актора (от имени ведущего, если актор чужой). */
+/* -------------------------------------------------------------------------- */
+/*  Защита и исход                                                            */
+/* -------------------------------------------------------------------------- */
+
+/** Основа действия — для выбора лучшей защиты и списка контраргументов. */
+const actionBase = (actor, def) => Math.max(0, duelParts(actor, def).reduce((sum, p) => sum + (Number(p.value) || 0), 0));
+
+/** Лучшая защита для автоматического броска: Игнорировать или Смена темы — что выше. */
+export function bestVerbalDefense(actor) {
+  return actionBase(actor, ACTIONS.ignore) >= actionBase(actor, ACTIONS.changeSubject) ? "ignore" : "changeSubject";
+}
+
+/** Контраргумент: какую атаку бросить в ответ (по умолчанию — с наибольшей основой). */
+async function pickCounter(actor, skipDialog) {
+  const options = Object.values(ACTIONS).filter(isAttack).map(a => ({ ...a, base: actionBase(actor, a) }))
+    .sort((a, b) => b.base - a.base);
+  if (skipDialog) return options[0]?.key ?? null;
+  const rows = options.map((a, i) => `<label class="chip"><input type="radio" name="counter" value="${a.key}" ${i === 0 ? "checked" : ""}>
+    <span>${a.label} <b>${a.base}</b></span></label>`).join("");
+  const key = await DialogV2.wait({
+    window: { title: `Контраргумент: ${actor.name}`, icon: "fa-solid fa-reply" },
+    classes: ["vedmak", "vedmak-dialog"],
+    content: `<div class="vedmak-roll-dialog"><p class="hint">Бросьте атаку в ответ: если результат выше, атака противника отменяется, а ваша наносит урон.</p>
+      <div class="opt-row">${rows}</div></div>`,
+    buttons: [{ action: "ok", label: "Ответить", icon: "fa-solid fa-reply", default: true,
+      callback: (e, b) => b.form.querySelector('[name="counter"]:checked')?.value ?? null },
+    { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    rejectClose: false
+  });
+  return key && key !== "cancel" ? key : null;
+}
+
+/**
+ * Защититься от атаки из карточки.
+ * @param {ChatMessage} message — карточка атаки
+ * @param {object} target — {tokenUuid, actorUuid} или пусто (выделенный токен)
+ * @param {string} defense — ignore | changeSubject | disengage | counter | none
+ */
+export async function verbalDefend(message, target, defense, { skipDialog = false } = {}) {
+  const atk = message.flags.vedmak?.verbal;
+  if (atk?.kind !== "attack") return null;
+  const info = target?.tokenUuid || target?.actorUuid ? target : fallbackDefender();
+  const defender = resolveActor(info?.tokenUuid) ?? resolveActor(info?.actorUuid);
+  if (!defender) return ui.notifications.warn("Выделите токен того, кто защищается.");
+  if (!defender.isOwner) return ui.notifications.warn(`Защищаться за «${defender.name}» может только его владелец или ведущий.`);
+  const attacker = resolveActor(atk.attacker.tokenUuid) ?? resolveActor(atk.attacker.actorUuid);
+  if (!attacker) return ui.notifications.warn("Атакующий не найден.");
+  const action = ACTIONS[atk.key];
+  const who = refOf(defender, info.tokenUuid);
+
+  // Бросок защиты или контраргумента
+  let defAction = null, res = null, label = "Без защиты";
+  if (defense === "counter") {
+    const key = await pickCounter(defender, skipDialog);
+    if (!key) return null;
+    defAction = ACTIONS[key];
+    label = `Контраргумент: ${defAction.label}`;
+    res = await duelRoll(defender, defAction, { skipDialog, title: label, optional: targetStateParts(defAction, attacker) });
+    if (!res) return null;
+  } else if (defense !== "none") {
+    defAction = ACTIONS[defense];
+    if (!defAction) return null;
+    label = defAction.label;
+    res = await duelRoll(defender, defAction, { skipDialog });
+    if (!res) return null;
+  }
+  const defTotal = res?.roll.total ?? null;
+  const hit = defTotal === null || atk.total > defTotal;
+  const rolls = [...(res?.roll.rolls ?? [])];
+  const lines = [];
+  let loss = null, stack = null;
+
+  if (hit) {
+    const dmg = await rollDuelDamage(attacker, action, defender, atk.damageMod);
+    if (dmg) {
+      if (dmg.roll) rolls.push(dmg.roll);
+      loss = { ...who, amount: dmg.total, formula: dmg.formula, why: dmg.why.join(", ") };
+    }
+    if (STACKS[action.key]) stack = { holder: who.tokenUuid ?? who.actorUuid, pair: pairKey(attacker), key: action.key };
+    if (defense === "counter") lines.push("Контраргумент не перебил атаку.");
+    if (action.effect) lines.push(action.effect);
+  } else if (defAction?.damage) {
+    const ref = refOf(attacker, atk.attacker.tokenUuid);
+    const dmg = await rollDuelDamage(defender, defAction, attacker, res.choice.damageMod);
+    if (dmg.roll) rolls.push(dmg.roll);
+    loss = { ...ref, amount: dmg.total, formula: dmg.formula, why: dmg.why.join(", ") };
+    if (defense === "counter") {
+      lines.push("Атака противника отменена.");
+      if (STACKS[defAction.key]) stack = { holder: ref.tokenUuid ?? ref.actorUuid, pair: pairKey(defender), key: defAction.key };
+    }
+  } else if (defense === "disengage") {
+    lines.push("Спор окончен: никто не выиграл.");
+  }
+
+  const data = {
+    kind: "outcome", attackMessageId: message.id,
+    attack: { label: atk.label, total: atk.total }, attacker: atk.attacker, defender: who,
+    label, roll: res?.roll ?? null, total: defTotal, hit, loss, stack, lines, applied: false, report: []
+  };
+  return postCard({
+    template: "systems/vedmak/templates/chat/verbal-outcome.hbs", data, actor: defender,
+    flags: { verbal: data }, rolls, messageMode: res?.choice.messageMode
+  });
+}
+
+/** Снять Решительность у актора. */
 async function applyResolve({ uuid, amount }) {
   const actor = resolveActor(uuid);
   if (!actor) return null;
@@ -184,9 +383,65 @@ async function applyResolve({ uuid, amount }) {
   await actor.setFlag("vedmak", "duelResolve", next);
   return { name: actor.name, from: value, to: next, max };
 }
+// Старые карточки с кнопкой «−N Решительности цели»
 registerGMHandler("applyResolve", applyResolve);
 
-/** Кнопка карточки: урон Решительности выбранной цели (цель или выделенный токен). */
+const applyingOutcomes = new Set();
+
+/** Применить исход обмена: Решительность проигравшего и накопление бонусов (у ведущего). */
+registerGMHandler("verbalApply", async ({ messageId }, userId) => {
+  if (applyingOutcomes.has(messageId)) return;
+  const message = game.messages.get(messageId);
+  const v = message?.flags.vedmak?.verbal;
+  if (v?.kind !== "outcome" || v.applied || !v.loss) return;
+  const attacker = resolveActor(v.attacker.tokenUuid) ?? resolveActor(v.attacker.actorUuid);
+  const defender = resolveActor(v.defender.tokenUuid) ?? resolveActor(v.defender.actorUuid);
+  // Запрос игрока: он участник обмена, и карточку исхода создал участник — иначе её можно подделать
+  if (!game.users.get(userId)?.isGM
+    && (!userOwnsAny(userId, attacker, defender) || !userOwnsAny(message.author?.id, attacker, defender))) {
+    return console.warn(`vedmak | отклонён исход дуэли от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  applyingOutcomes.add(messageId);
+  try {
+    const report = [];
+    const r = await applyResolve({ uuid: v.loss.tokenUuid ?? v.loss.actorUuid, amount: v.loss.amount });
+    if (r) {
+      report.push(`${r.name}: Решительность ${r.from} → ${r.to} из ${r.max}.`);
+      if (r.to <= 0) report.push(`${r.name} проигрывает дуэль и делает то, чего хотел противник.`);
+    }
+    if (v.stack) {
+      const holder = resolveActor(v.stack.holder);
+      const path = `duelStacks.${v.stack.pair}.${v.stack.key}`;
+      if (holder) await holder.setFlag("vedmak", path, (holder.getFlag("vedmak", path) ?? 0) + 1);
+    }
+    const data = { ...v, applied: true, report };
+    const content = await renderTemplate("systems/vedmak/templates/chat/verbal-outcome.hbs", data);
+    await message.update({ content, "flags.vedmak.verbal.applied": true, "flags.vedmak.verbal.report": report });
+  } finally {
+    applyingOutcomes.delete(messageId);
+  }
+});
+
+/** Новая дуэль: полная Решительность и никаких накоплений. */
+export async function resetDuel(actor) {
+  await actor.unsetFlag("vedmak", "duelResolve");
+  await actor.unsetFlag("vedmak", "duelStacks");
+}
+
+registerChatAction("verbalDefend", async (message, button, event) => {
+  const row = button.closest(".target-row");
+  const target = { tokenUuid: row?.dataset.targetToken || null, actorUuid: row?.dataset.targetActor || null };
+  return verbalDefend(message, target, button.dataset.defense, { skipDialog: event.shiftKey });
+});
+
+registerChatAction("verbalApply", async message => {
+  const v = message.flags.vedmak?.verbal;
+  if (v?.kind !== "outcome" || !v.loss) return null;
+  if (v.applied) return ui.notifications.info("Исход уже применён.");
+  return asGM("verbalApply", { messageId: message.id });
+});
+
+/** Кнопка старых карточек: урон Решительности выбранной цели (цель или выделенный токен). */
 registerChatAction("verbalDamage", async message => {
   const v = message.flags.vedmak?.verbal;
   if (!v?.damage) return null;

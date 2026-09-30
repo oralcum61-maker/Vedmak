@@ -1,3 +1,4 @@
+{{!-- Словесная дуэль: атака — с кнопками защиты у каждой цели; защита и рычаги вне обмена — проверка с уроном. --}}
 <div class="vedmak-card verbal {{kind}}{{#if crit}} is-crit{{/if}}{{#if fumble}} is-fumble{{/if}}">
   <header class="card-head">
     <span class="card-glyph"><i class="fa-solid fa-comments"></i></span>
@@ -7,28 +8,52 @@
     </div>
     <div class="card-value">
       <b>{{total}}</b>
-      <span class="cap">{{#if dc}}против {{dc}}{{else}}проверка{{/if}}</span>
+      <span class="cap">{{#if isAttack}}атака{{else}}{{#if dc}}против {{dc}}{{else}}проверка{{/if}}{{/if}}</span>
     </div>
   </header>
 
   <div class="card-body">
     {{> "systems/vedmak/templates/chat/parts/roll.hbs"}}
-    {{#if damage}}
+    {{#if isAttack}}
+    <div class="result-line">
+      <span class="name">Урон Решительности при успехе</span>
+      <span class="dots-fill"></span>
+      <span class="dim">{{damageHint}}</span>
+    </div>
+    {{else}}{{#if damage}}
     <div class="result-line">
       <span class="name">Урон Решительности</span>
       <span class="dots-fill"></span>
       <b>{{damage.total}}</b> <span class="dim">{{damage.formula}}</span>
     </div>
-    {{/if}}
+    {{/if}}{{/if}}
     {{#if effect}}<p class="note dim">{{effect}}</p>{{/if}}
-    <p class="note dim">Сравните с результатом противника: больший наносит урон Решительности меньшему.</p>
+    {{#unless isAttack}}<p class="note dim">Сравните с результатом противника: больший наносит урон Решительности меньшему.</p>{{/unless}}
   </div>
 
-  {{#if damage}}
+  {{#if isAttack}}
+  <div class="card-section">
+    <h4>{{#if hasTargets}}Отвечает{{else}}Отвечает выделенный токен{{/if}}</h4>
+    {{#each targets}}
+    <div class="target-row" data-target-token="{{tokenUuid}}" data-target-actor="{{actorUuid}}">
+      <div class="target-name"><img src="{{img}}" alt=""><span class="name">{{name}}</span></div>
+      <div class="defense-buttons">
+        {{#each ../defenses}}<button type="button" data-vedmak="verbalDefend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+      </div>
+    </div>
+    {{else}}
+    <div class="target-row any">
+      <div class="defense-buttons">
+        {{#each defenses}}<button type="button" data-vedmak="verbalDefend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{else}}{{#if damage}}
   <div class="card-buttons">
     <button type="button" class="primary" data-vedmak="verbalDamage" data-tooltip="Отнять у цели или выделенного токена">
       <i class="fa-solid fa-comment-slash"></i> −{{damage.total}} Решительности цели
     </button>
   </div>
-  {{/if}}
+  {{/if}}{{/if}}
 </div>

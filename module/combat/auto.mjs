@@ -6,6 +6,7 @@ import { defend, bestDefense } from "./defense.mjs";
 import { damageFromDefense } from "./damage.mjs";
 import { resolveActor, asGM } from "./common.mjs";
 import { requestSpellEffects } from "../magic/effects.mjs";
+import { verbalDefend, bestVerbalDefense } from "./verbal.mjs";
 
 const setting = key => game.settings.get("vedmak", key);
 
@@ -49,6 +50,22 @@ async function onDefense(message, def) {
   }
 }
 
+/** Словесная дуэль: цели ведущего отвечают сами — Игнорировать или Сменой темы, что выше. */
+async function onVerbalAttack(message, atk) {
+  if (!setting("autoDefense") || !game.users.activeGM?.isSelf) return;
+  for (const target of atk.targets ?? []) {
+    const actor = actorOf(target);
+    if (!actor || actor.hasPlayerOwner) continue;
+    await verbalDefend(message, target, bestVerbalDefense(actor), { skipDialog: true });
+  }
+}
+
+/** Исход обмена в дуэли: ведущий снимает Решительность сразу. */
+async function onVerbalOutcome(message, v) {
+  if (!v.loss || v.applied || !setting("autoApply") || !game.users.activeGM?.isSelf) return;
+  await asGM("verbalApply", { messageId: message.id });
+}
+
 /** Карточка урона: ведущий применяет сразу. */
 async function onDamage(message, dmg) {
   if (dmg.applied || !setting("autoApply") || !game.users.activeGM?.isSelf) return;
@@ -63,6 +80,8 @@ export function registerCombatAutomation() {
       if (flags.attack?.kind === "attack") await onAttack(message, flags.attack);
       else if (flags.defense?.kind === "defense") await onDefense(message, flags.defense);
       else if (flags.damage?.kind === "damage") await onDamage(message, flags.damage);
+      else if (flags.verbal?.kind === "attack") await onVerbalAttack(message, flags.verbal);
+      else if (flags.verbal?.kind === "outcome") await onVerbalOutcome(message, flags.verbal);
     } catch (err) {
       console.error("vedmak | автоматизация боя", err);
     }

@@ -1,0 +1,35 @@
+{{!-- Исход обмена в словесной дуэли: защита против атаки, кто теряет Решительность. --}}
+<div class="vedmak-card verbal defense{{#if hit}} is-hit{{else}} is-miss{{/if}}{{#if applied}} is-applied{{/if}}">
+  <header class="card-head">
+    <img src="{{defender.img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">{{defender.name}}: {{label}}</span>
+      <span class="card-sub">против «{{attack.label}}» · {{attacker.name}} {{attack.total}}</span>
+    </div>
+    {{#if roll}}<div class="card-value"><b>{{total}}</b><span class="cap">ответ</span></div>{{/if}}
+  </header>
+
+  <div class="card-body">
+    {{#if roll}}{{#with roll}}{{> "systems/vedmak/templates/chat/parts/roll.hbs"}}{{/with}}{{/if}}
+    {{#if hit}}
+      <div class="outcome failure">Атака проходит</div>
+    {{else}}
+      <div class="outcome success">{{#if loss}}Ответ берёт верх{{else}}Защита удалась{{/if}}</div>
+    {{/if}}
+    {{#if loss}}
+    <div class="result-line">
+      <span class="name">{{loss.name}}: урон Решительности</span>
+      <span class="dots-fill"></span>
+      <b>{{loss.amount}}</b> <span class="dim">{{loss.formula}}{{#if loss.why}} ({{loss.why}}){{/if}}</span>
+    </div>
+    {{/if}}
+    {{#each lines}}<p class="note">{{this}}</p>{{/each}}
+    {{#each report}}<p class="note"><b>{{this}}</b></p>{{/each}}
+  </div>
+
+  {{#if loss}}{{#unless applied}}
+  <div class="card-buttons">
+    <button type="button" class="primary" data-vedmak="verbalApply"><i class="fa-solid fa-comment-slash"></i> −{{loss.amount}} Решительности: {{loss.name}}</button>
+  </div>
+  {{/unless}}{{/if}}
+</div>
