@@ -56,6 +56,11 @@
    портреты существ в шапке и худе по-прежнему заполняют рамку (cover в своих правилах). */
 .vedmak img, .vedmak-card img { object-fit: contain; }
 
+/* Окно системы — свой слой видеокарты: при перетаскивании браузер сдвигает готовую картинку, а не перерисовывает
+   кожу, фактуры и тени на каждый кадр. Цена — шрифты в окне сглаживаются в оттенках серого (PLAN 4.35).
+   Худ не двигается — ему слой не нужен. */
+.application.vedmak:not(.vedmak-hud) { will-change: transform; }
+
 .vedmak.sheet .window-content {
   position: relative;
   background-color: var(--vd-bg);
