@@ -15,7 +15,6 @@ import { craft, readiness, requirements, forage, repair, disassemble, toggleMemo
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement, detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
 import { signed, compareRu } from "../util.mjs";
-import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
@@ -42,8 +41,6 @@ export class CharacterSheet extends VedmakActorSheet {
     position: { width: 1040, height: 860 },
     actions: {
       rollDefining: CharacterSheet.#onRollDefining,
-      verbalAction: CharacterSheet.#onVerbalAction,
-      duelReset: CharacterSheet.#onDuelReset,
       rollAbility: CharacterSheet.#onRollAbility,
       toggleAdvance: CharacterSheet.#onToggleAdvance,
       improveSkill: CharacterSheet.#onImproveSkill,
@@ -140,7 +137,6 @@ export class CharacterSheet extends VedmakActorSheet {
     const context = await super._prepareContext(options);
     context.tabs = this._prepareTabs("primary");
     context.skillTabs = this._prepareTabs("skills");
-    context.combatTabs = this._prepareTabs("combat");
     const actor = this.actor;
     const system = actor.system;
 
@@ -222,9 +218,6 @@ export class CharacterSheet extends VedmakActorSheet {
       (_, i) => ({ value: i + 1, on: i < (system.luck?.value ?? 0) }));
 
     context.trainedCount = Object.values(system.skills).filter(sk => sk.value > 0).length;
-    context.verbal = verbalContext(actor);
-    // Словесная дуэль — необязательное правило: без неё «Бой» показывает только обычный бой
-    context.showSocialCombat = game.settings.get("vedmak", "verbalDuel");
 
     context.race = system.race;
     context.profession = system.profession;
@@ -583,15 +576,6 @@ export class CharacterSheet extends VedmakActorSheet {
 
   static async #onMoneyExchange() {
     await exchangeDialog(this.actor);
-  }
-
-  static async #onVerbalAction(event, target) {
-    await verbalAction(this.actor, target.dataset.verbal, { skipDialog: event.shiftKey });
-  }
-
-  /** Новая словесная дуэль: Решительность снова полная, накопленные бонусы противников сброшены. */
-  static async #onDuelReset() {
-    await resetDuel(this.actor);
   }
 
   static async #onRollDefining(event) {

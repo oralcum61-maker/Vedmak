@@ -15,6 +15,7 @@ import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
 import { compareRu, balanceColumns } from "../util.mjs";
 import { profileSheet } from "../apps/perf.mjs";
+import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -51,7 +52,9 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       ram: VedmakActorSheet.#onRam,
       castSpell: VedmakActorSheet.#onCastSpell,
       endMaintained: VedmakActorSheet.#onEndMaintained,
-      profileSheet: VedmakActorSheet.#onProfileSheet
+      profileSheet: VedmakActorSheet.#onProfileSheet,
+      verbalAction: VedmakActorSheet.#onVerbalAction,
+      duelReset: VedmakActorSheet.#onDuelReset
     }
   };
 
@@ -64,6 +67,15 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onProfileSheet() {
     await profileSheet(this);
+  }
+
+  static async #onVerbalAction(event, target) {
+    await verbalAction(this.actor, target.dataset.verbal, { skipDialog: event.shiftKey });
+  }
+
+  /** Новая словесная дуэль: Решительность снова полная, накопленные бонусы противников сброшены. */
+  static async #onDuelReset() {
+    await resetDuel(this.actor);
   }
 
   /** Показывать только изученные навыки (состояние окна, не документа). */
@@ -345,6 +357,12 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       duration: e.flags?.vedmak?.timed?.rounds ? `${e.flags.vedmak.timed.rounds} р.` : (e.isTemporary ? e.duration.label : ""),
       expired: e.isTemporary && !e.active && !e.disabled
     }));
+
+    // Словесная дуэль (стр. 176–177) — у персонажа и чудовища. Необязательное правило: без неё «Бой» —
+    // только обычный бой. Решительность — (Воля + Инт) / 2 × 5 у любого актора
+    context.showSocialCombat = game.settings.get("vedmak", "verbalDuel");
+    if (context.showSocialCombat) context.verbal = verbalContext(actor);
+    if (this.constructor.TABS?.combat) context.combatTabs = this._prepareTabs("combat");
 
     return context;
   }

@@ -68,6 +68,14 @@ export class MonsterSheet extends VedmakActorSheet {
         { id: "effects", label: "Эффекты",    icon: "fa-solid fa-bolt" }
       ],
       initial: "stats"
+    },
+    // Подвкладки «Боя»: обычный бой и словесная дуэль — как у персонажа
+    combat: {
+      tabs: [
+        { id: "fight",  label: "Бой",             icon: "fa-solid fa-swords" },
+        { id: "social", label: "Социальный бой",  icon: "fa-solid fa-comments" }
+      ],
+      initial: "fight"
     }
   };
 

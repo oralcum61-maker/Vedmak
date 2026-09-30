@@ -174,7 +174,7 @@ Hooks.once("init", () => {
   });
   game.settings.register(SYSTEM_ID, "verbalDuel", {
     name: "Словесная дуэль",
-    hint: "Подвкладка «Социальный бой» у персонажа: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
+    hint: "Подвкладка «Социальный бой» у персонажей и чудовищ: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
     scope: "world", config: true, type: Boolean, default: true,
     onChange: () => game.actors.forEach(a => a.sheet?.rendered && a.sheet.render())
   });
