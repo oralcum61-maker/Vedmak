@@ -1,7 +1,7 @@
 // Словесная дуэль (корник стр. 176–177): Решительность вместо ПЗ, эмпатические и антагонистические
 // атаки, защиты и рычаги давления. Проведение как у боя: атака с выбранными целями даёт карточку
 // с кнопками защиты у каждой цели; атака больше защиты — урон Решительности цели, иначе успешная
-// защита бьёт атакующего. Исход применяется кнопкой через ведущего.
+// защита бьёт атакующего. Исход применяется через ведущего (сам — настройкой «применять сразу»).
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
@@ -275,6 +275,11 @@ export async function verbalAction(actor, key, { skipDialog = false, targets: fo
 
 /** Основа действия — для выбора лучшей защиты и списка контраргументов. */
 const actionBase = (actor, def) => Math.max(0, duelParts(actor, def).reduce((sum, p) => sum + (Number(p.value) || 0), 0));
+
+/** Лучшая защита для автоматического броска: Игнорировать или Смена темы — что выше. */
+export function bestVerbalDefense(actor) {
+  return actionBase(actor, ACTIONS.ignore) >= actionBase(actor, ACTIONS.changeSubject) ? "ignore" : "changeSubject";
+}
 
 /** Контраргумент: какую атаку бросить в ответ (по умолчанию — с наибольшей основой). */
 async function pickCounter(actor, skipDialog) {
