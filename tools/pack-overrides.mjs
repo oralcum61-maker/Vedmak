@@ -95,6 +95,9 @@ export const OVERRIDES = [
 
   /* ------------------------------ Броня: ноги ------------------------------ */
   { op: "rename", pack: "armor", from: "Кожаные штаны из Лирии", to: "Шинные поножи" },
+  // Латы Туссента — сине-стальные набедренники и наколенники; реданские — кожа со сталью в красном цвете Редании
+  { op: "set", pack: "armor", name: "Латные поножи", set: { img: "icons/equipment/leg/cuisses-plate-reticulated-steel-blue.webp" } },
+  { op: "set", pack: "armor", name: "Реданские поножи", set: { img: "icons/equipment/leg/pants-tasset-leather-steel-red.webp" } },
   { op: "set", pack: "armor", name: "Шинные поножи", set: {
     "system.description": p("Поножи из продольных стальных полос-шин, нашитых на кожаную или стёганую основу. Прикрывают голени и бёдра, не сковывая шага.")
   } }
