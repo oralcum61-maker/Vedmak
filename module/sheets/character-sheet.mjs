@@ -2,7 +2,7 @@
 
 import { VedmakActorSheet } from "./actor-sheet-base.mjs";
 import { STATS, STAT_GROUPS } from "../config/stats.mjs";
-import { REGIONS, WITCHER_SCHOOLS, SOCIAL_SKILLS, socialModifier, abilityBonus } from "../config/character.mjs";
+import { REGIONS, HOMELANDS, WITCHER_SCHOOLS, SOCIAL_SKILLS, socialModifier, abilityBonus } from "../config/character.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import {
   skillOffer, statOffer, definingOffer, abilityOffer, improveSkill, improveStat, improveDefining, improveAbility,
@@ -21,6 +21,19 @@ import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
 } from "../character/lifepath.mjs";
+
+/** Нелюди родом из земель Старших Народов (мастер создания ставит им это происхождение сам). */
+const ELDER_RACES = ["elf", "dwarf", "gnome", "vran", "bobolak"];
+
+/**
+ * Колонка таблиц жизненного пути: происхождение из мастера, а у персонажа без мастера — по расе и родине.
+ * Иначе эльф, собранный перетаскиванием расы, бросал бы судьбу семьи по колонке Севера.
+ */
+function lifepathRegion(system) {
+  if (system.details.origin) return system.details.origin;
+  if (ELDER_RACES.includes(system.raceKey)) return "elder";
+  return HOMELANDS[system.details.homelandKey]?.region ?? "north";
+}
 
 export class CharacterSheet extends VedmakActorSheet {
 
@@ -546,7 +559,7 @@ export class CharacterSheet extends VedmakActorSheet {
     const data = {
       rolls: {}, witcher,
       age: Number.parseInt(actor.system.details.age) || (witcher ? 80 : 25),
-      region: actor.system.details.origin || "north",
+      region: lifepathRegion(actor.system),
       race: actor.system.raceKey || "human"
     };
     await this.#stepLifepath(data);

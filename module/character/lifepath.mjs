@@ -248,7 +248,7 @@ function buildRegular(b, { age = 25, region = "north", race = "human" }) {
         ["Пол", "Кто", "Причина"].forEach((l, c) => b.table(ev, `${base}.enemy.${c}`, "enemies", { col: c, label: `Враг: ${l.toLowerCase()}` }));
         b.plain(ev, `${base}.enemy.victim`, "Кто пострадал", v => (v % 2 === 0 ? "Пострадавшая сторона — вы" : "Пострадавшая сторона — враг"),
           { options: EVEN_OPTIONS("вы", "враг") });
-        b.table(ev, `${base}.enemy.power`, "enemyPower", { col: 0, label: "Сила врага" });
+        // Столбец 0 таблицы enemyPower — номера строк из вёрстки книги, а не значения: сила врага — столбец 2
         b.table(ev, `${base}.enemy.far`, "enemyPower", { col: 1, label: "Насколько далеко зашло" });
         b.table(ev, `${base}.enemy.kind`, "enemyPower", { col: 2, label: "В чём сила" });
       }
@@ -789,5 +789,7 @@ export async function postLifepathRolls(actor, rows, { roll = null, name = "" } 
     title: brief ? `Жизненный путь — ${rows.length} ${plural(rows.length, "бросок", "броска", "бросков")}` : "Жизненный путь",
     subtitle: name || actor?.name || "", groups
   });
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls: roll ? [roll] : [] });
+  // Режим чата (скрытый бросок, только ведущему) v14 применяет лишь по явной опции
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls: roll ? [roll] : [] },
+    { messageMode: game.settings.get("core", "messageMode") });
 }

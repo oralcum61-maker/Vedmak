@@ -725,14 +725,26 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (problems.summary) return ui.notifications.warn(problems.summary);
     const actor = this.actor;
     const hasData = actor.items.size > 0 || Object.values(actor.system.skills).some(sk => sk.value > 0);
-    if (hasData) {
+    if (hasData || actor.system.lifepath) {
+      const path = actor.system.lifepath ? " и жизненный путь в «Дневнике»" : "";
       const ok = await DialogV2.confirm({
         window: { title: "Создать персонажа" },
-        content: `<p>Параметры, навыки, раса и профессия персонажа «${actor.name}» будут заменены. Остальные предметы останутся. Продолжить?</p>`
+        content: `<p>Параметры, навыки, раса, профессия${path} персонажа «${actor.name}» будут заменены. Остальные предметы останутся. Продолжить?</p>`
       });
       if (!ok) return;
     }
-    await applyCharacter(this, lp);
+    // Прежний мастер писал путь в биографию. Теперь путь — в «Дневнике», но под ним мог остаться текст игрока:
+    // биографию очищаем только с согласия
+    let clearBio = false;
+    if (GENERATED_BIO.test((actor.system.biography ?? "").trim())) {
+      clearBio = await DialogV2.confirm({
+        window: { title: "Биография" },
+        content: "<p>В биографии записан жизненный путь прежнего мастера создания. Теперь путь хранится в «Дневнике»"
+          + " карточками, и в биографии он задвоится.</p><p>Очистить биографию? Если вы дописывали туда своё, нажмите"
+          + " «Нет» — текст останется, лишнее уберёте сами.</p>"
+      });
+    }
+    await applyCharacter(this, lp, { clearBio });
     ui.notifications.info(`Персонаж «${this.wiz.name}» создан.`);
     this.close();
     actor.sheet.render(true);
@@ -804,7 +816,10 @@ async function itemByName(name, qty = 1) {
   return { name, type: "gear", system: { quantity: qty, category: "general" } };
 }
 
-async function applyCharacter(wizard, lp) {
+/** Биография, которую прежний мастер создания собирал из жизненного пути. */
+const GENERATED_BIO = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/;
+
+async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   const { state: s, race, profession, stats, skills, profKeys, magic, native, statParts } = wizard.applyData;
   const actor = wizard.actor;
   const fx = lp.effects ?? { crowns: 0, reputation: 0, luck: 0, hpBonus: 0, staBonus: 0, vigorBonus: 0, feared: false,
@@ -823,12 +838,9 @@ async function applyCharacter(wizard, lp) {
   const values = lp.sections.find(x => x.title === "Ценности")?.entries ?? [];
   const styleText = i => style[i]?.text ?? "";
   // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
-  // Прежний мастер писал путь в биографию HTML-ом — такую биографию убираем, чтобы путь не задвоился.
   const lifepath = s.lifepath && lp.sections.length
     ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "" })
     : "";
-  const oldBio = actor.system.biography ?? "";
-  const generatedBio = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/.test(oldBio.trim());
 
   const update = {
     name: s.name || actor.name,
@@ -856,7 +868,7 @@ async function applyCharacter(wizard, lp) {
     "system.adrenaline.value": 0
   };
   update["system.lifepath"] = lifepath;
-  if (generatedBio) update["system.biography"] = "";
+  if (clearBio) update["system.biography"] = "";
   for (const k of STAT_KEYS) {
     update[`system.stats.${k}.base`] = stats[k] + (k === "luck" ? fx.luck : 0);
   }
