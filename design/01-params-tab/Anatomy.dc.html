@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Карточка параметра: состояния и токены</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+body { margin: 0; background: #141517; font-family: 'PT Sans', sans-serif; }
+a { color: #c9a45c; }
+a:hover { color: #e0be7a; }
+</style>
+</helmet>
+
+<div style="width: 920px; height: 470px; box-sizing: border-box; padding: 22px 24px; background: #1a1c1f; color: #e6e1d6; display: flex; flex-direction: column; gap: 18px;">
+
+  <div>
+    <h2 style="position: relative; margin: 0 0 12px; padding-bottom: 5px; font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 20px; color: #c9ccd1;">
+      Карточка параметра — состояния
+      <span style="position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, #8e98a3, rgba(58,62,68,.1) 72%);"></span>
+    </h2>
+
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px;">
+      <div>
+        <div style="display: flex; flex-direction: column; align-items: center; padding: 7px 4px 8px; background: linear-gradient(180deg, #2a2e34 0%, #212429 55%, #1b1e22 100%); border: 1px solid #343941; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.35);">
+          <span style="display: flex; align-items: center; min-height: 21px; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: #938d7e;">Реакция</span>
+          <span style="margin-top: 2px; font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 42px; line-height: 1; color: #d2d6dc;">10</span>
+          <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px; width: 100%; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,.055); font-size: 9.5px; color: #7d7870;">
+            <span>база</span><span style="font-size: 12.5px; font-weight: 700; color: #cbc6ba;">10</span>
+          </div>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.35; color: #8b857a;"><b style="color: #c9ccd1;">Обычная.</b> Итог крупно, под волосяной линией — база и, если есть, модификатор.</p>
+      </div>
+      <div>
+        <div style="display: flex; flex-direction: column; align-items: center; padding: 7px 4px 8px; background: linear-gradient(180deg, #2a2e34 0%, #212429 55%, #1b1e22 100%); border: 1px solid #6b5a33; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.35);">
+          <span style="display: flex; align-items: center; min-height: 21px; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: #a5936f;">Реакция</span>
+          <span style="position: relative; margin-top: 2px; font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 42px; line-height: 1; color: #d7bb7c; text-shadow: 0 0 12px rgba(201,164,92,.35);">10<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#c9a45c" stroke-width="1.5" style="position: absolute; top: 6px; right: -15px;" aria-hidden="true"><path d="M8 1 L14.5 5.5 L12 13.5 L4 13.5 L1.5 5.5 Z"></path></svg></span>
+          <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px; width: 100%; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,.055); font-size: 9.5px; color: #7d7870;">
+            <span>база</span><span style="font-size: 12.5px; font-weight: 700; color: #cbc6ba;">10</span>
+          </div>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.35; color: #8b857a;"><b style="color: #c9ccd1;">Наведение.</b> Число золотится, проступает d10 — клик бросает проверку.</p>
+      </div>
+      <div>
+        <div style="display: flex; flex-direction: column; align-items: center; padding: 7px 4px 8px; background: linear-gradient(180deg, #2a2e34 0%, #212429 55%, #1b1e22 100%); border: 1px solid #4a2f2f; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.35);">
+          <span style="display: flex; align-items: center; min-height: 21px; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: #b08b83;">Ловкость</span>
+          <span style="margin-top: 2px; font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 42px; line-height: 1; color: #e08b80;">5</span>
+          <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px; width: 100%; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,.055); font-size: 9.5px; color: #7d7870;">
+            <span>база</span><span style="font-size: 12.5px; font-weight: 700; color: #cbc6ba;">10</span><span style="color: #e08b80;">−5</span>
+          </div>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.35; color: #8b857a;"><b style="color: #c9ccd1;">Срезана.</b> Раны, скованность, перегруз — итог кровью, база остаётся прежней.</p>
+      </div>
+      <div>
+        <div style="display: flex; flex-direction: column; align-items: center; padding: 7px 4px 8px; background: linear-gradient(180deg, #2a2e34 0%, #212429 55%, #1b1e22 100%); border: 1px solid #3a3226; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.35);">
+          <span style="display: flex; align-items: center; min-height: 21px; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: #a5936f;">Удача</span>
+          <span style="margin-top: 2px; font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 42px; line-height: 1; color: #d7bb7c;">4</span>
+          <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px; width: 100%; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,.055); font-size: 9.5px; color: #7d7870;">
+            <span>база</span><span style="font-size: 12.5px; font-weight: 700; color: #cbc6ba;">4</span>
+          </div>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.35; color: #8b857a;"><b style="color: #c9ccd1;">Удача.</b> Не бросается: тёплая плита и золотое число вместо стального.</p>
+      </div>
+      <div>
+        <div style="display: flex; flex-direction: column; align-items: center; padding: 7px 4px 8px; background: linear-gradient(180deg, #2a2e34 0%, #212429 55%, #1b1e22 100%); border: 1px solid #343941; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.35);">
+          <span style="display: flex; align-items: center; min-height: 21px; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: #938d7e;">Воля</span>
+          <span style="margin-top: 2px; font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 42px; line-height: 1; color: #d2d6dc;">6</span>
+          <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px; width: 100%; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,.055); font-size: 9.5px; color: #7d7870;">
+            <span>база</span><span style="font-size: 12.5px; font-weight: 700; color: #cbc6ba;">6</span>
+          </div>
+          <span style="display: inline-flex; align-items: baseline; gap: 4px; margin-top: 6px; padding: 1px 8px; font-size: 11px; color: #d7bb7c; background: rgba(201,164,92,.12); border: 1px solid #6b5a33; border-radius: 3px;">+ <span style="font-size: 9.5px; color: #8b857a;">60</span></span>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.35; color: #8b857a;"><b style="color: #c9ccd1;">Развитие.</b> Кнопка с ценой в О.У встаёт в подвал, ничего не перекрывая.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: start;">
+
+    <div>
+      <h2 style="position: relative; margin: 0 0 10px; padding-bottom: 5px; font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 20px; color: #c9ccd1;">
+        Палитра
+        <span style="position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, #8e98a3, rgba(58,62,68,.1) 72%);"></span>
+      </h2>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;">
+        <div><span style="display: block; height: 30px; background: #17181a; border: 1px solid #33373d; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Ночь · #17181A</span></div>
+        <div><span style="display: block; height: 30px; background: linear-gradient(180deg, #272b31, #1d2024); border: 1px solid #33373d; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Плита · #272B31</span></div>
+        <div><span style="display: block; height: 30px; background: #8e98a3; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Сталь · #8E98A3</span></div>
+        <div><span style="display: block; height: 30px; background: #d2d6dc; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Серебро · #D2D6DC</span></div>
+        <div><span style="display: block; height: 30px; background: #c9a45c; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Золото · #C9A45C</span></div>
+        <div><span style="display: block; height: 30px; background: #9b2c2c; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Кровь · #9B2C2C</span></div>
+        <div><span style="display: block; height: 30px; background: #6d9a5b; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Вын · #6D9A5B</span></div>
+        <div><span style="display: block; height: 30px; background: #8e5aa0; border-radius: 3px;"></span><span style="display: block; margin-top: 4px; font-size: 10.5px; color: #8b857a;">Токсичность · #8E5AA0</span></div>
+      </div>
+    </div>
+
+    <div>
+      <h2 style="position: relative; margin: 0 0 10px; padding-bottom: 5px; font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 20px; color: #c9ccd1;">
+        Шрифты
+        <span style="position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, #8e98a3, rgba(58,62,68,.1) 72%);"></span>
+      </h2>
+      <p style="margin: 0 0 6px; font-family: 'Oswald', sans-serif; font-size: 34px; line-height: 1; color: #d2d6dc;">10 · 6 · 30 <span style="font-size: 12px; font-family: 'PT Sans', sans-serif; color: #8b857a;">— числа и заголовки, узкий гротеск</span></p>
+      <p style="margin: 0 0 6px; font-size: 12.5px; line-height: 1.45; color: #cbc6ba;">Основной текст — гуманистический гротеск с кириллицей: описания особенностей, подсказки, подписи полей.</p>
+      <p style="margin: 0; font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: #7f8893;">Мелкая разрядка — названия групп и подписи значений</p>
+      <p style="margin: 8px 0 0; font-size: 11.5px; line-height: 1.35; color: #8b857a;">В системе роль узкого гротеска играет Modesto Condensed из Foundry — тот же характер, только с засечками.</p>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":920,"height":470}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

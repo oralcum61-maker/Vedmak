@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Окно атаки</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+  <style>
+    body { margin: 0; font-family: "PT Serif", Georgia, serif; background: #16120d; color: #ded3bb; }
+    a { color: #b4914e; } a:hover { color: #e3c078; }
+    button { font: inherit; }
+  </style>
+</helmet>
+
+<div style="width: 560px; height: 700px; box-sizing: border-box; display: flex; flex-direction: column; background: #1b1610; border: 1px solid #0d0a07; box-shadow: inset 0 0 0 1px rgba(180,145,78,.12);">
+
+  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #12100e; border-bottom: 1px solid #0d0a07;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c0533f" stroke-width="1.6" aria-hidden="true"><path d="M4 20l7-7M14 10l6-6M14 4h6v6"/><path d="M4 4l10 10"/></svg>
+    <span style="flex-grow: 1; font-family: Forum, serif; font-size: 15px; letter-spacing: .06em; color: #e8dcc2;">Атака: Стальной ведьмачий меч</span>
+    <button type="button" aria-label="Закрыть" style="width: 22px; height: 22px; display: grid; place-items: center; background: transparent; border: 1px solid transparent; border-radius: 3px; color: #97886c; cursor: pointer;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+  </div>
+
+  <!-- по кому бьём и чем -->
+  <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: linear-gradient(180deg, rgba(255,240,210,.05), rgba(0,0,0,.3)); border-bottom: 1px solid #0d0a07;">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+      <span style="font-family: Forum, serif; font-size: 22px; line-height: 1.1; color: #e8dcc2;">Утопец</span>
+      <span style="font-size: 12.5px; color: #97886c;">Владение мечом 16 &middot; урон 2d6+2 &middot; серебро &mdash;</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 14px; background: #241d15; border: 1px solid #0f0b07;">
+      <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .12em; color: #97886c;">ОСНОВА</span>
+      <span style="font-family: Forum, serif; font-size: 32px; line-height: 1; color: #e8dcc2;">16</span>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 14px; padding: 14px 18px; overflow: hidden;">
+
+    <!-- как бьём -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">УДАР</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+        <button type="button" aria-pressed="false" style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 4px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer;">
+          <span style="font-family: Forum, serif; font-size: 14px;">Быстрый</span>
+          <span style="font-size: 10.5px; color: #97886c;">два удара, −3</span>
+        </button>
+        <button type="button" aria-pressed="true" style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 4px; background: #33291d; color: #e3c078; border: 1px solid #b4914e; border-radius: 2px; cursor: pointer;">
+          <span style="font-family: Forum, serif; font-size: 14px;">Обычный</span>
+          <span style="font-size: 10.5px; color: #97886c;">без правок</span>
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 4px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer;">
+          <span style="font-family: Forum, serif; font-size: 14px;">Сильный</span>
+          <span style="font-size: 10.5px; color: #97886c;">урон ×2, −3</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- куда бьём -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">КУДА</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+        <button type="button" aria-pressed="true" style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 10px; background: #33291d; color: #e3c078; border: 1px solid #b4914e; border-radius: 2px; cursor: pointer; font-size: 13px;">
+          <span>Случайно</span><span style="font-size: 11px; color: #97886c;">d10</span>
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 13px;">
+          <span>Голова</span><span style="font-size: 11px; color: #c0533f;">−6</span>
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 13px;">
+          <span>Туловище</span><span style="font-size: 11px; color: #c0533f;">−1</span>
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 13px;">
+          <span>Рука</span><span style="font-size: 11px; color: #c0533f;">−3</span>
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 13px;">
+          <span>Нога</span><span style="font-size: 11px; color: #c0533f;">−2</span>
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 13px;">
+          <span>Приём</span><span style="font-size: 11px; color: #97886c;">борьба</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- обстоятельства -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">ОБСТОЯТЕЛЬСТВА</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <button type="button" aria-pressed="true" style="padding: 5px 11px; background: #33291d; color: #e3c078; border: 1px solid #b4914e; border-radius: 12px; cursor: pointer; font-size: 12.5px;">Засада +5</button>
+        <button type="button" aria-pressed="false" style="padding: 5px 11px; background: #241d15; color: #ded3bb; border: 1px solid #443a2b; border-radius: 12px; cursor: pointer; font-size: 12.5px;">Темнота −3</button>
+        <button type="button" aria-pressed="false" style="padding: 5px 11px; background: #241d15; color: #ded3bb; border: 1px solid #443a2b; border-radius: 12px; cursor: pointer; font-size: 12.5px;">Цель обездвижена +2</button>
+        <button type="button" aria-pressed="false" style="padding: 5px 11px; background: #241d15; color: #ded3bb; border: 1px solid #443a2b; border-radius: 12px; cursor: pointer; font-size: 12.5px;">Верхом +1</button>
+        <button type="button" aria-pressed="false" style="padding: 5px 11px; background: #241d15; color: #ded3bb; border: 1px solid #443a2b; border-radius: 12px; cursor: pointer; font-size: 12.5px;">Дальняя дистанция −2</button>
+      </div>
+    </div>
+
+    <!-- ручные правки и цена хода -->
+    <div style="display: flex; align-items: flex-end; gap: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">МОДИФИКАТОРЫ</span>
+        <div style="display: flex; gap: 8px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <input id="amod" type="text" value="+5" inputmode="numeric" style="width: 92px; height: 34px; text-align: center; font-family: Forum, serif; font-size: 20px; color: #e8dcc2; background: #120e09; border: 1px solid #443a2b; border-radius: 2px;">
+            <label for="amod" style="font-size: 11.5px; color: #97886c;">к броску</label>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <input id="adam" type="text" value="+2" inputmode="numeric" style="width: 92px; height: 34px; text-align: center; font-family: Forum, serif; font-size: 20px; color: #e8dcc2; background: #120e09; border: 1px solid #443a2b; border-radius: 2px;">
+            <label for="adam" style="font-size: 11.5px; color: #97886c;">к урону</label>
+          </div>
+        </div>
+      </div>
+      <div style="flex-grow: 1; display: flex; align-items: center; gap: 10px; margin-bottom: 21px; padding: 9px 12px; background: #241d15; border: 1px solid #0f0b07; border-left: 2px solid #6b7a3c; border-radius: 2px;">
+        <span style="font-size: 12.5px; color: #97886c;">Дополнительное действие</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="font-family: Forum, serif; font-size: 18px; color: #a7b167;">3 Вын</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- итог броска и кнопки -->
+  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 18px 14px; background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.4)); border-top: 1px solid #0d0a07;">
+    <div style="flex-grow: 1; display: flex; align-items: stretch; gap: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 11.5px; letter-spacing: .06em; color: #6b5c42;">БРОСОК</span>
+        <span style="font-family: Forum, serif; font-size: 17px; color: #ded3bb;">d10 + 16 + 5</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding-left: 14px; border-left: 1px solid #2e261b;">
+        <span style="font-size: 11.5px; letter-spacing: .06em; color: #6b5c42;">УРОН</span>
+        <span style="font-family: Forum, serif; font-size: 17px; color: #ded3bb;">2d6+2 <b style="color: #e3c078;">+2</b></span>
+      </div>
+    </div>
+    <button type="button" style="padding: 9px 16px; background: #241d15; color: #97886c; border: 1px solid #443a2b; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 14px; letter-spacing: .06em;">Отмена</button>
+    <button type="button" style="display: flex; align-items: center; gap: 8px; padding: 9px 22px; background: linear-gradient(180deg, #5a2019, #33120e); color: #f3c9bf; border: 1px solid #8e2b22; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 16px; letter-spacing: .08em; box-shadow: inset 0 1px 0 rgba(255,235,200,.14);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 20l7-7M14 10l6-6M14 4h6v6"/><path d="M4 4l10 10"/></svg>
+      Атаковать
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":560,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

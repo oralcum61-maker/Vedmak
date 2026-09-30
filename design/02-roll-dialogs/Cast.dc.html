@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Окно сотворения заклинания</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+  <style>
+    body { margin: 0; font-family: "PT Serif", Georgia, serif; background: #16120d; color: #ded3bb; }
+    a { color: #b4914e; } a:hover { color: #e3c078; }
+    button { font: inherit; }
+  </style>
+</helmet>
+
+<div style="width: 520px; height: 700px; box-sizing: border-box; display: flex; flex-direction: column; background: #1c1824; border: 1px solid #0d0a07; box-shadow: inset 0 0 0 1px rgba(150,130,190,.12);">
+
+  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #141119; border-bottom: 1px solid #0d0a07;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9a86c4" stroke-width="1.6" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+    <span style="flex-grow: 1; font-family: Forum, serif; font-size: 15px; letter-spacing: .06em; color: #e8dcc2;">Сотворение: Игни</span>
+    <button type="button" aria-label="Закрыть" style="width: 22px; height: 22px; display: grid; place-items: center; background: transparent; border: 1px solid transparent; border-radius: 3px; color: #97886c; cursor: pointer;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+  </div>
+
+  <div style="display: flex; align-items: stretch; gap: 12px; padding: 14px 18px; background: linear-gradient(180deg, rgba(220,210,255,.05), rgba(0,0,0,.3)); border-bottom: 1px solid #0d0a07;">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+      <span style="font-family: Forum, serif; font-size: 24px; line-height: 1.1; color: #e8dcc2;">Игни</span>
+      <span style="font-size: 12.5px; color: #97886c;">Ведьмачий знак &middot; огонь &middot; 2-метровый конус</span>
+    </div>
+    <div style="flex-shrink: 0; width: 112px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 8px; background: #262031; border: 1px solid #0f0b07;">
+      <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .12em; color: #97886c;">ОСНОВА</span>
+      <span style="font-family: Forum, serif; font-size: 34px; line-height: 1; color: #e8dcc2;">9</span>
+      <span style="font-size: 10.5px; color: #97886c;">Воля + Сотворение</span>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 15px; padding: 15px 18px;">
+
+    <!-- сколько вложить -->
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">ВЛОЖИТЬ ВЫНОСЛИВОСТИ</span>
+        <span style="flex-grow: 1;"></span>
+        <span style="font-size: 12px; color: #97886c;">знак берёт от 1 до 7</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; gap: 4px;" role="group" aria-label="Вложено 4 очка выносливости из 7">
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: linear-gradient(180deg, #7b6ba8, #4a3d70); border: 1px solid #2a2338;"></span>
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: linear-gradient(180deg, #7b6ba8, #4a3d70); border: 1px solid #2a2338;"></span>
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: linear-gradient(180deg, #7b6ba8, #4a3d70); border: 1px solid #2a2338;"></span>
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: linear-gradient(180deg, #7b6ba8, #4a3d70); border: 1px solid #2a2338;"></span>
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: #171320; border: 1px solid #3a3248;"></span>
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: #171320; border: 1px solid #3a3248;"></span>
+          <span style="width: 26px; height: 30px; border-radius: 2px; background: #171320; border: 1px solid #3a3248;"></span>
+        </div>
+        <span style="flex-grow: 1; font-size: 12.5px; color: #97886c;">урон 4d6 &middot; шанс поджечь 50%</span>
+        <span style="font-family: Forum, serif; font-size: 26px; color: #c9b8f0;">4</span>
+      </div>
+    </div>
+
+    <!-- энергия раунда -->
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #262031; border: 1px solid #0f0b07; border-left: 2px solid #7b6ba8; border-radius: 2px;">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+        <div style="display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; color: #97886c;">
+          <span>Энергия за раунд</span>
+          <b style="color: #ded3bb;">4 из 2</b>
+          <span style="color: #c0533f;">— перегрузка на 2</span>
+        </div>
+        <div style="position: relative; height: 8px; background: #120e09; border: 1px solid #0f0b07; border-radius: 2px; overflow: hidden;">
+          <span style="position: absolute; inset: 0 50% 0 0; background: linear-gradient(180deg, #8f7fbe, #4a3d70);"></span>
+          <span style="position: absolute; inset: 0 0 0 50%; background: repeating-linear-gradient(45deg, #c0533f 0 4px, #6e2a22 4px 8px);"></span>
+        </div>
+      </div>
+      <span style="font-size: 12px; text-align: right; color: #c0533f; max-width: 150px;">10 ПЗ и стихийный откат за перебор</span>
+    </div>
+
+    <!-- фокус -->
+    <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #262031; border: 1px solid #0f0b07; border-radius: 2px;">
+      <input type="checkbox" id="focus" checked style="width: 16px; height: 16px; accent-color: #b4914e;">
+      <label for="focus" style="flex-grow: 1; font-size: 13px; color: #ded3bb;">Фокус: <b>медальон школы Волка</b></label>
+      <span style="font-family: Forum, serif; font-size: 16px; color: #e3c078;">−1 Вын</span>
+    </div>
+
+    <!-- цели -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">ЦЕЛИ</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <span style="display: flex; align-items: center; gap: 7px; padding: 5px 11px; background: #2b2438; border: 1px solid #4a3d70; border-radius: 12px; font-size: 12.5px;">
+          Утопец
+        </span>
+        <span style="display: flex; align-items: center; gap: 7px; padding: 5px 11px; background: #2b2438; border: 1px solid #4a3d70; border-radius: 12px; font-size: 12.5px;">
+          Утопец
+        </span>
+        <span style="padding: 5px 11px; background: transparent; border: 1px dashed #443a2b; border-radius: 12px; font-size: 12.5px; color: #6b5c42;">выделите токены на сцене</span>
+      </div>
+    </div>
+
+    <!-- модификаторы и удача -->
+    <div style="display: flex; align-items: flex-start; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">МОДИФИКАТОРЫ</span>
+        <div style="display: flex; gap: 8px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <input id="cmod" type="text" value="0" inputmode="numeric" style="width: 84px; height: 34px; text-align: center; font-family: Forum, serif; font-size: 20px; color: #e8dcc2; background: #120e09; border: 1px solid #443a2b; border-radius: 2px;">
+            <label for="cmod" style="font-size: 11.5px; color: #97886c;">к броску</label>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <input id="cdam" type="text" value="+2" inputmode="numeric" style="width: 84px; height: 34px; text-align: center; font-family: Forum, serif; font-size: 20px; color: #e8dcc2; background: #120e09; border: 1px solid #443a2b; border-radius: 2px;">
+            <label for="cdam" style="font-size: 11.5px; color: #97886c;">к урону</label>
+          </div>
+        </div>
+      </div>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">УДАЧА</span>
+        <div style="display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; background: #262031; border: 1px solid #0f0b07; border-radius: 2px;">
+          <div style="display: flex; gap: 5px;" role="group" aria-label="Удача не потрачена: 4 из 4">
+            <span style="width: 15px; height: 15px; border-radius: 50%; background: #120e09; border: 1px solid #6b5c42;"></span>
+            <span style="width: 15px; height: 15px; border-radius: 50%; background: #120e09; border: 1px solid #6b5c42;"></span>
+            <span style="width: 15px; height: 15px; border-radius: 50%; background: #120e09; border: 1px solid #6b5c42;"></span>
+            <span style="width: 15px; height: 15px; border-radius: 50%; background: #120e09; border: 1px solid #6b5c42;"></span>
+          </div>
+          <span style="flex-grow: 1; font-size: 12.5px; color: #97886c;">не тратим</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 18px 14px; background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.42)); border-top: 1px solid #0d0a07;">
+    <div style="flex-grow: 1; display: flex; align-items: stretch; gap: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 11.5px; letter-spacing: .06em; color: #6b5c42;">БРОСОК</span>
+        <span style="font-family: Forum, serif; font-size: 17px; color: #ded3bb;">d10 + 9</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding-left: 14px; border-left: 1px solid #2b2438;">
+        <span style="font-size: 11.5px; letter-spacing: .06em; color: #6b5c42;">УРОН</span>
+        <span style="font-family: Forum, serif; font-size: 17px; color: #ded3bb;">4d6 <b style="color: #c9b8f0;">+2</b></span>
+      </div>
+    </div>
+    <button type="button" style="padding: 9px 16px; background: #241d15; color: #97886c; border: 1px solid #443a2b; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 14px; letter-spacing: .06em;">Отмена</button>
+    <button type="button" style="display: flex; align-items: center; gap: 8px; padding: 9px 20px; background: linear-gradient(180deg, #443668, #241d38); color: #ddd0f5; border: 1px solid #7b6ba8; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 16px; letter-spacing: .08em; box-shadow: inset 0 1px 0 rgba(235,225,255,.16);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+      Сотворить
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":520,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

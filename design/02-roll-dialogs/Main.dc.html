@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Окно проверки навыка</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+  <style>
+    body { margin: 0; font-family: "PT Serif", Georgia, serif; background: #16120d; color: #ded3bb; }
+    a { color: #b4914e; } a:hover { color: #e3c078; }
+    button { font: inherit; }
+  </style>
+</helmet>
+
+<div style="width: 520px; height: 500px; box-sizing: border-box; display: flex; flex-direction: column; background: #1b1610; border: 1px solid #0d0a07; box-shadow: inset 0 0 0 1px rgba(180,145,78,.12);">
+
+  <!-- планка окна -->
+  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #12100e; border-bottom: 1px solid #0d0a07;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b4914e" stroke-width="1.6" aria-hidden="true"><path d="M12 2l8 4.6v9.2L12 22l-8-5.2V6.6z"/><path d="M12 8.5l3.5 2v4l-3.5 2-3.5-2v-4z"/></svg>
+    <span style="flex-grow: 1; font-family: Forum, serif; font-size: 15px; letter-spacing: .06em; color: #e8dcc2;">Проверка: Уклонение/Изворотливость</span>
+    <button type="button" aria-label="Закрыть" style="width: 22px; height: 22px; display: grid; place-items: center; background: transparent; border: 1px solid transparent; border-radius: 3px; color: #97886c; cursor: pointer;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+  </div>
+
+  <!-- шапка: что бросаем и из чего складывается -->
+  <div style="display: flex; align-items: stretch; gap: 14px; padding: 16px 18px 14px; background: linear-gradient(180deg, rgba(255,240,210,.05), rgba(0,0,0,.3)); border-bottom: 1px solid #0d0a07;">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+      <span style="font-family: Forum, serif; font-size: 26px; line-height: 1.1; color: #e8dcc2;">Уклонение</span>
+      <span style="font-size: 13px; color: #97886c;">Реакция 10 &middot; навык 4</span>
+      <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 6px; font-size: 14px; color: #97886c;">
+        <span>бросок</span>
+        <b style="font-size: 16px; color: #ded3bb;">d10</b><span>+</span><b style="font-size: 16px; color: #ded3bb;">14</b>
+      </div>
+    </div>
+    <div style="flex-shrink: 0; width: 124px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 8px; background: #241d15; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.1);">
+      <span style="font-family: Forum, serif; font-size: 11px; letter-spacing: .12em; color: #97886c;">ОСНОВА</span>
+      <span style="font-family: Forum, serif; font-size: 42px; line-height: 1; color: #e8dcc2;">14</span>
+    </div>
+  </div>
+
+  <!-- поля -->
+  <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 16px; padding: 16px 18px;">
+
+    <!-- модификатор -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <label for="mod" style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">МОДИФИКАТОР</label>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button type="button" aria-label="Меньше" style="width: 34px; height: 34px; display: grid; place-items: center; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <input id="mod" type="text" value="0" inputmode="numeric" style="width: 64px; height: 34px; text-align: center; font-family: Forum, serif; font-size: 20px; color: #e8dcc2; background: #120e09; border: 1px solid #443a2b; border-radius: 2px;">
+        <button type="button" aria-label="Больше" style="width: 34px; height: 34px; display: grid; place-items: center; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <span style="flex-grow: 1; font-size: 12.5px; color: #97886c;">засада, темнота, помощь — всё разом одним числом</span>
+      </div>
+    </div>
+
+    <!-- удача -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">УДАЧА</span>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #241d15; border: 1px solid #0f0b07; border-left: 2px solid #b4914e; border-radius: 2px;">
+        <div style="display: flex; gap: 5px;" role="group" aria-label="Потратить очки удачи: 2 из 4">
+          <span style="width: 17px; height: 17px; border-radius: 50%; background: #e3c078; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35);"></span>
+          <span style="width: 17px; height: 17px; border-radius: 50%; background: #e3c078; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35);"></span>
+          <span style="width: 17px; height: 17px; border-radius: 50%; background: #120e09; border: 1px solid #6b5c42;"></span>
+          <span style="width: 17px; height: 17px; border-radius: 50%; background: #120e09; border: 1px solid #6b5c42;"></span>
+        </div>
+        <span style="flex-grow: 1; font-size: 13px; color: #97886c;">потрачено <b style="color: #e3c078;">2</b> из 4</span>
+        <span style="font-family: Forum, serif; font-size: 18px; color: #e8dcc2;">+2</span>
+      </div>
+    </div>
+
+    <!-- видимость -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .1em; color: #b4914e;">КОМУ ВИДНО</span>
+      <div style="display: flex; gap: 6px;">
+        <button type="button" aria-pressed="true" style="display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: #33291d; color: #e3c078; border: 1px solid #b4914e; border-radius: 2px; cursor: pointer; font-size: 12.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.6"/></svg>
+          Всем
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 12.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3.5v5c0 4-3 7.6-7 9.5-4-1.9-7-5.5-7-9.5v-5z"/></svg>
+          Ведущему
+        </button>
+        <button type="button" aria-pressed="false" style="display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: #241d15; color: #ded3bb; border: 1px solid #0f0b07; border-radius: 2px; cursor: pointer; font-size: 12.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5l16 14M9.5 9.2A2.6 2.6 0 0012 14.6M6.2 7.4C3.9 9 2 12 2 12s3.6 6 10 6c1.7 0 3.2-.4 4.5-1M9.6 6.3A9.7 9.7 0 0112 6c6.4 0 10 6 10 6a18 18 0 01-2.7 3.2"/></svg>
+          Себе
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- подвал -->
+  <div style="display: flex; align-items: center; gap: 10px; padding: 12px 18px 14px; background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.4)); border-top: 1px solid #0d0a07;">
+    <span style="flex-grow: 1; font-size: 12px; font-style: italic; color: #6b5c42;">Shift — бросить сразу, без окна</span>
+    <button type="button" style="padding: 9px 16px; background: #241d15; color: #97886c; border: 1px solid #443a2b; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 14px; letter-spacing: .06em;">Отмена</button>
+    <button type="button" style="display: flex; align-items: center; gap: 8px; padding: 9px 22px; background: linear-gradient(180deg, #4a3a1e, #2c2111); color: #f0dba6; border: 1px solid #b4914e; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 16px; letter-spacing: .08em; box-shadow: inset 0 1px 0 rgba(255,235,200,.18);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2l8 4.6v9.2L12 22l-8-5.2V6.6z"/><path d="M12 8.5l3.5 2v4l-3.5 2-3.5-2v-4z"/></svg>
+      Бросить
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":520,"height":500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

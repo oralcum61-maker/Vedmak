@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Лист: параметры</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+  <style>
+    body { margin: 0; font-family: "PT Serif", Georgia, serif; background: #16120d; color: #ded3bb; }
+    a { color: #b4914e; text-decoration: none; } a:hover { color: #e3c078; }
+    button, input { font: inherit; }
+    .tex-leather { background-image: url("/_blob/7445afe0e95c33efb75f14da6a59f8f5"); background-size: 420px; background-blend-mode: overlay; }
+    .tex-steel { background-image: url("/_blob/96471bfed8ab02dcc17b3541870b0656"); background-size: 360px; background-blend-mode: overlay; }
+    .tex-bronze { background-image: url("/_blob/cbb282ee0d6d0a63c21172ffa0c7c378"); background-size: 220px; background-blend-mode: overlay; }
+    .tex-stone { background-image: url("/_blob/ad69a12e6e3e8c0fee9e755f43a7fcf7"); background-size: 300px; background-blend-mode: overlay; }
+  </style>
+</helmet>
+
+<div class="tex-leather" style="width: 1060px; height: 880px; box-sizing: border-box; display: flex; background-color: #1b1610; border: 1px solid #0d0a07;">
+
+  <!-- ====================== КОЛОНКА ====================== -->
+  <aside class="tex-leather" style="width: 236px; flex-shrink: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 10px; background-color: #221b13; border-right: 1px solid #0d0a07; box-shadow: inset -6px 0 10px rgba(0,0,0,.35);">
+
+    <!-- портрет с именем на нём -->
+    <div style="position: relative; height: 166px; background-color: #14100b; border: 1px solid #0f0b07; box-shadow: inset 0 0 0 1px rgba(180,145,78,.22);">
+      <div style="position: absolute; inset: 0; display: grid; place-items: center; color: #3b3225;">
+        <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
+          <path d="M12 3c-3.2 0-5 2.2-5 5 0 2 .6 3.1 1.2 4.1.5.9.8 1.5.8 2.4 0 1.3-.7 2-2 2.6C5.3 18 4 19.3 4 21h16c0-1.7-1.3-3-3-3.9-1.3-.6-2-1.3-2-2.6 0-.9.3-1.5.8-2.4C16.4 11.1 17 10 17 8c0-2.8-1.8-5-5-5z"/>
+        </svg>
+      </div>
+      <span style="position: absolute; left: 6px; top: 6px; width: 10px; height: 10px; border-left: 1px solid #b4914e; border-top: 1px solid #b4914e;"></span>
+      <span style="position: absolute; right: 6px; top: 6px; width: 10px; height: 10px; border-right: 1px solid #b4914e; border-top: 1px solid #b4914e;"></span>
+      <span style="position: absolute; left: 6px; bottom: 6px; width: 10px; height: 10px; border-left: 1px solid #b4914e; border-bottom: 1px solid #b4914e;"></span>
+      <span style="position: absolute; right: 6px; bottom: 6px; width: 10px; height: 10px; border-right: 1px solid #b4914e; border-bottom: 1px solid #b4914e;"></span>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 10px 8px; background: linear-gradient(180deg, rgba(20,16,11,0), rgba(20,16,11,.92) 55%);">
+        <input type="text" value="Ведьмак-тест" aria-label="Имя персонажа"
+               style="width: 100%; padding: 0; font-family: Forum, serif; font-size: 20px; line-height: 1.1; color: #e8dcc2; background: transparent; border: none; border-bottom: 1px solid rgba(180,145,78,.28);">
+      </div>
+    </div>
+
+    <!-- кто он -->
+    <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+      <a href="#race" style="padding: 2px 7px; font-size: 11px; color: #ded3bb; background: #2a2119; border: 1px solid #443a2b; border-radius: 2px;">Ведьмак</a>
+      <a href="#profession" style="padding: 2px 7px; font-size: 11px; color: #ded3bb; background: #2a2119; border: 1px solid #443a2b; border-radius: 2px;">Ведьмак</a>
+      <span style="padding: 2px 7px; font-size: 11px; color: #c0533f; background: #2a1a16; border: 1px solid #5a2019; border-radius: 2px;">Незнакомец</span>
+    </div>
+
+    <!-- тревога -->
+    <div style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: #2a1a16; border-left: 2px solid #8e2b22;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c0533f" stroke-width="2" aria-hidden="true"><path d="M12 8v5M12 17h.01"/><path d="M10.3 3.9 2.6 18a1.9 1.9 0 0 0 1.7 2.9h15.4a1.9 1.9 0 0 0 1.7-2.9L13.7 3.9a1.9 1.9 0 0 0-3.4 0z"/></svg>
+      <span style="font-size: 11.5px; color: #c0533f;">Ниже порога ранения</span>
+    </div>
+
+    <!-- жизнь -->
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+
+      <div style="display: flex; flex-direction: column; gap: 3px;">
+        <div style="display: flex; align-items: baseline; gap: 6px;">
+          <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #97886c;">ПЗ</span>
+          <span style="flex-grow: 1;"></span>
+          <input type="text" value="20" aria-label="Здоровье"
+                 style="width: 34px; padding: 0; text-align: right; font-family: Forum, serif; font-size: 19px; line-height: 1; color: #e8dcc2; background: transparent; border: none;">
+          <span style="font-size: 11px; color: #6b5c42;">/ 20</span>
+        </div>
+        <div style="position: relative; height: 10px; background: #120e09; border: 1px solid #0f0b07;">
+          <span style="position: absolute; inset: 1px; width: calc(100% - 2px); background: linear-gradient(180deg, #a8352a, #6e2219);"></span>
+          <span style="position: absolute; left: 25%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.45);"></span>
+          <span style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.45);"></span>
+          <span style="position: absolute; left: 75%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.45);"></span>
+          <span style="position: absolute; left: 30%; top: -2px; bottom: -2px; width: 2px; background: #e3c078;" title="Порог ранения 6"></span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 3px;">
+        <div style="display: flex; align-items: baseline; gap: 6px;">
+          <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #97886c;">ВЫНОСЛИВОСТЬ</span>
+          <span style="flex-grow: 1;"></span>
+          <input type="text" value="26" aria-label="Выносливость"
+                 style="width: 34px; padding: 0; text-align: right; font-family: Forum, serif; font-size: 19px; line-height: 1; color: #e8dcc2; background: transparent; border: none;">
+          <span style="font-size: 11px; color: #6b5c42;">/ 30</span>
+        </div>
+        <div style="position: relative; height: 10px; background: #120e09; border: 1px solid #0f0b07;">
+          <span style="position: absolute; inset: 1px; width: 85%; background: linear-gradient(180deg, #8a9450, #5c6533);"></span>
+          <span style="position: absolute; left: 25%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.45);"></span>
+          <span style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.45);"></span>
+          <span style="position: absolute; left: 75%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.45);"></span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 3px;">
+        <div style="display: flex; align-items: baseline; gap: 6px;">
+          <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #97886c;">ТОКСИЧНОСТЬ</span>
+          <span style="flex-grow: 1;"></span>
+          <input type="text" value="0" aria-label="Токсичность"
+                 style="width: 34px; padding: 0; text-align: right; font-family: Forum, serif; font-size: 19px; line-height: 1; color: #e8dcc2; background: transparent; border: none;">
+          <span style="font-size: 11px; color: #6b5c42;">/ 100</span>
+        </div>
+        <div style="position: relative; height: 10px; background: #120e09; border: 1px solid #0f0b07;">
+          <span style="position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; background: #6b5c42;" title="Половина — порог дурноты"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Удача жетонами, как в окнах бросков -->
+    <div class="tex-bronze" style="display: flex; align-items: center; gap: 8px; padding: 7px 9px; background-color: #2a2119; border: 1px solid #0f0b07;">
+      <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .14em; color: #97886c;">УДАЧА</span>
+      <div style="display: flex; gap: 4px; margin-left: auto;" role="img" aria-label="Удача 4 из 4">
+        <span style="width: 13px; height: 13px; border-radius: 50%; background: #e3c078; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35);"></span>
+        <span style="width: 13px; height: 13px; border-radius: 50%; background: #e3c078; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35);"></span>
+        <span style="width: 13px; height: 13px; border-radius: 50%; background: #e3c078; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35);"></span>
+        <span style="width: 13px; height: 13px; border-radius: 50%; background: #e3c078; box-shadow: inset 0 -2px 3px rgba(0,0,0,.35);"></span>
+      </div>
+      <button type="button" aria-label="Восстановить Удачу" style="width: 20px; height: 20px; display: grid; place-items: center; padding: 0; background: transparent; color: #6b5c42; border: 1px solid transparent; cursor: pointer;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>
+      </button>
+    </div>
+
+    <!-- счёт партии -->
+    <div style="display: flex; flex-direction: column; gap: 5px; padding: 0 1px;">
+      <div style="display: flex; align-items: baseline; gap: 6px;">
+        <span style="font-size: 11.5px; color: #97886c;">Очки улучшения</span>
+        <span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span>
+        <input type="text" value="30" aria-label="Очки улучшения"
+               style="width: 30px; padding: 0; text-align: right; font-family: Forum, serif; font-size: 15px; color: #ded3bb; background: transparent; border: none;">
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 6px;">
+        <span style="font-size: 11.5px; color: #97886c;">Репутация</span>
+        <span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span>
+        <input type="text" value="0" aria-label="Репутация"
+               style="width: 30px; padding: 0; text-align: right; font-family: Forum, serif; font-size: 15px; color: #ded3bb; background: transparent; border: none;">
+      </div>
+    </div>
+
+    <!-- то, что спрашивают каждый ход -->
+    <div class="tex-stone" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background-color: #241d15; border: 1px solid #0f0b07;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 2px 6px; border-right: 1px solid #191309;">
+        <span style="font-family: Forum, serif; font-size: 20px; line-height: 1; color: #e8dcc2;">2</span>
+        <span style="font-size: 9.5px; letter-spacing: .06em; color: #97886c;">Энергия</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 2px 6px; border-right: 1px solid #191309;">
+        <span style="font-family: Forum, serif; font-size: 20px; line-height: 1; color: #e8dcc2;">6</span>
+        <span style="font-size: 9.5px; letter-spacing: .06em; color: #97886c;">Уст</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 2px 6px; border-right: 1px solid #191309;">
+        <span style="font-family: Forum, serif; font-size: 20px; line-height: 1; color: #e8dcc2;">6</span>
+        <span style="font-size: 9.5px; letter-spacing: .06em; color: #97886c;">Порог</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 2px 6px;">
+        <span style="font-family: Forum, serif; font-size: 20px; line-height: 1; color: #e8dcc2;">12<small style="font-size: 10px; color: #97886c;">м</small></span>
+        <span style="font-size: 9.5px; letter-spacing: .06em; color: #97886c;">Бег</span>
+      </div>
+    </div>
+
+    <span style="flex-grow: 1;"></span>
+
+    <div style="display: flex; gap: 6px;">
+      <button type="button" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; height: 30px; padding: 0; background: linear-gradient(180deg, #4a3a1e, #2c2111); color: #f0dba6; border: 1px solid #b4914e; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 13px; letter-spacing: .04em;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 19l6-6 3 3 7-7"/><path d="M14 9h6v6"/></svg>
+        Развитие
+      </button>
+      <button type="button" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; height: 30px; padding: 0; background: #241d15; color: #97886c; border: 1px solid #443a2b; border-radius: 2px; cursor: pointer; font-family: Forum, serif; font-size: 13px; letter-spacing: .04em;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 19 19 5M15 5h4v4"/><path d="M9 4.5 10 7l2.5 1L10 9l-1 2.5L8 9 5.5 8 8 7z"/></svg>
+        Мастер
+      </button>
+    </div>
+  </aside>
+
+  <!-- ====================== ПРАВАЯ ЧАСТЬ ====================== -->
+  <div style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0;">
+
+    <!-- вкладки -->
+    <nav class="tex-steel" style="display: flex; align-items: flex-end; gap: 2px; padding: 8px 14px 0; background-color: #241d15; border-bottom: 1px solid #0d0a07;">
+      <a href="#stats" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #e3c078; background: #33291d; border: 1px solid #0f0b07; border-bottom: 2px solid #b4914e;">Параметры</a>
+      <a href="#combat" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #97886c;">Бой</a>
+      <a href="#skills" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #97886c;">Навыки</a>
+      <a href="#gear" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #97886c;">Снаряжение</a>
+      <a href="#craft" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #97886c;">Ремесло</a>
+      <a href="#magic" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #97886c;">Магия</a>
+      <a href="#bio" style="padding: 7px 14px 6px; font-family: Forum, serif; font-size: 13.5px; letter-spacing: .04em; color: #97886c;">Дневник</a>
+    </nav>
+
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 16px; min-height: 0;">
+
+      <!-- две колонки характеристик -->
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+
+        <section style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="tex-bronze" style="padding: 2px 9px; font-family: Forum, serif; font-size: 11px; letter-spacing: .16em; color: #e8dcc2; background-color: #4a3a1e; border: 1px solid #0f0b07;">ТЕЛО</span>
+            <span style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, #443a2b, rgba(68,58,43,0));"></span>
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-body" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">6</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Телосложение</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">удар рукой 1d6 · вес 60 кг</span>
+              </span>
+            </a>
+            <label for="m-body" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-body" type="text" value="6" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-ref" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">10</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Реакция</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">уклонение, порядок хода</span>
+              </span>
+            </a>
+            <label for="m-ref" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-ref" type="text" value="10" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-dex" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">11</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Ловкость</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">оружие, стрельба, скрытность</span>
+              </span>
+            </a>
+            <label for="m-dex" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-dex" type="text" value="10" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+          <div style="display: flex; justify-content: flex-end; margin-top: -4px; padding-right: 2px;">
+            <span style="font-size: 10.5px; color: #7d8a4a;">+1 от «Кошки» — учтено в 11</span>
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-spd" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">4</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Скорость</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">бег 12 м · прыжок 2 м</span>
+              </span>
+            </a>
+            <label for="m-spd" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-spd" type="text" value="4" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="tex-bronze" style="padding: 2px 9px; font-family: Forum, serif; font-size: 11px; letter-spacing: .16em; color: #e8dcc2; background-color: #4a3a1e; border: 1px solid #0f0b07;">РАЗУМ</span>
+            <span style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, #443a2b, rgba(68,58,43,0));"></span>
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-int" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">7</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Интеллект</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">знания, дедукция, внимание</span>
+              </span>
+            </a>
+            <label for="m-int" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-int" type="text" value="7" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-will" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">6</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Воля</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">знаки, сопротивление магии</span>
+              </span>
+            </a>
+            <label for="m-will" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-will" type="text" value="6" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; border-left: 2px solid #8e2b22; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-emp" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #c0533f; background: #191309; border: 1px solid #5a2019;">1</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Эмпатия</span>
+                <span style="font-size: 10.5px; color: #c0533f;">мутации ведьмака: −5</span>
+              </span>
+            </a>
+            <label for="m-emp" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-emp" type="text" value="6" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+
+          <div class="tex-steel" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+            <a href="#roll-cra" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+              <span style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 26px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">4</span>
+              <span style="display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-family: Forum, serif; font-size: 15px; color: #ded3bb;">Ремесло</span>
+                <span style="font-size: 10.5px; color: #6b5c42;">изготовление, алхимия, починка</span>
+              </span>
+            </a>
+            <label for="m-cra" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+            <input id="m-cra" type="text" value="4" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+          </div>
+        </section>
+      </div>
+
+      <!-- производные: списки с заполнителями вместо двенадцати плиток -->
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px;">
+
+        <section style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #b4914e;">ДВИЖЕНИЕ</span>
+            <span style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, #443a2b, rgba(68,58,43,0));"></span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Бег</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">12<small style="font-size: 10px; color: #6b5c42;"> м</small></b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Прыжок</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">2<small style="font-size: 10px; color: #6b5c42;"> м</small></b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Подъём</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">300<small style="font-size: 10px; color: #6b5c42;"> кг</small></b></div>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #b4914e;">СТОЙКОСТЬ</span>
+            <span style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, #443a2b, rgba(68,58,43,0));"></span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Устойчивость</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">6</b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Отдых</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">6</b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #c0533f;">Порог ранения</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #c0533f;">6</b></div>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #b4914e;">РУКОПАШНАЯ</span>
+            <span style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, #443a2b, rgba(68,58,43,0));"></span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Удар рукой</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">1d6</b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Удар ногой</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">1d6+4</b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Бонус урона</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">+3</b></div>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .16em; color: #b4914e;">ДУХ</span>
+            <span style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, #443a2b, rgba(68,58,43,0));"></span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Энергия</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">2</b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #97886c;">Решительность</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #ded3bb;">30</b></div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 12.5px; color: #6b5c42;">Фокус</span><span style="flex-grow: 1; border-bottom: 1px dotted #3b3225; transform: translateY(-3px);"></span><b style="font-family: Forum, serif; font-weight: 400; font-size: 15px; color: #6b5c42;">—</b></div>
+        </section>
+      </div>
+
+      <span style="flex-grow: 1;"></span>
+
+      <!-- судьба и бонусы: одной строкой внизу -->
+      <div style="display: flex; align-items: center; gap: 14px; padding: 9px 12px; background: #241d15; border: 1px solid #0f0b07; border-left: 2px solid #b4914e;">
+        <span style="font-family: Forum, serif; font-size: 11px; letter-spacing: .16em; color: #b4914e;">СУДЬБА</span>
+        <span style="display: flex; align-items: baseline; gap: 7px;">
+          <span style="font-size: 12.5px; color: #97886c;">Удача</span>
+          <b style="font-family: Forum, serif; font-weight: 400; font-size: 20px; color: #e3c078;">4</b>
+          <span style="font-size: 11px; color: #6b5c42;">из 4 — тратится на любой бросок</span>
+        </span>
+        <span style="flex-grow: 1;"></span>
+        <a href="#bonus" style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #97886c;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          Бонусы к максимумам ПЗ, Вын, Энергии
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1060,"height":880}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

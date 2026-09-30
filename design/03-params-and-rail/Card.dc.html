@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Параметр: было и стало</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+  <style>
+    body { margin: 0; font-family: "PT Serif", Georgia, serif; background: #16120d; color: #ded3bb; }
+    a { color: #b4914e; text-decoration: none; } a:hover { color: #e3c078; }
+    button, input { font: inherit; }
+    .tex-leather { background-image: url("/_blob/7445afe0e95c33efb75f14da6a59f8f5"); background-size: 420px; background-blend-mode: overlay; }
+    .tex-steel { background-image: url("/_blob/96471bfed8ab02dcc17b3541870b0656"); background-size: 360px; background-blend-mode: overlay; }
+  </style>
+</helmet>
+
+<div class="tex-leather" style="width: 820px; height: 320px; box-sizing: border-box; display: flex; gap: 22px; padding: 18px 20px; background-color: #1b1610; border: 1px solid #0d0a07;">
+
+  <!-- было -->
+  <section style="width: 320px; display: flex; flex-direction: column; gap: 10px;">
+    <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .16em; color: #6b5c42;">БЫЛО</span>
+
+    <div class="tex-steel" style="width: 170px; display: flex; flex-direction: column; gap: 4px; padding: 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07;">
+      <span style="font-family: Forum, serif; font-size: 10.5px; letter-spacing: .12em; color: #97886c;">ИНТЕЛЛЕКТ</span>
+      <span style="font-family: Forum, serif; font-size: 30px; line-height: 1; color: #e8dcc2;">7</span>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</span>
+        <input type="text" value="7" aria-label="База интеллекта" style="width: 32px; height: 20px; text-align: center; font-size: 12px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+      </div>
+    </div>
+
+    <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #97886c;">
+      Девять одинаковых плиток в два ряда: 5 и 4 — последний ряд обрывается. Число крупное, но рядом с ним
+      ничего не сказано: ни зачем этот параметр, ни откуда взялась разница с базой. Бросок висит на цифре.
+    </p>
+  </section>
+
+  <span style="width: 1px; background: linear-gradient(180deg, rgba(68,58,43,0), #443a2b, rgba(68,58,43,0));"></span>
+
+  <!-- стало -->
+  <section style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+    <span style="font-family: Forum, serif; font-size: 12px; letter-spacing: .16em; color: #b4914e;">СТАЛО</span>
+
+    <div class="tex-steel" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; background-color: #2a2119; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255,235,200,.07);">
+      <a href="#roll" style="display: flex; align-items: center; gap: 10px; flex-grow: 1; color: inherit;">
+        <span style="width: 48px; height: 48px; flex-shrink: 0; display: grid; place-items: center; font-family: Forum, serif; font-size: 27px; color: #e8dcc2; background: #191309; border: 1px solid #443a2b;">7</span>
+        <span style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-family: Forum, serif; font-size: 15.5px; color: #ded3bb;">Интеллект</span>
+          <span style="font-size: 10.5px; color: #6b5c42;">знания, дедукция, внимание</span>
+        </span>
+      </a>
+      <label for="c-int" style="font-size: 9.5px; letter-spacing: .1em; color: #6b5c42;">БАЗА</label>
+      <input id="c-int" type="text" value="7" style="width: 34px; height: 24px; text-align: center; font-family: Forum, serif; font-size: 14px; color: #ded3bb; background: #120e09; border: 1px solid #443a2b;">
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 7px; padding-left: 2px;">
+      <div style="display: flex; gap: 8px;">
+        <span style="width: 58px; flex-shrink: 0; font-size: 11px; letter-spacing: .08em; color: #b4914e;">КЛЕЙМО</span>
+        <span style="font-size: 12.5px; color: #97886c;">итоговое значение — то, что уходит в бросок; рамка краснеет, когда параметр срезан, и зеленеет, когда поднят</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <span style="width: 58px; flex-shrink: 0; font-size: 11px; letter-spacing: .08em; color: #b4914e;">СТРОКА</span>
+        <span style="font-size: 12.5px; color: #97886c;">название и под ним — за что отвечает параметр: «знаки, сопротивление магии», «бег 12 м · прыжок 2 м»</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <span style="width: 58px; flex-shrink: 0; font-size: 11px; letter-spacing: .08em; color: #b4914e;">БАЗА</span>
+        <span style="font-size: 12.5px; color: #97886c;">вложенные очки — единственное поле, которое правят руками; остальное считается</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <span style="width: 58px; flex-shrink: 0; font-size: 11px; letter-spacing: .08em; color: #b4914e;">БРОСОК</span>
+        <span style="font-size: 12.5px; color: #97886c;">по всей строке, кроме поля базы; в режиме развития справа встаёт кнопка «+» с ценой в О.У.</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
