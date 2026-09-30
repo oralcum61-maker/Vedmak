@@ -25,6 +25,7 @@ import { registerStatusEffects } from "./module/combat/statuses.mjs";
 import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
 import { registerCombatAutomation } from "./module/combat/auto.mjs";
+import { registerZoneHooks } from "./module/combat/zones.mjs";
 import { initSocket } from "./module/combat/common.mjs";
 import { attack } from "./module/combat/attack.mjs";
 import { computeDamage, applyDamageToActor } from "./module/combat/damage.mjs";
@@ -114,6 +115,11 @@ Hooks.once("init", () => {
     hint: "Ведущий применяет урон, эффекты заклинаний и статусы приёмов без кнопки «Применить». Нужен ведущий в игре.",
     scope: "world", config: true, type: Boolean, default: true
   });
+  game.settings.register(SYSTEM_ID, "zones", {
+    name: "Зоны заклинаний и бомб на сцене",
+    hint: "Конусы и круги ставятся мышью (колесо — поворот, правый клик — отмена), цели — все, кто в зоне. Мгновенная зона исчезает к следующему ходу заклинателя, на N раундов — через N раундов, активная — с концом поддержания.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
   game.settings.register(SYSTEM_ID, "verbalDuel", {
     name: "Словесная дуэль",
     hint: "Подвкладка «Социальный бой» у персонажа: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
@@ -140,6 +146,7 @@ Hooks.once("init", () => {
   preloadTemplates();
   registerChatListeners();
   registerCombatAutomation();
+  registerZoneHooks();
   CombatHud.registerHooks();
 
   // API для макросов

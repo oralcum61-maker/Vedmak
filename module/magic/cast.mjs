@@ -9,7 +9,8 @@ import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
-import { currentTargets, actorToken, combatantFor, postCard } from "../combat/common.mjs";
+import { currentTargets, actorToken, combatantFor, postCard, targetInfo } from "../combat/common.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones } from "../combat/zones.mjs";
 
 /** Сколько Энергии уже израсходовано в текущем раунде боя. */
 export function vigorUsed(actor) {
@@ -53,7 +54,7 @@ function resolveChance(chance, sta) {
 export async function castSpell(actor, item, opts = {}) {
   const s = item.system;
   const d = actor.system.derived;
-  const targets = opts.targets ?? currentTargets();
+  let targets = opts.targets ?? currentTargets();
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
 
   if (!d.vigor && actor.type === "character") {
@@ -77,7 +78,22 @@ export async function castSpell(actor, item, opts = {}) {
     cfg = await castDialog(actor, item, cfg, targets);
     if (!cfg) return null;
   }
-  return performCast(actor, item, cfg, targets);
+
+  // Зона на сцене: конус или круг ставится мышью, цели — все, кто в неё попал; отмена — отмена сотворения
+  const area = opts.targets ? null : parseArea(s.range);
+  let region = null;
+  const placed = area && zonesAvailable() ? await placeZone(area, { name: item.name }) : null;
+  if (placed?.cancelled) return null;
+  if (placed?.shape) {
+    const duration = await parseZoneDuration(s.duration, { cost: cfg.cost });
+    region = await createZone(placed.shape, { name: item.name, actor, itemName: item.name, duration, maintainItemId: item.id });
+    targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);
+  }
+
+  const message = await performCast(actor, item, cfg, targets);
+  // Заклинание не сработало — зона не нужна
+  if (region && !message?.flags?.vedmak?.cast?.works) await removeZones([region]);
+  return message;
 }
 
 /** Основа проверки сотворения: Воля + навык магии со всеми постоянными правками. */

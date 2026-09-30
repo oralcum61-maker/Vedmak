@@ -5,6 +5,7 @@ import { postCard } from "./common.mjs";
 import { wearArmor } from "./damage.mjs";
 import { magicStartOfTurn } from "../magic/effects.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
+import { expireZonesForTurn } from "./zones.mjs";
 
 export class VedmakCombat extends Combat {
 
@@ -50,6 +51,7 @@ export async function startOfTurn(actor, combat, context) {
   // Эликсиры и масла, истёкшие по времени; магия: поддержание, регенерация, щиты, статусы с длительностью
   lines.push(...await expireAlchemy(actor));
   lines.push(...await magicStartOfTurn(actor));
+  lines.push(...await expireZonesForTurn(actor, combat));
 
   // Урон за ход
   let loss = 0;

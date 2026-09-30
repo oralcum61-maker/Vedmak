@@ -13,6 +13,7 @@ import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { postCard, resolveActor, tokenDistance } from "../combat/common.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens } from "../combat/zones.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
@@ -169,6 +170,24 @@ function areaTargets(radius) {
   return canvas.tokens.placeables.filter(t => t.actor && tokenDistance(center, t) <= radius).map(t => t.actor);
 }
 
+/**
+ * Зона склянки или ловушки на сцене: круг или конус ставится мышью.
+ * @returns {Promise<{victims: Actor[]}|null|false>} false — отменили, null — зоны недоступны
+ */
+async function zoneVictims(actor, name, u, effect) {
+  const area = parseArea(u.area, { plainIsRadius: true });
+  if (!area || !zonesAvailable()) return null;
+  const placed = await placeZone(area, { name });
+  if (placed?.cancelled) return false;
+  if (!placed) return null;
+  const shape = placed.shape;
+  // Облака без урона (двимерит, «Лунная пыль», «Сон дракона») висят столько раундов, сколько сказано в описании
+  const lingering = !(u.damage || u.status);
+  const duration = lingering ? (await parseZoneDuration(effect.match(/\d+\s*(?:раунд|ход)\S*/)?.[0] ?? "")) : { instant: true };
+  const region = await createZone(shape, { name, actor, itemName: name, duration });
+  return { victims: zoneTokens(shape, { region }).map(t => t.actor) };
+}
+
 export async function throwItem(actor, item) {
   const s = item.system;
   const u = s.use;
@@ -176,11 +195,14 @@ export async function throwItem(actor, item) {
   const rangeText = u.range || (s.kind === "bomb" ? "Тел×4 м" : "Тел×2 м");
   const mult = Number(rangeText.match(/Тел\s*[×x]\s*(\d+)/)?.[1] ?? 0);
   const meters = mult ? body * mult : Number(rangeText.match(/\d+/)?.[0] ?? 0);
+  // Сначала — куда бросаем (зона на сцене), потом бросок: отмена зоны ничего не тратит
+  const zone = await zoneVictims(actor, item.name, u, s.effect ?? "");
+  if (zone === false) return null;
   const attack = await actor.rollSkill("athletics", { subtitle: `Бросок: ${item.name} (дистанция ${meters} м)` });
   if (!attack) return null;
   await spendOne(item);
   const radius = Number(String(u.area).match(/\d+/)?.[0] ?? 0);
-  const victims = areaTargets(radius);
+  const victims = zone?.victims ?? areaTargets(radius);
   const lines = [s.effect, `Зона: ${u.area || "—"}. Промах — склянка падает в случайном направлении (таблица разброса, стр. 152).`];
   const buttons = [];
   if ((u.damage || u.status) && victims.length) {
@@ -210,7 +232,10 @@ registerChatAction("trapTrigger", async message => {
   const trap = message.flags.vedmak?.alchemy?.trap;
   if (!trap) return;
   const radius = Number(String(trap.use.area).match(/\d+/)?.[0] ?? 0);
-  const victims = areaTargets(radius);
+  const owner = resolveActor(message.flags.vedmak?.alchemy?.actorUuid) ?? game.user.character;
+  const zone = await zoneVictims(owner, trap.name, trap.use, trap.effect ?? "");
+  if (zone === false) return;
+  const victims = zone?.victims ?? areaTargets(radius);
   if (!victims.length) return ui.notifications.warn("Выберите цели в зоне ловушки (или одну — центр взрыва).");
   return manualDamage(victims, {
     formula: trap.use.damage, reason: trap.name, damageType: trap.use.damageType, where: "all",
