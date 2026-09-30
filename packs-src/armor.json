@@ -1,0 +1,4309 @@
+[
+ {
+  "name": "Капюшон вердэнского лучника",
+  "type": "armor",
+  "img": "icons/equipment/head/hood-leather-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 100,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 3,
+     "max": 3
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "1Dxjw5ZLMufveKdM"
+ },
+ {
+  "name": "Двуслойный капюшон",
+  "type": "armor",
+  "img": "icons/equipment/head/hood-cloth-blue-white.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 175,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 5,
+     "max": 5
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "d7Ji6HdMDCBt3KO3"
+ },
+ {
+  "name": "Каркасный шлем с полумаской",
+  "type": "armor",
+  "img": "icons/equipment/head/helm-rounded-reinforced-leather.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 200,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 8,
+     "max": 8
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "yf7XLo5O87X3Bjkd"
+ },
+ {
+  "name": "Кольчужный капюшон",
+  "type": "armor",
+  "img": "icons/equipment/head/hood-chain-worn.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 250,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 12,
+     "max": 12
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "EsA3cAMdakLY8wTW"
+ },
+ {
+  "name": "Усиленный капюшон",
+  "type": "armor",
+  "img": "icons/equipment/head/helm-spangen-engraved-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 250,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 14,
+     "max": 14
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "WgPCu2sTxqrI0BWb"
+ },
+ {
+  "name": "Темерский армет",
+  "type": "armor",
+  "img": "icons/equipment/head/helm-sallet-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 475,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 16,
+     "max": 16
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Ограничение зрения",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "yOJMvDXdSkGKmmUC"
+ },
+ {
+  "name": "Топфхельм",
+  "type": "armor",
+  "img": "icons/equipment/head/greathelm-banded-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 20,
+     "max": 20
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Ограничение зрения",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "TsY0BImk1irpJmCG"
+ },
+ {
+  "name": "Скеллигский шлем",
+  "type": "armor",
+  "img": "icons/equipment/head/helm-spangen-horned.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 700,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 25,
+     "max": 25
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Ограничение зрения",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "XYdjHNfXou329LaC"
+ },
+ {
+  "name": "Нильфгаардский шлем",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/hd-nilf-helmet.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 800,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 30,
+     "max": 30
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Ограничение зрения",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Головная"
+  ],
+  "_id": "wHZfKJRV8kMSrN4m"
+ },
+ {
+  "name": "Гамбезон",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl1-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 100,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 3,
+     "max": 3
+    },
+    "rightArm": {
+     "value": 3,
+     "max": 3
+    },
+    "leftArm": {
+     "value": 3,
+     "max": 3
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "5goohtzJatVLrdi8"
+ },
+ {
+  "name": "Аэдирнский гамбезон",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl2-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 175,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 5,
+     "max": 5
+    },
+    "rightArm": {
+     "value": 5,
+     "max": 5
+    },
+    "leftArm": {
+     "value": 5,
+     "max": 5
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "GkBWoetJMk79fOW1"
+ },
+ {
+  "name": "Двуслойный гамбезон",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl2-2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 250,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 8,
+     "max": 8
+    },
+    "rightArm": {
+     "value": 8,
+     "max": 8
+    },
+    "leftArm": {
+     "value": 8,
+     "max": 8
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "HTcw8FcTsJOClfvq"
+ },
+ {
+  "name": "Бригантина",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 7,
+   "cost": 300,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 12,
+     "max": 12
+    },
+    "rightArm": {
+     "value": 12,
+     "max": 12
+    },
+    "leftArm": {
+     "value": 12,
+     "max": 12
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "60oy8LLC7Om4CzFD"
+ },
+ {
+  "name": "Броня реданского алебардщика",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 8.5,
+   "cost": 400,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 14,
+     "max": 14
+    },
+    "rightArm": {
+     "value": 14,
+     "max": 14
+    },
+    "leftArm": {
+     "value": 14,
+     "max": 14
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "2QbpQJzVlbIExqUa"
+ },
+ {
+  "name": "Кожаная куртка из Лирии",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl3-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 6.5,
+   "cost": 525,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 16,
+     "max": 16
+    },
+    "rightArm": {
+     "value": 16,
+     "max": 16
+    },
+    "leftArm": {
+     "value": 16,
+     "max": 16
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "beLiC72KuvAOk8qu"
+ },
+ {
+  "name": "Латный доспех",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl2-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 14,
+   "cost": 625,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 20,
+     "max": 20
+    },
+    "rightArm": {
+     "value": 20,
+     "max": 20
+    },
+    "leftArm": {
+     "value": 20,
+     "max": 20
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 2,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "DuvuMSNHYNuKZmWe"
+ },
+ {
+  "name": "Хиндарсфьяльский тяжёлый доспех",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl3-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 15,
+   "cost": 750,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 25,
+     "max": 25
+    },
+    "rightArm": {
+     "value": 25,
+     "max": 25
+    },
+    "leftArm": {
+     "value": 25,
+     "max": 25
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 2,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "49qdnJbpzZ4UalKA"
+ },
+ {
+  "name": "Нильфгаардский латный доспех",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl4.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 12,
+   "cost": 850,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "79"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 30,
+     "max": 30
+    },
+    "rightArm": {
+     "value": 30,
+     "max": 30
+    },
+    "leftArm": {
+     "value": 30,
+     "max": 30
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 2,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "ZS9B82Sml3RALmmq"
+ },
+ {
+  "name": "Кавалерийские штаны",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-light1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 75,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 3,
+     "max": 3
+    },
+    "leftLeg": {
+     "value": 3,
+     "max": 3
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "nyt0f8rUVq0DQROt"
+ },
+ {
+  "name": "Стёганые штаны",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-light3.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 125,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 5,
+     "max": 5
+    },
+    "leftLeg": {
+     "value": 5,
+     "max": 5
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "fnLP2gbz5ctGScJ0"
+ },
+ {
+  "name": "Двуслойные штаны",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 225,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 8,
+     "max": 8
+    },
+    "leftLeg": {
+     "value": 8,
+     "max": 8
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "qWtmmDeKBY9POcmH"
+ },
+ {
+  "name": "Усиленные штаны",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-reinforced.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 250,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 12,
+     "max": 12
+    },
+    "leftLeg": {
+     "value": 12,
+     "max": 12
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "L4jTf4MGwWpwnjjH"
+ },
+ {
+  "name": "Реданские поножи",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-temerian.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 400,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 14,
+     "max": 14
+    },
+    "leftLeg": {
+     "value": 14,
+     "max": 14
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "rgWZas9gbu9zi6Jz"
+ },
+ {
+  "name": "Кожаные штаны из Лирии",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-lyria.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 525,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 16,
+     "max": 16
+    },
+    "leftLeg": {
+     "value": 16,
+     "max": 16
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "Ww7JawlhPVpg0lmR"
+ },
+ {
+  "name": "Латные поножи",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-heavy1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 7.5,
+   "cost": 625,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 20,
+     "max": 20
+    },
+    "leftLeg": {
+     "value": 20,
+     "max": 20
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "wlvF0mFWeKMFhA77"
+ },
+ {
+  "name": "Хиндарсфьяльские тяжёлые шоссы",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-skellige.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 650,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 25,
+     "max": 25
+    },
+    "leftLeg": {
+     "value": 25,
+     "max": 25
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "pOYxf5Xy0n6T7Owg"
+ },
+ {
+  "name": "Нильфгаардские поножи",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/lg-nilf.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 6,
+   "cost": 850,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 30,
+     "max": 30
+    },
+    "leftLeg": {
+     "value": 30,
+     "max": 30
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Ножная"
+  ],
+  "_id": "2PBv5AVmgLbg9Q0L"
+ },
+ {
+  "name": "Кожаный щит",
+  "type": "armor",
+  "img": "icons/equipment/shield/buckler-wooden-boss-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 50,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "light",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 4,
+    "max": 4
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "bcymUoF1ynRnXIYR"
+ },
+ {
+  "name": "Стальной баклер",
+  "type": "armor",
+  "img": "icons/equipment/shield/buckler-iron-cross-gray.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 150,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "light",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 6,
+    "max": 6
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "kt9u1qsD6zDdQE3Y"
+ },
+ {
+  "name": "Темерский щит",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-steel-boss-red.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 225,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "light",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 8,
+    "max": 8
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "pYQNTknBuxfFHxZQ"
+ },
+ {
+  "name": "Щит налётчика со Скеллиге",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-wooden-antlers-blue.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 325,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "medium",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "VBemRt90guPr2bMV"
+ },
+ {
+  "name": "Каэдвенский щит",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-steel-gray.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 400,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "medium",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 14,
+    "max": 14
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "XySnwkM8BhaENrlk"
+ },
+ {
+  "name": "Стальной каплевидный щит",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-steel-engraved-lance-rest.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 400,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "medium",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 16,
+    "max": 16
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "W9cfFEtCSCBuhW9s"
+ },
+ {
+  "name": "Павеза",
+  "type": "armor",
+  "img": "icons/equipment/shield/Scutum-steel-worn.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 500,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "heavy",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Полное укрытие. Атака должна нанести урон больше надёжности павезы; каждый раз при уроне надёжность −1",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "GFW0f2PUk62gDQqE"
+ },
+ {
+  "name": "Нильфгаардская павеза",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-steel-segmented-purple.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 600,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "80"
+   },
+   "weightClass": "heavy",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 25,
+    "max": 25
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Полное укрытие. Ставится без поддержки (действие); если получает урон больше половины надёжности — падает. Стоящую павезу нельзя использовать для блока, только как укрытие",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "gFlaxb0nNozsOfWS"
+ },
+ {
+  "name": "Низушечий защитный дублет",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl4-1.webp",
+  "system": {
+   "description": "<p>Выглядит как обычный дублет: чтобы понять, что это броня, нужна проверка Внимания со СЛ 20.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 375,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 8,
+     "max": 8
+    },
+    "rightArm": {
+     "value": 8,
+     "max": 8
+    },
+    "leftArm": {
+     "value": 8,
+     "max": 8
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Корпусная"
+  ],
+  "_id": "UBIKBp9aZZ2epbAX"
+ },
+ {
+  "name": "Кольчуга гномьей работы",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl3.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 975,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 10,
+     "max": 10
+    },
+    "torso": {
+     "value": 10,
+     "max": 10
+    },
+    "rightArm": {
+     "value": 10,
+     "max": 10
+    },
+    "leftArm": {
+     "value": 10,
+     "max": 10
+    },
+    "rightLeg": {
+     "value": 10,
+     "max": 10
+    },
+    "leftLeg": {
+     "value": 10,
+     "max": 10
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": true,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "_id": "GGJN4BS9gs1jY3m5"
+ },
+ {
+  "name": "Краснолюдский плащ",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl1-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 1400,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 16,
+     "max": 16
+    },
+    "torso": {
+     "value": 16,
+     "max": 16
+    },
+    "rightArm": {
+     "value": 16,
+     "max": 16
+    },
+    "leftArm": {
+     "value": 16,
+     "max": 16
+    },
+    "rightLeg": {
+     "value": 16,
+     "max": 16
+    },
+    "leftLeg": {
+     "value": 16,
+     "max": 16
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "_id": "PzAbEGjp8WVufX6E"
+ },
+ {
+  "name": "Броня скоя’таэля",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl4-2.webp",
+  "system": {
+   "description": "<p>В дикой местности носитель получает +2 к проверкам Скрытности.</p>",
+   "quantity": 1,
+   "weight": 12,
+   "cost": 2325,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 20,
+     "max": 20
+    },
+    "torso": {
+     "value": 20,
+     "max": 20
+    },
+    "rightArm": {
+     "value": 20,
+     "max": 20
+    },
+    "leftArm": {
+     "value": 20,
+     "max": 20
+    },
+    "rightLeg": {
+     "value": 20,
+     "max": 20
+    },
+    "leftLeg": {
+     "value": 20,
+     "max": 20
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "_id": "VtGF3GjLtq7uvMkW"
+ },
+ {
+  "name": "Драгунская броня гномьей работы",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl2-2.webp",
+  "system": {
+   "description": "<p>Носитель получает +2 к проверкам Верховой езды, когда он верхом на лошади.</p>",
+   "quantity": 1,
+   "weight": 20,
+   "cost": 2850,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 25,
+     "max": 25
+    },
+    "torso": {
+     "value": 25,
+     "max": 25
+    },
+    "rightArm": {
+     "value": 25,
+     "max": 25
+    },
+    "leftArm": {
+     "value": 25,
+     "max": 25
+    },
+    "rightLeg": {
+     "value": 25,
+     "max": 25
+    },
+    "leftLeg": {
+     "value": 25,
+     "max": 25
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 2,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "_id": "DfM39VkbDJ3biroR"
+ },
+ {
+  "name": "Махакамские латы",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl4-1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 30,
+   "cost": 3525,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 30,
+     "max": 30
+    },
+    "torso": {
+     "value": 30,
+     "max": 30
+    },
+    "rightArm": {
+     "value": 30,
+     "max": 30
+    },
+    "leftArm": {
+     "value": 30,
+     "max": 30
+    },
+    "rightLeg": {
+     "value": 30,
+     "max": 30
+    },
+    "leftLeg": {
+     "value": 30,
+     "max": 30
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 2,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "_id": "fg4t3vDbrjg5MBjM"
+ },
+ {
+  "name": "Гномий баклер",
+  "type": "armor",
+  "img": "icons/equipment/shield/buckler-boss-iron-wood-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 450,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "light",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "9ZVyzOJOoqgiHlnP"
+ },
+ {
+  "name": "Эльфский щит",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-emossed-spiral-green.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 700,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "medium",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 25,
+    "max": 25
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "0GNAwY4ePG6SkkFQ"
+ },
+ {
+  "name": "Махакамская павеза",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-steel-worn.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5.5,
+   "cost": 1050,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "84"
+   },
+   "weightClass": "heavy",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 35,
+    "max": 35
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Полное укрытие. Её можно поставить на землю перед собой, как нильфгаардскую павезу",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Людей"
+  ],
+  "_id": "zTULGRPKqDKhhXfC"
+ },
+ {
+  "name": "Доспехи Ворона",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-wolf-armo-base.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 14, чтобы вспомнить её историю и свойства.</p><p>Доспехи ведьмака школы Грифона Ворона, выкованные в Махакаме; эльфский менестрель Тиен'сааль наложил на них глифы, пока Ворон шёл на Чёрного Дракона.</p>",
+   "quantity": 1,
+   "weight": 12,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "264"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 12,
+     "max": 12
+    },
+    "rightArm": {
+     "value": 12,
+     "max": 12
+    },
+    "leftArm": {
+     "value": 12,
+     "max": 12
+    },
+    "rightLeg": {
+     "value": 12,
+     "max": 12
+    },
+    "leftLeg": {
+     "value": 12,
+     "max": 12
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": true,
+    "poison": true
+   },
+   "effectsText": "",
+   "relic": true,
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 15
+    },
+    {
+     "target": "skills.courage",
+     "value": 3
+    }
+   ],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Реликвии"
+  ],
+  "_id": "yQMIHBqOWwHHsA2H"
+ },
+ {
+  "name": "Доспехи Горного народа",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-bear-armo-base.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 16, чтобы вспомнить её историю и свойства.</p><p>Броня предводителя боболаков Зжина, защищавшего шахты в Пустульских горах.</p>",
+   "quantity": 1,
+   "weight": 15,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "265"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 24,
+     "max": 24
+    },
+    "torso": {
+     "value": 24,
+     "max": 24
+    },
+    "rightArm": {
+     "value": 24,
+     "max": 24
+    },
+    "leftArm": {
+     "value": 24,
+     "max": 24
+    },
+    "rightLeg": {
+     "value": 24,
+     "max": 24
+    },
+    "leftLeg": {
+     "value": 24,
+     "max": 24
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": false,
+    "bleeding": false,
+    "poison": true
+   },
+   "effectsText": "",
+   "relic": true,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Реликвии"
+  ],
+  "_id": "ciVozKIPbpYS1tIc"
+ },
+ {
+  "name": "Доспехи драуга",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-grif-armo-base.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 18, чтобы вспомнить её историю и свойства.</p><p>Броня, перекованная из доспехов Вандергрифта — драуга, которого одолел Геральт из Ривии.</p>",
+   "quantity": 1,
+   "weight": 37,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "265"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 36,
+     "max": 36
+    },
+    "torso": {
+     "value": 36,
+     "max": 36
+    },
+    "rightArm": {
+     "value": 36,
+     "max": 36
+    },
+    "leftArm": {
+     "value": 36,
+     "max": 36
+    },
+    "rightLeg": {
+     "value": 36,
+     "max": 36
+    },
+    "leftLeg": {
+     "value": 36,
+     "max": 36
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 3,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": true,
+    "bleeding": true,
+    "poison": true
+   },
+   "effectsText": "",
+   "relic": true,
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 25
+    },
+    {
+     "target": "skills.resistMagic",
+     "value": 2
+    },
+    {
+     "target": "skills.spellCasting",
+     "value": 2
+    }
+   ],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Реликвии"
+  ],
+  "_id": "ofDxVAx1VHRDG9L1"
+ },
+ {
+  "name": "Щит из чешуи виверны",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-crystal-blue.webp",
+  "system": {
+   "description": "<p>Щит, обитый чешуёй виверны или иного драконида: огонь стекает с него, как вода с гуся.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 500,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "8"
+   },
+   "weightClass": "medium",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 18,
+    "max": 18
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": true,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Огнеупорный: если заблокированная атака была огненной, щит не получает повреждений от блокирования.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Фургончик Родольфа"
+  ],
+  "_id": "plCoJhQ3bU3MLNez"
+ },
+ {
+  "name": "Броня школы Медведя",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-bear-armo.webp",
+  "system": {
+   "description": "<p>Броня ведьмачьей школы Медведя.</p><p><b>Критическая казнь:</b> всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, это ранение повышается на один уровень (например, лёгкое критическое ранение становится средним).</p>",
+   "quantity": 1,
+   "weight": 24,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 20,
+     "max": 20
+    },
+    "rightArm": {
+     "value": 20,
+     "max": 20
+    },
+    "leftArm": {
+     "value": 20,
+     "max": 20
+    },
+    "rightLeg": {
+     "value": 20,
+     "max": 20
+    },
+    "leftLeg": {
+     "value": 20,
+     "max": 20
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 3,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Критическая казнь: всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, это ранение повышается на один уровень (например, лёгкое критическое ранение становится средним).",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "WQXKiJFuekfR6NLN"
+ },
+ {
+  "name": "Броня школы Кота",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-cat-armo.webp",
+  "system": {
+   "description": "<p>Броня ведьмачьей школы Кота.</p><p><b>Критический натиск:</b> всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, вы можете сразу пройти проверку Разоружения или Подсечки без дополнительных штрафов и без дополнительной траты выносливости.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 6,
+     "max": 6
+    },
+    "rightArm": {
+     "value": 6,
+     "max": 6
+    },
+    "leftArm": {
+     "value": 6,
+     "max": 6
+    },
+    "rightLeg": {
+     "value": 6,
+     "max": 6
+    },
+    "leftLeg": {
+     "value": 6,
+     "max": 6
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Критический натиск: всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, вы можете сразу пройти проверку Разоружения или Подсечки без дополнительных штрафов и без дополнительной траты выносливости.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "PFet9ELJC3qq5Kli"
+ },
+ {
+  "name": "Броня школы Грифона",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-grif-armo.webp",
+  "system": {
+   "description": "<p>Броня ведьмачьей школы Грифона.</p><p><b>Критическая магия:</b> всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, вы можете сразу пройти проверку Сотворения заклинаний, чтобы сотворить Знак, без дополнительных штрафов и без затрат Выносливости, кроме той, что требуется для самого Знака.</p>",
+   "quantity": 1,
+   "weight": 18,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 16,
+     "max": 16
+    },
+    "rightArm": {
+     "value": 16,
+     "max": 16
+    },
+    "leftArm": {
+     "value": 16,
+     "max": 16
+    },
+    "rightLeg": {
+     "value": 16,
+     "max": 16
+    },
+    "leftLeg": {
+     "value": 16,
+     "max": 16
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Критическая магия: всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, вы можете сразу пройти проверку Сотворения заклинаний, чтобы сотворить Знак, без дополнительных штрафов и без затрат Выносливости, кроме той, что требуется для самого Знака.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "Oz8uhNUWb7lNTlr4"
+ },
+ {
+  "name": "Броня школы Мантикоры",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-mant-armo.webp",
+  "system": {
+   "description": "<p>Броня ведьмачьей школы Мантикоры.</p><p><b>Критическое блокирование:</b> всякий раз, когда ваш результат проверки Блокирования или Парирования щитом школы Мантикоры больше результата атаки противника более чем на 4, вы можете сразу выполнить Атаку щитом без дополнительных штрафов и траты выносливости: она отбрасывает атакующего на 4 м и сбивает его с ног.</p>",
+   "quantity": 1,
+   "weight": 10,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 12,
+     "max": 12
+    },
+    "rightArm": {
+     "value": 12,
+     "max": 12
+    },
+    "leftArm": {
+     "value": 12,
+     "max": 12
+    },
+    "rightLeg": {
+     "value": 12,
+     "max": 12
+    },
+    "leftLeg": {
+     "value": 12,
+     "max": 12
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Критическое блокирование: всякий раз, когда ваш результат проверки Блокирования или Парирования щитом школы Мантикоры больше результата атаки противника более чем на 4, вы можете сразу выполнить Атаку щитом без дополнительных штрафов и траты выносливости: она отбрасывает атакующего на 4 м и сбивает его с ног.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "U6mOKp2SDJQJN8On"
+ },
+ {
+  "name": "Броня школы Змеи",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-viper-armo.webp",
+  "system": {
+   "description": "<p>Броня ведьмачьей школы Змеи.</p><p><b>Критическое парирование:</b> всякий раз, когда ваш результат проверки Парирования ведьмачьим оружием больше результата атаки противника более чем на 4, вы можете сразу совершить один удар взятым оружием без дополнительных штрафов и траты выносливости.</p>",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "weightClass": "light",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 8,
+     "max": 8
+    },
+    "rightArm": {
+     "value": 8,
+     "max": 8
+    },
+    "leftArm": {
+     "value": 8,
+     "max": 8
+    },
+    "rightLeg": {
+     "value": 8,
+     "max": 8
+    },
+    "leftLeg": {
+     "value": 8,
+     "max": 8
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Критическое парирование: всякий раз, когда ваш результат проверки Парирования ведьмачьим оружием больше результата атаки противника более чем на 4, вы можете сразу совершить один удар взятым оружием без дополнительных штрафов и траты выносливости.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "svIS4aEtuAtXnMtG"
+ },
+ {
+  "name": "Броня школы Волка",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/armor/sch-wolf-armo.webp",
+  "system": {
+   "description": "<p>Броня ведьмачьей школы Волка.</p><p><b>Критическое ускорение:</b> всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, вы можете сразу совершить один удар взятым оружием без дополнительных штрафов и без дополнительной траты выносливости.</p>",
+   "quantity": 1,
+   "weight": 14,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 14,
+     "max": 14
+    },
+    "rightArm": {
+     "value": 14,
+     "max": 14
+    },
+    "leftArm": {
+     "value": 14,
+     "max": 14
+    },
+    "rightLeg": {
+     "value": 14,
+     "max": 14
+    },
+    "leftLeg": {
+     "value": 14,
+     "max": 14
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 2,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Критическое ускорение: всякий раз, когда вы наносите критическое ранение ведьмачьим оружием, вы можете сразу совершить один удар взятым оружием без дополнительных штрафов и без дополнительной траты выносливости.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "twclIbXlKJphGviW"
+ },
+ {
+  "name": "Щит школы Мантикоры",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-steel-crystal-red.webp",
+  "system": {
+   "description": "<p>Щит ведьмачьей школы Мантикоры: окован метеоритной сталью и серебром, поэтому бьёт чудовищ наравне с ведьмачьими мечами.</p><p>Урон при Атаке щитом — как у среднего щита.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "5"
+   },
+   "weightClass": "medium",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Метеоритное, серебряное (3d6), удар щитом",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "LRgg54bErrVdvdjF"
+ },
+ {
+  "_id": "wO4cLNq8tfwQERNy",
+  "name": "Доспехи дикой охоты",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 15.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 20,
+     "max": 20
+    },
+    "torso": {
+     "value": 20,
+     "max": 20
+    },
+    "leftArm": {
+     "value": 20,
+     "max": 20
+    },
+    "rightArm": {
+     "value": 20,
+     "max": 20
+    },
+    "leftLeg": {
+     "value": 20,
+     "max": 20
+    },
+    "rightLeg": {
+     "value": 20,
+     "max": 20
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "2pp7IvUGwjBQ8SbB",
+  "name": "Кожаные конские доспехи",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/bs/misc/horse-saddle--9.webp",
+  "system": {
+   "description": "<p>ПБ: 10 для скакуна.</p>",
+   "quantity": 1,
+   "weight": 10.0,
+   "cost": 550.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 10,
+     "max": 10
+    },
+    "torso": {
+     "value": 10,
+     "max": 10
+    },
+    "leftArm": {
+     "value": 10,
+     "max": 10
+    },
+    "rightArm": {
+     "value": 10,
+     "max": 10
+    },
+    "leftLeg": {
+     "value": 10,
+     "max": 10
+    },
+    "rightLeg": {
+     "value": 10,
+     "max": 10
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "9BF8911hrIxFlFHY",
+  "name": "Доспехи короля дикой охоты",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-leather-brown-belted.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 45.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 36,
+     "max": 36
+    },
+    "torso": {
+     "value": 36,
+     "max": 36
+    },
+    "leftArm": {
+     "value": 36,
+     "max": 36
+    },
+    "rightArm": {
+     "value": 36,
+     "max": 36
+    },
+    "leftLeg": {
+     "value": 36,
+     "max": 36
+    },
+    "rightLeg": {
+     "value": 36,
+     "max": 36
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 4,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "6JYJAHQzispQoMDx",
+  "name": "Скелетная павеза",
+  "type": "armor",
+  "img": "icons/equipment/shield/kite-decorative-steel-claws.webp",
+  "system": {
+   "description": "<p>- ПОЛНОЕ УКРЫТИЕ\n[Если персонаж сидит на корточках за павезой, она действует как укрытие, и любая атака, направленная против персонажа, должна нанести урон, превышающий надёжность павезы, чтобы навредить персонажу. Каждый раз, когда павеза получает урон, её надежность снижается на 1.]</p>",
+   "quantity": 1,
+   "weight": 8.0,
+   "cost": 0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "heavy",
+   "isShield": true,
+   "sp": {
+    "head": {
+     "value": 0,
+     "max": 0
+    },
+    "torso": {
+     "value": 0,
+     "max": 0
+    },
+    "leftArm": {
+     "value": 0,
+     "max": 0
+    },
+    "rightArm": {
+     "value": 0,
+     "max": 0
+    },
+    "leftLeg": {
+     "value": 0,
+     "max": 0
+    },
+    "rightLeg": {
+     "value": 0,
+     "max": 0
+    }
+   },
+   "reliability": {
+    "value": 30,
+    "max": 30
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Щиты",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "lyEcTvy0zGZVBeRX",
+  "name": "Доспехи военачальника дикой охоты",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-steel-grey.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 35.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 30,
+     "max": 30
+    },
+    "torso": {
+     "value": 30,
+     "max": 30
+    },
+    "leftArm": {
+     "value": 30,
+     "max": 30
+    },
+    "rightArm": {
+     "value": 30,
+     "max": 30
+    },
+    "leftLeg": {
+     "value": 30,
+     "max": 30
+    },
+    "rightLeg": {
+     "value": 30,
+     "max": 30
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 1,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "u6NYxcgm5jLHwLL3",
+  "name": "Кости неверных",
+  "type": "armor",
+  "img": "icons/equipment/head/mask-horned-skull.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "medium",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 20,
+     "max": 20
+    },
+    "torso": {
+     "value": 20,
+     "max": 20
+    },
+    "leftArm": {
+     "value": 20,
+     "max": 20
+    },
+    "rightArm": {
+     "value": 20,
+     "max": 20
+    },
+    "leftLeg": {
+     "value": 20,
+     "max": 20
+    },
+    "rightLeg": {
+     "value": 20,
+     "max": 20
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 3,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "oLxBbnbaYTKH7Oon",
+  "name": "Кольчужные конские доспехи",
+  "type": "armor",
+  "img": "systems/vedmak/assets/fan/bs/misc/horse-saddle--16.webp",
+  "system": {
+   "description": "<p>ПБ: 15 для скакуна.\n-1 к проверкам управлени.</p>",
+   "quantity": 1,
+   "weight": 25.0,
+   "cost": 1050.0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 15,
+     "max": 15
+    },
+    "torso": {
+     "value": 15,
+     "max": 15
+    },
+    "leftArm": {
+     "value": 15,
+     "max": 15
+    },
+    "rightArm": {
+     "value": 15,
+     "max": 15
+    },
+    "leftLeg": {
+     "value": 15,
+     "max": 15
+    },
+    "rightLeg": {
+     "value": 15,
+     "max": 15
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 0,
+   "enhancementSlots": 0,
+   "resistances": {
+    "slashing": false,
+    "piercing": false,
+    "bludgeoning": false,
+    "elemental": false,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ }
+]

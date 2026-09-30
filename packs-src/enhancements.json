@@ -1,0 +1,1809 @@
+[
+ {
+  "name": "Кольчужное",
+  "type": "enhancement",
+  "img": "icons/commodities/metal/mail-chain-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 125,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "",
+   "sp": 3,
+   "resistances": [
+    "bludgeoning",
+    "slashing"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "Fa6rTKFngwLnMso6"
+ },
+ {
+  "name": "Краснолюдское",
+  "type": "enhancement",
+  "img": "icons/commodities/metal/mail-plate-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 195,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "",
+   "sp": 5,
+   "resistances": [
+    "slashing",
+    "piercing"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "kYtRaaRdBxxgmihn"
+ },
+ {
+  "name": "Эльфское",
+  "type": "enhancement",
+  "img": "icons/commodities/cloth/cloth-patterned-green.webp",
+  "system": {
+   "description": "<p>+1 к Скрытности</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 200,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "+1 к Скрытности",
+   "sp": 3,
+   "resistances": [
+    "bludgeoning",
+    "piercing"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "b11TOzcTErREbyzz"
+ },
+ {
+  "name": "Ткань",
+  "type": "enhancement",
+  "img": "icons/commodities/cloth/cloth-bolt-grey.webp",
+  "system": {
+   "description": "<p>Сопротивление кровотечению</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 40,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "Сопротивление кровотечению",
+   "sp": 1,
+   "resistances": [
+    "bleeding"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "LDxrFdjm8M6sxjXK"
+ },
+ {
+  "name": "Укреплённая кожа",
+  "type": "enhancement",
+  "img": "icons/equipment/chest/breastplate-banded-leather-brown.webp",
+  "system": {
+   "description": "<p>Сопротивление огню</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 130,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "Сопротивление огню",
+   "sp": 2,
+   "resistances": [
+    "bludgeoning",
+    "slashing",
+    "elemental"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "KZBKFOmOJmjfC2lc"
+ },
+ {
+  "name": "Стальное",
+  "type": "enhancement",
+  "img": "icons/commodities/metal/plate-scored-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 145,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "",
+   "sp": 4,
+   "resistances": [
+    "slashing",
+    "piercing"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "ZKgPol4yPDHDpcUQ"
+ },
+ {
+  "name": "Клёпаная кожа",
+  "type": "enhancement",
+  "img": "icons/commodities/leather/leather-studded-tan.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 80,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "90"
+   },
+   "kind": "armor",
+   "effect": "",
+   "sp": 2,
+   "resistances": [
+    "slashing"
+   ],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "_id": "8BsiqvDQuM91i6Z9"
+ },
+ {
+  "name": "Руна «Чернобог»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-chernobog.webp",
+  "system": {
+   "description": "<p>Когда ваше оружие должно получить урон, сделайте бросок 1d6. При результате 4, 5 или 6 оружие не получает урона.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Когда ваше оружие должно получить урон, сделайте бросок 1d6. При результате 4, 5 или 6 оружие не получает урона.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "gWbRQ4rxlY6YMUwf"
+ },
+ {
+  "name": "Руна «Даждьбог»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-dazhbog.webp",
+  "system": {
+   "description": "<p>Горение (30 %)</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 600,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Горение (30 %)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "burning",
+    "value": "30%"
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "s6lR8S8h6wigFXSu"
+ },
+ {
+  "name": "Руна «Девана»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-devana.webp",
+  "system": {
+   "description": "<p>Кровотечение (30%)</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Кровотечение (30%)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "bleeding",
+    "value": "30%"
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "Dvgoh0bJiADpbfMX"
+ },
+ {
+  "name": "Руна «Марена»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-morana.webp",
+  "system": {
+   "description": "<p>Отравление (30 %)</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Отравление (30 %)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "poison",
+    "value": "30%"
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "HsILgYPfzHi0cjj1"
+ },
+ {
+  "name": "Руна «Перун»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-perun.webp",
+  "system": {
+   "description": "<p>Каждый раз, когда вы получаете кость адреналина, добавьте к ней ещё одну.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Каждый раз, когда вы получаете кость адреналина, добавьте к ней ещё одну.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "Hp4hOthKMQOmKoNv"
+ },
+ {
+  "name": "Руна «Стрибог»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-stribog.webp",
+  "system": {
+   "description": "<p>Ошеломление (30%)</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 500,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Ошеломление (30%)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "staggering",
+    "value": "30%"
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "CEYbX7vpg4kswlFs"
+ },
+ {
+  "name": "Руна «Сварог»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-svarog.webp",
+  "system": {
+   "description": "<p>Пробивающее броню</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 600,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Пробивающее броню",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "armorPiercing",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "qocdVrP2x553wPkq"
+ },
+ {
+  "name": "Руна «Триглав»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-triglav.webp",
+  "system": {
+   "description": "<p>Дезориентирующее (-1)</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Дезориентирующее (-1)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "stun",
+    "value": "-1"
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "klj0F7fm9zunTOrv"
+ },
+ {
+  "name": "Руна «Велес»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-veles.webp",
+  "system": {
+   "description": "<p>Улучшенное фокусирующее</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 600,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Улучшенное фокусирующее",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "greaterFocus",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "cnY1JNqHUjPFndSZ"
+ },
+ {
+  "name": "Руна «Зоря»",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/rune-zoria.webp",
+  "system": {
+   "description": "<p>Замораживание (30 %)</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 550,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "rune",
+   "effect": "Замораживание (30 %)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "freeze",
+    "value": "30%"
+   },
+   "element": ""
+  },
+  "folder": [
+   "Руны"
+  ],
+  "_id": "bdw72gtc2aWpMFBO"
+ },
+ {
+  "name": "Глиф магии",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/gl-magic.webp",
+  "system": {
+   "description": "<p>Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям смешанных элементов.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "glyph",
+   "effect": "Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям смешанных элементов.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "mixed"
+  },
+  "folder": [
+   "Глифы",
+   "Корник"
+  ],
+  "_id": "dMc6FavNsWPhS1yJ"
+ },
+ {
+  "name": "Глиф воздуха",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/gl-air.webp",
+  "system": {
+   "description": "<p>Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям воздуха.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "glyph",
+   "effect": "Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям воздуха.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "air"
+  },
+  "folder": [
+   "Глифы",
+   "Корник"
+  ],
+  "_id": "GTrP5EwizZzLiHBm"
+ },
+ {
+  "name": "Глиф земли",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/gl-earth.webp",
+  "system": {
+   "description": "<p>Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям земли.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "glyph",
+   "effect": "Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям земли.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "earth"
+  },
+  "folder": [
+   "Глифы",
+   "Корник"
+  ],
+  "_id": "Oq8qjYiaaVD1f7BK"
+ },
+ {
+  "name": "Глиф огня",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/gl-fire.webp",
+  "system": {
+   "description": "<p>Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям огня.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "glyph",
+   "effect": "Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям огня.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "fire"
+  },
+  "folder": [
+   "Глифы",
+   "Корник"
+  ],
+  "_id": "PSl0mOgtLyaMydzT"
+ },
+ {
+  "name": "Глиф воды",
+  "type": "enhancement",
+  "img": "systems/vedmak/assets/fan/enhancements/gl-water.webp",
+  "system": {
+   "description": "<p>Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям воды.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "256"
+   },
+   "kind": "glyph",
+   "effect": "Когда на вас эта броня, СЛ ваших заклинаний повышается на 3 или же урон от ваших заклинаний повышается на 1d6. Применимо только к заклинаниям воды.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "water"
+  },
+  "folder": [
+   "Глифы",
+   "Корник"
+  ],
+  "_id": "2oPFh2HI7Z1soP1P"
+ },
+ {
+  "name": "Нильфгаардский прицел",
+  "type": "enhancement",
+  "img": "icons/tools/scribal/magnifying-glass.webp",
+  "system": {
+   "description": "<p>Повышает точность арбалета на +1.</p><p>Ставится и снимается действием полного хода, без проверки. На ручной арбалет влезает одна модификация, на прочие — две, и не больше одной каждого вида.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 275,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "kind": "crossbow",
+   "effect": "Повышает точность арбалета на +1.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Модификации арбалета"
+  ],
+  "_id": "GSpnZ0H5ZcWsNMEM"
+ },
+ {
+  "name": "Улучшенный ворот",
+  "type": "enhancement",
+  "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
+  "system": {
+   "description": "<p>Позволяет перезаряжать арбалет за счёт действия либо за счёт действия перемещения в каждом раунде.</p><p>Ставится и снимается действием полного хода, без проверки. На ручной арбалет влезает одна модификация, на прочие — две, и не больше одной каждого вида.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 440,
+   "availability": "unique",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "kind": "crossbow",
+   "effect": "Позволяет перезаряжать арбалет за счёт действия либо за счёт действия перемещения в каждом раунде.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Модификации арбалета"
+  ],
+  "_id": "U2y7ijbs13Bvs67b"
+ },
+ {
+  "name": "Скеллигское стремя",
+  "type": "enhancement",
+  "img": "icons/tools/smithing/anvil.webp",
+  "system": {
+   "description": "<p>Повышает надёжность арбалета на +5 и позволяет бить им как дробящим оружием ближнего боя: урон равен урону выстрела, точность −1. Другие модификации при таком ударе не работают.</p><p>Ставится и снимается действием полного хода, без проверки. На ручной арбалет влезает одна модификация, на прочие — две, и не больше одной каждого вида.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 375,
+   "availability": "common",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "kind": "crossbow",
+   "effect": "Повышает надёжность арбалета на +5 и позволяет бить им как дробящим оружием ближнего боя: урон равен урону выстрела, точность −1. Другие модификации при таком ударе не работают.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Модификации арбалета"
+  ],
+  "_id": "igj7mdpKZLH78P9T"
+ },
+ {
+  "name": "Усиленная тетива",
+  "type": "enhancement",
+  "img": "icons/commodities/cloth/thread-spindle-grey.webp",
+  "system": {
+   "description": "<p>Повышает урон выстрела из арбалета на +1d6.</p><p>Ставится и снимается действием полного хода, без проверки. На ручной арбалет влезает одна модификация, на прочие — две, и не больше одной каждого вида.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 425,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "kind": "crossbow",
+   "effect": "Повышает урон выстрела из арбалета на +1d6.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Модификации арбалета"
+  ],
+  "_id": "YME4G53wbQ1Ulkl1"
+ },
+ {
+  "name": "Балансировочное стремя",
+  "type": "enhancement",
+  "img": "icons/commodities/tech/crank.webp",
+  "system": {
+   "description": "<p>Добавляет арбалету эффект «Сбалансированное».</p><p>Ставится и снимается действием полного хода, без проверки. На ручной арбалет влезает одна модификация, на прочие — две, и не больше одной каждого вида.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 395,
+   "availability": "common",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "kind": "crossbow",
+   "effect": "Добавляет арбалету эффект «Сбалансированное».",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": ""
+  },
+  "folder": [
+   "Модификации арбалета"
+  ],
+  "_id": "VuOtiIYdWb8daMQi"
+ },
+ {
+  "name": "Глиф связывания",
+  "type": "enhancement",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "system": {
+   "description": "<p>Пока на вас эта броня, любой шанс кровотечения по вам ниже на 30 %.</p><p>Глиф из Офира: наносится на броню со свободной ячейкой усиления, держится вечно, камень при этом расходуется.</p><p><b>Инструменты Рунописца</b> (полчаса работы): Вероятность сопротивления кровотечению повышается до 40 %.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 200,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "111"
+   },
+   "kind": "glyph",
+   "effect": "Пока на вас эта броня, любой шанс кровотечения по вам ниже на 30 %.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Глифы",
+   "Из Офира"
+  ],
+  "_id": "8qogB3ayegQKhqex"
+ },
+ {
+  "name": "Глиф восстановления",
+  "type": "enhancement",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "system": {
+   "description": "<p>Пока на вас эта броня, при каждом восстановлении Очков Жизни вы получаете на 1 ПЗ больше.</p><p>Глиф из Офира: наносится на броню со свободной ячейкой усиления, держится вечно, камень при этом расходуется.</p><p><b>Инструменты Рунописца</b> (полчаса работы): Дополнительно повышает ПЗ на 2.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 450,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "111"
+   },
+   "kind": "glyph",
+   "effect": "Пока на вас эта броня, при каждом восстановлении Очков Жизни вы получаете на 1 ПЗ больше.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Глифы",
+   "Из Офира"
+  ],
+  "_id": "d5CVlGizSdnc42P7"
+ },
+ {
+  "name": "Глиф укрепления",
+  "type": "enhancement",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "system": {
+   "description": "<p>ПБ брони увеличивается на 3.</p><p>Глиф из Офира: наносится на броню со свободной ячейкой усиления, держится вечно, камень при этом расходуется.</p><p><b>Инструменты Рунописца</b> (полчаса работы): Дополнительно повышает ПБ на 1.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "111"
+   },
+   "kind": "glyph",
+   "effect": "ПБ брони увеличивается на 3.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Глифы",
+   "Из Офира"
+  ],
+  "_id": "HdJLamdFVazxZdZl"
+ },
+ {
+  "name": "Глиф сопротивления",
+  "type": "enhancement",
+  "img": "icons/magic/symbols/rune-sigil-green-purple.webp",
+  "system": {
+   "description": "<p>Пока на вас эта броня, вы получаете сопротивление стихийному урону — огню, молнии и прочему.</p><p>Глиф из Офира: наносится на броню со свободной ячейкой усиления, держится вечно, камень при этом расходуется.</p><p><b>Инструменты Рунописца</b> (полчаса работы): Дополнительно повышает Сопротивление магии на 1, пока броня надета.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 300,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "111"
+   },
+   "kind": "glyph",
+   "effect": "Пока на вас эта броня, вы получаете сопротивление стихийному урону — огню, молнии и прочему.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Глифы",
+   "Из Офира"
+  ],
+  "_id": "3thbv3PP0iOOU7mc"
+ },
+ {
+  "name": "Рунное слово: Горение",
+  "type": "enhancement",
+  "img": "icons/magic/fire/dagger-rune-enchant-flame-blue-yellow.webp",
+  "system": {
+   "description": "<p>Урон оружия можно заменить на огненный: он проходит мимо сопротивлений режущему, колющему и дробящему урону, но существа, стойкие к огню, сопротивляются ему по-прежнему. Цель при этом не загорается.</p><p>Зачарование малое (две ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2150,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Урон оружия можно заменить на огненный: он проходит мимо сопротивлений режущему, колющему и дробящему урону, но существа, стойкие к огню, сопротивляются ему по-прежнему. Цель при этом не загорается.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "WLXueHqNoV0GP6sW"
+ },
+ {
+  "name": "Рунное слово: Отражение",
+  "type": "enhancement",
+  "img": "icons/magic/defensive/shield-barrier-deflect-gold.webp",
+  "system": {
+   "description": "<p>Когда по вам стреляют, вы можете бросить базу навыка владения этим оружием со штрафом −6, чтобы отбить снаряд. Перебив бросок стрелка, вы направляете выстрел в цель в пределах 10 м: она защищается против вашего броска или получает ошеломление. Если у вас есть способность «Отбить стрелы», вместо этого вы получаете к ней +2 с этим оружием в руках.</p><p>Зачарование большое (три ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 3300,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Когда по вам стреляют, вы можете бросить базу навыка владения этим оружием со штрафом −6, чтобы отбить снаряд. Перебив бросок стрелка, вы направляете выстрел в цель в пределах 10 м: она защищается против вашего броска или получает ошеломление. Если у вас есть способность «Отбить стрелы», вместо этого вы получаете к ней +2 с этим оружием в руках.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "large"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "JspQObvahxrso9s3"
+ },
+ {
+  "name": "Рунное слово: Истощение",
+  "type": "enhancement",
+  "img": "icons/magic/unholy/strike-body-life-soul-purple.webp",
+  "system": {
+   "description": "<p>Когда вы сотворяете заклинание или инвокацию, используя это оружие как фокус, и цель не защитилась, она вдобавок теряет 1d6 выносливости.</p><p>Зачарование большое (три ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 3350,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Когда вы сотворяете заклинание или инвокацию, используя это оружие как фокус, и цель не защитилась, она вдобавок теряет 1d6 выносливости.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "large"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "EluJTWTs85DERPfk"
+ },
+ {
+  "name": "Рунное слово: Размещение",
+  "type": "enhancement",
+  "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+  "system": {
+   "description": "<p>Пока вы держите это оружие, трата кости адреналина стоит 5 выносливости вместо 10.</p><p>Зачарование малое (две ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2150,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Пока вы держите это оружие, трата кости адреналина стоит 5 выносливости вместо 10.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "2jYoPMYlBxKh9Bbv"
+ },
+ {
+  "name": "Рунное слово: Сохранение",
+  "type": "enhancement",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
+  "system": {
+   "description": "<p>Надёжность оружия или щита повышается на 5.</p><p>Зачарование малое (две ячейки). Ставится на: оружие или щит.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2300,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Надёжность оружия или щита повышается на 5.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "aQsVUUNim3ZUq3dC"
+ },
+ {
+  "name": "Рунное слово: Продление",
+  "type": "enhancement",
+  "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+  "system": {
+   "description": "<p>Когда вы сотворяете заклинание или инвокацию, используя это оружие как фокус, и её длительность бросается кубиками, бросьте их дважды и возьмите больший результат.</p><p>Зачарование малое (две ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2150,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Когда вы сотворяете заклинание или инвокацию, используя это оружие как фокус, и её длительность бросается кубиками, бросьте их дважды и возьмите больший результат.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "B6AnAdtFVpuAjOy7"
+ },
+ {
+  "name": "Рунное слово: Омоложение",
+  "type": "enhancement",
+  "img": "icons/magic/life/heart-cross-strong-green.webp",
+  "system": {
+   "description": "<p>Каждое существо, убитое этим оружием, возвращает вам выносливость, равную вашему Восстановлению.</p><p>Зачарование большое (три ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 3500,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Каждое существо, убитое этим оружием, возвращает вам выносливость, равную вашему Восстановлению.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "large"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "ZNQT5e7vnf7OlDiN"
+ },
+ {
+  "name": "Рунное слово: Стригущий",
+  "type": "enhancement",
+  "img": "icons/magic/unholy/orb-swirling-teal.webp",
+  "system": {
+   "description": "<p>Пробившая атака этим оружием снимает на 1 единицу больше прочности брони или надёжности щита.</p><p>Зачарование малое (две ячейки). Ставится на: оружие.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2300,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "runeword",
+   "effect": "Пробившая атака этим оружием снимает на 1 единицу больше прочности брони или надёжности щита.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Рунные слова"
+  ],
+  "_id": "6WPvuWqJbR7TT27H"
+ },
+ {
+  "name": "Глифово слово: Баланс",
+  "type": "enhancement",
+  "img": "icons/magic/movement/abstract-ribbons-red-orange.webp",
+  "system": {
+   "description": "<p>Стоимость движения этой брони снижается на 1.</p><p>Зачарование малое (две ячейки). Ставится на: любая броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 1100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "Стоимость движения этой брони снижается на 1.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "CecmYKUNogMo13VT"
+ },
+ {
+  "name": "Глифово слово: Заблуждение",
+  "type": "enhancement",
+  "img": "icons/magic/control/fear-fright-mask-orange.webp",
+  "system": {
+   "description": "<p>+1 к Харизме, Уходу за собой и Лидерству.</p><p>Зачарование малое (две ячейки). Ставится на: головная броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2300,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "+1 к Харизме, Уходу за собой и Лидерству.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "f0VTEI0hYpnvvpCU"
+ },
+ {
+  "name": "Глифово слово: Вес",
+  "type": "enhancement",
+  "img": "icons/magic/earth/strike-body-stone-crumble.webp",
+  "system": {
+   "description": "<p>ПБ брони повышается на 2, но стоимость движения удваивается; если она была 0, то и остаётся 0.</p><p>Зачарование малое (две ячейки). Ставится на: любая броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 1100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "ПБ брони повышается на 2, но стоимость движения удваивается; если она была 0, то и остаётся 0.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "1BVLIxFuy0w242dN"
+ },
+ {
+  "name": "Глифово слово: Защита",
+  "type": "enhancement",
+  "img": "icons/magic/defensive/shield-barrier-flaming-diamond-blue.webp",
+  "system": {
+   "description": "<p>Пока броня надета, ваши ПЗ выше на 5.</p><p>Зачарование большое (три ячейки). Ставится на: туловищная броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2900,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "Пока броня надета, ваши ПЗ выше на 5.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "large"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "vJyjbPnub9W4FWET"
+ },
+ {
+  "name": "Глифово слово: Возмездие",
+  "type": "enhancement",
+  "img": "icons/magic/defensive/barrier-shield-dome-deflect-teal.webp",
+  "system": {
+   "description": "<p>Когда атака наносит вам урон, атакующий получает 3 урона по туловищу, и броня его не останавливает.</p><p>Зачарование большое (три ячейки). Ставится на: любая броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 2500,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "Когда атака наносит вам урон, атакующий получает 3 урона по туловищу, и броня его не останавливает.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "large"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "oqdxpMEiDnVTi9Kj"
+ },
+ {
+  "name": "Глифово слово: Вращение",
+  "type": "enhancement",
+  "img": "icons/magic/movement/trail-streak-zigzag-teal.webp",
+  "system": {
+   "description": "<p>Атакующие не получают бонуса за удар вне вашего поля зрения.</p><p>Зачарование малое (две ячейки). Ставится на: ножная броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 600,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "Атакующие не получают бонуса за удар вне вашего поля зрения.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "0fwV4UrKgeDLrwHe"
+ },
+ {
+  "name": "Глифово слово: Сияющий",
+  "type": "enhancement",
+  "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+  "system": {
+   "description": "<p>Действие, чтобы растереть глиф: броня на 30 минут светит дневным светом на 6 метров. Чудовища, уязвимые или восприимчивые к свету, попадают под его действие.</p><p>Зачарование малое (две ячейки). Ставится на: туловищная броня.</p><p>Предмет несёт только одно зачарование: прежние руны и глифы при наложении сгорают, новые нанести уже нельзя.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 1750,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "112"
+   },
+   "kind": "glyphword",
+   "effect": "Действие, чтобы растереть глиф: броня на 30 минут светит дневным светом на 6 метров. Чудовища, уязвимые или восприимчивые к свету, попадают под его действие.",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": "small"
+  },
+  "folder": [
+   "Глифовы слова"
+  ],
+  "_id": "h56LOloRP8HmRvH9"
+ },
+ {
+  "_id": "5wQvlOl2zNHTWIob",
+  "name": "Серебрение одноручного оружия",
+  "type": "enhancement",
+  "img": "icons/skills/melee/hand-grip-sword-white-brown.webp",
+  "system": {
+   "description": "<p>Получает эффект Серебряное (2d6).</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "kind": "weapon",
+   "effect": "Получает эффект Серебряное (2d6)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления оружия"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Kla8Q9eMb1sWvFbE",
+  "name": "Серебрение двуручного оружия",
+  "type": "enhancement",
+  "img": "icons/skills/melee/weapons-crossed-swords-white-blue.webp",
+  "system": {
+   "description": "<p>Получает эффект Серебряное (2d6+2).</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 340.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "kind": "weapon",
+   "effect": "Получает эффект Серебряное (2d6+2)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления оружия"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "KYWISzmWwosTV9Ft",
+  "name": "Укрепление брони",
+  "type": "enhancement",
+  "img": "icons/skills/melee/shield-block-fire-orange.webp",
+  "system": {
+   "description": "<p>+2 к прочности.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 49.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "kind": "armor",
+   "effect": "+2 к прочности",
+   "sp": 2,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "yNgIUJCowxYSqrc7",
+  "name": "Зазубривание / шипы",
+  "type": "enhancement",
+  "img": "icons/skills/melee/strike-slashes-red.webp",
+  "system": {
+   "description": "<p>+25% к вероятности кровотечения (25%).</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 51.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "kind": "weapon",
+   "effect": "+25% к вероятности кровотечения (25%)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "bleeding",
+    "value": "25%"
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления оружия"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "oBqc3yIhs6p5vWNL",
+  "name": "Укрепление оружия",
+  "type": "enhancement",
+  "img": "icons/skills/melee/sword-twirl-orange.webp",
+  "system": {
+   "description": "<p>+2 к надёжности.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 49.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "kind": "weapon",
+   "effect": "+2 к надёжности",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления оружия"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "dDtiw3eIdcEezXNq",
+  "name": "Камуфляж",
+  "type": "enhancement",
+  "img": "icons/consumables/plants/grass-leaves-green.webp",
+  "system": {
+   "description": "<p>+1 к Скрытности.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "kind": "armor",
+   "effect": "+1 к Скрытности",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "oSauqeUFbvYkUaPA",
+  "name": "Шипы",
+  "type": "enhancement",
+  "img": "icons/equipment/shoulder/pauldron-spiked-black.webp",
+  "system": {
+   "description": "<p>Тот, кто пытается взять вас в захват, получает 2 урона.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 51.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "kind": "armor",
+   "effect": "Тот, кто пытается взять вас в захват, получает 2 урона",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления брони"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "8nCUZmTmCVWc5R1a",
+  "name": "Облегчение",
+  "type": "enhancement",
+  "img": "icons/skills/melee/strike-sword-gray.webp",
+  "system": {
+   "description": "<p>+1 к точности.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 53.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "kind": "weapon",
+   "effect": "+1 к точности",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления оружия"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "PUxvRUoDwv8ePiNM",
+  "name": "Серебрение 10 или менее стрел",
+  "type": "enhancement",
+  "img": "icons/skills/melee/spear-tips-three-green.webp",
+  "system": {
+   "description": "<p>Получает эффект Серебряное (1d6).</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 125.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "kind": "weapon",
+   "effect": "Получает эффект Серебряное (1d6)",
+   "sp": 0,
+   "resistances": [],
+   "weaponEffect": {
+    "key": "",
+    "value": ""
+   },
+   "element": "",
+   "size": ""
+  },
+  "folder": [
+   "Усиления оружия"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ }
+]
