@@ -86,6 +86,19 @@ function checkCode() {
     }
   }
 
+  // Манифест: всё, на что ссылается system.json, существует (модули, стили, языки, пакеты, картинки)
+  try {
+    const manifest = JSON.parse(read(path.join(ROOT, "system.json")));
+    const needed = [
+      ...(manifest.esmodules ?? []), ...(manifest.styles ?? []),
+      ...(manifest.languages ?? []).map(l => l.path), ...(manifest.packs ?? []).map(p => p.path)
+    ];
+    for (const s of strings(manifest)) if (s.startsWith("systems/vedmak/")) needed.push(s.slice("systems/vedmak/".length));
+    for (const p of new Set(needed)) if (p && !fs.existsSync(path.join(ROOT, p))) err(S, `system.json: нет файла ${p}`);
+  } catch (e) {
+    err(S, `system.json: не JSON — ${e.message}`);
+  }
+
   // Настройки: всё, что читается, зарегистрировано
   const all = files.map(read).join("\n");
   const settingRe = verb => new RegExp(`settings\\.${verb}\\(\\s*(?:SYSTEM_ID|["']vedmak["'])\\s*,\\s*["'](\\w+)`, "g");

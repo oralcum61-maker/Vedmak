@@ -3,6 +3,14 @@
   "title": "Ведьмак: НРИ",
   "description": "Система для настольной ролевой игры «Ведьмак» (R. Talsorian Games) под Foundry VTT v14. Полностью на русском: параметры и навыки, древа профессий, бой по частям тела с критическими ранениями, магия, алхимия и ремесло, бестиарий.",
   "version": "0.1.0",
+  "background": "systems/vedmak/assets/cover/cover.webp",
+  "media": [
+    {
+      "type": "setup",
+      "url": "systems/vedmak/assets/cover/setup.webp",
+      "thumbnail": "systems/vedmak/assets/cover/thumb.webp"
+    }
+  ],
   "compatibility": {
     "minimum": "14",
     "verified": "14.365"
