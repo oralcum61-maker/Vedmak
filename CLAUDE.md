@@ -83,7 +83,8 @@
   работает, только если его путь есть в `TEMPLATE_PATHS` в `module/helpers.mjs`.
 - `module/character/race.mjs` — черты расы при появлении на листе: естественное оружие, выбор навыков гнома.
 - `tools/build-packs.mjs` — сборка компендиумов; `tools/check.mjs` — статические проверки;
-  `tools/sync-to-foundry.ps1` — выгрузка в Foundry; `tools/release.mjs` — сборка выпуска в `dist/`.
+  `tools/sync-to-foundry.ps1` — выгрузка в Foundry; `tools/release.mjs` — сборка выпуска в `dist/`;
+  `tools/pack-overrides.mjs` — правки компендиумов поверх генераторов; `tools/square-icons.py` — значки из игры в квадрат.
 
 ## Дизайн
 Лист оформлен в стиле «кожа и железо» (PLAN 4.9, 4.15):
