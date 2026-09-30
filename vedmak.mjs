@@ -24,7 +24,6 @@ import { SYSTEM_ID } from "./module/util.mjs";
 import { registerStatusEffects } from "./module/combat/statuses.mjs";
 import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
-import { registerCombatAutomation } from "./module/combat/auto.mjs";
 import { registerZoneHooks } from "./module/combat/zones.mjs";
 import { registerAlchemyHooks } from "./module/crafting/alchemy-triggers.mjs";
 import { registerBuffHooks } from "./module/magic/buffs.mjs";
@@ -102,22 +101,6 @@ Hooks.once("init", () => {
     hint: "Каждый нанесённый крит даёт кость d6 (не больше Тел). Кость: +1d6 урона, −10 Вын. Сгорает в конце боя (стр. 175).",
     scope: "world", config: true, type: Boolean, default: false
   });
-  // Автоматизация боя (module/combat/auto.mjs): каждый шаг можно выключить, тогда он снова по кнопке
-  game.settings.register(SYSTEM_ID, "autoDefense", {
-    name: "Бой: защита НИП сама",
-    hint: "Цели без игрока-владельца защищаются сразу лучшим способом: уклонение, блок, парирование или Сопротивление магии — что выше. Игроки выбирают защиту сами.",
-    scope: "world", config: true, type: Boolean, default: true
-  });
-  game.settings.register(SYSTEM_ID, "autoDamage", {
-    name: "Бой: урон сразу после попадания",
-    hint: "Урон бросается без окна: часть тела — из прицеливания или d10, первый тип урона оружия. Укрытие, адреналин и правка урона — если выключить и бросать кнопкой «Урон».",
-    scope: "world", config: true, type: Boolean, default: true
-  });
-  game.settings.register(SYSTEM_ID, "autoApply", {
-    name: "Бой: применять урон и эффекты сразу",
-    hint: "Ведущий применяет урон, эффекты заклинаний и статусы приёмов без кнопки «Применить». Нужен ведущий в игре.",
-    scope: "world", config: true, type: Boolean, default: true
-  });
   game.settings.register(SYSTEM_ID, "ammo", {
     name: "Бой: расход боеприпасов",
     hint: "Выстрел из лука или арбалета тратит один боеприпас из снаряжения персонажа: надетый, иначе стандартный, иначе любой. Без боеприпасов выстрелить нельзя. У чудовищ не считается.",
@@ -153,7 +136,6 @@ Hooks.once("init", () => {
   registerHelpers();
   preloadTemplates();
   registerChatListeners();
-  registerCombatAutomation();
   registerZoneHooks();
   registerAlchemyHooks();
   registerBuffHooks();
