@@ -1,0 +1,23 @@
+# Статические проверки системы на каждую отправку: node tools/check.mjs.
+# Foundry здесь нет, поэтому значки Foundry (icons/…) не сверяются — это делает запуск на компьютере автора.
+name: Проверка системы
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Handlebars для компиляции шаблонов
+        run: npm install --no-save --no-package-lock --prefix "$RUNNER_TEMP/hbs" handlebars@4
+      - name: tools/check.mjs
+        run: node tools/check.mjs
+        env:
+          NODE_PATH: ${{ runner.temp }}/hbs/node_modules
