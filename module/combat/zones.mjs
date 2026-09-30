@@ -120,9 +120,10 @@ function regionData(shape, { name, color, zone }) {
  * @param {object} opts — name, color, actor, itemName, duration ({instant|rounds|maintain}|null), maintainItemId
  * @returns {Promise<RegionDocument|null>}
  */
-export async function createZone(shape, { name, color, actor, itemName = "", duration = null, maintainItemId = null }) {
+export async function createZone(shape, { name, color, actor, itemName = "", duration = null, maintainItemId = null, extra = {} }) {
   const combat = game.combat?.started ? game.combat : null;
   const zone = {
+    ...extra,
     actorUuid: actor?.uuid ?? null, itemName,
     instant: !!duration?.instant,
     combatId: combat?.id ?? null,
@@ -233,7 +234,7 @@ export function zoneTokens(shape, { region = null, exclude = null } = {}) {
 
 /* ------------------------------ Срок действия ------------------------------ */
 
-const zonesOf = scene => (scene?.regions ?? []).filter(r => r.flags?.vedmak?.zone);
+export const zonesOf = scene => (scene?.regions ?? []).filter(r => r.flags?.vedmak?.zone);
 
 /** Начало хода: снять мгновенные и истёкшие зоны этого актора. */
 export async function expireZonesForTurn(actor, combat) {

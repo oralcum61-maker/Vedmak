@@ -13,7 +13,8 @@
 
   <div class="card-body">
     <p class="card-props">
-      <span>Вын <b>{{paid}}</b>{{#if (ne paid cost)}} <span class="dim">(вложено {{cost}})</span>{{/if}}</span>
+      {{#if repeat}}<span>Зона держится · раунд <b>{{repeat}}</b></span>
+      {{else}}<span>Вын <b>{{paid}}</b>{{#if (ne paid cost)}} <span class="dim">(вложено {{cost}})</span>{{/if}}</span>{{/if}}
       {{#if range}}<span>{{range}}</span>{{/if}}
       {{#if duration}}<span>{{duration}}</span>{{/if}}
       {{#if defenseLabel}}<span>защита: {{defenseLabel}}</span>{{/if}}

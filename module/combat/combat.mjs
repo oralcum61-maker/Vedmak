@@ -6,6 +6,7 @@ import { wearArmor } from "./damage.mjs";
 import { magicStartOfTurn } from "../magic/effects.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
 import { expireZonesForTurn } from "./zones.mjs";
+import { repeatZonesForTurn } from "../magic/cast.mjs";
 
 export class VedmakCombat extends Combat {
 
@@ -52,6 +53,7 @@ export async function startOfTurn(actor, combat, context) {
   lines.push(...await expireAlchemy(actor));
   lines.push(...await magicStartOfTurn(actor));
   lines.push(...await expireZonesForTurn(actor, combat));
+  lines.push(...await repeatZonesForTurn(actor, combat));
 
   // Урон за ход
   let loss = 0;

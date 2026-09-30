@@ -88,3 +88,12 @@ export async function chooseDetailSkills(actor, race) {
   }]);
   return picked;
 }
+
+/** Раса удалена с листа кнопкой: её естественное оружие и эффекты черт уходят вместе с ней. */
+export function registerRaceHooks() {
+  Hooks.on("deleteItem", (item, options, userId) => {
+    const actor = item.parent;
+    if (item.type !== "race" || userId !== game.user.id || actor?.documentName !== "Actor") return;
+    removeRaceExtras(actor, item).catch(err => console.error("vedmak | черты расы", err));
+  });
+}

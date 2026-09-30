@@ -9,8 +9,8 @@ import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
-import { currentTargets, actorToken, combatantFor, postCard, targetInfo } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones } from "../combat/zones.mjs";
+import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor } from "../combat/common.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf } from "../combat/zones.mjs";
 import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
 import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
 
@@ -88,7 +88,12 @@ export async function castSpell(actor, item, opts = {}) {
   if (placed?.cancelled) return null;
   if (placed?.shape) {
     const duration = await parseZoneDuration(s.duration, { cost: cfg.cost });
-    region = await createZone(placed.shape, { name: item.name, actor, itemName: item.name, duration, maintainItemId: item.id });
+    // Долгая зона с уроном или статусами бьёт всех внутри в начале каждого хода заклинателя
+    const auto = spellAutomation(item);
+    const lasting = !!(duration?.rounds || duration?.maintain);
+    const repeat = lasting && !!(auto.damage || auto.staDamage || auto.statuses?.some(x => x.status));
+    region = await createZone(placed.shape, { name: item.name, actor, itemName: item.name, duration, maintainItemId: item.id,
+      extra: { itemId: item.id, repeat } });
     targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);
   }
 
@@ -445,4 +450,56 @@ export async function applyHex(actor, item) {
     description: item.system.description,
     flags: { vedmak: { hex: item.name } }
   }]);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Долгие зоны: удар каждый раунд                                            */
+/* -------------------------------------------------------------------------- */
+
+/** Последняя карточка сотворения этого заклинания этим заклинателем. */
+function lastCastMessage(actor, itemId) {
+  return game.messages.contents.findLast(m => {
+    const a = m.flags?.vedmak?.attack;
+    return a?.spell?.itemId === itemId && !m.flags.vedmak.cast?.repeat
+      && (a.attacker.actorUuid === actor.uuid || resolveActor(a.attacker.tokenUuid) === actor);
+  }) ?? null;
+}
+
+/**
+ * Начало хода заклинателя: каждая его долгая зона с уроном или статусами снова бьёт всех, кто в ней.
+ * Карточка — та же, что при сотворении, с новыми целями; защита — против исходного результата.
+ */
+export async function repeatZonesForTurn(actor, combat) {
+  const scene = combat?.scene ?? canvas?.scene;
+  const lines = [];
+  for (const region of zonesOf(scene)) {
+    const z = region.flags.vedmak.zone;
+    if (!z.repeat || z.actorUuid !== actor.uuid) continue;
+    // Поддержание уже прекращено — зону снимет обработчик конца поддержания
+    if (z.maintain && !actor.effects.some(e => e.flags?.vedmak?.maintain?.itemId === z.maintain)) continue;
+    const message = lastCastMessage(actor, z.itemId);
+    const atk = message?.flags.vedmak.attack;
+    const item = actor.items.get(z.itemId);
+    if (!atk || !item) continue;
+    const shape = region.shapes?.[0];
+    const onScene = canvas?.scene?.id === scene?.id;
+    const targets = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor) }).map(targetInfo) : [];
+    const s = item.system;
+    const data = { ...atk, targets, notes: ["Защита — против того же результата сотворения."] };
+    await postCard({
+      template: "systems/vedmak/templates/chat/cast.hbs", actor,
+      data: {
+        ...data, repeat: combat?.round ?? 1, hasTargets: targets.length > 0, showDefense: true,
+        defenseButtons: spellDefenseButtons(atk.spell.defenses),
+        kindLabel: CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel: levelLabel(s.kind, s.level),
+        elementLabel: s.kind === "spell" || s.kind === "sign" ? CONFIG.VEDMAK.MAGIC_ELEMENTS[s.element] : "",
+        range: s.range, duration: s.duration,
+        defenseLabel: s.defenseText || SPELL_DEFENSES[s.defense]?.label,
+        cost: atk.spell.cost, paid: atk.spell.paid, works: true, selfLines: []
+      },
+      flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } }
+    });
+    lines.push(`${item.name}: зона бьёт снова — целей ${targets.length}.`);
+  }
+  return lines;
 }

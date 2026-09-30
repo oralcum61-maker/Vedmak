@@ -265,7 +265,33 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
 }
 
 /** Бросок атаки и карточка. */
+/** Боеприпас для лука или арбалета: надетый, иначе стандартный, иначе любой с остатком (кроме болтов скорпио). */
+function pickAmmo(actor) {
+  const ammo = actor.itemTypes.gear.filter(g => g.system.category === "ammo" && (g.system.quantity ?? 0) > 0
+    && !/скорпио/i.test(g.name));
+  return ammo.find(g => g.system.equipped) ?? ammo.find(g => /стандартн/i.test(g.name)) ?? ammo[0] ?? null;
+}
+
+/**
+ * Выстрел тратит боеприпас (персонажи, настройка «Бой: расход боеприпасов»).
+ * @returns {Promise<string|null|false>} строка для карточки; false — стрелять нечем
+ */
+async function spendAmmo(actor, src) {
+  const w = src.item?.system;
+  if (!w || !(w.isBow || w.isCrossbow) || actor.type !== "character" || !game.settings.get("vedmak", "ammo")) return null;
+  const ammo = pickAmmo(actor);
+  if (!ammo) {
+    ui.notifications.warn(`${actor.name}: нет боеприпасов для «${src.item.name}». Добавьте их в снаряжение или выключите расход в настройках.`);
+    return false;
+  }
+  const left = ammo.system.quantity - 1;
+  await ammo.update({ "system.quantity": left });
+  return `Боеприпас: ${ammo.name} (осталось ${left}).${left ? "" : " Последний!"}`;
+}
+
 export async function rollAttack(actor, src, targets, cfg) {
+  const ammoNote = await spendAmmo(actor, src);
+  if (ammoNote === false) return null;
   const typeCfg = src.types[cfg.attackType] ?? Object.values(src.types)[0];
   const skillKey = typeCfg.skill ?? src.skill;
   const skill = actor.system.skills[skillKey];
@@ -301,7 +327,7 @@ export async function rollAttack(actor, src, targets, cfg) {
   parts.push(...statusRollMods(actor, "attack"));
 
   // Дополнительное действие атаки: 3 Вын, −3 (стр. 151)
-  const notes = [];
+  const notes = ammoNote ? [ammoNote] : [];
   if (cfg.extraAction) {
     parts.push({ label: "Доп. действие", value: -3 });
     const sta = actor.system.sta.value;

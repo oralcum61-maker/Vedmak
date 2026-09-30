@@ -28,6 +28,7 @@ import { registerCombatAutomation } from "./module/combat/auto.mjs";
 import { registerZoneHooks } from "./module/combat/zones.mjs";
 import { registerAlchemyHooks } from "./module/crafting/alchemy-triggers.mjs";
 import { registerBuffHooks } from "./module/magic/buffs.mjs";
+import { registerRaceHooks } from "./module/character/race.mjs";
 import { initSocket } from "./module/combat/common.mjs";
 import { attack } from "./module/combat/attack.mjs";
 import { computeDamage, applyDamageToActor } from "./module/combat/damage.mjs";
@@ -117,6 +118,11 @@ Hooks.once("init", () => {
     hint: "Ведущий применяет урон, эффекты заклинаний и статусы приёмов без кнопки «Применить». Нужен ведущий в игре.",
     scope: "world", config: true, type: Boolean, default: true
   });
+  game.settings.register(SYSTEM_ID, "ammo", {
+    name: "Бой: расход боеприпасов",
+    hint: "Выстрел из лука или арбалета тратит один боеприпас из снаряжения персонажа: надетый, иначе стандартный, иначе любой. Без боеприпасов выстрелить нельзя. У чудовищ не считается.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
   game.settings.register(SYSTEM_ID, "zones", {
     name: "Зоны заклинаний и бомб на сцене",
     hint: "Конусы и круги ставятся мышью (колесо — поворот, правый клик — отмена), цели — все, кто в зоне. Мгновенная зона исчезает к следующему ходу заклинателя, на N раундов — через N раундов, активная — с концом поддержания.",
@@ -151,6 +157,7 @@ Hooks.once("init", () => {
   registerZoneHooks();
   registerAlchemyHooks();
   registerBuffHooks();
+  registerRaceHooks();
   CombatHud.registerHooks();
 
   // API для макросов
