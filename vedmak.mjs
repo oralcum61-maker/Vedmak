@@ -41,6 +41,7 @@ import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
+import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 
@@ -135,6 +136,18 @@ Hooks.once("init", () => {
   const refreshActors = () => game.actors.forEach(a => { a.prepareData(); if (a.sheet?.rendered) a.sheet.render(); });
   game.settings.register(SYSTEM_ID, "currencies", {
     scope: "world", config: false, type: Object, default: DEFAULT_MONEY_SETTING, onChange: refreshActors
+  });
+  // Свои ведьмачьи школы (module/apps/school-config.mjs): школы корника встроены, здесь — из дополнений и домашние
+  game.settings.register(SYSTEM_ID, "witcherSchools", {
+    scope: "world", config: false, type: Object, default: { list: [] }, onChange: refreshActors
+  });
+  game.settings.registerMenu(SYSTEM_ID, "witcherSchoolsMenu", {
+    name: "Ведьмачьи школы",
+    label: "Свои школы",
+    hint: "Школы из дополнений (например, «Книги Весемира») или домашние: описание, Энергия, скованность движений, виды атаки без штрафа, поправки к параметрам и навыкам.",
+    icon: "fa-solid fa-shield-cat",
+    type: SchoolConfig,
+    restricted: true
   });
   game.settings.registerMenu(SYSTEM_ID, "currencyMenu", {
     name: "Валюты и обмен",

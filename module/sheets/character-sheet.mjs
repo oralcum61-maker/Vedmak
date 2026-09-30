@@ -2,7 +2,7 @@
 
 import { VedmakActorSheet } from "./actor-sheet-base.mjs";
 import { STATS, STAT_GROUPS } from "../config/stats.mjs";
-import { REGIONS, HOMELANDS, WITCHER_SCHOOLS, SOCIAL_SKILLS, socialModifier, abilityBonus } from "../config/character.mjs";
+import { REGIONS, HOMELANDS, witcherSchools, schoolMechanics, modTargets, SOCIAL_SKILLS, socialModifier, abilityBonus } from "../config/character.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import {
   skillOffer, statOffer, definingOffer, abilityOffer, improveSkill, improveStat, improveDefining, improveAbility,
@@ -241,8 +241,12 @@ export class CharacterSheet extends VedmakActorSheet {
     context.regionOptions = { "": `Из настроек мира (${REGIONS[worldRegion]?.label ?? worldRegion})`,
       ...Object.fromEntries(Object.entries(REGIONS).map(([k, v]) => [k, v.label])) };
     context.isWitcher = system.raceKey === "witcher" || system.professionKey === "witcher" || !!system.details.school;
-    context.schoolOptions = Object.fromEntries(Object.entries(WITCHER_SCHOOLS).map(([k, v]) => [k, v.label]));
-    context.schoolHint = WITCHER_SCHOOLS[system.details.school]?.hint ?? "";
+    // Школы корника и свои (настройка «Ведьмачьи школы»); под выбором — описание и механика словами
+    const schools = witcherSchools();
+    context.schoolOptions = Object.fromEntries(Object.entries(schools).map(([k, v]) => [k, v.label]));
+    const school = schools[system.details.school];
+    const mechanics = school?.custom ? schoolMechanics(school, modTargets(STATS, SKILLS)) : "";
+    context.schoolHint = [school?.hint, mechanics].filter(Boolean).join(" ");
 
     // Развитие: стоимость на вкладках параметров и навыков
     if (this.advanceMode) {

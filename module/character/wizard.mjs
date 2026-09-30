@@ -4,7 +4,7 @@
 import { STATS, STAT_POINT_BUY } from "../config/stats.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import {
-  HOMELANDS, ORIGIN_REGIONS, NATIVE_LANGUAGE_LEVEL, WITCHER_SCHOOLS, CREATION, nativeLanguage,
+  HOMELANDS, ORIGIN_REGIONS, NATIVE_LANGUAGE_LEVEL, witcherSchools, CREATION, nativeLanguage,
   creationSkillCost, HEX_DANGER_LEVEL
 } from "../config/character.mjs";
 import { levelLabel } from "../config/magic.mjs";
@@ -471,7 +471,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const [k, v] of Object.entries(fx.statMods)) if (v) lines.push(`${v > 0 ? "+" : ""}${v} к ${STATS[k].abbr}`);
     for (const [k, v] of Object.entries(fx.skills)) lines.push(`+${v} к навыку «${SKILLS[k].label}»`);
     for (const [k, v] of Object.entries(fx.skillMods)) lines.push(`${v} к навыку «${SKILLS[k].label}»`);
-    if (fx.school) lines.push(WITCHER_SCHOOLS[fx.school].label);
+    if (fx.school) lines.push(witcherSchools()[fx.school]?.label ?? fx.school);
     if (fx.addictions.length) lines.push(`зависимость (${fx.addictions.length})`);
     for (const i of fx.items) lines.push(`предмет: ${i}`);
     for (const n of fx.notes) lines.push(n);

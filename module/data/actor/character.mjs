@@ -2,7 +2,7 @@
 
 import { int, str, html } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
-import { SOCIAL_TABLE, REGIONS, WITCHER_SCHOOLS, abilityBonus, socialLabel } from "../../config/character.mjs";
+import { SOCIAL_TABLE, REGIONS, witcherSchools, abilityBonus, socialLabel } from "../../config/character.mjs";
 
 const { SchemaField, BooleanField, ArrayField } = foundry.data.fields;
 
@@ -58,7 +58,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     const race = this.race?.system;
     const prof = this.profession?.system;
-    const school = WITCHER_SCHOOLS[this.details.school] ?? {};
+    // Школа корника или своя (настройка «Ведьмачьи школы»): Энергия, СД, поправки как у расы
+    const school = witcherSchools()[this.details.school] ?? {};
 
     // Модификаторы расы, надетых реликвий и принятых мутагенов: параметры и навыки — в `mod`, прочее — бонусами
     const extra = { hp: 0, sta: 0, vigor: 0, stun: 0, rec: 0, run: 0, enc: 0, damage: 0, meleeDamage: 0 };
@@ -73,7 +74,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     }
     this.derived ??= {};
     this.derived.mutagens = this.parent.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;
-    for (const { target, value } of [...(race?.mods ?? []), ...itemMods]) {
+    for (const { target, value } of [...(race?.mods ?? []), ...(school.mods ?? []), ...itemMods]) {
       const [group, key] = target.split(".");
       if (group === "stats" && this.stats[key]) this.stats[key].mod += value;
       else if (group === "skills" && this.skills[key]) this.skills[key].mod += value;

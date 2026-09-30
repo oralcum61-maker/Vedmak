@@ -2,6 +2,7 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import { punchSteps } from "../config/stats.mjs";
+import { witcherSchools } from "../config/character.mjs";
 import {
   ATTACK_TYPES, UNARMED_ATTACKS, ATTACK_SITUATIONS, RANGE_BANDS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MOUNTS, WEIGHT_MODS,
   fumbleText
@@ -92,6 +93,12 @@ export function describeSource(actor, source) {
       nonLethal: !!w.effect("nonLethal"), category: w.category
     }
   };
+}
+
+/** Ведьмачья школа персонажа (корника или своя) — с видами атаки без штрафа. */
+function schoolOf(actor) {
+  if (actor.type !== "character") return null;
+  return witcherSchools()[actor.system.details?.school] ?? null;
 }
 
 function pick(map, keys) {
@@ -201,9 +208,9 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
   if (target?.statuses.has("immobilized")) autoSituations.add("immobilized");
   if (!src.isRanged && target?.statuses.has("activeDodge")) autoSituations.add("activeDodge");
 
-  const school = actor.type === "character" ? actor.system.details?.school : "";
+  const school = schoolOf(actor);
   const types = Object.entries(src.types).map(([key, t]) => {
-    const waived = (school === "wolf" && key === "strong") || (school === "viper" && key === "dual");
+    const waived = !!school?.waive?.includes(key);
     const mod = waived ? 0 : t.mod ?? 0;
     const damage = previewDamage(actor, src, key);
     return {
@@ -311,9 +318,9 @@ export async function rollAttack(actor, src, targets, cfg) {
   if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
   if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
   if (src.accuracy && !typeCfg.skill) parts.push({ label: "Точность", value: src.accuracy });
-  const school = actor.type === "character" ? actor.system.details?.school : "";
-  const waived = (school === "wolf" && cfg.attackType === "strong") || (school === "viper" && cfg.attackType === "dual");
-  if (typeCfg.mod && waived) parts.push({ label: `${typeCfg.label}: школа ${school === "wolf" ? "Волка" : "Змеи"} без штрафа`, value: 0, always: true });
+  const school = schoolOf(actor);
+  const waived = !!school?.waive?.includes(cfg.attackType);
+  if (typeCfg.mod && waived) parts.push({ label: `${typeCfg.label}: ${school.label} — без штрафа`, value: 0, always: true });
   else if (typeCfg.mod) parts.push({ label: typeCfg.label, value: typeCfg.mod });
 
   // Прицельная атака

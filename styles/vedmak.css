@@ -2584,3 +2584,20 @@ body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
 .vedmak-card .perf-table td { padding: .1rem .2rem; border-bottom: 1px dotted var(--vd-line-soft); }
 .vedmak-card .perf-table td + td, .vedmak-card .perf-table th + th { text-align: right; font-family: var(--vd-font-head); }
 .vedmak-card.perf-report .note { margin: .2rem 0; font-size: .74rem; }
+
+/* Ведьмачьи школы — настройки мира (templates/apps/schools.hbs): школа — вкладышем, механика — строками */
+.vedmak.school-config .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.vedmak .school-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .5rem; }
+.vedmak .school-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: .6rem; padding-right: .2rem; }
+.vedmak .school-row { margin: 0; display: flex; flex-direction: column; gap: .45rem; }
+.vedmak .school-top { display: flex; align-items: flex-end; gap: .5rem; }
+.vedmak .school-top label, .vedmak .school-hint { display: flex; flex-direction: column; gap: .15rem; }
+.vedmak .school-top .grow { flex: 1; }
+.vedmak .school-top .num input { width: 4.5rem; }
+.vedmak .school-top .danger { padding-bottom: .35rem; }
+.vedmak .school-hint textarea { width: 100%; min-height: 3rem; resize: vertical; }
+.vedmak .school-waive { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem 1rem; }
+.vedmak .school-waive .check { display: flex; align-items: center; gap: .3rem; font-size: .85rem; }
+.vedmak .school-mods { display: flex; flex-direction: column; gap: .25rem; }
+.vedmak .school-summary { margin: 0; color: var(--vd-gold); }
+.vedmak .school-row .cap { font-family: var(--vd-font-head); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--vd-text-dim); }

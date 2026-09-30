@@ -1,0 +1,45 @@
+{{!-- Ведьмачьи школы (настройки мира): свои школы — из дополнений или домашние. Школы корника встроены. --}}
+<div class="vedmak-roll-dialog school-body">
+  <p class="hint">Школы корника встроены: {{#each builtin}}<b data-tooltip="{{hint}}">{{label}}</b>{{#unless @last}}, {{/unless}}{{/each}}.
+    Здесь — свои: из дополнений (например, «Книги Весемира») или домашние. Механика считается сама:
+    Энергия, скованность движений (СД), виды атаки без штрафа и поправки к параметрам и навыкам, как у расы.
+    Остальное впишите в описание — его видно под выбором школы на листе.</p>
+
+  <div class="school-list">
+    {{#each schools as |s|}}
+    <fieldset class="vd-fieldset school-row" data-school="{{s.index}}">
+      <input type="hidden" name="schools.{{s.index}}.key" value="{{s.key}}">
+      <div class="school-top">
+        <label class="grow"><span class="cap">Название</span>
+          <input type="text" name="schools.{{s.index}}.label" value="{{s.label}}" placeholder="Школа Мантикоры"></label>
+        <label class="num"><span class="cap">Энергия</span>
+          <input type="number" name="schools.{{s.index}}.vigor" value="{{s.vigor}}" step="1"></label>
+        <label class="num"><span class="cap">СД</span>
+          <input type="number" name="schools.{{s.index}}.ev" value="{{s.ev}}" step="1" data-tooltip="Скованность движений: −2 у Медведя"></label>
+        <a class="danger" data-action="deleteSchool" data-tooltip="Убрать школу"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      <label class="school-hint"><span class="cap">Описание</span>
+        <textarea name="schools.{{s.index}}.hint" rows="2" placeholder="Коротко: чем школа отличается — видно под выбором школы на листе">{{s.hint}}</textarea></label>
+      <div class="school-waive">
+        <span class="cap">Без штрафа</span>
+        {{#each s.waiveOptions}}
+        <label class="check"><input type="checkbox" name="schools.{{s.index}}.waive.{{key}}" {{checked checked}}> {{label}}</label>
+        {{/each}}
+      </div>
+      <div class="school-mods">
+        <span class="cap">Поправки <a data-action="addMod" data-tooltip="Добавить поправку"><i class="fa-solid fa-plus"></i></a></span>
+        {{#each s.mods as |m|}}
+        <div class="row-edit mod" data-mod="{{m.index}}">
+          <select name="schools.{{s.index}}.mods.{{m.index}}.target">{{selectOptions @root.targets selected=m.target}}</select>
+          <input type="number" name="schools.{{s.index}}.mods.{{m.index}}.value" value="{{m.value}}">
+          <a data-action="deleteMod" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        {{/each}}
+      </div>
+      {{#if s.summary}}<p class="hint school-summary">На листе: {{s.summary}}</p>{{/if}}
+    </fieldset>
+    {{else}}
+    <p class="hint">Своих школ пока нет.</p>
+    {{/each}}
+  </div>
+</div>
