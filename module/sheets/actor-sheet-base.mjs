@@ -13,7 +13,7 @@ import { castSpell, vigorUsed, maintainedSpells } from "../magic/cast.mjs";
 import { endMaintained } from "../magic/effects.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
-import { compareRu } from "../util.mjs";
+import { compareRu, balanceColumns } from "../util.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -146,6 +146,9 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         .filter(s => !this.trainedOnly || s.trained || s.profession)
     }));
     context.hasSkills = context.skillGroups.some(g => g.skills.length);
+    // Две колонки групп навыков примерно равной высоты: заголовок группы — как две строки
+    context.skillCols = balanceColumns(context.skillGroups.filter(g => g.skills.length), g => g.skills.length + 2)
+      .filter(col => col.length);
 
     // Предметы по типам
     const byType = type => actor.itemTypes[type]?.slice().sort((a, b) => a.sort - b.sort) ?? [];

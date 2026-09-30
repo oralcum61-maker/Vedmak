@@ -1,8 +1,10 @@
-{{!-- Навыки по параметрам. Группы укладываются плотно (колонками), без дыр между короткими и длинными.
+{{!-- Навыки по параметрам. Группы укладываются плотно, без дыр между короткими и длинными: лист заранее
+      раскладывает их по двум колонкам равной высоты (skillCols) — CSS-колонки перекладывали всё при каждом показе.
       Строка: ромб «навык профессии», название, вложенные очки, основа — то, что бросают. --}}
 <div class="skill-cols">
-  {{#each skillGroups as |group|}}
-  {{#if group.skills.length}}
+  {{#each skillCols as |col|}}
+  <div class="skill-col">
+  {{#each col as |group|}}
   <section class="skill-group">
     <div class="group-head">
       <span class="bronze-tag">{{group.label}}</span>
@@ -30,7 +32,8 @@
     </div>
     {{/each}}
   </section>
-  {{/if}}
+  {{/each}}
+  </div>
   {{/each}}
 </div>
 {{#unless hasSkills}}<p class="hint">Изученных навыков нет — нажмите «Показать все».</p>{{/unless}}
