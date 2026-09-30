@@ -3,12 +3,14 @@
 //
 // Источник — массив документов: Item, Actor (с вложенными `items`), RollTable (`results`)
 // или JournalEntry (`pages`). Папки строятся по функции `folders` конфигурации пакета.
+// Перед сборкой к источникам применяются правки поверх генераторов — tools/pack-overrides.mjs.
 
 import { createRequire } from "node:module";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { applyOverrides } from "./pack-overrides.mjs";
 
 const FOUNDRY_APP = process.env.FOUNDRY_APP ?? "D:/FoundryVTT-WindowsPortable-14.365/App/resources/app";
 const require = createRequire(path.join(FOUNDRY_APP, "package.json"));
@@ -158,10 +160,18 @@ function stats() {
   };
 }
 
-async function buildPack(cfg) {
+/** Все источники сразу: правки меняют имена во всех пакетах (чертежи, бестиарий, генераторы). */
+const SOURCES = {};
+for (const cfg of PACKS) {
   const file = path.join(ROOT, cfg.source);
-  if (!fs.existsSync(file)) return console.log(`${cfg.name}: нет ${cfg.source} — пропущен`);
-  const docs = JSON.parse(fs.readFileSync(file, "utf8"));
+  if (fs.existsSync(file)) SOURCES[cfg.name] = JSON.parse(fs.readFileSync(file, "utf8"));
+}
+const overrides = applyOverrides(SOURCES);
+console.log(`Правки поверх генераторов: ${overrides.applied}${overrides.skipped.length ? `; пропущено: ${overrides.skipped.join("; ")}` : ""}`);
+
+async function buildPack(cfg) {
+  const docs = SOURCES[cfg.name];
+  if (!docs) return console.log(`${cfg.name}: нет ${cfg.source} — пропущен`);
   const documentName = cfg.documentName ?? "Item";
   const layout = LAYOUT[documentName];
   const dir = path.join(ROOT, "packs", cfg.name);

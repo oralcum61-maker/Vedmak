@@ -29,7 +29,7 @@ const EXCLUDE = [
   "CLAUDE.md", ".gitignore", ".gitattributes"
 ];
 /** Нужно только на время сборки: пересборка бестиария. */
-const BUILD_ONLY = ["packs-src/", "tools/build-packs.mjs"];
+const BUILD_ONLY = ["packs-src/", "tools/build-packs.mjs", "tools/pack-overrides.mjs"];
 
 const TOKENS = "systems/vedmak/assets/tokens/";
 

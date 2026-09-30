@@ -273,6 +273,10 @@ async function checkPacks() {
     try { packs[file.slice(0, -5)] = JSON.parse(read(path.join(dir, file))); }
     catch (e) { err(S, `packs-src/${file}: не JSON — ${e.message}`); }
   }
+  // Правки поверх генераторов: проверяется то, что попадёт в компендиумы
+  const { applyOverrides } = await import(pathToFileURL(path.join(ROOT, "tools/pack-overrides.mjs")));
+  const overrides = applyOverrides(packs);
+  for (const s of overrides.skipped) warn(S, `tools/pack-overrides.mjs: ${s}`);
 
   // Схемы моделей
   const fields = stubFoundry();
