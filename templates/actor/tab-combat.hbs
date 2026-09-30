@@ -1,7 +1,7 @@
 {{!-- Вкладка «Бой». У персонажа две подвкладки: обычный бой и социальный (словесная дуэль);
-      у чудовища — только обычный бой. --}}
+      у чудовища и при выключенной настройке «Словесная дуэль» — только обычный бой. --}}
 <section class="tab combat-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
-  {{#if isCharacter}}
+  {{#if showSocialCombat}}
 
   <div class="skills-head">
     <nav class="tabs pane-switch" aria-label="Бой и социальный бой">
@@ -23,5 +23,6 @@
 
   {{else}}
   {{> "systems/vedmak/templates/actor/parts/combat-fight.hbs"}}
+  {{#if isCharacter}}{{> "systems/vedmak/templates/actor/parts/social-status.hbs"}}{{/if}}
   {{/if}}
 </section>

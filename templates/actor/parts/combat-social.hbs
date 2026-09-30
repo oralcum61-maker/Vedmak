@@ -58,18 +58,4 @@
   +3 и +10 к Запугиванию. Прочие модификаторы — на усмотрение ведущего: малый 1, средний 3, большой 5.</p>
 
 {{!-- Социальный статус перенесён из «Дневника»: он действует на те же социальные проверки --}}
-<section class="combat-block social">
-  <div class="group-head">
-    <span class="bronze-tag">СОЦИАЛЬНЫЙ СТАТУС</span>
-    <span class="rule"></span>
-    <span class="status-now{{#if (ne social.level "equal")}} bad{{/if}}">{{social.label}}</span>
-  </div>
-  <div class="social-grid">
-    <label>Территория
-      <select name="system.social.region">{{selectOptions regionOptions selected=system.social.region}}</select>
-    </label>
-    <label class="check"><input type="checkbox" name="system.social.feared" {{checked system.social.feared}}> Опасение (уродливый шрам, дурные поступки)</label>
-  </div>
-  <p class="status-line">{{social.regionLabel}}{{#if social.mods}}: {{social.mods}}{{/if}}</p>
-  <p class="hint">Статус учитывается в проверках социальных навыков (галочкой в окне броска). Со своими — всегда равенство (стр. 21).</p>
-</section>
+{{> "systems/vedmak/templates/actor/parts/social-status.hbs"}}

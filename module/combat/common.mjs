@@ -76,6 +76,16 @@ export function registerGMHandler(action, fn) {
   HANDLERS[action] = fn;
 }
 
+/**
+ * Может ли пользователь действовать за кого-то из акторов: ведущий — за всех, игрок — за своих.
+ * Для проверок на стороне ведущего: кто прислал запрос по сокету и кто создал карточку в чате.
+ */
+export function userOwnsAny(userId, ...actors) {
+  const user = game.users.get(userId);
+  if (!user) return false;
+  return user.isGM || actors.some(a => a?.testUserPermission(user, "OWNER"));
+}
+
 export function initSocket() {
   game.socket.on(SOCKET, async ({ action, data, userId }) => {
     if (!game.users.activeGM?.isSelf) return;

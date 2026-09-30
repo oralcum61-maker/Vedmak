@@ -80,6 +80,7 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/actor/parts/skill-list.hbs",
   "systems/vedmak/templates/actor/parts/combat-fight.hbs",
   "systems/vedmak/templates/actor/parts/combat-social.hbs",
+  "systems/vedmak/templates/actor/parts/social-status.hbs",
   "systems/vedmak/templates/actor/parts/monster-abilities.hbs",
   "systems/vedmak/templates/chat/verbal.hbs",
   "systems/vedmak/templates/actor/tab-effects.hbs",

@@ -97,6 +97,12 @@ Hooks.once("init", () => {
     hint: "Каждый нанесённый крит даёт кость d6 (не больше Тел). Кость: +1d6 урона, −10 Вын. Сгорает в конце боя (стр. 175).",
     scope: "world", config: true, type: Boolean, default: false
   });
+  game.settings.register(SYSTEM_ID, "verbalDuel", {
+    name: "Словесная дуэль",
+    hint: "Подвкладка «Социальный бой» у персонажа: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
+    scope: "world", config: true, type: Boolean, default: true,
+    onChange: () => game.actors.forEach(a => a.sheet?.rendered && a.sheet.render())
+  });
 
   // Листы
   const DSC = foundry.applications.apps.DocumentSheetConfig;

@@ -1,0 +1,17 @@
+{{!-- Социальный статус персонажа. Стоит на подвкладке «Социальный бой», а при выключенной
+      словесной дуэли — под обычным боем: статус действует на социальные проверки и без дуэли. --}}
+<section class="combat-block social">
+  <div class="group-head">
+    <span class="bronze-tag">СОЦИАЛЬНЫЙ СТАТУС</span>
+    <span class="rule"></span>
+    <span class="status-now{{#if (ne social.level "equal")}} bad{{/if}}">{{social.label}}</span>
+  </div>
+  <div class="social-grid">
+    <label>Территория
+      <select name="system.social.region">{{selectOptions regionOptions selected=system.social.region}}</select>
+    </label>
+    <label class="check"><input type="checkbox" name="system.social.feared" {{checked system.social.feared}}> Опасение (уродливый шрам, дурные поступки)</label>
+  </div>
+  <p class="status-line">{{social.regionLabel}}{{#if social.mods}}: {{social.mods}}{{/if}}</p>
+  <p class="hint">Статус учитывается в проверках социальных навыков (галочкой в окне броска). Со своими — всегда равенство (стр. 21).</p>
+</section>

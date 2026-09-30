@@ -9,6 +9,7 @@ import {
   setAbilityValue, grantImprovementPoints, learnSpellDialog
 } from "../character/advancement.mjs";
 import { CharacterWizard } from "../character/wizard.mjs";
+import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
 import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS } from "../config/crafting.mjs";
 import { craft, readiness, requirements, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
@@ -192,6 +193,8 @@ export class CharacterSheet extends VedmakActorSheet {
 
     context.trainedCount = Object.values(system.skills).filter(sk => sk.value > 0).length;
     context.verbal = verbalContext(actor);
+    // Словесная дуэль — необязательное правило: без неё «Бой» показывает только обычный бой
+    context.showSocialCombat = game.settings.get("vedmak", "verbalDuel");
 
     context.race = system.race;
     context.profession = system.profession;
@@ -378,10 +381,14 @@ export class CharacterSheet extends VedmakActorSheet {
           content: `<p>Заменить «${old[0].name}» на «${item.name}»?${item.type === "profession" ? " Очки, вложенные в древо прежней профессии, пропадут." : ""}</p>`
         });
         if (!ok) return null;
+        // Клыки и эффекты черт прежней расы уходят вместе с ней
+        if (item.type === "race") await removeRaceExtras(actor, old[0]);
         await actor.deleteEmbeddedDocuments("Item", old.map(i => i.id));
       }
     }
     const result = await super._onDropItem(event, item);
+    // Естественное оружие расы и выбор навыков гнома — как в мастере создания
+    if (item.type === "race" && fromElsewhere && result) await applyRaceExtras(actor, item);
     if (item.type === "profession" && fromElsewhere) {
       const listed = new Set(item.system.skills);
       const update = {};

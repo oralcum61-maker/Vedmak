@@ -7,7 +7,7 @@ import {
 } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
-import { resolveActor, asGM, registerGMHandler, rollFormula, postCard } from "./common.mjs";
+import { resolveActor, asGM, registerGMHandler, userOwnsAny, rollFormula, postCard } from "./common.mjs";
 import { markDead } from "./saves.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
@@ -485,19 +485,25 @@ export async function removeShieldEffects(actor) {
  */
 export const applyingMessages = new Set();
 
-registerGMHandler("applyDamage", async ({ messageId }) => {
+registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   if (applyingMessages.has(messageId)) return;
   const message = game.messages.get(messageId);
   const dmg = message?.flags.vedmak?.damage;
   if (!dmg || dmg.applied) return;
   const actor = resolveActor(dmg.target.tokenUuid) ?? resolveActor(dmg.target.actorUuid);
   if (!actor) return ui.notifications.warn("Цель урона не найдена.");
+  const attacker = resolveActor(dmg.attacker.tokenUuid) ?? resolveActor(dmg.attacker.actorUuid);
+  // Запрос игрока: он атакующий или владелец цели (как у кнопки), а карточку урона создал владелец
+  // атакующего — иначе карточку с любым уроном по любой цели можно подделать из консоли
+  if (!game.users.get(userId)?.isGM
+    && (!userOwnsAny(userId, attacker, actor) || !userOwnsAny(message.author?.id, attacker))) {
+    return console.warn(`vedmak | отклонён запрос урона от ${game.users.get(userId)?.name ?? userId}`);
+  }
   applyingMessages.add(messageId);
   try {
     const report = await applyDamageToActor(actor, dmg);
     // Адреналин: каждый нанесённый крит — кость d6, не больше Тел атакующего
     if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {
-      const attacker = resolveActor(dmg.attacker.tokenUuid) ?? resolveActor(dmg.attacker.actorUuid);
       if (attacker?.type === "character") {
         const max = attacker.system.stats.body.total;
         const value = Math.min(max, (attacker.system.adrenaline?.value ?? 0) + 1);

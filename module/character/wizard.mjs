@@ -9,6 +9,7 @@ import {
 } from "../config/character.mjs";
 import { levelLabel } from "../config/magic.mjs";
 import { buildLifepath, clearRoll, dependents, lifepathHtml, choiceSkillOptions, rollDie, WITCHER_RISK } from "./lifepath.mjs";
+import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
@@ -749,7 +750,9 @@ async function applyCharacter(wizard, lp) {
   const fx = lp.effects ?? { crowns: 0, reputation: 0, luck: 0, hpBonus: 0, staBonus: 0, vigorBonus: 0, feared: false,
     skills: {}, skillChoices: [], statMods: {}, skillMods: {}, definingBonus: 0, items: [], addictions: [], notes: [], school: "" };
 
-  // Старые раса и профессия
+  // Старые раса и профессия; клыки и эффекты черт прежней расы — вместе с ней
+  const oldRace = actor.itemTypes.race[0];
+  if (oldRace) await removeRaceExtras(actor, oldRace);
   const old = actor.items.filter(i => ["race", "profession"].includes(i.type)).map(i => i.id);
   if (old.length) await actor.deleteEmbeddedDocuments("Item", old);
   const oldEffects = actor.effects.filter(e => e.getFlag("vedmak", "lifepath")).map(e => e.id);
@@ -834,4 +837,7 @@ async function applyCharacter(wizard, lp) {
     "system.sta.value": actor.system.sta.max,
     "system.luck.value": actor.system.luck.max
   });
+
+  // «Внимание к деталям» гнома: три навыка Ремесла на выбор
+  if (race?.system.key === "gnome") await chooseDetailSkills(actor, race);
 }

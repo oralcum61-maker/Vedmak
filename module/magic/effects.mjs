@@ -2,7 +2,7 @@
 // регенерация, щиты, поддержание активных заклинаний, порча.
 
 import { STATUS_RESIST_KEY } from "../config/combat.mjs";
-import { resolveActor, registerGMHandler, asGM, postCard } from "../combat/common.mjs";
+import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny } from "../combat/common.mjs";
 import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
 import { performCheck } from "../dice/check.mjs";
@@ -19,24 +19,31 @@ export async function requestSpellEffects(message) {
   return asGM("applySpellEffects", { messageId: message.id });
 }
 
-registerGMHandler("applySpellEffects", async ({ messageId }) => {
+registerGMHandler("applySpellEffects", async ({ messageId }, userId) => {
   // Флаг effectsApplied ставится только в конце — не даём второму запросу наложить эффекты повторно
   if (applyingMessages.has(messageId)) return;
   applyingMessages.add(messageId);
   try {
-    await applySpellEffectsNow(messageId);
+    await applySpellEffectsNow(messageId, userId);
   } finally {
     applyingMessages.delete(messageId);
   }
 });
 
-async function applySpellEffectsNow(messageId) {
+async function applySpellEffectsNow(messageId, userId) {
   const message = game.messages.get(messageId);
   const def = message?.flags.vedmak?.defense;
   if (!def || def.effectsApplied) return;
   const spell = def.attack.spell;
   const actor = resolveActor(def.defender.tokenUuid) ?? resolveActor(def.defender.actorUuid);
   if (!actor || !spell) return;
+  // Запрос игрока: он заклинатель (как у кнопки), а карточку защиты создал кто-то из участников —
+  // иначе эффекты можно наложить на любую цель подделанной карточкой
+  const caster = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
+  if (!game.users.get(userId)?.isGM
+    && (!userOwnsAny(userId, caster) || !userOwnsAny(message.author?.id, caster, actor))) {
+    return console.warn(`vedmak | отклонён запрос эффектов заклинания от ${game.users.get(userId)?.name ?? userId}`);
+  }
   const lines = [];
   const rolls = [];
 
@@ -59,7 +66,6 @@ async function applySpellEffectsNow(messageId) {
     lines.push(`Регенерация: +${spell.regen.hp} ПЗ за ход${spell.regen.rounds ? ` (${spell.regen.rounds} раундов)` : ", пока поддерживается"}.`);
   }
   if (spell.hex) {
-    const caster = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
     const item = caster?.items.get(spell.itemId);
     if (item) { await applyHex(actor, item); lines.push(`Наложена порча «${item.name}».`); }
   }
