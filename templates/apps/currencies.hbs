@@ -1,7 +1,7 @@
 {{!-- Валюты и обмен (настройки мира): курс — сколько крон стоит одна монета, вес — граммы на монету. --}}
 <div class="vedmak-roll-dialog currency-body">
-  <p class="hint">Цены в книгах — в кронах. Курс валюты — сколько крон стоит одна её монета. Значения по умолчанию
-    примерные: в корнике таблицы обмена нет, поправьте их под свою кампанию.</p>
+  <p class="hint">Цены в книгах — в кронах. Курс валюты — сколько крон стоит одна её монета. Курсы по умолчанию —
+    из корника (стр. 71); марок в книге нет, их курс домашний. Поправьте под свою кампанию.</p>
   <table class="vd-table currency-table">
     <thead><tr><th>Название</th><th>Сокр.</th><th>Где ходит</th><th>Курс, кр.</th><th>Вес, г</th></tr></thead>
     <tbody>
@@ -11,7 +11,7 @@
         <td class="short"><input type="text" name="list.{{c.key}}.abbr" value="{{c.abbr}}"></td>
         <td><input type="text" name="list.{{c.key}}.region" value="{{c.region}}"></td>
         <td class="num">{{#if c.base}}<b>1</b><input type="hidden" name="list.{{c.key}}.rate" value="1">
-          {{else}}<input type="number" name="list.{{c.key}}.rate" value="{{c.rate}}" min="0.01" step="0.01">{{/if}}</td>
+          {{else}}<input type="number" name="list.{{c.key}}.rate" value="{{c.rate}}" min="0.001" step="any">{{/if}}</td>
         <td class="num"><input type="number" name="list.{{c.key}}.grams" value="{{c.grams}}" min="0" step="0.5"></td>
       </tr>
     {{/each}}
@@ -22,7 +22,3 @@
     <span class="hint grow">Подставляется в окно обмена; там её можно поменять под конкретную лавку.</span>
   </div>
 </div>
-<footer class="form-footer">
-  <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> По умолчанию</button>
-  <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Сохранить</button>
-</footer>

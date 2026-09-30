@@ -16,8 +16,10 @@ export class CurrencyConfig extends HandlebarsApplicationMixin(ApplicationV2) {
     actions: { reset: CurrencyConfig.#onReset }
   };
 
+  // Часть шаблона в v14 — ровно один корневой элемент, поэтому кнопки — отдельной частью
   static PARTS = {
-    form: { template: "systems/vedmak/templates/apps/currencies.hbs" }
+    form: { template: "systems/vedmak/templates/apps/currencies.hbs" },
+    footer: { template: "systems/vedmak/templates/apps/currencies-footer.hbs" }
   };
 
   async _prepareContext() {
