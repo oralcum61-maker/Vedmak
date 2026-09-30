@@ -1,0 +1,20 @@
+<section class="tab effects {{tab.cssClass}}" data-group="primary" data-tab="effects">
+  <table class="vd-table">
+    <thead><tr><th></th><th class="name">Эффект <a class="add" data-action="effectCreate" data-tooltip="Создать"><i class="fa-solid fa-plus"></i></a></th><th>Изменения</th><th></th></tr></thead>
+    <tbody>
+    {{#each effects as |e|}}
+      <tr data-effect-id="{{e.id}}" class="{{#if e.disabled}}disabled{{/if}}">
+        <td><img src="{{e.img}}" class="icon"></td>
+        <td class="name"><a data-action="effectEdit">{{e.name}}</a>{{#unless e.transfer}} <i class="fa-solid fa-link-slash" data-tooltip="Не переносится на владельца"></i>{{/unless}}</td>
+        <td class="changes">{{e.changes}}</td>
+        <td class="controls">
+          <a data-action="effectToggle"><i class="fa-solid {{#if e.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></a>
+          <a data-action="effectDelete"><i class="fa-solid fa-trash"></i></a>
+        </td>
+      </tr>
+    {{else}}<tr class="empty"><td colspan="4">Эффектов нет</td></tr>
+    {{/each}}
+    </tbody>
+  </table>
+  <p class="hint">Эффекты с переносом действуют на владельца предмета. Что именно меняет эффект — выбирается в его окне на вкладке «Изменения».</p>
+</section>

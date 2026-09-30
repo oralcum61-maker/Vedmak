@@ -1,0 +1,20 @@
+<section class="tab{{#if tab.active}} active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <fieldset class="vd-fieldset">
+    <legend>Эффект</legend>
+    <div class="vd-grid g2">
+      <label class="check"><input type="checkbox" name="disabled" {{checked source.disabled}}> Выключен</label>
+      {{#if isItemEffect}}
+      <label class="check"><input type="checkbox" name="transfer" {{checked source.transfer}}> Переходит на владельца предмета</label>
+      {{/if}}
+    </div>
+    <div class="wide">
+      <span class="field-label">Состояния, которые ставит эффект</span>
+      {{formInput fields.statuses value=source.statuses options=statusChoices}}
+    </div>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Описание</legend>
+    {{formInput fields.description value=source.description enriched=enrichedDescription toggled=true}}
+  </fieldset>
+</section>

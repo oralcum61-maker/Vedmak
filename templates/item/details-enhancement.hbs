@@ -1,0 +1,26 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Усиление</legend>
+    <div class="vd-grid g3">
+      <label>Вид <select name="system.kind">{{selectOptions config.ENHANCEMENT_KINDS selected=system.kind}}</select></label>
+      {{#if (eq system.kind "armor")}}<label>+ПБ <input type="number" name="system.sp" value="{{system.sp}}"></label>{{/if}}
+      {{#if (eq system.kind "glyph")}}<label>Стихия <select name="system.element">{{selectOptions config.MAGIC_ELEMENTS selected=system.element}}</select></label>{{/if}}
+    </div>
+    <label class="wide">Эффект <textarea name="system.effect" rows="3">{{system.effect}}</textarea></label>
+    {{#if (eq system.kind "armor")}}
+    <div class="wide">
+      <span class="field-label">Сопротивления</span>
+      <multi-checkbox name="system.resistances">{{selectOptions resistOptions selected=system.resistances}}</multi-checkbox>
+    </div>
+    <p class="hint">Набор ставится на все надетые части брони: полный ход, инструменты ремесленника, Изготовление СЛ 14; снять — СЛ 15 (стр. 90).</p>
+    {{/if}}
+    {{#if (eq system.kind "rune")}}
+    <div class="vd-grid g2">
+      <label>Эффект оружия <select name="system.weaponEffect.key">{{selectOptions weaponEffectOptions selected=system.weaponEffect.key}}</select></label>
+      <label>Значение <input type="text" name="system.weaponEffect.value" value="{{system.weaponEffect.value}}"></label>
+    </div>
+    <p class="hint">Руна наносится в свободную ячейку усиления оружия и не снимается (стр. 256).</p>
+    {{/if}}
+  </fieldset>
+  {{> "systems/vedmak/templates/item/physical.hbs"}}
+</section>

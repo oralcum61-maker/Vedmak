@@ -1,0 +1,68 @@
+<section class="tab stats-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="vd-columns">
+    <div class="vd-panel stats-panel">
+      <h3>Параметры</h3>
+      <div class="stat-grid">
+        <div class="stat-head"><span></span><span>База</span><span>Мод.</span><span>Итог</span></div>
+        {{#each stats}}
+        <div class="stat-row{{#if (ne total effective)}} reduced{{/if}}">
+          <a class="stat-name rollable" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)"><i class="fa-solid fa-certificate"></i> {{label}}</a>
+          <input type="number" name="system.stats.{{key}}.base" value="{{base}}" min="0">
+          <span class="mod">{{vedmakSigned mod}}</span>
+          <span class="total">{{effective}}</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="vd-panel derived-panel">
+      <h3>Производные</h3>
+      <div class="derived-grid">
+        {{#each derived}}
+        <div class="derived" data-tooltip="{{label}}">
+          <span class="abbr">{{abbr}}</span>
+          <span class="value">{{value}}{{#if unit}}<small> {{unit}}</small>{{/if}}</span>
+        </div>
+        {{/each}}
+      </div>
+
+      <h3>Поправки</h3>
+      <div class="bonus-grid">
+        <label>Энергия (база) <input type="number" name="system.vigor" value="{{system.vigor}}" min="0"></label>
+        <label>ПЗ <input type="number" name="system.bonus.hp" value="{{system.bonus.hp}}"></label>
+        <label>Вын <input type="number" name="system.bonus.sta" value="{{system.bonus.sta}}"></label>
+        <label>Уст <input type="number" name="system.bonus.stun" value="{{system.bonus.stun}}"></label>
+        <label>Бег <input type="number" name="system.bonus.run" value="{{system.bonus.run}}"></label>
+        <label>Отдых <input type="number" name="system.bonus.rec" value="{{system.bonus.rec}}"></label>
+      </div>
+      <p class="hint">В бестиарии ПЗ и Вын даны готовыми числами — подгоните бонусом разницу с формулой.</p>
+    </div>
+  </div>
+
+  <div class="vd-panel defenses-panel">
+    <h3>Защиты чудовища</h3>
+    <div class="vd-grid g4">
+      <label>Таблица частей тела <select name="system.bodyType">{{selectOptions bodyTypes selected=system.bodyType}}</select></label>
+      <label>Размер <select name="system.size">{{selectOptions sizes selected=system.size}}</select></label>
+      <label>Уязвим к металлу <select name="system.materialWeakness">{{selectOptions weaknesses selected=system.materialWeakness}}</select></label>
+      <label>Сейчас <span class="value-box">{{weaknessNow}}</span></label>
+      <label class="check"><input type="checkbox" name="system.noAnatomy" {{checked system.noAnatomy}}> Нет органов (дух)</label>
+      <label class="check"><input type="checkbox" name="system.noLegs" {{checked system.noLegs}}> Нет ног</label>
+    </div>
+    <div class="resist-block">
+      <span class="field-label">Сопротивление (урон ×½, +2 к проверкам против эффекта)</span>
+      <multi-checkbox name="system.resistances">{{selectOptions resistKeys selected=system.resistances}}</multi-checkbox>
+    </div>
+    <div class="resist-block">
+      <span class="field-label">Восприимчивость (урон ×2)</span>
+      <multi-checkbox name="system.susceptibilities">{{selectOptions resistKeys selected=system.susceptibilities}}</multi-checkbox>
+    </div>
+    <div class="resist-block">
+      <span class="field-label">Невосприимчивость</span>
+      <multi-checkbox name="system.immunities">{{selectOptions resistKeys selected=system.immunities}}</multi-checkbox>
+    </div>
+    <p class="hint">Все чудовища, кроме зверей и гуманоидов, получают ½ урона от несеребряного оружия (кроме стихийного) и дополнительный урон серебром (стр. 162).</p>
+  </div>
+
+  {{> "systems/vedmak/templates/actor/parts/monster-abilities.hbs"}}
+</section>

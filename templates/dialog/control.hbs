@@ -1,0 +1,44 @@
+<div class="vedmak-roll-dialog control">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    <div class="dlg-group">
+      <span class="dlg-label">ЧЕМ УПРАВЛЯЕМ</span>
+      <div class="opt-grid g3">
+        {{#each mounts}}
+        <label class="opt tall">
+          <input type="radio" name="mount" value="{{key}}" data-base="{{base}}" {{checked selected}}>
+          <span><b>{{label}}</b><small>{{skillLabel}} {{vedmakSigned mod}}</small></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="dlg-group">
+      <span class="dlg-label">МАНЁВР</span>
+      <div class="opt-row">
+        {{#each maneuvers}}
+        <label class="chip" data-tooltip="{{label}}">
+          <input type="radio" name="maneuver" value="{{key}}" data-dc="{{dc}}" {{checked selected}}>
+          <span>{{short}} <b>СЛ {{dc}}</b></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="dlg-group">
+      <span class="dlg-label">ПОМЕХИ</span>
+      <div class="opt-row">
+        <label class="chip"><input type="checkbox" name="noSaddle" data-mod="-2"><span>Без седла <b>−2</b></span></label>
+        <label class="chip"><input type="checkbox" name="reins" data-mod="-1"><span>Выронил поводья <b>−1</b></span></label>
+        <label class="chip"><input type="checkbox" name="ramDrawn" data-mod="-10"><span>Таран упряжкой <b>−10</b></span></label>
+      </div>
+      <p class="hint">Верхом проверка нужна при каждой атаке. Лодки и корабли — Мореходство.</p>
+    </div>
+
+    {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

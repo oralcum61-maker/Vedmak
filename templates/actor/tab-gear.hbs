@@ -1,0 +1,118 @@
+<section class="tab gear-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+
+  {{#if isCharacter}}
+  <div class="vd-panel purse">
+    <div class="money">
+      <label for="crowns">Кроны</label>
+      <input id="crowns" type="number" name="system.money.crowns" value="{{system.money.crowns}}" min="0">
+    </div>
+    <div class="load">
+      <div class="load-head"><span class="label">Нагрузка</span> <b class="{{#if load.over}}bad{{/if}}">{{load.carried}}</b> <span class="dim">из {{load.enc}} кг</span></div>
+      <div class="load-track" data-tooltip="Предел — Тел × 10; поднять с места можно до {{load.liftMax}} кг">
+        <span class="fill{{#if load.over}} over{{/if}}" style="width: {{load.pct}}%"></span>
+      </div>
+    </div>
+    {{#if system.derived.overload}}
+    <div class="overload" data-tooltip="По −1 за каждые 5 кг сверх предела (стр. 48)">
+      <i class="fa-solid fa-triangle-exclamation"></i> Перегруз −{{system.derived.overload}} к Реа, Лвк и Скор
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <div class="vd-panel">
+    <h3>Оружие <a class="add" data-action="itemCreate" data-type="weapon" data-tooltip="Добавить оружие"><i class="fa-solid fa-plus"></i></a></h3>
+    <table class="vd-table gear-list">
+      <thead><tr><th></th><th class="name">Название</th><th>Т</th><th>Урон</th><th>Тип</th><th>Н</th><th>Х</th><th>Дис</th><th>Вес</th><th></th></tr></thead>
+      <tbody>
+      {{#each items.weapons as |item|}}
+        <tr data-item-id="{{item.id}}" class="{{#if item.system.equipped}}equipped{{/if}}">
+          <td><img src="{{item.img}}" class="icon"></td>
+          <td class="name"><a data-action="itemEdit">{{item.name}}</a>
+            {{#if item.system.relic}}<span class="badge relic">реликвия</span>{{/if}}
+            {{#if item.system.activeOil}}<span class="badge oil" data-tooltip="{{item.system.oil.name}}">масло</span>{{/if}}
+            {{#each item.system.runes}}<span class="badge rune" data-tooltip="{{value}}">{{source}}</span>{{/each}}
+            {{#each item.system.crossbowMods}}<span class="badge mod">{{name}} <a data-action="detachCrossbowMod" data-index="{{@index}}" data-tooltip="Снять (полный ход)"><i class="fa-solid fa-xmark"></i></a></span>{{/each}}
+          </td>
+          <td>{{vedmakSigned item.system.accuracy}}</td>
+          <td>{{item.system.damage}}</td>
+          <td>{{vedmakDamageTypes item.system.damageTypes}}</td>
+          <td>{{item.system.reliability.value}}/{{item.system.reliability.max}}</td>
+          <td>{{item.system.hands}}</td>
+          <td>{{#if item.system.range}}{{item.system.range}}{{else}}—{{/if}}</td>
+          <td>{{item.system.weight}}</td>
+          <td class="controls">
+            <a data-action="attack" data-kind="weapon" data-tooltip="Атаковать (Shift — без окна)"><i class="fa-solid fa-certificate"></i></a>
+            <a data-action="itemToggleEquip" data-tooltip="{{#if item.system.equipped}}Убрать{{else}}Взять в руки{{/if}}"><i class="fa-solid fa-hand-fist"></i></a>
+            {{#if @root.isCharacter}}<a data-action="repairItem" data-tooltip="Починить (СЛ чертежа − 5)"><i class="fa-solid fa-screwdriver-wrench"></i></a>
+            <a data-action="disassembleItem" data-tooltip="Разобрать на компоненты"><i class="fa-solid fa-hammer"></i></a>{{/if}}
+            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      {{else}}<tr class="empty"><td colspan="10">Нет оружия</td></tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="vd-panel">
+    <h3>Броня и щиты <a class="add" data-action="itemCreate" data-type="armor" data-tooltip="Добавить броню"><i class="fa-solid fa-plus"></i></a></h3>
+    <table class="vd-table gear-list">
+      <thead><tr><th></th><th class="name">Название</th><th>Класс</th><th>Закрывает</th><th>ПБ / Н</th><th>СД</th><th>Вес</th><th></th></tr></thead>
+      <tbody>
+      {{#each items.armor as |item|}}
+        <tr data-item-id="{{item.id}}" class="{{#if item.system.equipped}}equipped{{/if}}">
+          <td><img src="{{item.img}}" class="icon"></td>
+          <td class="name"><a data-action="itemEdit">{{item.name}}</a>
+            {{#if item.system.relic}}<span class="badge relic">реликвия</span>{{/if}}
+            {{#each item.system.enhancements}}<span class="badge enh" data-tooltip="{{effect}}{{#if sp}} +{{sp}} ПБ{{/if}}">{{name}}{{#if (eq kind "armor")}} <a data-action="detachEnhancement" data-index="{{@index}}" data-tooltip="Снять (Изготовление СЛ 15)"><i class="fa-solid fa-xmark"></i></a>{{/if}}</span>{{/each}}
+          </td>
+          <td>{{vedmakLabel "ARMOR_WEIGHT_CLASS" item.system.weightClass}}</td>
+          <td>{{vedmakArmorCovers item}}</td>
+          <td>{{vedmakArmorSp item}}</td>
+          <td>{{item.system.encumbrance}}</td>
+          <td>{{item.system.weight}}</td>
+          <td class="controls">
+            <a data-action="itemToggleEquip" data-tooltip="{{#if item.system.equipped}}Снять{{else}}Надеть{{/if}}"><i class="fa-solid fa-shirt"></i></a>
+            {{#if @root.isCharacter}}<a data-action="repairItem" data-tooltip="Починить (СЛ чертежа − 5)"><i class="fa-solid fa-screwdriver-wrench"></i></a>
+            <a data-action="disassembleItem" data-tooltip="Разобрать на компоненты"><i class="fa-solid fa-hammer"></i></a>{{/if}}
+            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      {{else}}<tr class="empty"><td colspan="8">Нет брони</td></tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="vd-panel">
+    <h3>Снаряжение <a class="add" data-action="itemCreate" data-type="gear" data-tooltip="Добавить снаряжение"><i class="fa-solid fa-plus"></i></a></h3>
+    {{#each gearGroups as |group|}}
+    <h4>{{group.label}}</h4>
+    <table class="vd-table gear-list stuff">
+      <tbody>
+      {{#each group.items as |item|}}
+        <tr data-item-id="{{item.id}}" class="{{#if item.system.equipped}}equipped{{/if}}">
+          <td><img src="{{item.img}}" class="icon"></td>
+          <td class="name"><a data-action="itemEdit" {{#if item.system.effect}}data-tooltip="{{item.system.effect}}"{{/if}}>{{item.name}}</a>
+            {{#if item.system.tool}}{{#if (ne (vedmakLabel "TOOL_KINDS" item.system.tool) item.name)}}<span class="badge tool">{{vedmakLabel "TOOL_KINDS" item.system.tool}}</span>{{/if}}{{/if}}
+            {{#if item.system.focus}}<span class="badge focus" data-tooltip="Фокусирующий предмет в руках: −{{item.system.focus}} Вын на заклинание">фокус −{{item.system.focus}}</span>{{/if}}
+          </td>
+          <td class="qty"><input type="number" class="item-field" data-field="system.quantity" value="{{item.system.quantity}}" min="0" data-tooltip="Количество"></td>
+          <td class="small" data-tooltip="Вес за штуку: {{item.system.weight}} кг">{{#if item.total}}{{item.total}} кг{{else}}—{{/if}}</td>
+          <td class="small" data-tooltip="Цена за штуку">{{#if item.system.cost}}{{item.system.cost}} кр.{{else}}—{{/if}}</td>
+          <td class="controls">
+            <a data-action="itemToggleEquip" class="{{#if item.system.equipped}}active{{/if}}" data-tooltip="{{#if item.system.equipped}}Убрать{{else}}Взять в руки или надеть{{/if}}"><i class="fa-solid fa-hand"></i></a>
+            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+    {{else}}<p class="hint">Пусто</p>
+    {{/each}}
+  </div>
+</section>

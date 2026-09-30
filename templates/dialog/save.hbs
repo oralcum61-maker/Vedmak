@@ -1,0 +1,31 @@
+<div class="vedmak-roll-dialog save">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    <div class="dlg-group">
+      <span class="dlg-label">УДАЧА <span class="dim">· каждое очко поднимает порог на 1</span></span>
+      <div class="luck-row">
+        <label class="dot zero" data-dot="0" data-tooltip="Не тратить Удачу">
+          <input type="radio" name="luck" value="0" checked aria-label="Не тратить Удачу">
+          <span aria-hidden="true">—</span>
+        </label>
+        {{#each luckDots}}
+        <label class="dot" data-dot="{{value}}" data-tooltip="Потратить {{value}}">
+          <input type="radio" name="luck" value="{{value}}" aria-label="Потратить Удачу: {{value}}">
+          <span aria-hidden="true"></span>
+        </label>
+        {{/each}}
+        <span class="luck-note" data-luck-note="{{luckMax}}">{{luckNote}}</span>
+      </div>
+    </div>
+    <p class="hint">{{hint}}</p>
+  </div>
+
+  <footer class="dlg-total">
+    <div class="tot">
+      <span class="cap">БРОСОК</span>
+      <b>d10 меньше <span data-save-threshold>{{threshold}}</span></b>
+    </div>
+    <span class="tot-hint">Равно порогу — провал</span>
+  </footer>
+</div>

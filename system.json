@@ -1,0 +1,368 @@
+{
+  "id": "vedmak",
+  "title": "Ведьмак: НРИ",
+  "description": "Система для настольной ролевой игры «Ведьмак» (R. Talsorian Games) под Foundry VTT v14. Полностью на русском: параметры и навыки, древа профессий, бой по частям тела с критическими ранениями, магия, алхимия и ремесло, бестиарий.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.365"
+  },
+  "authors": [
+    {
+      "name": "Ведьмак НРИ"
+    }
+  ],
+  "esmodules": [
+    "vedmak.mjs"
+  ],
+  "styles": [
+    "styles/vedmak.css"
+  ],
+  "languages": [
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "path": "lang/ru.json"
+    },
+    {
+      "lang": "en",
+      "name": "Русский (система только на русском)",
+      "path": "lang/ru.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": [
+          "biography",
+          "notes"
+        ]
+      },
+      "monster": {
+        "htmlFields": [
+          "description",
+          "commonKnowledge",
+          "witcherKnowledge",
+          "notes"
+        ]
+      }
+    },
+    "Item": {
+      "weapon": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "armor": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "gear": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "spell": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "profession": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "race": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "critWound": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "component": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "recipe": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "alchemical": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "enhancement": {
+        "htmlFields": [
+          "description"
+        ]
+      }
+    }
+  },
+  "grid": {
+    "distance": 2,
+    "units": "м"
+  },
+  "primaryTokenAttribute": "hp",
+  "secondaryTokenAttribute": "sta",
+  "socket": true,
+  "packs": [
+    {
+      "name": "magic",
+      "label": "Магия",
+      "path": "packs/magic",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/magic.webp"
+    },
+    {
+      "name": "races",
+      "label": "Расы",
+      "path": "packs/races",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/races.webp"
+    },
+    {
+      "name": "professions",
+      "label": "Профессии",
+      "path": "packs/professions",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/professions.webp"
+    },
+    {
+      "name": "weapons",
+      "label": "Оружие",
+      "path": "packs/weapons",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/weapons.webp"
+    },
+    {
+      "name": "armor",
+      "label": "Броня и щиты",
+      "path": "packs/armor",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/armor.webp"
+    },
+    {
+      "name": "gear",
+      "label": "Снаряжение",
+      "path": "packs/gear",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/gear.webp"
+    },
+    {
+      "name": "alchemy",
+      "label": "Алхимия",
+      "path": "packs/alchemy",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/alchemy.webp"
+    },
+    {
+      "name": "components",
+      "label": "Компоненты и ингредиенты",
+      "path": "packs/components",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/components.webp"
+    },
+    {
+      "name": "recipes",
+      "label": "Чертежи и формулы",
+      "path": "packs/recipes",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/recipes.webp"
+    },
+    {
+      "name": "enhancements",
+      "label": "Усиления, руны и глифы",
+      "path": "packs/enhancements",
+      "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/enhancements.webp"
+    },
+    {
+      "name": "bestiary",
+      "label": "Бестиарий",
+      "path": "packs/bestiary",
+      "type": "Actor",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/bestiary.webp"
+    },
+    {
+      "name": "tables",
+      "label": "Случайные таблицы",
+      "path": "packs/tables",
+      "type": "RollTable",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/tables.webp"
+    },
+    {
+      "name": "generators",
+      "label": "Генераторы",
+      "path": "packs/generators",
+      "type": "RollTable",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/generators.webp"
+    },
+    {
+      "name": "chargen",
+      "label": "Генераторы НИП",
+      "path": "packs/chargen",
+      "type": "RollTable",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/chargen.webp"
+    },
+    {
+      "name": "rules",
+      "label": "Памятки по правилам",
+      "path": "packs/rules",
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/rules.webp"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Ведьмак: НРИ",
+      "sorting": "m",
+      "color": "#7a2f28",
+      "folders": [
+        {
+          "name": "Персонаж",
+          "sorting": "m",
+          "color": "#8a6a3a",
+          "packs": [
+            "races",
+            "professions"
+          ]
+        },
+        {
+          "name": "Магия",
+          "sorting": "m",
+          "color": "#6f4f96",
+          "packs": [
+            "magic"
+          ]
+        },
+        {
+          "name": "Снаряжение",
+          "sorting": "m",
+          "color": "#6b7a86",
+          "packs": [
+            "weapons",
+            "armor",
+            "gear"
+          ]
+        },
+        {
+          "name": "Алхимия и ремесло",
+          "sorting": "m",
+          "color": "#4e7a3f",
+          "packs": [
+            "alchemy",
+            "components",
+            "recipes",
+            "enhancements"
+          ]
+        },
+        {
+          "name": "Ведущему",
+          "sorting": "m",
+          "color": "#5a2f2b",
+          "packs": [
+            "bestiary",
+            "tables",
+            "generators",
+            "chargen",
+            "rules"
+          ]
+        }
+      ],
+      "packs": []
+    }
+  ]
+}

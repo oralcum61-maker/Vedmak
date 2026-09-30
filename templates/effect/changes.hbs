@@ -1,0 +1,56 @@
+<section class="tab changes vedmak-changes{{#if tab.active}} active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <header>
+    <div class="key">Что меняет</div>
+    <div class="type">Как</div>
+    <div class="value">Насколько</div>
+    <div class="controls">
+      <button type="button" class="inline-control icon fa-regular fa-square-plus" data-action="addChange" data-tooltip="Добавить изменение"></button>
+    </div>
+  </header>
+
+  <ol class="scrollable" data-changes>
+    {{#each changes as |change|}}
+    <li data-index="{{change.index}}" class="{{#if change.custom}}custom{{/if}}">
+      <div class="key">
+        {{!-- Значение всегда несёт скрытое поле, список лишь заполняет его: иначе форма склеит два одноимённых поля --}}
+        <input type="hidden" class="key-value" name="system.changes.{{change.index}}.key" value="{{change.key}}">
+        <select class="key-field">
+          <option value="" {{#if change.empty}}selected{{/if}}>— выберите —</option>
+          {{#each change.groups as |group|}}
+          <optgroup label="{{group.label}}">
+            {{#each group.options as |opt|}}
+            <option value="{{opt.value}}" {{#if opt.selected}}selected{{/if}}>{{opt.label}}</option>
+            {{/each}}
+          </optgroup>
+          {{/each}}
+          <option value="__custom__" {{#if change.custom}}selected{{/if}}>Свой путь данных…</option>
+        </select>
+        <input type="text" class="key-custom" value="{{change.key}}" placeholder="system.bonus.hp" spellcheck="false">
+        <a class="key-toggle" data-action="customKey" data-tooltip="Список целей или свой путь данных"><i class="fa-solid fa-code"></i></a>
+      </div>
+
+      <div class="type">
+        <select name="system.changes.{{change.index}}.type">
+          {{#each @root.changeTypes as |label key|}}
+          <option value="{{key}}" {{#if (eq key ../change.type)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="value">
+        <input type="text" name="system.changes.{{change.index}}.value" value="{{change.value}}" placeholder="2">
+      </div>
+
+      <input type="hidden" name="system.changes.{{change.index}}.phase" value="{{change.phase}}">
+
+      <div class="controls">
+        <button type="button" class="inline-control icon fa-solid fa-trash" data-action="deleteChange" data-tooltip="Убрать"></button>
+      </div>
+    </li>
+    {{else}}
+    <li class="empty">Эффект ничего не меняет. Нажмите «плюс» и выберите, на что он действует.</li>
+    {{/each}}
+  </ol>
+
+  <p class="hint">Цель — параметр, навык, максимум или бонус к урону. «Прибавить» с отрицательным числом работает как штраф.</p>
+</section>

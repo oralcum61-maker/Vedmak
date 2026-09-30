@@ -1,0 +1,63 @@
+<div class="vedmak-roll-dialog manual-damage">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    <div class="dlg-row">
+      <label class="num grow"><span class="cap">урон</span>
+        <input type="text" name="formula" value="{{preset.formula}}" placeholder="3d6+2">
+      </label>
+      <label class="num grow"><span class="cap">причина</span>
+        <input type="text" name="reason" value="{{preset.reason}}" placeholder="Падение, «Танцующая звезда»…">
+      </label>
+    </div>
+
+    <div class="dlg-row">
+      <label class="num grow"><span class="cap">тип урона</span>
+        <select name="damageType">{{selectOptions damageTypes selected=preset.damageType labelAttr="label"}}</select>
+      </label>
+      <label class="num grow"><span class="cap">куда</span>
+        <select name="where">
+          <option value="roll" {{#if (eq preset.where "roll")}}selected{{/if}}>Бросок части тела</option>
+          <option value="all" {{#if (eq preset.where "all")}}selected{{/if}}>Все части тела (бомба, ловушка, огонь)</option>
+          {{#each locations}}<option value="{{@key}}" {{#if (eq @key @root.preset.where)}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </label>
+    </div>
+
+    <div class="dlg-row">
+      <label class="num grow"><span class="cap">эффект</span>
+        <select name="status">
+          <option value="">— нет —</option>
+          {{#each statuses}}<option value="{{id}}" {{#if (eq id @root.preset.status)}}selected{{/if}}>{{name}}</option>{{/each}}
+        </select>
+      </label>
+      <label class="num"><span class="cap">шанс, %</span>
+        <input type="number" name="statusChance" value="{{preset.statusChance}}" min="0" max="100">
+      </label>
+      <label class="num"><span class="cap">раундов</span>
+        <input type="text" name="statusRounds" value="{{preset.statusRounds}}" placeholder="—">
+      </label>
+    </div>
+
+    <label class="plate">
+      <input type="checkbox" name="ignoreArmor" {{checked preset.ignoreArmor}}>
+      <span class="plate-text">Мимо брони</span>
+      <b class="plate-value">яд, удушье, кислота</b>
+    </label>
+    <label class="plate">
+      <input type="checkbox" name="nonLethal" {{checked preset.nonLethal}}>
+      <span class="plate-text">Несмертельный</span>
+      <b class="plate-value">в Вын</b>
+    </label>
+
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  <footer class="dlg-total">
+    <div class="tot">
+      <span class="cap">КОМУ</span>
+      <b>{{names}}</b>
+    </div>
+    <span class="tot-hint">Падение — (высота/2)d6 в туловище; бомба и ловушка — по всем частям тела</span>
+  </footer>
+</div>

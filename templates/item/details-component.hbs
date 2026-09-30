@@ -1,0 +1,20 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Компонент</legend>
+    <div class="vd-grid g2">
+      <label>Группа <select name="system.group">{{selectOptions config.COMPONENT_GROUPS selected=system.group}}</select></label>
+      <label>Субстанция <select name="system.substance">{{selectOptions substanceOptions selected=system.substance}}</select></label>
+    </div>
+    {{#if substance}}<p class="substance-line"><span class="sub-dot" style="background:{{substance.color}}">{{substance.symbol}}</span> Даёт субстанцию «{{substance.label}}» для алхимических формул.</p>{{/if}}
+  </fieldset>
+  <fieldset class="vd-fieldset">
+    <legend>Собирательство (Выживание в дикой природе)</legend>
+    <div class="vd-grid g3">
+      <label class="span2">Где найти <input type="text" name="system.forage.where" value="{{system.forage.where}}"></label>
+      <label>Количество <input type="text" name="system.forage.quantity" value="{{system.forage.quantity}}" placeholder="1d6"></label>
+      <label>СЛ собирания <input type="number" name="system.forage.dc" value="{{system.forage.dc}}" min="0"></label>
+    </div>
+    <p class="hint">Пустое количество — компонент не собирается: его покупают, изготавливают или добывают с чудовищ (стр. 128).</p>
+  </fieldset>
+  {{> "systems/vedmak/templates/item/physical.hbs"}}
+</section>

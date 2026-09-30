@@ -1,0 +1,13 @@
+<fieldset class="vd-fieldset">
+  <legend>Товар</legend>
+  <div class="vd-grid g4">
+    <label>Кол-во <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"></label>
+    <label>Вес, кг <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.1"></label>
+    <label>Цена, кр. <input type="number" name="system.cost" value="{{system.cost}}" min="0"></label>
+    <label class="check"><input type="checkbox" name="system.equipped" {{checked system.equipped}}> Экипировано</label>
+    <label>Доступность <select name="system.availability">{{selectOptions config.AVAILABILITY selected=system.availability}}</select></label>
+    <label>Скрытность <select name="system.concealment">{{selectOptions config.CONCEALMENT selected=system.concealment}}</select></label>
+    <label>Книга <input type="text" name="system.source.book" value="{{system.source.book}}"></label>
+    <label>Стр. <input type="text" name="system.source.page" value="{{system.source.page}}"></label>
+  </div>
+</fieldset>

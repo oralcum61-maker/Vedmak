@@ -1,0 +1,228 @@
+// Усиления брони, руны и глифы (корник стр. 90, 256).
+//
+//  • Усиление брони — набор накладок на все надетые части: полный ход, инструменты ремесленника, Изготовление СЛ 14.
+//    Даёт +ПБ и сопротивления; снять — Изготовление СЛ 15. Уничтожение брони уничтожает и усиление.
+//  • Руна — на оружие, глиф — на броню, в свободную ячейку усиления; снять нельзя, камень одноразовый.
+
+import { SKILLS } from "../config/skills.mjs";
+import { STATS } from "../config/stats.mjs";
+import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS } from "../config/crafting.mjs";
+import { ARMOR_LOCATIONS } from "../config/items.mjs";
+import { performCheck } from "../dice/check.mjs";
+import { postCard } from "../util.mjs";
+import { hasTool, findItemData, giveItem } from "./craft.mjs";
+
+const { DialogV2 } = foundry.applications.api;
+
+async function craftingCheck(actor, dc, title) {
+  const skill = actor.system.skills.crafting;
+  const parts = [
+    { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
+    { label: SKILLS.crafting.label, value: skill.total, always: true }
+  ];
+  if (!hasTool(actor, "craftsman")) parts.push({ label: "Без инструментов ремесленника", value: -4 });
+  return performCheck({ actor, title, parts, dc });
+}
+
+async function spendOne(item) {
+  const q = item.system.quantity ?? 1;
+  if (q <= 1) await item.delete();
+  else await item.update({ "system.quantity": q - 1 });
+}
+
+/** Выбрать предметы галочками. */
+async function pickTargets(title, candidates, { multiple = false, hint = "" } = {}) {
+  if (!candidates.length) return null;
+  const rows = candidates.map((c, i) => multiple
+    ? `<label class="check"><input type="checkbox" name="t${i}" ${c.checked ? "checked" : ""}> ${c.label}</label>`
+    : `<option value="${i}">${c.label}</option>`).join("");
+  const content = `<div class="vedmak-roll-dialog">${multiple ? rows : `<div class="form-group"><label>Куда</label><select name="target">${rows}</select></div>`}
+    ${hint ? `<p class="hint">${hint}</p>` : ""}</div>`;
+  const result = await DialogV2.wait({
+    window: { title, icon: "fa-solid fa-gem" }, classes: ["vedmak", "vedmak-dialog"], content,
+    buttons: [{ action: "ok", label: "Далее", icon: "fa-solid fa-check", default: true,
+      callback: (e, b) => multiple ? candidates.filter((c, i) => b.form.elements[`t${i}`].checked) : [candidates[Number(b.form.elements.target.value)]] },
+      { action: "cancel", label: "Отмена" }],
+    rejectClose: false
+  });
+  return result && result !== "cancel" && result.length ? result : null;
+}
+
+/** Прикрепить усиление, руну или глиф из инвентаря. */
+export async function attachEnhancement(actor, item) {
+  const s = item.system;
+  if (s.kind === "rune") return attachRune(actor, item);
+  if (s.kind === "glyph") return attachGlyph(actor, item);
+  if (s.kind === "crossbow") return attachCrossbowMod(actor, item);
+  if (s.kind === "runeword" || s.kind === "glyphword") return attachEnchantment(actor, item);
+
+  const armors = actor.itemTypes.armor.filter(a => !a.system.isShield && a.system.covers.length);
+  const candidates = armors.map(a => ({
+    item: a, checked: a.system.equipped && a.system.freeSlots > 0,
+    label: `${a.name}${a.system.equipped ? "" : " (не надета)"} — ячеек свободно: ${a.system.freeSlots}`
+  }));
+  const chosen = await pickTargets(`${item.name}: на какую броню`, candidates, {
+    multiple: true, hint: `Набор ставится на все выбранные части. Изготовление СЛ ${CRAFTING.attachDc}, полный ход, нужны инструменты ремесленника.`
+  });
+  if (!chosen) return null;
+  const noSlot = chosen.filter(c => c.item.system.freeSlots <= 0);
+  if (noSlot.length) return ui.notifications.warn(`Нет свободных ячеек: ${noSlot.map(c => c.item.name).join(", ")}.`);
+  const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление брони: ${item.name}`);
+  if (!check.success) return null;
+
+  for (const [i, c] of chosen.entries()) {
+    const armor = c.item;
+    const sp = foundry.utils.deepClone(armor.system.toObject().sp);
+    for (const loc of Object.keys(ARMOR_LOCATIONS)) {
+      if (sp[loc].max > 0) { sp[loc].max += s.sp; sp[loc].value += s.sp; }
+    }
+    const enhancements = [...armor.system.toObject().enhancements,
+      { name: item.name, kind: "armor", sp: s.sp, resist: [...s.resistances], effect: s.effect, element: "" }];
+    const update = { "system.sp": sp, "system.enhancements": enhancements };
+    // Вес набора прибавляется один раз
+    if (i === 0) update["system.weight"] = Math.round((armor.system.weight + s.weight) * 10) / 10;
+    await armor.update(update);
+  }
+  await spendOne(item);
+  return postCard(actor, "Усиление брони", `<p><b>${item.name}</b> → ${chosen.map(c => c.item.name).join(", ")}: +${s.sp} ПБ${s.resistances.length ? `, сопротивления: ${s.resistances.map(r => resistLabel(r)).join(", ")}` : ""}.</p>`,
+    { icon: "fa-solid fa-shield-halved" });
+}
+
+function resistLabel(key) {
+  return { slashing: "режущему", piercing: "колющему", bludgeoning: "дробящему", elemental: "огню/стихиям", bleeding: "кровотечению", poison: "яду" }[key] ?? key;
+}
+
+/** Снять усиление брони (Изготовление СЛ 15), вернуть набор в инвентарь. */
+export async function detachEnhancement(actor, armor, index) {
+  const e = armor.system.enhancements[index];
+  if (!e) return null;
+  if (e.kind !== "armor") return ui.notifications.warn("Руны и глифы снять нельзя (стр. 256).");
+  const check = await craftingCheck(actor, CRAFTING.detachDc, `Снять усиление: ${e.name}`);
+  if (!check.success) return null;
+  const sp = foundry.utils.deepClone(armor.system.toObject().sp);
+  for (const loc of Object.keys(ARMOR_LOCATIONS)) {
+    if (sp[loc].max > 0) { sp[loc].max = Math.max(0, sp[loc].max - e.sp); sp[loc].value = Math.min(sp[loc].value, sp[loc].max); }
+  }
+  const enhancements = armor.system.toObject().enhancements;
+  enhancements.splice(index, 1);
+  await armor.update({ "system.sp": sp, "system.enhancements": enhancements });
+  await giveItem(actor, await findItemData(e.name, "enhancement"), 1);
+  return postCard(actor, "Усиление снято", `<p><b>${e.name}</b> снято с «${armor.name}» и возвращено в снаряжение.</p>`, { icon: "fa-solid fa-shield-halved" });
+}
+
+async function attachRune(actor, item) {
+  const weapons = actor.itemTypes.weapon.filter(w => w.system.freeSlots > 0);
+  if (!weapons.length) return ui.notifications.warn("Нет оружия со свободной ячейкой усиления.");
+  const chosen = await pickTargets(`${item.name}: на какое оружие`, weapons.map(w => ({ item: w, label: `${w.name} — ячеек: ${w.system.freeSlots}` })),
+    { hint: "Руну нельзя снять; камень расходуется." });
+  if (!chosen) return null;
+  const weapon = chosen[0].item;
+  const we = item.system.weaponEffect;
+  const effects = weapon.system.toObject().effects;
+  effects.push({ key: we.key || "rune", value: we.key ? we.value : item.system.effect, source: item.name });
+  await weapon.update({ "system.effects": effects });
+  await spendOne(item);
+  return postCard(actor, "Руна нанесена", `<p><b>${item.name}</b> → «${weapon.name}»: ${item.system.effect}</p>`, { icon: "fa-solid fa-gem" });
+}
+
+async function attachGlyph(actor, item) {
+  const armors = actor.itemTypes.armor.filter(a => a.system.freeSlots > 0);
+  if (!armors.length) return ui.notifications.warn("Нет брони со свободной ячейкой усиления.");
+  const chosen = await pickTargets(`${item.name}: на какую броню`, armors.map(a => ({ item: a, label: `${a.name} — ячеек: ${a.system.freeSlots}` })),
+    { hint: "Глиф нельзя снять; камень расходуется." });
+  if (!chosen) return null;
+  const armor = chosen[0].item;
+  const enhancements = [...armor.system.toObject().enhancements,
+    { name: item.name, kind: "glyph", sp: 0, resist: [], effect: item.system.effect, element: item.system.element }];
+  await armor.update({ "system.enhancements": enhancements });
+  await spendOne(item);
+  return postCard(actor, "Глиф нанесён", `<p><b>${item.name}</b> → «${armor.name}»: ${item.system.effect}</p>`, { icon: "fa-solid fa-gem" });
+}
+
+/** Поставить модификацию на арбалет: полный ход, без проверки (DLC «Фургончик Родольфа»). */
+async function attachCrossbowMod(actor, item) {
+  const key = modKey(item.name);
+  const bows = actor.itemTypes.weapon.filter(w => w.system.isCrossbow);
+  if (!bows.length) return ui.notifications.warn("Нет арбалета, на который это ставится.");
+  const candidates = bows.map(w => ({
+    item: w,
+    label: `${w.name} — модификаций: ${w.system.crossbowMods.length} из ${crossbowModLimit(w)}`
+  }));
+  const chosen = await pickTargets(`${item.name}: на какой арбалет`, candidates,
+    { hint: "Полный ход, без проверки. Снять — тоже полный ход." });
+  if (!chosen) return null;
+  const bow = chosen[0].item;
+  const mods = bow.system.toObject().crossbowMods;
+  if (mods.length >= crossbowModLimit(bow)) {
+    return ui.notifications.warn(`На «${bow.name}» больше модификаций не влезает.`);
+  }
+  if (mods.some(m => m.key === key)) {
+    return ui.notifications.warn("Модификация такого вида на этом арбалете уже стоит.");
+  }
+  mods.push({ name: item.name, key });
+  await bow.update({ "system.crossbowMods": mods });
+  await spendOne(item);
+  return postCard(actor, "Модификация поставлена",
+    `<p><b>${item.name}</b> → «${bow.name}»: ${item.system.effect}</p>`,
+    { icon: "fa-solid fa-screwdriver-wrench" });
+}
+
+/** Снять модификацию с арбалета и вернуть её в снаряжение. */
+export async function detachCrossbowMod(actor, weapon, index) {
+  const mods = weapon.system.toObject().crossbowMods;
+  const mod = mods[index];
+  if (!mod) return null;
+  mods.splice(index, 1);
+  await weapon.update({ "system.crossbowMods": mods });
+  await giveItem(actor, await findItemData(mod.name, "enhancement"), 1);
+  return postCard(actor, "Модификация снята",
+    `<p><b>${mod.name}</b> снята с «${weapon.name}» и возвращена в снаряжение.</p>`,
+    { icon: "fa-solid fa-screwdriver-wrench" });
+}
+
+/** Вид модификации по названию — ключ из CROSSBOW_MODS. */
+function modKey(name) {
+  const n = name.toLowerCase();
+  if (n.includes("прицел")) return "sight";
+  if (n.includes("ворот")) return "windlass";
+  if (n.includes("тетива")) return "string";
+  if (n.includes("балансировочное")) return "balance";
+  if (n.includes("стремя")) return "stirrup";
+  return Object.keys(CROSSBOW_MODS)[0];
+}
+
+/** Рунное или глифово слово: зачарование занимает две-три ячейки и не терпит других рун и глифов. */
+async function attachEnchantment(actor, item) {
+  const s = item.system;
+  const weapon = s.kind === "runeword";
+  const slots = ENCHANT_SLOTS[s.size] ?? ENCHANT_SLOTS.small;
+  const targets = weapon
+    ? actor.itemTypes.weapon
+    : actor.itemTypes.armor.filter(a => !a.system.isShield || s.effect.includes("щит"));
+  const free = targets.filter(t => t.system.freeSlots >= slots);
+  if (!free.length) {
+    return ui.notifications.warn(`Нужен предмет со свободными ячейками усиления: ${slots}.`);
+  }
+  const chosen = await pickTargets(`${item.name}: на что наложить`,
+    free.map(t => ({ item: t, label: `${t.name} — ячеек свободно: ${t.system.freeSlots}` })),
+    { hint: `Зачарование занимает ${slots} ячейки. Другие руны и глифы на предмете при этом сгорают, `
+          + "и новых наложить уже нельзя." });
+  if (!chosen) return null;
+  const target = chosen[0].item;
+  const check = await craftingCheck(actor, s.size === "large" ? 21 : 15, `Зачарование: ${item.name}`);
+  if (!check.success) return null;
+
+  if (weapon) {
+    const effects = target.system.toObject().effects.filter(e => !e.source);
+    effects.push({ key: "rune", value: s.effect, source: item.name, slots });
+    await target.update({ "system.effects": effects });
+  } else {
+    const kept = target.system.toObject().enhancements.filter(e => e.kind === "armor");
+    kept.push({ name: item.name, kind: "glyph", sp: 0, resist: [], effect: s.effect,
+                element: s.element, slots });
+    await target.update({ "system.enhancements": kept });
+  }
+  await spendOne(item);
+  return postCard(actor, "Зачарование наложено",
+    `<p><b>${item.name}</b> → «${target.name}»: ${s.effect}</p>`, { icon: "fa-solid fa-wand-sparkles" });
+}

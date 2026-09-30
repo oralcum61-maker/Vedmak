@@ -1,0 +1,24 @@
+<div class="vedmak-roll-dialog check">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    {{#if optional.length}}
+    <div class="dlg-group">
+      <span class="dlg-label">ОБСТОЯТЕЛЬСТВА</span>
+      <div class="opt-row">
+        {{#each optional}}
+        <label class="chip" {{#if hint}}data-tooltip="{{hint}}"{{/if}}>
+          <input type="checkbox" name="optional.{{index}}" data-mod="{{value}}" {{checked checked}}>
+          <span>{{label}} <b>{{vedmakSigned value}}</b></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

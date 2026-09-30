@@ -1,0 +1,85 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Определяющий навык</legend>
+    <div class="vd-grid g3">
+      <label>Название <input type="text" name="system.definingSkill.name" value="{{system.definingSkill.name}}"></label>
+      <label>Параметр <select name="system.definingSkill.stat">{{selectOptions statOptions selected=system.definingSkill.stat}}</select></label>
+      <label>Значение <input type="number" name="system.definingSkill.value" value="{{system.definingSkill.value}}" min="0"></label>
+    </div>
+    <label class="wide">Действие <textarea name="system.definingSkill.effect" rows="4">{{system.definingSkill.effect}}</textarea></label>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Профессия</legend>
+    <div class="vd-grid g3">
+      <label>Ключ <input type="text" name="system.key" value="{{system.key}}" placeholder="witcher, mage…"></label>
+      <label>Энергия <input type="number" name="system.vigor" value="{{system.vigor}}" min="0"></label>
+      <label>Капитал (× 2d6) <input type="number" name="system.startingMoney" value="{{system.startingMoney}}"></label>
+    </div>
+    <div class="wide">
+      <span class="field-label">Доступна расам (пусто — всем)</span>
+      <multi-checkbox name="system.allowedRaces">{{selectOptions raceKeyOptions selected=system.allowedRaces}}</multi-checkbox>
+    </div>
+    <label class="wide">Магические способности <input type="text" name="system.magicAbilities" value="{{system.magicAbilities}}"></label>
+    <div class="vd-grid g3 quota">
+      <label>Заклинаний <input type="number" name="system.magicQuota.spell" value="{{system.magicQuota.spell}}" min="0"></label>
+      <label>Инвокаций <input type="number" name="system.magicQuota.invocation" value="{{system.magicQuota.invocation}}" min="0"></label>
+      <label>Ритуалов <input type="number" name="system.magicQuota.ritual" value="{{system.magicQuota.ritual}}" min="0"></label>
+      <label>Порчи <input type="number" name="system.magicQuota.hex" value="{{system.magicQuota.hex}}" min="0"></label>
+      <label>Знаков <input type="number" name="system.magicQuota.sign" value="{{system.magicQuota.sign}}" min="0"></label>
+      <label class="check"><input type="checkbox" name="system.magicQuota.allBasicSigns" {{checked system.magicQuota.allBasicSigns}}> Все базовые знаки</label>
+    </div>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Навыки профессии</legend>
+    <multi-select name="system.skills">{{selectOptions skillOptions selected=system.skills}}</multi-select>
+    <h4>Навыки на выбор <a data-action="rowAdd" data-field="skillChoices" data-tooltip="Добавить выбор"><i class="fa-solid fa-plus"></i></a></h4>
+    {{#each system.skillChoices as |c|}}
+    <div class="row-edit choice" data-index="{{@index}}">
+      <input type="text" name="system.skillChoices.{{@index}}.label" value="{{c.label}}" placeholder="Язык (выберите 1)">
+      <input type="number" name="system.skillChoices.{{@index}}.count" value="{{c.count}}" min="1">
+      <a data-action="rowDelete" data-field="skillChoices" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+      <multi-select name="system.skillChoices.{{@index}}.options">{{selectOptions @root.skillOptions selected=c.options}}</multi-select>
+    </div>
+    {{/each}}
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Снаряжение</legend>
+    <label>Выбрать предметов <input type="number" name="system.gearChoice.count" value="{{system.gearChoice.count}}" min="0"></label>
+    <label class="wide">Варианты (по одному в строке) <textarea name="system.gearChoice.options" rows="6">{{gearOptionsText}}</textarea></label>
+    <label class="wide">Особое снаряжение (по одному в строке) <textarea name="system.gearFixed" rows="3">{{gearFixedText}}</textarea></label>
+  </fieldset>
+
+  <fieldset class="vd-fieldset tree-edit">
+    <legend>Древо навыков <a data-action="branchAdd" data-tooltip="Добавить ветвь"><i class="fa-solid fa-plus"></i></a></legend>
+    {{#each system.branches as |b|}}
+    <div class="branch-edit" data-branch="{{@index}}">
+      <div class="branch-head">
+        <input type="text" name="system.branches.{{@index}}.name" value="{{b.name}}" placeholder="Название ветви">
+        <a data-action="abilityAdd" data-tooltip="Добавить способность"><i class="fa-solid fa-plus"></i></a>
+        <a data-action="branchDelete" data-tooltip="Удалить ветвь"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      {{#each b.abilities as |a|}}
+      <div class="ability-edit" data-ability="{{@index}}">
+        <input type="text" name="system.branches.{{@../index}}.abilities.{{@index}}.name" value="{{a.name}}" placeholder="Способность">
+        <select name="system.branches.{{@../index}}.abilities.{{@index}}.stat">{{selectOptions @root.abilityStatOptions selected=a.stat}}</select>
+        <select name="system.branches.{{@../index}}.abilities.{{@index}}.mechanic">{{selectOptions @root.mechanicOptions selected=a.mechanic}}</select>
+        <input type="number" name="system.branches.{{@../index}}.abilities.{{@index}}.value" value="{{a.value}}" min="0" data-tooltip="Очки у персонажа">
+        <a data-action="abilityDelete" data-tooltip="Удалить способность"><i class="fa-solid fa-trash"></i></a>
+        <textarea name="system.branches.{{@../index}}.abilities.{{@index}}.description" rows="3" placeholder="Описание">{{a.description}}</textarea>
+      </div>
+      {{/each}}
+    </div>
+    {{/each}}
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Источник</legend>
+    <div class="vd-grid g2">
+      <label>Книга <input type="text" name="system.source.book" value="{{system.source.book}}"></label>
+      <label>Стр. <input type="text" name="system.source.page" value="{{system.source.page}}"></label>
+    </div>
+  </fieldset>
+</section>

@@ -1,0 +1,57 @@
+<section class="tab bio-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="vd-panel details">
+    <h3>О персонаже</h3>
+    <div class="details-grid">
+      <label>Возраст <input type="text" name="system.details.age" value="{{system.details.age}}"></label>
+      <label>Пол <input type="text" name="system.details.gender" value="{{system.details.gender}}"></label>
+      <label>Родина <input type="text" name="system.details.homeland" value="{{system.details.homeland}}"></label>
+      <label>Родной язык <input type="text" name="system.details.languageNative" value="{{system.details.languageNative}}"></label>
+      <label>Внешность <input type="text" name="system.details.appearance" value="{{system.details.appearance}}"></label>
+      <label>Характер <input type="text" name="system.details.personality" value="{{system.details.personality}}"></label>
+      <label>Ценности <input type="text" name="system.details.values" value="{{system.details.values}}"></label>
+      <label>Слава <input type="text" name="system.reputation.fame" value="{{system.reputation.fame}}"></label>
+      {{#if isWitcher}}
+      <label>Ведьмачья школа <select name="system.details.school">{{selectOptions schoolOptions selected=system.details.school}}</select></label>
+      {{/if}}
+    </div>
+    {{#if schoolHint}}<p class="hint">{{schoolHint}}</p>{{/if}}
+  </div>
+
+  {{#if race.system.traits.length}}
+  <div class="vd-panel traits-panel">
+    <h3>{{race.name}} <span class="hint-inline">особенности расы</span></h3>
+    <div class="traits">
+      {{#each race.system.traits}}
+      <p class="trait-line"><b>{{name}}</b> — {{effect}}</p>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+
+  {{!-- Социальный статус переехал во вкладку «Бой» → «Социальный бой» --}}
+  <div class="vd-panel addictions">
+      <h3>Зависимости <a data-action="addictionAdd" data-tooltip="Добавить зависимость"><i class="fa-solid fa-plus"></i></a></h3>
+      {{#each system.addictions as |a|}}
+      <div class="addiction-row" data-index="{{@index}}">
+        <input type="text" name="system.addictions.{{@index}}.name" value="{{a.name}}" placeholder="Объект зависимости">
+        <label data-tooltip="Дней без дозы">Дней <input type="number" name="system.addictions.{{@index}}.days" value="{{a.days}}" min="0"></label>
+        <a data-action="addictionRoll" data-tooltip="Проверка без дозы: d10 меньше Воли − дни"><i class="fa-solid fa-certificate"></i></a>
+        <a data-action="addictionDay" data-tooltip="Прошёл день без дозы"><i class="fa-solid fa-calendar-plus"></i></a>
+        <a data-action="addictionDose" data-tooltip="Доза принята: дни и ломка сбрасываются"><i class="fa-solid fa-prescription-bottle"></i></a>
+        <a data-action="addictionDelete" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      {{else}}<p class="hint">Зависимостей нет.</p>
+      {{/each}}
+      <p class="hint">Доза нужна каждый день. Избавиться — провести 3 недели без доступа к объекту зависимости (стр. 32).</p>
+  </div>
+
+  <div class="vd-panel editor-panel">
+    <h3>Жизненный путь</h3>
+    {{formInput systemFields.biography value=system.biography enriched=enrichedBiography toggled=true}}
+  </div>
+
+  <div class="vd-panel editor-panel">
+    <h3>Заметки</h3>
+    {{formInput systemFields.notes value=system.notes enriched=enrichedNotes toggled=true}}
+  </div>
+</section>

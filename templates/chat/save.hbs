@@ -1,0 +1,33 @@
+<div class="vedmak-card save {{kind}}{{#if success}} is-success{{else}} is-failure{{/if}}">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">{{title}}</span>
+      {{#if reason}}<span class="card-sub">{{reason}}</span>{{/if}}
+    </div>
+    {{#unless immune}}
+    <div class="card-value">
+      <b>{{die}}</b>
+      <span class="cap">нужно &lt; {{threshold}}</span>
+    </div>
+    {{/unless}}
+  </header>
+
+  <div class="card-body">
+    {{#if immune}}
+      <div class="outcome success">Невосприимчив</div>
+    {{else}}
+      <div class="roll-line">
+        <span class="dice"><span class="die d10{{#if (eq die 10)}} max{{/if}}{{#if (eq die 1)}} min{{/if}}">{{die}}</span></span>
+        <span class="roll-sum">d10 против порога <b>{{threshold}}</b> · равно — провал</span>
+      </div>
+      <details class="roll-parts">
+        <summary>из чего порог</summary>
+        <ul class="parts">
+          {{#each parts}}<li><span>{{label}}</span><b>{{vedmakSigned value}}</b></li>{{/each}}
+          <li class="sum"><span>Порог</span><b>{{threshold}}</b></li>
+        </ul>
+      </details>
+      <div class="outcome {{#if success}}success{{else}}failure{{/if}}">{{outcome}}</div>
+    {{/if}}
+  </div>
+</div>

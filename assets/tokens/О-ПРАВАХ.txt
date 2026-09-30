@@ -1,0 +1,14 @@
+Жетоны существ для сцены взяты из фанатского компендиума BS & Tobi
+«The Witcher Compendium» (braintrap-studio) и ужаты для системы.
+
+— monster_set, monster_set_two, monster_token_2d — жетоны чудовищ из того же
+  компендиума, автор в нём не указан;
+— Dwarves2020, FantasyTownsfolk2017, FarmAnimals2022, Halflings2018,
+  Rangers&Rogues2018, Spellcasters22022, TownGuards2019, TownGuards22021,
+  Townsfolk22021, WildernessAnimals2022, WIldmen2019, WitchHunters2020,
+  WoodElves2020 — наборы 2-Minute Tabletop (2minutetabletop.com). Их лицензия
+  разрешает личное некоммерческое использование и не разрешает раздавать
+  сами файлы.
+
+Поэтому при любой публикации системы эту папку надо убрать: жетоны заменятся
+портретами, а бестиарий продолжит работать.

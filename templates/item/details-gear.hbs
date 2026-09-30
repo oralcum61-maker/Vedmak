@@ -1,0 +1,12 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Снаряжение</legend>
+    <div class="vd-grid g2">
+      <label>Категория <select name="system.category">{{selectOptions config.GEAR_CATEGORIES selected=system.category}}</select></label>
+      <label>Фокус (−Вын на магию) <input type="number" name="system.focus" value="{{system.focus}}" min="0"></label>
+      <label>Набор инструментов <select name="system.tool">{{selectOptions config.TOOL_KINDS selected=system.tool}}</select></label>
+    </div>
+    <label class="wide">Эффект <textarea name="system.effect" rows="3">{{system.effect}}</textarea></label>
+  </fieldset>
+  {{> "systems/vedmak/templates/item/physical.hbs"}}
+</section>

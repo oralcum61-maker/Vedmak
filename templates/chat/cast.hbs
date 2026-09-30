@@ -1,0 +1,62 @@
+<div class="vedmak-card cast attack{{#if roll.crit}} is-crit{{/if}}{{#if roll.fumble}} is-fumble{{/if}}">
+  <header class="card-head">
+    <img src="{{img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">{{label}}</span>
+      <span class="card-sub">{{kindLabel}} · {{levelLabel}}{{#if elementLabel}} · {{elementLabel}}{{/if}}</span>
+    </div>
+    <div class="card-value arcane">
+      <b>{{roll.total}}</b>
+      <span class="cap">{{#if dc}}против {{dc}}{{else}}сотворение{{/if}}</span>
+    </div>
+  </header>
+
+  <div class="card-body">
+    <p class="card-props">
+      <span>Вын <b>{{paid}}</b>{{#if (ne paid cost)}} <span class="dim">(вложено {{cost}})</span>{{/if}}</span>
+      {{#if range}}<span>{{range}}</span>{{/if}}
+      {{#if duration}}<span>{{duration}}</span>{{/if}}
+      {{#if defenseLabel}}<span>защита: {{defenseLabel}}</span>{{/if}}
+    </p>
+
+    {{#with roll}}{{> "systems/vedmak/templates/chat/parts/roll.hbs"}}{{/with}}
+
+    {{#if dc}}
+      {{#if roll.success}}<div class="outcome success">Успех против СЛ {{dc}}</div>{{else}}<div class="outcome failure">Провал против СЛ {{dc}}</div>{{/if}}
+    {{else}}
+      {{#unless works}}<div class="outcome failure">Не сработало</div>{{/unless}}
+    {{/if}}
+
+    {{#if fumble}}<div class="fumble-note"><b>{{#if isRitual}}Провал ритуала{{else}}Магический провал{{/if}}:</b> {{fumble.text}}</div>{{/if}}
+    {{#if selfLines.length}}
+      <div class="applied-report">{{#each selfLines}}<p>{{this}}</p>{{/each}}</div>
+    {{/if}}
+    {{#each notes}}<p class="note dim">{{this}}</p>{{/each}}
+  </div>
+
+  {{#if showDefense}}
+  <div class="card-section">
+    <h4>{{#if hasTargets}}Защищается{{else}}Защищается выделенный токен{{/if}}</h4>
+    {{#each targets}}
+    <div class="target-row" data-target-token="{{tokenUuid}}" data-target-actor="{{actorUuid}}">
+      <div class="target-name"><img src="{{img}}" alt=""><span class="name">{{name}}</span></div>
+      <div class="defense-buttons">
+        {{#each ../defenseButtons}}<button type="button" data-vedmak="defend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+      </div>
+    </div>
+    {{else}}
+    <div class="target-row any">
+      <div class="defense-buttons">
+        {{#each defenseButtons}}<button type="button" data-vedmak="defend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{#if isRitual}}
+  <div class="card-buttons">
+    <button type="button" class="quiet" data-vedmak="ritualFocus"><i class="fa-solid fa-circle-notch"></i> Концентрация при прерывании</button>
+  </div>
+  {{/if}}
+</div>

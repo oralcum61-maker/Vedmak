@@ -1,0 +1,16 @@
+{{!-- Подвал окна: во что сложится бросок. Контекст — объект total. --}}
+<footer class="dlg-total">
+  {{#unless noRoll}}
+  <div class="tot">
+    <span class="cap">БРОСОК</span>
+    <b data-total-roll>d10 + {{base}}</b>
+  </div>
+  {{/unless}}
+  {{#if damage}}
+  <div class="tot dmg">
+    <span class="cap">УРОН</span>
+    <b data-total-damage data-damage="{{damage}}">{{damage}}</b>
+  </div>
+  {{/if}}
+  <span class="tot-hint" data-total-hint>{{hint}}</span>
+</footer>

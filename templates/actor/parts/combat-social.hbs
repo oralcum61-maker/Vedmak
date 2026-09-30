@@ -1,0 +1,75 @@
+{{!-- Социальный бой: словесная дуэль (стр. 176–177) и социальный статус. Решительность заменяет ПЗ:
+      у кого результат больше, тот наносит урон Решительности противника; успешная защита бьёт атакующего. --}}
+<section class="combat-block">
+  <div class="group-head">
+    <span class="bronze-tag">СЛОВЕСНАЯ ДУЭЛЬ</span>
+    <span class="rule"></span>
+    <span class="hint-inline">Shift — без окна</span>
+  </div>
+
+  <div class="duel-resolve{{#if verbal.resolve.broken}} broken{{/if}}">
+    <div class="rv-head">
+      <span class="cap">РЕШИТЕЛЬНОСТЬ</span>
+      <input type="number" name="flags.vedmak.duelResolve" value="{{verbal.resolve.value}}" min="0"
+             data-tooltip="Решительность в текущей дуэли: вместо ПЗ" aria-label="Решительность">
+      <span class="max">/ {{verbal.resolve.max}}</span>
+    </div>
+    <div class="track" data-tooltip="(Воля + Инт) / 2 × 5">
+      <span class="fill" style="width: {{verbal.resolve.pct}}%"></span>
+      <span class="tick" style="left: 25%"></span>
+      <span class="tick" style="left: 50%"></span>
+      <span class="tick" style="left: 75%"></span>
+    </div>
+    <div class="duel-foot">
+      {{#if verbal.resolve.broken}}<span class="bad-inline">Решительность исчерпана — вы проиграли дуэль и делаете то, чего хотел противник.</span>
+      {{else}}<span class="hint-inline">{{#if verbal.mods}}Штрафы в дуэли: {{verbal.mods}}{{else}}Каждая сторона сначала называет цель спора.{{/if}}</span>{{/if}}
+      <button type="button" class="turn-btn" data-action="duelReset" data-tooltip="Решительность снова полная">
+        <i class="fa-solid fa-rotate"></i> Новая дуэль
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="duel-cols">
+  {{#each verbal.groups as |g|}}
+  <section class="combat-block duel-group {{g.key}}">
+    <div class="group-head">
+      <span class="glabel">{{g.label}}</span>
+      <span class="rule"></span>
+    </div>
+    <p class="hint">{{g.about}}</p>
+    {{#each g.actions as |a|}}
+    <a class="duel-row rollable" data-action="verbalAction" data-verbal="{{a.key}}"
+       data-tooltip="{{#if a.effect}}{{a.effect}}{{else}}Проверка: {{a.skillLabel}}{{/if}}">
+      <span class="stamp">{{a.base}}</span>
+      <span class="who">
+        <span class="name">{{a.label}}</span>
+        <span class="about">{{a.skillLabel}}{{#if a.effect}} · {{a.effect}}{{/if}}</span>
+      </span>
+      {{#if a.damageLabel}}<span class="dmg"><b>{{a.damageLabel}}</b><em>урон</em></span>{{/if}}
+    </a>
+    {{/each}}
+    {{#if g.note}}<p class="hint">{{g.note}}</p>{{/if}}
+  </section>
+  {{/each}}
+</div>
+
+<p class="hint">Урон нанесённому противнику и доведение его до порога ранения меняют дуэль: −3 и −10 к эмпатическим атакам,
+  +3 и +10 к Запугиванию. Прочие модификаторы — на усмотрение ведущего: малый 1, средний 3, большой 5.</p>
+
+{{!-- Социальный статус перенесён из «Дневника»: он действует на те же социальные проверки --}}
+<section class="combat-block social">
+  <div class="group-head">
+    <span class="bronze-tag">СОЦИАЛЬНЫЙ СТАТУС</span>
+    <span class="rule"></span>
+    <span class="status-now{{#if (ne social.level "equal")}} bad{{/if}}">{{social.label}}</span>
+  </div>
+  <div class="social-grid">
+    <label>Территория
+      <select name="system.social.region">{{selectOptions regionOptions selected=system.social.region}}</select>
+    </label>
+    <label class="check"><input type="checkbox" name="system.social.feared" {{checked system.social.feared}}> Опасение (уродливый шрам, дурные поступки)</label>
+  </div>
+  <p class="status-line">{{social.regionLabel}}{{#if social.mods}}: {{social.mods}}{{/if}}</p>
+  <p class="hint">Статус учитывается в проверках социальных навыков (галочкой в окне броска). Со своими — всегда равенство (стр. 21).</p>
+</section>

@@ -1,0 +1,45 @@
+{{!-- Ручные правки и Удача. Контекст — корневой (см. commonFields в module/dice/dialog-ui.mjs). --}}
+<div class="dlg-row mods">
+  <div class="dlg-group">
+    <span class="dlg-label">{{#if hasDamage}}МОДИФИКАТОРЫ{{else}}МОДИФИКАТОР{{/if}}</span>
+    <div class="mod-fields">
+      <div class="mod-field">
+        <div class="stepper">
+          <button type="button" class="step" data-step="-1" data-field="mod" aria-label="Меньше"><i class="fa-solid fa-minus"></i></button>
+          <input type="number" name="mod" value="{{mod}}" step="1" aria-label="Модификатор к броску">
+          <button type="button" class="step" data-step="1" data-field="mod" aria-label="Больше"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <span class="cap">к броску</span>
+      </div>
+      {{#if hasDamage}}
+      <div class="mod-field">
+        <div class="stepper">
+          <button type="button" class="step" data-step="-1" data-field="damageMod" aria-label="Меньше"><i class="fa-solid fa-minus"></i></button>
+          <input type="number" name="damageMod" value="{{damageMod}}" step="1" aria-label="Модификатор к урону">
+          <button type="button" class="step" data-step="1" data-field="damageMod" aria-label="Больше"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <span class="cap">к урону</span>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if luckMax}}
+  <div class="dlg-group grow">
+    <span class="dlg-label">УДАЧА</span>
+    <div class="luck-row">
+      <label class="dot zero" data-dot="0" data-tooltip="Не тратить Удачу">
+        <input type="radio" name="luck" value="0" {{checked (eq luckSpent 0)}} aria-label="Не тратить Удачу">
+        <span aria-hidden="true">—</span>
+      </label>
+      {{#each luckDots}}
+      <label class="dot{{#if on}} on{{/if}}" data-dot="{{value}}" data-tooltip="Потратить {{value}}">
+        <input type="radio" name="luck" value="{{value}}" {{checked selected}} aria-label="Потратить Удачу: {{value}}">
+        <span aria-hidden="true"></span>
+      </label>
+      {{/each}}
+      <span class="luck-note" data-luck-note="{{luckMax}}">{{luckNote}}</span>
+    </div>
+  </div>
+  {{/if}}
+</div>

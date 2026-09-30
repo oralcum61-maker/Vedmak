@@ -1,0 +1,93 @@
+<div class="vedmak-roll-dialog attack">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    <div class="dlg-group">
+      <span class="dlg-label">УДАР</span>
+      <div class="opt-grid g3">
+        {{#each types}}
+        <label class="opt tall" {{#if hint}}data-tooltip="{{hint}}"{{/if}}>
+          <input type="radio" name="attackType" value="{{key}}" data-base="{{base}}" data-mod="{{mod}}"
+                 data-dmult="{{dmult}}" data-damage="{{damage}}" {{checked selected}}>
+          <span><b>{{label}}</b><small>{{note}}</small></span>
+        </label>
+        {{/each}}
+      </div>
+      {{#if isMonster}}<p class="hint">Чудовища и НИП бьют по Скорости атаки оружия, без быстрых и сильных ударов.</p>{{/if}}
+    </div>
+
+    <div class="dlg-group">
+      <span class="dlg-label">КУДА</span>
+      <div class="opt-grid g4">
+        {{#each locations}}
+        <label class="opt">
+          <input type="radio" name="aim" value="{{key}}" data-mod="{{mod}}" {{checked selected}}>
+          <span>{{label}}<em class="{{#if mod}}bad{{else}}dim{{/if}}">{{note}}</em></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+
+    {{#if src.isRanged}}
+    <div class="dlg-group">
+      <span class="dlg-label">ДИСТАНЦИЯ{{#if suggested.distance}} <span class="dim">· до цели {{suggested.distance}} м</span>{{/if}}</span>
+      <div class="opt-row">
+        {{#each bands}}
+        <label class="chip">
+          <input type="radio" name="band" value="{{key}}" data-mod="{{mod}}" {{checked selected}}>
+          <span>{{label}} <b>{{vedmakSigned mod}}</b></span>
+        </label>
+        {{/each}}
+      </div>
+      {{#if beyond}}<p class="hint warn">Цель дальше двойной дистанции оружия.</p>{{/if}}
+    </div>
+    {{/if}}
+
+    <details class="dlg-group fold" data-fold="attackSituations"{{#if foldSituations}} open{{/if}}>
+      <summary class="dlg-label">ОБСТОЯТЕЛЬСТВА <span class="dim fold-note" data-fold-note></span></summary>
+      <div class="opt-row">
+        {{#each situations}}
+        <label class="chip">
+          <input type="checkbox" name="sit.{{key}}" data-mod="{{mod}}" {{checked checked}}>
+          <span>{{label}} <b>{{vedmakSigned mod}}</b></span>
+        </label>
+        {{/each}}
+      </div>
+      {{#if statusMods.length}}
+      <p class="hint">Состояния: {{#each statusMods}}{{label}} {{vedmakSigned value}}{{#unless @last}}, {{/unless}}{{/each}} — уже в основе.</p>
+      {{/if}}
+    </details>
+
+    {{#unless src.isRanged}}
+    <details class="dlg-group fold"{{#if cfg.chargeMeters}} open{{/if}}>
+      <summary class="dlg-label">ВЕРХОМ: РАЗБЕГ ИЛИ ТАРАН</summary>
+      <div class="charge-row">
+        <label class="num"><span class="cap">метров до цели</span>
+          <input type="number" name="chargeMeters" value="{{cfg.chargeMeters}}" min="0" step="1">
+        </label>
+        <label class="chip">
+          <input type="checkbox" name="gallop" {{checked cfg.gallop}}>
+          <span>Галоп <b>5d6</b></span>
+        </label>
+        <label class="num grow"><span class="cap">вес цели</span>
+          <select name="weight">{{#each weights}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+        </label>
+      </div>
+      {{#if src.mounted}}<p class="hint">Таран упряжкой — −10 к проверке управления. Урон получает и сам транспорт.</p>{{/if}}
+    </details>
+    {{/unless}}
+
+    {{#if staCost}}
+    <label class="plate cost">
+      <input type="checkbox" name="extraAction" data-mod="-3">
+      <span class="plate-text">Дополнительное действие атаки</span>
+      <b class="plate-value">3 Вын, −3</b>
+    </label>
+    {{/if}}
+
+    {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

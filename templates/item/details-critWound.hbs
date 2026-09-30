@@ -1,0 +1,40 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Критическое ранение</legend>
+    <div class="vd-grid g3">
+      <label>Ранение
+        <select name="system.wound">
+          {{#each woundGroups}}<optgroup label="{{label}}">{{#each wounds}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</optgroup>{{/each}}
+        </select>
+      </label>
+      <label>Часть тела <select name="system.location">{{selectOptions woundLocations selected=system.location}}</select></label>
+      <label>Состояние <select name="system.state">{{selectOptions critStates selected=system.state}}</select></label>
+      <label>Дней до снятия штрафов <input type="number" name="system.healingDays" value="{{system.healingDays}}" min="0"></label>
+      {{#if (eq system.wound "lostTeeth")}}<label>Выбито зубов <input type="number" name="system.teeth" value="{{system.teeth}}" min="0"></label>{{/if}}
+    </div>
+    <label class="wide">Заметки <input type="text" name="system.notes" value="{{system.notes}}"></label>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Эффекты по состояниям</legend>
+    <table class="vd-table wound-states">
+      <tbody>
+      {{#each woundStates}}
+        <tr class="{{#if current}}equipped{{/if}}"><td class="name">{{label}}</td><td class="name">{{text}}</td></tr>
+      {{/each}}
+      </tbody>
+    </table>
+    <p class="hint">Штрафы текущего состояния применяются к параметрам и навыкам автоматически.</p>
+  </fieldset>
+
+  {{#if levelInfo}}
+  <fieldset class="vd-fieldset">
+    <legend>Лечение ({{levelInfo.label}})</legend>
+    <ul class="plain">
+      <li>Стабилизация: Первая помощь, СЛ {{levelInfo.stabilizeDC}}.</li>
+      <li>Лечение медиком: {{levelInfo.treatRounds}} раунда, Лечащее прикосновение СЛ {{levelInfo.treatDC}}.</li>
+      <li>Лечение магией: {{levelInfo.magicCount}} заклинаний, преодолевших СЛ {{levelInfo.magicDC}} (ПЗ не восстанавливаются).</li>
+    </ul>
+  </fieldset>
+  {{/if}}
+</section>

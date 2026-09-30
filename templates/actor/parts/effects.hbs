@@ -1,0 +1,59 @@
+{{!-- Состояния: наверху только действующие, с ценой каждого; полная сетка раскрывается кнопкой. --}}
+<section class="combat-block states">
+  <div class="group-head">
+    <span class="bronze-tag">ЧТО СО МНОЙ</span>
+    <span class="rule"></span>
+    {{#if activeStatuses.length}}<span class="hint-inline">действует {{activeStatuses.length}}</span>{{/if}}
+  </div>
+
+  {{#if activeStatuses.length}}
+  <div class="state-chips">
+    {{#each activeStatuses}}
+    <a class="state-chip" data-action="toggleStatus" data-status="{{id}}" data-tooltip="{{hint}} — нажмите, чтобы снять">
+      <img src="{{img}}" alt="">
+      <span class="name">{{name}}</span>
+      <span class="cost">{{cost}}</span>
+      <i class="fa-solid fa-xmark"></i>
+    </a>
+    {{/each}}
+  </div>
+  {{else}}
+  <p class="hint">Состояний нет.</p>
+  {{/if}}
+
+  <details class="state-fold">
+    <summary><i class="fa-solid fa-plus"></i> Отметить состояние</summary>
+    <div class="status-grid">
+      {{#each statusList}}
+      <a class="status{{#if active}} active{{/if}}" data-action="toggleStatus" data-status="{{id}}" data-tooltip="{{hint}}">
+        <img src="{{img}}" alt=""><span>{{name}}</span>
+      </a>
+      {{/each}}
+    </div>
+  </details>
+</section>
+
+<section class="combat-block">
+  <div class="group-head">
+    <span class="glabel">АКТИВНЫЕ ЭФФЕКТЫ</span>
+    <span class="rule"></span>
+    <a class="add" data-action="effectCreate" data-tooltip="Создать эффект"><i class="fa-solid fa-plus"></i> создать</a>
+  </div>
+
+  {{#each effects as |e|}}
+  <div class="fx-line{{#if e.disabled}} off{{/if}}{{#if e.expired}} expired{{/if}}" data-effect-id="{{e.id}}" data-parent-id="{{e.parentId}}">
+    <img src="{{e.img}}" alt="" class="fx-icon">
+    <a class="fx-name" data-action="effectEdit">{{e.name}}</a>
+    {{#if e.source}}<span class="dim">{{e.source}}</span>{{/if}}
+    <span class="dots-fill"></span>
+    <span class="fx-changes">{{e.changes}}</span>
+    <span class="fx-time{{#if e.expired}} bad{{/if}}">{{#if e.expired}}истёк{{else if e.duration}}{{e.duration}}{{else}}постоянный{{/if}}</span>
+    <span class="fx-ctl">
+      <a data-action="effectToggle" data-tooltip="{{#if e.disabled}}Включить{{else}}Выключить{{/if}}"><i class="fa-solid {{#if e.disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></a>
+      <a data-action="effectDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+    </span>
+  </div>
+  {{else}}
+  <p class="hint">Эффектов нет.</p>
+  {{/each}}
+</section>

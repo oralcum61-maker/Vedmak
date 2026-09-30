@@ -1,0 +1,79 @@
+{{!-- Левая колонка листа: кто это, сколько в нём жизни, счёт партии и четыре значения,
+      которые спрашивают каждый ход. Остальное живёт во вкладках справа. --}}
+<aside class="vd-rail">
+
+  {{!-- Портрет — якорь колонки, имя вписано на него: так не тратится высота на отдельную строку --}}
+  <div class="portrait-frame">
+    <img class="portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img" data-tooltip="Сменить портрет">
+    <div class="portrait-name">
+      <input class="name" type="text" name="name" value="{{actor.name}}" placeholder="Имя" aria-label="Имя персонажа">
+    </div>
+  </div>
+
+  <div class="tags">
+    {{#if race}}<a class="tag race" data-action="itemEdit" data-item-id="{{race.id}}" data-tooltip="Раса">{{race.name}}</a>
+    {{else}}<span class="tag race" data-tooltip="Раса"><i>раса не выбрана</i></span>{{/if}}
+    {{#if profession}}<a class="tag profession" data-action="itemEdit" data-item-id="{{profession.id}}" data-tooltip="Профессия">{{profession.name}}</a>
+    {{else}}<span class="tag profession" data-tooltip="Профессия"><i>профессия не выбрана</i></span>{{/if}}
+    {{#if social}}<span class="tag social{{#if (ne social.level "equal")}} bad{{/if}}" data-tooltip="Социальный статус: {{social.regionLabel}}{{#if social.mods}} ({{social.mods}}){{/if}}">{{social.label}}</span>{{/if}}
+  </div>
+
+  {{#if states.length}}
+  <div class="rail-states">
+    {{#each states}}
+    <div class="state-line {{kind}}"{{#if hint}} data-tooltip="{{hint}}"{{/if}}>
+      <i class="{{icon}}"></i><span>{{label}}</span>
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{> "systems/vedmak/templates/actor/parts/vitals-rail.hbs"}}
+
+  {{!-- Удача жетонами — теми же, что в окнах бросков --}}
+  <div class="rail-luck" data-tooltip="Удача: тратится на любой бросок">
+    <span class="cap">УДАЧА</span>
+    <div class="dots" role="img" aria-label="Удача {{system.luck.value}} из {{system.luck.max}}">
+      {{#each luckDots}}<span class="dot{{#if on}} on{{/if}}"></span>{{/each}}
+    </div>
+    <input type="number" name="system.luck.value" value="{{system.luck.value}}" aria-label="Удача">
+    <a data-action="restoreLuck" data-tooltip="Новая партия: восстановить Удачу"><i class="fa-solid fa-rotate"></i></a>
+  </div>
+
+  {{!-- Счёт партии: тихие строки, а не плашки — их не читают в бою --}}
+  <div class="rail-count">
+    <label class="count-line" data-tooltip="Очки улучшения">
+      <span>Очки улучшения</span>
+      <span class="dots-fill"></span>
+      <input type="number" name="system.improvementPoints.value" value="{{system.improvementPoints.value}}">
+      {{#if isGM}}<a data-action="grantIp" data-tooltip="Начислить О.У"><i class="fa-solid fa-star"></i></a>{{/if}}
+    </label>
+    <label class="count-line" data-tooltip="Узнают ли персонажа: d10 ≤ репутации">
+      <span>Репутация</span>
+      <span class="dots-fill"></span>
+      <input type="number" name="system.reputation.value" value="{{system.reputation.value}}">
+      <a data-action="rollReputation" data-tooltip="Бросить репутацию"><i class="fa-solid fa-certificate"></i></a>
+    </label>
+  </div>
+
+  {{!-- Четыре значения, которые спрашивают каждый ход; остальные — на вкладке «Параметры» --}}
+  <div class="rail-derived">
+    {{#each railDerived}}
+    <span class="dval" data-tooltip="{{hint}}">
+      <span class="v"><b>{{value}}</b>{{#if unit}}<small>{{unit}}</small>{{/if}}</span>
+      <em>{{label}}</em>
+    </span>
+    {{/each}}
+  </div>
+
+  <div class="rail-foot">
+    <a class="rail-btn{{#if advanceMode}} active{{/if}}" data-action="toggleAdvance"
+       data-tooltip="Показывать кнопки повышения у параметров, навыков и способностей">
+      <i class="fa-solid fa-arrow-up-right-dots"></i> Развитие
+    </a>
+    <a class="rail-btn" data-action="openWizard"
+       data-tooltip="Создать персонажа по шагам: раса, жизненный путь, профессия, параметры, навыки, снаряжение">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Мастер
+    </a>
+  </div>
+</aside>

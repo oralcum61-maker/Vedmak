@@ -1,0 +1,52 @@
+{{!-- Способности, уязвимости, разновидности и услуги (бестиарий, стр. 267). В просмотре — текст из книги,
+      в правке — поля; название щёлкается в чат. --}}
+<div class="vd-panel abilities-panel{{#if editAbilities}} editing{{/if}}">
+  <div class="panel-head">
+    <h3>Способности</h3>
+    {{#if editable}}
+    <div class="panel-tools">
+      <a data-action="toggleAbilityEdit" data-tooltip="{{#if editAbilities}}Готово{{else}}Править способности и добычу{{/if}}">
+        <i class="fa-solid {{#if editAbilities}}fa-check{{else}}fa-pen{{/if}}"></i></a>
+      <a data-action="rowAdd" data-field="abilities" data-tooltip="Добавить способность"><i class="fa-solid fa-plus"></i></a>
+    </div>
+    {{/if}}
+  </div>
+
+  {{#if hasResistText}}
+  <dl class="resist-text">
+    {{#if system.info.resistText}}<dt>Сопротивление</dt><dd>{{system.info.resistText}}</dd>{{/if}}
+    {{#if system.info.immunityText}}<dt>Невосприимчивость</dt><dd>{{system.info.immunityText}}</dd>{{/if}}
+    {{#if system.info.susceptText}}<dt>Восприимчивость</dt><dd>{{system.info.susceptText}}</dd>{{/if}}
+  </dl>
+  {{/if}}
+
+  {{#if editAbilities}}
+  {{#each abilityRows as |a|}}
+  <div class="ability-edit" data-index="{{a.index}}">
+    <div class="row">
+      <input type="text" name="system.abilities.{{a.index}}.name" value="{{a.name}}" placeholder="Название">
+      <select name="system.abilities.{{a.index}}.kind">{{selectOptions @root.abilityKinds selected=a.kind}}</select>
+      <a class="danger" data-action="rowDelete" data-field="abilities" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    <textarea name="system.abilities.{{a.index}}.description" rows="3" placeholder="Описание (можно HTML)">{{a.description}}</textarea>
+  </div>
+  {{else}}
+  <p class="hint">Способностей нет — добавьте кнопкой «+».</p>
+  {{/each}}
+
+  {{else}}
+  {{#each abilityGroups as |g|}}
+  <section class="ability-group {{g.kind}}">
+    <h4>{{g.label}}</h4>
+    {{#each g.rows as |a|}}
+    <div class="ability" data-index="{{a.index}}">
+      <a class="ability-name" data-action="abilityPost" data-tooltip="Показать в чате">{{a.name}}</a>
+      <div class="ability-text">{{{a.enriched}}}</div>
+    </div>
+    {{/each}}
+  </section>
+  {{else}}
+  <p class="hint">Способностей нет.</p>
+  {{/each}}
+  {{/if}}
+</div>

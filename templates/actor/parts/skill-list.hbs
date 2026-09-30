@@ -1,0 +1,36 @@
+{{!-- Навыки по параметрам. Группы укладываются плотно (колонками), без дыр между короткими и длинными.
+      Строка: ромб «навык профессии», название, вложенные очки, основа — то, что бросают. --}}
+<div class="skill-cols">
+  {{#each skillGroups as |group|}}
+  {{#if group.skills.length}}
+  <section class="skill-group">
+    <div class="group-head">
+      <span class="bronze-tag">{{group.label}}</span>
+      <span class="rule"></span>
+      <span class="stat-stamp" data-tooltip="{{group.label}}: значение параметра">{{group.value}}</span>
+    </div>
+    {{#each group.skills as |skill|}}
+    <div class="skill-line{{#if skill.trained}} trained{{/if}}{{#if skill.profession}} prof{{/if}}">
+      <label class="prof-mark" data-tooltip="Навык профессии">
+        <input type="checkbox" name="system.skills.{{skill.key}}.profession" {{checked skill.profession}} aria-label="Навык профессии: {{skill.label}}">
+        <i class="fa-solid fa-diamond"></i>
+      </label>
+      <a class="hit rollable" data-action="rollSkill" data-skill="{{skill.key}}" data-tooltip="Проверка навыка (Shift — без окна)">
+        <span class="name">{{skill.label}}{{#if skill.difficult}}<i class="fa-solid fa-asterisk difficult" data-tooltip="Сложный навык"></i>{{/if}}</span>
+        <span class="dots-fill"></span>
+      </a>
+      <input class="lvl" type="number" name="system.skills.{{skill.key}}.value" value="{{skill.value}}" min="0"
+             data-tooltip="Вложено в навык" aria-label="Вложено в навык: {{skill.label}}">
+      <a class="base rollable" data-action="rollSkill" data-skill="{{skill.key}}"
+         data-tooltip="Основа: параметр + навык{{#if skill.mod}} (мод. {{skill.mod}}){{/if}}">{{skill.base}}</a>
+      {{#if @root.advanceMode}}{{#with skill.offer}}
+      <a class="improve{{#if error}} disabled{{/if}}" data-action="improveSkill" data-skill="{{../key}}"
+         data-tooltip="{{#if error}}{{error}}{{else}}Повысить до {{to}} за {{cost}} О.У{{/if}}"><i class="fa-solid fa-plus"></i>{{#unless error}} <small>{{cost}}</small>{{/unless}}</a>
+      {{/with}}{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{/each}}
+</div>
+{{#unless hasSkills}}<p class="hint">Изученных навыков нет — нажмите «Показать все».</p>{{/unless}}

@@ -1,0 +1,43 @@
+<div class="vedmak-card defense{{#if hit}} is-hit{{else}} is-miss{{/if}}{{#if critLevel}} is-crit{{/if}}">
+  <header class="card-head">
+    <img src="{{defender.img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">{{defender.name}}: {{label}}</span>
+      <span class="card-sub">против «{{attack.label}}» · {{attack.attacker.name}} {{attack.total}}</span>
+    </div>
+    {{#if roll}}
+    <div class="card-value"><b>{{total}}</b><span class="cap">защита</span></div>
+    {{else}}{{#unless auto}}
+    <div class="card-value"><b>{{dc}}</b><span class="cap">СЛ</span></div>
+    {{/unless}}{{/if}}
+  </header>
+
+  <div class="card-body">
+    {{#if roll}}
+      {{#with roll}}{{> "systems/vedmak/templates/chat/parts/roll.hbs"}}{{/with}}
+    {{else}}{{#if auto}}
+      <p class="note dim">Защиты нет — эффект срабатывает, раз сотворение не провалено.</p>
+    {{else}}
+      <p class="note dim">Без защиты: атака {{attack.total}} против СЛ {{dc}}.</p>
+    {{/if}}{{/if}}
+
+    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}</div>{{/if}}
+
+    {{#if hit}}
+      <div class="outcome failure">Попадание{{#if (gt margin 0)}} · атака выше на {{margin}}{{/if}}</div>
+      {{#if critLevel}}<div class="badge crit"><i class="fa-solid fa-droplet"></i> Критическое ранение: {{critLabel}}</div>{{/if}}
+    {{else}}
+      <div class="outcome success">Защита удалась</div>
+    {{/if}}
+
+    {{#each notes}}<p class="note">{{this}}</p>{{/each}}
+    {{#if showHitText}}<p class="note">{{attack.hitText}}</p>{{/if}}
+  </div>
+
+  <div class="card-buttons">
+    {{#if canDamage}}<button type="button" class="primary" data-vedmak="damage"><i class="fa-solid fa-droplet"></i> Урон</button>{{/if}}
+    {{#if canApplyEffects}}<button type="button" class="primary" data-vedmak="applySpellEffects"><i class="fa-solid fa-wand-sparkles"></i> Применить эффекты</button>{{/if}}
+    {{#if hitStatusLabel}}<button type="button" data-vedmak="applyHitStatus"><i class="fa-solid fa-person-falling"></i> {{hitStatusLabel}}</button>{{/if}}
+    {{#if stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{defender.tokenUuid}}" data-fallback="{{defender.actorUuid}}" data-mod="{{attack.stunSaveMod}}"><i class="fa-solid fa-face-dizzy"></i> Испытание Уст</button>{{/if}}
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="vedmak-card item-card">
+  <header class="card-head">
+    <img src="{{item.img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">{{item.name}}</span>
+      <span class="card-sub">{{typeLabel}}</span>
+    </div>
+  </header>
+  <div class="card-body">
+    {{#if summary.length}}
+    <ul class="parts props">
+      {{#each summary}}<li><span>{{label}}</span><b>{{value}}</b></li>{{/each}}
+    </ul>
+    {{/if}}
+    {{#if description}}<div class="description">{{{description}}}</div>{{/if}}
+  </div>
+</div>

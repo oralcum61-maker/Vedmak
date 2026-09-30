@@ -1,0 +1,34 @@
+<div class="vedmak-card verbal {{kind}}{{#if crit}} is-crit{{/if}}{{#if fumble}} is-fumble{{/if}}">
+  <header class="card-head">
+    <span class="card-glyph"><i class="fa-solid fa-comments"></i></span>
+    <div class="card-ident">
+      <span class="card-name">{{label}}</span>
+      <span class="card-sub">Словесная дуэль · {{groupLabel}} · {{skillLabel}}</span>
+    </div>
+    <div class="card-value">
+      <b>{{total}}</b>
+      <span class="cap">{{#if dc}}против {{dc}}{{else}}проверка{{/if}}</span>
+    </div>
+  </header>
+
+  <div class="card-body">
+    {{> "systems/vedmak/templates/chat/parts/roll.hbs"}}
+    {{#if damage}}
+    <div class="result-line">
+      <span class="name">Урон Решительности</span>
+      <span class="dots-fill"></span>
+      <b>{{damage.total}}</b> <span class="dim">{{damage.formula}}</span>
+    </div>
+    {{/if}}
+    {{#if effect}}<p class="note dim">{{effect}}</p>{{/if}}
+    <p class="note dim">Сравните с результатом противника: больший наносит урон Решительности меньшему.</p>
+  </div>
+
+  {{#if damage}}
+  <div class="card-buttons">
+    <button type="button" class="primary" data-vedmak="verbalDamage" data-tooltip="Отнять у цели или выделенного токена">
+      <i class="fa-solid fa-comment-slash"></i> −{{damage.total}} Решительности цели
+    </button>
+  </div>
+  {{/if}}
+</div>

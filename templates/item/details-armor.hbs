@@ -1,0 +1,53 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Броня</legend>
+    <div class="vd-grid g3">
+      <label>Класс <select name="system.weightClass">{{selectOptions config.ARMOR_WEIGHT_CLASS selected=system.weightClass}}</select></label>
+      <label>Скованность движений <input type="number" name="system.encumbrance" value="{{system.encumbrance}}" min="0"></label>
+      <label>Слоты улучшений <input type="number" name="system.enhancementSlots" value="{{system.enhancementSlots}}" min="0"></label>
+      <label class="check"><input type="checkbox" name="system.isShield" {{checked system.isShield}}> Щит</label>
+      <label class="check"><input type="checkbox" name="system.relic" {{checked system.relic}}> Реликвия</label>
+    </div>
+  </fieldset>
+
+  {{#if system.isShield}}
+  <fieldset class="vd-fieldset">
+    <legend>Щит</legend>
+    <div class="vd-grid g3">
+      <label>Надёжность <span class="pair"><input type="number" name="system.reliability.value" value="{{system.reliability.value}}"> / <input type="number" name="system.reliability.max" value="{{system.reliability.max}}"></span></label>
+    </div>
+  </fieldset>
+  {{else}}
+  <fieldset class="vd-fieldset">
+    <legend>Прочность брони (ПБ) по частям тела</legend>
+    <div class="vd-grid g2">
+      {{#each locations as |loc|}}
+      <label>{{loc.label}} <span class="pair"><input type="number" name="system.sp.{{loc.key}}.value" value="{{loc.value}}" min="0"> / <input type="number" name="system.sp.{{loc.key}}.max" value="{{loc.max}}" min="0"></span></label>
+      {{/each}}
+    </div>
+    <p class="hint">Часть тела считается закрытой, если максимум ПБ больше 0.</p>
+  </fieldset>
+  {{/if}}
+
+  <fieldset class="vd-fieldset">
+    <legend>Сопротивления (урон ×½)</legend>
+    <div class="vd-grid g3">
+      {{#each resistances as |r|}}
+      <label class="check"><input type="checkbox" name="system.resistances.{{r.key}}" {{checked r.checked}}> {{r.label}}</label>
+      {{/each}}
+    </div>
+    <label class="wide">Особые эффекты <input type="text" name="system.effectsText" value="{{system.effectsText}}"></label>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Усиления и глифы ({{system.enhancements.length}} из {{system.enhancementSlots}})</legend>
+    {{#each system.enhancements as |e|}}
+    <p class="enh-line"><b>{{e.name}}</b>{{#if e.sp}} +{{e.sp}} ПБ{{/if}}{{#if e.effect}} — {{e.effect}}{{/if}}</p>
+    {{else}}<p class="hint">Нет. Усиление прикрепляется с вкладки «Ремесло» персонажа.</p>
+    {{/each}}
+  </fieldset>
+
+  {{> "systems/vedmak/templates/item/parts/mods.hbs" modsLegend="Модификаторы (пока надета)" modsHint="Реликвии: +ПЗ, +к навыкам — действуют, пока броня надета."}}
+
+  {{> "systems/vedmak/templates/item/physical.hbs"}}
+</section>

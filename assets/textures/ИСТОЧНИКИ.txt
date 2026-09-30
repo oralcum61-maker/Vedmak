@@ -1,0 +1,15 @@
+leather-grain.webp     — зерно кожи, сделано из карты рельефа Leather037 (ambientCG.com), CC0.
+iron-grain.webp        — патина по металлу, сделано из карты рельефа Metal063 (ambientCG.com), CC0.
+wood-grain.webp        — доска, сделано из карты рельефа Wood062 (ambientCG.com), CC0.
+paper-grain.webp       — бумага, сделано из карты рельефа Paper003 (ambientCG.com), CC0.
+cloth-grain.webp       — полотно, сделано из карты рельефа Fabric063 (ambientCG.com), CC0.
+stone-grain.webp       — камень, сделано из карты рельефа Rock030 (ambientCG.com), CC0.
+brass-grain.webp       — латунь, сделано из карты рельефа Metal046A (ambientCG.com), CC0.
+parchment-grain.webp   — пергамент, сделано из карты рельефа Cardboard004 (ambientCG.com), CC0.
+leather-tooled.webp    — тиснёная кожа, сделано из карты рельефа Leather026 (ambientCG.com), CC0.
+canvas-weave.webp      — холст, сделано из карты рельефа Fabric004 (ambientCG.com), CC0.
+steel-blued.webp       — вороненая сталь, сделано из карты рельефа Metal009 (ambientCG.com), CC0.
+paper-old.webp         — старая бумага, сделано из карты рельефа Paper004 (ambientCG.com), CC0.
+bronze-cast.webp       — литая бронза, сделано из карты рельефа Metal029 (ambientCG.com), CC0.
+slate-dark.webp        — тёмный сланец, сделано из карты рельефа Rock029 (ambientCG.com), CC0.
+Все картинки — оттенки серого вокруг среднего тона: накладываются поверх цвета.

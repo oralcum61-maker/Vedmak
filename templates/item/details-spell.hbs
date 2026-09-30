@@ -1,0 +1,93 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Магия</legend>
+    <div class="vd-grid g3">
+      <label>Вид <select name="system.kind">{{selectOptions config.MAGIC_KINDS selected=system.kind}}</select></label>
+      <label>Уровень <select name="system.level">{{selectOptions levelOptions selected=system.level}}</select></label>
+      {{#if showElement}}
+      <label>Стихия <select name="system.element">{{selectOptions config.MAGIC_ELEMENTS selected=system.element}}</select></label>
+      {{/if}}
+      {{#if showBranch}}
+      <label>Ветвь <select name="system.branch">{{selectOptions config.MAGIC_BRANCHES selected=system.branch}}</select></label>
+      {{/if}}
+      {{#if showGod}}<label>Божество <input type="text" name="system.god" value="{{system.god}}"></label>{{/if}}
+      {{#if showCastDc}}<label>СЛ сотворения <input type="number" name="system.dc" value="{{system.dc}}" min="0"></label>{{/if}}
+    </div>
+    <div class="vd-grid g4">
+      <label class="check"><input type="checkbox" name="system.variableCost" {{checked system.variableCost}}> Переменные затраты</label>
+      {{#if system.variableCost}}
+      <label>Максимум Вын <input type="number" name="system.maxCost" value="{{system.maxCost}}" min="0"></label>
+      {{else}}
+      <label>Затраты Вын <input type="number" name="system.staCost" value="{{system.staCost}}" min="0"></label>
+      {{/if}}
+      <label>Поддержание <input type="number" name="system.maintainCost" value="{{system.maintainCost}}" min="0"></label>
+      <label>Поддержание от вложенной <select name="system.maintainMode">{{selectOptions maintainModes selected=system.maintainMode}}</select></label>
+    </div>
+    <div class="vd-grid g3">
+      <label>Дистанция <input type="text" name="system.range" value="{{system.range}}"></label>
+      <label>Длительность <input type="text" name="system.duration" value="{{system.duration}}"></label>
+      <label>Защита <select name="system.defense">{{selectOptions config.MAGIC_DEFENSES selected=system.defense}}</select></label>
+    </div>
+    <p class="hint">Цель: {{targetingLabel}}. Проверка: Воля + {{skillLabel}}.</p>
+  </fieldset>
+
+  {{#if (eq system.kind "ritual")}}
+  <fieldset class="vd-fieldset">
+    <legend>Ритуал</legend>
+    <div class="vd-grid g3">
+      <label>СЛ <input type="number" name="system.dc" value="{{system.dc}}" min="0"></label>
+      <label>СЛ (текст) <input type="text" name="system.dcText" value="{{system.dcText}}"></label>
+      <label>Время подготовки <input type="text" name="system.preparation" value="{{system.preparation}}"></label>
+    </div>
+    <label class="wide">Ингредиенты <textarea name="system.ingredients" rows="2">{{system.ingredients}}</textarea></label>
+    <label class="wide">Ингредиенты на замену <input type="text" name="system.altIngredients" value="{{system.altIngredients}}"></label>
+  </fieldset>
+  {{/if}}
+
+  {{#if (eq system.kind "hex")}}
+  <fieldset class="vd-fieldset">
+    <legend>Порча</legend>
+    <label class="wide">Условия снятия <textarea name="system.removal" rows="4">{{system.removal}}</textarea></label>
+  </fieldset>
+  {{/if}}
+
+  <fieldset class="vd-fieldset">
+    <legend>Автоматизация в бою</legend>
+    <p class="hint">В формулах: <code>@sta</code> — вложенная Вын, <code>@margin</code> — на сколько проверка превысила защиту. Пример: <code>(@sta)d6</code>, <code>(min(@margin, 10))d6</code>.</p>
+    <div class="vd-grid g3">
+      <label>Урон <input type="text" name="system.automation.damage" value="{{system.automation.damage}}" placeholder="4d6"></label>
+      <label>Тип урона <select name="system.automation.damageType">{{selectOptions damageTypeOptions selected=system.automation.damageType}}</select></label>
+      <label>Часть тела <select name="system.automation.location">{{selectOptions locationOptions selected=system.automation.location}}</select></label>
+      <label>Урон Вын <input type="text" name="system.automation.staDamage" value="{{system.automation.staDamage}}" placeholder="4d6"></label>
+      <label class="check"><input type="checkbox" name="system.automation.ignoreArmor" {{checked system.automation.ignoreArmor}}> Мимо брони</label>
+      <label class="check"><input type="checkbox" name="system.automation.canCrit" {{checked system.automation.canCrit}}> Может критовать</label>
+    </div>
+
+    <div class="wide">
+      <span class="field-label">Статусы при попадании <a data-action="rowAdd" data-field="automation.statuses" data-tooltip="Добавить"><i class="fa-solid fa-plus"></i></a></span>
+      {{#each statusRows as |row|}}
+      <div class="row-edit" data-index="{{row.index}}">
+        <select name="system.automation.statuses.{{row.index}}.status">{{selectOptions @root.statusOptions selected=row.status}}</select>
+        <input type="text" name="system.automation.statuses.{{row.index}}.chance" value="{{row.chance}}" placeholder="шанс, %">
+        <a data-action="rowDelete" data-field="automation.statuses" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      {{/each}}
+    </div>
+    <div class="vd-grid g3">
+      <label>Длительность статусов (раунды) <input type="text" name="system.automation.statusRounds" value="{{system.automation.statusRounds}}" placeholder="1d10"></label>
+      <label>Регенерация, ПЗ за ход <input type="number" name="system.automation.regen.hp" value="{{system.automation.regen.hp}}" min="0"></label>
+      <label>Регенерация, раундов <input type="text" name="system.automation.regen.rounds" value="{{system.automation.regen.rounds}}" placeholder="пусто — пока поддерживается"></label>
+      <label>Щит, ПЗ за 1 Вын <input type="number" name="system.automation.shieldPerSta" value="{{system.automation.shieldPerSta}}" min="0"></label>
+      <label>Щит, раундов <input type="number" name="system.automation.shieldRounds" value="{{system.automation.shieldRounds}}" min="0"></label>
+    </div>
+    {{#if byCost}}<p class="hint">Эффект по вложенной Вын: {{byCost}}.</p>{{/if}}
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Источник</legend>
+    <div class="vd-grid g2">
+      <label>Книга <input type="text" name="system.source.book" value="{{system.source.book}}"></label>
+      <label>Стр. <input type="text" name="system.source.page" value="{{system.source.page}}"></label>
+    </div>
+  </fieldset>
+</section>

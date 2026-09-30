@@ -1,0 +1,21 @@
+<div class="vedmak-card turn">
+  <header class="card-head">
+    <img src="{{img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">{{#if title}}{{title}}{{else}}Ход: {{name}}{{/if}}</span>
+      {{#if round}}<span class="card-sub">Раунд {{round}}</span>{{/if}}
+    </div>
+  </header>
+  <div class="card-body">
+    <div class="applied-report">
+      {{#each lines}}<p>{{this}}</p>{{/each}}
+    </div>
+  </div>
+  {{#if buttons.length}}
+  <div class="card-buttons">
+    {{#each buttons}}
+      <button type="button" data-vedmak="{{action}}" data-actor="{{../tokenUuid}}" data-fallback="{{../actorUuid}}" data-reason="{{reason}}"><i class="fa-solid {{icon}}"></i> {{label}}</button>
+    {{/each}}
+  </div>
+  {{/if}}
+</div>

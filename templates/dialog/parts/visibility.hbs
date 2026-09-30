@@ -1,0 +1,12 @@
+{{!-- Кому видно сообщение. Контекст — корневой (modes из visibilityModes). --}}
+<div class="dlg-group vis">
+  <span class="dlg-label">КОМУ ВИДНО</span>
+  <div class="opt-row">
+    {{#each modes}}
+    <label class="opt chip">
+      <input type="radio" name="messageMode" value="{{key}}" {{checked selected}}>
+      <span><i class="{{icon}}"></i> {{label}}</span>
+    </label>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,188 @@
+{{!-- Обычный бой: чем бью, чем отвечаю, что со мной. Общий для персонажа и чудовища. --}}
+  <section class="combat-block">
+    <div class="group-head">
+      <span class="bronze-tag">ЧЕМ БЬЮ</span>
+      <span class="rule"></span>
+      <span class="hint-inline">Shift — без окна</span>
+    </div>
+
+    {{#each attacks as |a|}}
+    <div class="atk-row{{#if a.equipped}} ready{{else}} off{{/if}}" data-item-id="{{a.itemId}}">
+      <img src="{{a.img}}" class="atk-icon" alt="">
+      <span class="atk-who">
+        <span class="atk-name">
+          {{#if a.itemId}}<a data-action="itemEdit">{{a.label}}</a>{{else}}{{a.label}}{{/if}}
+          {{#if a.oil}}<span class="tag oil">{{a.oil}}</span>{{/if}}
+          {{#if a.attackSpeed}}<span class="tag">СА {{a.attackSpeed}}</span>{{/if}}
+        </span>
+        <span class="atk-about">
+          {{#unless a.equipped}}<span class="off-note">не в руках</span> · {{/unless}}
+          {{a.skillLabel}}
+          {{#if a.silver}} · <span class="silver">{{a.silver}}</span>{{/if}}
+          {{#if a.nonLethal}} · несмертельный{{/if}}
+          {{#if a.range}} · дистанция {{a.range}} м{{/if}}
+          {{#if a.traits}} · {{a.traits}}{{/if}}
+        </span>
+      </span>
+      {{#if a.reliability}}
+      <span class="atk-rel" data-tooltip="Надёжность: падает при блоке и на критическом провале">
+        <span class="track"><span class="fill" style="width: {{a.relPct}}%"></span></span>
+        <span class="cap">{{a.reliability.value}} / {{a.reliability.max}}</span>
+      </span>
+      {{/if}}
+      <span class="atk-num">
+        <b>{{a.base}}</b>
+        <em>ОСНОВА</em>
+      </span>
+      <span class="atk-num wide">
+        <b>{{a.damage}}</b>
+        <em>{{a.damageLabel}}</em>
+      </span>
+      {{#if a.equipped}}
+      <button type="button" class="atk-go" data-action="attack" data-kind="{{a.kind}}" data-item-id="{{a.itemId}}"
+              data-tooltip="Окно атаки (Shift — сразу)">
+        <i class="fa-solid fa-khanda"></i> {{#if a.isRanged}}Выстрел{{else}}Атака{{/if}}
+      </button>
+      {{else}}
+      <a class="atk-go quiet" data-action="itemToggleEquip" data-item-id="{{a.itemId}}" data-tooltip="Взять в руки">В руки</a>
+      {{/if}}
+    </div>
+    {{/each}}
+
+    {{#if adrenalineRule}}
+    <label class="adrenaline" data-tooltip="Кость адреналина: +1d6 урона за −10 Вын, максимум — Телосложение">
+      <i class="fa-solid fa-bolt"></i>
+      <span>Адреналин: кость +1d6 к урону за −10 Вын</span>
+      <input type="number" name="system.adrenaline.value" value="{{system.adrenaline.value}}" min="0">
+      <span class="cap">из {{system.stats.body.effective}}</span>
+    </label>
+    {{/if}}
+  </section>
+
+  <div class="combat-cols">
+
+    <section class="combat-block">
+      <div class="group-head"><span class="bronze-tag">ЧЕМ ОТВЕЧАЮ</span><span class="rule"></span></div>
+
+      <div class="def-grid">
+        {{#each defenses}}
+        <a class="def-row rollable" data-action="rollSkill" data-skill="{{key}}" data-tooltip="Проверка навыка (Shift — без окна)">
+          <span class="stamp">{{base}}</span>
+          <span class="who">
+            <span class="name">{{label}}</span>
+            <span class="about">{{about}}</span>
+          </span>
+        </a>
+        {{/each}}
+      </div>
+
+      <div class="save-grid">
+        <a class="save rollable" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">
+          <i class="fa-solid fa-star-of-life"></i>
+          <span class="name">Испытание Уст</span>
+          <b>&lt; {{system.derived.stun}}</b>
+        </a>
+        <a class="save bad rollable{{#if system.derived.dying}} alert{{/if}}" data-action="deathSave"
+           data-tooltip="d10 меньше Уст − накопленный штраф (Удача поднимает порог)">
+          <i class="fa-solid fa-skull"></i>
+          <span class="name">Против смерти</span>
+          <b>&lt; {{system.derived.stun}}{{#if system.deathSaves.penalty}} −{{system.deathSaves.penalty}}{{/if}}</b>
+        </a>
+      </div>
+      {{#if system.deathSaves.penalty}}
+      <p class="hint">Порог против смерти падает на 1 за каждое испытание: пройдено {{system.deathSaves.penalty}}.</p>
+      {{/if}}
+
+      <div class="group-head"><span class="glabel">ХОД</span><span class="rule"></span></div>
+      <div class="turn-row">
+        <button type="button" class="turn-btn" data-action="restTurn" data-tooltip="Полный ход: восстановить Вын">
+          <i class="fa-solid fa-lungs"></i> Отдых (ход) <b>+{{system.derived.rec}}</b>
+        </button>
+        <button type="button" class="turn-btn" data-action="restDays" data-tooltip="Дни отдыха: ПЗ, Вын, заживление ран">
+          <i class="fa-solid fa-bed"></i> Дни отдыха
+        </button>
+        <button type="button" class="turn-btn" data-action="manualDamage" data-tooltip="Падение, бомба, ловушка, огонь">
+          <i class="fa-solid fa-burst"></i> Урон без атаки
+        </button>
+        <button type="button" class="turn-btn quiet" data-action="controlCheck" data-tooltip="Реа + Верховая езда / Мореходство">
+          <i class="fa-solid fa-horse"></i> Управление
+        </button>
+        <button type="button" class="turn-btn quiet" data-action="ram" data-tooltip="Таран скакуном или транспортом">
+          <i class="fa-solid fa-horse-head"></i> Таран
+        </button>
+      </div>
+    </section>
+
+    <section class="combat-block">
+      <div class="group-head">
+        <span class="bronze-tag">БРОНЯ</span>
+        <span class="rule"></span>
+        {{#if system.derived.encumbrance}}<span class="bad-inline">скованность −{{system.derived.encumbrance}}</span>{{/if}}
+      </div>
+
+      <div class="armor-list">
+        {{#each armorLocations}}
+        <div class="armor-line"{{#if layerNames}} data-tooltip="{{layerNames}}"{{/if}}>
+          <span class="part" data-tooltip="{{label}}">{{label}}</span>
+          <span class="track"><span class="fill" style="width: {{pct}}%"></span></span>
+          <b>{{sp}}</b>
+          <span class="mult{{#if (gt mult 1)}} bad{{/if}}">{{multLabel}}</span>
+        </div>
+        {{/each}}
+      </div>
+
+      {{#if armorLayers}}
+      <div class="armor-note">
+        <span class="cap">СЛОИ</span>
+        <span>{{armorLayers}}</span>
+        {{#if armorResists}}<span class="res">Сопротивления: {{armorResists}}</span>{{/if}}
+      </div>
+      {{else}}
+      <p class="hint">Брони нет — удары приходятся прямо по телу.</p>
+      {{/if}}
+
+      {{#each shields}}
+      <div class="shield-line" data-item-id="{{id}}" data-tooltip="Блок щитом: прочность тратится за каждую блокированную атаку">
+        <img src="{{img}}" alt="">
+        <span class="name">{{name}}</span>
+        <span class="cap">прочность</span>
+        <b>{{reliability}}</b>
+      </div>
+      {{/each}}
+    </section>
+  </div>
+
+  <section class="combat-block wounds">
+    <div class="group-head">
+      <span class="bronze-tag">КРИТИЧЕСКИЕ РАНЕНИЯ</span>
+      <span class="rule"></span>
+      <a class="add" data-action="critCreate" data-tooltip="Добавить вручную"><i class="fa-solid fa-plus"></i> добавить</a>
+    </div>
+
+    {{#each critWounds as |w|}}
+    <div class="wound level-{{w.levelKey}} state-{{w.state}}" data-item-id="{{w.id}}">
+      <img src="{{w.img}}" alt="" class="wound-icon">
+      <div class="wound-body">
+        <div class="wound-head">
+          <a class="wound-name" data-action="itemEdit">{{w.name}}</a>
+          <span class="tag level">{{w.levelLabel}}</span>
+          <span class="dim">{{w.locationLabel}}{{#if w.teeth}} · зубов выбито {{w.teeth}}{{/if}}</span>
+        </div>
+        <p class="wound-text">{{w.text}}{{#if w.healingDays}} Штрафы пройдут через {{w.healingDays}} дн.{{/if}}</p>
+        <p class="hint">{{w.hint}}</p>
+      </div>
+      <div class="wound-ctl">
+        <select class="crit-state" data-tooltip="Состояние раны">
+          {{#each w.states}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+      </div>
+    </div>
+    {{else}}
+    <p class="hint">Ранений нет.</p>
+    {{/each}}
+  </section>
+
+  {{#if isCharacter}}
+  {{> "systems/vedmak/templates/actor/parts/effects.hbs"}}
+  {{/if}}

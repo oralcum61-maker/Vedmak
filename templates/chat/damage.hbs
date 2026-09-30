@@ -1,0 +1,64 @@
+<div class="vedmak-card damage{{#if crit}} is-crit{{/if}}{{#if applied}} is-applied{{/if}}">
+  <header class="card-head">
+    <img src="{{img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">Урон: {{target.name}}</span>
+      <span class="card-sub">{{attackLabel}} · {{locationLabel}}{{#if locRoll}} (d10 {{locRoll}}){{/if}} · {{damageTypeLabel}}{{#if nonLethal}} · несмертельный{{/if}}</span>
+    </div>
+    <div class="card-value blood">
+      <b>{{final}}</b>
+      <span class="cap">{{#if nonLethal}}Вын{{else}}ПЗ{{/if}}</span>
+    </div>
+  </header>
+
+  <div class="card-body">
+    <details class="roll-parts">
+      <summary>из чего сложилось</summary>
+      <ul class="parts">
+        {{#each parts}}<li><span>{{label}}</span><b>{{vedmakSigned value}}</b></li>{{/each}}
+        {{#if coverSp}}<li><span>Укрытие</span><b>−{{coverSp}}</b></li>{{/if}}
+        <li><span>ПБ ({{locationLabel}}){{#if improvedAP}} — улучшенное пробивание ½{{else}}{{#if ap}} — пробивает броню{{/if}}{{/if}}</span><b>−{{effectiveSp}}</b></li>
+        {{#if resistReasons.length}}<li><span>Сопротивление: {{#each resistReasons}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</span><b>×½</b></li>{{/if}}
+        {{#if susceptible}}<li><span>Восприимчивость</span><b>×2</b></li>{{/if}}
+        {{#if immune}}<li><span>Невосприимчивость</span><b>×0</b></li>{{/if}}
+        <li><span>Часть тела</span><b>×{{locMult}}</b></li>
+        {{#if crit}}<li class="luck"><span>Крит «{{crit.levelLabel}}» (мимо брони)</span><b>+{{crit.bonus}}</b></li>{{/if}}
+      </ul>
+    </details>
+
+    {{#if crit}}
+    <div class="crit-box">
+      <b>{{crit.levelLabel}} критическое ранение{{#if crit.woundLabel}}: {{crit.woundLabel}}{{/if}}</b>
+      <span class="dim">бросок {{crit.roll}}</span>
+      <p>{{crit.woundText}}</p>
+    </div>
+    {{/if}}
+
+    {{#if effects.length}}
+    <ul class="parts effects">
+      {{#each effects}}
+        <li class="{{#if success}}ok{{else}}no{{/if}}"><span>{{label}} {{chance}}%{{#if immune}} (невосприимчив){{/if}}</span><b>{{roll}} — {{#if success}}да{{else}}нет{{/if}}</b></li>
+      {{/each}}
+    </ul>
+    {{/if}}
+    {{#if penetrated}}<p class="note dim">Броня пробита: −1 ПБ{{#if ablate}}, разрушающее ещё −{{ablate}}{{/if}}.</p>{{else}}{{#if ablate}}<p class="note dim">Разрушающее: −{{ablate}} ПБ.</p>{{/if}}{{/if}}
+    {{#each notes}}<p class="note dim">{{this}}</p>{{/each}}
+
+    {{#if applied}}
+    <div class="applied-report">
+      {{#each report.lines}}<p>{{this}}</p>{{/each}}
+    </div>
+    {{/if}}
+  </div>
+
+  {{#if applied}}
+  <div class="card-buttons">
+    {{#if report.stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}" data-mod="{{report.stunSave.mod}}" data-reason="{{report.stunSave.reason}}"><i class="fa-solid fa-face-dizzy"></i> Испытание Уст{{#if report.stunSave.mod}} ({{report.stunSave.mod}}){{/if}}</button>{{/if}}
+    {{#if report.deathSave}}<button type="button" class="primary" data-vedmak="deathSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}"><i class="fa-solid fa-skull"></i> Испытание против смерти</button>{{/if}}
+  </div>
+  {{else}}
+  <div class="card-buttons">
+    <button type="button" class="primary" data-vedmak="applyDamage"><i class="fa-solid fa-check"></i> Применить</button>
+  </div>
+  {{/if}}
+</div>

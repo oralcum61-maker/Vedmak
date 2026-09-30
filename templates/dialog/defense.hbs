@@ -1,0 +1,59 @@
+<div class="vedmak-roll-dialog defense">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    <div class="dlg-group">
+      <span class="dlg-label">ЧЕМ ОТВЕЧАЕМ</span>
+      <div class="opt-grid g3">
+        {{#each types}}
+        <label class="opt tall" {{#if hint}}data-tooltip="{{hint}}"{{/if}}>
+          <input type="radio" name="defense" value="{{key}}" data-mod="{{mod}}" {{checked selected}}>
+          <span><b>{{label}}</b><small>{{note}}</small></span>
+        </label>
+        {{/each}}
+      </div>
+      <p class="hint">Уклонение — Уклонение/Изворотливость; позиция — Атлетика; блок и парирование — навык оружия или Ближний бой (щит); без оружия — Борьба.{{#if attack.isRanged}} Дистанционную атаку блокируют только щитом.{{/if}}</p>
+    </div>
+
+    {{#if items.length}}
+    <div class="dlg-group">
+      <span class="dlg-label">БЛОК ИЛИ ПАРИРОВАНИЕ</span>
+      <div class="opt-row">
+        {{#each items}}
+        <label class="chip">
+          <input type="radio" name="itemId" value="{{id}}" {{checked selected}}>
+          <span>{{name}} <b>{{skillLabel}}</b></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    <details class="dlg-group fold" data-fold="defenseSituations"{{#if foldSituations}} open{{/if}}>
+      <summary class="dlg-label">ОБСТОЯТЕЛЬСТВА <span class="dim fold-note" data-fold-note></span></summary>
+      <div class="opt-row">
+        {{#each situations}}
+        <label class="chip">
+          <input type="checkbox" name="sit.{{key}}" data-mod="{{mod}}">
+          <span>{{label}} <b>{{vedmakSigned mod}}</b></span>
+        </label>
+        {{/each}}
+      </div>
+      {{#if statusMods.length}}
+      <p class="hint">Состояния: {{#each statusMods}}{{label}} {{vedmakSigned value}}{{#unless @last}}, {{/unless}}{{/each}} — уже в основе.</p>
+      {{/if}}
+    </details>
+
+    <div class="dlg-row">
+      <label class="num"><span class="cap">противников рядом</span>
+        <input type="number" name="outnumbered" value="1" min="1" step="1">
+      </label>
+      <span class="hint grow">Каждый лишний противник в ближнем бою — −1.{{#if extraCost}} Это не первая защита в раунде: −{{extraCost}} Вын.{{/if}}</span>
+    </div>
+
+    {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

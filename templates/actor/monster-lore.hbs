@@ -1,0 +1,72 @@
+<section class="tab lore-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="vd-panel details">
+    <h3>Сведения</h3>
+    <div class="details-grid">
+      <label>Рост <input type="text" name="system.info.height" value="{{system.info.height}}"></label>
+      <label>Вес <input type="text" name="system.info.weight" value="{{system.info.weight}}"></label>
+      <label>Среда обитания <input type="text" name="system.info.habitat" value="{{system.info.habitat}}"></label>
+      <label>Интеллект <input type="text" name="system.info.intelligence" value="{{system.info.intelligence}}"></label>
+      <label>Организация <input type="text" name="system.info.organization" value="{{system.info.organization}}"></label>
+      <label>Чувства <input type="text" name="system.info.senses" value="{{system.info.senses}}" placeholder="Ночное зрение, чутьё…"></label>
+    </div>
+    <p class="source-line dim">
+      Источник: <input type="text" name="system.source.book" value="{{system.source.book}}" aria-label="Книга">
+      {{#if system.source.page}}стр.{{/if}} <input type="text" class="page" name="system.source.page" value="{{system.source.page}}" aria-label="Страница">
+    </p>
+  </div>
+
+  {{!-- Добыча (стр. 267): количество формулой, ссылка тянется на лист героя --}}
+  <div class="vd-panel loot-panel">
+    <div class="panel-head">
+      <h3>Добыча</h3>
+      {{#if editable}}
+      <div class="panel-tools">
+        <a data-action="toggleAbilityEdit" data-tooltip="{{#if editAbilities}}Готово{{else}}Править добычу{{/if}}">
+          <i class="fa-solid {{#if editAbilities}}fa-check{{else}}fa-pen{{/if}}"></i></a>
+        <a data-action="rowAdd" data-field="loot" data-tooltip="Добавить строку добычи"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      {{/if}}
+    </div>
+    {{#if loot.length}}
+    <ul class="loot-list">
+      {{#each loot as |l|}}
+      <li data-index="{{l.index}}">
+        {{#if @root.editAbilities}}
+        <input type="text" name="system.loot.{{l.index}}.name" value="{{l.name}}" placeholder="Название">
+        <input type="text" class="qty" name="system.loot.{{l.index}}.quantity" value="{{l.quantity}}" placeholder="1d6/2">
+        <input type="hidden" name="system.loot.{{l.index}}.uuid" value="{{l.uuid}}">
+        <a class="danger" data-action="rowDelete" data-field="loot" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+        {{else}}
+        <span class="loot-name">{{#if l.link}}{{{l.link}}}{{else}}{{l.name}}{{/if}}</span>
+        <span class="dots-fill"></span>
+        <b class="loot-qty">{{l.quantity}}</b>
+        {{/if}}
+      </li>
+      {{/each}}
+    </ul>
+    <p class="hint">Количество — как в книге: бросьте формулу при разделке. Предмет со ссылкой перетаскивается на лист героя.</p>
+    {{else}}
+    <p class="hint">Добычи нет.</p>
+    {{/if}}
+  </div>
+
+  <div class="vd-panel editor-panel">
+    <h3>Описание</h3>
+    {{formInput systemFields.description value=system.description enriched=enrichedDescription toggled=true}}
+  </div>
+
+  <div class="vd-panel editor-panel">
+    <h3>Народные поверья <label class="inline">СЛ Образования <input type="number" name="system.knowledge.commonDC" value="{{system.knowledge.commonDC}}"></label></h3>
+    {{formInput systemFields.commonKnowledge value=system.commonKnowledge enriched=enrichedCommon toggled=true}}
+  </div>
+
+  <div class="vd-panel editor-panel">
+    <h3>Ведьмачьи знания <label class="inline">СЛ Монстрологии <input type="number" name="system.knowledge.witcherDC" value="{{system.knowledge.witcherDC}}"></label></h3>
+    {{formInput systemFields.witcherKnowledge value=system.witcherKnowledge enriched=enrichedWitcher toggled=true}}
+  </div>
+
+  <div class="vd-panel editor-panel">
+    <h3>Заметки ведущего</h3>
+    {{formInput systemFields.notes value=system.notes enriched=enrichedNotes toggled=true}}
+  </div>
+</section>

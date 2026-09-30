@@ -1,0 +1,27 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Персонаж",
+      "monster": "Чудовище"
+    },
+    "Item": {
+      "weapon": "Оружие",
+      "armor": "Броня",
+      "gear": "Снаряжение",
+      "spell": "Магия",
+      "profession": "Профессия",
+      "race": "Раса",
+      "critWound": "Критическое ранение",
+      "component": "Компонент",
+      "recipe": "Чертёж или формула",
+      "alchemical": "Алхимия",
+      "enhancement": "Усиление"
+    }
+  },
+  "VEDMAK": {
+    "SheetCharacter": "Лист персонажа «Ведьмак»",
+    "SheetMonster": "Лист чудовища «Ведьмак»",
+    "SheetItem": "Лист предмета «Ведьмак»",
+    "SheetEffect": "Эффект «Ведьмак»"
+  }
+}

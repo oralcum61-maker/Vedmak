@@ -1,0 +1,93 @@
+{{#if actor}}
+<div class="hud-bar{{#if collapsed}} collapsed{{/if}}{{#if isCurrent}} my-turn{{/if}}">
+
+  <div class="hud-head">
+    <img class="portrait" src="{{actor.img}}" alt="" data-action="openSheet" data-tooltip="Открыть лист">
+    <div class="who">
+      <div class="name">{{actor.name}}</div>
+      <div class="meta">
+        Раунд {{round}} · ход: <b>{{turnName}}</b>
+        {{#if encumbrance}} · СД {{encumbrance}}{{/if}}
+        {{#if shield}} · щит {{shield}}{{/if}}
+        {{#if adrenalineRule}} · адреналин {{adrenaline}}{{/if}}
+      </div>
+    </div>
+
+    <div class="hud-vitals">
+      {{#each vitals}}
+      <div class="vital {{key}}{{#if state}} {{state}}{{/if}}">
+        <label>{{label}}</label>
+        <div class="track" data-tooltip="{{hint}}">
+          <span class="fill" style="width: {{pct}}%"></span>
+          {{#if extraPct}}<span class="fill extra" style="left: {{pct}}%; width: {{extraPct}}%"></span>{{/if}}
+          {{#if notch}}<span class="notch" style="left: {{notch}}%"></span>{{/if}}
+        </div>
+        <span class="num">{{value}}<span class="dim">/{{max}}{{suffix}}</span></span>
+      </div>
+      {{/each}}
+    </div>
+
+    <div class="hud-statuses">
+      {{#each statuses}}
+      <a class="status" data-action="toggleStatus" data-status="{{id}}" data-tooltip="{{hint}} — снять">
+        <img src="{{img}}" alt=""><span>{{name}}</span>
+      </a>
+      {{/each}}
+    </div>
+
+    <div class="hud-turn">
+      {{#if canAdvance}}<button type="button" class="hud-btn next" data-action="nextTurn" data-tooltip="Передать ход дальше"><i class="fa-solid fa-forward-step"></i> Ход</button>{{/if}}
+      <a class="fold" data-action="toggleCollapse" data-tooltip="{{#if collapsed}}Развернуть{{else}}Свернуть{{/if}}"><i class="fa-solid {{#if collapsed}}fa-chevron-up{{else}}fa-chevron-down{{/if}}"></i></a>
+    </div>
+  </div>
+
+  <div class="hud-rows">
+    <div class="hud-row">
+      <span class="tag">Атака</span>
+      {{#each attacks}}
+      <button type="button" class="hud-btn atk" data-action="attack" data-kind="{{kind}}" data-item-id="{{itemId}}"
+              data-tooltip="{{label}}: урон {{damage}}{{#if range}}, дистанция {{range}}{{/if}} (Shift — без окна)">
+        <img src="{{img}}" alt=""> {{label}} <b>{{base}}</b>
+      </button>
+      {{else}}<span class="dim">нет оружия в руках</span>
+      {{/each}}
+    </div>
+
+    <div class="hud-row">
+      <span class="tag">Защита</span>
+      {{#each defenses}}
+      <button type="button" class="hud-btn def" data-action="rollSkill" data-skill="{{key}}" data-tooltip="Проверка навыка (Shift — без окна)">
+        {{label}} <b>{{base}}</b>
+      </button>
+      {{/each}}
+      <span class="sep"></span>
+      <button type="button" class="hud-btn util" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">Уст <b>&lt; {{stun}}</b></button>
+      {{#if dying}}<button type="button" class="hud-btn danger" data-action="deathSave" data-tooltip="Испытание против смерти"><i class="fa-solid fa-skull"></i> Против смерти</button>{{/if}}
+      <button type="button" class="hud-btn util" data-action="restTurn" data-tooltip="Полный ход отдыха: вернуть Вын"><i class="fa-solid fa-lungs"></i></button>
+      <button type="button" class="hud-btn util" data-action="manualDamage" data-tooltip="Урон без атаки: падение, огонь, ловушка"><i class="fa-solid fa-burst"></i></button>
+    </div>
+
+    {{#if spells.length}}
+    <div class="hud-row">
+      <span class="tag">Магия</span>
+      {{#each spells}}
+      <button type="button" class="hud-btn spell" data-action="castSpell" data-item-id="{{id}}" data-tooltip="{{name}} (Shift — без окна)">
+        <img src="{{img}}" alt=""> {{name}} <b>{{cost}}</b>
+      </button>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if alchemy.length}}
+    <div class="hud-row">
+      <span class="tag">Алхимия</span>
+      {{#each alchemy}}
+      <button type="button" class="hud-btn alch" data-action="useAlchemical" data-item-id="{{id}}" data-tooltip="{{hint}}">
+        <img src="{{img}}" alt=""> {{name}} <b>×{{quantity}}</b>
+      </button>
+      {{/each}}
+    </div>
+    {{/if}}
+  </div>
+</div>
+{{/if}}

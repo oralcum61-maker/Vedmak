@@ -1,0 +1,21 @@
+{{!-- Полосы жизни в колонке: подпись и крупное число сверху, под ними шкала с делениями
+      по четвертям и риской порога. Лист чудовища берёт обычный vitals.hbs. --}}
+<div class="rail-vitals">
+  {{#each vitals}}
+  <div class="rv {{key}}{{#if state}} {{state}}{{/if}}">
+    <div class="rv-head">
+      <span class="cap">{{full}}</span>
+      <input type="number" name="{{name}}" value="{{value}}" data-tooltip="{{hint}}" aria-label="{{label}}">
+      <span class="max">/ {{max}}{{suffix}}</span>
+    </div>
+    <div class="track" data-tooltip="{{hint}}">
+      <span class="fill" style="width: {{pct}}%"></span>
+      {{#if extraPct}}<span class="fill extra" style="left: {{pct}}%; width: {{extraPct}}%"></span>{{/if}}
+      <span class="tick" style="left: 25%"></span>
+      <span class="tick" style="left: 50%"></span>
+      <span class="tick" style="left: 75%"></span>
+      {{#if notch}}<span class="notch" style="left: {{notch}}%" data-tooltip="{{#if notchHint}}{{notchHint}}{{else}}Порог ранения{{/if}}"></span>{{/if}}
+    </div>
+  </div>
+  {{/each}}
+</div>

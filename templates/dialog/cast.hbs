@@ -1,0 +1,92 @@
+<div class="vedmak-roll-dialog cast">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    {{#if costDots.length}}
+    <div class="dlg-group">
+      <span class="dlg-label">ВЛОЖИТЬ ВЫНОСЛИВОСТИ <span class="dim">· берёт от 1 до {{maxCost}}</span></span>
+      <div class="cost-row">
+        {{#each costDots}}
+        <label class="bar{{#if on}} on{{/if}}" data-bar="{{value}}" data-tooltip="Вложить {{value}}">
+          <input type="radio" name="cost" value="{{value}}" data-damage="{{damage}}" data-note="{{note}}" {{checked selected}}
+                 aria-label="Вложить Выносливости: {{value}}">
+          <span aria-hidden="true"></span>
+        </label>
+        {{/each}}
+        <span class="cost-note" data-cost-note>{{costNote}}</span>
+        <b class="cost-value" data-cost-value>{{cfg.cost}}</b>
+      </div>
+    </div>
+    {{else if s.variableCost}}
+    <div class="dlg-group">
+      <span class="dlg-label">ВЛОЖИТЬ ВЫНОСЛИВОСТИ <span class="dim">· до {{maxCost}}</span></span>
+      <input type="number" name="cost" value="{{cfg.cost}}" min="1" max="{{maxCost}}" step="1">
+    </div>
+    {{/if}}
+
+    <div class="energy" data-energy>
+      <div class="energy-head">
+        <span class="cap">ЭНЕРГИЯ ЗА РАУНД</span>
+        <span class="energy-text" data-energy-text></span>
+      </div>
+      <div class="energy-bar">
+        <span class="fill" data-energy-fill></span>
+        <span class="over" data-energy-over></span>
+      </div>
+      <span class="energy-warn" data-energy-warn></span>
+    </div>
+
+    {{#if focus}}
+    <label class="plate">
+      <input type="checkbox" name="useFocus" {{checked cfg.useFocus}}>
+      <span class="plate-text">Фокус: <b>{{focusItem}}</b></span>
+      <b class="plate-value">−{{focus}} Вын</b>
+    </label>
+    {{/if}}
+
+    {{#unless isHex}}
+    <label class="plate">
+      <input type="checkbox" name="placeOfPower" data-mod="2">
+      <span class="plate-text">Место силы этой стихии</span>
+      <b class="plate-value">+5 Энергии, +2</b>
+    </label>
+    {{/unless}}
+
+    <div class="dlg-row">
+      <label class="num"><span class="cap">двимерит в 5 м</span>
+        <input type="number" name="dimeritium" value="0" min="0" step="1">
+      </label>
+      {{#if isRitual}}
+      <label class="num"><span class="cap">СЛ ритуала{{#if s.dcText}} ({{s.dcText}}){{/if}}</span>
+        <input type="number" name="dc" value="{{cfg.dc}}" min="0">
+      </label>
+      <label class="num"><span class="cap">помощников (до 4)</span>
+        <input type="number" name="helpers" value="0" min="0" max="4">
+      </label>
+      {{else}}
+      <span class="hint grow">Каждая единица двимерита — −1 Энергии.</span>
+      {{/if}}
+    </div>
+
+    {{#if targets.length}}
+    <div class="dlg-group">
+      <span class="dlg-label">ЦЕЛИ</span>
+      <div class="opt-row">
+        {{#each targets}}<span class="chip static">{{name}}</span>{{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if isRitual}}
+    <p class="hint">Подготовка: {{s.preparation}}. Ингредиенты: {{s.ingredients}}{{#if s.altIngredients}} (замена: {{s.altIngredients}}){{/if}}. Тратятся и при провале.</p>
+    {{/if}}
+    {{#if maintained.length}}
+    <p class="hint warn">Поддерживается: {{#each maintained}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}. Пока держится активное заклинание, другие творить нельзя.</p>
+    {{/if}}
+
+    {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

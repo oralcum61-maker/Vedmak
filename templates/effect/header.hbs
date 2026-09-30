@@ -1,0 +1,13 @@
+<header class="vd-header">
+  <img class="portrait" src="{{source.img}}" data-action="editImage" data-edit="img" alt="Значок эффекта">
+  <div class="identity">
+    <div class="name-line">
+      <input class="name" type="text" name="name" value="{{source.name}}" placeholder="Название эффекта">
+      <div class="tags">
+        <span class="tag">{{originLabel}}</span>
+        {{#if source.disabled}}<span class="tag state wounded">выключен</span>{{/if}}
+        {{#if durationLabel}}<span class="tag">{{durationLabel}}</span>{{/if}}
+      </div>
+    </div>
+  </div>
+</header>

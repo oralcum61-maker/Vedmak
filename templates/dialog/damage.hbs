@@ -1,0 +1,70 @@
+<div class="vedmak-roll-dialog damage">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    {{#if manyTypes}}
+    <div class="dlg-group">
+      <span class="dlg-label">ТИП УРОНА</span>
+      <div class="opt-row">
+        {{#each damageTypes}}
+        <label class="chip">
+          <input type="radio" name="damageType" value="{{key}}" {{checked selected}}>
+          <span>{{label}}</span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+    {{else}}
+    <input type="hidden" name="damageType" value="{{singleType}}">
+    {{/if}}
+
+    <div class="dlg-group">
+      <span class="dlg-label">КУДА ПОПАЛО</span>
+      <div class="opt-grid g4">
+        {{#each locations}}
+        <label class="opt">
+          <input type="radio" name="location" value="{{key}}" {{checked selected}}>
+          <span>{{label}}<em class="dim">{{note}}</em></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+
+    <details class="dlg-group fold">
+      <summary class="dlg-label">УКРЫТИЕ ЦЕЛИ <span class="dim" data-cover-note>{{coverNote}}</span></summary>
+      <div class="opt-row">
+        {{#each covers}}
+        <label class="chip">
+          <input type="radio" name="cover" value="{{key}}" {{checked selected}}>
+          <span>{{label}}{{#if sp}} <b>ПБ {{sp}}</b>{{/if}}</span>
+        </label>
+        {{/each}}
+      </div>
+    </details>
+
+    <div class="dlg-row mods">
+      <div class="dlg-group">
+        <span class="dlg-label">ДОП. УРОН</span>
+        <div class="mod-fields">
+          <div class="mod-field">
+            <div class="stepper">
+              <button type="button" class="step" data-step="-1" data-field="mod" aria-label="Меньше"><i class="fa-solid fa-minus"></i></button>
+              <input type="number" name="mod" value="{{cfg.mod}}" step="1" aria-label="Дополнительный урон">
+            <button type="button" class="step" data-step="1" data-field="mod" aria-label="Больше"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <span class="cap">к броску урона</span>
+          </div>
+        </div>
+      </div>
+      {{#if adrenalineMax}}
+      <label class="num"><span class="cap">кости адреналина (есть {{adrenalineMax}}, −10 Вын за кость)</span>
+        <input type="number" name="adrenaline" value="0" min="0" max="{{adrenalineMax}}">
+      </label>
+      {{/if}}
+    </div>
+
+    {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

@@ -1,0 +1,12 @@
+<header class="vd-header item-header">
+  <img class="portrait" src="{{item.img}}" alt="{{item.name}}" data-action="editImage" data-edit="img">
+  <div class="identity">
+    <input class="name" type="text" name="name" value="{{item.name}}" placeholder="Название">
+    <div class="tags">
+      <span class="tag">{{typeLabel}}</span>
+      {{#if (eq item.type "spell")}}<span class="tag">{{vedmakLabel "MAGIC_KINDS" system.kind}}</span>{{/if}}
+      {{#if system.relic}}<span class="tag relic">Реликвия</span>{{/if}}
+      <a class="tag post" data-action="post" data-tooltip="Показать в чате"><i class="fa-solid fa-comment"></i> В чат</a>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,57 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Рецепт</legend>
+    <div class="vd-grid g3">
+      <label>Вид <select name="system.kind">{{selectOptions config.RECIPE_KINDS selected=system.kind}}</select></label>
+      <label>Категория <select name="system.category">{{selectOptions config.RECIPE_CATEGORIES selected=system.category}}</select></label>
+      <label>Уровень <select name="system.level">{{selectOptions config.RECIPE_LEVELS selected=system.level}}</select></label>
+      <label>Навык <select name="system.skill">{{selectOptions skillChoice selected=system.skill}}</select></label>
+      <label>СЛ <input type="number" name="system.dc" value="{{system.dc}}" min="0"></label>
+      <label>Время <input type="text" name="system.time" value="{{system.time}}"></label>
+      <label>Доплата, кр. <input type="number" name="system.surcharge" value="{{system.surcharge}}" min="0"></label>
+      <label>Цена рецепта <input type="number" name="system.cost" value="{{system.cost}}" min="0"></label>
+      <label class="check"><input type="checkbox" name="system.needsForge" {{checked system.needsForge}}> Нужна кузница</label>
+      <label class="check"><input type="checkbox" name="system.memorized" {{checked system.memorized}}> Запомнен</label>
+    </div>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Результат</legend>
+    <div class="vd-grid g3">
+      <label class="span2">Предмет <input type="text" name="system.result.name" value="{{system.result.name}}"></label>
+      <label>Количество <input type="number" name="system.result.quantity" value="{{system.result.quantity}}" min="1"></label>
+      <label>Тип <select name="system.result.type">{{selectOptions resultTypes selected=system.result.type}}</select></label>
+    </div>
+    <p class="hint">Предмет ищется по названию и типу в компендиумах и мире.</p>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Компоненты <a data-action="rowAdd" data-field="components" data-tooltip="Добавить компонент"><i class="fa-solid fa-plus"></i></a></legend>
+    {{#each system.components as |c|}}
+    <div class="row-edit mod" data-index="{{@index}}">
+      <input type="text" name="system.components.{{@index}}.name" value="{{c.name}}" placeholder="Название компонента">
+      <input type="number" name="system.components.{{@index}}.quantity" value="{{c.quantity}}" min="1">
+      <a data-action="rowDelete" data-field="components" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{else}}<p class="hint">Нет именных компонентов.</p>
+    {{/each}}
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Субстанции</legend>
+    <div class="vd-grid g3 substances-edit">
+      {{#each substanceRows as |s|}}
+      <label><span class="sub-dot" style="background:{{s.color}}">{{s.symbol}}</span> {{s.label}} <input type="number" name="system.substances.{{s.key}}" value="{{s.value}}" min="0"></label>
+      {{/each}}
+    </div>
+    <p class="hint">Формула требует только субстанции — годится любой ингредиент с нужной субстанцией (стр. 142).</p>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Источник</legend>
+    <div class="vd-grid g2">
+      <label>Книга <input type="text" name="system.source.book" value="{{system.source.book}}"></label>
+      <label>Стр. <input type="text" name="system.source.page" value="{{system.source.page}}"></label>
+    </div>
+  </fieldset>
+</section>

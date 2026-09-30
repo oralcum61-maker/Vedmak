@@ -1,0 +1,61 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Алхимия</legend>
+    <div class="vd-grid g3">
+      <label>Вид <select name="system.kind">{{selectOptions config.ALCHEMY_KINDS selected=system.kind}}</select></label>
+      <label>Действие <select name="system.use.action">{{selectOptions config.ALCHEMY_ACTIONS selected=system.use.action}}</select></label>
+      <label>Токсичность, % <input type="number" name="system.toxicity" value="{{system.toxicity}}" min="0"></label>
+      <label>Длительность (текст) <input type="text" name="system.duration" value="{{system.duration}}"></label>
+      <label>Раундов <input type="number" name="system.durationRounds" value="{{system.durationRounds}}" min="0"></label>
+      <label>Минут <input type="number" name="system.durationMinutes" value="{{system.durationMinutes}}" min="0"></label>
+    </div>
+    <label class="wide">Эффект <textarea name="system.effect" rows="3">{{system.effect}}</textarea></label>
+  </fieldset>
+
+  {{#if (eq system.kind "oil")}}
+  <fieldset class="vd-fieldset">
+    <legend>Масло</legend>
+    <label>Против <select name="system.oilTarget">{{selectOptions config.MONSTER_CLASSES selected=system.oilTarget}}</select></label>
+    <p class="hint">+5 урона по этому классу чудовищ на 30 минут; «Гуманоиды» — ещё и персонажи.</p>
+  </fieldset>
+  {{/if}}
+
+  <fieldset class="vd-fieldset">
+    <legend>Автоматизация</legend>
+    <div class="vd-grid g3">
+      <label>Урон <input type="text" name="system.use.damage" value="{{system.use.damage}}" placeholder="5d6"></label>
+      <label>Тип урона <select name="system.use.damageType">{{selectOptions damageTypeOptions selected=system.use.damageType}}</select></label>
+      <label>Зона <input type="text" name="system.use.area" value="{{system.use.area}}" placeholder="4 м"></label>
+      <label>Дистанция <input type="text" name="system.use.range" value="{{system.use.range}}" placeholder="Тел×4 м"></label>
+      <label>Эффект <select name="system.use.status">{{selectOptions statusChoice selected=system.use.status}}</select></label>
+      <label>Шанс, % <input type="number" name="system.use.statusChance" value="{{system.use.statusChance}}" min="0" max="100"></label>
+      <label>Раундов эффекта <input type="text" name="system.use.statusRounds" value="{{system.use.statusRounds}}"></label>
+      <label>Регенерация ПЗ/раунд <input type="number" name="system.use.regen" value="{{system.use.regen}}" min="0"></label>
+      <label>Временные ПЗ <input type="number" name="system.use.heal" value="{{system.use.heal}}" min="0"></label>
+      <label class="check"><input type="checkbox" name="system.use.clearToxicity" {{checked system.use.clearToxicity}}> Обнулить токсичность</label>
+    </div>
+    <div class="wide">
+      <span class="field-label">Снимает состояния</span>
+      <multi-select name="system.use.removeStatuses">{{selectOptions statusOptions selected=system.use.removeStatuses}}</multi-select>
+    </div>
+    <label class="wide">Изменения активного эффекта (JSON)
+      <textarea name="system.changes" rows="3" placeholder='[{"key": "system.fx.damage", "type": "add", "value": 3}]'>{{changesText}}</textarea>
+    </label>
+    <p class="hint">Цели: system.skills.&lt;навык&gt;.mod, system.stats.&lt;параметр&gt;.mod, system.fx.hp / sta / vigor / rec / damage / meleeDamage.</p>
+  </fieldset>
+
+  {{#if (eq system.kind "mutagen")}}
+  <fieldset class="vd-fieldset">
+    <legend>Мутаген</legend>
+    <div class="vd-grid g3">
+      <label>Цвет <select name="system.mutagen.color">{{selectOptions config.MUTAGEN_COLORS selected=system.mutagen.color}}</select></label>
+      <label>СЛ Алхимии <input type="number" name="system.mutagen.dc" value="{{system.mutagen.dc}}" min="0"></label>
+      <label class="check"><input type="checkbox" name="system.applied" {{checked system.applied}}> Принят</label>
+    </div>
+    <label class="wide">Малая мутация <input type="text" name="system.mutagen.minor" value="{{system.mutagen.minor}}"></label>
+  </fieldset>
+  {{> "systems/vedmak/templates/item/parts/mods.hbs"}}
+  {{/if}}
+
+  {{> "systems/vedmak/templates/item/physical.hbs"}}
+</section>

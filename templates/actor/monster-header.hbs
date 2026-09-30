@@ -1,0 +1,27 @@
+<header class="vd-header monster-header">
+  <img class="portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img">
+  <div class="identity">
+    <div class="name-line">
+      <input class="name" type="text" name="name" value="{{actor.name}}" placeholder="Название">
+      <div class="tags selects">
+        <select name="system.monsterClass" data-tooltip="Класс">{{selectOptions monsterClasses selected=system.monsterClass}}</select>
+        <select name="system.threat.complexity" data-tooltip="Уровень угрозы: сложность">{{selectOptions threatComplexity selected=system.threat.complexity}}</select>
+        <select name="system.threat.difficulty" data-tooltip="Уровень угрозы: опасность">{{selectOptions threatDifficulty selected=system.threat.difficulty}}</select>
+        {{#if system.derived.dying}}<span class="tag state dying">При смерти</span>
+        {{else if system.derived.wounded}}<span class="tag state wounded">Ниже порога ранения</span>{{/if}}
+      </div>
+    </div>
+    {{> "systems/vedmak/templates/actor/parts/vitals.hbs"}}
+  </div>
+
+  <div class="resources">
+    <div class="res armor">
+      <label>Броня</label>
+      <div class="pair"><input type="number" name="system.armor" value="{{system.armor}}" min="0"></div>
+    </div>
+    <div class="res bounty">
+      <label>Награда</label>
+      <div class="pair"><input type="number" name="system.bounty" value="{{system.bounty}}" min="0"><span>кр.</span></div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,60 @@
+<div class="vedmak-roll-dialog craft-dialog">
+  {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
+
+  <div class="dlg-body">
+    <div class="craft-req">
+      {{#if req.components.length}}
+      <div class="dlg-group">
+        <span class="dlg-label">КОМПОНЕНТЫ</span>
+        <ul class="req">
+          {{#each req.components}}<li class="{{#if ok}}ok{{else}}no{{/if}}">{{name}}: {{have}} / {{need}}</li>{{/each}}
+        </ul>
+      </div>
+      {{/if}}
+      {{#if req.substances.length}}
+      <div class="dlg-group">
+        <span class="dlg-label">СУБСТАНЦИИ</span>
+        <ul class="req substances">
+          {{#each req.substances}}<li class="{{#if ok}}ok{{else}}no{{/if}}"><span class="sub-dot" style="background:{{color}}">{{symbol}}</span> {{label}}: {{have}} / {{need}}</li>{{/each}}
+        </ul>
+        <p class="hint">Тратятся любые ингредиенты с нужной субстанцией, дешёвые — первыми.</p>
+      </div>
+      {{/if}}
+      <div class="dlg-group">
+        <span class="dlg-label">ИНСТРУМЕНТЫ</span>
+        <ul class="req">
+          {{#each req.tools}}<li class="{{#if ok}}ok{{else}}no{{/if}}">{{label}}</li>{{/each}}
+        </ul>
+      </div>
+    </div>
+
+    {{#unless req.toolsOk}}
+    <label class="plate">
+      <input type="checkbox" name="toolsOverride">
+      <span class="plate-text">Инструменты или кузница есть на месте</span>
+      <b class="plate-value">разрешение ведущего</b>
+    </label>
+    {{/unless}}
+
+    <label class="plate">
+      <input type="checkbox" name="blueprint" data-mod="{{bonus}}" checked>
+      <span class="plate-text">{{#if r.isFormula}}Формула{{else}}Чертёж{{/if}} перед глазами{{#if memorizedNote}} — рецепт запомнен{{/if}}</span>
+      <b class="plate-value">{{vedmakSigned bonus}}</b>
+    </label>
+
+    {{#if r.surcharge}}
+    <label class="plate" {{#unless canSurcharge}}data-tooltip="Не хватает крон"{{/unless}}>
+      <input type="checkbox" name="surcharge" {{#unless canSurcharge}}disabled{{/unless}} {{#unless req.materialsOk}}{{#if canSurcharge}}checked{{/if}}{{/unless}}>
+      <span class="plate-text">Купить все материалы в поселении (есть {{crowns}} крон)</span>
+      <b class="plate-value">{{r.surcharge}} крон</b>
+    </label>
+    {{/if}}
+    {{#unless req.materialsOk}}{{#unless r.surcharge}}<p class="hint warn">Материалов не хватает.</p>{{/unless}}{{/unless}}
+
+    {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
+
+    <p class="hint">Материалы расходуются и при провале; после провала можно попробовать переработку.</p>
+  </div>
+
+  {{> "systems/vedmak/templates/dialog/parts/total.hbs" total}}
+</div>

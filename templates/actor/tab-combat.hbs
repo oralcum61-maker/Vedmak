@@ -1,0 +1,27 @@
+{{!-- Вкладка «Бой». У персонажа две подвкладки: обычный бой и социальный (словесная дуэль);
+      у чудовища — только обычный бой. --}}
+<section class="tab combat-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#if isCharacter}}
+
+  <div class="skills-head">
+    <nav class="tabs pane-switch" aria-label="Бой и социальный бой">
+      <a class="{{combatTabs.fight.cssClass}}" data-action="tab" data-group="combat" data-tab="fight">
+        <i class="fa-solid fa-swords"></i><span>Бой</span>
+      </a>
+      <a class="{{combatTabs.social.cssClass}}" data-action="tab" data-group="combat" data-tab="social">
+        <i class="fa-solid fa-comments"></i><span>Социальный бой</span><span class="count">{{verbal.resolve.value}}</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="tab pane {{combatTabs.fight.cssClass}}" data-group="combat" data-tab="fight">
+    {{> "systems/vedmak/templates/actor/parts/combat-fight.hbs"}}
+  </div>
+  <div class="tab pane {{combatTabs.social.cssClass}}" data-group="combat" data-tab="social">
+    {{> "systems/vedmak/templates/actor/parts/combat-social.hbs"}}
+  </div>
+
+  {{else}}
+  {{> "systems/vedmak/templates/actor/parts/combat-fight.hbs"}}
+  {{/if}}
+</section>

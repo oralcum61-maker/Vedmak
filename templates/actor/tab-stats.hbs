@@ -1,0 +1,90 @@
+<section class="tab stats-tab{{#if advanceMode}} advancing{{/if}} {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+
+  {{#if advanceMode}}
+  <div class="advance-bar">
+    <i class="fa-solid fa-arrow-up-right-dots"></i>
+    <b>Развитие</b>
+    <span class="hint-inline">повышение параметра стоит новое значение × 10 О.У.</span>
+    <span class="grow"></span>
+    <span class="ip">осталось <b>{{system.improvementPoints.value}}</b> О.У.</span>
+    <a class="rail-btn" data-action="toggleAdvance">Выйти</a>
+  </div>
+  {{/if}}
+
+  {{!-- Параметры двумя столбцами по смыслу: ровная сетка вместо ряда 5 + 4 --}}
+  <div class="stat-cols">
+    {{#each statGroups}}
+    <section class="stat-col">
+      <div class="group-head"><span class="bronze-tag">{{label}}</span><span class="rule"></span></div>
+      {{#each stats}}
+      <div class="stat-row{{#if tone}} tone-{{tone}}{{/if}}">
+        <a class="hit rollable" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)">
+          <span class="stamp">{{effective}}<i class="fa-solid fa-certificate"></i></span>
+          <span class="who">
+            <span class="name">{{label}}</span>
+            <span class="about" data-tooltip="{{about}}">{{about}}</span>
+          </span>
+        </a>
+        {{#if @root.advanceMode}}
+          {{#with offer}}
+          <a class="improve{{#if error}} disabled{{/if}}" data-action="improveStat" data-stat="{{../key}}"
+             data-tooltip="{{#if error}}{{error}}{{else}}Повысить до {{to}} за {{cost}} О.У{{/if}}">
+            <i class="fa-solid fa-plus"></i>{{#unless error}} <small>{{cost}}</small>{{/unless}}
+          </a>
+          {{/with}}
+        {{else}}
+          <label class="base" data-tooltip="Вложенные очки">
+            <span class="cap">база</span>
+            <input type="number" name="system.stats.{{key}}.base" value="{{base}}" min="0">
+          </label>
+        {{/if}}
+      </div>
+      {{/each}}
+    </section>
+    {{/each}}
+  </div>
+
+  {{!-- Производные списками, как в книге: название — заполнитель — число --}}
+  <div class="derived-lists">
+    {{#each derivedGroups}}
+    <section class="dlist">
+      <div class="group-head"><span class="glabel">{{label}}</span><span class="rule"></span></div>
+      {{#each items}}
+      <div class="dline" data-tooltip="{{hint}}">
+        <span class="t">{{label}}</span>
+        <span class="dots-fill"></span>
+        <b>{{value}}{{#if unit}}<small> {{unit}}</small>{{/if}}</b>
+      </div>
+      {{/each}}
+    </section>
+    {{/each}}
+  </div>
+
+  {{!-- Удача не бросается как параметр — её тратят, поэтому она стоит отдельной строкой --}}
+  <div class="fate-bar">
+    <span class="cap">СУДЬБА</span>
+    <span class="fate-value">
+      <span class="t">Удача</span>
+      <b>{{luckStat.effective}}</b>
+      <span class="hint-inline">из {{system.luck.max}} — тратится на любой бросок</span>
+    </span>
+    <span class="grow"></span>
+    <label class="base" data-tooltip="Вложенные очки">
+      <span class="cap">база</span>
+      <input type="number" name="system.stats.luck.base" value="{{luckStat.base}}" min="0">
+    </label>
+  </div>
+
+  <details class="bonus-fold">
+    <summary>Бонусы к максимумам <span class="dim">— от реликвий, мутагенов и способностей</span></summary>
+    <div class="counters wide">
+      <label><span>ПЗ</span><input type="number" name="system.bonus.hp" value="{{system.bonus.hp}}"></label>
+      <label><span>Вын</span><input type="number" name="system.bonus.sta" value="{{system.bonus.sta}}"></label>
+      <label><span>Энергия</span><input type="number" name="system.bonus.vigor" value="{{system.bonus.vigor}}"></label>
+      <label><span>Уст</span><input type="number" name="system.bonus.stun" value="{{system.bonus.stun}}"></label>
+      <label><span>Отдых</span><input type="number" name="system.bonus.rec" value="{{system.bonus.rec}}"></label>
+      <label><span>Бег</span><input type="number" name="system.bonus.run" value="{{system.bonus.run}}"></label>
+      <label><span>Вес</span><input type="number" name="system.bonus.enc" value="{{system.bonus.enc}}"></label>
+    </div>
+  </details>
+</section>

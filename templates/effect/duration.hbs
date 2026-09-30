@@ -1,0 +1,18 @@
+<section class="tab{{#if tab.active}} active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <fieldset class="vd-fieldset">
+    <legend>Длительность</legend>
+    <div class="vd-grid g2">
+      <label>Сколько<input type="number" name="duration.value" value="{{source.duration.value}}" min="0" placeholder="без предела"></label>
+      <label>Чего<select name="duration.units">{{selectOptions durationUnits selected=source.duration.units}}</select></label>
+      <label class="span2">Когда истекает<select name="duration.expiry">{{selectOptions expiryEvents selected=source.duration.expiry blank="по времени мира"}}</select></label>
+    </div>
+    <p class="hint">Раунды и ходы отсчитываются в бою, остальное — по часам мира. Пустая длительность — эффект действует, пока его не снимут.</p>
+  </fieldset>
+
+  {{#if startLabel}}
+  <fieldset class="vd-fieldset">
+    <legend>Начало</legend>
+    <p class="hint">{{startLabel}}</p>
+  </fieldset>
+  {{/if}}
+</section>

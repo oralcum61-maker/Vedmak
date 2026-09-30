@@ -1,0 +1,45 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Оружие</legend>
+    <div class="vd-grid g3">
+      <label>Категория <select name="system.category">{{selectOptions config.WEAPON_CATEGORIES selected=system.category}}</select></label>
+      <label>Навык атаки <select name="system.skill">{{selectOptions config.WEAPON_SKILLS selected=system.skill}}</select></label>
+      <label>Точность <input type="number" name="system.accuracy" value="{{system.accuracy}}"></label>
+      <label>Урон <input type="text" name="system.damage" value="{{system.damage}}" placeholder="2d6+2"></label>
+      <label>Урон серебром <input type="text" name="system.silverDamage" value="{{system.silverDamage}}" placeholder="—"></label>
+      <label>Хват (рук) <input type="number" name="system.hands" value="{{system.hands}}" min="0" max="2"></label>
+      <label>Надёжность <span class="pair"><input type="number" name="system.reliability.value" value="{{system.reliability.value}}"> / <input type="number" name="system.reliability.max" value="{{system.reliability.max}}"></span></label>
+      <label>Дистанция <input type="text" name="system.range" value="{{system.range}}" placeholder="Тел×4 м"></label>
+      <label>Слоты улучшений <input type="number" name="system.enhancementSlots" value="{{system.enhancementSlots}}" min="0"></label>
+    </div>
+    <div class="wide">
+      <span class="field-label">Тип урона</span>
+      <multi-checkbox name="system.damageTypes">{{selectOptions damageTypeOptions selected=system.damageTypes}}</multi-checkbox>
+    </div>
+    <label class="check"><input type="checkbox" name="system.relic" {{checked system.relic}}> Реликвия</label>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Эффекты <a data-action="rowAdd" data-field="effects" data-tooltip="Добавить эффект"><i class="fa-solid fa-plus"></i></a></legend>
+    {{#each weaponEffects as |e|}}
+    <div class="row-edit" data-index="{{e.index}}">
+      <select name="system.effects.{{e.index}}.key">{{selectOptions @root.config.WEAPON_EFFECTS selected=e.key}}</select>
+      <input type="text" name="system.effects.{{e.index}}.value" value="{{e.value}}" placeholder="{{#if e.hasParam}}{{e.paramHint}}{{else}}—{{/if}}">
+      <a data-action="rowDelete" data-field="effects" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{else}}<p class="hint">Нет особых эффектов.</p>
+    {{/each}}
+    <p class="hint">Эффекты с отметкой источника — нанесённые руны.</p>
+  </fieldset>
+
+  {{#if system.oil.target}}
+  <fieldset class="vd-fieldset">
+    <legend>Масло</legend>
+    <p>{{system.oil.name}}: +5 урона против «{{vedmakLabel "MONSTER_CLASSES" system.oil.target}}» {{#if system.activeOil}}(действует){{else}}(выдохлось){{/if}}.</p>
+  </fieldset>
+  {{/if}}
+
+  {{> "systems/vedmak/templates/item/parts/mods.hbs" modsLegend="Модификаторы (пока в руках)" modsHint="Реликвии: +ПЗ, +к навыкам — действуют, пока оружие в руках."}}
+
+  {{> "systems/vedmak/templates/item/physical.hbs"}}
+</section>

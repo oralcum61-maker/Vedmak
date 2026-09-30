@@ -1,0 +1,16 @@
+{{!-- Шапка окна проверки: что бросаем, из чего складывается основа. Контекст — объект head. --}}
+<header class="dlg-head">
+  {{#if img}}<img src="{{img}}" alt="">{{/if}}
+  <div class="dlg-ident">
+    <span class="dlg-title">{{title}}</span>
+    {{#if subtitle}}<span class="dlg-sub">{{subtitle}}</span>{{/if}}
+    {{#if note}}<span class="dlg-sub{{#if noteWarn}} warn{{/if}}">{{note}}</span>{{/if}}
+  </div>
+  {{#unless noBase}}
+  <div class="dlg-base" data-base="{{base}}">
+    <span class="cap">ОСНОВА</span>
+    <b>{{base}}</b>
+    {{#if baseHint}}<span class="cap dim">{{baseHint}}</span>{{/if}}
+  </div>
+  {{/unless}}
+</header>

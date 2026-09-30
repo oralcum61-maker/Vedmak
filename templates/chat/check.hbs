@@ -1,0 +1,20 @@
+<div class="vedmak-card check{{#if crit}} is-crit{{/if}}{{#if fumble}} is-fumble{{/if}}{{#if dc}}{{#if success}} is-success{{else}} is-failure{{/if}}{{/if}}">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">{{title}}</span>
+      {{#if subtitle}}<span class="card-sub">{{subtitle}}</span>{{/if}}
+    </div>
+    <div class="card-value">
+      <b>{{total}}</b>
+      <span class="cap">{{#if dc}}против {{dc}}{{else}}итог{{/if}}</span>
+    </div>
+  </header>
+
+  <div class="card-body">
+    {{> "systems/vedmak/templates/chat/parts/roll.hbs"}}
+    {{#if dc}}
+      {{#if success}}<div class="outcome success">Успех · на {{margin}}</div>
+      {{else}}<div class="outcome failure">Провал</div>{{/if}}
+    {{/if}}
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Раса</legend>
+    <div class="vd-grid g2">
+      <label>Ключ механики
+        <select name="system.key">{{selectOptions raceKeyOptions selected=system.key}}</select>
+      </label>
+      <label class="check"><input type="checkbox" name="system.canUseMagic" {{checked system.canUseMagic}}> Может быть магом или жрецом</label>
+    </div>
+    <p class="hint">Ключ связывает расу с социальным статусом, профессиями и мастером создания.</p>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Черты расы <a data-action="rowAdd" data-field="traits" data-tooltip="Добавить черту"><i class="fa-solid fa-plus"></i></a></legend>
+    {{#each system.traits as |t|}}
+    <div class="row-edit trait" data-index="{{@index}}">
+      <input type="text" name="system.traits.{{@index}}.name" value="{{t.name}}" placeholder="Название">
+      <textarea name="system.traits.{{@index}}.effect" rows="2" placeholder="Действие">{{t.effect}}</textarea>
+      <a data-action="rowDelete" data-field="traits" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{else}}<p class="hint">Черт пока нет.</p>
+    {{/each}}
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Модификаторы <a data-action="rowAdd" data-field="mods" data-tooltip="Добавить модификатор"><i class="fa-solid fa-plus"></i></a></legend>
+    {{#each system.mods as |m|}}
+    <div class="row-edit mod" data-index="{{@index}}">
+      <select name="system.mods.{{@index}}.target">{{selectOptions @root.modTargets selected=m.target}}</select>
+      <input type="number" name="system.mods.{{@index}}.value" value="{{m.value}}">
+      <a data-action="rowDelete" data-field="mods" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{else}}<p class="hint">Модификаторов нет.</p>
+    {{/each}}
+    <p class="hint">Параметры и навыки прибавляются к модификатору и могут превышать предел 10; «Не выше/Не ниже» ограничивают итоговый параметр; естественная броня прибавляется к любой броне.</p>
+  </fieldset>
+
+  <fieldset class="vd-fieldset">
+    <legend>Источник</legend>
+    <div class="vd-grid g2">
+      <label>Книга <input type="text" name="system.source.book" value="{{system.source.book}}"></label>
+      <label>Стр. <input type="text" name="system.source.page" value="{{system.source.page}}"></label>
+    </div>
+  </fieldset>
+</section>

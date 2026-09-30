@@ -1,0 +1,2 @@
+Forum (Денис Машаров) и PT Serif (ParaType) — лицензия SIL Open Font License 1.1,
+тексты лицензий рядом: OFL-forum.txt, OFL-ptserif.txt. Файлы взяты из репозитория google/fonts.

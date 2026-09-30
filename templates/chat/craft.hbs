@@ -1,0 +1,36 @@
+<div class="vedmak-card craft{{#if crit}} is-crit{{/if}}{{#if fumble}} is-fumble{{/if}}{{#unless disassembled}}{{#if success}} is-success{{else}} is-failure{{/if}}{{/unless}}">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">{{#if disassembled}}Разборка{{else if recycle}}Переработка{{else if repair}}Починка{{else}}Изготовление{{/if}}: {{resultName}}</span>
+      {{#if recipeName}}<span class="card-sub">{{recipeName}}{{#if time}} · {{time}}{{/if}}</span>{{/if}}
+    </div>
+    {{#unless disassembled}}
+    <div class="card-value">
+      <b>{{total}}</b>
+      <span class="cap">против {{dc}}</span>
+    </div>
+    {{/unless}}
+  </header>
+
+  <div class="card-body">
+    {{#unless disassembled}}
+      {{> "systems/vedmak/templates/chat/parts/roll.hbs"}}
+      {{#if success}}<div class="outcome success">Успех · на {{margin}}</div>
+      {{else}}<div class="outcome failure">Провал</div>{{/if}}
+    {{/unless}}
+
+    {{#if surcharge}}<p class="note">Материалы куплены за {{surcharge}} крон.</p>{{/if}}
+    {{#if created}}<p class="note"><b>Готово:</b> {{created}}.</p>{{/if}}
+    {{#if consumedList}}<p class="note dim">Потрачено: {{consumedList}}.</p>{{/if}}
+    {{#if returned}}<p class="note"><b>Возвращено:</b> {{returned}}.</p>{{/if}}
+    {{#if recycle}}{{#unless returned}}<p class="note dim">Материалы вернуть не удалось.</p>{{/unless}}{{/if}}
+  </div>
+
+  {{#if canRecycle}}
+  <div class="card-buttons">
+    <button type="button" data-vedmak="recycle" data-tooltip="Та же СЛ: при успехе вернётся половина материалов (для формулы — одна субстанция)">
+      <i class="fa-solid fa-recycle"></i> Переработать
+    </button>
+  </div>
+  {{/if}}
+</div>

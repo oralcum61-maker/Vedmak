@@ -1,0 +1,16 @@
+<div class="vedmak-card alchemy">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">{{title}}</span>
+      {{#if subtitle}}<span class="card-sub">{{subtitle}}</span>{{/if}}
+    </div>
+  </header>
+  <div class="card-body">
+    {{#each lines}}{{#if this}}<p class="note">{{this}}</p>{{/if}}{{/each}}
+  </div>
+  {{#if buttons.length}}
+  <div class="card-buttons">
+    {{#each buttons}}<button type="button" data-vedmak="{{action}}"><i class="{{icon}}"></i> {{label}}</button>{{/each}}
+  </div>
+  {{/if}}
+</div>

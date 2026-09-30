@@ -1,0 +1,12 @@
+<fieldset class="vd-fieldset">
+  <legend>{{#if modsLegend}}{{modsLegend}}{{else}}Модификаторы{{/if}} <a data-action="rowAdd" data-field="mods" data-tooltip="Добавить модификатор"><i class="fa-solid fa-plus"></i></a></legend>
+  {{#each system.mods as |m|}}
+  <div class="row-edit mod" data-index="{{@index}}">
+    <select name="system.mods.{{@index}}.target">{{selectOptions @root.modTargets selected=m.target}}</select>
+    <input type="number" name="system.mods.{{@index}}.value" value="{{m.value}}">
+    <a data-action="rowDelete" data-field="mods" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+  </div>
+  {{else}}<p class="hint">Модификаторов нет.</p>
+  {{/each}}
+  {{#if modsHint}}<p class="hint">{{modsHint}}</p>{{/if}}
+</fieldset>

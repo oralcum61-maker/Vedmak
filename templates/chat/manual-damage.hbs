@@ -1,0 +1,28 @@
+<div class="vedmak-card damage is-applied">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">{{#if reason}}{{reason}}{{else}}Урон без атаки{{/if}}</span>
+      <span class="card-sub">{{formula}} · {{vedmakLabel "DAMAGE_TYPES" damageType}}{{#if nonLethal}} · несмертельный{{/if}}{{#if ignoreArmor}} · мимо брони{{/if}}{{#if statusLabel}} · {{statusLabel}}{{/if}}</span>
+    </div>
+    <div class="card-value blood">
+      <b>{{total}}</b>
+      <span class="cap">бросок</span>
+    </div>
+  </header>
+
+  <div class="card-body">
+    {{#each results}}
+    <div class="result-line">
+      <span class="name">{{name}}</span>
+      <span class="dots-fill"></span>
+      <b>{{final}}</b> <span class="dim">{{#if nonLethal}}Вын{{else}}ПЗ{{/if}}</span>
+    </div>
+    <details class="roll-parts">
+      <summary>по частям тела</summary>
+      <ul class="parts">
+        {{#each rows}}<li><span>{{label}}: ПБ {{sp}}, ×{{locMult}}{{#if (ne mult 1)}}, ×{{mult}}{{/if}}</span><b>{{value}}</b></li>{{/each}}
+      </ul>
+    </details>
+    {{/each}}
+  </div>
+</div>

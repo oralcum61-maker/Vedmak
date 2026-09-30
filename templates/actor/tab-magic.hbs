@@ -1,0 +1,63 @@
+<section class="tab magic-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="magic-summary vd-panel">
+    <div class="derived" data-tooltip="Сколько Вын можно без вреда потратить на магию за раунд"><span class="abbr">Энергия</span><span class="value">{{magic.used}} / {{system.derived.vigor}}</span></div>
+    <div class="derived"><span class="abbr">Вын</span><span class="value">{{system.sta.value}} / {{system.sta.max}}</span></div>
+    <div class="derived" data-tooltip="Воля + Сотворение заклинаний"><span class="abbr">Сотворение</span><span class="value">{{magic.casting}}</span></div>
+    <div class="derived" data-tooltip="Воля + Проведение ритуалов"><span class="abbr">Ритуалы</span><span class="value">{{magic.rituals}}</span></div>
+    <div class="derived" data-tooltip="Воля + Наведение порчи"><span class="abbr">Порча</span><span class="value">{{magic.hexes}}</span></div>
+    <div class="derived" data-tooltip="Фокусирующий предмет в руках: −N к затратам Вын"><span class="abbr">Фокус</span><span class="value">{{#if system.derived.focus}}−{{system.derived.focus}}{{else}}—{{/if}}</span></div>
+    <div class="derived" data-tooltip="Щит Квена поглощает урон от блокируемых атак"><span class="abbr">Щит</span><span class="value">{{system.shield.value}}</span></div>
+  </div>
+  {{#if system.derived.focusItem}}<p class="hint">Фокус: {{system.derived.focusItem}}. Скованность брони снижает Сотворение, Ритуалы и Порчу.</p>{{/if}}
+
+  {{#if magic.maintained.length}}
+  <div class="vd-panel">
+    <h3>Поддерживается</h3>
+    {{#each magic.maintained}}
+      <div class="maintained-row" data-effect-id="{{id}}">
+        <img src="{{img}}" alt=""><span class="name">{{name}}</span><span class="dim">{{cost}} Вын/раунд</span>
+        <button type="button" class="roll-btn" data-action="endMaintained"><i class="fa-solid fa-hand"></i> Прекратить</button>
+      </div>
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{#each spellGroups as |group|}}
+  {{#if group.items.length}}
+  <div class="vd-panel">
+    <h3>{{group.label}} <a class="add" data-action="itemCreate" data-type="spell" data-kind="{{group.kind}}" data-tooltip="Добавить"><i class="fa-solid fa-plus"></i></a></h3>
+    <table class="vd-table spells">
+      <thead><tr><th></th><th class="name">Название</th><th>Уровень</th><th>Стихия</th><th>Вын</th><th>Дис</th><th>Длит.</th><th>Защита</th><th></th></tr></thead>
+      <tbody>
+      {{#each group.items as |item|}}
+        <tr data-item-id="{{item.id}}">
+          <td><img src="{{item.img}}" class="icon"></td>
+          <td class="name"><a data-action="itemEdit">{{item.name}}</a></td>
+          <td>{{item.levelLabel}}</td>
+          <td>{{#if item.elementLabel}}{{item.elementLabel}}{{else}}—{{/if}}</td>
+          <td>{{#if item.system.variableCost}}1–{{#if item.system.maxCost}}{{item.system.maxCost}}{{else}}?{{/if}}{{else}}{{item.system.staCost}}{{/if}}{{#if item.maintain}} <span class="dim">(+{{item.maintain}})</span>{{/if}}</td>
+          <td class="small">{{item.system.range}}</td>
+          <td class="small">{{item.system.duration}}</td>
+          <td class="small">{{vedmakLabel "MAGIC_DEFENSES" item.system.defense}}</td>
+          <td class="controls">
+            <button type="button" class="roll-btn" data-action="castSpell" data-tooltip="Shift — без окна"><i class="fa-solid fa-hand-sparkles"></i> {{item.castLabel}}</button>
+            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{/if}}
+  {{/each}}
+
+  {{#unless hasMagic}}<p class="hint">Магии нет. Заклинания, знаки, инвокации и ритуалы лежат в компендиуме «Магия» — перетащите нужное на лист. Персонаж без магической профессии учит их за О.У.</p>{{/unless}}
+
+  <div class="add-row">
+    {{#each spellGroups as |group|}}
+    <a class="add-btn" data-action="itemCreate" data-type="spell" data-kind="{{group.kind}}"><i class="fa-solid fa-plus"></i> {{group.label}}</a>
+    {{/each}}
+  </div>
+  <p class="hint">Изучение: новичок/низкая — 10 О.У, 4 дня, 2 проверки СЛ 14; подмастерье/средняя — 20 О.У, неделя, 4 проверки СЛ 18; мастер/высокая — 30 О.У, 3 недели, 6 проверок СЛ 22; верховный жрец — 40 О.У, 5 недель, 8 проверок СЛ 24 (стр. 123).</p>
+</section>
