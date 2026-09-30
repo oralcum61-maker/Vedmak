@@ -61,8 +61,14 @@ export function describeSource(actor, source) {
 
   const w = item.system;
   let types;
-  if (isMonster) types = pick(ATTACK_TYPES, w.isRanged || w.category === "natural" ? ["single"] : ["single", "pommel", "disarm", "trip"]);
-  else if (w.isCrossbow) types = pick(ATTACK_TYPES, ["single"]);
+  if (isMonster) {
+    // Чудовище выбирает вид атаки, как персонаж; первой стоит обычная — со скоростью атаки (СА), как в книге.
+    // Быстрая и сильная — по просьбе автора (PLAN 4.40); приёмы оружием — только у изготовленного оружия ближнего боя
+    if (w.isCrossbow) types = pick(ATTACK_TYPES, ["single"]);
+    else if (w.isRanged) types = pick(ATTACK_TYPES, w.isThrown ? ["single", "fast", "strong"] : ["single", "strong"]);
+    else types = pick(ATTACK_TYPES, w.category === "natural" ? ["single", "fast", "strong"]
+      : ["single", "fast", "strong", "pommel", "disarm", "trip"]);
+  } else if (w.isCrossbow) types = pick(ATTACK_TYPES, ["single"]);
   else if (w.isBow) types = pick(ATTACK_TYPES, ["single", "strong"]);
   else if (w.isThrown) types = pick(ATTACK_TYPES, ["fast", "strong"]);
   else types = pick(ATTACK_TYPES, ["fast", "strong", "charge", "pommel", "disarm", "trip", "feint", "dual"]);
@@ -384,7 +390,8 @@ export async function rollAttack(actor, src, targets, cfg) {
     fixedLocation: typeCfg.location ?? "",
     chargeDice, weightMult, mounted: !!src.mounted || chargeDice > 0,
     hitText: typeCfg.hit ?? "", hitStatus: typeCfg.status ?? "", stunSaveMod: typeCfg.stunSave ?? null,
-    attackSpeed: actor.type === "monster" ? src.weapon.attackSpeed : null,
+    // СА — сколько обычных атак за действие; у быстрой и сильной её нет
+    attackSpeed: actor.type === "monster" && cfg.attackType === "single" ? src.weapon.attackSpeed : null,
     roll,
     fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
     fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : "",
