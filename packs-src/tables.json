@@ -1,0 +1,1346 @@
+[
+ {
+  "_id": "U4e7bqn1MMQOJ2Dz",
+  "name": "Крит. провал атака/защита без оружия",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "ROmJYvdak3miL6is",
+    "type": "text",
+    "name": "",
+    "description": "Нет особых последствий.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "n7jZnYIZAJnlYuIB",
+    "type": "text",
+    "name": "",
+    "description": "Ваш персонаж теряет равновесие и считается ошеломленным.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "TnHTNm3S5ChLp8Wn",
+    "type": "text",
+    "name": "",
+    "description": "Персонаж спотыкается и падает (сбит с ног).",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "tnv8ZMNUETfK6uOF",
+    "type": "text",
+    "name": "",
+    "description": "Персонаж спотыкается и падает (сбит с ног), вы должны совершить испытание Устойчивости.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "bwhHvqx45VNOtZVw",
+    "type": "text",
+    "name": "",
+    "description": "Персонаж спотыкается, падает и ударяется головой. Персонаж сбит с ног, он получает [[/r 1d6]] несмертельного урона по голове и должен совершить испытание Устойчивости.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "BFhnIWQs3QLEc74p",
+    "type": "text",
+    "name": "",
+    "description": "Персонаж не только сбит с ног, но и получает [[/r 1d6]] смертельного урона по голове и должен совершить испытание Устойчивости.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "tigThhETm6qrH2ZG",
+  "name": "Крит. провал атаки ближнего боя",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "Rv1TrdrAZRqUQPeY",
+    "type": "text",
+    "name": "",
+    "description": "Нет сособых последсвий.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "loFVTwbogdqTGbAG",
+    "type": "text",
+    "name": "",
+    "description": "Ваше оружие проходит вскользь, и ваш персонаж ошеломлен.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "if50FFuDcP8HnYPT",
+    "type": "text",
+    "name": "",
+    "description": "Ваше оружие застревает в ближайшем объекте; потребуется 1 раунд, чтобы его достать.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "FjUy7DT8hc5L9MOl",
+    "type": "text",
+    "name": "",
+    "description": "Ваше оружие сильно повреждено и получает [[/r 1d10]] урона надёжности.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "yn8HMzh9hAX9c8G9",
+    "type": "text",
+    "name": "",
+    "description": "Ваш персонаж случайно ранил сам себя. Совершите бросок, чтобы определить куда.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "cNpW7L0oMC3tKjvI",
+    "type": "text",
+    "name": "",
+    "description": "Ваш персонаж ранил ближайшего союзника. Совершите бросок, чтобы определить, куда он ранил случайно выбранного союзника в пределах дистанции.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "ITftzqysuVKXYQrc",
+  "name": "Крит. провал дистанционная атака",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "QKW0G7xBjAeXoeps",
+    "type": "text",
+    "name": "",
+    "description": "Нет особых последствий.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "HQXJxR0rhU0nR2P7",
+    "type": "text",
+    "name": "",
+    "description": "Выпущенный персонажем снаряд или брошенное им оружие с силой врезается во что-то и ломается.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "qm7B3Mr9Y0SrGvmj",
+    "type": "text",
+    "name": "",
+    "description": "С лука слетает тетива, арбалет заклинивает, или же персонаж случайно роняет метательное оружие. Для того чтобы исправить ситуацию, требуется 1 раунд.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "NCKKxGrPMc5FTJiC",
+    "type": "text",
+    "name": "",
+    "description": "Снаряд рикошетит и случайно задевает вашего союзника. Совершите бросок, чтобы определить, куда ваш персонаж ранил случайно выбранного союзника в пределах дистанции.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "hVQ5v94LxAddxkia",
+  "name": "Крит. провал защита оружием",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "clxWUJQXtZ1afuml",
+    "type": "text",
+    "name": "",
+    "description": "Нет особых последствий.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "sLMKvktYwRClFK58",
+    "type": "text",
+    "name": "",
+    "description": "Ваше оружие получает дополнительно [[/r 1d6]] урона надёжности.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Uflnxqd3L7LoVivd",
+    "type": "text",
+    "name": "",
+    "description": "Оружие выбито из рук вашего персонажа и пролетает [[/r 1d6]] метров в случайном направлении (см. таблицу разброса).",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "7858V89hfHA3Ytsq",
+    "type": "text",
+    "name": "",
+    "description": "Ваш персонаж сбит с ног. Он должен совершить испытание Устойчивости.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "aLmwxQaybsXG6rur",
+    "type": "text",
+    "name": "",
+    "description": "Ваше оружие получает дополнительно [[/r 2d6]] урона надёжности.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "sCczjwbJfWcDmPu7",
+    "type": "text",
+    "name": "",
+    "description": "Оружие рикошетит и попадает по вашему персонажу. Совершите бросок, чтобы определить место попадания.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "c4aQIq6IwE81nr8t",
+  "name": "Лёгкие крит. вунды",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Если результат атаки превышает защиту цели на 7 и более, ваш персонаж наносит лёгкое критическое ранение.</p><p>Цель получает дополнительный урон 3, а также ей приходится пройти испытание Устойчивости. Дополнительный урон от критических ранений не блокируется броней.</p>",
+  "formula": "2d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "i3Xyujc6U3xVTLND",
+    "type": "text",
+    "name": "Вывих ноги",
+    "description": "<p>После удара нога персонажа вывихнута, она плохо слушается и на неё больно наступать. Персонаж получает -2 к Скор, Уклонению/Изворотливости и Атлетике.</p>",
+    "img": "icons/skills/wounds/anatomy-bone-joint.webp",
+    "weight": 1,
+    "range": [
+     2,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "cZPpEk65BENwxlYH",
+    "type": "text",
+    "name": "Вывих руки",
+    "description": "<p>После удара рука персонажа вывихнута и плохо слушается. Персонаж получает -2 к действиям этой рукой.</p>",
+    "img": "icons/skills/wounds/anatomy-bone-joint.webp",
+    "weight": 1,
+    "range": [
+     4,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "K2q656K437gFUk6R",
+    "type": "text",
+    "name": "Инородный объект",
+    "description": "<p>В ране застрял кусок одежды или брони, что вызвало заражение. Параметр Отдых и исцеление критических ранений снижены в четыре раза.</p>",
+    "img": "icons/skills/ranged/projectile-strike-impale-gray.webp",
+    "weight": 1,
+    "range": [
+     6,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "0h7U9Oiz2HC747F3",
+    "type": "text",
+    "name": "Треснувшие рёбра",
+    "description": "<p>От удара у персонажа треснули рёбра, отчего ему больно дышать и напрягаться. Он получает -2 к Тел. Это не влияет на пункты здоровья.</p>",
+    "img": "icons/commodities/bones/bones-rib-gold.webp",
+    "weight": 1,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "SV77AdK6yNLfZrnW",
+    "type": "text",
+    "name": "Уродующий шрам",
+    "description": "<p>От удара у персонажа треснули рёбра, отчего ему больно дышать и напрягаться. Он получает -2 к Тел. Это не влияет на пункты здоровья.</p>",
+    "img": "icons/skills/wounds/injury-stapled-flesh-tan.webp",
+    "weight": 1,
+    "range": [
+     11,
+     11
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "y0NL4BnTfrFdPMEs",
+    "type": "text",
+    "name": "Треснувшая челюсть",
+    "description": "<p>От удара челюсть персонажа треснула, из-за чего ему тяжело говорить. Он получает -2 к магическим навыкам и в Словесной дуэли (Харизма, Убеждение, Соблазнение, Лидерство, Обман, Этикет и Запугивание).</p>",
+    "img": "icons/commodities/bones/skull-hollow-grey.webp",
+    "weight": 1,
+    "range": [
+     12,
+     12
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "ZsdrVjb207qP6muB",
+  "name": "Маг. провал",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "n7MuRsG8tnCfvY5j",
+    "type": "text",
+    "name": "",
+    "description": "Магия трещит и полыхает вокруг персонажа, нанося ему урон в зависимости от величины магического провала (1 урон за 1 пункт), но заклинание всё равно срабатывает.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ZfbGoiGqiTEnWmt7",
+    "type": "text",
+    "name": "",
+    "description": "Частично прошедшая сквозь персонажа магия загорается внутри него. Заклинание не срабатывает, а персонаж испытывает стихийный эффект критического провала, указанный в следующей таблице.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "EnuQlyF3IUZZJQtb",
+    "type": "text",
+    "name": "",
+    "description": "<p>Cотворённая персонажем магия взрывается с жутким шумом и вспышками. Персонаж испытывает стихийный эффект критического провала, и любой фокусирующий предмет, который у него при себе, взрывается подобно бомбе, нанося [[/r 1d10]] урона в радиусе 2 метров.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "qMqDLCmOD4Kc7w4k",
+  "name": "Потеря упр. скакуном (Наездник)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "ZFNGdgPwOeibsh5C",
+    "type": "text",
+    "name": "Выронил поводья",
+    "description": "<p>Поводья выскальзывают из рук персонажа. Он получает Штраф -1 к проверкам управления до тех пор, пока не сумеет вновь ухватить поводья, для чего требуется ход.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "VoNqDYqERcYLJ8DT",
+    "type": "text",
+    "name": "Брыкание",
+    "description": "<p>Скакун брыкается. Совершите проверку Атлетики со СЛ 15, чтобы персонаж остался в седле.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "O5feZh4sGSvb3kAG",
+    "type": "text",
+    "name": "Брыкание",
+    "description": "<p>Скакун брыкается. Совершите проверку Атлетики со СЛ 18, чтобы персонаж остался в седле. Если персонаж упал, считается, что он сбит с ног.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "C23DRsgKbph4KOSa",
+    "type": "text",
+    "name": "Брыкание",
+    "description": "<p>Скакун брыкается. Совершите проверку Атлетики со СЛ 20, чтобы персонаж остался в седле. Если персонаж упал, считается, что он сбит с ног.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "yAXc6J2md5IJ2DR0",
+    "type": "text",
+    "name": "Брыкание",
+    "description": "<p>Скакун брыкается. Совершите проверку Атлетики со СЛ 25, чтобы персонаж остался в седле. Если персонаж упал, считается, что он сбит с ног.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "nZRLLSpj7mgF2s6z",
+    "type": "text",
+    "name": "Вылетел из седла",
+    "description": "<p>Скакун сбрасывает наездника. Сделайте бросок [[/r 1d6/2]], чтобы определить, насколько далеко (в метрах) улетел сброшенный персонаж. Если он падает, не столкнувшись ни с чем в полёте, сделайте бросок на определение места попадания, после чего это место получает [[/r 1d6]] урона. Если персонаж падает, столкнувшись с чем-либо в полёте, сделайте бросок на определение места попадания, после чего персонаж получает столько d6 урона, сколько метров он пролетел бы. Если персонаж сталкивается с живым существом, оно получает такой же урон.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Fs87lhMZdNtXN5sJ",
+    "type": "text",
+    "name": "Вылетел из седла",
+    "description": "<p>Скакун сбрасывает наездника. Сделайте бросок [[/r 1d6]], чтобы определить, насколько далеко (в метрах) улетел сброшенный персонаж. Если он падает, не столкнувшись ни с чем в полёте, сделайте бросок на определение места попадания, после чего это место получает [[/r 1d6]] урона. Если персонаж падает, столкнувшись с чем-либо в полёте, сделайте бросок на определение места попадания, после чего персонаж получает столько d6 урона, сколько метров он пролетел бы. Если персонаж сталкивается с живым существом, оно получает такой же урон.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "QNNNshEQrqiuqaeP",
+    "type": "text",
+    "name": "Вылетел из седла",
+    "description": "<p>Скакун сбрасывает наездника. Сделайте бросок [[/r 1d10]], чтобы определить, насколько далеко (в метрах) улетел сброшенный персонаж. Если он падает, не столкнувшись ни с чем в полёте, сделайте бросок на определение места попадания, после чего это место получает [[/r 1d6]] урона. Если персонаж падает, столкнувшись с чем-либо в полёте, сделайте бросок на определение места попадания, после чего персонаж получает столько d6 урона, сколько метров он пролетел бы. Если персонаж сталкивается с живым существом, оно получает такой же урон.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "FfRByEth2vOlznws",
+  "name": "Потеря упр. скакуном (Скакун)",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "TbQ1QjvlBxV1tgk8",
+    "type": "text",
+    "name": "Отказ",
+    "description": "<p>Скакун попросту отказывается выполнять команду. Совершите новую проверку управления в следующий раунд.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "JCJhF6bXhlo88cC5",
+    "type": "text",
+    "name": "Напутан",
+    "description": "<p>Скакун напуган и встаёт на дыбы. Совершите проверку Атлетики со СЛ 16, чтобы удержаться, а также проверку Выживания в дикой природе со СЛ 18, чтобы успокоить скакуна, прежде чем ехать дальше.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "iVIaH0CtFxQGYWg2",
+    "type": "text",
+    "name": "Споткнулся",
+    "description": "<p>Скакун спотыкается. Он должен пройти проверку Атлетики со СЛ 14, чтобы не упасть.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "pOMlLyYAYCkOdLON",
+    "type": "text",
+    "name": "Споткнулся",
+    "description": "<p>Скакун спотыкается. Он должен пройти проверку Атлетики со СЛ 18, чтобы не упасть.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "IyiTokClpXFK97Wj",
+    "type": "text",
+    "name": "Споткнулся",
+    "description": "<p>Скакун спотыкается. Он должен пройти проверку Атлетики со СЛ 15, чтобы не упасть. В случае провала он получает [[/r 1d10]] урона по случайной ноге. Совершите бросок [[/r 1d10]]. 1-3: левая передняя; 4-6: правая передняя; 7-8: левая задняя; 9-10: правая задняя.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "zqTbld3iY9erMl53",
+    "type": "text",
+    "name": "Споткнулся",
+    "description": "<p>Скакун спотыкается. Он должен пройти проверку Атлетики со СЛ 15, чтобы не упасть. В случае провала он получает [[/r 2d10]] урона по случайной ноге. Совершите бросок [[/r 1d10]]. 1-3: левая передняя; 4-6: правая передняя; 7-8: левая задняя; 9-10: правая задняя.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "2TXoddTSqCZUHFwY",
+    "type": "text",
+    "name": "Падение",
+    "description": "<p>Скакун падает. Если персонаж сидит верхом на скакуне или находится в пределах 1 метра от него, пройдите проверку Атлетики со СЛ 18. При провале скакун падает на персонажа. Совершите бросок на определение той части тела персонажа, что окажется под скакуном. Эта часть получает [[/r 2d10]] урона. Скакун получает этот урон в туловище. Персонаж оказывается придавлен скакуном. В следующий ход вы можете совершить проверку управления, чтобы выбраться из-под скакуна.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "cRR7kIlTsi9fojQW",
+    "type": "text",
+    "name": "Потеря сознания",
+    "description": "<p>Скакун теряет сознание, не выдержав стресса. Если персонаж сидит верхом на скакуне или находится в пределах 1 метра от него, пройдите проверку Атлетики со СЛ 18. При провале скакун падает на персонажа. Совершите бросок на определение той части тела персонажа, что окажется под скакуном. Эта часть получает [[/r 2d10]] урона. Скакун получает этот урон в туловище. Персонаж оказывается придавлен скакуном. Скакун должен проходить испытание Устойчивости каждый раунд, чтобы прийти в себя.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "o0BCQhNxjVdtrQs2",
+  "name": "Потеря упр. транспортом",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "DL0Zr9XwtBdAwZbq",
+    "type": "text",
+    "name": "Занос или разворот",
+    "description": "<p>Нет других эффектов.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "7OsdjPvgisOHDIPs",
+    "type": "text",
+    "name": "Сильный занос",
+    "description": "<p>Транспорт скользит [[/r 1d10*2]] метра боком по направлению движения. При столкновении с объектом используйте правила атаки с разбега, чтобы определить, какой урон получили транспорт и объект.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Y2ux3wb3zjCCcG0h",
+    "type": "text",
+    "name": "Транспорт перевернулся",
+    "description": "<p>Транспорт скользит [[/r 1d10*3]] метра боком по направлению движения и переворачивается. Если транспорт наземный, то персонаж, транспорт и тянущие его животные получают [[/r 5d6]] урона. Если транспорт водный, он переворачивается и персонаж оказывается под водой до тех пор, пока не пройдёт проверку Атлетики со СЛ 12, чтобы выплыть на поверхность.</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "Q2zXKpBEi8mjpelP",
+  "name": "Смертельных крит. вунды",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Если результат атаки превышает защиту цели на 15 и более, ваш персонаж наносит смертельное критическое ранение.</p><p>Цель получает дополнительный урон 10, а также ей приходится пройти испытание Устойчивости. Дополнительный урон от критических ранений не блокируется броней.</p>",
+  "formula": "2d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "WEFJhIn9L53mW06m",
+    "type": "text",
+    "name": "Потеря ноги",
+    "description": "<p>Удар начисто отрубает ногу или повреждает до такой степени, что вылечить её невозможно. Скор, Уклонение/Изворотливость и Атлетика снижаются вчетверо. Персонаж истекает кровью.</p>",
+    "img": "icons/commodities/bones/bone-red.webp",
+    "weight": 1,
+    "range": [
+     2,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "9rP5EB4T32yo8S2X",
+    "type": "text",
+    "name": "Потеря руки",
+    "description": "<p>Удар начисто отрубает руку или повреждает до такой степени, что вылечить её невозможно. Рукой нельзя пользоваться, персонаж истекает кровью.</p>",
+    "img": "icons/commodities/bones/bones-hand-grey.webp",
+    "weight": 1,
+    "range": [
+     4,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "4qUMx3ZLaP3zWXBx",
+    "type": "text",
+    "name": "Септический шок",
+    "description": "<p>Удар повредил внутренние органы, и их содержимое попало в кровь. Выносливость персонажа снижается вчетверо. Персонаж получает -3 к Инт, Воле, Реа и Лвк. Персонаж отравлен.</p>",
+    "img": "icons/skills/wounds/blood-cells-disease-green.webp",
+    "weight": 1,
+    "range": [
+     6,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ArK7i3lMtOfoGqlm",
+    "type": "text",
+    "name": "Травма сердца",
+    "description": "<p>Урон повреждает сердце персонажа. Немедленно пройдите испытание против смерти. Если персонаж выживает, рана кровоточит, а его Выносливость, Скор и Тел снижаются вчетверо.</p>",
+    "img": "icons/skills/wounds/anatomy-organ-heart-red.webp",
+    "weight": 1,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "8TMgLhmU3rCGpRSw",
+    "type": "text",
+    "name": "Повреждение глаза",
+    "description": "<p>Глаз персонажа повреждён или выбит. Персонаж получает -5 к связанным со зрением проверкам Внимания и -4 к Лвк. Персонаж истекает кровью.</p>",
+    "img": "icons/skills/wounds/injury-eyes-blood-red.webp",
+    "weight": 1,
+    "range": [
+     11,
+     11
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "6nepSj4xwhG3iOc9",
+    "type": "text",
+    "name": "Сломанная шея / отсечение головы",
+    "description": "<p>Ударом персонажу сломали шею или же вовсе сняли голову с плеч. Персонаж немедленно умирает.</p>",
+    "img": "icons/commodities/bones/skull-hollow-worn-blue.webp",
+    "weight": 1,
+    "range": [
+     12,
+     12
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "UDDlHHmyBYsMkvjW",
+  "name": "Средние крит. вунды",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Если результат атаки превышает защиту цели на 10 и более, ваш персонаж наносит среднее критическое ранение.</p><p>Цель получает дополнительный урон 5, а также ей приходится пройти испытание Устойчивости. Дополнительный урон от критических ранений не блокируется броней.</p>",
+  "formula": "2d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "KUv90l3De7Og0uM3",
+    "type": "text",
+    "name": "Перелом ноги",
+    "description": "<p>Персонаж получил перелом ноги. Штраф -3 к Скор, Уклонению/Изворотливости и Атлетике.</p>",
+    "img": "icons/skills/wounds/bone-broken-knee-beam.webp",
+    "weight": 1,
+    "range": [
+     2,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "WAd6OqySVlWuUXgi",
+    "type": "text",
+    "name": "Перелом руки",
+    "description": "<p>Персонаж получил перелом руки. Штраф -3 ко всем действиям этой рукой.</p>",
+    "img": "icons/skills/wounds/bone-broken-knee-beam.webp",
+    "weight": 1,
+    "range": [
+     4,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "tzJXSDzNGJaz2e0w",
+    "type": "text",
+    "name": "Сломанные рёбра",
+    "description": "<p>От удара у персонажа сломаны рёбра, ему очень тяжело дышать, сгибаться и прилагать какие-либо усилия. Персонаж получает -2 к Тел и -1 к Реа и Лвк.</p>",
+    "img": "icons/commodities/bones/bones-rib-white.webp",
+    "weight": 1,
+    "range": [
+     6,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "z7tjr5IShXKlML0p",
+    "type": "text",
+    "name": "Разрыв селезёнки",
+    "description": "<p>У персонажа разрыв селезёнки с сильным кровотечением, из-за чего он чувствует слабость. Совершайте испытание Устойчивости каждые 5 раундов. Персонаж истекает кровью.</p>",
+    "img": "icons/skills/wounds/blood-cells-vessel-red-orange.webp",
+    "weight": 1,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Y9uwzxHU0M6EtscS",
+    "type": "text",
+    "name": "Выбитые зубы",
+    "description": "<p>Ударом персонажу выбили часть зубов. Совершите бросок [[/r 1d10]], чтобы узнать количество выбитых зубов. Персонаж получает -3 к магическим навыкам и в Словесной дуэли.</p>",
+    "img": "icons/commodities/bones/tooth-molar-white-red.webp",
+    "weight": 1,
+    "range": [
+     11,
+     11
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "DLAnqDqZBvyTSx1p",
+    "type": "text",
+    "name": "Небольшая травма головы",
+    "description": "<p>От удара у вашего персонажа сотрясение мозга и небольшое внутреннее кровотечение, отчего он с трудом соображает. Персонаж получает -1 к Инт, Воле и Уст.</p>",
+    "img": "icons/skills/wounds/injury-face-impact-orange.webp",
+    "weight": 1,
+    "range": [
+     12,
+     12
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "N4b3q5Kn1F3Y5jkm",
+  "name": "Тяжёлых крит. вунды",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "<p>Если результат атаки превышает защиту цели на 13 и более, ваш персонаж наносит тяжёлое критическое ранение.</p><p>Цель получает дополнительный урон 8, а также ей приходится пройти испытание Устойчивости. Дополнительный урон от критических ранений не блокируется броней.</p>",
+  "formula": "2d6",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "3OUguFDanalSqD6n",
+    "type": "text",
+    "name": "Открытый перелом ноги",
+    "description": "<p>От удара нога сломана и не может двигаться. Скор, Уклонение/Изворотливость и Атлетика снижены вчетверо, а сам персонаж истекает кровью.</p>",
+    "img": "icons/skills/wounds/bone-broken-marrow-red.webp",
+    "weight": 1,
+    "range": [
+     2,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "t0IShSsQEhhuTE8o",
+    "type": "text",
+    "name": "Открытый перелом руки",
+    "description": "<p>От удара рука раздроблена. Из раны торчит кость. Рукой невозможно двигать, персонаж истекает кровью.</p>",
+    "img": "icons/skills/wounds/bone-broken-marrow-red.webp",
+    "weight": 1,
+    "range": [
+     4,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "KjO9dBeW7lyMB5vI",
+    "type": "text",
+    "name": "Сосущая рана грудной клетки",
+    "description": "<p>Удар разорвал лёгкое персонажа, переполнив его грудь воздухом и сдавливая органы. Персонаж получает -3 к Тел и Скор и начинает задыхаться.</p>",
+    "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
+    "weight": 1,
+    "range": [
+     6,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "kON8wDra7IAj48uk",
+    "type": "text",
+    "name": "Рана в живот",
+    "description": "<p>От удара желудок персонажа порвался, и его содержимое выплеснулось в брюшную полость. Персонаж получает -2 ко всем действиям и 4 пункта урона кислотой в раунд.</p>",
+    "img": "icons/skills/melee/strike-sword-stabbed-brown.webp",
+    "weight": 1,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "wAXMag0TytFvtf2M",
+    "type": "text",
+    "name": "Контузия",
+    "description": "<p>От удара персонаж получил лёгкую контузию. Совершайте испытание Устойчивости каждые 1 d6 раундов. Персонаж также получает -2 к Инт, Реа и Лвк.</p>",
+    "img": "icons/skills/wounds/anatomy-organ-brain-pink-red.webp",
+    "weight": 1,
+    "range": [
+     11,
+     11
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "gjFEwwOOCZtSOJpV",
+    "type": "text",
+    "name": "Проломленный череп",
+    "description": "<p>Проломленный череп От удара череп персонажа проломлен, что делает его голову уязвимее и вызывает кровотечение. Персонаж получает -1 к Инт и Лвк, а последующие ранения в голову наносят в четыре раза больше урона.</p>",
+    "img": "icons/skills/wounds/injury-eyes-blood-red-pink.webp",
+    "weight": 1,
+    "range": [
+     12,
+     12
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "Az9oNzD1UadjzanU",
+  "name": "Урон по частям гуманоидов",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "auDTVYolijqWeM1j",
+    "type": "text",
+    "name": "Голова",
+    "description": "<p>Штраф к попаданию: -6</p><p>Мод. урона: х3</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Qu6msMYyPhQc8fl3",
+    "type": "text",
+    "name": "Туловище",
+    "description": "<p>Штраф к попаданию: -1</p><p>Мод. урона: х1</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Hj0aoluU9WPIx898",
+    "type": "text",
+    "name": "Правая рука",
+    "description": "<p>Штраф к попаданию: -3</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Ld7hhoXLORNPDpNJ",
+    "type": "text",
+    "name": "Левая рука.",
+    "description": "<p>Штраф к попаданию: -3.</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "FQhXioDJz9JXFxFY",
+    "type": "text",
+    "name": "Правая нога",
+    "description": "<p>Штраф к попаданию: -2.</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "EOgjr7pmOXItxumI",
+    "type": "text",
+    "name": "Левая нога",
+    "description": "<p>Штраф к попаданию: -2.</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ },
+ {
+  "_id": "zrkFbX1L6TtZ9gYW",
+  "name": "Урон частям монстров",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "results": [
+   {
+    "_id": "auDTVYolijqWeM1j",
+    "type": "text",
+    "name": "Голова",
+    "description": "<p>Штраф к попаданию: -6</p><p>Мод урона: х3</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Qu6msMYyPhQc8fl3",
+    "type": "text",
+    "name": "Туловище",
+    "description": "<p>Штраф к попаданию: -1</p><p>Мод. урона: х1</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Hj0aoluU9WPIx898",
+    "type": "text",
+    "name": "Правая конечность",
+    "description": "<p>Штраф: к попаданию -3 (переброс по нематериальным сущесвам)</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Ld7hhoXLORNPDpNJ",
+    "type": "text",
+    "name": "Левая конечность",
+    "description": "<p>Штраф к попаданию: -3 (переброс по нематериальным сущесвам)</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "FQhXioDJz9JXFxFY",
+    "type": "text",
+    "name": "Хвост или крыло",
+    "description": "<p>Штраф к попаданию: -2 (переброс по сущесвам без хвоста)</p><p>Мод. урона: х0.2</p>",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "folder": [],
+  "flags": {
+   "vedmak": {
+    "origin": "Компендиум BS & Tobi"
+   }
+  }
+ }
+]

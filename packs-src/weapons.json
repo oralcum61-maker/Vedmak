@@ -1,0 +1,8878 @@
+[
+ {
+  "name": "Железный полуторный меч",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-noma-lvl2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 160,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "Wl4Ip2AUCxN8vOkd"
+ },
+ {
+  "name": "Рыцарский меч",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-knight.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 270,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "2d6+4",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "TaCmUVnCWYobuS0b"
+ },
+ {
+  "name": "Гледдиф",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-dolblath.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 285,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "3d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "aTYZPa8FLVJfHwjg"
+ },
+ {
+  "name": "Охотничий фальшион",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-falchion.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 325,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "3d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "gIssNHhTrEwdcDXJ"
+ },
+ {
+  "name": "Кригсверд",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-skel-lvl2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 570,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "4d6+4",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "8V2dg9OzJHbg0oKS"
+ },
+ {
+  "name": "Эсбода",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-noma-lvl4.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 650,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "5d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "u2CxY0mricTovZ6P"
+ },
+ {
+  "name": "Корд",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-cord.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 725,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "aj5QxLKQa9wN5uC9"
+ },
+ {
+  "name": "Клинок из Виковаро",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-toussaint1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 955,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "5d6+4",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "kEQwQVevKRIJwieY"
+ },
+ {
+  "name": "Торрур",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-torrur.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 1075,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "6d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "50%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "1Yh84QK1UEF4nE34"
+ },
+ {
+  "name": "Кинжал",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 50,
+   "availability": "everywhere",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 0,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Людей"
+  ],
+  "_id": "CugFy2anVgFtgMp3"
+ },
+ {
+  "name": "Стилет",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-knife-ritual.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 275,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 2,
+   "damage": "1d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "concealable",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Людей"
+  ],
+  "_id": "kD1qPS0h0Lo7lUUF"
+ },
+ {
+  "name": "Короткий кинжал",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-viper-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 350,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Людей"
+  ],
+  "_id": "FNGAJxl8BJ6yvBXn"
+ },
+ {
+  "name": "Джамбия",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-knife-toussaint.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 440,
+   "availability": "unique",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 2,
+   "damage": "2d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Людей"
+  ],
+  "_id": "uocTi1dOoLYk3nMS"
+ },
+ {
+  "name": "Топор",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-axe-head.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 205,
+   "availability": "everywhere",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "axe",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "2d6+1",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Топоры",
+   "Людей"
+  ],
+  "_id": "jnR5xoXbKW809EVA"
+ },
+ {
+  "name": "Боевой топор",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/people/t3-axe-great1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 525,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "axe",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Топоры",
+   "Людей"
+  ],
+  "_id": "8XN0JBSQSZ1wC1hI"
+ },
+ {
+  "name": "Топор берсерка",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-axe-great2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 960,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "axe",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "6d6",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    },
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Топоры",
+   "Людей"
+  ],
+  "_id": "jxpIMvUAPl7ysLQf"
+ },
+ {
+  "name": "Кастет",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-hammer-rusty.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 50,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "bludgeon",
+   "skill": "brawling",
+   "accuracy": 1,
+   "damage": "1d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "hands",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Людей"
+  ],
+  "_id": "E20t9E3OVGk07POS"
+ },
+ {
+  "name": "Булава",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-mace1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 525,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Людей"
+  ],
+  "_id": "0ER8DCPkHqBunyJQ"
+ },
+ {
+  "name": "Молот горца",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-mace2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 1100,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "6d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Людей"
+  ],
+  "_id": "wHx55UWIGd9ZZjtp"
+ },
+ {
+  "name": "Копьё",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-paling.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 375,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "3d6",
+   "damageTypes": [
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "Тел×2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Древковое",
+   "Людей"
+  ],
+  "_id": "YN026VN1c1SZp5nD"
+ },
+ {
+  "name": "Секира",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-halberd.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 460,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Древковое",
+   "Людей"
+  ],
+  "_id": "dmQB1OR9gzHbRRUd"
+ },
+ {
+  "name": "Красная алебарда",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-guisarme.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 865,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "73"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "6d6+3",
+   "damageTypes": [
+    "slashing",
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Древковое",
+   "Людей"
+  ],
+  "_id": "MABh8UVicIm3qXOT"
+ },
+ {
+  "name": "Посох",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-staff.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 335,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "focus",
+     "value": "1",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "QA8IlW07DOdBlAJ4"
+ },
+ {
+  "name": "Посох с крюком",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-forked-wood.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 550,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "focus",
+     "value": "1",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "x4EglJMIRiJCX7T4"
+ },
+ {
+  "name": "Железный посох",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-ornate-orb-steel-red.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 675,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "3d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "focus",
+     "value": "2",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "a1XooZXiZDHCes9v"
+ },
+ {
+  "name": "Посох с кристаллом",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-blue-jewel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 835,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "3",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "rk9EEcfjb1vFlOkN"
+ },
+ {
+  "name": "Метательный нож",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-knife-butter.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 50,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "1d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "_id": "I6NswdvvWWbMpf5c"
+ },
+ {
+  "name": "Метательный топор",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-axe-meteorite.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 75,
+   "availability": "everywhere",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "Тел×2 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "_id": "WEsnlx4acerp0zyx"
+ },
+ {
+  "name": "Орион",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-virgin.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 1,
+   "damage": "1d6",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "_id": "XjDV2tn1qlgXZtfh"
+ },
+ {
+  "name": "Короткий лук",
+  "type": "weapon",
+  "img": "icons/weapons/bows/bow-simple-small.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 290,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "bow",
+   "skill": "archery",
+   "accuracy": 0,
+   "damage": "3d6+3",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "100 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Луки",
+   "Людей"
+  ],
+  "_id": "wm4E9WMp69wmTfxO"
+ },
+ {
+  "name": "Длинный лук",
+  "type": "weapon",
+  "img": "icons/weapons/bows/longbow-recurve-leather-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 475,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "bow",
+   "skill": "archery",
+   "accuracy": 0,
+   "damage": "4d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "200 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Луки",
+   "Людей"
+  ],
+  "_id": "z6i0P0zGFKSqosGJ"
+ },
+ {
+  "name": "Армейский лук",
+  "type": "weapon",
+  "img": "icons/weapons/bows/longbow-recurve-skull-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 835,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "bow",
+   "skill": "archery",
+   "accuracy": 0,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "300 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Луки",
+   "Людей"
+  ],
+  "_id": "zNG8toMRjWTnHUgx"
+ },
+ {
+  "name": "Ручной арбалет",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/cb-hand.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 285,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "50 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Арбалеты",
+   "Людей"
+  ],
+  "_id": "1gkhzQMdWkqMPhoz"
+ },
+ {
+  "name": "Арбалет",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/cb-standard.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 455,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 1,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "100 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Арбалеты",
+   "Людей"
+  ],
+  "_id": "bAwCt5XhEwTwXOwZ"
+ },
+ {
+  "name": "Арбалет охотника на чудовищ",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/cb-hunter.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 1125,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "74"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 1,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "200 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Арбалеты",
+   "Людей"
+  ],
+  "_id": "OahvEhaL3QZXQbFo"
+ },
+ {
+  "name": "Эльфский мессер",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-skel-lvl4.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 595,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "3d6+4",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "Wn3xZFU1qjutfqXf"
+ },
+ {
+  "name": "Клинок бригады «Врихедд»",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-naevde.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 745,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "4d6+4",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "QhzMiFgiJtquQmj8"
+ },
+ {
+  "name": "Меч из метеоритной стали",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-glory.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 875,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "5d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "Hk8rKeL9otPIYvG4"
+ },
+ {
+  "name": "Гномий гвихир",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-gwyhyr.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 1090,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "5d6+3",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "50%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "xv85MuqMurCfH08o"
+ },
+ {
+  "name": "Клинок из Тир Тохаира",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-whitewidow.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 1175,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Людей"
+  ],
+  "_id": "XyCmN1aAdiIOvROi"
+ },
+ {
+  "name": "Низушечий рондель",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-knife-hunting.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 485,
+   "availability": "unique",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 2,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Людей"
+  ],
+  "_id": "V2xjP1t4IuwHFMSw"
+ },
+ {
+  "name": "Краснолюдский секач",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-silver-dagger.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 500,
+   "availability": "unique",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 2,
+   "damage": "3d6",
+   "damageTypes": [
+    "slashing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Людей"
+  ],
+  "_id": "yyXualAhawk5RLnq"
+ },
+ {
+  "name": "Краснолюдский топор",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/people/t3-axe-dwarven.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 740,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "axe",
+   "skill": "melee",
+   "accuracy": 3,
+   "damage": "5d6+3",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Топоры",
+   "Людей"
+  ],
+  "_id": "gqG7TaY1Y6DblpEv"
+ },
+ {
+  "name": "Гномий чёрный топор",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-axe-cupro.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 910,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "axe",
+   "skill": "melee",
+   "accuracy": 2,
+   "damage": "6d6+2",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Топоры",
+   "Людей"
+  ],
+  "_id": "bTEbD0UMFgVEzwDw"
+ },
+ {
+  "name": "Махакамский мартель",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-mace-knight1.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 750,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Людей"
+  ],
+  "_id": "tbfAE1T7rLZJzJ63"
+ },
+ {
+  "name": "Кистень из метеоритной стали",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-mace-knight2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 900,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 2,
+   "damage": "6d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Людей"
+  ],
+  "_id": "dPcCWtknBzXrS8KZ"
+ },
+ {
+  "name": "Краснолюдский боевой молот",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-dwarven-hammer.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 835,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "5d6+2",
+   "damageTypes": [
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Древковое",
+   "Людей"
+  ],
+  "_id": "TDxZCpni38ztgvss"
+ },
+ {
+  "name": "Эльфская глефа",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/glaive-simple-hooked.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 925,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 2,
+   "damage": "4d6+3",
+   "damageTypes": [
+    "slashing",
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Древковое",
+   "Людей"
+  ],
+  "_id": "RRHtMalyLzonf3Q5"
+ },
+ {
+  "name": "Гномий посох",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-engraved-red.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 910,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 1,
+   "damage": "3d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "focus",
+     "value": "3",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "BSRXLfrgAAmv9Utm"
+ },
+ {
+  "name": "Эльфский дорожный посох",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-crescent-green.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 975,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 1,
+   "damage": "3d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "3",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "nWDbf4Wr08thrsdR"
+ },
+ {
+  "name": "Эльфский походный лук",
+  "type": "weapon",
+  "img": "icons/weapons/bows/bow-ornamental-carved-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 575,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "bow",
+   "skill": "archery",
+   "accuracy": 1,
+   "damage": "4d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "200 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Луки",
+   "Людей"
+  ],
+  "_id": "alAcUA5nty5obNQv"
+ },
+ {
+  "name": "Эльфский зефар",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-animal-bird.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 1100,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 2,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "350 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "improvedAP",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Посохи",
+   "Людей"
+  ],
+  "_id": "kYkCP7KEwPuNGo1X"
+ },
+ {
+  "name": "Гномий ручной арбалет",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/cb-gnome.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 425,
+   "availability": "unique",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 3,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "100 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Арбалеты",
+   "Людей"
+  ],
+  "_id": "RyBG8ryU3rbx2lQc"
+ },
+ {
+  "name": "Краснолюдский тяжёлый арбалет",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/cb-dwarf-heavy.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 850,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "83"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 3,
+   "damage": "5d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "300 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Арбалеты",
+   "Людей"
+  ],
+  "_id": "vV9WeFW1vHVhokzG"
+ },
+ {
+  "name": "Стальной ведьмачий меч",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-wolfschool.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "247"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачье"
+  ],
+  "_id": "CyzC2xRL4OdobGPU"
+ },
+ {
+  "name": "Серебряный ведьмачий меч",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-silver-lvl5.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "247"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 2,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачье"
+  ],
+  "_id": "WekZLDypLmtiPiM5"
+ },
+ {
+  "name": "Девин",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-devine.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 18, чтобы вспомнить её историю и свойства.</p><p>Полуторный меч лорда Седрика из Цинтры, в который аттрский маг Хенек заключил джинна. Говорят, когда клинок обнажают, поднимается ветер.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "257"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "10d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "магия воздуха",
+     "source": ""
+    },
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "xUuPpjVVAgtCBmCS"
+ },
+ {
+  "name": "Сорвишапка",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-headtaker.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 16, чтобы вспомнить её историю и свойства.</p><p>Меч из метеоритной стали геммерского героя Ульстера Шапки с надписью «Резак Шапки» на старшей речи.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "257"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "8d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "5",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "NpodEjDTgcR7EUBM"
+ },
+ {
+  "name": "Волк",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-blackwolf.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 16, чтобы вспомнить её историю и свойства.</p><p>Клинок скеллигского пирата Уффе Кровавого, ставшего волколаком; побратим Надим пронзил им сердце чудовища.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "258"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "7d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "YSbnD6jQcy7Qu7sg"
+ },
+ {
+  "name": "Каролина",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-caroline.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 20, чтобы вспомнить её историю и свойства.</p><p>Отцовский меч цидарисской вдовы Каролины, которая мстила пиратам Скеллиге под покровительством марида.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "258"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "9d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "магия воды",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 25
+    }
+   ]
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "gTo2CERSyaM5dC1q"
+ },
+ {
+  "name": "Шип",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-viper-silver.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 15, чтобы вспомнить её историю и свойства.</p><p>Деревянный кинжал, созданный дриадой из столбика кровати, к которой её привязал вердэнский рыцарь Генрих.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "259"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 3,
+   "damage": "3d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "Тел×2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    },
+    {
+     "key": "poison",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Реликвии"
+  ],
+  "_id": "nUVprEGsgtI6qmPr"
+ },
+ {
+  "name": "Обезглавливатель",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-zerrikanterment.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 14, чтобы вспомнить её историю и свойства.</p><p>Топор нильфгаардского палача Тааветти, проклятый ведьмой. Говорят, в нём живёт безумный дух хозяина.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "259"
+   },
+   "category": "axe",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "10d6",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Топоры",
+   "Реликвии"
+  ],
+  "_id": "E2IuUzTRTcl1mGT1"
+ },
+ {
+  "name": "Огх'р",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-hammer-wood.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 17, чтобы вспомнить её историю и свойства.</p><p>Двухметровый молот из тёмного железа, которым краснолюд Йорат победил в бодании тролля Рогара.</p>",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "260"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "10d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "stun",
+     "value": "-4",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Реликвии"
+  ],
+  "_id": "DF2fwJr3ld4vYQRP"
+ },
+ {
+  "name": "Страж Бездны",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 18, чтобы вспомнить её историю и свойства.</p><p>Гарпун с рунами, найденный у берегов острова Фаро; связан с затонувшим городом Ис.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "260"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 2,
+   "damage": "7d6+4",
+   "damageTypes": [
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "Тел×2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "магия воды",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "freeze",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Древковое",
+   "Реликвии"
+  ],
+  "_id": "qsKez23mOJsuTJUE"
+ },
+ {
+  "name": "Посох суккуба",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-succubus-staff.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 20, чтобы вспомнить её историю и свойства.</p><p>Посох суккуба-чародейки Нерис, убитой ревнивой женой пастуха серебряной шпилькой.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "261"
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "3d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "магия огня",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "5",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "burning",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": [
+    {
+     "target": "skills.seduction",
+     "value": 2
+    }
+   ]
+  },
+  "folder": [
+   "Посохи",
+   "Реликвии"
+  ],
+  "_id": "W2coPKOmwdxTCzwK"
+ },
+ {
+  "name": "Лунный лук",
+  "type": "weapon",
+  "img": "icons/weapons/bows/bow-ornamental-silver-black.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 17, чтобы вспомнить её историю и свойства.</p><p>Лук эльфки Адерин, дар Девы Полей, созданный для охоты на призраков.</p><p>+3 урона призракам</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "261"
+   },
+   "category": "bow",
+   "skill": "archery",
+   "accuracy": 1,
+   "damage": "8d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "200 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "freeze",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Луки",
+   "Реликвии"
+  ],
+  "_id": "ehXP91OMGYprZOiz"
+ },
+ {
+  "name": "Красная Смерть",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/cb-red-death.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 16, чтобы вспомнить её историю и свойства.</p><p>Арбалет «Палача из Гвиндефа», хирурга, отстреливавшего заражённых чумой.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "262"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 2,
+   "damage": "10d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "300 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "poison",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": true,
+   "mods": [
+    {
+     "target": "skills.hexWeaving",
+     "value": 3
+    },
+    {
+     "target": "skills.resistMagic",
+     "value": 3
+    }
+   ]
+  },
+  "folder": [
+   "Арбалеты",
+   "Реликвии"
+  ],
+  "_id": "6O9McSWDiv0Xld1Y"
+ },
+ {
+  "name": "Судьба",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-fate.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 19, чтобы вспомнить её историю и свойства.</p><p>Серебряный меч краснолюда Владоса Варги, выкованный против брукса Эссилит.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "262"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "2d6+1",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "магия воды и огня",
+     "source": ""
+    },
+    {
+     "key": "staggering",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "6d6+4",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "G0yYo1xLMfMRx97D"
+ },
+ {
+  "name": "Лунный клинок",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t3-moonblade.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 18, чтобы вспомнить её историю и свойства.</p><p>Серебряный клинок ведьмака Олека, освящённый жрицами Лилвани, которым был изгнан дьявол из Элландера.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "263"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "3d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "7d6+4",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "jzSzGVyiLC2zuqU2"
+ },
+ {
+  "name": "Могрим",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-torlara.webp",
+  "system": {
+   "description": "<p><b>Реликвия.</b> Проверка Образования со СЛ 22, чтобы вспомнить её историю и свойства.</p><p>Второй серебряный клинок ведьмака школы Змеи Геррина, выкованный для битвы с Могримом и Эйрой Ледяной Песнью.</p>",
+   "quantity": 1,
+   "weight": 6,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "263"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "магия земли и воды",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "freeze",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "6d6+4",
+   "relic": true,
+   "mods": []
+  },
+  "folder": [
+   "Мечи",
+   "Реликвии"
+  ],
+  "_id": "PEgObHlczrpkZjxF"
+ },
+ {
+  "name": "Лопата (импровизированное оружие)",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-shovel.webp",
+  "system": {
+   "description": "<p>Добротная лопата в умелых руках — тяжёлая дубина.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 15,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": -2,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Дробящее",
+   "Фургончик Родольфа"
+  ],
+  "_id": "hoWrHTy1fbGrAal9"
+ },
+ {
+  "name": "Факел (импровизированное оружие)",
+  "type": "weapon",
+  "img": "icons/sundries/lights/torch-brown-lit.webp",
+  "system": {
+   "description": "<p>Зажжённый факел поджигает с шансом 25 %.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1,
+   "availability": "everywhere",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": "1"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": -1,
+   "damage": "1d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "burning",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Дробящее",
+   "Фургончик Родольфа"
+  ],
+  "_id": "uMuaIFJivxReytOm"
+ },
+ {
+  "name": "Шприц полевого врача",
+  "type": "weapon",
+  "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
+  "system": {
+   "description": "<p>Заряжается флаконом яда или эликсира: при уроне содержимое уходит глубоко в тело — СЛ избавления от яда +3, длительность эликсира +3 раунда.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 350,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "7"
+   },
+   "category": "other",
+   "skill": "melee",
+   "accuracy": 1,
+   "damage": "1d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "syringe",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Прочее",
+   "Фургончик Родольфа"
+  ],
+  "_id": "0JYYQMlkzXeQdJDw"
+ },
+ {
+  "name": "Сеть охотника на монстров",
+  "type": "weapon",
+  "img": "icons/environment/traps/wire-fencing-coil.webp",
+  "system": {
+   "description": "<p>Пропитана составами, которые держат магию: пока существо касается сети, оно не может стать невидимым, неосязаемым или телепортироваться, а уже невидимое проявляется.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 500,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "7"
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "entangling",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "magicBinding",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Метательное",
+   "Фургончик Родольфа"
+  ],
+  "_id": "XZI90vSdcjMsWt06"
+ },
+ {
+  "name": "Отравленный коготь гарпии",
+  "type": "weapon",
+  "img": "icons/weapons/daggers/dagger-poisoned-curved-green.webp",
+  "system": {
+   "description": "<p>Прямой двусторонний метательный клинок, пропитанный ядом.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 450,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "7"
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 1,
+   "damage": "1d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "Тел × 4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "poison",
+     "value": "90%",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Метательное",
+   "Фургончик Родольфа"
+  ],
+  "_id": "oTI6QfobJdYoC5eX"
+ },
+ {
+  "name": "Скорпио",
+  "type": "weapon",
+  "img": "icons/weapons/artillery/ballista-wood-green.webp",
+  "system": {
+   "description": "<p>Младший родич осадных скорпионов: пробивает рыцаря вместе с конём.</p>",
+   "quantity": 1,
+   "weight": 40,
+   "cost": 2500,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "7"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 0,
+   "damage": "10d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "200 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "calculatedReload",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "mounted",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Арбалеты",
+   "Фургончик Родольфа"
+  ],
+  "_id": "xe2twNHDTYb38syN"
+ },
+ {
+  "name": "Ловец мечей",
+  "type": "weapon",
+  "img": "icons/weapons/daggers/dagger-simple-hooked.webp",
+  "system": {
+   "description": "<p>Зубцы на обухе ловят чужой клинок, чтобы добить противника второй рукой.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 500,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "7"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bladeCatcher",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Фургончик Родольфа"
+  ],
+  "_id": "8HrXH5psvCkfs5gi"
+ },
+ {
+  "name": "Утяжелённая сеть",
+  "type": "weapon",
+  "img": "icons/environment/traps/net.webp",
+  "system": {
+   "description": "<p>Моток верёвки с железными грузиками по краю.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 125,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "7"
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "entangling",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Метательное",
+   "Фургончик Родольфа"
+  ],
+  "_id": "elaVA4BxMfS7ycmD"
+ },
+ {
+  "name": "Стальной меч школы Медведя",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-bear-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Медведя.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "6d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "FRwNjg9SXz9rtsoL"
+ },
+ {
+  "name": "Серебряный меч школы Медведя",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-bear-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Медведя.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "3d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "x1JENu8v2InIo3Ss"
+ },
+ {
+  "name": "Стальной меч школы Кота",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-cat-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Кота.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "DG8tWLntrkZYvv2Z"
+ },
+ {
+  "name": "Серебряный меч школы Кота",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-cat-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Кота.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "Fc2Q1cfZf6Cv9D9g"
+ },
+ {
+  "name": "Стальной меч школы Грифона",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-grif-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Грифона.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "5d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "1",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "6AUEbLA3HB6DTRS4"
+ },
+ {
+  "name": "Серебряный меч школы Грифона",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-grif-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Грифона.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "focus",
+     "value": "1",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "zLwmPg71WQiC3bfN"
+ },
+ {
+  "name": "Стальной меч школы Мантикоры",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-mant-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Мантикоры.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "5d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "FSVveIAqQayi3yyp"
+ },
+ {
+  "name": "Серебряный меч школы Мантикоры",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-mant-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Мантикоры.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "q4yoxgrjupzENUaE"
+ },
+ {
+  "name": "Стальной меч школы Змеи",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-viper-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Змеи.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "poison",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "my7FrnA1cUyHl8Vl"
+ },
+ {
+  "name": "Серебряный меч школы Змеи",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-viper-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Змеи.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "poison",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "5ZuI3b9UmHRQAiAQ"
+ },
+ {
+  "name": "Стальной меч школы Волка",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "5d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "improvedAP",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "mmMSt5VpT1EeNLkQ"
+ },
+ {
+  "name": "Серебряный меч школы Волка",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-wolf-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "ofDIUJyeVKGK5xVs"
+ },
+ {
+  "name": "Арбалет школы Медведя",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-bear-cb.webp",
+  "system": {
+   "description": "<p>Арбалет ведьмачьей школы Медведя.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 1,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "50 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Арбалеты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "npMIs3fVmeL1PuaN"
+ },
+ {
+  "name": "Арбалет школы Кота",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-cat-cb.webp",
+  "system": {
+   "description": "<p>Арбалет ведьмачьей школы Кота.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "50 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Арбалеты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "kVeFotYlhZCy53tL"
+ },
+ {
+  "name": "Арбалет школы Грифона",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sch-grif-cb.webp",
+  "system": {
+   "description": "<p>Арбалет ведьмачьей школы Грифона.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "3"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "50 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "improvedAP",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Арбалеты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "lmmnm4tJm0AVzKNq"
+ },
+ {
+  "name": "Змеиный клык",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/sw-viper-fang.webp",
+  "system": {
+   "description": "<p>Короткий клинок школы Змеи: ведьмаки этой школы носят два таких.</p><p><b>Парирующее:</b> клинок скован для перехвата чужих ударов.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Снаряжение ведьмака",
+    "page": "5"
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 1,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "parrying",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Ведьмачьих школ"
+  ],
+  "_id": "vJ3VYNsfx9fP8Ksf"
+ },
+ {
+  "name": "Затупленное копьё",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/spear-flared-blue.webp",
+  "system": {
+   "description": "<p>Турнирное копьё Туссента: бьёт, но не калечит.</p><p>Разбег: при удачном ударе с разбега добавьте d6 урона за каждые два метра разбега.</p>",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 500,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "nonLethal",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "charge",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Древковое",
+   "Туссент"
+  ],
+  "_id": "wZltYZOzuh1mzGy4"
+ },
+ {
+  "name": "Герцогский меч",
+  "type": "weapon",
+  "img": "icons/weapons/swords/shortsword-guard-gold-red.webp",
+  "system": {
+   "description": "<p>Клинок туссентской знати — лёгкий, узкий и дорогой.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 800,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Туссент"
+  ],
+  "_id": "W9hiTzgQHRhYGil4"
+ },
+ {
+  "name": "Фламберг",
+  "type": "weapon",
+  "img": "icons/weapons/swords/greatsword-flamberge.webp",
+  "system": {
+   "description": "<p>Двуручный клинок с волнистым лезвием: рвёт доспех и держит противника на расстоянии.</p>",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 1025,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": -1,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Туссент"
+  ],
+  "_id": "RQ0UinP78qKpegu8"
+ },
+ {
+  "name": "Клевец",
+  "type": "weapon",
+  "img": "icons/weapons/hammers/hammer-war-spiked.webp",
+  "system": {
+   "description": "<p>Конный молот с клювом.</p><p>Разбег: при удачном ударе с разбега добавьте d6 урона за каждые два метра разбега.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 860,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "charge",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Дробящее",
+   "Туссент"
+  ],
+  "_id": "dnN7DQDC2HN2P9dT"
+ },
+ {
+  "name": "Партизан",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/halberd-crescent-engraved-steel.webp",
+  "system": {
+   "description": "<p>Древковое оружие туссентской стражи.</p>",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 750,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 1,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "bludgeoning",
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Древковое",
+   "Туссент"
+  ],
+  "_id": "LtzaFT1AFFeJSIBt"
+ },
+ {
+  "name": "Дубина",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/weapons/t2-club.webp",
+  "system": {
+   "description": "<p>Тяжёлая палка, которой ломают щиты и доспехи.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 375,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Дробящее",
+   "Туссент"
+  ],
+  "_id": "TQML3t3Qb8cN2MQL"
+ },
+ {
+  "name": "Клинок Видеолана",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-runed-glowing.webp",
+  "system": {
+   "description": "<p>Именной клинок: отравлен и точён так, что раны от него не закрываются.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 995,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "4d6+4",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "30%",
+     "source": ""
+    },
+    {
+     "key": "poison",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Туссент"
+  ],
+  "_id": "K0E5zACgIC2EcM5M"
+ },
+ {
+  "name": "Боевое копьё",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/spear-barbed-silver.webp",
+  "system": {
+   "description": "<p>Копьё для конного боя.</p><p>Разбег: при удачном ударе с разбега добавьте d6 урона за каждые два метра разбега.</p>",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 550,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "charge",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Древковое",
+   "Туссент"
+  ],
+  "_id": "ajEFOGQ06nELmtFW"
+ },
+ {
+  "name": "Охотничий арбалет",
+  "type": "weapon",
+  "img": "icons/weapons/crossbows/crossbow-heavy.webp",
+  "system": {
+   "description": "<p>Тяжёлый арбалет с длинным боем: из такого бьют зверя за полтораста метров.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 600,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "1"
+   },
+   "category": "crossbow",
+   "skill": "crossbow",
+   "accuracy": 2,
+   "damage": "5d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "150 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Арбалеты",
+   "Туссент"
+  ],
+  "_id": "4PxhXbiaMl56I0av"
+ },
+ {
+  "name": "Клыки врана",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/fang-tooth-poison-green.webp",
+  "system": {
+   "description": "<p>Раса «Вран»: ближняя атака клыками, 3d6 урона, отравление 50%.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "5"
+   },
+   "category": "natural",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "3d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "poison",
+     "value": "50%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Естественное"
+  ],
+  "_id": "SAhC9E8P38FB2BEC"
+ },
+ {
+  "name": "Зубы-бритвы боболака",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/mouth-teeth-sharp.webp",
+  "system": {
+   "description": "<p>Раса «Боболак»: ближняя атака клыками, 2d6 урона, пробивает броню.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Книга сказаний",
+    "page": "6"
+   },
+   "category": "natural",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Естественное"
+  ],
+  "_id": "vpG9hGmTSCJmORtp"
+ },
+ {
+  "_id": "sqgZ4xKTkDt4afpW",
+  "name": "Солнце Зеррикании",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/alchemy/t3-bomb-virus.webp",
+  "system": {
+   "description": "<p>Радиус - 4 м\n\nЛюбое способное видеть существо, попавшее в радиус\nдействия бомбы, ослепляется на 5 раундов. Любое существо с ночным зрением, попавшее в радиус действия бомбы, ослепляется на 10 раундов и ошеломлено. Любое существо с Улучшенным ночным зрением ослепляется на 10 раундов и дезориентировано.</p><p>Ослепление. Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 120.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "staggering",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Фургончик Родольфа"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "GuXqdrupDWOQfrlu",
+  "name": "Серп",
+  "type": "weapon",
+  "img": "icons/weapons/sickles/sickle-worn-white.webp",
+  "system": {
+   "description": "<p>- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 76.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Крестьянин",
+    "page": ""
+   },
+   "category": "smallBlade",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Крестьянин"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "z42CYJMwYXFAAB1R",
+  "name": "Вилы",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/trident-fork-white.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (15 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n\nОбычные крестьянские вилы. В целом, вполне безобидные, если их испльзовать по назначению. Однако, иногда, в руках дрожащего крестьянины может и ведьмака заколоть.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 115.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Крестьянин",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": -2,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "15%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Крестьянин"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "KINGf2QSU9u3abGF",
+  "name": "Кистень",
+  "type": "weapon",
+  "img": "icons/weapons/maces/flail-studded-grey.webp",
+  "system": {
+   "description": "<p>- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]\n- ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони, по которой оно попадает.]\n\nМало кто сейчас дерётся кистенём. Ну да, попробуй· помахать здоровенным шипастым шаром на цепи. Но когда я в последний раз видел парня с кистенём, тот сделал вмятину на рыцарском шлеме, а хозяина шлема навеки упокоил.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 562.0,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Лорды и земли",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": -1,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Лорды и земли"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "6QTJpcUtOTHQ6erG",
+  "name": "Дубинка",
+  "type": "weapon",
+  "img": "icons/weapons/clubs/club-baton-blue.webp",
+  "system": {
+   "description": "<p>- НЕСМЕРТЕЛЬНОЕ\n[Это оружие можно использовать для нанесения несмертельного урона без штрафов.]</p>",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 375.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "nonLethal",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "CXxmTafwaN09tBJC",
+  "name": "Протазан",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/trident-curved-steel.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- КРОВОПУСКАЮЩЕЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]</p>",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 750.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 1,
+   "damage": "4d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Туссент"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Ifx3qoGZovlrQHoi",
+  "name": "Лунная пыль",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/moon-dust-bomb.webp",
+  "system": {
+   "description": "<p>Радиус - 8 м\n\nЛюбые невидимые или неосязаемые существа становятся видимыми и осязаемыми на 20 раундов. Эта бомба также не позволяет чудовищам регенерировать или трансформироваться.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 199.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "6n8EKzk19acj3562",
+  "name": "Лопата ключника",
+  "type": "weapon",
+  "img": "icons/tools/hand/shovel-spade-steel-white.webp",
+  "system": {
+   "description": "<p>Востанавливает 10% пз при уроне\n- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]</p><p>Вост-е 10% пз при уроне.</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "6d6+4",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "DKgPXp5zIVFD4l71",
+  "name": "Ведьмачий протез (Рука)",
+  "type": "weapon",
+  "img": "icons/equipment/hand/glove-reticulated-steel.webp",
+  "system": {
+   "description": "<p>- СЕРЕБРЯНОЕ (1d6)\n[Серебряное оружие наносит чудовищам дополнительный урон, что указано в параметрах оружия.]\n\nПостроенный Барендом Ансельбергом и Элганом из Вердена, чтобы противостоять Пути и всем его испытаниям для Ворена из Диллингена, а позже воспроизведенный для использования другими ведьмаками. Эти конечности сильно укреплены, они способны противостоять сокрушительным челюстям мантикоры и оставаться функциональными.\n\nЭффект: При ношении протеза Ведьмака конечность сохраняет полный спектр подвижности и функций, а любое снижение подвижности до уровня SPD сводится на нет. Ведьмачий протез можно использовать для управления Хаосом с помощью магических символов, вырезанных по всей длине, и пропитанных пятой эссенцией, похожей на магический амулет. Серебряные кастеты и накладки на носки добавляют 1d6 серебряного урона к любому удару или пинку, нанесенному ведьмачьим протезом. \n\nЛюбая атака, направленная против протеза конечности, перенаправляется на его владельца в игровых целях.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 800.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Ведьмачьи протезы и коляски",
+    "page": ""
+   },
+   "category": "other",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "1d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "1d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Прочее",
+   "Ведьмачьи протезы и коляски"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "vNqAwStI7zgfouzD",
+  "name": "Танцующая звезда",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-guard-worn-purple.webp",
+  "system": {
+   "description": "<p>Раудиус - 4 м\n\n- ГОРЕНИЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 162.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "burning",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "fOXoegOvyJfiAZwO",
+  "name": "Коса",
+  "type": "weapon",
+  "img": "icons/weapons/sickles/scythe-simple-white.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]</p><p>Захватывающее.</p>",
+   "quantity": 1,
+   "weight": 3.5,
+   "cost": 126.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Крестьянин",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": -3,
+   "damage": "3d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Крестьянин"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "3wVAVuHhCAWcT1xu",
+  "name": "Пастуший посох",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-simple-brown.webp",
+  "system": {
+   "description": "<p>- НЕСМЕРТЕЛЬНОЕ\n[Это оружие можно использовать для нанесения несмертельного урона без штрафов.]\n\nМожно метнуть на дистанцию ТЕЛ*2</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 14.0,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Крестьянин",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "1d6-2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "nonLethal",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Крестьянин"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "gjHIn7jlEeWHNw4T",
+  "name": "Укус (Вран)",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/skills_icons/bite.webp",
+  "system": {
+   "description": "<p>- ОТРАВЛЯЮЩЕЕ (50 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "3d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 99,
+    "max": 99
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "poison",
+     "value": "50%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Туссент"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "jyOM8qve8uDeeJ16",
+  "name": "Посох связывания",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-engraved-red.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.\n- ФОКУСИРУЮЩЕЕ (3) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]\n\nКрепкий посох из орешника, обработанный эфирной смазкой, воском огра и маслом селезня, инкрустированный резным кровавым камнем. Этот посох является незавершенным Посохом связывания, но по-прежнему действует как мощная фокусировка.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 1332.0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "3",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "BxMRJ6rKkN0qPI8e",
+  "name": "Крюк",
+  "type": "weapon",
+  "img": "icons/weapons/fist/hook.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (15 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 5.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": -2,
+   "damage": "1d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "15%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "jfYVBELR6iBH9FS0",
+  "name": "Посох управителя",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-orb-purple.webp",
+  "system": {
+   "description": "<p>+25 ПЗ\n- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ФОКУСИРУЮЩЕЕ (5) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]</p><p>Фокус(5). +25 пз.</p>",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 3,
+   "damage": "3d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "e7hrT5GHN0I7d6V8",
+  "name": "Посох дикой охоты",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-metal-mask.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ФОКУСИРУЮЩЕЕ (3) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]</p><p>Фокус(3).</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 2,
+   "damage": "4d6+4",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "LJOpAzKJcV9x086v",
+  "name": "Снежная буря",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-ornate-blue.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ФОКУСИРУЮЩЕЕ (5) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]\n- МЕТЕОРИТНОЕ\n[Это оружие наносит полный урон чудовищам, уязвимым к метеоритной стали. Также такое оружие имеет 5 дополнительных пунктов надежности.]</p><p>Фокус(5).</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 2,
+   "damage": "4d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "0H1bD2jVOyf76K17",
+  "name": "Бешенство",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/rage.webp",
+  "system": {
+   "description": "<p>Радиус - 8 метров, вид - стихийная ловушка.\n\nЛюбой, попавший в зону взрыва, должен пройти проверку Стойкости,СЛ 18. При провале он начинает сражаться с ближайшим к нему существом, пока не совершит успешную проверку.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 144.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "8 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "jHmNfIYzd4ps1F95",
+  "name": "Пожарище",
+  "type": "weapon",
+  "img": "icons/magic/fire/projectile-arrow-fire-orange.webp",
+  "system": {
+   "description": "<p>Радиус - 4 метра, урон 5d6, тип - Стихийная ловушка.\n\nГорение(75% шанс)</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 121.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "burning",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "e5uDeyTPAtqMGkT7",
+  "name": "Истинный посох связывания",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-ornate-red.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.\n- ФОКУСИРУЮЩЕЕ (3) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]\n\n\nКрепкий посох из орешника, обработанный эфирной смазкой, воском огра и маслом из дрейка, инкрустированный резным кровавым камнем. Этот Истинный Посох Связывания завершен и имеет последние штрихи: пару наконечников из метеоритной латуни на обоих концах посоха, инкрустированных рунами и обработанных Катализатором. Этот Посох Связывания по-прежнему действует как мощный фокусировка, но теперь его можно использовать в Ритуале Связывания.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 0.0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "3",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "4sXCVWOOgpcebPu4",
+  "name": "Сеть охотника на чудовищ",
+  "type": "weapon",
+  "img": "icons/tools/fishing/net-simple-tan.webp",
+  "system": {
+   "description": "<p>- ОПУТЫВАЮЩИЕ\n[Цель, пораженная этим оружием, становится опутанной. Она снижает свою Скор на 5 и получает штраф -2 ко всем физическим действиям. Каждый ход цель может совершать проверку Уклонения/Изворотливости или Борьбы со СЛ 18, чтобы высвободиться. В качестве альтернативы другой персонаж может потратить действие, чтобы освободить опутанного.]\n- МАГИЧЕСКИЕ ПУТЫ\n[Пока существо прикасается к этому оружию, оно не может стать невидимым или неосязаемым или использовать любую способность, которая позволяет ему телепортироваться. Существа, которые уже являются невидимыми или неосязаемыми, становятся видимыми и осязаемыми при прикосновении к этому оружию.]\n\nЯ слышал, что Охотники за колдуньями используют их, когда охотятся на магов и монстров вроде допплеров. Сама сеть на самом деле не особенная, но она пропитана \nхимическими веществами и чем-то ещё, что мешает тому, что попало в сеть, использовать магию для побега.</p><p>Опутывающее. Магические путы.</p>",
+   "quantity": 1,
+   "weight": 4.0,
+   "cost": 500.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 2,
+   "range": "4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Фургончик Родольфа"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "hau2IGf0fln7G3v5",
+  "name": "Ведьмачий протез (Нога)",
+  "type": "weapon",
+  "img": "icons/equipment/feet/boots-armored-banded-steel.webp",
+  "system": {
+   "description": "<p>- СЕРЕБРЯНОЕ (1d6)\n[Серебряное оружие наносит чудовищам дополнительный урон, что указано в параметрах оружия.]\n\nПостроенный Барендом Ансельбергом и Элганом из Вердена, чтобы противостоять Пути и всем его испытаниям для Ворена из Диллингена, а позже воспроизведенный для использования другими ведьмаками. Эти конечности сильно укреплены, они способны противостоять сокрушительным челюстям мантикоры и оставаться функциональными.\n\nЭффект: При ношении протеза Ведьмака конечность сохраняет полный спектр подвижности и функций, а любое снижение подвижности до уровня SPD сводится на нет. Ведьмачий протез можно использовать для управления Хаосом с помощью магических символов, вырезанных по всей длине, и пропитанных пятой эссенцией, похожей на магический амулет. Серебряные кастеты и накладки на носки добавляют 1d6 серебряного урона к любому удару или пинку, нанесенному ведьмачьим протезом. \n\nЛюбая атака, направленная против протеза конечности, перенаправляется на его владельца в игровых целях.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 800.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Ведьмачьи протезы и коляски",
+    "page": ""
+   },
+   "category": "other",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "1d6+4",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 99,
+    "max": 99
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "1d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Прочее",
+   "Ведьмачьи протезы и коляски"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "UVpJVdVD9kNCmKea",
+  "name": "Фальшарда",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/glaive-simple.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 412.0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "3d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "7Lmu6yF8ygjhWty4",
+  "name": "Звезда смерти",
+  "type": "weapon",
+  "img": "icons/weapons/maces/mace-spiked-skull.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ДЕЗОРИЕНТИРУЮЩИЕ (-2) \n[Когда этим оружием наносят удар по туловищу или голове, противник должен совершить испытание Устойчивости, к которому применяется штраф, указанный в скобках.]\n- МЕТЕОРИТНОЕ\n[Это оружие наносит полный урон чудовищам, уязвимым к метеоритной стали. Также такое оружие имеет 5 дополнительных пунктов надежности.]</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 3,
+   "damage": "8d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "XAezEzfAxtFxpj9H",
+  "name": "Картечь",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+  "system": {
+   "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 159.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "7d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "burning",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "IFbGHB5lLO6Bd4CR",
+  "name": "Кусач",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/trap.webp",
+  "system": {
+   "description": "<p>Радиус - 4 метра, тип - колющая ловушка. Урон 7d6.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 144.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "7d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "mUNCd3eMVDDDqYWY",
+  "name": "Ламия",
+  "type": "weapon",
+  "img": "icons/weapons/misc/whip-red-yellow.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]\n- КРОВОПУСКАЮЩЕЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n\nЕсли вы ищете по—настоящему жестокое оружие — что-нибудь, чтобы живьем содрать с человека кожу, - вы обратились по адресу. Ламия - это длинный плетеный хлыст с металлическими зазубринами, который мгновенно сдирает плоть с человека. Бывшему главе тайной полиции Новиграда эти штуки нравились. Слышал, храмовая стража до сих пор носит их как “служебные знаки”.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 115.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Лорды и земли",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Лорды и земли"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "gxS3AsiOK3L3pPMM",
+  "name": "Клинок из Вироледы",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-guard.webp",
+  "system": {
+   "description": "<p>- ОТРАВЛЯЮЩЕЕ (30 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]\n- КРОВОПУСКАЮЩЕЕ (30 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- СБАЛАНСИРОВАННОЕ \n[При нанесении критического ранения этим оружием бросьте 2d6 + 2 для определения места этого ранения. Если атака была прицельной, бросьте ld6 + 1 вместо ld6 для определения серьезности критического ранения.]</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 995.0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": ""
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 1,
+   "damage": "4d6+4",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "30%",
+     "source": ""
+    },
+    {
+     "key": "poison",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Мечи",
+   "Туссент"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "ZwXiXtXf17bVySyV",
+  "name": "Призрачный клинок",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-jeweled-red.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]\n- СБАЛАНСИРОВАННОЕ \n[При нанесении критического ранения этим оружием бросьте 2d6 + 2 для определения места этого ранения. Если атака была прицельной, бросьте ld6 + 1 вместо ld6 для определения серьезности критического ранения.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]</p><p>Улучшенный фокус.</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 0,
+   "damage": "8d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    },
+    {
+     "key": "burning",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Мечи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "briM045Xbfdttxd9",
+  "name": "Кавалерийский молот",
+  "type": "weapon",
+  "img": "icons/weapons/hammers/hammer-war-rounding.webp",
+  "system": {
+   "description": "<p>- ТАРАНЯЩЕЕ\n[Оружие с эффектом таранящее наносит дополнительный таранящий урон, когда используется из положения верхом. Количество дополнительных d6 кубов урона, атакуя верхом, равно количеству метров, на которые вы продвинулись до цели, а не половине количества метров, как при таранящем уроне.]</p><p>Таранящее.</p>",
+   "quantity": 1,
+   "weight": 2.5,
+   "cost": 860.0,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Туссент"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "CruOuS5C5eBe4u7c",
+  "name": "Медвежий коготь",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-guard-flanged-purple.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (25)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- СБАЛАНСИРОВАННОЕ \n[При нанесении критического ранения этим оружием бросьте 2d6 + 2 для определения места этого ранения. Если атака была прицельной, бросьте ld6 + 1 вместо ld6 для определения серьезности критического ранения.]\n- МЕТЕОРИТНОЕ\n[Это оружие наносит полный урон чудовищам, уязвимым к метеоритной стали. Также такое оружие имеет 5 дополнительных пунктов надежности.]\n- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "10d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Мечи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Q4eGi2Ya4hU6iEV4",
+  "name": "Алебарда-секач",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/halberd-crescent-steel.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]</p>",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 568.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "5d6+2",
+   "damageTypes": [
+    "slashing",
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "32C5pU02mUYENuv2",
+  "name": "Кочерга",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/spear-hooked-brown.webp",
+  "system": {
+   "description": "<p>Если расколено, то имеет свойство\n\n- ГОРЕНИЕ (15 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 137.0,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "2d6+2",
+   "damageTypes": [
+    "piercing",
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "burning",
+     "value": "15%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "G5xGckijZaYMghkq",
+  "name": "Когтезуб",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/clawtooth.webp",
+  "system": {
+   "description": "<p>Радиус - 4 метра, Урон 5d6, тип - режущая ловушка.\n\nВсе в зоне взрыва получают урон, от которого с вероятностью 60 % остаётся кровоточащая рана.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 111.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "60%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "QXWvnHZFQdSoOItq",
+  "name": "Талгарская зима",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/talgarian_winter.webp",
+  "system": {
+   "description": "<p>Радиус - 4 метра, тип - стихийная ловушка.\nЛюбой, попавший в зону взрыва, замораживается на месте на 8 раундов или до тех пор, пока не совершит проверку Силы, СЛ 18, либо пока по нему не нанесут удар. Атака по замороженной цели наносит ей дополнительно 2d6 урона.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 126.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "freeze",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "YVeD2ZC8SxydaHMN",
+  "name": "Северный ветер",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/northern-wind-bomb.webp",
+  "system": {
+   "description": "<p>Радиус - 4 м\n\nВсе существа, попавшие в зону действия этой бомбы, замораживаются на месте до тех пор, пока не пройдут проверку Силы со СЛ 18, пока по ним не нанесут удар или пока не пройдёт 8 раундов. Атака по замороженной цели наносит ей дополнительно 2d6 урона.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 177.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "freeze",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "hNuw1IB2QMASceBj",
+  "name": "Острые зубы (Боболак)",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/mouth-teeth-long-red.webp",
+  "system": {
+   "description": "<p>- УЛУЧШЕННОЕ ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони и половину прочности брони, по которой оно попадает.]</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Книга сказаний",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 99,
+    "max": 99
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "improvedAP",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Туссент"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "t1kYQWqXO1Py9rFg",
+  "name": "Кирка",
+  "type": "weapon",
+  "img": "icons/tools/hand/pickaxe-steel-white.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 14.0,
+   "availability": "everywhere",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": -2,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Q5rK5iBbs132nrge",
+  "name": "Серп друида",
+  "type": "weapon",
+  "img": "icons/weapons/sickles/sickle-wrapped-engraved-green.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (30 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]</p><p>Захватывающий.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 540.0,
+   "availability": "common",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "category": "smallBlade",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "3d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "30%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "eTVHxMKiVtGCOMmq",
+  "name": "Древний меч вранов",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-broad-serrated-blue.webp",
+  "system": {
+   "description": "<p>+ 25 ПЗ\n- КРОВОПУСКАЮЩЕЕ (75 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ (Магия огня)\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]\n- СБАЛАНСИРОВАННОЕ \n[При нанесении критического ранения этим оружием бросьте 2d6 + 2 для определения места этого ранения. Если атака была прицельной, бросьте ld6 + 1 вместо ld6 для определения серьезности критического ранения.]</p><p>+25 пз.</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "9d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Мечи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "5VJ3jVhqZ0lAbgHz",
+  "name": "Чертов гриб",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/devil-s-puffball-bomb.webp",
+  "system": {
+   "description": "<p>Радиус - 4 м\n\n- ОТРАВЛЯЮЩЕЕ (100 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]\n«Чертов гриб» наносит двойной урон от яда.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 138.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "poison",
+     "value": "100%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "KlFxUditQ6sR73Ew",
+  "name": "Двимеритовая бомба",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/dimeritium-bomb.webp",
+  "system": {
+   "description": "<p>Радиус - 8 м\n\nНе позволяет использовать магию в зоне действия в течение 20 раундов.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 264.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "6w3nXK4ZuVYuabs6",
+  "name": "Жезл изгнания",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-spiked.webp",
+  "system": {
+   "description": "<p>Ореховый жезл с колпачком из протравленной темной стали, обработанный огровым воском и эфирной смазкой. Этот жезл может быть использован для временного изгнания определенного демона с плана существования. Владелец должен совершить рукопашную атаку против демона, которая в случае успеха не наносит урона, но изгоняет демона обратно в его собственное царство на 24 часа. Каждая палочка может быть использована только против одного определенного демона (чье имя высечено на палочке) и имеет 50% шанс сломаться при каждом изгнании. При использовании против великого демона жезл всегда ломается после изгнания.</p><p>Поломка (50%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 1,
+    "max": 1
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "JPUOU0f93s6ZXwZr",
+  "name": "Посох из дуба и омелы",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-nature-spiral.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ФОКУСИРУЮЩЕЕ (1) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n\nДруид очень быстро учится собирать магически могущественные растения и превращать их в мощный источник своей магии, который связывает его с окружающей землей. Друид может потратить день на то, чтобы провести ритуал с дубом и омелой, сверяясь с ДЦ, характерным для местности, в которой он находится, для сбора необходимых ингредиентов. В случае успеха Друид создает Посох, который подходит только для него. Этот посох функционирует точно так же, как и обычный посох, но его ценность возрастает по мере того, как друид повышает свою ценность в ритуале Дуба и Омелы. Кроме того, пока друид носит свой посох, он получает преимущества, основанные на его ценности в ритуале Дуба и Омелы.</p>",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "category": "staff",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "1d6+2",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "focus",
+     "value": "1",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Посохи",
+   "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "NWLCRqM9VxadIexX",
+  "name": "Ковирский ламинированный лук",
+  "type": "weapon",
+  "img": "icons/weapons/bows/longbow-recurve-brown.webp",
+  "system": {
+   "description": "<p>- ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони, по которой оно попадает.]\n- СБАЛАНСИРОВАННОЕ \n[При нанесении критического ранения этим оружием бросьте 2d6 + 2 для определения места этого ранения. Если атака была прицельной, бросьте ld6 + 1 вместо ld6 для определения серьезности критического ранения.]\n\nОружие с плоскими ламинированными плечами из слоёв благородной древесины. Выпущенная из этого лука стрела способна запросто уложить оленя на расстоянии в сто шагов, а человека без лат прошьёт насквозь.</p>",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 1371.0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bow",
+   "skill": "archery",
+   "accuracy": 3,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 2,
+   "range": "370 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 2,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Луки",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "o56YRCbUT6E0lcJj",
+  "name": "Метка",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/fire_mark.webp",
+  "system": {
+   "description": "<p>Радиус - 8 метров. Тип - Стихийная ловушка.\n\nПокрывает попавших в зону взрыва яркой краской с мощным запахом,который чувствуется за милю. Краска держится 1 полный день и даёт +5 к выслеживанию цели.\nЕсли вы доберётесь до достаточно крупного водоёма или реки, то можете смыть с себя краску из\nловушки-метки. На это потребуется 3 полных раунда — в результате бонус к выслеживанию снизится до +2. Запах нельзя смыть, но нанесение духов/одеколона или же валяние в грязи снизит бонус к выслеживанию до +2.</p><p>Проходит сквозь надетую броню.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 57.0,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "8 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "nWgUZJYwcaTBFTUH",
+  "name": "Пожиратель крови",
+  "type": "weapon",
+  "img": "icons/weapons/axes/axe-battle-eyes-red.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- МЕТЕОРИТНОЕ\n[Это оружие наносит полный урон чудовищам, уязвимым к метеоритной стали. Также такое оружие имеет 5 дополнительных пунктов надежности.]\n- ФОКУСИРУЮЩЕЕ (4) \n[При сотворении магии с помощью этого оружия вычтите его значение фокусировки из стоимости заклинания в Вын.]\n- УЛУЧШЕННОЕ ФОКУСИРУЮЩЕЕ\n[При сотворении заклинаний с помощью этого оружия СЛ проверок против ваших заклинаний считается на 2 выше.]</p><p>Фокус(4).</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": 3,
+   "damage": "8d6+2",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "greaterFocus",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "MHmhQTiboihZmKKN",
+  "name": "Сон дракона",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/zerricanian-sun.webp",
+  "system": {
+   "description": "<p>Радиус - 8 м\n\nСоздаёт облако горючего газа, которое распространяется в случайном направлении на 3 хода, а после рассеивается. При появлении в этом облаке любого источника пламени газ взрывается. Все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.</p><p>Урон по всем частям тела.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 177.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "5d6",
+   "damageTypes": [
+    "elemental"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "burning",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "70RIFJh6JKZJU6tt",
+  "name": "Самум",
+  "type": "weapon",
+  "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+  "system": {
+   "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 147.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "category": "thrown",
+   "skill": "athletics",
+   "accuracy": 0,
+   "damage": "0",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 1,
+   "range": "Тел×4 м",
+   "attackSpeed": 1,
+   "effects": [],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Метательное",
+   "Людей"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Aa5tV8jH0un8VeiU",
+  "name": "Человеколов",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/spear-simple-crescent.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]\n\n\nЧёрные крадут народ и продают в Империю. Когда пленники сбегают, за ними отправляются в погоню вот с такой штукой. Человеколов — здоровенный ухват с шипами, насаженный на древко. Цепляешь таким беглеца за шею, и тот быстро сдаётся.</p><p>Захватывающее.</p>",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 463.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Лорды и земли",
+    "page": ""
+   },
+   "category": "pole",
+   "skill": "staffSpear",
+   "accuracy": 0,
+   "damage": "3d6+3",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Древковое",
+   "Лорды и земли"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "8ssKmn429wt9kBXN",
+  "name": "Арондит",
+  "type": "weapon",
+  "img": "icons/weapons/swords/greatsword-guard-split-eyes.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (75 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n- СЕРЕБРЯНОЕ (6d6+4)\n[Серебряное оружие наносит чудовищам дополнительный урон, что указано в параметрах оружия.]\n- ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони, по которой оно попадает.]\n- СБАЛАНСИРОВАННОЕ \n[При нанесении критического ранения этим оружием бросьте 2d6 + 2 для определения места этого ранения. Если атака была прицельной, бросьте ld6 + 1 вместо ld6 для определения серьезности критического ранения.]</p><p>Серебряное 6d6+4. Кропопускающее.</p>",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 2,
+   "damage": "6d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "balanced",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "6d6+4",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Мечи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "nDMBcdOjnP1z6oGu",
+  "name": "Дага",
+  "type": "weapon",
+  "img": "icons/weapons/daggers/dagger-straight-green.webp",
+  "system": {
+   "description": "<p>- ПАРИРУЮЩЕЕ\n[-2 к штрафу за парирование.]\n\nДага — это такой кинжал, которым дерутся вместе со пагой. Дага крепче обычного ножа, с красивой рукоят ью и широкой гардой. Порой даже делают дополнительную защ ит у кисти.</p>",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 350.0,
+   "availability": "common",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Лорды и земли",
+    "page": ""
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 10,
+    "max": 10
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "parrying",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Лорды и земли"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "8qjqDNBvco5kh3UX",
+  "name": "Кнут",
+  "type": "weapon",
+  "img": "icons/weapons/misc/whip-red-yellow.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ЗАХВАТНОЕ\n[Это оружие можно использовать для захвата и подсечки противника в пределах дистанции.]\n\nО кнуте много не скажешь. Длинный тонкий ремень. Им хорошо подгонять рабочих или животных. Но видал я и тех, кто кнутом сражается. Особого урона эта игрушка не нанесёт, зато ею удобно захватывать оружие или конечности противника.</p><p>Захватывающее.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 600.0,
+   "availability": "rare",
+   "concealment": "small",
+   "equipped": false,
+   "source": {
+    "book": "Лорды и земли",
+    "page": ""
+   },
+   "category": "bludgeon",
+   "skill": "melee",
+   "accuracy": -1,
+   "damage": "3d6+1",
+   "damageTypes": [
+    "slashing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "2 м",
+   "attackSpeed": 2,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Дробящее",
+   "Лорды и земли"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "ceZ9sko5bvuHmww5",
+  "name": "Кинжал из кровавого камня",
+  "type": "weapon",
+  "img": "icons/weapons/daggers/dagger-notched-blackened.webp",
+  "system": {
+   "description": "<p>- КРОВОПУСКАЮЩЕЕ (25%)\n[Если это оружие нанесёт урон цели, с определённой вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n\nДлинный стальной кинжал с волнистым лезвием, исписанным древними рунами. Наиболее впечатляющим и отличительным аспектом этого кинжала является полированный кровавый камень, вставленный в его рукоять. Кинжалы из кровавого камня носят культисты многих вероисповеданий, но оригинальные кинжалы из кровавого камня были созданы как инструменты для практикующих гоэтиков. В наши дни их трудно найти, и редко можно найти кого-то, кто их создает из-за их зловещей репутации.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 0.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "category": "smallBlade",
+   "skill": "smallBlades",
+   "accuracy": 0,
+   "damage": "2d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "25%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Лёгкие клинки",
+   "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "OcDGpFnEYznVU2UE",
+  "name": "Белый хлад",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-runed-glowing.webp",
+  "system": {
+   "description": "<p>- ДЛИННОЕ \n[Этим оружием можно атаковать противников в пределах 2 метров.]\n- ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони, по которой оно попадает.]\n- СЕРЕБРЯНОЕ (9d6)\n[Серебряное оружие наносит чудовищам дополнительный урон, что указано в параметрах оружия.]\n- КРОВОПУСКАЮЩЕЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]</p><p>Серебряное(9d6).</p>",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": 3,
+   "damage": "9d6",
+   "damageTypes": [
+    "slashing",
+    "piercing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 1,
+   "range": "2 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "longReach",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 3,
+   "silverDamage": "9d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "folder": [
+   "Мечи",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ }
+]

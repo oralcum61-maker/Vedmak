@@ -1,0 +1,9554 @@
+[
+ {
+  "name": "Пепел",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-bone-ashes.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Костёр и сгоревшие предметы",
+    "quantity": "1d10",
+    "dc": 10
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "1V9kvsm8lWWNqnDK"
+ },
+ {
+  "name": "Уголь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-coal.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Костёр, горы или под землёй",
+    "quantity": "1d10",
+    "dc": 14
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "ihb4duSb2vCoQ05J"
+ },
+ {
+  "name": "Хлопок",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-cotton-raw.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Поля и плантации",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "xqpW8V6d18xtlOB2"
+ },
+ {
+  "name": "Двойное полотно",
+  "type": "component",
+  "img": "icons/commodities/cloth/cloth-bolt-gold.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 22,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "fAG3BqNiNSOHN0Vy"
+ },
+ {
+  "name": "Стекло",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/m-glass.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 5,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "oyaI3u2llOi4aizi"
+ },
+ {
+  "name": "Укреплённое дерево",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-hardened-timber.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 16,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "8N9N7t7qBWACfF74"
+ },
+ {
+  "name": "Полотно",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/m-linen.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 9,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "wOyTMWjKwOpL8e2w"
+ },
+ {
+  "name": "Масло",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-oil.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 3,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "NdmVYGLmtOaIfgW0"
+ },
+ {
+  "name": "Смола",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-resin.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 2,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Лес",
+    "quantity": "1d6",
+    "dc": 10
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "r0oajfN7bcjFTNTW"
+ },
+ {
+  "name": "Шёлк",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/m-silk.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "ThMO8cIaIsOu6iPn"
+ },
+ {
+  "name": "Нитки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/m-thread.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 3,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "1IM8C3fQLL7wCYmc"
+ },
+ {
+  "name": "Древесина",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-timber.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 3,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Лес",
+    "quantity": "2d6",
+    "dc": 8
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "d2NeUVyVZSaaapxE"
+ },
+ {
+  "name": "Воск",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-wax.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 2,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Лес и поля",
+    "quantity": "1d6",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "5tAQv78K1P9DFiJT"
+ },
+ {
+  "name": "Кости животных",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-bone.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Чудовища и животные",
+    "quantity": "Варьируется",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "1ohF86MGA5F1g7gU"
+ },
+ {
+  "name": "Коровья шкура",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cow-hide.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 10,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Покупается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "3HwamjKtDecxBkCv"
+ },
+ {
+  "name": "Кожа драконида",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-forktail-hide.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 58,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "cPLjizVuVEaqzCSw"
+ },
+ {
+  "name": "Чешуя драконида",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-basilisk-hide.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 30,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Виверны",
+    "quantity": "1d6",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "EPVQotxXU2RPHOtN"
+ },
+ {
+  "name": "Перья",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-feather.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 4,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Птицы",
+    "quantity": "1d6",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "Gl1aZ0BbupZk2N51"
+ },
+ {
+  "name": "Укреплённая кожа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-hardened-leather.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 48,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "FNoC9bs6Xi8Jn7FA"
+ },
+ {
+  "name": "Кожа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-leather.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 28,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "kV2uEg91goGQOtYI"
+ },
+ {
+  "name": "Лирийская кожа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-leather-basilisk.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 60,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "Q241fNIl86yrTN6A"
+ },
+ {
+  "name": "Волчья шкура",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-werewolf-hide.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 14,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "128"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Волки",
+    "quantity": "3",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "hN7Timo7rlta7RAC"
+ },
+ {
+  "name": "Чернящее масло",
+  "type": "component",
+  "img": "icons/consumables/potions/bottle-bulb-corked-purple.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 24,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Лес",
+    "quantity": "1d6",
+    "dc": 16
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "vPj3CmSgAkrYEnNk"
+ },
+ {
+  "name": "Масло из дрейка",
+  "type": "component",
+  "img": "icons/commodities/materials/liquid-orange.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 45,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Реки и морское побережье",
+    "quantity": "1d6",
+    "dc": 16
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "EthcSlLZFExBZoij"
+ },
+ {
+  "name": "Эфирная смазка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-ether.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Леса и поля",
+    "quantity": "1d10",
+    "dc": 14
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "ZxbZ7HwMXMJ7MbR6"
+ },
+ {
+  "name": "Травильная кислота",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t-acid.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 2,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Пещеры и горы",
+    "quantity": "1d10",
+    "dc": 14
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "QDobEdDV1y533c0K"
+ },
+ {
+  "name": "Пятая эссенция",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-fifth-essence.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 82,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Места силы, маги и бесы",
+    "quantity": "Варьируется",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "QnyafLhiyPtcS3GJ"
+ },
+ {
+  "name": "Огров воск",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-ogre-wax.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 10,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Пещеры",
+    "quantity": "1d10",
+    "dc": 14
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "PMLxBScIsXkJ1fqG"
+ },
+ {
+  "name": "Точильный порошок",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-glowing-ingot.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 32,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Горы и пещеры",
+    "quantity": "1d6",
+    "dc": 16
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "TSqbkmgxduKef5tz"
+ },
+ {
+  "name": "Дубильные травы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-beggartick.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 3,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "treatments",
+   "substance": "",
+   "forage": {
+    "where": "Поля и леса",
+    "quantity": "1d10",
+    "dc": 14
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Пропитки и составы"
+  ],
+  "_id": "qo26UMOkAGUlRe3g"
+ },
+ {
+  "name": "Тёмное железо",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-dark-iron.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 52,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "uxgPzj888IeUua3T"
+ },
+ {
+  "name": "Тёмная сталь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/i-steel.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 82,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "mwru4p5yHrBqc56h"
+ },
+ {
+  "name": "Двимерит",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-dimeritium-ingot.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 240,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "ihaju51wPEsSQrry"
+ },
+ {
+  "name": "Самоцветы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-amethyst.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "UBkgQdw5kZni49Tr"
+ },
+ {
+  "name": "Светящаяся руда",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-glowing-ore.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 80,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6/2",
+    "dc": 20
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "sFxF8HW2RYhIEkgd"
+ },
+ {
+  "name": "Золото",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-gold-nugget.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 85,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "an3IrsZ1QKaOCgfz"
+ },
+ {
+  "name": "Железо",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-iron-ingot.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6",
+    "dc": 16
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "xc58U8Ix1Xa2WzqZ"
+ },
+ {
+  "name": "Махакамский двимерит",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-dimeritium-plate.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 300,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "GXWw3IXvb9R9YnPE"
+ },
+ {
+  "name": "Махакамская сталь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-dark-steel-plate.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 114,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "Rk9eELkZLeSU2L2x"
+ },
+ {
+  "name": "Метеорит",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/i-meteorite.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 98,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Где угодно на поверхности земли",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "pSRxoSpzqpFcSfm9"
+ },
+ {
+  "name": "Речная глина",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-copper-ore.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 5,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Реки или их берега",
+    "quantity": "1d6",
+    "dc": 14
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "m4IfSDL7xbCaFD7B"
+ },
+ {
+  "name": "Серебро",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/i-silver.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 72,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6/2",
+    "dc": 16
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "mCax159OKznUebwP"
+ },
+ {
+  "name": "Сталь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-steel-ingot.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 48,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "caNFkKwamhzlRsoS"
+ },
+ {
+  "name": "Камень",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-cupronickel-ore.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 4,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Повсеместно",
+    "quantity": "2d6",
+    "dc": 8
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "7v5xXDxz6pKHkeyy"
+ },
+ {
+  "name": "Третогорская сталь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-dark-iron-plate.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 64,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "7tlcNUhZoci2OKbc"
+ },
+ {
+  "name": "Зерриканская смесь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-zerrikanian-powder.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "129"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы или под землёй",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "D5aRfHd7VjCajjB1"
+ },
+ {
+  "name": "Плод балиссы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-balisse.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "3arxvh9Y0A5redJi"
+ },
+ {
+  "name": "Ячмень",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-holy-basil.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 9,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "JV6N5UmNkDZb2ld9"
+ },
+ {
+  "name": "Calcium equum",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-calcium.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 12,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "yp9mD9KXimOFJwJa"
+ },
+ {
+  "name": "Вороний глаз",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-crowseye.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 17,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Поля и леса",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "L5Y7OenRXwxuzcMZ"
+ },
+ {
+  "name": "Коготь гуля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-alghoul-claw.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 60,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Гули",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "HdL0frzg7SXcFyKV"
+ },
+ {
+  "name": "Зубы накера",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-tooth.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Накеры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "KyUEF6y7wLMQlDNK"
+ },
+ {
+  "name": "Грибы-шибальцы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-puffball.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 17,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Пещеры",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "JeFTL9QFpvhG7XoC"
+ },
+ {
+  "name": "Шкура тролля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-troll-hide.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 4.5,
+   "cost": 147,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Скальные тролли",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "MpsrI6RhRszyP1Ij"
+ },
+ {
+  "name": "Лепестки белого мирта",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-white-myrtle.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "WOd57x3Xrv55iBM4"
+ },
+ {
+  "name": "Ласточкина трава",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-celandine.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Поля и леса",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "HfCP731RyCzmD29P"
+ },
+ {
+  "name": "Мозг утопца",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-drowner-brain.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 80,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Утопцы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "MKh90fiieEQtlmpR"
+ },
+ {
+  "name": "Волокна хана",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-han.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 17,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "hMd0CZB1A6IMJuJa"
+ },
+ {
+  "name": "Зубы кладбищенской бабы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-gravehag-skull.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 90,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Кладбищенские бабы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "MqcTKSJo0uso7QAM"
+ },
+ {
+  "name": "Лунная крошка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-lunar.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 91,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Горы или под землёй",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "SL5g6aOsB5kqPmNI"
+ },
+ {
+  "name": "Сердце накера",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-nekker-heart.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Накеры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "4gi7IabhGC11b0YP"
+ },
+ {
+  "name": "Винный камень",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-frighteners-claw.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 88,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Винокурни",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "eBVH1aXv2sZjzmf5"
+ },
+ {
+  "name": "Корень зарника",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-bryonia.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 18,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "LkNEbvciQ1Z0mg7j"
+ },
+ {
+  "name": "Плод берберки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-berbercane.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 9,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Горы и болота",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "Pgfb8g4ZsXQZGV5G"
+ },
+ {
+  "name": "Эссенция призрака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-specter-dust.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 95,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Призраки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "iD9eCK2ENDe8GhMg"
+ },
+ {
+  "name": "Лепестки гинации",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-ginatia.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 17,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "R5Pq2cijlpxccNkh"
+ },
+ {
+  "name": "Лепестки морозника",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-hellebore.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 19,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Леса",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "GDyVKlWqRTKwlfGD"
+ },
+ {
+  "name": "Жемчуг",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/gear/t3-pearl.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Дно океана и побережье",
+    "quantity": "1d6/3",
+    "dc": 20
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "GNQYG13dlWHj4TFo"
+ },
+ {
+  "name": "Ртутный раствор",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-quicksilver.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 77,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Горы или под землёй",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "PjffBFzGi44GvYsm"
+ },
+ {
+  "name": "Склеродерм",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-spore.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 5,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Леса и пещеры",
+    "quantity": "2d6",
+    "dc": 10
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "wDjgWP5tT3Bdp1OB"
+ },
+ {
+  "name": "Листья балиссы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-balisse.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "QHbxrcviQjmmbC02"
+ },
+ {
+  "name": "Царская водка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-mahakam-spirit.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 20,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "Pd8hzIBT30iCRraW"
+ },
+ {
+  "name": "Собачья петрушка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-devourer-teeth.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 2,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Поля",
+    "quantity": "2d6",
+    "dc": 10
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "W26AcZuzBpoRTD1N"
+ },
+ {
+  "name": "Костный мозг гуля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-alghoul-marrow.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 80,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Гули",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "jXyhVrJFcjjyHFNz"
+ },
+ {
+  "name": "Жимолость",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-honeysuckle.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 21,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "qdSXEISnjMil81FL"
+ },
+ {
+  "name": "Optima mater",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-vodyanoi-bladder.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "D0TdMDgv8MzKEr6s"
+ },
+ {
+  "name": "Сера",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-sulfur.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 14,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "XcOCAqan4wsYQJhN"
+ },
+ {
+  "name": "Паутинник",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-vine.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 18,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Лес",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "xorRKfOexCdIGbFH"
+ },
+ {
+  "name": "Эссенция воды",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-essence-water.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 46,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Утопцы и сирены",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "7LQvlAs1GAQr5D1R"
+ },
+ {
+  "name": "Дымная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-stammelford-dust.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 146,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Призраки, полуденницы, грифоны и големы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "r7IVJmTysavHSESu"
+ },
+ {
+  "name": "Омела",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-mistletoe.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Поля и леса",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "ZgjfjlV7l6SRAK2X"
+ },
+ {
+  "name": "Коготь накера",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-nekker-claws.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 40,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Накеры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "hyvN6GJfHCPU3gTZ"
+ },
+ {
+  "name": "Печень тролля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-liver.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 87,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Скальные тролли",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "gGHDDT4yTfAqEhJh"
+ },
+ {
+  "name": "Слюна волколака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-werewolf-saliva.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 60,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Волколаки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "KnOdonM3PNgsODU2"
+ },
+ {
+  "name": "Хитин",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-carapace.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 106,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Главоглазы и эндриаги",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "HQcoxn83Iu13T1YU"
+ },
+ {
+  "name": "Слюна эндриаги",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-saliva.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 38,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Эндриаги",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "DhOuggC6ctetVQpg"
+ },
+ {
+  "name": "Яйцо грифона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-griffin-egg.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 150,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Грифоны и грифоньи гнёзда",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "kCBmY2GGEAFQ15Um"
+ },
+ {
+  "name": "Перья грифона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-griffin-feathers.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 148,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Грифоны",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "TaJ9FSsrAT6lX28s"
+ },
+ {
+  "name": "Корень мандрагоры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-mandrake.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 65,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Поля и леса",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "WX5KLpR0YcSSc7GP"
+ },
+ {
+  "name": "Фосфор",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-phosphorus2.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 20,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Горы и под землёй",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "rv6Ggs0AOFQslLhF"
+ },
+ {
+  "name": "Аконит",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-wolfsbane.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 9,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Поля, леса и горы",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "yMiQeWA7tpZVSQK8"
+ },
+ {
+  "name": "Глаз беса",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-fiend-eye.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 149,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Бесы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "lkzCYTA5UieY7jGY"
+ },
+ {
+  "name": "Эссенция света",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-essence-light.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 43,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Полуденницы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "ziNEilHhbJHZVy7j"
+ },
+ {
+  "name": "Голосовые связки сирены",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-siren-cords.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 65,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Сирены",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "uYcZgLWDsUqasc2c"
+ },
+ {
+  "name": "Слюна вампира",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-vampire-saliva.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 155,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Катаканы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "gwunBiDCjtxeZMLm"
+ },
+ {
+  "name": "Вербена",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/c-verbena.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 18,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Поля",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "C9dVtYPIIRkIwLct"
+ },
+ {
+  "name": "Листья волчьего алоэ",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-wolfs-aloe.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 39,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Синие горы",
+    "quantity": "1d6",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "G4C1vweV6VxhLiSE"
+ },
+ {
+  "name": "Глаза виверны",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-eye.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 75,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Виверны",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "0i5qHc00NBnVKdn5"
+ },
+ {
+  "name": "Яд главоглаза",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-arachas-venom.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 76,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Главоглазы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "OdCDoSCWItvJ0sBr"
+ },
+ {
+  "name": "Переступень",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-echinops.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Горы и города",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "yF0xboZKpr8ru6dl"
+ },
+ {
+  "name": "Язык утопца",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-drowner-tongue.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 86,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Утопцы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "joVKByKJ099EvcR7"
+ },
+ {
+  "name": "Помёт беса",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-fiend-dung.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 106,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Территория бесов или бесы",
+    "quantity": "1d6/2",
+    "dc": 20
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "fb1FG4v4pQEEcgoV"
+ },
+ {
+  "name": "Язык кладбищенской бабы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-waterhag-tooth.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 80,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Кладбищенские бабы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "IIbB2i6r0p2tdQtJ"
+ },
+ {
+  "name": "Зелёная плесень",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-green-mold.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 8,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Пещеры",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "YE0llAkGd93B8ZMO"
+ },
+ {
+  "name": "Зубы вампира",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-vampire-fang.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 150,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Катаканы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "9ScLyZRRhpgzeMru"
+ },
+ {
+  "name": "Экстракт яда",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-venom-extract.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 38,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Гули, кладбищенские бабы, эндриаги, главоглазы, виверны",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "jyTZ93250KvKG4mt"
+ },
+ {
+  "name": "Глаза главоглаза или эндриаги",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-arachas-eyes.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 95,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Главоглазы и эндриаги",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "yoFJEsFsvbHv0kWw"
+ },
+ {
+  "name": "Собачье сало",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/t3-dog-tallow.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 10,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Собаки и волки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "ZkE8ecLwBVIpZpla"
+ },
+ {
+  "name": "Краснолюдский бессмертник",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/s-feainnewedd.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 75,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Под землёй",
+    "quantity": "1d6/2",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "dJu41RtzH759Vt0y"
+ },
+ {
+  "name": "Эмбрион эндриаги",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-endrega-embryo.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.5,
+   "cost": 55,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Гнёзда эндриаг",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "p0PRAal61eJWYaMn"
+ },
+ {
+  "name": "Сердце голема",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-golem-heart.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 167,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Големы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "TNZFXqeHyKgy3WFI"
+ },
+ {
+  "name": "Ухо кладбищенской бабы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-gravehag-ear.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 134,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Кладбищенские бабы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "2JYvjBq7xUuIAAQ8"
+ },
+ {
+  "name": "Призрачная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-essence.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Призраки",
+    "quantity": "1d6",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "9D6xFn05LjH3KS2S"
+ },
+ {
+  "name": "Яйцо виверны",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-wyvern-egg.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 150,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": "145"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Виверны",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "UJZitJ8taZf5P8vs"
+ },
+ {
+  "name": "Очищенный Аер",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-caelum.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "Ah98kTLIAoexcW2t"
+ },
+ {
+  "name": "Очищенный Гидраген",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-hydragenum.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "SKxAx88WqD5Yfw30"
+ },
+ {
+  "name": "Очищенный Квебрит",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-quebrith.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "kAAinpCAt0xz5yNZ"
+ },
+ {
+  "name": "Очищенный Киноварь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-vermilion.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "cQAPocunm4yTvggQ"
+ },
+ {
+  "name": "Очищенный Купорос",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-vitriol.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "dQsY6dbitqeHPLLu"
+ },
+ {
+  "name": "Очищенный Ребис",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-rebis.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "oV3fS8sLbkErYcyV"
+ },
+ {
+  "name": "Очищенный Солнце",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-sol.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "0AtHM7hhW36SbJHJ"
+ },
+ {
+  "name": "Очищенный Фульгор",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-fulgur.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "9ekcdlhW5JaDzZ8r"
+ },
+ {
+  "name": "Очищенный Эфир",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/components/pure-aether.webp",
+  "system": {
+   "description": "<p>Субстанция, перегнанная и высушенная в цветной порошок. Одна единица очищенной субстанции считается за две единицы обычной.</p><p>Получается в дистилляционной камере: час работы и проверка Алхимии СЛ 14.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Профессиональные инструменты",
+    "page": "6"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Изготавливается",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Очищенные субстанции"
+  ],
+  "_id": "dw48MtRI4N9FSXJl"
+ },
+ {
+  "name": "Медвежья шкура",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bear-hide.webp",
+  "system": {
+   "description": "<p>Из шкур и мехов выделывают кожу наравне с коровьей — когда нужна другая на вид или под руку броня.</p>",
+   "quantity": 1,
+   "weight": 6,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Медведи",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "deJn1yJRxe7XRgm2"
+ },
+ {
+  "name": "Кабанья шкура",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-boar-pelt.webp",
+  "system": {
+   "description": "<p>Из шкур и мехов выделывают кожу наравне с коровьей — когда нужна другая на вид или под руку броня.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 10,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Кабаны",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "6B6VPO55diEMrppx"
+ },
+ {
+  "name": "Шкура пантеры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-panther-hide.webp",
+  "system": {
+   "description": "<p>Из шкур и мехов выделывают кожу наравне с коровьей — когда нужна другая на вид или под руку броня.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 38,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Пантеры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "_id": "5iwvUZFc0b2NyZKC"
+ },
+ {
+  "name": "Лимфа мерзости",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-abomination-lymph.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: бруксы, гаркаины.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 152,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Бруксы, гаркаины",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "JbUlHQ3rZetwCEfH"
+ },
+ {
+  "name": "Сок археспоры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-archespore-juice.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: археспоры.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 38,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Археспоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "l2aNcZLvTLe32NNK"
+ },
+ {
+  "name": "Усики археспоры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-archespore-tendrils.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: археспоры.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 44,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Археспоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "1J5oJFJFVPiN9J8f"
+ },
+ {
+  "name": "Шерсть барбегази",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-barbegazi-fur.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: барбегази.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 21,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Барбегази",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "1gsZZIXwgbI9A2nc"
+ },
+ {
+  "name": "Эссенция баргеста",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-barghest-essence.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: баргесты.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 36,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Баргесты",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "Q65LujOYETAwFOBY"
+ },
+ {
+  "name": "Медвежий жир",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bear-fat.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: медведи.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 90,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Медведи",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "roJ3drlcByIrPfHp"
+ },
+ {
+  "name": "Кабаньи клыки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-boar-tusks.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: кабаны.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 82,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Кабаны",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "ERNCWN2F2LGo0360"
+ },
+ {
+  "name": "Яд богун-упаса",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bohun-upas.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: мантикоры.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 200,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Мантикоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "pyEA6y3YXVBk1fGr"
+ },
+ {
+  "name": "Кровь игоши",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-botchling-blood.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: игоши.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 66,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Игоши",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "OLQByGsiylnmEaU4"
+ },
+ {
+  "name": "Кости игоши",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-botchling-bones.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: игоши.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 55,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Игоши",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "RfYUeFhEmLRlOnc6"
+ },
+ {
+  "name": "Мозг игоши",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-botchling-brain.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: игоши.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 164,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Игоши",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "9QfHVQ11bOYlvmsg"
+ },
+ {
+  "name": "Ухо игоши",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-botchling-ear.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: игоши.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Игоши",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "4eLU8lE8sn4Pf2TJ"
+ },
+ {
+  "name": "Кровь бруксы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bruxa-blood.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: бруксы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 97,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Бруксы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "nfqNqLiRws6Csddn"
+ },
+ {
+  "name": "Кровь утковола",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bullvore-blood.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: утковолы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 85,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Утковолы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "MkKumg44X1ermh0B"
+ },
+ {
+  "name": "Мозг утковола",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bullvore-brain.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: утковолы.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 150,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Утковолы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "II8AawUMXu6E3Amn"
+ },
+ {
+  "name": "Глаза утковола",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-bullvore-eyes.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: утковолы.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 87,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Утковолы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "LTc6By38JyKqUIN3"
+ },
+ {
+  "name": "Корень лопуха",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-burdock-root.webp",
+  "system": {
+   "description": "<p>Растёт в полях и лесах. Скудная редкость, сбор СЛ 16: находится 1d6 единиц.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 32,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Поля и леса",
+    "quantity": "1d6",
+    "dc": 16
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "JaZrBV6dj3C7QX4X"
+ },
+ {
+  "name": "Панцирь куролиска",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cockatrice-carapace.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: куролиски.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 75,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Куролиски",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "w8J5PaZg8Z2loPwR"
+ },
+ {
+  "name": "Желудок куролиска",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cockatrice-stomach.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: куролиски.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 92,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Куролиски",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "5vHmS7yvewr9IOuH"
+ },
+ {
+  "name": "Перья хвоста куролиска",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cockatrice-feathers.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: куролиски.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 135,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Куролиски",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "H2BPiuRxcQFZd3Iq"
+ },
+ {
+  "name": "Кристаллизованная эссенция",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-crystallized-essence.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: химы, моровые девы, вендиго, лешие, циклопы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 292,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Химы, моровые девы, вендиго, лешие, циклопы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "mHv0PimBW6JkvR6N"
+ },
+ {
+  "name": "Кости циклопа",
+  "type": "component",
+  "img": "icons/commodities/bones/bones-stack-tan.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: циклопы.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 87,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Циклопы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "vxq4Ntkmin8qF7np"
+ },
+ {
+  "name": "Мозг циклопа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cyclops-brain.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: циклопы.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 136,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Циклопы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "zpUqwxxQAeGdfZdN"
+ },
+ {
+  "name": "Глаз циклопа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cyclops-eye.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: циклопы.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 159,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Циклопы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "EA3YYPVCJgbQX1Qq"
+ },
+ {
+  "name": "Язык циклопа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-cyclops-tongue.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: циклопы.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 90,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Циклопы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "G6AriB4IOrWih0o1"
+ },
+ {
+  "name": "Кровь дракона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-dragon-blood.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: истинные драконы.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 250,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Истинные драконы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "n1Viu49ffLSfUbG4"
+ },
+ {
+  "name": "Хвост дракона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-dragon-tail.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: истинные драконы.</p>",
+   "quantity": 1,
+   "weight": 4,
+   "cost": 310,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Истинные драконы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "AyKG3Uxb5cXzCRIw"
+ },
+ {
+  "name": "Слёзы дракона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-dragon-tears.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: истинные драконы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 276,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Истинные драконы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "5VgCM8BZ7Ci7yZH4"
+ },
+ {
+  "name": "Зубы дракона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-dragon-teeth2.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: истинные драконы.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 192,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Истинные драконы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "dbWztugnNyUc27IU"
+ },
+ {
+  "name": "Камень элементаля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-elemental-stone.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: все элементали.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 134,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Все элементали",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "BGmhryifZyOGez3w"
+ },
+ {
+  "name": "Эссенция огня",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-essence-fire.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: фениксы, элементали огня.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 46,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Фениксы, элементали огня",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "GzY6K3BPPTyIX2oY"
+ },
+ {
+  "name": "Эссенция туманника",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-foglet-essence.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: туманники.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 43,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Туманники",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "bHD8FZIwW8E09klk"
+ },
+ {
+  "name": "Зубы туманника",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-foglet-teeth.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: туманники.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 40,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Туманники",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "guPHLHhwyVQUHmIe"
+ },
+ {
+  "name": "Когти пугача",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-frightener-claws.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: пугачи.</p>",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 205,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Пугачи",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "PK39Y9qBZhpPNOTU"
+ },
+ {
+  "name": "Глаза пугача",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-frightener-eyes.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: пугачи.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 192,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Пугачи",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "bv2h2OS9XtLoaaX5"
+ },
+ {
+  "name": "Слюна гаркаина",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-garkain-saliva.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гаркаины.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 70,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Гаркаины",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "HwETJRy6ZNCASBXX"
+ },
+ {
+  "name": "Выделения сколопендроморфа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-centipede-discharge.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: сколопендроморфы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 40,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Сколопендроморфы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "lhcuRWpRMyNBvR9j"
+ },
+ {
+  "name": "Жвалы сколопендроморфа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-centipede-mandibles.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: сколопендроморфы.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 48,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Сколопендроморфы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "Na5ubi7j2yfYJBF4"
+ },
+ {
+  "name": "Глаза божка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-godling-eyes.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: божки.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 55,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Божки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "Epy4ELj4B0wd6kkZ"
+ },
+ {
+  "name": "Яйца гарпии",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-harpy-eggs.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гнёзда гарпий.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 50,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Гнёзда гарпий",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "jG1yCy2CioXWMqBF"
+ },
+ {
+  "name": "Перья гарпии",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-harpy-feathers.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гарпии.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 28,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Гарпии",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "VuzISbJr8MvKv7uN"
+ },
+ {
+  "name": "Когти гарпии",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-harpy-talons.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гарпии.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 40,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Гарпии",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "gXyIZNhcjfdah3jq"
+ },
+ {
+  "name": "Клыки высшего вампира",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-higher-vampire-fangs.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: высшие вампиры.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 250,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Высшие вампиры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "4TBSnzYUazvQBBcO"
+ },
+ {
+  "name": "Волосы стучака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-knocker-hair.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: стучаки.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 33,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Стучаки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "osPtjPCtsM0A1RK2"
+ },
+ {
+  "name": "Зубы стучака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-knocker-teeth.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: стучаки.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 46,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Стучаки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "KZnmBRYRI12lg2Zr"
+ },
+ {
+  "name": "Пальцы стучака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-knocker-toes.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: стучаки.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 62,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Стучаки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "KBF3rJE3frn2RYAk"
+ },
+ {
+  "name": "Кость лешего",
+  "type": "component",
+  "img": "icons/commodities/bones/bone-simple-white-brown.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: лешие.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 92,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Лешие",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "WOPrMMc6jzrWtK75"
+ },
+ {
+  "name": "Волокна лешего",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-leshen-fiber.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: лешие.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 106,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Лешие",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "nr9Yib9a7awM1QSV"
+ },
+ {
+  "name": "Смола лешего",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-leshen-resin.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: лешие.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 140,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Лешие",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "DPRXtD05mLeIDCZF"
+ },
+ {
+  "name": "Клыки мантикоры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-manticore-fangs.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: мантикоры.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 132,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Мантикоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "Q95CeEos3yfWIH20"
+ },
+ {
+  "name": "Рог мантикоры",
+  "type": "component",
+  "img": "icons/commodities/bones/horn-curved-brown.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: мантикоры.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 120,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Мантикоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "_id": "y2HvpkdnRCnJsCOV"
+ },
+ {
+  "name": "Желудок мантикоры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-manticore-stomach2.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: мантикоры.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 189,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Мантикоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "_id": "2ICLV1rfBQW8mKXn"
+ },
+ {
+  "name": "Перепонки крыльев мантикоры",
+  "type": "component",
+  "img": "icons/commodities/biological/wing-lizard-brown.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: мантикоры.</p>",
+   "quantity": 1,
+   "weight": 2,
+   "cost": 145,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Мантикоры",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "DFphHB1iwaglbSP5"
+ },
+ {
+  "name": "Наэзанская соль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-naezan-salts.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: бруксы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 146,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Бруксы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "mvqdiWfbrlYf1pQf"
+ },
+ {
+  "name": "Пепел феникса",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-phoenix-ash2.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: фениксы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 94,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Фениксы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "_id": "sP7pSqyQJaqlHUF9"
+ },
+ {
+  "name": "Перья феникса",
+  "type": "component",
+  "img": "icons/commodities/materials/feather-red.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: фениксы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 176,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Фениксы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "YRBR2GFxdHuXn9GS"
+ },
+ {
+  "name": "Желудок плюмарда",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-plumard-stomach.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: плюмарды.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Плюмарды",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "h7Xf3pSHP0sEZRo4"
+ },
+ {
+  "name": "Кровь гнильца",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-rotfiend-blood.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гнильцы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 30,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Гнильцы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "beMaPdKDdhaKdkqQ"
+ },
+ {
+  "name": "Печень гнильца",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-rotfiend-liver.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гнильцы.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 42,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Гнильцы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "zbFFf1WOiyVqlpJu"
+ },
+ {
+  "name": "Пыль шаэлмаара",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-shaelmaar-dust.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: шаэлмаары.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 79,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Шаэлмаары",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "gffoU6Y6qgWU0JAw"
+ },
+ {
+  "name": "Волосы шаэлмаара",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-shaelmaar-hair.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: шаэлмаары.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Шаэлмаары",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "RKB7CY7xRXCmELnc"
+ },
+ {
+  "name": "Чешуя слизарда",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-slyzard-scales.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: слизарды.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 82,
+   "availability": "rare",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Слизарды",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "f1CUton2JrwnPHEb"
+ },
+ {
+  "name": "Когти слизарда",
+  "type": "component",
+  "img": "icons/commodities/biological/hand-clawed-scale-grey.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: слизарды.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 69,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Слизарды",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "0YJwS4d7LO5NUMjr"
+ },
+ {
+  "name": "Голосовые связки слизарда",
+  "type": "component",
+  "img": "icons/commodities/biological/organ-bladder-red.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: слизарды.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 99,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "143"
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Слизарды",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "_id": "Bq0NzKFVTkLdnNeA"
+ },
+ {
+  "name": "Сердце суккуба",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-succubus-heart.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: суккубы.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 95,
+   "availability": "unique",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Суккубы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь"
+  ],
+  "_id": "mvoYkmNQczSg93Pq"
+ },
+ {
+  "name": "Рог суккуба",
+  "type": "component",
+  "img": "icons/commodities/bones/horn-twisted-brown-red.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: суккубы.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 87,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Суккубы",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "_id": "b0Xv6utJcZtAsr43"
+ },
+ {
+  "name": "Язык тролля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-troll-tongue.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: тролли.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 66,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Тролли",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "Qy5OAW4t2cZ28IIS"
+ },
+ {
+  "name": "Перепонка крыла",
+  "type": "component",
+  "img": "icons/commodities/biological/wing-bat-pink.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: гаркаины, плюмарды.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 36,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Гаркаины, плюмарды",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис"
+  ],
+  "_id": "0dC5QrdZNVffF0K5"
+ },
+ {
+  "name": "Шерсть вендиго",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-vendigo-fur2.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: вендиго.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 76,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Вендиго",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "_id": "QGDICMCM8TseXOQu"
+ },
+ {
+  "name": "Сердце вендиго",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-vendigo-heart.webp",
+  "system": {
+   "description": "<p>Добывается с добычи: вендиго.</p>",
+   "quantity": 1,
+   "weight": 1,
+   "cost": 167,
+   "availability": "unique",
+   "concealment": "large",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "144"
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Вендиго",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "_id": "Kvnz7UUDkoJxlbtp"
+ },
+ {
+  "name": "Насыщенная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-infused-dust.webp",
+  "system": {
+   "description": "<p>Остаток чар на телах магических тварей: баргесты, туманники, пугачи, суккубы, фениксы.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 25,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "142"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "ATOQkoIGLMlqOnpV"
+ },
+ {
+  "name": "Кристаллизованная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-crystalized-shard.webp",
+  "system": {
+   "description": "<p>Слежавшаяся насыщенная пыль. 15 минут и проверка Ремесла СЛ 10 превращают одну единицу в две единицы насыщенной пыли.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 60,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "142"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "TDnwXU5osJWz2SGL"
+ },
+ {
+  "name": "Изумрудная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-emerald-dust.webp",
+  "system": {
+   "description": "<p>Толчёный изумруд: идёт на серебряные клинки школы Змеи.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 120,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "142"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "VwTyx8ZaJqI4nyCs"
+ },
+ {
+  "name": "Рубиновая пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-ruby-dust.webp",
+  "system": {
+   "description": "<p>Толчёный рубин: идёт на серебряные клинки школы Кота.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 120,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "142"
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "_id": "FwW1Erkrn6fuWNdp"
+ },
+ {
+  "name": "Бечёвка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/monster-parts/mp-twine.webp",
+  "system": {
+   "description": "<p>Грубая нить для увязки и оплётки.</p>",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 3,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": "142"
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "_id": "DhKML9PJ6WZnEs3U"
+ },
+ {
+  "_id": "nDfTyyoegIv9ZYMH",
+  "name": "Аметист",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/amethyst.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "GikWiqp6QiZq1sCY",
+  "name": "Хвостовые перья васислиска",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/feathers-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 73.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Василиск",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "dfqSkHCaR6ypZCaE",
+  "name": "Совершенный Сапфир",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/perfect_sapphire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Трансмутация или изготовление",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "2bVM4bxLwVID1CrW",
+  "name": "Ухо крысолака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/ear-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 150.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Крысолак",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "iDel7rbi97rQU7x5",
+  "name": "Слезы суккуба",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 280.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Суккуб",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "yDLrWBfuENNjBlvP",
+  "name": "Коготь жагницы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 0.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Жагница",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Nh9TbUmhJpJxBsfF",
+  "name": "Эссенция смерти",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/pheromones-endriag-queen.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 155.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Вендиго, брукса, высший вампир",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "WpXRutVqTno6vICl",
+  "name": "Глаз прибожка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-cyclops.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 55.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Прибожек",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "0GrGedycSNFg53w3",
+  "name": "Сердце древня",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/heart-gargoyle.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 216.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Древень",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "RDKgiJafjELnjJkC",
+  "name": "Костный мозг вигилозавра",
+  "type": "component",
+  "img": "icons/commodities/materials/material-plant-green.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 84.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Вигилозавр",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "dUNLgH667P3FNVLB",
+  "name": "Мясо жиритвы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/vocal-cords-siren.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 1000.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Жиритва",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "x0yFVYByE6kLMy6o",
+  "name": "Костный мозг яги",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 80.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Яга",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "ZmXc3JuMDhXAsOtf",
+  "name": "Шип гравейра",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 80.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Гравейр",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "jFEVrmOvWubJf69e",
+  "name": "Сердце гаргульи",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/heart-golem.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 167.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Гаргулья",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "u1t22zRlc7jUUm7j",
+  "name": "Помет черта",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/dust-gargoyle.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 78.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Место обитания черта или черт",
+    "quantity": "1d6/2",
+    "dc": 20
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "SkXG5MFlftqp3PPX",
+  "name": "Черная жемчужина",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/blackpearl.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 2500.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Дно океана",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "tAzEn1oV4IDF1CxC",
+  "name": "Когти гончей дикой охоты",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 120.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Гончая дикой охоты",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "1JwP2rMFSgFkCOIL",
+  "name": "Явер",
+  "type": "component",
+  "img": "icons/consumables/plants/leaf-broad-blue.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 18.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Ведьмачьи протезы и коляски",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Поля и болота",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "nXFmaHJMLAiFxKWt",
+  "name": "Алмазная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/dust_diamond.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей, изготовление",
+    "quantity": "1d6",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Q7Ix9XtkKbSwQ9F2",
+  "name": "Ноготь Скрытого",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 5000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Скрытый",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "SinnDImINbgSNVqe",
+  "name": "Рог сильвана",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 80.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Сильван",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "tIlovvfNUaXtINDw",
+  "name": "Темная эссенция",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/essence-nightwraith.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 86.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Полуночница",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "zm9HUKYZiLMbVR4d",
+  "name": "Слюна котолака",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 90.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Чудовища в дороге",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Котолак",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "s9ukfo1tM5ET8xEG",
+  "name": "Костный мозг гравейра",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 80.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Гравейр",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "l3zAfoivNxYtRwiw",
+  "name": "Сапфир",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/sapphire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "jNBv3muE3SsTqUbe",
+  "name": "Ореховая древесина",
+  "type": "component",
+  "img": "icons/commodities/wood/log-stack-maple-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 12.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или в глубоких лесах",
+    "quantity": "1d6",
+    "dc": 13
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "10P1boDhhEumgG4D",
+  "name": "Глаз вилохвоста",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-tentadrake.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 75.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Вилохвост",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "h3RkzXPMoXodOwZ3",
+  "name": "Безоар из черта",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/heart-gargoyle.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 325.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Черт",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Qp6eseExTiTLeYCC",
+  "name": "Сердце агуары",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/heart-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 125.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Агуара",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "MCjWzvanRJ4vcFsy",
+  "name": "Рог единорога",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tooth-hag.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 5000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Единорог",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "0ckvGqVDOmq1vyzc",
+  "name": "Совершенный Изумруд",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/izumrud.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Трансмутация или изготовление",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "SwpFVda7IfAylBPE",
+  "name": "Эссенция покаянника",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/essence-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 95.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Покаянник",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "lfVk7SxI7MTrmPI5",
+  "name": "Рог хиронекса",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tooth-hag.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 200.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Хиронекс",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "PRflDZxBwqk5JcxR",
+  "name": "Совершенный Аметист",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/perfect_amethyst.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Трансмутация или изготовление",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "8c4mZPPa6F5RVKRt",
+  "name": "Кровь Дагона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/blood-nekker.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 10000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Дагон",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "f2VE5i4dFHcMRqcj",
+  "name": "Яйцо вилохвоста",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/egg-cockatrice.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 150.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Вилохвост",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "3vIgAg2gz2Tamtn5",
+  "name": "Выделения кикиморы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 55.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Кикимора",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "EMVJNqGjuNaEX1Gh",
+  "name": "Яйцо дракопахи",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/egg-gryphon.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 500.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Дракопаха",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Fbj5GqA8ECUJcfXJ",
+  "name": "Зубы Свальблода",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tooth-nekker.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 10000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Свальблод",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "F9jQSD6KuWC7K4JX",
+  "name": "Сапфировая пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/dust_sapphire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей, изготовление",
+    "quantity": "1d6",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "sLy7v1Y05PT0Daqu",
+  "name": "Болотные пиявки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tongue-drowned-dead.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 40.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Болота",
+    "quantity": "1d6/2",
+    "dc": 15
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "JyRIyG6do9bvtT0D",
+  "name": "Мех",
+  "type": "component",
+  "img": "icons/commodities/leather/fur-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 0.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "N/A",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "THCwTuprQzPjhzUq",
+  "name": "Череп мари львид",
+  "type": "component",
+  "img": "icons/commodities/bones/skull-cattle-brown.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 200.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Мари львид",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "0jEYjEgivlgxlVED",
+  "name": "Глаз химеры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-necrophage.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 192.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Химера",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "jN7ntsWaofiNkf36",
+  "name": "Мозг великана",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/brain-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 500.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Великан",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "EkTdPliErpWCJcQs",
+  "name": "Изумруд",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/izumrud_plohoi.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "7giZAUKDgZGKWHZY",
+  "name": "Алмаз",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/diamond.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "fABk7XGqiQb5ac6b",
+  "name": "Рог диавола",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 166.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Диавол",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "zBnnl6H4I1Y7o8A5",
+  "name": "Слюна пятнистого вихта",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 253.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Пятнистый вихт",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "D7nrBsJtVvYlxA9C",
+  "name": "Глаз черта",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-crab-spider.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 125.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Черт",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "bvx1toAt7NlwrXNL",
+  "name": "Клыки веспертыля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tooth-nekker.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 86.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Веспертыл",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "9EtxkzwLMEU2ylLD",
+  "name": "Яд кракена",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-harpy.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 286.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "кракен",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "nBG5gdKc4xBNHlzI",
+  "name": "Яйцо архигрифона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/egg-gryphon.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 250.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Архигрифон",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "AsbxkCLO4yVl2a0o",
+  "name": "Кровь гернихоры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/blood-rotfiend-greater.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 562.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Гернихор",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "gMB1lEcHj324pJvZ",
+  "name": "Темная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/sub-02.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 86.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Амарок, вихт, полуночница и др.",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "CC3QwBfv0g9wYugZ",
+  "name": "Глаз арахноморфа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-necrophage.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 84.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Арахноморф",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "K1LqkbWTy3PAfXjg",
+  "name": "Кровь мули",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/blood-rotfiend.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 97.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "Муля",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "R0YusZmjNMQ51ieU",
+  "name": "Чешуя ослизга",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/plate-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 82.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Ослизг",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "Hl7q5SfDfAMgcKG4",
+  "name": "Мясо щуки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/plate-wyvern.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 500.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Щука",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "wDNd6GFdz03027dl",
+  "name": "Шип цеметавра",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 80.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Цеметавр",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "zbn2QLlXBWeAQUUn",
+  "name": "Аметистовая пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/dust_amethyst.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей, изготовление",
+    "quantity": "1d6",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "TpHnxdT3Ta80tnFx",
+  "name": "Кровь паршивца",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/blood-rotfiend.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 60.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Паршивец",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "sbeNoamJ1GEa2AO8",
+  "name": "Совершенный Янтарь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/perfect_amber.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Трансмутация или изготовление",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "ycwte3HMaSRzOoor",
+  "name": "Шкура",
+  "type": "component",
+  "img": "icons/commodities/leather/fur-brown-gold.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 0.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "materials",
+   "substance": "",
+   "forage": {
+    "where": "N/A",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Ремесленные материалы",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "o6gLQukLNFPlG8Pv",
+  "name": "Голосовые связки беанн'ши",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/vocal-cords-siren.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 165.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Беанши",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "hqeBPNmDhBULT8hW",
+  "name": "Печень паршивца",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/liver-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 84.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Паршивец",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "bka403VxCrxacb3j",
+  "name": "Шип альгуля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 87.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Альгуль",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "ANKESIkRocDcebfo",
+  "name": "Когти ослизка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-nekker.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 69.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Ослизк",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "rwGxIQVfc2oTndih",
+  "name": "Кость хирикки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/bone-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 2.0,
+   "cost": 10000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Хирикк",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "yX1Hsf8NTwXL4Cdr",
+  "name": "Мясо гиппокампа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/plate-wyvern.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 3500.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Гиппокамп",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "fUGGd85EoVuG9csx",
+  "name": "Костный мозг гончей дикой охоты",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 160.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Гончая дикой охоты",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "C24SubApZTkZqkZM",
+  "name": "Глаза кейрана",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-tentadrake.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 5000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Кейран",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "KGTdUG2Zwa6Kz9gz",
+  "name": "Копыто сильвана",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/heart-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 75.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Фургончик Родольфа",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Сильван",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "ErX8yEtp3EcEysV7",
+  "name": "Когти гравейра",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 60.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Гравейр",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "YPuf0tfLy1hUZpIj",
+  "name": "Крылья песчанного червя",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/hide-ekimma.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 254.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Песчаный червь",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "eUpOYgvpovBRWSYn",
+  "name": "Яйцо гидры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/egg-wyvern.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 1534.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Гидра",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "GgBXXJkAkot8Sz9f",
+  "name": "Жало гигаскорпиона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tooth-hag.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 1.0,
+   "cost": 89.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Гигаскорпион",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "LjyVW9GSnxuBUjUv",
+  "name": "Костный мозг альгуля",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 113.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Альгуль",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "aZAm8CK5RQX97BSo",
+  "name": "Глаз Дагона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/eye-cyclops.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 10000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "sol",
+   "forage": {
+    "where": "Дагон",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Солнце",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "4HkYvvdD5qtckTmJ",
+  "name": "Рубин",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/ruby.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "4Fmi5pQPpLbwyAYh",
+  "name": "Совершенный самоцвет",
+  "type": "component",
+  "img": "icons/commodities/gems/gem-faceted-round-teal.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Корник",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Покупается или изготавливается",
+    "quantity": "1",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "vYkuPHcivBIIKbMo",
+  "name": "Голосовые связки ослизга",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/vocal-cords-siren.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 99.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vitriol",
+   "forage": {
+    "where": "ослизг",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Купорос"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "NVnHSHAF8XAKRCFY",
+  "name": "Мясо кейрана",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tongue-troll.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 5000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Кейран",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "gqyj1ZkJayQsTKEO",
+  "name": "Янтарная пыль",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/dust_amber.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 50.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей, изготовление",
+    "quantity": "1d6",
+    "dc": 18
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "GAUsXAeBnN95TS10",
+  "name": "Янтарь",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/amber.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Горы и под землей",
+    "quantity": "1d6/2",
+    "dc": 24
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "5I49DmZFOVcnB28p",
+  "name": "Желудок жагницы",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/liver-cave-troll.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 96.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Чудовища в дороге",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "caelum",
+   "forage": {
+    "where": "Жагница",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Аер"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "dVCZ9G3bzKZi9fOf",
+  "name": "Чешуя золотого дракона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/scale-dragon.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 5000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Золотой дракон",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "586S4d77FlPcpwOy",
+  "name": "Слюна вихта",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 100.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Вихт",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "rKhkDsOvxk9iJNEc",
+  "name": "Когти химеры",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 5.0,
+   "cost": 205.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Журнал ведьмака",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "fulgur",
+   "forage": {
+    "where": "Химера",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Фульгор"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "zavbUIBi1UDmpo6C",
+  "name": "Кошачий мозг",
+  "type": "component",
+  "img": "icons/commodities/biological/organ-brain-pink-purple.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0.0,
+   "availability": "everywhere",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Том Хаоса",
+    "page": ""
+   },
+   "group": "hides",
+   "substance": "",
+   "forage": {
+    "where": "Кошки",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Шкуры и части животных"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "nmGG9TZJxEdXGEY0",
+  "name": "Совершенный Алмаз",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/perfect_diamond.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Трансмутация или изготовление",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "NpQeUby2kOslKHNm",
+  "name": "Блод берберки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/herbs/berbercane-fruit.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 9.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Горы и болота",
+    "quantity": "1d10",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "VoMgaeHyHN3ECcI5",
+  "name": "Совершенный Рубин",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/gems/perfect_ruby.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 1000.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "group": "ingots",
+   "substance": "",
+   "forage": {
+    "where": "Трансмутация или изготовление",
+    "quantity": "1",
+    "dc": 30
+   }
+  },
+  "folder": [
+   "Ремесленные компоненты",
+   "Слитки и минералы"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "7p8gyBjhxgZ5Op0J",
+  "name": "Слюна берсерка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 60.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "quebrith",
+   "forage": {
+    "where": "Берсерк",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Квебрит",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "eJ22ctWynFUYnemV",
+  "name": "Слюна альпа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/saliva-vampire.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 250.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Чудовища в дороге",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Альп",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "1by8NfJFDMsLTLdT",
+  "name": "Кровь пиявки",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/blood-rotfiend-greater.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 63.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "rebis",
+   "forage": {
+    "where": "Пиявка",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Ребис",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "scQSjfwkbbHyFxmj",
+  "name": "Перо архигрифона",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/feathers-harpy.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 248.0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "vermilion",
+   "forage": {
+    "where": "Архигрифон",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Киноварь",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "gWUBK139UVnBklUf",
+  "name": "Плавник гиппокампа",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/tongue-rotfiend.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 3.0,
+   "cost": 89.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "hydragenum",
+   "forage": {
+    "where": "Гиппокамп",
+    "quantity": "",
+    "dc": 0
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Гидраген",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "RupB3uzlJSUzRcFR",
+  "name": "Улитка",
+  "type": "component",
+  "img": "systems/vedmak/assets/fan/bs/substance/plate-endriag.webp",
+  "system": {
+   "description": "",
+   "quantity": 1,
+   "weight": 0.1,
+   "cost": 34.0,
+   "availability": "common",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Домашние правила BS & Tobi",
+    "page": ""
+   },
+   "group": "alchemy",
+   "substance": "aether",
+   "forage": {
+    "where": "Леса и болота",
+    "quantity": "1d6/2",
+    "dc": 12
+   }
+  },
+  "folder": [
+   "Алхимические ингредиенты",
+   "Эфир",
+   "Домашние правила"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ }
+]
