@@ -333,7 +333,7 @@ function buildOutcome(message, attack, defender, r) {
   const critLevel = r.hit && critAllowed && !r.auto ? critLevelFor(r.margin) : null;
   const canDamage = (r.hit || r.damageOnBlock) && !attack.noDamage;
   const spell = attack.spell ?? null;
-  const canApplyEffects = r.hit && !!spell && attack.noDamage && !!(spell.statuses?.length || spell.regen || spell.hex);
+  const canApplyEffects = r.hit && !!spell && attack.noDamage && !!(spell.statuses?.length || spell.regen || spell.hex || spell.buff);
   return {
     kind: "defense",
     attackMessageId: message.id,

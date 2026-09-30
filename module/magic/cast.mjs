@@ -11,6 +11,8 @@ import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
 import { currentTargets, actorToken, combatantFor, postCard, targetInfo } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones } from "../combat/zones.mjs";
+import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
+import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
 
 /** Сколько Энергии уже израсходовано в текущем раунде боя. */
 export function vigorUsed(actor) {
@@ -108,8 +110,7 @@ function castBase(actor, skillKey) {
 }
 
 /** Что даёт вложенная Выносливость: урон и шансы статусов. */
-function costNote(s, cost) {
-  const a = s.automation;
+function costNote(a, cost) {
   const bits = [];
   const damage = resolveSta(a.damage, cost);
   if (damage) bits.push(`урон ${damage}`);
@@ -130,13 +131,14 @@ async function castDialog(actor, item, cfg, targets) {
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
   const base = castBase(actor, skillKey);
   const maxCost = s.maxCost || 7;
+  const auto = spellAutomation(item);
   const costDots = s.variableCost && maxCost <= 12
     ? Array.from({ length: maxCost }, (_, i) => ({
         value: i + 1, selected: i + 1 === cfg.cost, on: i + 1 <= cfg.cost,
-        damage: resolveSta(s.automation.damage, i + 1), note: costNote(s, i + 1)
+        damage: resolveSta(auto.damage, i + 1), note: costNote(auto, i + 1)
       }))
     : [];
-  const damage = resolveSta(s.automation.damage, cfg.cost);
+  const damage = resolveSta(auto.damage, cfg.cost);
 
   const content = await renderTemplate("systems/vedmak/templates/dialog/cast.hbs", {
     item, s, cfg, targets,
@@ -148,7 +150,7 @@ async function castDialog(actor, item, cfg, targets) {
     },
     kindLabel: CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel: levelLabel(s.kind, s.level),
     isRitual: s.kind === "ritual", isHex: s.kind === "hex",
-    maxCost, costDots, costNote: costNote(s, cfg.cost),
+    maxCost, costDots, costNote: costNote(auto, cfg.cost),
     vigor: d.vigor, used, focus: d.focus, focusItem: d.focusItem,
     sta: actor.system.sta.value,
     maintained: maintained.map(e => e.name),
@@ -212,7 +214,9 @@ async function castDialog(actor, item, cfg, targets) {
 /** Бросок, оплата, провал, эффекты на себя и карточка. */
 export async function performCast(actor, item, cfg, targets) {
   const s = item.system;
-  const a = s.automation;
+  const a = spellAutomation(item);
+  const reg = spellAuto(item.name);
+  const buffTime = reg?.self || reg?.target ? await buffDuration(s.duration) : {};
   const d = actor.system.derived;
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
   const skill = actor.system.skills[skillKey];
@@ -315,6 +319,13 @@ export async function performCast(actor, item, cfg, targets) {
       }]);
       selfLines.push(`Поддержание: ${maintain} Вын за раунд.`);
     }
+    // Бафф на себя из справочника (config/spell-auto.mjs)
+    if (reg?.self) {
+      const buff = buffData(item, actor, reg.self, buffTime);
+      await applyBuff(actor, buff);
+      selfLines.push(buffLine(buff));
+    }
+    if (reg?.note) notes.push(reg.note);
     if (s.kind === "ritual" && a.regen.hp && !targets.length) {
       await applyRegen(actor, { hp: a.regen.hp, rounds: a.regen.rounds, name: item.name, img: item.img });
       selfLines.push(`${item.name}: +${a.regen.hp} ПЗ за ход.`);
@@ -343,10 +354,11 @@ export async function performCast(actor, item, cfg, targets) {
     statusRounds: a.statusRounds,
     regen: a.regen.hp ? { hp: a.regen.hp, rounds: a.regen.rounds } : null,
     hex: s.kind === "hex",
+    buff: reg?.target ? buffData(item, actor, reg.target, buffTime) : null,
     allLocations: a.location === "all",
     works, targeting
   };
-  const hasTargetEffect = !!(a.damage || spellData.staDamage || spellData.statuses.length || spellData.regen || spellData.hex);
+  const hasTargetEffect = !!(a.damage || spellData.staDamage || spellData.statuses.length || spellData.regen || spellData.hex || spellData.buff);
   const showTargets = works && targeting !== "self" && (hasTargetEffect || s.defense !== "none");
 
   const data = {

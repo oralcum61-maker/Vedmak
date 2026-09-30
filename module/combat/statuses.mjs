@@ -84,5 +84,11 @@ export function statusRollMods(actor, kind, { skill } = {}) {
     const sight = actor?.system?.derived?.sightMod;
     if (sight) parts.push({ label: "Ранение глаза (зрение)", value: sight });
   }
+  // Модификаторы бросков от эффектов («Покров» +5 к атаке и защите, «Чемпион реки» +5 ко всему)
+  for (const effect of actor?.effects ?? []) {
+    const mods = !effect.disabled && effect.flags?.vedmak?.rollMods;
+    const value = mods ? (mods[kind] ?? 0) + (mods.all ?? 0) : 0;
+    if (value) parts.push({ label: effect.name, value });
+  }
   return parts;
 }

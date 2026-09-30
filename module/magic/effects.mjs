@@ -5,6 +5,7 @@ import { STATUS_RESIST_KEY } from "../config/combat.mjs";
 import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny } from "../combat/common.mjs";
 import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
+import { applyBuff, buffLine } from "./buffs.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
@@ -71,6 +72,10 @@ async function applySpellEffectsNow(messageId, userId) {
   if (spell.hex) {
     const item = caster?.items.get(spell.itemId);
     if (item) { await applyHex(actor, item); lines.push(`Наложена порча «${item.name}».`); }
+  }
+  if (spell.buff) {
+    await applyBuff(actor, spell.buff);
+    lines.push(buffLine(spell.buff));
   }
 
   await message.setFlag("vedmak", "defense.effectsApplied", true);

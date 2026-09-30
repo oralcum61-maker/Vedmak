@@ -378,7 +378,7 @@ export function useAlchemical(actor, item) {
 /** Снять истёкшие по времени эффекты алхимии и масла (вызывается в начале хода). */
 export async function expireAlchemy(actor) {
   const lines = [];
-  const expired = actor.effects.filter(e => e.flags?.vedmak?.alchemy && e.duration?.expired).map(e => e.id);
+  const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && e.duration?.expired).map(e => e.id);
   if (expired.length) {
     lines.push(...expired.map(id => `${actor.effects.get(id).name}: действие закончилось.`));
     await actor.deleteEmbeddedDocuments("ActiveEffect", expired);
