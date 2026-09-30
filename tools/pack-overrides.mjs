@@ -14,6 +14,7 @@
 
 const W = "systems/vedmak/assets/fan/weapons/";
 const A = "systems/vedmak/assets/fan/armor/";
+const H = "icons/equipment/head/";
 const p = text => `<p>${text}</p>`;
 
 export const OVERRIDES = [
@@ -32,37 +33,45 @@ export const OVERRIDES = [
   // Кинжал и стилет меняются картинками
   { op: "set", pack: "weapons", name: "Кинжал", set: { img: `${W}t3-knife-ritual.webp` } },
   { op: "set", pack: "weapons", name: "Стилет", set: { img: `${W}t3-knife-assassin.webp` } },
+  // Орион — метательная звезда, а не меч
+  { op: "set", pack: "weapons", name: "Орион", set: { img: "icons/weapons/thrown/throwing-star-quad-steel.webp" } },
   // Ловушки — не метательное оружие
   ...["Кусач", "Когтезуб", "Пожарище", "Бешенство", "Метка", "Талгарская зима"]
     .map(name => ({ op: "set", pack: "weapons", name, set: { folder: ["Ловушки"] } })),
   { op: "copy", pack: "weapons", from: "Корд", name: "Сабля", set: {
+    img: "icons/weapons/swords/scimitar-guard.webp",
     "system.description": p("Изогнутый однолезвийный клинок. Хорош для рубящих ударов с оттягом, особенно верхом.")
   } },
 
   /* ------------------------------ Броня: голова ------------------------------ */
   { op: "rename", pack: "armor", from: "Темерский армет", to: "Бацинет" },
   { op: "set", pack: "armor", name: "Бацинет", set: {
+    img: `${H}helm-bassinet-steel.webp`,
     "system.description": p("Стальной шлем, плотно облегающий голову и спускающийся на виски и затылок. К нему крепится кольчужная бармица, прикрывающая шею и плечи. Обзор и дыхание остаются свободными.")
   } },
   { op: "rename", pack: "armor", from: "Капюшон вердэнского лучника", to: "Лёгкий подшлемник" },
   { op: "set", pack: "armor", name: "Лёгкий подшлемник", set: {
+    img: `${H}cap-simple-leather-tan.webp`,
     "system.description": p("Стёганая шапочка из льна и войлока. Её носят под шлемом, чтобы смягчить удар, а когда шлема нет — как единственную защиту головы.")
   } },
   { op: "rename", pack: "armor", from: "Двуслойный капюшон", to: "Стёганый капюшон" },
   { op: "set", pack: "armor", name: "Стёганый капюшон", set: {
+    img: `${H}hood-cloth-brown.webp`,
     "system.description": p("Капюшон с оплечьем из нескольких слоёв простёганной ткани. Держит скользящий удар и не стесняет движений.")
   } },
   { op: "rename", pack: "armor", from: "Каркасный шлем с полумаской", to: "Шапель" },
   { op: "set", pack: "armor", name: "Шапель", set: {
+    img: `${H}helm-kettle-worn.webp`,
     "system.description": p("Железная шляпа с широкими полями. Поля отводят удары сверху, а лицо остаётся открытым — любимый шлем пехоты и городской стражи.")
   } },
   { op: "rename", pack: "armor", from: "Усиленный капюшон", to: "Салад" },
   { op: "set", pack: "armor", name: "Салад", set: {
-    img: "icons/equipment/head/helm-sallet-steel.webp",
+    img: `${H}helm-sallet-steel.webp`,
     "system.description": p("Стальной шлем с вытянутым назад назатыльником, закрывающим шею. Лицо прикрывает смотровая щель или откидное забрало.")
   } },
   { op: "rename", pack: "armor", from: "Топфхельм", to: "Салад с бувигером" },
   { op: "set", pack: "armor", name: "Салад с бувигером", set: {
+    img: `${H}helm-sallet-grey.webp`,
     "system.description": p("Салад вместе с бувигером — стальной пластиной, закрывающей подбородок, горло и нижнюю часть лица. Вдвоём они почти целиком заключают голову в сталь.")
   } },
 
@@ -81,6 +90,8 @@ export const OVERRIDES = [
     "system.description": p("Стальная кираса с наплечниками и защитой рук поверх кольчуги. Ноги остаются в стёганых штанах, поэтому полулаты заметно легче полного доспеха.")
   } },
   { op: "set", pack: "armor", name: "Хиндарсфьяльский тяжёлый доспех", set: { img: `${A}c-hv-ab-lvl4.webp` } },
+  // Туссентские латы — сине-золотые
+  { op: "set", pack: "armor", name: "Латный доспех", set: { img: "icons/equipment/chest/breastplate-layered-steel-blue-gold.webp" } },
 
   /* ------------------------------ Броня: ноги ------------------------------ */
   { op: "rename", pack: "armor", from: "Кожаные штаны из Лирии", to: "Шинные поножи" },
