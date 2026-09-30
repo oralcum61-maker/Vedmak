@@ -40,6 +40,8 @@ import "./module/magic/effects.mjs";
 import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
+import { CurrencyConfig } from "./module/apps/currency-config.mjs";
+import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 
 Hooks.once("init", () => {
   console.log(`${SYSTEM_ID} | Инициализация системы «Ведьмак: НРИ»`);
@@ -117,6 +119,24 @@ Hooks.once("init", () => {
     name: "Бой: применять урон и эффекты сразу",
     hint: "Ведущий применяет урон, эффекты заклинаний и статусы приёмов без кнопки «Применить». Нужен ведущий в игре.",
     scope: "world", config: true, type: Boolean, default: false
+  });
+  // Деньги (module/config/money.mjs): курсы и вес монет правит ведущий в меню «Валюты и обмен»
+  const refreshActors = () => game.actors.forEach(a => { a.prepareData(); if (a.sheet?.rendered) a.sheet.render(); });
+  game.settings.register(SYSTEM_ID, "currencies", {
+    scope: "world", config: false, type: Object, default: DEFAULT_MONEY_SETTING, onChange: refreshActors
+  });
+  game.settings.registerMenu(SYSTEM_ID, "currencyMenu", {
+    name: "Валюты и обмен",
+    label: "Курсы и вес монет",
+    hint: "Названия валют, курс к кроне, вес монеты и комиссия менялы. Цены в книгах — в кронах.",
+    icon: "fa-solid fa-coins",
+    type: CurrencyConfig,
+    restricted: true
+  });
+  game.settings.register(SYSTEM_ID, "coinWeight", {
+    name: "Вес монет",
+    hint: "Монеты в кошельке входят в нагрузку: вес одной монеты задаётся в «Валюты и обмен» (по умолчанию 5 г — 200 монет весят килограмм). Домашнее правило: в корнике монеты ничего не весят.",
+    scope: "world", config: true, type: Boolean, default: true, onChange: refreshActors
   });
   game.settings.register(SYSTEM_ID, "ammo", {
     name: "Бой: расход боеприпасов",

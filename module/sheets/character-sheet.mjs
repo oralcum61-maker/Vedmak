@@ -16,6 +16,7 @@ import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement, detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
 import { signed } from "../util.mjs";
 import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
+import { exchangeDialog } from "../character/money.mjs";
 
 export class CharacterSheet extends VedmakActorSheet {
 
@@ -50,7 +51,8 @@ export class CharacterSheet extends VedmakActorSheet {
       detachCrossbowMod: CharacterSheet.#onDetachCrossbowMod,
       repairItem: CharacterSheet.#onRepairItem,
       disassembleItem: CharacterSheet.#onDisassembleItem,
-      endAlchemyEffect: CharacterSheet.#onEndAlchemyEffect
+      endAlchemyEffect: CharacterSheet.#onEndAlchemyEffect,
+      moneyExchange: CharacterSheet.#onMoneyExchange
     }
   };
 
@@ -407,6 +409,10 @@ export class CharacterSheet extends VedmakActorSheet {
   }
 
   /* ------------------------------ Действия ------------------------------ */
+
+  static async #onMoneyExchange() {
+    await exchangeDialog(this.actor);
+  }
 
   static async #onVerbalAction(event, target) {
     await verbalAction(this.actor, target.dataset.verbal, { skipDialog: event.shiftKey });

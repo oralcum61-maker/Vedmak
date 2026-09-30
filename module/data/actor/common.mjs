@@ -5,6 +5,7 @@ import { STATS, bodyTable } from "../../config/stats.mjs";
 import { SKILLS } from "../../config/skills.mjs";
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MAGIC_SKILLS, layerBonus } from "../../config/combat.mjs";
 import { int, track } from "../fields.mjs";
+import { coinWeightKg, coinWeightEnabled } from "../../config/money.mjs";
 
 const { SchemaField, BooleanField } = foundry.data.fields;
 
@@ -138,6 +139,8 @@ export function carriedWeight(actor) {
     if (!Number.isFinite(w) || w <= 0) continue;
     total += w * (item.system.quantity ?? 1);
   }
+  // Монеты (настройка мира «Вес монет»)
+  if (actor?.system?.money && coinWeightEnabled()) total += coinWeightKg(actor.system.money);
   return Math.round(total * 10) / 10;
 }
 

@@ -40,6 +40,7 @@
         <span class="loot-name">{{#if l.link}}{{{l.link}}}{{else}}{{l.name}}{{/if}}</span>
         <span class="dots-fill"></span>
         <b class="loot-qty">{{l.quantity}}</b>
+        {{#if l.coins}}<a class="loot-coins" data-action="lootCoins" data-tooltip="Бросить и положить в кошелёк своего персонажа (или выделенного токена)"><i class="fa-solid fa-coins"></i></a>{{/if}}
         {{/if}}
       </li>
       {{/each}}

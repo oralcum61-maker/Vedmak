@@ -12,6 +12,7 @@ import { levelLabel } from "../config/magic.mjs";
 import { castSpell, vigorUsed, maintainedSpells } from "../magic/cast.mjs";
 import { endMaintained } from "../magic/effects.mjs";
 import { describeChanges } from "../config/effects.mjs";
+import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -137,6 +138,15 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       carried: d.carried, enc: d.enc, liftMax: d.liftMax, overload: d.overload,
       pct: pct(d.carried, d.enc), over: d.carried > d.enc
     };
+    // Кошелёк по валютам: итог в кронах и вес монет
+    if (system.money) {
+      context.purse = {
+        rows: currencies().map(c => ({ ...c, main: c.key === "crowns", value: system.money[c.key] ?? 0, rateText: formatRate(c.rate) })),
+        crowns: formatRate(toCrowns(system.money)),
+        kg: formatRate(coinWeightKg(system.money)),
+        weightOn: coinWeightEnabled()
+      };
+    }
 
     // Производные — порядок как на листе книги
     context.derived = [

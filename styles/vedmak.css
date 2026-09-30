@@ -2208,9 +2208,20 @@
 
 .vedmak .purse { display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; align-items: center; }
 .vedmak .purse .load { flex: 1 1 14rem; max-width: 26rem; }
-.vedmak .purse .money { display: flex; align-items: center; gap: .4rem; }
-.vedmak .purse .money label { font-family: var(--vd-font-head); font-size: 1.25rem; color: var(--vd-gold); }
-.vedmak .purse .money input { width: 6rem; height: 1.7rem; font-weight: bold; }
+/* Кошелёк: крона крупно, прочие валюты — мелкими ячейками; пустые приглушены */
+.vedmak .purse .coins { flex: 3 1 30rem; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.vedmak .purse .coins-head { display: flex; align-items: baseline; gap: .45rem; }
+.vedmak .purse .coins-head .label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--vd-text-dim); }
+.vedmak .purse .coins-head .exchange { margin-left: auto; font-size: .8rem; color: var(--vd-gold); }
+.vedmak .purse .coins-head .exchange:hover { color: var(--vd-gold-lite); }
+.vedmak .purse .coin-grid { display: grid; grid-template-columns: 1.3fr repeat(6, minmax(0, 1fr)); gap: .3rem .4rem; }
+.vedmak .purse .coin { display: flex; flex-direction: column; justify-content: flex-end; gap: .05rem; min-width: 0; }
+.vedmak .purse .coin .cap { font-size: .62rem; text-transform: uppercase; letter-spacing: .03em; color: var(--vd-text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .purse .coin input { width: 100%; height: 1.5rem; text-align: center; }
+.vedmak .purse .coin.main .cap { font-family: var(--vd-font-head); font-size: .95rem; text-transform: none; letter-spacing: 0; color: var(--vd-gold); }
+.vedmak .purse .coin.main input { font-weight: bold; }
+.vedmak .purse .coin.empty:not(.main) { opacity: .55; }
+.vedmak .purse .coin.empty:not(.main):focus-within { opacity: 1; }
 .vedmak .purse .load-head { display: flex; align-items: baseline; gap: .35rem; margin-bottom: .2rem; }
 .vedmak .purse .load-head .label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--vd-text-dim); }
 .vedmak .purse .load-head b { color: var(--vd-silver); }
@@ -2380,3 +2391,22 @@
 .vedmak-changes li.custom .key-toggle { opacity: 1; color: var(--vd-gold, #c9a45c); }
 .vedmak-changes .controls { text-align: right; }
 .vedmak-changes .hint { font-size: .78rem; opacity: .75; margin: .5rem 0 0; }
+
+/* Валюты и обмен: окно настроек и окно менялы */
+.vedmak.currency-config .currency-body { padding: .6rem .8rem; }
+.vedmak.currency-config .currency-table { width: 100%; margin: .4rem 0 .6rem; }
+.vedmak.currency-config .currency-table input { width: 100%; height: 1.6rem; }
+.vedmak.currency-config .currency-table td.short { width: 4.5rem; }
+.vedmak.currency-config .currency-table td.num { width: 5.5rem; text-align: center; }
+.vedmak.currency-config .form-footer { display: flex; gap: .5rem; padding: .5rem .8rem .8rem; }
+.vedmak.currency-config .form-footer button { flex: 1; }
+.vedmak-dialog .exchange-dialog .dlg-row { display: flex; gap: .6rem; align-items: flex-end; margin-bottom: .45rem; }
+.vedmak-dialog .exchange-dialog label { display: flex; flex-direction: column; gap: .15rem; }
+.vedmak-dialog .exchange-dialog label.grow { flex: 1; }
+.vedmak-dialog .exchange-dialog label.num input { width: 6rem; }
+.vedmak-dialog .exchange-dialog .exchange-quote { margin: .3rem 0; font-size: .95rem; min-height: 1.3em; }
+.vedmak-dialog .exchange-dialog .exchange-quote b { color: var(--vd-gold); }
+
+/* Добыча чудовища: монеты — в кошелёк героя */
+.vedmak .loot-list .loot-coins { margin-left: .35rem; color: var(--vd-gold); }
+.vedmak .loot-list .loot-coins:hover { color: var(--vd-gold-lite); }

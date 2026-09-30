@@ -3,6 +3,7 @@
 import { VedmakActorSheet } from "./actor-sheet-base.mjs";
 import { MONSTER_CLASSES, THREAT_COMPLEXITY, THREAT_DIFFICULTY, MATERIAL_WEAKNESS, ABILITY_KINDS } from "../data/actor/monster.mjs";
 import { BODY_TYPES, RESIST_KEYS, SIZE_MODS } from "../config/combat.mjs";
+import { currencyForName, lootCoins } from "../character/money.mjs";
 
 /** Списки объектов на форме (name="system.abilities.0.name") — собираются обратно в массивы. */
 const OBJECT_ARRAYS = ["abilities", "loot"];
@@ -20,7 +21,8 @@ export class MonsterSheet extends VedmakActorSheet {
       rowAdd: MonsterSheet.#onRowAdd,
       rowDelete: MonsterSheet.#onRowDelete,
       toggleAbilityEdit: MonsterSheet.#onToggleAbilityEdit,
-      abilityPost: MonsterSheet.#onAbilityPost
+      abilityPost: MonsterSheet.#onAbilityPost,
+      lootCoins: MonsterSheet.#onLootCoins
     }
   };
 
@@ -91,7 +93,8 @@ export class MonsterSheet extends VedmakActorSheet {
     // Добыча: ссылка на предмет компендиума тянется мышью на лист героя
     context.loot = await Promise.all(system.loot.map(async (l, index) => ({
       ...l, index,
-      link: l.uuid ? await this.enrich(`@UUID[${l.uuid}]{${l.name}}`) : ""
+      link: l.uuid ? await this.enrich(`@UUID[${l.uuid}]{${l.name}}`) : "",
+      coins: !l.uuid && !!currencyForName(l.name)
     })));
     return context;
   }
@@ -132,6 +135,12 @@ export class MonsterSheet extends VedmakActorSheet {
   }
 
   /** Способность — в чат, чтобы игроки видели, что происходит. */
+  /** Монеты из добычи — в кошелёк персонажа пользователя или выделенного токена. */
+  static async #onLootCoins(event, target) {
+    const row = this.actor.system.loot[Number(target.closest("[data-index]").dataset.index)];
+    if (row) await lootCoins(this.actor, row);
+  }
+
   static async #onAbilityPost(event, target) {
     const a = this.actor.system.abilities[Number(target.closest("[data-index]").dataset.index)];
     if (!a) return;

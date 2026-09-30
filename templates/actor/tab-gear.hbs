@@ -2,9 +2,21 @@
 
   {{#if isCharacter}}
   <div class="vd-panel purse">
-    <div class="money">
-      <label for="crowns">Кроны</label>
-      <input id="crowns" type="number" name="system.money.crowns" value="{{system.money.crowns}}" min="0">
+    <div class="coins">
+      <div class="coins-head">
+        <span class="label">Кошелёк</span>
+        <span class="dim" data-tooltip="Всё в кронах по курсу из настроек «Валюты и обмен»">≈ {{purse.crowns}} кр.</span>
+        {{#if purse.weightOn}}<span class="dim" data-tooltip="Вес монет входит в нагрузку">· монеты {{purse.kg}} кг</span>{{/if}}
+        <a class="exchange" data-action="moneyExchange" data-tooltip="Обменять у менялы"><i class="fa-solid fa-scale-balanced"></i> Обмен</a>
+      </div>
+      <div class="coin-grid">
+        {{#each purse.rows as |c|}}
+        <label class="coin{{#if c.main}} main{{/if}}{{#unless c.value}} empty{{/unless}}" data-tooltip="{{c.region}}{{#unless c.main}} · 1 {{c.abbr}} = {{c.rateText}} кр.{{/unless}}">
+          <span class="cap">{{c.label}}</span>
+          <input type="number" name="system.money.{{c.key}}" value="{{c.value}}" min="0">
+        </label>
+        {{/each}}
+      </div>
     </div>
     <div class="load">
       <div class="load-head"><span class="label">Нагрузка</span> <b class="{{#if load.over}}bad{{/if}}">{{load.carried}}</b> <span class="dim">из {{load.enc}} кг</span></div>
