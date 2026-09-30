@@ -48,7 +48,8 @@
 - `/check` — проверки и что делать с каждой ошибкой;
 - `/sync` — выгрузка в Foundry;
 - `/build-packs` — порядок сборки компендиумов. `/sync` и `/build-packs` работают только на компьютере автора;
-- `/release` — выпуск версии: тег `vX.Y.Z` запускает сборку на GitHub. Ссылка для установки в Foundry —
+- `/release` — выпуск версии: сценарий «Выпуск» на GitHub, запуск кнопкой или тегом `vX.Y.Z`.
+  Из облака теги не отправить, поэтому — кнопкой. Ссылка для установки в Foundry —
   `https://github.com/oralcum61-maker/Vedmak/releases/latest/download/system.json`.
 
 На GitHub `tools/check.mjs` запускается сам на каждую отправку (`.github/workflows/check.yml`).

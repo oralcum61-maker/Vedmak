@@ -733,7 +733,8 @@ User» по-английски, всё одинаково важное. Тепе
   портретами (270 существ; у «Рабочего» портрет тоже из жетонов — там силуэт Foundry), бестиарий
   пересобирается. В `system.json` проставляются версия, `manifest` на последний выпуск и `download`
   на архив именно этой версии.
-- **Выпуск по тегу** `vX.Y.Z` — `.github/workflows/release.yml`: проверка версии и `check.mjs`, сборка, архив,
+- **Выпуск** — `.github/workflows/release.yml`, кнопкой Run workflow (тег ставится сам) или тегом `vX.Y.Z`:
+  проверка версии и `check.mjs`, сборка, архив,
   GitHub Release с `system.json` и `vedmak.zip`. Порядок — навык `/release`.
 - В `system.json` репозитория — `url`, `manifest`, `download` на последний выпуск; в `README` — раздел «Установка».
 

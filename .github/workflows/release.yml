@@ -1,9 +1,12 @@
-# Выпуск системы по тегу vX.Y.Z: проверка → сборка без жетонов → архив → GitHub Release
-# с system.json и vedmak.zip. Ссылка для установки в Foundry (манифест):
+# Выпуск системы: проверка → сборка без жетонов → архив → GitHub Release с system.json и vedmak.zip.
+# Запуск — кнопкой Run workflow во вкладке Actions (версия берётся из system.json, тег vX.Y.Z создаётся сам)
+# или отправкой тега vX.Y.Z (тогда он обязан совпадать с версией в system.json).
+# Ссылка для установки в Foundry (манифест):
 #   https://github.com/oralcum61-maker/Vedmak/releases/latest/download/system.json
 name: Выпуск
 
 on:
+  workflow_dispatch:
   push:
     tags: ["v*.*.*"]
 
@@ -19,6 +22,22 @@ jobs:
         with:
           node-version: 22
 
+      - name: Версия
+        id: ver
+        run: |
+          ver="$(node -p "require('./system.json').version")"
+          if [ "$GITHUB_REF_TYPE" = "tag" ] && [ "${GITHUB_REF_NAME#v}" != "$ver" ]; then
+            echo "::error::Тег $GITHUB_REF_NAME, а в system.json версия $ver — поднимите версию в system.json"
+            exit 1
+          fi
+          if gh release view "v$ver" >/dev/null 2>&1; then
+            echo "::error::Выпуск v$ver уже есть — поднимите версию в system.json"
+            exit 1
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Handlebars и classic-level
         run: |
           npm install --no-save --no-package-lock --prefix "$RUNNER_TEMP/hbs" handlebars@4
@@ -26,22 +45,13 @@ jobs:
           echo '{"name":"foundry-stub","private":true}' > "$RUNNER_TEMP/foundry/package.json"
           npm install --no-package-lock --prefix "$RUNNER_TEMP/foundry" classic-level@1
 
-      - name: Версия тега совпадает с system.json
-        run: |
-          tag="${GITHUB_REF_NAME#v}"
-          ver="$(node -p "require('./system.json').version")"
-          if [ "$tag" != "$ver" ]; then
-            echo "::error::Тег $GITHUB_REF_NAME, а в system.json версия $ver — поднимите версию в system.json"
-            exit 1
-          fi
-
       - name: tools/check.mjs
         run: node tools/check.mjs
         env:
           NODE_PATH: ${{ runner.temp }}/hbs/node_modules
 
       - name: Сборка выпуска
-        run: node tools/release.mjs "${GITHUB_REF_NAME#v}"
+        run: node tools/release.mjs "${{ steps.ver.outputs.version }}"
         env:
           FOUNDRY_APP: ${{ runner.temp }}/foundry
 
@@ -50,7 +60,7 @@ jobs:
 
       - name: GitHub Release
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/system.json dist/vedmak.zip \
-            --title "Ведьмак: НРИ ${GITHUB_REF_NAME#v}" --generate-notes
+          gh release create "v${{ steps.ver.outputs.version }}" dist/system.json dist/vedmak.zip \
+            --target "$GITHUB_SHA" --title "Ведьмак: НРИ ${{ steps.ver.outputs.version }}" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
