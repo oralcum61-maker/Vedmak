@@ -110,6 +110,8 @@ function regionData(shape, { name, color, zone }) {
     visibility: CONST.REGION_VISIBILITY?.ALWAYS ?? 2,
     highlightMode: "coverage",
     displayMeasurements: true,
+    // Права на область v14 берёт только отсюда: без владельца игрок не может ни сдвинуть, ни снять свою зону
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE, [game.user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     flags: { core: { MeasuredTemplate: true }, vedmak: { zone } }
   };
 }
@@ -218,12 +220,19 @@ function tester(shape, region) {
   return p => inShape(shape, p);
 }
 
+/** Кого зона может задеть: не заклинатель, не павший; скрытых ведущим токенов игрок не видит — и зона их не выдаёт. */
+function eligible(t, exclude) {
+  if (!t.actor || t === exclude) return false;
+  if (t.document.hidden && !game.user.isGM) return false;
+  return !t.actor.statuses?.has(CONFIG.specialStatusEffects.DEFEATED);
+}
+
 /**
  * Токены в зоне (без заклинателя).
  * @returns {Token[]}
  */
 export function zoneTokens(shape, { region = null, exclude = null } = {}) {
-  const pick = test => canvas.tokens.placeables.filter(t => t.actor && t !== exclude && tokenPoints(t).some(test));
+  const pick = test => canvas.tokens.placeables.filter(t => eligible(t, exclude) && tokenPoints(t).some(test));
   const own = pick(p => inShape(shape, p));
   if (!region) return own;
   // Область Foundry точнее (поворот, уровни сцены), но если она не нашла никого, а геометрия нашла —

@@ -7277,17 +7277,17 @@
   "results": [
    {
     "_id": "8lfmR99gJwWlLp2I",
-    "type": "text",
+    "type": "document",
     "name": "Раступление вод",
     "description": "",
-    "img": "icons/magic/water/wave-water-blue.webp",
+    "img": "icons/magic/water/projectile-ice-faceted-gray.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.magic.Item.kaqb8SHx6DSPpjmy"
    },
    {
     "_id": "nCuMJtUGdXgF6pdl",
@@ -9237,17 +9237,17 @@
    },
    {
     "_id": "11wklfgnEy5v1b8R",
-    "type": "text",
+    "type": "document",
     "name": "Замена Де Клаудинса",
     "description": "",
-    "img": "icons/magic/symbols/elements-air-earth-fire-water.webp",
+    "img": "icons/magic/nature/plant-glowing-white-purple.webp",
     "weight": 1,
     "range": [
      12,
      12
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.magic.Item.BU3igNWIztLPy8h1"
    }
   ],
   "folder": [
@@ -21117,17 +21117,17 @@
    },
    {
     "_id": "4lcnLGxMpfpJa0x0",
-    "type": "text",
+    "type": "document",
     "name": "Глаз нехалени",
     "description": "",
-    "img": "icons/commodities/treasure/token-engraved-eye-red.webp",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
     "weight": 1,
     "range": [
      2,
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.gear.Item.Cjz890LNozWpWbpf"
    },
    {
     "_id": "JluN3BudrIj4BvJK",
@@ -21271,17 +21271,17 @@
    },
    {
     "_id": "bcBdeLoAl9f9tj7h",
-    "type": "text",
+    "type": "document",
     "name": "Охранный силовой камень",
     "description": "",
-    "img": "icons/commodities/treasure/crystal-pedastal-red-gold.webp",
+    "img": "icons/commodities/gems/gem-faceted-hexagon-blue.webp",
     "weight": 1,
     "range": [
      13,
      13
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.gear.Item.BN1S3duYUqTCcFv7"
    },
    {
     "_id": "19QFxvg5bvGHEEEQ",
@@ -22638,14 +22638,14 @@
     "type": "document",
     "name": "Факел",
     "description": "",
-    "img": "icons/sundries/lights/torch-brown-lit.webp",
+    "img": "systems/vedmak/assets/fan/gear/g-torch.webp",
     "weight": 1,
     "range": [
      43,
      43
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.uMuaIFJivxReytOm"
+    "documentUuid": "Compendium.vedmak.gear.Item.ZJno9101ghZPg6nG"
    },
    {
     "_id": "8CSimGceSYDryKx5",
@@ -22892,17 +22892,17 @@
    },
    {
     "_id": "JDiQ1KVvysNIvZIW",
-    "type": "text",
+    "type": "document",
     "name": "Тканевое",
     "description": "",
-    "img": "icons/equipment/shoulder/shoulderpad-cloth-green.webp",
+    "img": "icons/commodities/cloth/cloth-bolt-grey.webp",
     "weight": 1,
     "range": [
      4,
      4
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.LDxrFdjm8M6sxjXK"
    },
    {
     "_id": "KPlPMcrjLOOvKFMn",
@@ -22951,7 +22951,7 @@
     "type": "document",
     "name": "Нильфгаардский прицел",
     "description": "",
-    "img": "icons/tools/scribal/magnifying-glass.webp",
+    "img": "icons/tools/navigation/spyglass-telescope-brass.webp",
     "weight": 1,
     "range": [
      8,
@@ -22962,31 +22962,31 @@
    },
    {
     "_id": "2Q1o4oO1IdsxhB2J",
-    "type": "text",
+    "type": "document",
     "name": "Скеллигская скоба",
     "description": "",
-    "img": "icons/tools/smithing/plate-steel-grey.webp",
+    "img": "icons/tools/smithing/anvil.webp",
     "weight": 1,
     "range": [
      9,
      9
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.igj7mdpKZLH78P9T"
    },
    {
     "_id": "ubFnLII4dHrp7PYX",
-    "type": "text",
+    "type": "document",
     "name": "Стабилизирующая скоба",
     "description": "",
-    "img": "icons/tools/fasteners/bracket.webp",
+    "img": "icons/commodities/tech/crank.webp",
     "weight": 1,
     "range": [
      10,
      10
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.VuOtiIYdWb8daMQi"
    },
    {
     "_id": "maKPMDEzu5mPNjKM",
@@ -23004,17 +23004,17 @@
    },
    {
     "_id": "P87e32uNQUU53sRO",
-    "type": "text",
+    "type": "document",
     "name": "Усовершенствованный брашпиль",
     "description": "",
-    "img": "icons/tools/fasteners/screw-flat-steel-grey.webp",
+    "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
     "weight": 1,
     "range": [
      12,
      12
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.U2y7ijbs13Bvs67b"
    }
   ],
   "folder": [
@@ -23775,17 +23775,17 @@
    },
    {
     "_id": "sH2wvmw91aai01Uf",
-    "type": "text",
+    "type": "document",
     "name": "Глиф защиты",
     "description": "",
-    "img": "icons/svg/d20-black.svg",
+    "img": "icons/magic/symbols/rune-sigil-green-purple.webp",
     "weight": 1,
     "range": [
      3,
      3
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.3thbv3PP0iOOU7mc"
    },
    {
     "_id": "PY25M9lQNV6L4DYJ",
@@ -23831,17 +23831,17 @@
    },
    {
     "_id": "Yud284HwbnSvFu5i",
-    "type": "text",
+    "type": "document",
     "name": "Глиф починки",
     "description": "",
-    "img": "icons/svg/d20-black.svg",
+    "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
     "weight": 1,
     "range": [
      7,
      7
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.d5CVlGizSdnc42P7"
    },
    {
     "_id": "IxjS9IJlolTQRjW6",
@@ -23859,17 +23859,17 @@
    },
    {
     "_id": "cfLArXzSAoC4jOLa",
-    "type": "text",
+    "type": "document",
     "name": "Глиф усиления",
     "description": "",
-    "img": "icons/svg/d20-black.svg",
+    "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
     "weight": 1,
     "range": [
      9,
      9
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.enhancements.Item.HdJLamdFVazxZdZl"
    }
   ],
   "folder": [
@@ -24425,7 +24425,7 @@
     "type": "document",
     "name": "*Формула: Эликсир Мец",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
+    "img": "icons/sundries/documents/document-writing-pink.webp",
     "weight": 1,
     "range": [
      1,
@@ -24439,7 +24439,7 @@
     "type": "document",
     "name": "*Формула: Цитрусовая мазь",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      2,
@@ -24453,7 +24453,7 @@
     "type": "document",
     "name": "*Формула: Травяной чай",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      3,
@@ -24467,7 +24467,7 @@
     "type": "document",
     "name": "*Формула: Горячий суп",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      4,
@@ -24481,7 +24481,7 @@
     "type": "document",
     "name": "*Формула: Опиат Киновари",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      5,
@@ -24495,7 +24495,7 @@
     "type": "document",
     "name": "*Формула: Мытые коренья",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      6,
@@ -24556,7 +24556,7 @@
     "type": "document",
     "name": "Формула: Зелье берсерка",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      3,
@@ -24626,7 +24626,7 @@
     "type": "document",
     "name": "Формула: Эликсир выносливости",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      8,
@@ -24640,7 +24640,7 @@
     "type": "document",
     "name": "Формула: Эликсир живучести",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      9,
@@ -24771,7 +24771,7 @@
     "type": "document",
     "name": "Формула: Летняя мазь",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      6,
@@ -25028,7 +25028,7 @@
     "type": "document",
     "name": "Формула: Селестин",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      9,
@@ -25042,7 +25042,7 @@
     "type": "document",
     "name": "Формула: Трупный яд",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+    "img": "icons/sundries/documents/document-bound-white-tan.webp",
     "weight": 1,
     "range": [
      11,
@@ -25170,17 +25170,17 @@
    },
    {
     "_id": "D1zoJtQRSGdpNrfT",
-    "type": "text",
+    "type": "document",
     "name": "Формула: Масло против элементалей",
     "description": "",
-    "img": "icons/sundries/documents/document-symbol-skull-tan.webp",
+    "img": "icons/sundries/scrolls/scroll-writing-tan-grey.webp",
     "weight": 1,
     "range": [
      4,
      4
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.13J9ody8fhoN4hIk"
    },
    {
     "_id": "b39m8hA35IBAshOO",
@@ -25229,7 +25229,7 @@
     "type": "document",
     "name": "Формула: Масло против призраков",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-writing-tan-grey.webp",
+    "img": "icons/sundries/documents/document-symbol-skull-tan.webp",
     "weight": 1,
     "range": [
      8,
@@ -27040,7 +27040,7 @@
    },
    {
     "_id": "ZS581Kv876c7NYy9",
-    "type": "text",
+    "type": "document",
     "name": "Чертежи: Метательные ножи (х3)",
     "description": "",
     "img": "icons/sundries/documents/blueprint-axe.webp",
@@ -27050,7 +27050,7 @@
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.UpWrsyOcr0w9T6Bf"
    },
    {
     "_id": "SNtU4bbSornNlvkT",
@@ -27068,7 +27068,7 @@
    },
    {
     "_id": "7HvR4zjYfYNfoioI",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Орион (х3)",
     "description": "",
     "img": "icons/sundries/documents/blueprint-axe.webp",
@@ -27078,11 +27078,11 @@
      4
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.gJ6EfY5ED8EoHoqy"
    },
    {
     "_id": "NF4zfCz5myteyiiI",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Стандартные боеприпасы (x30)",
     "description": "",
     "img": "icons/sundries/documents/blueprint-axe.webp",
@@ -27092,7 +27092,7 @@
      5
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.DG0jstAvgwxlFUmz"
    }
   ],
   "folder": [
@@ -27117,7 +27117,7 @@
   "results": [
    {
     "_id": "be4Xz4hhdcylQ1dI",
-    "type": "text",
+    "type": "document",
     "name": "Чертежи: Боеприпасы с широким наконечником (х10)",
     "description": "",
     "img": "icons/sundries/documents/blueprint-axe.webp",
@@ -27127,11 +27127,11 @@
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.KVMuSDCDGu2QFpWF"
    },
    {
     "_id": "lxjOehcp5Agkt8kQ",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Бронебойные боеприпасы (х10)",
     "description": "",
     "img": "icons/sundries/documents/blueprint-axe.webp",
@@ -27141,21 +27141,21 @@
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.jbyVZbcqVYwX9Vtx"
    },
    {
     "_id": "ToluI3qo6lmFNf2B",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Бронебойный болт для скорпио",
     "description": "",
-    "img": "https://assets.forge-vtt.com/bazaar/core/icons/sundries/documents/blueprint-axe.webp",
+    "img": "icons/sundries/documents/blueprints-teal.webp",
     "weight": 1,
     "range": [
      3,
      3
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.TM5pbkbZkbwTTQ1b"
    },
    {
     "_id": "HViywdQgW8LASVXu",
@@ -27173,17 +27173,17 @@
    },
    {
     "_id": "YWoHjQgbLzFnUs7h",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Стандартный болт для скорпио (x5)",
     "description": "",
-    "img": "https://assets.forge-vtt.com/bazaar/core/icons/sundries/documents/blueprint-axe.webp",
+    "img": "icons/sundries/documents/blueprints-teal.webp",
     "weight": 1,
     "range": [
      5,
      5
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.3DZMRI4P4V8kLMg3"
    }
   ],
   "folder": [
@@ -27260,196 +27260,196 @@
     "type": "document",
     "name": "Бешенство",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/rage.webp",
+    "img": "icons/environment/traps/spike-skull-white-brown.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.0H1bD2jVOyf76K17"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.m0RmSwhmJfpjkmrp"
    },
    {
     "_id": "wSZRJ0IX3rGTIxO1",
     "type": "document",
     "name": "Двимеритовая бомба",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/dimeritium-bomb.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dimeritium.webp",
     "weight": 1,
     "range": [
      2,
      2
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.KlFxUditQ6sR73Ew"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.5UPRxxSlKo0t0yZm"
    },
    {
     "_id": "1diaUGibDS1b2sQf",
     "type": "document",
     "name": "Картечь",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "weight": 1,
     "range": [
      3,
      3
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
    },
    {
     "_id": "0m5WEmctCJj61L1R",
     "type": "document",
     "name": "Когтезуб",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/clawtooth.webp",
+    "img": "icons/environment/traps/metal-spikes.webp",
     "weight": 1,
     "range": [
      4,
      4
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.G5xGckijZaYMghkq"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.qqDjT3QSscYMSnzZ"
    },
    {
     "_id": "mAahtC2360A4mYbU",
     "type": "document",
     "name": "Кусач",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/trap.webp",
+    "img": "icons/environment/traps/trap-jaw-steel.webp",
     "weight": 1,
     "range": [
      5,
      5
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.IFbGHB5lLO6Bd4CR"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.2i21Rws64POhQYeD"
    },
    {
     "_id": "kMBFGildm8ywbMA0",
     "type": "document",
     "name": "Лунная пыль",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/moon-dust-bomb.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-moon-dust.webp",
     "weight": 1,
     "range": [
      6,
      6
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.Ifx3qoGZovlrQHoi"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.qwIpOOw7maVeJOF9"
    },
    {
     "_id": "AzjS1o7aKwQHF4Sq",
     "type": "document",
     "name": "Метка",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/fire_mark.webp",
+    "img": "icons/environment/traps/trap-jaw-tan.webp",
     "weight": 1,
     "range": [
      7,
      7
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.o56YRCbUT6E0lcJj"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.7y9fm274g5Bbjxs3"
    },
    {
     "_id": "GRsUJM6yJ6mDGpay",
     "type": "document",
     "name": "Пожарище",
     "description": "",
-    "img": "icons/magic/fire/projectile-arrow-fire-orange.webp",
+    "img": "icons/environment/traps/saw-mechanical-toothed-steel-red.webp",
     "weight": 1,
     "range": [
      8,
      8
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.jHmNfIYzd4ps1F95"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.6YWXg9bhlxRU8CcP"
    },
    {
     "_id": "CBmPFUVFnAwpIqjL",
     "type": "document",
     "name": "Самум",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "weight": 1,
     "range": [
      9,
      9
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
    },
    {
     "_id": "Y7Ol9Tw8lzZqBwa8",
     "type": "document",
     "name": "Северный ветер",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/northern-wind-bomb.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-northern-wind.webp",
     "weight": 1,
     "range": [
      10,
      10
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.YVeD2ZC8SxydaHMN"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.ZYcPZdewk0iXqMuH"
    },
    {
     "_id": "IpRb7Lt48YM6Zbxs",
     "type": "document",
     "name": "Сон дракона",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/zerricanian-sun.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dragons-dream.webp",
     "weight": 1,
     "range": [
      11,
      11
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.MHmhQTiboihZmKKN"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.ShqMs4Dn9Y01WjLt"
    },
    {
     "_id": "99Mp9BzdbBSd57pS",
     "type": "document",
     "name": "Талгарская зима",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/talgarian_winter.webp",
+    "img": "icons/environment/traps/spiked-wall.webp",
     "weight": 1,
     "range": [
      12,
      12
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.QXWvnHZFQdSoOItq"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.szuBx0RAYSCCcvw6"
    },
    {
     "_id": "hgrIvkSc1RkDzkEl",
     "type": "document",
     "name": "Танцующая звезда",
     "description": "",
-    "img": "icons/weapons/swords/sword-guard-worn-purple.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dancing-star.webp",
     "weight": 1,
     "range": [
      13,
      13
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.vNqAwStI7zgfouzD"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.JpdFfNmAAalx2U7N"
    },
    {
     "_id": "BTWmzNZLD0jVaWoi",
     "type": "document",
     "name": "Чертов гриб",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/bombs/devil-s-puffball-bomb.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-devils-puffball.webp",
     "weight": 1,
     "range": [
      14,
      14
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.5VJ3jVhqZ0lAbgHz"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.E57KwUpW04mY7cvF"
    }
   ],
   "folder": [
@@ -27484,7 +27484,7 @@
      1
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.weapons.Item.sqgZ4xKTkDt4afpW"
+    "documentUuid": "Compendium.vedmak.alchemy.Item.oP80OMqxLJ6QOzoW"
    }
   ],
   "folder": [
@@ -27558,17 +27558,17 @@
   "results": [
    {
     "_id": "46da52k3aip7kl40",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Драгунская броня гномов",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-helmet.webp",
+    "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.1UvCv9E4bqTmlmqw"
    },
    {
     "_id": "2j5eokipd03cg627",
@@ -27824,17 +27824,17 @@
   "results": [
    {
     "_id": "xpehzgjz2z4fbq4o",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж: Щит налетчика скеллиге",
     "description": "",
-    "img": "https://assets.forge-vtt.com/bazaar/core/icons/sundries/documents/blueprint-shield.webp",
+    "img": "icons/sundries/documents/blueprint-helmet.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.So4eI1BATH0wBEjX"
    },
    {
     "_id": "vc0ypdbuy6teubc9",
@@ -28016,7 +28016,7 @@
     "type": "document",
     "name": "Чертеж: Эльфийский щит",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
+    "img": "icons/sundries/documents/blueprint-shield.webp",
     "weight": 1,
     "range": [
      1,
@@ -28072,7 +28072,7 @@
     "type": "document",
     "name": "Чертеж: Броня скоя'таэлей",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
+    "img": "icons/sundries/documents/blueprint-helmet.webp",
     "weight": 1,
     "range": [
      5,
@@ -28552,17 +28552,17 @@
   "results": [
    {
     "_id": "ue2eqRBbneVzGTxL",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж училения: Усовершенствованный брашпиль",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-grey.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.tlB1DrNj2qgSxP5R"
    }
   ],
   "folder": [
@@ -28587,31 +28587,31 @@
   "results": [
    {
     "_id": "CVXx45xRNl43IUjU",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Скеллигская скоба",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-grey.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.9VlzPOwmB7nARCyI"
    },
    {
     "_id": "wsVPtvg30qlxLv2v",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Стабилизирующая скоба",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-grey.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      2,
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.ulKZ7uwwQiZFyGmH"
    }
   ],
   "folder": [
@@ -28636,31 +28636,31 @@
   "results": [
    {
     "_id": "nYtJ6oyznTGxnVpW",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Нильфгаардский прицел",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-grey.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.XF2B02DJgfGskkMa"
    },
    {
     "_id": "dthZ7zAl88Ob9byb",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Усиленная тетива",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-grey.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      2,
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.zLvxR1t316L0pqR7"
    }
   ],
   "folder": [
@@ -29507,7 +29507,7 @@
     "type": "document",
     "name": "Чертеж: Эльфийский мессер",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-runed-brown-green.webp",
+    "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
      2,
@@ -29721,17 +29721,17 @@
   "results": [
    {
     "_id": "gTkSpGgW2SzQeJiR",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Краснолюдское",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.AIDmU57jyvAkc4be"
    }
   ],
   "folder": [
@@ -29759,7 +29759,7 @@
     "type": "document",
     "name": "Чертеж усиления: Эльфийское",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-magical.webp",
+    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
     "weight": 1,
     "range": [
      1,
@@ -29794,7 +29794,7 @@
     "type": "document",
     "name": "Чертеж усиления: Тканевое",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-magical.webp",
+    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
     "weight": 1,
     "range": [
      1,
@@ -29805,17 +29805,17 @@
    },
    {
     "_id": "pDsN1QkMKj4YHYIw",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Клепаная кожа",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      2,
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.juOjAwCHO8NY1mEb"
    }
   ],
   "folder": [
@@ -29840,45 +29840,45 @@
   "results": [
    {
     "_id": "zsuTkYNPYvbXWSe3",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Кольчужное",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.g4ZHgCZZE3EngsD9"
    },
    {
     "_id": "VnTPvgLrPrrs7J2B",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Стальное",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      2,
      2
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.LZ8k9BWakh7ZHkk7"
    },
    {
     "_id": "Dj2dDebmSMaAsbIe",
-    "type": "text",
+    "type": "document",
     "name": "Чертеж усиления: Укрепленная кожа",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      3,
      3
     ],
     "drawn": false,
-    "documentUuid": null
+    "documentUuid": "Compendium.vedmak.recipes.Item.cnv8TsPmOZaEAt5I"
    }
   ],
   "folder": [

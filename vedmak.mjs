@@ -72,6 +72,8 @@ Hooks.once("init", () => {
   // Бой: инициатива Реакция + d10 (стр. 151), статусы, начало хода
   CONFIG.Combat.initiative = { formula: "1d10 + @stats.ref.effective", decimals: 2 };
   CONFIG.Combat.documentClass = VedmakCombat;
+  // Корник: «раунд длится 3 секунды». По этому числу Foundry двигает время мира в бою и переводит раунды во время
+  CONFIG.time.roundTime = 3;
   registerStatusEffects();
 
   game.settings.register(SYSTEM_ID, "booksMonsters", {

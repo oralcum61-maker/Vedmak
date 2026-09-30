@@ -1,12 +1,17 @@
 // Как действуют эликсиры и отвары после приёма (справочник — config/alchemy-auto.mjs):
 // невосприимчивость к состояниям, зрение токена, срабатывания от убийства, попадания и полученного урона.
 
+import { inCombat, roundsAsTime } from "../util.mjs";
+
 const { DialogV2 } = foundry.applications.api;
 
-const M = (key, value) => ({ key, type: "add", value, phase: "initial" });
+const M =(key, value) => ({ key, type: "add", value, phase: "initial" });
 
-/** Эффекты актора с флагом vedmak.<key>. */
-const flagged = (actor, key) => (actor?.effects ?? []).filter(e => !e.disabled && e.flags?.vedmak?.[key]);
+/**
+ * Действующие эффекты актора с флагом vedmak.<key>. `active`, а не `!disabled`: истёкший по времени эффект v14
+ * не удаляет, а только помечает `duration.expired` — его флаги тоже должны перестать действовать.
+ */
+const flagged = (actor, key) => (actor?.effects ?? []).filter(e => e.active && e.flags?.vedmak?.[key]);
 
 /** Заменить одно изменение эффекта: остальные изменения остаются. */
 function withChange(effect, key, value) {
@@ -29,10 +34,11 @@ export function immuneStatuses(actor) {
 
 /** Зрение токенов актора на время эффекта; прежнее запоминается в эффекте. */
 export async function applyVision(actor, effect, vision) {
-  const prev = {};
+  // Список, а не объект по UUID: ключи с точками («Scene.x.Token.y») флаг разворачивает во вложенные объекты
+  const prev = [];
   for (const token of actor.getActiveTokens(false, true)) {
     const sight = token.sight ?? {};
-    prev[token.uuid] = { enabled: sight.enabled, visionMode: sight.visionMode, range: sight.range };
+    prev.push({ uuid: token.uuid, enabled: sight.enabled, visionMode: sight.visionMode, range: sight.range });
     try {
       await token.update({
         "sight.enabled": true, "sight.visionMode": vision.visionMode,
@@ -42,12 +48,22 @@ export async function applyVision(actor, effect, vision) {
       console.warn("vedmak | зрение токена", err);
     }
   }
-  if (Object.keys(prev).length) await effect.setFlag("vedmak", "visionPrev", prev);
-  return Object.keys(prev).length;
+  if (prev.length) await effect.setFlag("vedmak", "visionPrev", prev);
+  return prev.length;
+}
+
+/** Сохранённое зрение: список или (у эффектов до исправления) вложенный объект Scene → id → Token → id. */
+function savedVision(saved) {
+  if (Array.isArray(saved)) return saved;
+  const out = [];
+  for (const [sceneId, scene] of Object.entries(saved?.Scene ?? {})) {
+    for (const [tokenId, sight] of Object.entries(scene?.Token ?? {})) out.push({ uuid: `Scene.${sceneId}.Token.${tokenId}`, ...sight });
+  }
+  return out;
 }
 
 async function restoreVision(effect) {
-  for (const [uuid, sight] of Object.entries(effect.flags.vedmak.visionPrev)) {
+  for (const { uuid, ...sight } of savedVision(effect.flags.vedmak.visionPrev)) {
     const token = fromUuidSync(uuid);
     if (!token) continue;
     await token.update({ "sight.enabled": sight.enabled, "sight.visionMode": sight.visionMode, "sight.range": sight.range });
@@ -171,5 +187,31 @@ export function registerAlchemyHooks() {
   Hooks.on("deleteCombat", combat => {
     if (!game.users.activeGM?.isSelf) return;
     resetCombatStacks(combat).catch(err => console.error("vedmak | отвары", err));
+    roundsToTime(combat).catch(err => console.error("vedmak | срок эффектов после боя", err));
   });
+  // Срок вышел: v14 только помечает `duration.expired`. Вне боя зелья и заклинания снимаем сразу — вместе
+  // с ними уходят флаги и возвращается зрение; в бою их снимает начало хода с записью в чат (expireAlchemy)
+  Hooks.on("updateActiveEffect", (effect, changes) => {
+    if (changes.duration?.expired !== true || !game.users.activeGM?.isSelf) return;
+    const f = effect.flags?.vedmak ?? {};
+    const actor = effect.parent;
+    if (!(f.alchemy || f.spellBuff) || actor?.documentName !== "Actor" || inCombat(actor)) return;
+    effect.delete().catch(err => console.warn("vedmak | снятие истёкшего эффекта", err));
+  });
+}
+
+/** Бой кончился: несошедший остаток раундов у зелий и заклинаний становится временем, иначе они вечны. */
+async function roundsToTime(combat) {
+  const now = game.time.worldTime;
+  for (const actor of new Set(combat.combatants.map(c => c.actor).filter(Boolean))) {
+    const updates = actor.effects.filter(e => {
+      const f = e.flags?.vedmak ?? {};
+      return (f.alchemy || f.spellBuff) && f.timed?.rounds > 0;
+    }).map(e => ({
+      _id: e.id, "flags.vedmak.timed.rounds": 0,
+      start: { time: now, combat: null, combatant: null, initiative: null, round: null, turn: null },
+      duration: { ...roundsAsTime(e.flags.vedmak.timed.rounds), expired: false }
+    }));
+    if (updates.length) await actor.updateEmbeddedDocuments("ActiveEffect", updates);
+  }
 }

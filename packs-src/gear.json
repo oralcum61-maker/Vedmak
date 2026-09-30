@@ -4165,7 +4165,7 @@
   "_id": "fatngRh57JpzetSA",
   "name": "Поездка в карете",
   "type": "gear",
-  "img": "icons/environment/settlement/wagon-black.webp",
+  "img": "icons/environment/settlement/sign-wood.webp",
   "system": {
    "description": "<p>Если требуется куда-то добраться в безопасности и комфорте, можно и в карете прокатиться.</p>",
    "quantity": 1,
@@ -4840,37 +4840,6 @@
   "flags": {
    "vedmak": {
     "layer": "services"
-   }
-  }
- },
- {
-  "_id": "aVhNr6bAnga7LuZw",
-  "name": "Бронебойный болт для скорпио",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-head-war.webp",
-  "system": {
-   "description": "<p>- ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони, по которой оно попадает.]</p>",
-   "quantity": 10,
-   "weight": 4.0,
-   "cost": 75.0,
-   "availability": "rare",
-   "concealment": "none",
-   "equipped": false,
-   "source": {
-    "book": "Профессиональные инструменты",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "armorPiercing",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
    }
   }
  },
@@ -5659,7 +5628,7 @@
   "_id": "H2AxmotSg1KODHQR",
   "name": "Коньяк Виктора Моннарта",
   "type": "gear",
-  "img": "systems/vedmak/assets/fan/bs/alcohol/erveluce.webp",
+  "img": "icons/consumables/drinks/alcohol-jug-spirits-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -5783,7 +5752,7 @@
   "_id": "gG846nYUvbDhNPad",
   "name": "Обычная инвалидная коляска",
   "type": "gear",
-  "img": "icons/commodities/wood/framing-brace-reinforced.webp",
+  "img": "icons/containers/misc/wheelbarrow-white.webp",
   "system": {
    "description": "<p>Тяжелые и непрактичные для более активного образа жизни, они, тем не менее, являются уделом многих крестьян на континенте. Их простая конструкция обеспечивает повседневную мобильность и комфорт, а также простоту обслуживания и ремонта. Эффект: При использовании обычной инвалидной коляски любое снижение Скр, Уклонения/Изворотливости и Атлетики, вызванное Критической раной или ранее существовавшей инвалидностью, сводится на нет. Однако при использовании обычной инвалидной коляски любая проверка, связанная с плаванием или лазаньем, делается с -3. Любая атака, направленная против человека в инвалидной коляске, направлена на него, а не на кресло в игровых целях.</p>",
    "quantity": 1,
@@ -5846,7 +5815,7 @@
   "_id": "3016yiJyUrfstZeY",
   "name": "Мантия из козьей шкуры",
   "type": "gear",
-  "img": "icons/equipment/back/cloak-brown-fur-brown.webp",
+  "img": "icons/equipment/back/cloak-fur-brown.webp",
   "system": {
    "description": "<p>Мантия из козьей шкуры, которая висит на плечах и застегивается спереди костяными застежками. Мантия из козьей шкуры имеют несколько уникальных эффектов при вызове различных форм демонов и используются практикующими гоэтиками в качестве первой линии защиты. Единственный человек, который получает выгоду от эффектов мантии из козьей кожи, - это человек, который ее носит. \n\nРогатый: Если призыватель не носит мантию из козьей шкуры, рогатый сразу же попытаются завладеть им после его призыва. Это происходит до того, как кто-либо успевает предпринять какие-либо действия. \n\nКасглидд: Если призыватель не носит мантию из козьей шкуры, касглидд немедленно попытается использовать свою атаку Когтя, чтобы утащить его в тень, где он будет вести переговоры на своих условиях. Это происходит до того, как кто-либо успевает предпринять какие-либо действия. \n\nМари Львид: Если призыватель не носит мантию из козьей шкуры, мари львид будет считать, что все, что находится в здании, где происходит призыв, является частью подношения призывателя.</p>",
    "quantity": 1,
@@ -5897,37 +5866,6 @@
   },
   "folder": [
    "Еда и питьё"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "2Tf6YnBy1sVd84IR",
-  "name": "Стандартный болт для скорпио",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-head-war.webp",
-  "system": {
-   "description": "",
-   "quantity": 10,
-   "weight": 2.0,
-   "cost": 50.0,
-   "availability": "everywhere",
-   "concealment": "none",
-   "equipped": false,
-   "source": {
-    "book": "Профессиональные инструменты",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -6309,37 +6247,6 @@
   }
  },
  {
-  "_id": "oOYGVkgsBlTSFxqX",
-  "name": "Боеприпас с затупленным наконечником",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-fletching.webp",
-  "system": {
-   "description": "<p>- НЕСМЕРТЕЛЬНОЕ\n[Это оружие можно использовать для нанесения несмертельного урона без штрафов.]\n\nБолты и стрелы с тупыми наконечниками - интересный случай. Хех, сам я ими никогда не пользовался, но, с другой стороны, никогда не дрался так сильно, чтобы их не уложил палаш. У боеприпасов с тупыми наконечниками большая тупая деревянная головка, размером с кулак. Слышал, если ты наполовину натянешь их на себя, то сможешь использовать эти стрелы, чтобы сбивать людей с ног.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 5.0,
-   "availability": "common",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "nonLethal",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
   "_id": "ivgPQ2XtqsvaMBkE",
   "name": "Маска",
   "type": "gear",
@@ -6436,7 +6343,7 @@
   "_id": "cBS9qiPPmndU6AmA",
   "name": "Трофей: Ледяной элементаль",
   "type": "gear",
-  "img": "systems/vedmak/assets/fan/bs/trophy/elemental-trophy.webp",
+  "img": "icons/commodities/gems/gem-shattered-blue.webp",
   "system": {
    "description": "<p>Существа, которым вы наносите урон своими атаками, с вероятностью 25% могут быть заморожены</p>",
    "quantity": 1,
@@ -6499,7 +6406,7 @@
   "_id": "rXE5Qu1vt2Jw1bUN",
   "name": "Фазан (жареный)",
   "type": "gear",
-  "img": "systems/vedmak/assets/fan/bs/food/roasted-chicken.webp",
+  "img": "icons/consumables/food/chicken-bird-cooked.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6812,7 +6719,7 @@
   "_id": "c9CqT4F15HyDnS03",
   "name": "Трофей: Огненный элементаль",
   "type": "gear",
-  "img": "systems/vedmak/assets/fan/bs/trophy/elemental-trophy.webp",
+  "img": "icons/commodities/gems/gem-shattered-orange.webp",
   "system": {
    "description": "<p>Существа, которым вы наносите урон своими атаками, имеют 25% шанс загореться.</p>",
    "quantity": 1,
@@ -7096,7 +7003,7 @@
   "_id": "ayNH3e3p6bsW4idz",
   "name": "Белый гуль",
   "type": "gear",
-  "img": "systems/vedmak/assets/fan/bs/alcohol/white-gull.webp",
+  "img": "icons/consumables/potions/potion-bottle-corked-white.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7127,7 +7034,7 @@
   "_id": "253mxe7tt0DiutL1",
   "name": "Трофей: Ослизг",
   "type": "gear",
-  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "img": "icons/commodities/bones/skull-lizard-brown.webp",
   "system": {
    "description": "<p>Вы добавляете +2 к Сотворению заклинаний при использовании заклинаний и знаков, основанных на огне.</p>",
    "quantity": 1,
@@ -7252,7 +7159,7 @@
   "_id": "M1HQs0jlyzvaANZo",
   "name": "Фальшивая монета",
   "type": "gear",
-  "img": "icons/commodities/currency/coin-plain-gold.webp",
+  "img": "icons/commodities/currency/coin-engraved-oval-steel.webp",
   "system": {
    "description": "<p>Стомиость 10 крон за 100 шутк.\n\nПоддельными монетами опасно расплачиваться, но если ты достаточно хитёр или у тебя язык хорошо подвешен, можешь выдать их за настоящее золото. \n\n(Чтобы распознать подделку, требуется проверка Внимания или Торговли со СЛ 15.)</p>",
    "quantity": 1,
@@ -7272,37 +7179,6 @@
   },
   "folder": [
    "Стандартное снаряжение"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "J7JPmodh0E0yhCuz",
-  "name": "Эльфский ввинчивающийся боеприпас",
-  "type": "gear",
-  "img": "icons/skills/ranged/arrow-flying-broadhead-metal.webp",
-  "system": {
-   "description": "<p>- КРОВОПУСКАЮЩЕЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n\nДля извлечения наконечника и остановки кровотечения нужно совершить проверку Первой помощи, СЛ 16.\n\nСкоя’таэли пару лет назад приобрели их у человеческих торговцев и стали активно использовать. Наконечник по форме напоминает винт, из-за чего снаряд буквально ввинчивается в плоть, и вытащить его становится тяжеловато.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 50.0,
-   "availability": "rare",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "bleeding",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -7377,7 +7253,7 @@
   "_id": "bKrT1vcDfSnpw4vF",
   "name": "Кукла для чёрной магии",
   "type": "gear",
-  "img": "icons/commodities/treasure/doll-mummy.webp",
+  "img": "icons/commodities/treasure/doll-voodoo.webp",
   "system": {
    "description": "<p>Наибольшее влияние на вас оказала деревенская ведьма,\nпоказавшая ценность знаний. А также передавшая вам эту куклу, с помощью которой, по ее заверениям, вы сможете отомстить своему обидчику.</p>",
    "quantity": 1,
@@ -7680,37 +7556,6 @@
   },
   "folder": [
    "Стандартное снаряжение"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "gLHIM8EnBuomYNQM",
-  "name": "Стандартный боеприпас",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-simple.webp",
-  "system": {
-   "description": "<p>Хех, если у вас есть оружие, которое метает снаряды, вам нужны снаряды. Стандартные боеприпасы - это, по сути, обычный болт или стрела. Болты обычно меньше стрел, но у них острый металлический наконечник и оперение из перьев.</p>",
-   "quantity": 10,
-   "weight": 0.05,
-   "cost": 1.0,
-   "availability": "everywhere",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -8154,37 +7999,6 @@
   }
  },
  {
-  "_id": "5eLsrMS8VrgyvqGV",
-  "name": "Взрывной боеприпас",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-broadhead-glowing-orange.webp",
-  "system": {
-   "description": "<p>При столкновении с целью наконечник взрывается, нанося 4d6 урона по всем частям тела всем, кто находится в пределах 2 м.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 108.0,
-   "availability": "common",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "Урон по всем частям тела",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
   "_id": "o6HZHt0PwV2Kh4zi",
   "name": "Личный герб (+1 к репутации)",
   "type": "gear",
@@ -8343,7 +8157,7 @@
   "_id": "TboVUOQSzUZ5fGCD",
   "name": "Трофей: Голем",
   "type": "gear",
-  "img": "systems/vedmak/assets/fan/bs/trophy/elemental-trophy.webp",
+  "img": "icons/commodities/treasure/token-runed-circles-grey.webp",
   "system": {
    "description": "<p>Вы невосприимчивы к кровотечению.</p>",
    "quantity": 1,
@@ -8594,7 +8408,7 @@
   "_id": "yX7mucIaQIIjnXm6",
   "name": "Ожерелье с рубином",
   "type": "gear",
-  "img": "icons/equipment/neck/amulet-heart.webp",
+  "img": "icons/equipment/neck/necklace-jeweled-gold-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8721,7 +8535,7 @@
   "_id": "sgo7oRoKCbjX4GrB",
   "name": "Железная обшивка",
   "type": "gear",
-  "img": "icons/commodities/metal/mail-chain-steel.webp",
+  "img": "icons/commodities/metal/plate-steel.webp",
   "system": {
    "description": "<p>+20 ПБ транспортного средства. Данное улучшение не сочетается с укрепленной обшивкой. +100 к весу фургона.</p>",
    "quantity": 1,
@@ -9160,7 +8974,7 @@
   "_id": "1Hhod1IUwN9USs1s",
   "name": "Яблочный сок",
   "type": "gear",
-  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "img": "icons/consumables/drinks/water-jug-clay-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9243,37 +9057,6 @@
   },
   "folder": [
    "Еда и питьё"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "UaYBc3Iila3GxVSc",
-  "name": "Разрушающий болт для скорпио",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-head-war.webp",
-  "system": {
-   "description": "<p>- РАЗРУШАЮЩЕЕ\n[При попадании это оружие наносит 1d6 / 2 урона прочности брони.]</p>",
-   "quantity": 10,
-   "weight": 2.0,
-   "cost": 75.0,
-   "availability": "rare",
-   "concealment": "none",
-   "equipped": false,
-   "source": {
-    "book": "Профессиональные инструменты",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "ablating",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -9473,7 +9256,7 @@
   "_id": "spXhIO1sYBTUwJ1h",
   "name": "Эльфский гэдвх",
   "type": "gear",
-  "img": "icons/environment/settlement/wagon-black.webp",
+  "img": "icons/commodities/tech/wheel-wooden.webp",
   "system": {
    "description": "<p>Количество мест: 3\nКоличество мест для улучшения: 5\nКоличество рабочих мест: 0</p><p>Управление -1, скорость Животные -3, ПЗ 60.</p>",
    "quantity": 1,
@@ -9505,7 +9288,7 @@
   "_id": "oeNK7MEntYccwBxo",
   "name": "Шато де Конрад Каберне",
   "type": "gear",
-  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "img": "icons/consumables/drinks/wine-amphora-clay-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9525,37 +9308,6 @@
   },
   "folder": [
    "Еда и питьё"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "WqVBDqP3191CkCBS",
-  "name": "Боеприпас с широким наконечником",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-simple-brown.webp",
-  "system": {
-   "description": "<p>- КРОВОПУСКАЮЩЕЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать кровотечение. Вероятность кровотечения указана в скобках.]\n\nШирокие наконечники - одни из лучших альтернативных снарядов, которые можно иметь под рукой. Они очень похожи на обычные болты или стрелы, но вместо простого металлического наконечника у них широкий плоский наконечник с лезвием. Хех, они бывают разных форм и размеров: листья, ромбы, v-образные формы и тому подобное, но все они режут глубже, чем обычные стрелы, оставляя кровоточащие раны.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 10.0,
-   "availability": "common",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "bleeding",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -9848,7 +9600,7 @@
   "_id": "J64uFhiOTPmUg1bb",
   "name": "Жареные картофельные дольки",
   "type": "gear",
-  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "img": "icons/consumables/food/bowl-stew-tofu-potato-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9942,7 +9694,7 @@
   "_id": "3Em0TWOvQyBZUB2r",
   "name": "Рыба (сушеная)",
   "type": "gear",
-  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "img": "icons/consumables/food/dried-meat-jerky-fish-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -10182,37 +9934,6 @@
   },
   "folder": [
    "Еда и питьё"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "jrm1CGfFmnXDdiu4",
-  "name": "Краснолюдский пробивной боеприпас",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrows-bodkin-yellow-red.webp",
-  "system": {
-   "description": "<p>- РАЗРУШАЮЩЕЕ\n[При попадании это оружие наносит 1d6 / 2 урона прочности брони.]\n\nПо слухам, мы стали пользоваться такими стрелами и бол-\nтами, чтобы ломать камни в копях, но ныне краснолюдским\nнаёмникам эти наконечники служат для того, чтобы пробивать латные доспехи.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 50.0,
-   "availability": "rare",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "ablating",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -10938,41 +10659,10 @@
   }
  },
  {
-  "_id": "ooygvyzXeBG7PBxW",
-  "name": "Бронебойный боеприпас",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-broadhead-white.webp",
-  "system": {
-   "description": "<p>- ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони, по которой оно попадает.]\n\nТупые болты и наконечники вполне подойдут, если у вашей цели нет брони. Хех, проблема в том, что у большинства людей хватает здравого смысла носить какую-нибудь броню, так что у вас будет уйма времени, чтобы пробиться к ним. Вот тут-то и пригодятся шила. У него длинный заостренный наконечник, закаленный в огне, чтобы пробивать сталь и кожу насквозь.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 15.0,
-   "availability": "common",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "armorPiercing",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
   "_id": "tuuvxGElIRR8q1Vf",
   "name": "Колючая обшивка",
   "type": "gear",
-  "img": "icons/environment/traps/metal-spikes.webp",
+  "img": "icons/equipment/shoulder/shoulderguard-spiked-rough-grey.webp",
   "system": {
    "description": "<p>Персонаж, пытающийся забраться на фургон, должен пройти проверку Атлетики СЛ 16 или получит 3d6 урона по соответствующей части тела и будет вынужден отпустить фургон. +10 к весу фургона.</p>",
    "quantity": 1,
@@ -11035,7 +10725,7 @@
   "_id": "iKA9IEVRAoRlenQL",
   "name": "Военный фургон",
   "type": "gear",
-  "img": "icons/environment/settlement/wagon-black.webp",
+  "img": "icons/commodities/tech/wheel.webp",
   "system": {
    "description": "<p>Занятость: 0\nКоличество мест для улучшения: 4\nКоличество свободных мест: 0</p><p>Управление -2, скорость Животного -5, ПЗ 100.</p>",
    "quantity": 1,
@@ -11244,37 +10934,6 @@
   },
   "folder": [
    "Стандартное снаряжение"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "B9J0t0Oyi9bfXljs",
-  "name": "Выслеживающий боеприпас",
-  "type": "gear",
-  "img": "icons/weapons/ammunition/arrow-broadhead-bent-teal.webp",
-  "system": {
-   "description": "<p>Пока боеприпас остаётся в теле цели, выслеживание по запаху не требует проверок, если следу менее половины суток.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 22.0,
-   "availability": "common",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {
@@ -11523,37 +11182,6 @@
   },
   "folder": [
    "Еда и питьё"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "4ALIuM7iyWnDDvEC",
-  "name": "Разделяющиеся боеприпас",
-  "type": "gear",
-  "img": "icons/skills/ranged/arrows-flying-triple-gray.webp",
-  "system": {
-   "description": "<p>За каждый пункт свыше защиты цели, полученный при броске (максимум 3), вы наносите полный урон от оружия в случайную часть тела.</p>",
-   "quantity": 10,
-   "weight": 0.1,
-   "cost": 54.0,
-   "availability": "common",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Корник",
-    "page": ""
-   },
-   "category": "ammo",
-   "effect": "За каждый пункт свыше защиты цели, полученный при броске (максимум 3), вы наносите полный урон от оружия в случайную часть тела.",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Прочее"
   ],
   "flags": {
    "vedmak": {

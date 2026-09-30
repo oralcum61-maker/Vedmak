@@ -19,6 +19,7 @@ import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
 import { alchemyAuto } from "../config/alchemy-auto.mjs";
 import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
+import { inCombat, roundsAsTime } from "../util.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -142,7 +143,10 @@ export async function drink(actor, item) {
     };
     if (minutes) effect.duration = { value: minutes, units: "minutes" };
     if (rounds || regen || auto.regen !== undefined) {
-      effect.flags.vedmak.timed = { rounds: rounds || 0, key: "alchemy" };
+      // Вне боя раунды не отсчитываются — срок ставится временем мира; регенерация идёт, если начнётся бой
+      const combat = inCombat(actor);
+      if (rounds && !combat && !minutes) effect.duration = roundsAsTime(rounds);
+      effect.flags.vedmak.timed = { rounds: combat ? rounds || 0 : 0, key: "alchemy" };
       effect.flags.vedmak.regen = regen;
     }
     const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);

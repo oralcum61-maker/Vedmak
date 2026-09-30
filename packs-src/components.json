@@ -6166,7 +6166,7 @@
   "_id": "iDel7rbi97rQU7x5",
   "name": "Слезы суккуба",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6201,7 +6201,7 @@
   "_id": "yDLrWBfuENNjBlvP",
   "name": "Коготь жагницы",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "img": "icons/commodities/claws/claw-insect-grey-purple.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6343,7 +6343,7 @@
   "_id": "RDKgiJafjELnjJkC",
   "name": "Костный мозг вигилозавра",
   "type": "component",
-  "img": "icons/commodities/materials/material-plant-green.webp",
+  "img": "icons/commodities/bones/bone-broken-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6379,7 +6379,7 @@
   "_id": "dUNLgH667P3FNVLB",
   "name": "Мясо жиритвы",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/vocal-cords-siren.webp",
+  "img": "icons/consumables/meat/steak-alien-pink.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6415,7 +6415,7 @@
   "_id": "x0yFVYByE6kLMy6o",
   "name": "Костный мозг яги",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "img": "icons/commodities/bones/bones-broken-marrow-white-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6451,7 +6451,7 @@
   "_id": "ZmXc3JuMDhXAsOtf",
   "name": "Шип гравейра",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "img": "icons/commodities/bones/horn-jagged-grey.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6595,7 +6595,7 @@
   "_id": "tAzEn1oV4IDF1CxC",
   "name": "Когти гончей дикой охоты",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "img": "icons/commodities/claws/talon-blue.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6702,7 +6702,7 @@
   "_id": "Q7Ix9XtkKbSwQ9F2",
   "name": "Ноготь Скрытого",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "img": "icons/commodities/claws/talon-black.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6738,7 +6738,7 @@
   "_id": "SinnDImINbgSNVqe",
   "name": "Рог сильвана",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "img": "icons/commodities/bones/horn-curved-worn-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6844,7 +6844,7 @@
   "_id": "s9ukfo1tM5ET8xEG",
   "name": "Костный мозг гравейра",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "img": "icons/commodities/bones/bone-broken-grey-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -6986,7 +6986,7 @@
   "_id": "h3RkzXPMoXodOwZ3",
   "name": "Безоар из черта",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/heart-gargoyle.webp",
+  "img": "icons/commodities/stone/geode-raw-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7057,7 +7057,7 @@
   "_id": "MCjWzvanRJ4vcFsy",
   "name": "Рог единорога",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/tooth-hag.webp",
+  "img": "icons/commodities/bones/horn-twisted-beige.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7307,7 +7307,7 @@
   "_id": "3vIgAg2gz2Tamtn5",
   "name": "Выделения кикиморы",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/saliva-vampire.webp",
+  "img": "icons/consumables/potions/potion-jar-capped-teal.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7343,7 +7343,7 @@
   "_id": "EMVJNqGjuNaEX1Gh",
   "name": "Яйцо дракопахи",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/egg-gryphon.webp",
+  "img": "icons/consumables/eggs/egg-speckled-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7699,7 +7699,7 @@
   "_id": "fABk7XGqiQb5ac6b",
   "name": "Рог диавола",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "img": "icons/commodities/bones/horn-curved-black.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7734,7 +7734,7 @@
   "_id": "zBnnl6H4I1Y7o8A5",
   "name": "Слюна пятнистого вихта",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "img": "icons/consumables/potions/vial-cork-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7806,7 +7806,7 @@
   "_id": "bvx1toAt7NlwrXNL",
   "name": "Клыки веспертыля",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/tooth-nekker.webp",
+  "img": "icons/commodities/bones/tooth-canine-white.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -7986,7 +7986,7 @@
   "_id": "CC3QwBfv0g9wYugZ",
   "name": "Глаз арахноморфа",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/eye-necrophage.webp",
+  "img": "icons/creatures/eyes/slime-cluster-green.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8093,7 +8093,7 @@
   "_id": "Hl7q5SfDfAMgcKG4",
   "name": "Мясо щуки",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/plate-wyvern.webp",
+  "img": "icons/consumables/meat/fillet-fish-pink-silver-gray.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8129,7 +8129,7 @@
   "_id": "wDNd6GFdz03027dl",
   "name": "Шип цеметавра",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/fang-vampire.webp",
+  "img": "icons/commodities/bones/horn-jagged-grey-blue.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8201,7 +8201,7 @@
   "_id": "TpHnxdT3Ta80tnFx",
   "name": "Кровь паршивца",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/blood-rotfiend.webp",
+  "img": "icons/consumables/potions/potion-flask-corked-shiny-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8487,7 +8487,7 @@
   "_id": "yX1Hsf8NTwXL4Cdr",
   "name": "Мясо гиппокампа",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/plate-wyvern.webp",
+  "img": "icons/consumables/meat/fish-tail-cut-teal-purple.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8523,7 +8523,7 @@
   "_id": "fUGGd85EoVuG9csx",
   "name": "Костный мозг гончей дикой охоты",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/bone-marrow-alghoul.webp",
+  "img": "icons/commodities/bones/bone-broken-grey.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8559,7 +8559,7 @@
   "_id": "C24SubApZTkZqkZM",
   "name": "Глаза кейрана",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/eye-tentadrake.webp",
+  "img": "icons/commodities/biological/eye-tentacle-green-orange.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8595,7 +8595,7 @@
   "_id": "KGTdUG2Zwa6Kz9gz",
   "name": "Копыто сильвана",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/heart-monstrous.webp",
+  "img": "icons/commodities/bones/hooves-cloven-brown.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8738,7 +8738,7 @@
   "_id": "GgBXXJkAkot8Sz9f",
   "name": "Жало гигаскорпиона",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/tooth-hag.webp",
+  "img": "icons/commodities/biological/stinger-insect-yellow.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8810,7 +8810,7 @@
   "_id": "aZAm8CK5RQX97BSo",
   "name": "Глаз Дагона",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/eye-cyclops.webp",
+  "img": "icons/creatures/eyes/void-single-black-purple.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -8916,7 +8916,7 @@
   "_id": "vYkuPHcivBIIKbMo",
   "name": "Голосовые связки ослизга",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/vocal-cords-siren.webp",
+  "img": "icons/commodities/biological/tongue-violet.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9129,7 +9129,7 @@
   "_id": "586S4d77FlPcpwOy",
   "name": "Слюна вихта",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/saliva-vampire.webp",
+  "img": "icons/consumables/potions/potion-vial-tube-yellow.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9165,7 +9165,7 @@
   "_id": "rKhkDsOvxk9iJNEc",
   "name": "Когти химеры",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/claw-monstrous.webp",
+  "img": "icons/commodities/claws/claw-spiked-gold.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9340,7 +9340,7 @@
   "_id": "7p8gyBjhxgZ5Op0J",
   "name": "Слюна берсерка",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/saliva-monstrous.webp",
+  "img": "icons/consumables/potions/vial-cork-red.webp",
   "system": {
    "description": "",
    "quantity": 1,
@@ -9411,7 +9411,7 @@
   "_id": "1by8NfJFDMsLTLdT",
   "name": "Кровь пиявки",
   "type": "component",
-  "img": "systems/vedmak/assets/fan/bs/substance/blood-rotfiend-greater.webp",
+  "img": "icons/consumables/potions/potion-tube-corked-red.webp",
   "system": {
    "description": "",
    "quantity": 1,

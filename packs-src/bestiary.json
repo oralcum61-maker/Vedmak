@@ -340,9 +340,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -753,7 +751,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -1214,9 +1212,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -3386,9 +3382,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -4144,9 +4138,7 @@
     "poison",
     "slashing"
    ],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "2.1 метра",
@@ -4758,9 +4750,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий",
@@ -9028,9 +9018,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -9505,7 +9493,7 @@
    "bounty": 20,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -10016,9 +10004,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -10433,7 +10419,7 @@
    "bounty": 10,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -10899,9 +10885,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -11858,7 +11842,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -12920,9 +12904,7 @@
     "poison",
     "slashing"
    ],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "2.1 метра",
@@ -13593,9 +13575,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -14163,9 +14143,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -14941,9 +14919,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -15357,9 +15333,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -16120,9 +16094,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -17318,9 +17290,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -18001,9 +17971,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -18302,59 +18270,58 @@
     "_id": "x3xa7PPCX0WBISFk"
    },
    {
-    "name": "Сон дракона",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/zerricanian-sun.webp",
+    "name": "«Сон дракона»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dragons-dream.webp",
     "system": {
-     "description": "<p>Радиус - 8 м\n\nСоздаёт облако горючего газа, которое распространяется в случайном направлении на 3 хода, а после рассеивается. При появлении в этом облаке любого источника пламени газ взрывается. Все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Создаёт облако горючего газа, которое 3 хода расползается в случайном направлении, а затем рассеивается. При появлении в облаке любого источника пламени газ взрывается: все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 177.0,
+     "weight": 1,
+     "cost": 177,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "5d6",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Создаёт облако горючего газа, которое 3 хода расползается в случайном направлении, а затем рассеивается. При появлении в облаке любого источника пламени газ взрывается: все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "8 м",
+      "range": "Тел×4 м",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "75%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.MHmhQTiboihZmKKN"
+      "sourceId": "Compendium.vedmak.alchemy.Item.ShqMs4Dn9Y01WjLt"
      }
     },
-    "_id": "DhjLF5EtwX16SO30"
+    "_id": "x2jgBSjB1cV6w6Et"
    },
    {
     "name": "Игни",
@@ -18889,59 +18856,58 @@
     "_id": "Z2GENd9qJH03pa9y"
    },
    {
-    "name": "Картечь",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "name": "«Картечь»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (25%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 159.0,
+     "weight": 1,
+     "cost": 159,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "7d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (25%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "7d6",
+      "damageType": "piercing",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 25,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "25%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+      "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "xTtR2aBpGQAC1qvF"
+    "_id": "0yAPVad6oWP6dUvd"
    },
    {
     "name": "Супирре",
@@ -19169,53 +19135,58 @@
     "_id": "Wj5i0qr11zDlovXI"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "xV22hFNuofqjem9E"
+    "_id": "cPnUpJvrcOW2X5gG"
    },
    {
     "name": "Масло против трупоедов",
@@ -19999,9 +19970,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -21916,9 +21885,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -22851,9 +22818,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -23627,7 +23592,7 @@
    "bounty": 20,
    "armor": 10,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -24154,9 +24119,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -25160,53 +25123,58 @@
     "_id": "Ce4XIyZtBVU8BX55"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "72HI6P2Q1OSR13qN"
+    "_id": "8UggZxMSDjcATW6v"
    },
    {
     "name": "Активный щит",
@@ -25989,7 +25957,7 @@
    "bounty": 100,
    "armor": 10,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -27077,9 +27045,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -27528,7 +27494,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -28427,7 +28393,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
@@ -29492,7 +29458,7 @@
    "bounty": 30,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -30143,9 +30109,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -30559,9 +30523,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -30976,9 +30938,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -32089,7 +32049,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -32639,7 +32599,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -33740,9 +33700,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -35142,7 +35100,7 @@
    "bounty": 1500,
    "armor": 5,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -36702,9 +36660,7 @@
     "poison",
     "slashing"
    ],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "2.1 метра",
@@ -37948,9 +37904,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -38695,9 +38649,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий",
@@ -40386,9 +40338,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -41223,59 +41173,58 @@
     "_id": "pCSBOACrul2i47XQ"
    },
    {
-    "name": "Картечь",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "name": "«Картечь»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (25%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 159.0,
+     "weight": 1,
+     "cost": 159,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "7d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (25%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "7d6",
+      "damageType": "piercing",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 25,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "25%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+      "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "IFyfE5cPm7Kk40BA"
+    "_id": "CU7CAp1N42gTvA0K"
    },
    {
     "name": "Боеприпасы с широким наконечником",
@@ -41360,53 +41309,58 @@
     "_id": "i2rVaqMUGb6kHjtG"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "QnojOBfiPZuFdLix"
+    "_id": "saFNqmPVfIHzkO07"
    },
    {
     "name": "«Полнолуние»",
@@ -42755,9 +42709,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -43501,9 +43453,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -43762,59 +43712,58 @@
     "_id": "L14Oj9uh0SAJNf0d"
    },
    {
-    "name": "Северный ветер",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/northern-wind-bomb.webp",
+    "name": "«Северный ветер»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-northern-wind.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе существа, попавшие в зону действия этой бомбы, замораживаются на месте до тех пор, пока не пройдут проверку Силы со СЛ 18, пока по ним не нанесут удар или пока не пройдёт 8 раундов. Атака по замороженной цели наносит ей дополнительно 2d6 урона.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне замораживаются, пока не пройдут проверку Силы со СЛ 18, пока по ним не ударят или не пройдёт 8 раундов. Атака по замороженной цели наносит ей ещё 2d6 урона.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 177.0,
+     "weight": 1,
+     "cost": 177,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне замораживаются, пока не пройдут проверку Силы со СЛ 18, пока по ним не ударят или не пройдёт 8 раундов. Атака по замороженной цели наносит ей ещё 2d6 урона.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "frozen",
+      "statusChance": 100,
+      "statusRounds": "8",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "freeze",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.YVeD2ZC8SxydaHMN"
+      "sourceId": "Compendium.vedmak.alchemy.Item.ZYcPZdewk0iXqMuH"
      }
     },
-    "_id": "vLUA1dcUVU1k164g"
+    "_id": "Oxdij5sGSGNWtQ6b"
    },
    {
     "name": "Аард",
@@ -44064,59 +44013,58 @@
     "_id": "y5P4jsmaYO2Gc5TS"
    },
    {
-    "name": "Танцующая звезда",
-    "type": "weapon",
-    "img": "icons/weapons/swords/sword-guard-worn-purple.webp",
+    "name": "«Танцующая звезда»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dancing-star.webp",
     "system": {
-     "description": "<p>Раудиус - 4 м\n\n- ГОРЕНИЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (100%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 162.0,
+     "weight": 1,
+     "cost": 162,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "5d6",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (100%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "5d6",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.vNqAwStI7zgfouzD"
+      "sourceId": "Compendium.vedmak.alchemy.Item.JpdFfNmAAalx2U7N"
      }
     },
-    "_id": "tUsVwYS4XFr66gSO"
+    "_id": "6sE6FEKOp69B5PBs"
    },
    {
     "name": "Атака щитом школы мантикоры",
@@ -44514,53 +44462,58 @@
     "_id": "YhXeMfZ9xciaW6qe"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "yqIjqO6r84ywSIX9"
+    "_id": "ZyTuMMEDjpQUlngF"
    },
    {
     "name": "Активный щит",
@@ -45403,9 +45356,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -45816,7 +45767,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -46239,7 +46190,7 @@
    "bounty": 20,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -46799,9 +46750,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -47211,7 +47160,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -47773,7 +47722,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -48234,9 +48183,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -48900,7 +48847,7 @@
    "bounty": 1500,
    "armor": 5,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -50095,9 +50042,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -50512,9 +50457,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -51276,9 +51219,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -51820,9 +51761,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -52709,7 +52648,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -54327,9 +54266,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -55090,9 +55027,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -55840,7 +55775,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -56306,9 +56241,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -56717,9 +56650,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -57168,7 +57099,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -58432,9 +58363,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -58908,9 +58837,7 @@
     "poison",
     "slashing"
    ],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "2.1 метра",
@@ -60284,9 +60211,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -60710,9 +60635,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -61123,7 +61046,7 @@
    "bounty": 600,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -61626,9 +61549,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -62038,7 +61959,7 @@
    "bounty": 15,
    "armor": 3,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [
@@ -62569,9 +62490,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -63938,9 +63857,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -64885,9 +64802,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий",
@@ -67890,7 +67805,7 @@
    "bounty": 2000,
    "armor": 30,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "huge",
    "materialWeakness": "auto",
    "resistances": [
@@ -68414,9 +68329,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -69949,9 +69862,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -70361,7 +70272,7 @@
    "bounty": 1000,
    "armor": 20,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [
@@ -70919,9 +70830,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -71401,9 +71310,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -72164,9 +72071,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -72577,7 +72482,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -73137,9 +73042,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -73558,9 +73461,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -74084,9 +73985,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -74671,9 +74570,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -76301,9 +76198,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -76718,9 +76613,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -77394,9 +77287,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -77815,49 +77706,54 @@
    },
    {
     "name": "Двимеритовая бомба",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/dimeritium-bomb.webp",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dimeritium.webp",
     "system": {
-     "description": "<p>Радиус - 8 м\n\nНе позволяет использовать магию в зоне действия в течение 20 раундов.</p>",
+     "description": "<p>Не позволяет использовать магию в зоне действия в течение 20 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 264.0,
+     "weight": 1,
+     "cost": 264,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Не позволяет использовать магию в зоне действия в течение 20 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "8 м",
+      "range": "Тел×4 м",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.KlFxUditQ6sR73Ew"
+      "sourceId": "Compendium.vedmak.alchemy.Item.5UPRxxSlKo0t0yZm"
      }
     },
     "_id": "STxJyZ6AxKrtQoYz"
@@ -78419,53 +78315,58 @@
     "_id": "MvyGV9ZUXZiJwFLn"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "gqQn8CVIO1P6szWe"
+    "_id": "NXS9sPU5JzPWFPJd"
    },
    {
     "name": "Серебряный боеприпас",
@@ -79296,9 +79197,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -80617,7 +80516,7 @@
    "bounty": 600,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -81219,9 +81118,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -82239,9 +82136,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -84254,9 +84149,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -84321,9 +84214,9 @@
      "uuid": "Compendium.vedmak.generators.RollTable.2Z4Goh3pckdLWZwZ"
     },
     {
-     "name": "Стабилизирующее стремя",
+     "name": "Балансировочное стремя",
      "quantity": "1",
-     "uuid": ""
+     "uuid": "Compendium.vedmak.enhancements.Item.VuOtiIYdWb8daMQi"
     },
     {
      "name": "Скеллигское стремя",
@@ -85492,9 +85385,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -87864,9 +87755,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -88341,9 +88230,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -89522,9 +89409,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -90628,9 +90513,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -91375,9 +91258,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Средний человеческий",
@@ -92496,9 +92377,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -92947,9 +92826,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -93369,9 +93246,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -93680,59 +93555,58 @@
     "_id": "V81YRLWBrQImoMam"
    },
    {
-    "name": "Сон дракона",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/zerricanian-sun.webp",
+    "name": "«Сон дракона»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dragons-dream.webp",
     "system": {
-     "description": "<p>Радиус - 8 м\n\nСоздаёт облако горючего газа, которое распространяется в случайном направлении на 3 хода, а после рассеивается. При появлении в этом облаке любого источника пламени газ взрывается. Все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Создаёт облако горючего газа, которое 3 хода расползается в случайном направлении, а затем рассеивается. При появлении в облаке любого источника пламени газ взрывается: все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 177.0,
+     "weight": 1,
+     "cost": 177,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "5d6",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Создаёт облако горючего газа, которое 3 хода расползается в случайном направлении, а затем рассеивается. При появлении в облаке любого источника пламени газ взрывается: все в зоне взрыва получают по 5d6 урона с вероятностью горения 75%.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "8 м",
+      "range": "Тел×4 м",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "75%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.MHmhQTiboihZmKKN"
+      "sourceId": "Compendium.vedmak.alchemy.Item.ShqMs4Dn9Y01WjLt"
      }
     },
-    "_id": "crJ6wXMjNrppNk8B"
+    "_id": "sVGHuYUP10ToSJKf"
    },
    {
     "name": "Игни",
@@ -94267,59 +94141,58 @@
     "_id": "eRIKzj1blcdaR3Ck"
    },
    {
-    "name": "Картечь",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "name": "«Картечь»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (25%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 159.0,
+     "weight": 1,
+     "cost": 159,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "7d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (25%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "7d6",
+      "damageType": "piercing",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 25,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "25%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+      "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "BK57sujxcToCCgah"
+    "_id": "zEj5M0bscqPEI4Zj"
    },
    {
     "name": "Супирре",
@@ -94547,53 +94420,58 @@
     "_id": "Zl3z7BePiGsreYNi"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "jg7lOe7SKwsragRV"
+    "_id": "trdUoDQ2U2J9i8FY"
    },
    {
     "name": "Масло против трупоедов",
@@ -95378,9 +95256,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий",
@@ -96932,9 +96808,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -97691,9 +97565,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -99337,9 +99209,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -100018,9 +99888,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -101273,7 +101141,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -101741,7 +101609,7 @@
    "bounty": 450,
    "armor": 10,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [
@@ -102325,7 +102193,7 @@
    "bounty": 5000,
    "armor": 25,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "huge",
    "materialWeakness": "auto",
    "resistances": [],
@@ -103011,9 +102879,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -103774,9 +103640,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -104186,7 +104050,7 @@
    "bounty": 50,
    "armor": 5,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -105357,7 +105221,7 @@
    "bounty": 30,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -106008,9 +105872,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -107009,7 +106871,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -107475,9 +107337,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -108221,9 +108081,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -108633,7 +108491,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -109611,9 +109469,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -109882,59 +109738,58 @@
     "_id": "0vSNxu2Ufy1gakMK"
    },
    {
-    "name": "Северный ветер",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/northern-wind-bomb.webp",
+    "name": "«Северный ветер»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-northern-wind.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе существа, попавшие в зону действия этой бомбы, замораживаются на месте до тех пор, пока не пройдут проверку Силы со СЛ 18, пока по ним не нанесут удар или пока не пройдёт 8 раундов. Атака по замороженной цели наносит ей дополнительно 2d6 урона.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне замораживаются, пока не пройдут проверку Силы со СЛ 18, пока по ним не ударят или не пройдёт 8 раундов. Атака по замороженной цели наносит ей ещё 2d6 урона.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 177.0,
+     "weight": 1,
+     "cost": 177,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне замораживаются, пока не пройдут проверку Силы со СЛ 18, пока по ним не ударят или не пройдёт 8 раундов. Атака по замороженной цели наносит ей ещё 2d6 урона.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "frozen",
+      "statusChance": 100,
+      "statusRounds": "8",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "freeze",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.YVeD2ZC8SxydaHMN"
+      "sourceId": "Compendium.vedmak.alchemy.Item.ZYcPZdewk0iXqMuH"
      }
     },
-    "_id": "qbt290VyI5Nj4Qyx"
+    "_id": "Vn75hqQ5RrpmeMJY"
    },
    {
     "name": "Аард",
@@ -110184,59 +110039,58 @@
     "_id": "YrMfpwnRcYPTp05d"
    },
    {
-    "name": "Танцующая звезда",
-    "type": "weapon",
-    "img": "icons/weapons/swords/sword-guard-worn-purple.webp",
+    "name": "«Танцующая звезда»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dancing-star.webp",
     "system": {
-     "description": "<p>Раудиус - 4 м\n\n- ГОРЕНИЕ (100 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (100%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 162.0,
+     "weight": 1,
+     "cost": 162,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "5d6",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (100%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "5d6",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.vNqAwStI7zgfouzD"
+      "sourceId": "Compendium.vedmak.alchemy.Item.JpdFfNmAAalx2U7N"
      }
     },
-    "_id": "PEOUiZ8WFORGhT6C"
+    "_id": "oDn4pW2MYch72pm2"
    },
    {
     "name": "Атака щитом школы мантикоры",
@@ -110634,53 +110488,58 @@
     "_id": "Lppc5SbWu0MCoHb7"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "zQ58hVyKdBxeQZiM"
+    "_id": "Qhme6mg9LXc4dbTL"
    },
    {
     "name": "Активный щит",
@@ -111524,9 +111383,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -112212,9 +112069,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -112633,9 +112488,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -113054,9 +112907,7 @@
     "poison",
     "slashing"
    ],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Средний человеческий",
@@ -113608,9 +113459,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -115011,7 +114860,7 @@
    "bounty": 1500,
    "armor": 5,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -115505,9 +115354,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -116749,7 +116596,7 @@
    "bounty": 10,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -117638,7 +117485,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -118099,9 +117946,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -119077,9 +118922,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -119261,59 +119104,58 @@
     "_id": "OayO88cZ7u5r9YoH"
    },
    {
-    "name": "Чертов гриб",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/devil-s-puffball-bomb.webp",
+    "name": "«Чёртов гриб»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-devils-puffball.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ОТРАВЛЯЮЩЕЕ (100 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]\n«Чертов гриб» наносит двойной урон от яда.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Отравление (100%). «Чёртов гриб» наносит двойной урон от яда.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 138.0,
+     "weight": 1,
+     "cost": 138,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Отравление (100%). «Чёртов гриб» наносит двойной урон от яда.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "poisoned",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "poison",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.5VJ3jVhqZ0lAbgHz"
+      "sourceId": "Compendium.vedmak.alchemy.Item.E57KwUpW04mY7cvF"
      }
     },
-    "_id": "kl6beKLLPpH9ur6o"
+    "_id": "nqHBxalqGB8poGbu"
    },
    {
     "name": "Яд повешенного",
@@ -119939,59 +119781,58 @@
     "_id": "SstiV6KHLW9jQY7q"
    },
    {
-    "name": "Картечь",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "name": "«Картечь»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (25%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 159.0,
+     "weight": 1,
+     "cost": 159,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "7d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (25%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "7d6",
+      "damageType": "piercing",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 25,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "25%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+      "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "0d1GCbCHBeIz2QAs"
+    "_id": "26juD8DhGaMBThiC"
    },
    {
     "name": "«Ласточка»",
@@ -120287,53 +120128,58 @@
     "_id": "JJdomTpD0NckDmS3"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "0TOuVmRNvc470OQE"
+    "_id": "QyQBwn0oLjJXjsVc"
    },
    {
     "name": "Сметающий Аард",
@@ -121005,7 +120851,7 @@
    "bounty": 1500,
    "armor": 5,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -121504,9 +121350,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -122254,9 +122098,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -122798,9 +122640,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -124078,9 +123918,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -124925,59 +124763,58 @@
     "_id": "1vq6Zxjq0bu6RJwG"
    },
    {
-    "name": "Картечь",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "name": "«Картечь»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (25%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 159.0,
+     "weight": 1,
+     "cost": 159,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "7d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (25%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "7d6",
+      "damageType": "piercing",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 25,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "25%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+      "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "KZidYHmrppnE4z0b"
+    "_id": "SHYBE4oHgxToqNkx"
    },
    {
     "name": "Боеприпасы с широким наконечником",
@@ -125062,53 +124899,58 @@
     "_id": "iBYqfbjphdqeveVH"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "JQbEnFhEwAhZfTug"
+    "_id": "i3If6LGQhy942Ljf"
    },
    {
     "name": "«Полнолуние»",
@@ -125985,9 +125827,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -126029,55 +125869,54 @@
   "items": [
    {
     "name": "Солнце Зеррикании",
-    "type": "weapon",
+    "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-bomb-virus.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nЛюбое способное видеть существо, попавшее в радиус\nдействия бомбы, ослепляется на 5 раундов. Любое существо с ночным зрением, попавшее в радиус действия бомбы, ослепляется на 10 раундов и ошеломлено. Любое существо с Улучшенным ночным зрением ослепляется на 10 раундов и дезориентировано.</p><p>Ослепление. Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Зерриканская вспышка, которую в поле видно за мили.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 120.0,
+     "weight": 1,
+     "cost": 120,
      "availability": "rare",
      "concealment": "small",
      "equipped": true,
      "source": {
       "book": "Профессиональные инструменты",
-      "page": ""
+      "page": "8"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "slashing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Всякое зрячее существо в радиусе слепнет на 5 раундов. Существо с ночным зрением слепнет на 10 раундов и получает ошеломление; с улучшенным ночным зрением — слепнет на 10 раундов и получает дезориентацию.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "5",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "staggering",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.sqgZ4xKTkDt4afpW"
+      "sourceId": "Compendium.vedmak.alchemy.Item.oP80OMqxLJ6QOzoW"
      }
     },
     "_id": "Eqr23LKftCXysglo"
@@ -126810,7 +126649,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -127283,9 +127122,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -127694,9 +127531,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -128238,9 +128073,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -128826,7 +128659,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -129938,9 +129771,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -130704,7 +130535,7 @@
    "bounty": 30,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -131365,9 +131196,7 @@
     "poison",
     "slashing"
    ],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Средний человеческий",
@@ -132451,9 +132280,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -133467,53 +133294,58 @@
     "_id": "PiLqFORxivVVT4QC"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "gOR8E6vwSj4cc3t2"
+    "_id": "9whdT25KspUtQB3W"
    },
    {
     "name": "Активный щит",
@@ -134704,9 +134536,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -135380,9 +135210,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -135798,7 +135626,7 @@
    "bounty": 450,
    "armor": 14,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [
@@ -136388,9 +136216,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -137798,7 +137624,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -138264,9 +138090,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -138755,9 +138579,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -139670,9 +139492,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -140353,9 +140173,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -140770,9 +140588,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -141186,9 +141002,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -141230,55 +141044,54 @@
   "items": [
    {
     "name": "Солнце Зеррикании",
-    "type": "weapon",
+    "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-bomb-virus.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nЛюбое способное видеть существо, попавшее в радиус\nдействия бомбы, ослепляется на 5 раундов. Любое существо с ночным зрением, попавшее в радиус действия бомбы, ослепляется на 10 раундов и ошеломлено. Любое существо с Улучшенным ночным зрением ослепляется на 10 раундов и дезориентировано.</p><p>Ослепление. Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Зерриканская вспышка, которую в поле видно за мили.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 120.0,
+     "weight": 1,
+     "cost": 120,
      "availability": "rare",
      "concealment": "small",
      "equipped": true,
      "source": {
       "book": "Профессиональные инструменты",
-      "page": ""
+      "page": "8"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "slashing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Всякое зрячее существо в радиусе слепнет на 5 раундов. Существо с ночным зрением слепнет на 10 раундов и получает ошеломление; с улучшенным ночным зрением — слепнет на 10 раундов и получает дезориентацию.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "5",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "staggering",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.sqgZ4xKTkDt4afpW"
+      "sourceId": "Compendium.vedmak.alchemy.Item.oP80OMqxLJ6QOzoW"
      }
     },
     "_id": "mOrtJl628HFMtG5l"
@@ -143130,7 +142943,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -143592,7 +143405,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -144059,9 +143872,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -144812,9 +144623,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -145420,7 +145229,7 @@
    "bounty": 0,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
@@ -145904,7 +145713,7 @@
    "bounty": 800,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [
@@ -146469,9 +146278,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -147216,9 +147023,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -147265,55 +147070,54 @@
   "items": [
    {
     "name": "Солнце Зеррикании",
-    "type": "weapon",
+    "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-bomb-virus.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nЛюбое способное видеть существо, попавшее в радиус\nдействия бомбы, ослепляется на 5 раундов. Любое существо с ночным зрением, попавшее в радиус действия бомбы, ослепляется на 10 раундов и ошеломлено. Любое существо с Улучшенным ночным зрением ослепляется на 10 раундов и дезориентировано.</p><p>Ослепление. Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Зерриканская вспышка, которую в поле видно за мили.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 120.0,
+     "weight": 1,
+     "cost": 120,
      "availability": "rare",
      "concealment": "small",
      "equipped": true,
      "source": {
       "book": "Профессиональные инструменты",
-      "page": ""
+      "page": "8"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "slashing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Всякое зрячее существо в радиусе слепнет на 5 раундов. Существо с ночным зрением слепнет на 10 раундов и получает ошеломление; с улучшенным ночным зрением — слепнет на 10 раундов и получает дезориентацию.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "5",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "staggering",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.sqgZ4xKTkDt4afpW"
+      "sourceId": "Compendium.vedmak.alchemy.Item.oP80OMqxLJ6QOzoW"
      }
     },
     "_id": "ZVuDHdKIsAFjgFFW"
@@ -147992,7 +147796,7 @@
    "bounty": 40,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -148519,9 +148323,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -150301,9 +150103,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -150982,9 +150782,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий",
@@ -152878,9 +152676,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -153530,7 +153326,7 @@
    "bounty": 30,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -154061,7 +153857,7 @@
    "bounty": 20,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -154588,9 +154384,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -156016,7 +155810,7 @@
    "bounty": 150,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "huge",
    "materialWeakness": "auto",
    "resistances": [],
@@ -156479,9 +156273,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -157225,9 +157017,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -158264,9 +158054,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -158676,7 +158464,7 @@
    "bounty": 50,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
@@ -159145,7 +158933,7 @@
    "bounty": 500,
    "armor": 20,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [
@@ -159803,9 +159591,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Средний человеческий",
@@ -160936,9 +160722,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -161368,9 +161152,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -162639,9 +162421,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -163745,9 +163525,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -165479,9 +165257,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -165975,9 +165751,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -166734,9 +166508,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -168050,9 +167822,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -168524,7 +168294,7 @@
    "bounty": 700,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [
@@ -169173,9 +168943,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -169851,7 +169619,7 @@
    "bounty": 30,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -170378,9 +170146,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -170870,7 +170636,7 @@
    "bounty": 1000,
    "armor": 20,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "large",
    "materialWeakness": "auto",
    "resistances": [
@@ -171359,9 +171125,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",
@@ -172172,9 +171936,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -172366,59 +172128,58 @@
     "_id": "yrzXanBzkqPCyW2v"
    },
    {
-    "name": "Чертов гриб",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/devil-s-puffball-bomb.webp",
+    "name": "«Чёртов гриб»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-devils-puffball.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ОТРАВЛЯЮЩЕЕ (100 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]\n«Чертов гриб» наносит двойной урон от яда.</p><p>Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Отравление (100%). «Чёртов гриб» наносит двойной урон от яда.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 138.0,
+     "weight": 1,
+     "cost": 138,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Отравление (100%). «Чёртов гриб» наносит двойной урон от яда.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "poisoned",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "poison",
-       "value": "100%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.5VJ3jVhqZ0lAbgHz"
+      "sourceId": "Compendium.vedmak.alchemy.Item.E57KwUpW04mY7cvF"
      }
     },
-    "_id": "yb8ueKeYKbAQvbRv"
+    "_id": "6n0GI6yzjsKK3tXE"
    },
    {
     "name": "Яд повешенного",
@@ -173044,59 +172805,58 @@
     "_id": "rvEqcG1AcfZk2eu2"
    },
    {
-    "name": "Картечь",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/grapeshot-bomb.webp",
+    "name": "«Картечь»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-grapeshot.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\n- ГОРЕНИЕ (25 %)\n[Если это оружие наносит урон цели, с определенной вероятностью оно может поджечь цель. Вероятность горения указана в скобках.]</p><p>Урон по всем частям тела.</p>",
+     "description": "<p>Горение (25%).</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 159.0,
+     "weight": 1,
+     "cost": 159,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "7d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Горение (25%).",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "7d6",
+      "damageType": "piercing",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "burning",
+      "statusChance": 25,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "burning",
-       "value": "25%",
-       "source": ""
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.XAezEzfAxtFxpj9H"
+      "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "99uIT2N3CzReHOX9"
+    "_id": "msH4xr8eP3OYr8Jt"
    },
    {
     "name": "«Ласточка»",
@@ -173392,53 +173152,58 @@
     "_id": "Yh6sYI3tb9tPdu4c"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "Nju9kCK6L7MiMT4i"
+    "_id": "UNisYpvbQF7aHxbJ"
    },
    {
     "name": "Сметающий Аард",
@@ -174115,9 +173880,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -174597,9 +174360,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -174684,9 +174445,9 @@
    ],
    "loot": [
     {
-     "name": "Стабилизирующее стремя",
+     "name": "Балансировочное стремя",
      "quantity": "1",
-     "uuid": ""
+     "uuid": "Compendium.vedmak.enhancements.Item.VuOtiIYdWb8daMQi"
     },
     {
      "name": "Чертеж - Новичок",
@@ -176878,9 +176639,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -177294,9 +177053,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -178042,9 +177799,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -178473,49 +178228,54 @@
    },
    {
     "name": "Двимеритовая бомба",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/dimeritium-bomb.webp",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-dimeritium.webp",
     "system": {
-     "description": "<p>Радиус - 8 м\n\nНе позволяет использовать магию в зоне действия в течение 20 раундов.</p>",
+     "description": "<p>Не позволяет использовать магию в зоне действия в течение 20 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 264.0,
+     "weight": 1,
+     "cost": 264,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "elemental"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Не позволяет использовать магию в зоне действия в течение 20 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "8 м",
+      "range": "Тел×4 м",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.KlFxUditQ6sR73Ew"
+      "sourceId": "Compendium.vedmak.alchemy.Item.5UPRxxSlKo0t0yZm"
      }
     },
     "_id": "HrAgJS493cqSpyMo"
@@ -179077,53 +178837,58 @@
     "_id": "GrfSkrSgC2XRjoXI"
    },
    {
-    "name": "Самум",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/bombs/samum-bomb.webp",
+    "name": "«Самум»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/bomb-samum.webp",
     "system": {
-     "description": "<p>Радиус - 4 м\n\nВсе, кто оказался в зоне действия этой бомбы, должны пройти испытание Устойчивости со штрафом -2 и получают состояние слепоты на 6 раундов.</p><p>Ослепление на 6 раундов (100%). Проходит сквозь надетую броню. Проходит сквозь естественную броню.</p>",
+     "description": "<p>Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.</p>",
      "quantity": 1,
-     "weight": 1.0,
-     "cost": 147.0,
+     "weight": 1,
+     "cost": 147,
      "availability": "rare",
-     "concealment": "small",
+     "concealment": "tiny",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": ""
+      "page": "254"
      },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "0",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 0,
-      "max": 0
+     "kind": "bomb",
+     "effect": "Все в зоне действия проходят испытание Устойчивости со штрафом -2 и получают слепоту на 6 раундов.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "bludgeoning",
+      "area": "4 м",
+      "range": "Тел×4 м",
+      "status": "blind",
+      "statusChance": 100,
+      "statusRounds": "6",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.70RIFJh6JKZJU6tt"
+      "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "GBaOECDs0wQWOumH"
+    "_id": "FB6yylxkKKqdZNAG"
    },
    {
     "name": "Серебряный боеприпас",
@@ -179955,9 +179720,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -180368,7 +180131,7 @@
    "bounty": 600,
    "armor": 0,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "none",
    "resistances": [],
@@ -180911,7 +180674,7 @@
    "bounty": 10,
    "armor": 5,
    "vigor": 0,
-   "bodyType": "humanoid",
+   "bodyType": "monster",
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
@@ -181910,9 +181673,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -182326,9 +182087,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -183581,9 +183340,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий",
@@ -186170,9 +185927,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -187059,9 +186814,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -188354,9 +188107,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Обычный человеческий рост",
@@ -189102,9 +188853,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "",
@@ -190158,9 +189907,7 @@
    "size": "medium",
    "materialWeakness": "auto",
    "resistances": [],
-   "susceptibilities": [
-    "poison"
-   ],
+   "susceptibilities": [],
    "immunities": [],
    "info": {
     "height": "Человеческий",

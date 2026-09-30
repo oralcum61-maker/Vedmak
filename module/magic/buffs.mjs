@@ -5,6 +5,7 @@
 
 import { applyVision } from "../crafting/alchemy-triggers.mjs";
 import { describeChanges } from "../config/effects.mjs";
+import { inCombat, roundsAsTime } from "../util.mjs";
 
 /**
  * Срок баффа по тексту длительности.
@@ -40,7 +41,9 @@ export async function applyBuff(actor, buff) {
   const vedmak = { spellBuff: { name: buff.name, casterUuid: buff.casterUuid, itemId: buff.itemId, maintain: !!buff.maintain } };
   if (buff.immune?.length) vedmak.immune = buff.immune;
   if (buff.rollMods) vedmak.rollMods = buff.rollMods;
-  if (buff.rounds) vedmak.timed = { rounds: buff.rounds, key: `buff:${buff.name}` };
+  // Вне боя раунды не отсчитываются — такой срок ставится временем мира
+  const combat = inCombat(actor);
+  if (buff.rounds && combat) vedmak.timed = { rounds: buff.rounds, key: `buff:${buff.name}` };
   const effect = {
     name: buff.name, img: buff.img, transfer: false,
     system: { changes: buff.changes ?? [] },
@@ -48,6 +51,7 @@ export async function applyBuff(actor, buff) {
     flags: { vedmak }
   };
   if (buff.minutes) effect.duration = { value: buff.minutes, units: "minutes" };
+  else if (buff.rounds && !combat) effect.duration = roundsAsTime(buff.rounds);
   const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
   if (created && buff.vision) await applyVision(actor, created, buff.vision);
   return created;

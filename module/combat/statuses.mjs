@@ -86,7 +86,8 @@ export function statusRollMods(actor, kind, { skill } = {}) {
   }
   // Модификаторы бросков от эффектов («Покров» +5 к атаке и защите, «Чемпион реки» +5 ко всему)
   for (const effect of actor?.effects ?? []) {
-    const mods = !effect.disabled && effect.flags?.vedmak?.rollMods;
+    // active: истёкший эффект v14 не удаляет, а помечает — его правки к броскам уже не действуют
+    const mods = effect.active && effect.flags?.vedmak?.rollMods;
     const value = mods ? (mods[kind] ?? 0) + (mods.all ?? 0) : 0;
     if (value) parts.push({ label: effect.name, value });
   }

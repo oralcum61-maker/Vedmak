@@ -709,7 +709,7 @@
  {
   "name": "Нильфгаардский прицел",
   "type": "enhancement",
-  "img": "icons/tools/scribal/magnifying-glass.webp",
+  "img": "icons/tools/navigation/spyglass-telescope-brass.webp",
   "system": {
    "description": "<p>Повышает точность арбалета на +1.</p><p>Ставится и снимается действием полного хода, без проверки. На ручной арбалет влезает одна модификация, на прочие — две, и не больше одной каждого вида.</p>",
    "quantity": 1,
