@@ -99,14 +99,6 @@ Hooks.once("init", () => {
   game.settings.register(SYSTEM_ID, "combatHudCollapsed", {
     scope: "client", config: false, type: Boolean, default: false
   });
-  // Фактуры с наложением на цвет — самое дорогое в отрисовке окон (styles/vedmak.css, «Облегчённая графика»)
-  game.settings.register(SYSTEM_ID, "liteGraphics", {
-    name: "Облегчённая графика",
-    hint: "Листы, окна бросков, чат и худ — без фактур кожи, железа и пергамента. Цвета и раскладка те же, а рисуется быстрее: включите, если окна подтормаживают.",
-    scope: "client", config: true, type: Boolean, default: false,
-    onChange: value => document.body.classList.toggle("vedmak-lite", !!value)
-  });
-  document.body.classList.toggle("vedmak-lite", !!game.settings.get(SYSTEM_ID, "liteGraphics"));
   // Курсор-клинок (assets/cursors): в окнах — правилами styles/vedmak.css, на сцене — стилями указателя холста
   game.settings.register(SYSTEM_ID, "themedCursor", {
     name: "Курсор системы",

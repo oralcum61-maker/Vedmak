@@ -61,21 +61,21 @@ export class MonsterSheet extends VedmakActorSheet {
   static TABS = {
     primary: {
       tabs: [
-        { id: "stats",   label: "Параметры",  icon: "fa-solid fa-dragon" },
-        { id: "combat",  label: "Бой",        icon: "fa-solid fa-swords" },
-        { id: "skills",  label: "Навыки",     icon: "fa-solid fa-list-check" },
-        { id: "gear",    label: "Атаки",      icon: "fa-solid fa-khanda" },
-        { id: "magic",   label: "Магия",      icon: "fa-solid fa-hand-sparkles" },
-        { id: "lore",    label: "Знания",     icon: "fa-solid fa-book-skull" },
-        { id: "effects", label: "Эффекты",    icon: "fa-solid fa-bolt" }
+        { id: "stats",   label: "Параметры" },
+        { id: "combat",  label: "Бой" },
+        { id: "skills",  label: "Навыки" },
+        { id: "gear",    label: "Атаки" },
+        { id: "magic",   label: "Магия" },
+        { id: "lore",    label: "Знания" },
+        { id: "effects", label: "Эффекты" }
       ],
       initial: "stats"
     },
     // Подвкладки «Боя»: обычный бой и словесная дуэль — как у персонажа
     combat: {
       tabs: [
-        { id: "fight",  label: "Бой",             icon: "fa-solid fa-swords" },
-        { id: "social", label: "Социальный бой",  icon: "fa-solid fa-comments" }
+        { id: "fight",  label: "Бой" },
+        { id: "social", label: "Социальный бой" }
       ],
       initial: "fight"
     }

@@ -43,7 +43,7 @@
         {{#if l.coins}}
         {{#if l.taken}}
         <span class="loot-coins disabled" data-tooltip="Монеты уже взяты"><i class="fa-solid fa-coins"></i></span>
-        {{#if @root.isGM}}<a class="loot-reset" data-action="lootReset" data-tooltip="Вернуть монеты в добычу"><i class="fa-solid fa-rotate-left"></i> вернуть</a>{{/if}}
+        {{#if @root.isGM}}<a class="loot-reset" data-action="lootReset" data-tooltip="Вернуть монеты в добычу">вернуть</a>{{/if}}
         {{else}}
         <a class="loot-coins" data-action="lootCoins" data-tooltip="Бросить и положить в кошелёк своего персонажа (или выделенного токена). Взять можно один раз"><i class="fa-solid fa-coins"></i></a>
         {{/if}}

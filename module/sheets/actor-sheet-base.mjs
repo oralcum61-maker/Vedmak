@@ -150,7 +150,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** В меню «…» заголовка — замер скорости листа (module/apps/perf.mjs): цифры с компьютера игрока. */
   _getHeaderControls() {
     const controls = super._getHeaderControls();
-    if (!this.#limited) controls.push({ icon: "fa-solid fa-gauge-high", label: "Замер скорости листа", action: "profileSheet" });
+    if (!this.#limited) controls.push({ label: "Замер скорости листа", action: "profileSheet" });
     return controls;
   }
 
@@ -684,7 +684,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onRam() {
     const options = Object.entries(MOUNTS).map(([k, m]) => `<option value="${k}">${m.label} (${m.ram})</option>`).join("");
     const key = await foundry.applications.api.DialogV2.wait({
-      window: { title: "Таран", icon: "fa-solid fa-horse-head" },
+      window: { title: "Таран" },
       classes: ["vedmak", "vedmak-dialog"],
       content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Чем таранить</label><select name="mount">${options}</select></div></div>`,
       buttons: [{ action: "ok", label: "Далее", default: true, callback: (e, b) => b.form.elements.mount.value },
@@ -721,12 +721,12 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }).join("");
     const locations = Object.entries(table).map(([k, l]) => `<option value="${k}">${l.label}</option>`).join("");
     const result = await foundry.applications.api.DialogV2.wait({
-      window: { title: "Критическое ранение", icon: "fa-solid fa-bone" },
+      window: { title: "Критическое ранение" },
       classes: ["vedmak", "vedmak-dialog"],
       content: `<div class="vedmak-roll-dialog">
         <div class="form-group"><label>Ранение</label><select name="wound">${groups}</select></div>
         <div class="form-group"><label>Часть тела</label><select name="location">${locations}</select></div></div>`,
-      buttons: [{ action: "ok", label: "Добавить", icon: "fa-solid fa-plus", default: true,
+      buttons: [{ action: "ok", label: "Добавить", default: true,
         callback: (e, b) => ({ wound: b.form.elements.wound.value, location: b.form.elements.location.value }) },
         { action: "cancel", label: "Отмена" }],
       rejectClose: false

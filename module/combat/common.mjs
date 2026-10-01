@@ -202,7 +202,7 @@ export async function allowRepeat(what) {
     return false;
   }
   return !!(await foundry.applications.api.DialogV2.confirm({
-    window: { title: "Повторный бросок", icon: "fa-solid fa-rotate-right" },
+    window: { title: "Повторный бросок" },
     content: `<p>${what}</p><p>Бросить ещё раз? Прежняя карточка останется в чате — лишнюю удалите сами.</p>`,
     rejectClose: false
   }));

@@ -2,7 +2,7 @@
   <nav class="wizard-steps">
     {{#each steps}}
     <a class="wstep{{#if active}} active{{/if}}{{#if done}} done{{/if}}{{#if problem}} problem{{/if}}" data-action="step" data-step="{{id}}" data-tooltip="{{#if problem}}{{problem}}{{else}}Готово{{/if}}">
-      <i class="{{icon}}"></i><span>{{label}}</span>
+      <span>{{label}}</span>
     </a>
     {{/each}}
   </nav>
@@ -44,7 +44,7 @@
       </div>
     {{else}}
       <div class="vd-panel">
-        <h3>Откуда вы родом <a class="roll-btn" data-action="rollOrigin" data-tooltip="Бросить регион и родину"><i class="fa-solid fa-certificate"></i> Бросить</a></h3>
+        <h3>Откуда вы родом <a class="roll-btn" data-action="rollOrigin" data-tooltip="Бросить регион и родину">Бросить</a></h3>
         <div class="wizard-basics">
           <label>Регион
             <select data-field="origin">
@@ -75,11 +75,11 @@
       {{#if state.lifepath}}
         <label>Возраст <input type="number" data-field="age" value="{{state.age}}" min="0"></label>
         {{#if lifepathNext}}
-        <a class="roll-btn" data-action="lpStep" data-tooltip="Бросок уйдёт в чат"><i class="fa-solid fa-dice"></i> Бросить: {{lifepathNext.label}}</a>
-        <a class="roll-btn" data-action="lpSection" data-tooltip="Все броски раздела по очереди — каждый в чат"><i class="fa-solid fa-forward-step"></i> Раздел: {{lifepathNext.cardTitle}}</a>
-        <a class="roll-btn" data-action="lpRest" data-tooltip="Все оставшиеся броски — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i> До конца</a>
+        <a class="roll-btn" data-action="lpStep" data-tooltip="Бросок уйдёт в чат">Бросить: {{lifepathNext.label}}</a>
+        <a class="roll-btn" data-action="lpSection" data-tooltip="Все броски раздела по очереди — каждый в чат">Раздел: {{lifepathNext.cardTitle}}</a>
+        <a class="roll-btn" data-action="lpRest" data-tooltip="Все оставшиеся броски — одной карточкой в чат">До конца</a>
         {{else}}
-        <a class="roll-btn" data-action="rerollAll"><i class="fa-solid fa-dice"></i> Перебросить всё</a>
+        <a class="roll-btn" data-action="rerollAll">Перебросить всё</a>
         {{/if}}
       {{/if}}
       <span class="hint">{{#if isWitcher}}Ведьмак живёт от 50 до 260 лет; события — за каждое десятилетие странствий (стр. 241).{{else}}Событие — за каждые полные 10 лет жизни (стр. 31).{{/if}}
@@ -160,7 +160,7 @@
       </label>
       <div class="budget{{#if remaining}} off{{/if}}">Осталось очков: <b>{{remaining}}</b> из {{budget}}</div>
       {{else}}
-      <a class="roll-btn" data-action="rollStats"><i class="fa-solid fa-dice"></i> Бросить 9 × d10</a>
+      <a class="roll-btn" data-action="rollStats">Бросить 9 × d10</a>
       {{/if}}
     </div>
     <div class="vd-panel">
@@ -256,7 +256,7 @@
     <div class="vd-panel">
       <h3>Начальный капитал</h3>
       <p>{{moneyBase}} × 2d6 крон (стр. 71).
-        <a class="roll-btn" data-action="rollMoney"><i class="fa-solid fa-dice"></i> {{#if state.money}}Перебросить{{else}}Бросить{{/if}}</a>
+        <a class="roll-btn" data-action="rollMoney">{{#if state.money}}Перебросить{{else}}Бросить{{/if}}</a>
         {{#if state.money}} 2d6 = {{state.money.dice.[0]}} + {{state.money.dice.[1]}} = {{state.money.sum}} → <b>{{state.money.total}} крон</b>{{/if}}
       </p>
     </div>
@@ -297,11 +297,11 @@
   </div>
 
   <footer class="wizard-footer">
-    {{#if problem}}<span class="problem"><i class="fa-solid fa-triangle-exclamation"></i> {{problem}}</span>{{else}}<span class="ok"><i class="fa-solid fa-check"></i> Шаг заполнен</span>{{/if}}
+    {{#if problem}}<span class="problem">{{problem}}</span>{{else}}<span class="ok">Шаг заполнен</span>{{/if}}
     <div class="buttons">
-      {{#unless isFirst}}<button type="button" data-action="prev"><i class="fa-solid fa-arrow-left"></i> Назад</button>{{/unless}}
+      {{#unless isFirst}}<button type="button" data-action="prev">Назад</button>{{/unless}}
       {{#if isLast}}
-        <button type="button" class="primary" data-action="apply"><i class="fa-solid fa-check"></i> Создать персонажа</button>
+        <button type="button" class="primary" data-action="apply">Создать персонажа</button>
       {{else}}
         <button type="button" class="primary" data-action="next">Далее <i class="fa-solid fa-arrow-right"></i></button>
       {{/if}}

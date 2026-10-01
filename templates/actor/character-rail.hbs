@@ -22,7 +22,7 @@
   <div class="rail-states">
     {{#each states}}
     <div class="state-line {{kind}}"{{#if hint}} data-tooltip="{{hint}}"{{/if}}>
-      <i class="{{icon}}"></i><span>{{label}}</span>
+      <span>{{label}}</span>
     </div>
     {{/each}}
   </div>
@@ -69,11 +69,11 @@
   <div class="rail-foot">
     <a class="rail-btn{{#if advanceMode}} active{{/if}}" data-action="toggleAdvance"
        data-tooltip="Показывать кнопки повышения у параметров, навыков и способностей">
-      <i class="fa-solid fa-arrow-up-right-dots"></i> Развитие
+      Развитие
     </a>
     <a class="rail-btn" data-action="openWizard"
        data-tooltip="Создать персонажа по шагам: раса, жизненный путь, профессия, параметры, навыки, снаряжение">
-      <i class="fa-solid fa-wand-magic-sparkles"></i> Мастер
+      Мастер
     </a>
   </div>
 </aside>

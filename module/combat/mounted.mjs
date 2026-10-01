@@ -37,13 +37,13 @@ export async function controlCheck(actor, { mount = "horse" } = {}) {
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
   });
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Управление: ${actor.name}`, icon: "fa-solid fa-horse" },
+    window: { title: `Управление: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 520 },
     content,
     render: (event, dialog) => bindDialog(dialog),
     buttons: [{
-      action: "roll", label: "Бросить", icon: "fa-solid fa-certificate", default: true,
+      action: "roll", label: "Бросить", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -52,7 +52,7 @@ export async function controlCheck(actor, { mount = "horse" } = {}) {
           noSaddle: f.noSaddle.checked, reins: f.reins.checked, ramDrawn: f.ramDrawn.checked
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!cfg || cfg === "cancel") return null;

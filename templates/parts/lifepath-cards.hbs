@@ -8,7 +8,7 @@
     {{#if options}}
     <select data-roll-path="{{path}}" data-mod="{{mod}}" data-tooltip="Выбрать результат">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
     {{/if}}
-    <a class="lp-die" data-action="{{action}}" data-path="{{path}}" data-tooltip="Перебросить (d{{sides}})"><i class="fa-solid fa-dice-d20"></i>{{value}}</a>
+    <a class="lp-die" data-action="{{action}}" data-path="{{path}}" data-tooltip="Перебросить (d{{sides}})">{{value}}</a>
   </span>
   {{/if}}
 {{/inline}}
@@ -52,9 +52,9 @@
     <div class="lp-row lp-pending">
       <span class="lp-k">{{c.pending.label}}</span>
       <span class="lp-ctl">{{#if c.pending.action}}<a class="roll-btn lp-next" data-action="{{c.pending.action}}" data-tooltip="Бросок уйдёт в чат">
-        <i class="fa-solid fa-dice"></i> Бросить d{{c.pending.sides}}</a>
+        Бросить d{{c.pending.sides}}</a>
         <a class="roll-btn lp-next" data-action="{{c.pending.sectionAction}}" data-tooltip="Бросить раздел «{{c.pending.cardTitle}}» по очереди — каждый бросок в чат">
-        <i class="fa-solid fa-forward-step"></i> Раздел</a>{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
+        Раздел</a>{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
     </div>
     {{/if}}
   </article>

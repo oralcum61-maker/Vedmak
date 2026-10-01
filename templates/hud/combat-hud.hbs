@@ -36,7 +36,7 @@
     </div>
 
     <div class="hud-turn">
-      {{#if canAdvance}}<button type="button" class="hud-btn next" data-action="nextTurn" data-tooltip="Передать ход дальше"><i class="fa-solid fa-forward-step"></i> Ход</button>{{/if}}
+      {{#if canAdvance}}<button type="button" class="hud-btn next" data-action="nextTurn" data-tooltip="Передать ход дальше">Ход</button>{{/if}}
       <a class="fold" data-action="toggleCollapse" data-tooltip="{{#if collapsed}}Развернуть{{else}}Свернуть{{/if}}"><i class="fa-solid {{#if collapsed}}fa-chevron-up{{else}}fa-chevron-down{{/if}}"></i></a>
     </div>
   </div>
@@ -62,7 +62,7 @@
       {{/each}}
       <span class="sep"></span>
       <button type="button" class="hud-btn util" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">Уст <b>&lt; {{stun}}</b></button>
-      {{#if dying}}<button type="button" class="hud-btn danger" data-action="deathSave" data-tooltip="Испытание против смерти"><i class="fa-solid fa-skull"></i> Против смерти</button>{{/if}}
+      {{#if dying}}<button type="button" class="hud-btn danger" data-action="deathSave" data-tooltip="Испытание против смерти">Против смерти</button>{{/if}}
       <button type="button" class="hud-btn util" data-action="restTurn" data-tooltip="Полный ход отдыха: вернуть Вын"><i class="fa-solid fa-lungs"></i></button>
       <button type="button" class="hud-btn util" data-action="manualDamage" data-tooltip="Урон без атаки: падение, огонь, ловушка"><i class="fa-solid fa-burst"></i></button>
     </div>

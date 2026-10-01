@@ -25,27 +25,27 @@
     <div class="target-row" data-target-token="{{tokenUuid}}" data-target-actor="{{actorUuid}}">
       <div class="target-name"><img src="{{img}}" alt=""><span class="name">{{name}}</span></div>
       <div class="defense-buttons">
-        <button type="button" data-vedmak="defend" data-defense="dodge" data-tooltip="Уклонение"><i class="fa-solid fa-person-running"></i><span>Уклон</span></button>
-        <button type="button" data-vedmak="defend" data-defense="reposition" data-tooltip="Изменение позиции"><i class="fa-solid fa-arrows-up-down-left-right"></i><span>Позиция</span></button>
-        <button type="button" data-vedmak="defend" data-defense="block" data-tooltip="Блокирование"><i class="fa-solid fa-shield-halved"></i><span>Блок</span></button>
-        <button type="button" data-vedmak="defend" data-defense="parry" data-tooltip="Парирование (−3)"><i class="fa-solid fa-khanda"></i><span>Парир.</span></button>
-        <button type="button" data-vedmak="defend" data-defense="none" data-tooltip="Без защиты: против СЛ (беззащитна, дезориентирована)"><i class="fa-solid fa-bullseye"></i><span>СЛ</span></button>
+        <button type="button" data-vedmak="defend" data-defense="dodge" data-tooltip="Уклонение"><span>Уклон</span></button>
+        <button type="button" data-vedmak="defend" data-defense="reposition" data-tooltip="Изменение позиции"><span>Позиция</span></button>
+        <button type="button" data-vedmak="defend" data-defense="block" data-tooltip="Блокирование"><span>Блок</span></button>
+        <button type="button" data-vedmak="defend" data-defense="parry" data-tooltip="Парирование (−3)"><span>Парир.</span></button>
+        <button type="button" data-vedmak="defend" data-defense="none" data-tooltip="Без защиты: против СЛ (беззащитна, дезориентирована)"><span>СЛ</span></button>
       </div>
     </div>
     {{else}}
     <div class="target-row any">
       <div class="defense-buttons">
-        <button type="button" data-vedmak="defend" data-defense="dodge" data-tooltip="Уклонение"><i class="fa-solid fa-person-running"></i><span>Уклон</span></button>
-        <button type="button" data-vedmak="defend" data-defense="reposition" data-tooltip="Изменение позиции"><i class="fa-solid fa-arrows-up-down-left-right"></i><span>Позиция</span></button>
-        <button type="button" data-vedmak="defend" data-defense="block" data-tooltip="Блокирование"><i class="fa-solid fa-shield-halved"></i><span>Блок</span></button>
-        <button type="button" data-vedmak="defend" data-defense="parry" data-tooltip="Парирование (−3)"><i class="fa-solid fa-khanda"></i><span>Парир.</span></button>
-        <button type="button" data-vedmak="defend" data-defense="none" data-tooltip="Без защиты: против СЛ"><i class="fa-solid fa-bullseye"></i><span>СЛ</span></button>
+        <button type="button" data-vedmak="defend" data-defense="dodge" data-tooltip="Уклонение"><span>Уклон</span></button>
+        <button type="button" data-vedmak="defend" data-defense="reposition" data-tooltip="Изменение позиции"><span>Позиция</span></button>
+        <button type="button" data-vedmak="defend" data-defense="block" data-tooltip="Блокирование"><span>Блок</span></button>
+        <button type="button" data-vedmak="defend" data-defense="parry" data-tooltip="Парирование (−3)"><span>Парир.</span></button>
+        <button type="button" data-vedmak="defend" data-defense="none" data-tooltip="Без защиты: против СЛ"><span>СЛ</span></button>
       </div>
     </div>
     {{/each}}
   </div>
 
   <div class="card-buttons">
-    <button type="button" class="quiet" data-vedmak="repeatAttack"><i class="fa-solid fa-rotate-right"></i> Ещё атака</button>
+    <button type="button" class="quiet" data-vedmak="repeatAttack">Ещё атака</button>
   </div>
 </div>

@@ -655,7 +655,7 @@ export function lifepathCards(sections, {
         if (!byGroup.has(e.group)) byGroup.set(e.group, []);
         byGroup.get(e.group).push(entryView(e, ctx, ""));
       }
-      cards.push({ title: sec.title, icon: "fa-people-group", rows, pending: pendingOf(sec.entries),
+      cards.push({ title: sec.title, rows, pending: pendingOf(sec.entries),
         table: byGroup.size ? { cols: SIBLING_COLS, rows: [...byGroup.entries()].map(([i, cells]) => ({ n: i + 1, cells })) } : null });
       continue;
     }
@@ -670,8 +670,8 @@ export function lifepathCards(sections, {
         const rows = list.filter(e => !e.pending).map(e => entryView(e, ctx, short(e.label)));
         const pending = pendingOf(list);
         cards.push(i === "none"
-          ? { title: sec.title, icon: "fa-hourglass", rows, pending }
-          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", icon: "fa-hourglass-half", cls: "event", rows, pending });
+          ? { title: sec.title, rows, pending }
+          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", cls: "event", rows, pending });
       }
       continue;
     }

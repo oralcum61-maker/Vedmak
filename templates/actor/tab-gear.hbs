@@ -7,7 +7,7 @@
         <span class="label">Кошелёк</span>
         <span class="dim" data-tooltip="Всё в кронах по курсу из настроек «Валюты и обмен»">≈ {{purse.crowns}} кр.</span>
         {{#if purse.weightOn}}<span class="dim" data-tooltip="Вес монет входит в нагрузку">· монеты {{purse.kg}} кг</span>{{/if}}
-        <a class="exchange" data-action="moneyExchange" data-tooltip="Обменять у менялы"><i class="fa-solid fa-scale-balanced"></i> Обмен</a>
+        <a class="exchange" data-action="moneyExchange" data-tooltip="Обменять у менялы">Обмен</a>
       </div>
       <div class="coin-grid">
         {{#each purse.rows as |c|}}
@@ -26,7 +26,7 @@
     </div>
     {{#if system.derived.overload}}
     <div class="overload" data-tooltip="По −1 за каждые 5 кг сверх предела (стр. 48)">
-      <i class="fa-solid fa-triangle-exclamation"></i> Перегруз −{{system.derived.overload}} к Реа, Лвк и Скор
+      Перегруз −{{system.derived.overload}} к Реа, Лвк и Скор
     </div>
     {{/if}}
   </div>

@@ -179,7 +179,7 @@ async function castDialog(actor, item, cfg, targets) {
   });
 
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `${CONFIG.VEDMAK.MAGIC_KINDS[s.kind]}: ${item.name}`, icon: "fa-solid fa-hand-sparkles" },
+    window: { title: `${CONFIG.VEDMAK.MAGIC_KINDS[s.kind]}: ${item.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "cast-dialog"],
     position: { width: 520 },
     content,
@@ -212,7 +212,7 @@ async function castDialog(actor, item, cfg, targets) {
     } }),
     buttons: [{
       action: "cast", label: s.kind === "ritual" ? "Провести" : s.kind === "hex" ? "Навести" : "Сотворить",
-      icon: "fa-solid fa-hand-sparkles", default: true,
+      default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -225,7 +225,7 @@ async function castDialog(actor, item, cfg, targets) {
           helpers: Math.max(0, Math.min(4, Number(f.helpers?.value) || 0))
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -434,13 +434,13 @@ export async function performCast(actor, item, cfg, targets) {
 
 /** Кнопки защиты в карточке магии; `short` — подпись под иконкой, `label` — подсказка. */
 const DEFENSE_BUTTONS = {
-  dodge:       { icon: "fa-person-running", label: "Уклонение", short: "Уклон" },
-  reposition:  { icon: "fa-arrows-up-down-left-right", label: "Изменение позиции", short: "Позиция" },
-  block:       { icon: "fa-shield-halved", label: "Блокирование щитом", short: "Щит" },
-  resistMagic: { icon: "fa-brain", label: "Сопротивление магии", short: "Магия" },
-  willx3:      { icon: "fa-scale-balanced", label: "Против Воли ×3", short: "Воля ×3" },
-  auto:        { icon: "fa-wand-sparkles", label: "Эффект без защиты", short: "Сразу" },
-  none:        { icon: "fa-bullseye", label: "Без защиты: против СЛ", short: "СЛ" }
+  dodge:       { label: "Уклонение", short: "Уклон" },
+  reposition:  { label: "Изменение позиции", short: "Позиция" },
+  block:       { label: "Блокирование щитом", short: "Щит" },
+  resistMagic: { label: "Сопротивление магии", short: "Магия" },
+  willx3:      { label: "Против Воли ×3", short: "Воля ×3" },
+  auto:        { label: "Эффект без защиты", short: "Сразу" },
+  none:        { label: "Без защиты: против СЛ", short: "СЛ" }
 };
 
 export function spellDefenseButtons(keys) {

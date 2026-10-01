@@ -16,7 +16,7 @@
     {{#each magic.maintained}}
       <div class="maintained-row" data-effect-id="{{id}}">
         <img src="{{img}}" alt=""><span class="name">{{name}}</span><span class="dim">{{cost}} Вын/раунд</span>
-        <button type="button" class="roll-btn" data-action="endMaintained"><i class="fa-solid fa-hand"></i> Прекратить</button>
+        <button type="button" class="roll-btn" data-action="endMaintained">Прекратить</button>
       </div>
     {{/each}}
   </div>
@@ -40,7 +40,7 @@
           <td class="small">{{item.system.duration}}</td>
           <td class="small">{{vedmakLabel "MAGIC_DEFENSES" item.system.defense}}</td>
           <td class="controls">
-            <button type="button" class="roll-btn" data-action="castSpell" data-tooltip="Shift — без окна"><i class="fa-solid fa-hand-sparkles"></i> {{item.castLabel}}</button>
+            <button type="button" class="roll-btn" data-action="castSpell" data-tooltip="Shift — без окна">{{item.castLabel}}</button>
             <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
           </td>
@@ -56,7 +56,7 @@
 
   <div class="add-row">
     {{#each spellGroups as |group|}}
-    <a class="add-btn" data-action="itemCreate" data-type="spell" data-kind="{{group.kind}}"><i class="fa-solid fa-plus"></i> {{group.label}}</a>
+    <a class="add-btn" data-action="itemCreate" data-type="spell" data-kind="{{group.kind}}">{{group.label}}</a>
     {{/each}}
   </div>
   <p class="hint">Изучение: новичок/низкая — 10 О.У, 4 дня, 2 проверки СЛ 14; подмастерье/средняя — 20 О.У, неделя, 4 проверки СЛ 18; мастер/высокая — 30 О.У, 3 недели, 6 проверок СЛ 22; верховный жрец — 40 О.У, 5 недель, 8 проверок СЛ 24 (стр. 123).</p>

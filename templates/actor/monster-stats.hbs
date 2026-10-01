@@ -6,7 +6,7 @@
         <div class="stat-head"><span></span><span>База</span><span>Мод.</span><span>Итог</span></div>
         {{#each stats}}
         <div class="stat-row{{#if (ne total effective)}} reduced{{/if}}">
-          <a class="stat-name rollable" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)"><i class="fa-solid fa-certificate"></i> {{label}}</a>
+          <a class="stat-name rollable" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)">{{label}}</a>
           <input type="number" name="system.stats.{{key}}.base" value="{{base}}" min="0">
           <span class="mod">{{vedmakSigned mod}}</span>
           <span class="total">{{effective}}</span>

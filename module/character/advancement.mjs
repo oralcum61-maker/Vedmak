@@ -110,7 +110,7 @@ async function spend(actor, offer, apply, { skipConfirm = false, kind = "" } = {
   }
   if (!skipConfirm) {
     const ok = await DialogV2.confirm({
-      window: { title: "Развитие", icon: "fa-solid fa-arrow-up-right-dots" },
+      window: { title: "Развитие" },
       content: `<p><b>${offer.label}</b>: ${offer.from} → ${offer.to}</p><p>Стоимость: <b>${offer.cost} О.У</b> (осталось ${ip - offer.cost}).</p>`
     });
     if (!ok) return null;
@@ -156,13 +156,13 @@ export function setAbilityValue(profession, branch, index, value) {
 /** Начислить О.У (ведущий, стр. 59). */
 export async function grantImprovementPoints(actor) {
   const amount = await DialogV2.wait({
-    window: { title: "Начислить О.У", icon: "fa-solid fa-star" },
+    window: { title: "Начислить О.У" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog">
       <div class="form-group"><label>Сколько О.У</label><input type="number" name="amount" value="1" autofocus></div>
       <div class="form-group"><label>За что</label><input type="text" name="reason" value=""></div>
       <p class="hint">Книга не советует давать одному игроку больше 6 О.У за партию (стр. 59).</p></div>`,
-    buttons: [{ action: "ok", label: "Начислить", icon: "fa-solid fa-check", default: true,
+    buttons: [{ action: "ok", label: "Начислить", default: true,
       callback: (e, b) => ({ amount: Number(b.form.elements.amount.value) || 0, reason: b.form.elements.reason.value.trim() }) },
       { action: "cancel", label: "Отмена" }],
     rejectClose: false
@@ -222,11 +222,11 @@ export async function learnSpellDialog(actor, spell) {
     <p class="hint">Нужен наставник или книга. За каждый провал проверки обучение затягивается на день (стр. 124).</p>
     ${problem ? `<p class="warning">${problem}</p>` : ""}</div>`;
   const buttons = [];
-  if (!problem && ip >= cfg.ip) buttons.push({ action: "learn", label: `Изучить (−${cfg.ip} О.У)`, icon: "fa-solid fa-book-open", default: true });
-  buttons.push({ action: "add", label: "Просто добавить", icon: "fa-solid fa-plus", default: !!problem || ip < cfg.ip });
-  buttons.push({ action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" });
+  if (!problem && ip >= cfg.ip) buttons.push({ action: "learn", label: `Изучить (−${cfg.ip} О.У)`, default: true });
+  buttons.push({ action: "add", label: "Просто добавить", default: !!problem || ip < cfg.ip });
+  buttons.push({ action: "cancel", label: "Отмена" });
   const choice = await DialogV2.wait({
-    window: { title: "Изучение магии", icon: "fa-solid fa-hat-wizard" },
+    window: { title: "Изучение магии" },
     classes: ["vedmak", "vedmak-dialog"], position: { width: 420 }, content, buttons, rejectClose: false
   });
   if (choice !== "learn") return choice === "add" ? "add" : null;

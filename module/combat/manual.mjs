@@ -32,12 +32,12 @@ export async function manualDamage(actors, preset = {}) {
     ...commonFields()
   });
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: "Урон без атаки", icon: "fa-solid fa-burst" },
+    window: { title: "Урон без атаки" },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "damage-dialog"],
     position: { width: 520 },
     content,
     buttons: [{
-      action: "apply", label: "Нанести", icon: "fa-solid fa-burst", default: true,
+      action: "apply", label: "Нанести", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -47,7 +47,7 @@ export async function manualDamage(actors, preset = {}) {
           statusRounds: f.statusRounds.value.trim(), messageMode: f.messageMode?.value || "public"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!cfg || cfg === "cancel" || (!cfg.formula && !cfg.status)) return null;
@@ -193,7 +193,7 @@ export async function restDays(actor) {
         <span class="plate-text">Нагрузка: бег, работа, бой</span><b class="plate-value">½ Отдыха</b></label>
     </div></div>`;
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Отдых: ${actor.name}`, icon: "fa-solid fa-bed" },
+    window: { title: `Отдых: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 460 },
     content,
@@ -203,7 +203,7 @@ export async function restDays(actor) {
         if (out) out.textContent = String(Math.max(1, Number(form.elements.days.value) || 1));
       }
     }),
-    buttons: [{ action: "ok", label: "Отдохнуть", icon: "fa-solid fa-bed", default: true,
+    buttons: [{ action: "ok", label: "Отдохнуть", default: true,
       callback: (e, b) => {
         const f = b.form.elements;
         return { days: Math.max(1, Number(f.days.value) || 1), care: f.care.checked, touch: f.touch.checked, exertion: f.exertion.checked };

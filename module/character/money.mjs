@@ -38,7 +38,7 @@ export async function exchangeDialog(actor) {
   });
 
   const result = await DialogV2.wait({
-    window: { title: `Обмен: ${actor.name}`, icon: "fa-solid fa-scale-balanced" },
+    window: { title: `Обмен: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog"],
     position: { width: 460 },
     content,
@@ -63,8 +63,8 @@ export async function exchangeDialog(actor) {
       form.addEventListener("change", update);
       update();
     },
-    buttons: [{ action: "ok", label: "Обменять", icon: "fa-solid fa-scale-balanced", default: true, callback: (e, b) => read(b.form) },
-      { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    buttons: [{ action: "ok", label: "Обменять", default: true, callback: (e, b) => read(b.form) },
+      { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!result || result === "cancel") return null;
@@ -83,7 +83,7 @@ export async function exchangeDialog(actor) {
     `<p>${amount} ${list[from].label.toLowerCase()} → <b>${q.get} ${list[to].label.toLowerCase()}</b>.</p>`
     + `<p class="note dim">Курс: 1 ${list[from].abbr} = ${formatRate(list[from].rate / list[to].rate)} ${list[to].abbr}`
     + `${q.feeCrowns ? ` · комиссия ${result.fee}% (${formatRate(q.feeCrowns)} кр.)` : ""}.</p>`,
-    { icon: "fa-solid fa-coins", subtitle: actor.name });
+    { subtitle: actor.name });
 }
 
 /** Валюта по названию строки добычи: «Орены (Темерия)», «Кроны», «Флорены (Нильфгаард)». */

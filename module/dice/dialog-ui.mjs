@@ -8,10 +8,10 @@
 
 /** Режимы видимости сообщения — по-русски, вместо английских подписей ядра. */
 const MODES = {
-  public: { label: "Всем", icon: "fa-solid fa-globe" },
-  gm: { label: "Ведущему", icon: "fa-solid fa-user-secret" },
-  blind: { label: "Втёмную", icon: "fa-solid fa-eye-slash" },
-  self: { label: "Себе", icon: "fa-solid fa-user" }
+  public: { label: "Всем" },
+  gm: { label: "Ведущему" },
+  blind: { label: "Втёмную" },
+  self: { label: "Себе" }
 };
 
 /** Кнопки «кому видно»; «Втёмную» — только ведущему. */

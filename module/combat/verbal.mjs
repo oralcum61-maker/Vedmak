@@ -161,11 +161,11 @@ const isAttack = def => def.group === "empathic" || def.group === "antagonistic"
 
 /** Кнопки защиты у цели в карточке атаки. */
 export const DUEL_DEFENSES = [
-  { key: "ignore", icon: "fa-ear-deaf", short: "Игнор", label: "Игнорировать — Сопротивление убеждению; успех бьёт атакующего" },
-  { key: "changeSubject", icon: "fa-shuffle", short: "Тема", label: "Смена темы — Убеждение; успех бьёт атакующего" },
-  { key: "counter", icon: "fa-reply", short: "Ответ", label: "Контраргумент — ответная атака: выше — атака отменена, ваша наносит урон" },
-  { key: "disengage", icon: "fa-door-open", short: "Уйти", label: "Прекращение — успех: спор окончен, никто не выиграл" },
-  { key: "none", icon: "fa-comment-dots", short: "Принять", label: "Без защиты — атака проходит" }
+  { key: "ignore", short: "Игнор", label: "Игнорировать — Сопротивление убеждению; успех бьёт атакующего" },
+  { key: "changeSubject", short: "Тема", label: "Смена темы — Убеждение; успех бьёт атакующего" },
+  { key: "counter", short: "Ответ", label: "Контраргумент — ответная атака: выше — атака отменена, ваша наносит урон" },
+  { key: "disengage", short: "Уйти", label: "Прекращение — успех: спор окончен, никто не выиграл" },
+  { key: "none", short: "Принять", label: "Без защиты — атака проходит" }
 ];
 
 /** Ключ пары «кто бьёт» для флагов накопления (в пути флага не должно быть точек). */
@@ -308,13 +308,13 @@ async function pickCounter(actor, skipDialog) {
   const rows = options.map((a, i) => `<label class="chip"><input type="radio" name="counter" value="${a.key}" ${i === 0 ? "checked" : ""}>
     <span>${a.label} <b>${a.base}</b></span></label>`).join("");
   const key = await DialogV2.wait({
-    window: { title: `Контраргумент: ${actor.name}`, icon: "fa-solid fa-reply" },
+    window: { title: `Контраргумент: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><p class="hint">Бросьте атаку в ответ: если результат выше, атака противника отменяется, а ваша наносит урон.</p>
       <div class="opt-row">${rows}</div></div>`,
-    buttons: [{ action: "ok", label: "Ответить", icon: "fa-solid fa-reply", default: true,
+    buttons: [{ action: "ok", label: "Ответить", default: true,
       callback: (e, b) => b.form.querySelector('[name="counter"]:checked')?.value ?? null },
-    { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return key && key !== "cancel" ? key : null;

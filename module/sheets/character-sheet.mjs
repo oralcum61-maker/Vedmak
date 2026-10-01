@@ -129,29 +129,29 @@ export class CharacterSheet extends VedmakActorSheet {
   static TABS = {
     primary: {
       tabs: [
-        { id: "stats",  label: "Параметры",  icon: "fa-solid fa-chart-simple" },
-        { id: "combat", label: "Бой",        icon: "fa-solid fa-swords" },
-        { id: "skills", label: "Навыки",     icon: "fa-solid fa-list-check" },
-        { id: "gear",   label: "Снаряжение", icon: "fa-solid fa-sack" },
-        { id: "craft",  label: "Ремесло",    icon: "fa-solid fa-flask" },
-        { id: "magic",  label: "Магия",      icon: "fa-solid fa-hand-sparkles" },
-        { id: "bio",    label: "Дневник",    icon: "fa-solid fa-feather" }
+        { id: "stats",  label: "Параметры" },
+        { id: "combat", label: "Бой" },
+        { id: "skills", label: "Навыки" },
+        { id: "gear",   label: "Снаряжение" },
+        { id: "craft",  label: "Ремесло" },
+        { id: "magic",  label: "Магия" },
+        { id: "bio",    label: "Дневник" }
       ],
       initial: "stats"
     },
     // Подвкладки «Боя»: обычный бой и словесная дуэль
     combat: {
       tabs: [
-        { id: "fight",  label: "Бой",             icon: "fa-solid fa-swords" },
-        { id: "social", label: "Социальный бой",  icon: "fa-solid fa-comments" }
+        { id: "fight",  label: "Бой" },
+        { id: "social", label: "Социальный бой" }
       ],
       initial: "fight"
     },
     // Подвкладки «Навыков»: переключатель внутри вкладки, а не вторая полоса поперёк листа
     skills: {
       tabs: [
-        { id: "list",       label: "Навыки",    icon: "fa-solid fa-list-check" },
-        { id: "profession", label: "Профессия", icon: "fa-solid fa-sitemap" }
+        { id: "list",       label: "Навыки" },
+        { id: "profession", label: "Профессия" }
       ],
       initial: "list"
     }
@@ -178,15 +178,15 @@ export class CharacterSheet extends VedmakActorSheet {
     // Тревожные метки под именем: их видно на любой вкладке, поэтому они в левой колонке
     context.states = [];
     if (system.derived.dying) {
-      context.states.push({ kind: "dying", icon: "fa-solid fa-skull", label: "При смерти",
+      context.states.push({ kind: "dying", label: "При смерти",
         hint: "Все параметры ⅓, каждый ход — испытание против смерти" });
     } else if (system.derived.wounded) {
-      context.states.push({ kind: "wounded", icon: "fa-solid fa-heart-crack", label: "Ниже порога ранения",
+      context.states.push({ kind: "wounded", label: "Ниже порога ранения",
         hint: "Реа, Лвк, Инт и Воля вдвое" });
     }
     if (system.derived.overload) {
       context.states.push({
-        kind: "overload", icon: "fa-solid fa-weight-hanging", label: `Перегруз −${system.derived.overload}`,
+        kind: "overload", label: `Перегруз −${system.derived.overload}`,
         hint: `${system.derived.carried} кг при пределе ${system.derived.enc} кг`
       });
     }

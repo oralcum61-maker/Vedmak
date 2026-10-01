@@ -18,15 +18,15 @@ import { compareRu } from "../util.mjs";
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
 const STEPS = [
-  { id: "race",       label: "Раса",            icon: "fa-solid fa-people-group" },
-  { id: "origin",     label: "Происхождение",   icon: "fa-solid fa-map-location-dot" },
-  { id: "lifepath",   label: "Жизненный путь",  icon: "fa-solid fa-dice" },
-  { id: "profession", label: "Профессия",       icon: "fa-solid fa-sitemap" },
-  { id: "stats",      label: "Параметры",       icon: "fa-solid fa-user-shield" },
-  { id: "skills",     label: "Навыки",          icon: "fa-solid fa-list-check" },
-  { id: "magic",      label: "Магия",           icon: "fa-solid fa-hand-sparkles" },
-  { id: "gear",       label: "Снаряжение",      icon: "fa-solid fa-sack" },
-  { id: "summary",    label: "Итог",            icon: "fa-solid fa-scroll" }
+  { id: "race",       label: "Раса" },
+  { id: "origin",     label: "Происхождение" },
+  { id: "lifepath",   label: "Жизненный путь" },
+  { id: "profession", label: "Профессия" },
+  { id: "stats",      label: "Параметры" },
+  { id: "skills",     label: "Навыки" },
+  { id: "magic",      label: "Магия" },
+  { id: "gear",       label: "Снаряжение" },
+  { id: "summary",    label: "Итог" }
 ];
 
 const STAT_KEYS = Object.keys(STATS);
@@ -62,7 +62,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "vedmak-character-wizard-{id}",
     classes: ["vedmak", "sheet", "vedmak-wizard"],
     tag: "div",
-    window: { title: "Мастер создания персонажа", icon: "fa-solid fa-wand-magic-sparkles", resizable: true },
+    window: { title: "Мастер создания персонажа", resizable: true },
     position: { width: 900, height: 780 },
     actions: {
       step: CharacterWizard.#onStep,

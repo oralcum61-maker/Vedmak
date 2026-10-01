@@ -119,14 +119,14 @@ export async function startOfTurn(actor, combat, context) {
     }
     if (due) {
       lines.push(`${wound.name}: испытание Устойчивости.`);
-      buttons.push({ action: "stunSave", label: "Испытание Уст", icon: "fa-face-dizzy", reason: wound.name });
+      buttons.push({ action: "stunSave", label: "Испытание Уст", reason: wound.name });
     }
   }
 
   // При смерти — испытание каждый раунд
   if (actor.system.hp.value < 0 && !actor.statuses.has("dead")) {
     lines.push(wasDying ? "При смерти: испытание против смерти." : "Персонаж при смерти: испытание против смерти.");
-    buttons.push({ action: "deathSave", label: "Испытание против смерти", icon: "fa-skull" });
+    buttons.push({ action: "deathSave", label: "Испытание против смерти" });
   }
 
   // Напоминания о тяжёлых состояниях

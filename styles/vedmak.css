@@ -1,52 +1,38 @@
-/* «Ведьмак: НРИ» — кожа, железо и кровь. Свой вид, не зависящий от темы Foundry.
-   У каждой части листа свой материал: кожа переплёта, вороненая сталь, холст, пергамент, бумага,
-   бронза и камень — фактуры CC0 с ambientCG (см. assets/textures/ИСТОЧНИКИ.txt),
-   шрифты Forum и PT Serif — SIL OFL (см. fonts/ИСТОЧНИКИ.txt). */
+/* «Ведьмак: НРИ» — тёмная сталь и потемневшее золото. Свой вид, не зависящий от темы Foundry.
+   Плоские поверхности и тонкие линии вместо фактур и объёмных рамок: интерфейс не должен давить.
+   Шрифты (SIL OFL, см. fonts/ИСТОЧНИКИ.txt): Forum — только заголовки, IBM Plex Sans — всё остальное. */
 
 @font-face { font-family: "Vedmak Display"; src: url("../fonts/Forum-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Vedmak Body"; src: url("../fonts/PT_Serif-Web-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vedmak Body"; src: url("../fonts/PT_Serif-Web-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vedmak Body"; src: url("../fonts/PT_Serif-Web-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: normal; font-display: swap; }
+@font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: italic; font-display: swap; }
 
 .vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
-  /* Тёплая гамма: зола, кожа, железо, кость, потемневшее золото, кровь */
-  --vd-bg: #16120d;
-  --vd-bg-2: #1e1811;
-  /* Панель светлее фона: поверх неё лежит фактура, и на тёмном она бы пропала */
-  --vd-panel: #3a3022;
-  --vd-line: #443a2b;
-  --vd-line-soft: #302719;
-  --vd-text: #ded3bb;
-  --vd-text-dim: #97886c;
-  --vd-silver: #e8dcc2;
-  --vd-steel: #6b5c42;
-  --vd-gold: #b4914e;
-  --vd-gold-lite: #e3c078;
-  --vd-blood: #8e2b22;
-  --vd-blood-lite: #c0533f;
-  --vd-green: #7d8a4a;
-  --vd-input: #120e09;
+  /* Тёплая тёмная гамма: уголь, кость, потемневшее золото, кровь. Плоско: поверхность отличается от фона
+     только тоном, границы — волосяные линии */
+  --vd-bg: #15120e;
+  --vd-bg-2: #1b1712;
+  --vd-panel: #1f1a14;
+  --vd-line: #3a3227;
+  --vd-line-soft: #29231b;
+  --vd-text: #e2d8c3;
+  --vd-text-dim: #9a8c73;
+  --vd-silver: #efe5d0;
+  --vd-steel: #6e604a;
+  --vd-gold: #b8975a;
+  --vd-gold-lite: #dcbc7c;
+  --vd-blood: #9a3226;
+  --vd-blood-lite: #cf6a52;
+  --vd-green: #8a9a55;
+  --vd-input: #110e0b;
   --vd-font-head: "Vedmak Display", "Forum", serif;
-  --vd-font-body: "Vedmak Body", "PT Serif", Georgia, serif;
-  /* Фактуры (assets/textures, CC0 с ambientCG): серое зерно поверх цвета режимом overlay */
-  --vd-tex-leather: url("../assets/textures/leather-grain.webp");
-  --vd-tex-tooled: url("../assets/textures/leather-tooled.webp");
-  --vd-tex-iron: url("../assets/textures/iron-grain.webp");
-  --vd-tex-steel: url("../assets/textures/steel-blued.webp");
-  --vd-tex-bronze: url("../assets/textures/bronze-cast.webp");
-  --vd-tex-brass: url("../assets/textures/brass-grain.webp");
-  --vd-tex-canvas: url("../assets/textures/canvas-weave.webp");
-  --vd-tex-cloth: url("../assets/textures/cloth-grain.webp");
-  --vd-tex-parchment: url("../assets/textures/parchment-grain.webp");
-  --vd-tex-paper: url("../assets/textures/paper-old.webp");
-  --vd-tex-stone: url("../assets/textures/stone-grain.webp");
-  --vd-tex-slate: url("../assets/textures/slate-dark.webp");
-  --vd-tex-wood: url("../assets/textures/wood-grain.webp");
-  /* Материал текущей вкладки: панели берут его отсюда, см. «Материалы вкладок».
-     По умолчанию — тиснёная кожа: мелкое зерно на панели читается как шум, а не как материал. */
-  --vd-material: var(--vd-tex-tooled);
-  --vd-material-size: 360px;
-  font-family: var(--vd-font-body);
+  --vd-font-body: "Vedmak Sans", "IBM Plex Sans", system-ui, sans-serif;
+  /* Фактур больше нет: переменные оставлены пустыми, чтобы старые правила оставались верными */
+  --vd-tex-leather: none; --vd-tex-tooled: none; --vd-tex-iron: none; --vd-tex-steel: none; --vd-tex-bronze: none;
+  --vd-tex-brass: none; --vd-tex-canvas: none; --vd-tex-cloth: none; --vd-tex-parchment: none; --vd-tex-paper: none;
+  --vd-tex-stone: none; --vd-tex-slate: none; --vd-tex-wood: none;
+  --vd-material: none;
+  --vd-material-size: auto;
+  font-variant-numeric: tabular-nums;  font-family: var(--vd-font-body);
 }
 
 /* ---------------------------- Окно и форма ---------------------------- */
@@ -65,11 +51,7 @@
   position: relative;
   background-color: var(--vd-bg);
   /* Кожа переплёта плюс крупные разводы сланца: без них большой фон выглядит залитым одним цветом */
-  background-image:
-    radial-gradient(120% 80% at 50% -10%, rgba(120, 95, 58, .16), rgba(0, 0, 0, 0) 60%),
-    radial-gradient(100% 120% at 50% 110%, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0) 60%),
-    var(--vd-tex-leather),
-    var(--vd-tex-slate);
+  background-image: none;
   background-size: auto, auto, 260px 260px, 620px 620px;
   background-blend-mode: normal, normal, overlay, soft-light;
   color: var(--vd-text);
@@ -81,13 +63,12 @@
 /* Планка окна — вороненая сталь: рамка листа, а не часть его кожи */
 .vedmak.sheet .window-header {
   background-color: #12100e;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .46)),
-    var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 320px 320px;
   background-blend-mode: normal, overlay;
   border-bottom: 1px solid #0d0a07;
 }
-.vedmak.sheet .window-title { font-family: var(--vd-font-head); letter-spacing: .06em; }
+.vedmak.sheet .window-title { font-family: var(--vd-font-body); letter-spacing: .06em; }
 /* Полоса прокрутки под золото старой оковки */
 .vedmak.sheet .window-content, .vedmak.sheet section.tab { scrollbar-color: #6b5c42 rgba(0, 0, 0, .35); }
 
@@ -95,7 +76,7 @@
 .vedmak.sheet .window-content::after {
   content: "";
   position: absolute; inset: 0; pointer-events: none; z-index: 2;
-  box-shadow: inset 0 0 45px rgba(0, 0, 0, .42), inset 0 0 2px rgba(180, 145, 78, .16);
+  box-shadow: none;
 }
 
 .vedmak.sheet input,
@@ -172,12 +153,11 @@
   min-height: 0; overflow-y: auto;
   padding: .55rem .5rem .6rem;
   background-color: #241d15;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .26), rgba(0, 0, 0, .44)),
-    var(--vd-tex-tooled);
+  background-image: none;
   background-size: auto, 340px 340px;
   background-blend-mode: normal, overlay;
   border-right: 1px solid #0d0a07;
-  box-shadow: inset -7px 0 14px rgba(0, 0, 0, .45);
+  box-shadow: none;
 }
 .vedmak.character nav.sheet-tabs { grid-column: 2; grid-row: 1; }
 .vedmak.character section.tab { grid-column: 2; grid-row: 2; min-height: 0; }
@@ -187,7 +167,7 @@
 .vedmak .vd-rail .portrait-frame {
   position: relative; width: 100%; aspect-ratio: 4 / 3; flex: none;
   background: #14100b; border: 1px solid #0f0b07; overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(180, 145, 78, .22), inset 0 0 22px rgba(0, 0, 0, .8), 0 2px 8px rgba(0, 0, 0, .5);
+  box-shadow: none;
 }
 /* Арт вписывается целиком: `cover` срезал у портретов верх и низ под пропорцию рамки */
 .vedmak .vd-rail .portrait { width: 100%; height: 100%; object-fit: contain; cursor: pointer; display: block; }
@@ -201,11 +181,11 @@
 .vedmak .vd-rail .portrait-frame::after { right: 5px; border-right: 1px solid var(--vd-gold); }
 .vedmak .vd-rail .portrait-name {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 1.3rem .45rem .35rem;
-  background: linear-gradient(180deg, rgba(20, 16, 11, 0), rgba(20, 16, 11, .93) 55%);
+  background: rgba(20, 16, 11, 0);
 }
 .vedmak .vd-rail input.name {
   width: 100%; height: auto; padding: 0 .1rem;
-  font-family: var(--vd-font-head); font-size: 1.25rem; line-height: 1.15; letter-spacing: .04em;
+  font-family: var(--vd-font-body); font-size: 1.25rem; line-height: 1.15; letter-spacing: .04em;
   color: var(--vd-silver); background: transparent;
   border: none; border-bottom: 1px solid rgba(180, 145, 78, .28);
 }
@@ -230,12 +210,12 @@
 .vedmak .vd-rail .rv { display: flex; flex-direction: column; gap: .18rem; }
 .vedmak .vd-rail .rv-head { display: flex; align-items: baseline; gap: .3rem; }
 .vedmak .vd-rail .rv-head .cap {
-  font-family: var(--vd-font-head); font-size: .62rem; letter-spacing: .14em; color: var(--vd-text-dim);
+  font-family: var(--vd-font-body); font-size: .62rem; letter-spacing: .14em; color: var(--vd-text-dim);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .vedmak .vd-rail .rv-head input {
   width: 2.6rem; height: 1.4rem; margin-left: auto; padding: 0;
-  text-align: right; font-family: var(--vd-font-head); font-size: 1.25rem; line-height: 1;
+  text-align: right; font-family: var(--vd-font-body); font-size: 1.25rem; line-height: 1;
   color: var(--vd-silver); background: transparent; border: 1px solid transparent;
 }
 .vedmak .vd-rail .rv-head input:hover, .vedmak .vd-rail .rv-head input:focus { border-color: var(--vd-line); }
@@ -268,7 +248,7 @@
   border: 1px solid #0f0b07;
 }
 .vedmak .vd-rail .rail-luck .cap {
-  font-family: var(--vd-font-head); font-size: .62rem; letter-spacing: .14em; color: var(--vd-text-dim);
+  font-family: var(--vd-font-body); font-size: .62rem; letter-spacing: .14em; color: var(--vd-text-dim);
 }
 .vedmak .vd-rail .rail-luck .dots { display: flex; flex-wrap: wrap; gap: .2rem; margin-left: auto; }
 .vedmak .vd-rail .rail-luck .dot {
@@ -279,7 +259,7 @@
 }
 .vedmak .vd-rail .rail-luck input {
   width: 1.9rem; height: 1.2rem; padding: 0; text-align: right;
-  font-family: var(--vd-font-head); font-size: 1.05rem; color: var(--vd-gold-lite);
+  font-family: var(--vd-font-body); font-size: 1.05rem; color: var(--vd-gold-lite);
   background: transparent; border: 1px solid transparent;
 }
 .vedmak .vd-rail .rail-luck input:hover, .vedmak .vd-rail .rail-luck input:focus { border-color: var(--vd-line); }
@@ -291,7 +271,7 @@
 .vedmak .vd-rail .count-line { display: flex; align-items: baseline; gap: .3rem; font-size: .74rem; color: var(--vd-text-dim); }
 .vedmak .vd-rail .count-line input {
   width: 2.2rem; height: 1.2rem; padding: 0; text-align: right;
-  font-family: var(--vd-font-head); font-size: 1rem; color: var(--vd-text);
+  font-family: var(--vd-font-body); font-size: 1rem; color: var(--vd-text);
   background: transparent; border: 1px solid transparent;
 }
 .vedmak .vd-rail .count-line input:hover, .vedmak .vd-rail .count-line input:focus { border-color: var(--vd-line); }
@@ -303,7 +283,7 @@
 .vedmak .vd-rail .rail-derived {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   background-color: #241d15;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .06), rgba(0, 0, 0, .34)), var(--vd-tex-stone);
+  background-image: none;
   background-size: auto, 300px 300px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07;
@@ -314,7 +294,7 @@
 }
 .vedmak .vd-rail .dval:last-child { border-right: none; }
 .vedmak .vd-rail .dval .v { display: flex; align-items: baseline; gap: .1rem; }
-.vedmak .vd-rail .dval b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.25rem; line-height: 1; color: var(--vd-silver); }
+.vedmak .vd-rail .dval b { font-family: var(--vd-font-body); font-weight: 400; font-size: 1.25rem; line-height: 1; color: var(--vd-silver); }
 .vedmak .vd-rail .dval small { font-size: .62rem; color: var(--vd-text-dim); }
 .vedmak .vd-rail .dval em {
   font-style: normal; font-size: .6rem; letter-spacing: .04em; color: var(--vd-text-dim);
@@ -326,18 +306,18 @@
   position: sticky; bottom: -.6rem; z-index: 2; margin-top: auto;
   display: flex; gap: .3rem;
   padding: .45rem 0 .25rem;
-  background: linear-gradient(180deg, rgba(30, 24, 16, 0), rgba(30, 24, 16, .97) 45%);
+  background: rgba(30, 24, 16, 0);
 }
 .vedmak .vd-rail .rail-btn {
   flex: 1; text-align: center; padding: .25rem .3rem; font-size: .76rem;
   color: var(--vd-text-dim); border: 1px solid var(--vd-line); border-radius: 2px;
   background-color: #241d15;
-  background-image: linear-gradient(180deg, rgba(255, 235, 200, .06), rgba(0, 0, 0, .34));
+  background-image: none;
 }
 .vedmak .vd-rail .rail-btn:hover { color: var(--vd-gold-lite); border-color: var(--vd-steel); }
 .vedmak .vd-rail .rail-btn.active {
   color: #f0dba6; border-color: var(--vd-gold);
-  background-image: linear-gradient(180deg, #4a3a1e, #2c2111);
+  background-image: none;
 }
 
 /* ------------------------------- Шапка ------------------------------- */
@@ -351,17 +331,16 @@
   border-bottom: 1px solid #0d0a07;
   background-color: #241d15;
   /* Тиснёная кожа обложки: зерно крупнее, чем на листе, — шапка читается как накладка */
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .09), rgba(0, 0, 0, .35)),
-    var(--vd-tex-tooled);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .08), 0 3px 8px rgba(0, 0, 0, .5);
+  box-shadow: none;
   flex: none;
 }
 /* Кровяная нить по нижней кромке шапки */
 .vedmak .vd-header::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
-  background: linear-gradient(90deg, rgba(142, 43, 34, .2), var(--vd-blood) 25%, var(--vd-blood) 75%, rgba(142, 43, 34, .2));
+  background: rgba(142, 43, 34, .2);
 }
 .vedmak .vd-header .portrait {
   width: 94px; height: 94px;
@@ -371,14 +350,14 @@
   cursor: pointer;
   background: #000;
   flex: none;
-  box-shadow: 0 0 0 1px #0d0a07, inset 0 0 12px rgba(0, 0, 0, .8), 0 2px 6px rgba(0, 0, 0, .55);
+  box-shadow: none;
 }
 .vedmak.item .vd-header .portrait, .vedmak.vedmak-effect .vd-header .portrait { object-fit: contain; }
 .vedmak.item .vd-header .portrait { width: 64px; height: 64px; }
 .vedmak .vd-header .identity { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .4rem; justify-content: space-between; }
 .vedmak .vd-header .name-line { display: flex; flex-direction: column; gap: .3rem; }
 .vedmak .vd-header input.name {
-  font-family: var(--vd-font-head);
+  font-family: var(--vd-font-body);
   font-size: 1.7rem;
   height: auto;
   line-height: 1.15;
@@ -423,8 +402,8 @@
   color: var(--vd-text-dim);
   /* Бирки на шнурке: латунная пластинка с патиной */
   background-color: #2a2219;
-  background-image: linear-gradient(180deg, rgba(255, 235, 200, .06), rgba(0, 0, 0, .35));
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .06);
+  background-image: none;
+  box-shadow: none;
 }
 .vedmak .vd-header .tag.state.wounded { color: #f0c36b; border-color: #7a5d25; }
 .vedmak .vd-header .tag.state.dying { color: #fff; background: var(--vd-blood); border-color: var(--vd-blood-lite); }
@@ -445,15 +424,14 @@
   gap: .4rem;
   min-width: 10.5rem;
   background-color: var(--vd-panel);
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .28)),
-    var(--vd-tex-bronze);
+  background-image: none;
   background-size: auto, 280px 280px;
   background-blend-mode: normal, overlay;
   border: 1px solid #100c07;
   border-left: 2px solid var(--vd-steel);
   border-radius: 2px;
   padding: .14rem .4rem;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .08);
+  box-shadow: none;
 }
 .vedmak .res label { flex: 1; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--vd-text-dim); }
 .vedmak .res .pair { display: flex; align-items: center; gap: .2rem; font-size: .8rem; color: var(--vd-text-dim); }
@@ -477,11 +455,10 @@
   align-items: flex-end;
   border-bottom: 1px solid #0d0a07;
   background-color: #191309;
-  background-image: linear-gradient(180deg, rgba(255, 235, 200, .05), rgba(0, 0, 0, .38)),
-    var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
-  box-shadow: inset 0 -3px 7px rgba(0, 0, 0, .55);
+  box-shadow: none;
   justify-content: flex-start;
 }
 .vedmak.sheet nav.sheet-tabs > a {
@@ -490,20 +467,19 @@
   margin-bottom: -1px;
   padding: .3rem .62rem .32rem;
   color: var(--vd-text-dim);
-  font-family: var(--vd-font-head);
+  font-family: var(--vd-font-body);
   font-size: .86rem;
   letter-spacing: .07em;
   white-space: nowrap;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .7);
   background-color: #241d15;
-  background-image: linear-gradient(180deg, rgba(255, 235, 200, .06), rgba(0, 0, 0, .3)),
-    var(--vd-tex-tooled);
+  background-image: none;
   background-size: auto, 300px 300px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0d0a07;
   border-bottom-color: transparent;
   border-radius: 4px 4px 0 0;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .07);
+  box-shadow: none;
 }
 .vedmak.sheet nav.sheet-tabs > a:hover { color: var(--vd-silver); background-color: #2b2219; }
 /* Строчка по краю язычка — как прошивка кожи */
@@ -519,13 +495,13 @@
   color: var(--vd-gold-lite);
   background-color: #33291d;
   padding-bottom: .4rem;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .13), 0 -3px 7px rgba(0, 0, 0, .45);
+  box-shadow: none;
 }
 .vedmak.sheet nav.sheet-tabs > a.active::before { border-color: rgba(227, 192, 120, .35); }
 /* Красная нить на корешке активной закладки */
 .vedmak.sheet nav.sheet-tabs > a.active::after {
   content: ""; position: absolute; left: .35rem; right: .35rem; top: -1px; height: 2px;
-  background: linear-gradient(90deg, rgba(142, 43, 34, .15), var(--vd-blood) 30%, var(--vd-blood) 70%, rgba(142, 43, 34, .15));
+  background: rgba(142, 43, 34, .15);
   border-radius: 2px;
 }
 .vedmak.sheet nav.sheet-tabs > a i { margin-right: .25rem; font-size: .9em; }
@@ -579,19 +555,18 @@
   position: relative;
   /* Светлая основа + притеняющий градиент: так зерно материала остаётся видно */
   background-color: var(--vd-panel);
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .30), rgba(0, 0, 0, .42)),
-    var(--vd-material);
+  background-image: none;
   background-size: auto, var(--vd-material-size) var(--vd-material-size);
   background-blend-mode: normal, overlay;
   border: 1px solid #100c07;
   border-radius: 2px;
   padding: .45rem .7rem .65rem;
   margin-bottom: .6rem;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .10), inset 0 -2px 5px rgba(0, 0, 0, .40), 0 3px 7px rgba(0, 0, 0, .45);
+  box-shadow: none;
 }
 .vedmak .vd-panel h3 {
   position: relative;
-  font-family: var(--vd-font-head);
+  font-family: var(--vd-font-body);
   font-size: 1.2rem;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -606,8 +581,8 @@
 /* Линия под заголовком гаснет вправо — как клеймо на стали */
 .vedmak .vd-panel h3::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
-  background: linear-gradient(90deg, var(--vd-gold), rgba(107, 92, 66, .12) 70%);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .55);
+  background: rgba(107, 92, 66, .12);
+  box-shadow: none;
 }
 .vedmak .vd-panel h3 .add, .vedmak .vd-panel h3 .stat-val { margin-left: auto; }
 .vedmak .vd-panel h3 .stat-val { color: var(--vd-gold); font-size: 1.1rem; }
@@ -641,12 +616,12 @@
 .vedmak .derived {
   background-color: #241d15;
   /* Производные значения — камень: выбито раз и навсегда, в отличие от правимых полей */
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .3));
+  background-image: none;
   border: 1px solid #0f0b07;
   border-radius: 2px;
   text-align: center;
   padding: .25rem .2rem;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .08);
+  box-shadow: none;
 }
 .vedmak .derived .abbr { display: block; font-size: .68rem; color: var(--vd-text-dim); text-transform: uppercase; letter-spacing: .04em; }
 .vedmak .derived .value { font-size: 1.1rem; font-weight: bold; color: var(--vd-silver); }
@@ -669,29 +644,29 @@
 .vedmak.character .stat-col { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
 
 .vedmak .group-head { display: flex; align-items: center; gap: .4rem; }
-.vedmak .group-head .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--vd-line), rgba(68, 58, 43, 0)); }
+.vedmak .group-head .rule { flex: 1; height: 1px; background: rgba(68, 58, 43, 0); }
 .vedmak .bronze-tag {
   padding: .08rem .5rem;
-  font-family: var(--vd-font-head); font-size: .68rem; letter-spacing: .16em; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: .68rem; letter-spacing: .16em; color: var(--vd-silver);
   background-color: #4a3a1e;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .1), rgba(0, 0, 0, .3)), var(--vd-tex-bronze);
+  background-image: none;
   background-size: auto, 220px 220px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07;
 }
 .vedmak .group-head .glabel {
-  font-family: var(--vd-font-head); font-size: .66rem; letter-spacing: .16em; color: var(--vd-gold);
+  font-family: var(--vd-font-body); font-size: .66rem; letter-spacing: .16em; color: var(--vd-gold);
 }
 
 .vedmak.character .stat-row {
   display: flex; align-items: center; gap: .5rem;
   padding: .4rem .45rem;
   background-color: #2a2119;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .34)), var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-radius: 2px;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .07);
+  box-shadow: none;
 }
 .vedmak.character .stat-row:hover { border-color: var(--vd-steel); }
 /* Бросок — по всей строке, а не по одной цифре: попасть в строку легче */
@@ -701,7 +676,7 @@
 .vedmak.character .stat-row .stamp {
   position: relative; flex: none; width: 2.8rem; height: 2.8rem;
   display: grid; place-items: center;
-  font-family: var(--vd-font-head); font-size: 1.7rem; line-height: 1; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1.7rem; line-height: 1; color: var(--vd-silver);
   background: #191309; border: 1px solid var(--vd-line);
 }
 .vedmak.character .stat-row .stamp i {
@@ -712,7 +687,7 @@
 .vedmak.character .stat-row .hit:hover .stamp { border-color: var(--vd-gold); color: #f0dba6; }
 .vedmak.character .stat-row .hit:hover .stamp i { opacity: .95; }
 .vedmak.character .stat-row .who { display: flex; flex-direction: column; gap: 0; min-width: 0; }
-.vedmak.character .stat-row .name { font-family: var(--vd-font-head); font-size: .98rem; color: var(--vd-text); }
+.vedmak.character .stat-row .name { font-family: var(--vd-font-body); font-size: .98rem; color: var(--vd-text); }
 .vedmak.character .stat-row .about {
   font-size: .7rem; color: var(--vd-steel); line-height: 1.3;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -731,7 +706,7 @@
 }
 .vedmak.character .stat-row .base input {
   width: 2.1rem; height: 1.45rem; text-align: center;
-  font-family: var(--vd-font-head); font-size: .95rem; color: var(--vd-text);
+  font-family: var(--vd-font-body); font-size: .95rem; color: var(--vd-text);
   background: var(--vd-input); border: 1px solid var(--vd-line);
 }
 .vedmak.character .stat-row a.improve { flex: none; min-width: 2.6rem; height: 1.5rem; font-size: .76rem; }
@@ -741,14 +716,14 @@
   display: flex; align-items: center; gap: .5rem;
   padding: .3rem .5rem;
   background-color: #33291d;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .08), rgba(0, 0, 0, .3)), var(--vd-tex-bronze);
+  background-image: none;
   background-size: auto, 220px 220px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-left: 2px solid var(--vd-gold);
   font-size: .8rem;
 }
 .vedmak .advance-bar i { color: var(--vd-gold-lite); }
-.vedmak .advance-bar b { font-family: var(--vd-font-head); font-weight: 400; color: var(--vd-gold-lite); }
+.vedmak .advance-bar b { font-family: var(--vd-font-body); font-weight: 400; color: var(--vd-gold-lite); }
 .vedmak .advance-bar .grow { flex: 1; }
 .vedmak .advance-bar .ip { color: var(--vd-text-dim); }
 .vedmak .advance-bar .ip b { font-size: 1.1rem; color: var(--vd-silver); }
@@ -765,7 +740,7 @@
 .vedmak .dline { display: flex; align-items: baseline; gap: .35rem; font-size: .86rem; }
 .vedmak .dline .t { color: var(--vd-text-dim); white-space: nowrap; }
 .vedmak .dline b {
-  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.08rem; color: var(--vd-text); white-space: nowrap;
+  font-family: var(--vd-font-body); font-weight: 400; font-size: 1.08rem; color: var(--vd-text); white-space: nowrap;
 }
 .vedmak .dline b small { font-size: .66rem; color: var(--vd-steel); }
 
@@ -776,19 +751,19 @@
   background: #241d15; border: 1px solid #0f0b07; border-left: 2px solid var(--vd-gold);
 }
 .vedmak .fate-bar .cap {
-  font-family: var(--vd-font-head); font-size: .68rem; letter-spacing: .16em; color: var(--vd-gold);
+  font-family: var(--vd-font-body); font-size: .68rem; letter-spacing: .16em; color: var(--vd-gold);
 }
 .vedmak .fate-bar .fate-value { display: flex; align-items: baseline; gap: .4rem; }
 .vedmak .fate-bar .fate-value .t { font-size: .8rem; color: var(--vd-text-dim); }
 .vedmak .fate-bar .fate-value b {
-  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.3rem; color: var(--vd-gold-lite);
+  font-family: var(--vd-font-body); font-weight: 400; font-size: 1.3rem; color: var(--vd-gold-lite);
 }
 .vedmak .fate-bar .grow { flex: 1; }
 .vedmak .fate-bar .base { display: flex; align-items: center; gap: .25rem; }
 .vedmak .fate-bar .base .cap { font-size: .58rem; letter-spacing: .1em; color: var(--vd-steel); }
 .vedmak .fate-bar .base input {
   width: 2.1rem; height: 1.45rem; text-align: center;
-  font-family: var(--vd-font-head); font-size: .95rem; color: var(--vd-text);
+  font-family: var(--vd-font-body); font-size: .95rem; color: var(--vd-text);
   background: var(--vd-input); border: 1px solid var(--vd-line);
 }
 
@@ -846,19 +821,19 @@
 .vedmak nav.pane-switch {
   display: inline-flex; gap: 0; margin: 0; padding: 2px;
   background: #16120d; border: 1px solid #0d0a07; border-radius: 2px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .6);
+  box-shadow: none;
 }
 .vedmak nav.pane-switch > a {
   display: inline-flex; align-items: center; gap: .4rem;
-  padding: .28rem .8rem; font-family: var(--vd-font-head); font-size: .88rem; letter-spacing: .04em;
+  padding: .28rem .8rem; font-family: var(--vd-font-body); font-size: .88rem; letter-spacing: .04em;
   color: var(--vd-text-dim); border: 1px solid transparent; border-radius: 2px;
 }
 /* Клик по значку, подписи или счётчику должен попадать в саму кнопку: Foundry берёт event.target */
 .vedmak nav.pane-switch > a > * { pointer-events: none; }
 .vedmak nav.pane-switch > a:hover { color: var(--vd-silver); }
 .vedmak nav.pane-switch > a.active {
-  color: var(--vd-gold-lite); background: linear-gradient(180deg, #3a2e1f, #2a2117);
-  border-color: var(--vd-gold); box-shadow: inset 0 1px 0 rgba(255, 235, 200, .12);
+  color: var(--vd-gold-lite); background: #3a2e1f;
+  border-color: var(--vd-gold); box-shadow: none;
 }
 .vedmak nav.pane-switch .count {
   min-width: 1.3rem; padding: 0 .3rem; text-align: center;
@@ -881,7 +856,7 @@
 .vedmak .skills-tab .bronze-tag { text-transform: uppercase; }
 .vedmak .stat-stamp {
   min-width: 1.8rem; padding: .05rem .3rem; text-align: center;
-  font-family: var(--vd-font-head); font-size: 1rem; line-height: 1.3; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1rem; line-height: 1.3; color: var(--vd-silver);
   background: #191309; border: 1px solid var(--vd-line);
 }
 
@@ -905,13 +880,13 @@
 .vedmak .skill-line .difficult { font-size: .5rem; color: var(--vd-steel); margin-left: .2rem; vertical-align: super; }
 .vedmak .skill-line .lvl {
   flex: none; width: 2.1rem; height: 1.35rem; padding: 0; text-align: center;
-  font-family: var(--vd-font-head); font-size: .88rem; color: var(--vd-text-dim);
+  font-family: var(--vd-font-body); font-size: .88rem; color: var(--vd-text-dim);
   background: var(--vd-input); border: 1px solid var(--vd-line-soft);
 }
 .vedmak .skill-line.trained .lvl { color: var(--vd-text); border-color: var(--vd-line); }
 .vedmak .skill-line .base {
   flex: none; width: 2rem; height: 1.45rem; display: grid; place-items: center;
-  font-family: var(--vd-font-head); font-size: 1rem; line-height: 1; color: var(--vd-text-dim);
+  font-family: var(--vd-font-body); font-size: 1rem; line-height: 1; color: var(--vd-text-dim);
   background: #191309; border: 1px solid var(--vd-line-soft);
 }
 .vedmak .skill-line.trained .base { color: var(--vd-silver); border-color: var(--vd-line); }
@@ -922,18 +897,18 @@
 .vedmak .prof-card {
   display: flex; align-items: center; gap: .6rem; padding: .45rem .55rem;
   background-color: #2a2119;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .34)), var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-left: 2px solid var(--vd-gold);
 }
 .vedmak .prof-card img { width: 46px; height: 46px; flex: none; border: 1px solid var(--vd-line); border-radius: 2px; background: #191309; }
 .vedmak .prof-card .who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .05rem; }
-.vedmak .prof-card .name { font-family: var(--vd-font-head); font-size: 1.25rem; color: var(--vd-silver); }
+.vedmak .prof-card .name { font-family: var(--vd-font-body); font-size: 1.25rem; color: var(--vd-silver); }
 .vedmak .prof-card .name:hover { color: var(--vd-gold-lite); }
 .vedmak .prof-card .about { font-size: .74rem; color: var(--vd-text-dim); }
 .vedmak .prof-progress { flex: none; display: flex; flex-direction: column; align-items: center; padding: .2rem .5rem; background: #191309; border: 1px solid var(--vd-line); }
-.vedmak .prof-progress b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.4rem; line-height: 1; color: var(--vd-gold-lite); }
+.vedmak .prof-progress b { font-family: var(--vd-font-body); font-weight: 400; font-size: 1.4rem; line-height: 1; color: var(--vd-gold-lite); }
 .vedmak .prof-progress .cap { font-size: .6rem; letter-spacing: .06em; color: var(--vd-text-dim); }
 
 .vedmak .skills-tab .ability {
@@ -942,11 +917,11 @@
 }
 .vedmak .skills-tab .ability.learned { border-left-color: var(--vd-gold); background: #2a2119; }
 .vedmak .skills-tab .ability.locked { opacity: .55; }
-.vedmak .skills-tab .ability .cap { font-family: var(--vd-font-head); font-size: .6rem; letter-spacing: .14em; color: var(--vd-gold); }
+.vedmak .skills-tab .ability .cap { font-family: var(--vd-font-body); font-size: .6rem; letter-spacing: .14em; color: var(--vd-gold); }
 .vedmak .skills-tab .ab-row { display: flex; align-items: center; gap: .35rem; }
 .vedmak .skills-tab .ab-row .hit { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: .35rem; color: inherit; }
 .vedmak .skills-tab .ab-row .name {
-  font-family: var(--vd-font-head); font-size: .9rem; color: var(--vd-text);
+  font-family: var(--vd-font-body); font-size: .9rem; color: var(--vd-text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .vedmak .skills-tab .ability.learned .ab-row .name { color: var(--vd-gold-lite); }
@@ -955,12 +930,12 @@
 .vedmak .skills-tab .ab-row .stat { flex: none; font-size: .64rem; letter-spacing: .04em; color: var(--vd-steel); }
 .vedmak .skills-tab .ab-row input {
   flex: none; width: 2.1rem; height: 1.35rem; padding: 0; text-align: center;
-  font-family: var(--vd-font-head); font-size: .88rem; color: var(--vd-text);
+  font-family: var(--vd-font-body); font-size: .88rem; color: var(--vd-text);
   background: var(--vd-input); border: 1px solid var(--vd-line);
 }
 .vedmak .skills-tab .ab-row .base {
   flex: none; min-width: 2rem; height: 1.45rem; padding: 0 .2rem; display: grid; place-items: center;
-  font-family: var(--vd-font-head); font-size: 1rem; line-height: 1; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1rem; line-height: 1; color: var(--vd-silver);
   background: #191309; border: 1px solid var(--vd-line);
 }
 .vedmak .skills-tab .ab-row a.base:hover { color: #f0dba6; border-color: var(--vd-gold); }
@@ -1000,10 +975,10 @@
 .vedmak table.vd-table thead { background: transparent; text-shadow: none; }
 /* Шапка таблицы — бронзовая планка поверх материала вкладки */
 .vedmak table.vd-table th {
-  font-family: var(--vd-font-head); font-size: .74rem; text-transform: uppercase; letter-spacing: .08em;
+  font-family: var(--vd-font-body); font-size: .74rem; text-transform: uppercase; letter-spacing: .08em;
   color: var(--vd-text-dim); font-weight: normal; text-align: center;
   background-color: #241d14;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .46));
+  background-image: none;
   border-bottom: 1px solid var(--vd-steel); padding: .2rem .25rem; text-shadow: 0 1px 0 rgba(0, 0, 0, .6);
 }
 .vedmak table.vd-table td { padding: .15rem .25rem; text-align: center; border-bottom: 1px solid var(--vd-line-soft); color: var(--vd-text); }
@@ -1040,13 +1015,12 @@
   padding: .3rem .6rem .6rem;
   margin: 0 0 .6rem;
   background-color: var(--vd-panel);
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .36), rgba(0, 0, 0, .48)),
-    var(--vd-tex-parchment);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
 }
 .vedmak .vd-fieldset legend {
-  font-family: var(--vd-font-head);
+  font-family: var(--vd-font-body);
   font-size: 1.15rem;
   color: var(--vd-silver);
   padding: 0 .35rem;
@@ -1079,8 +1053,7 @@
 /* Окно броска — обрывок того же кожаного листа, чтобы не выбивалось из темы Foundry */
 .vedmak-dialog .window-content {
   background-color: #241d15;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .28), rgba(0, 0, 0, .42)),
-    var(--vd-tex-tooled, url("../assets/textures/leather-tooled.webp"));
+  background-image: none;
   background-size: auto, 340px 340px;
   background-blend-mode: normal, overlay;
   color: var(--vd-text, #ded3bb);
@@ -1132,7 +1105,7 @@
 .vedmak-dialog.check-dialog .dlg-head {
   display: flex; align-items: center; gap: .6rem; margin: 0;
   padding: .7rem .8rem;
-  background: linear-gradient(180deg, rgba(255, 240, 210, .05), rgba(0, 0, 0, .3));
+  background: rgba(255, 240, 210, .05);
   border-bottom: 1px solid #0d0a07;
 }
 .vedmak-dialog.check-dialog .dlg-head img {
@@ -1147,7 +1120,7 @@
 .vedmak-dialog.check-dialog .dlg-base {
   flex: none; display: flex; flex-direction: column; align-items: center; gap: .05rem;
   min-width: 4.6rem; padding: .35rem .6rem;
-  background: #241d15; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255, 235, 200, .1);
+  background: #241d15; border: 1px solid #0f0b07; box-shadow: none;
 }
 .vedmak-dialog.check-dialog .dlg-base b {
   font-family: var(--vd-font-head, serif); font-size: 1.9rem; line-height: 1; color: var(--vd-silver, #e8dcc2);
@@ -1333,7 +1306,7 @@
   position: sticky; bottom: 0; z-index: 1;
   display: flex; align-items: center; gap: .9rem; padding: .5rem .8rem .35rem;
   background-color: #1d1710;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .18), rgba(0, 0, 0, .4));
+  background-image: none;
   border-top: 1px solid #0d0a07;
 }
 .vedmak-dialog.check-dialog .dlg-total .tot { display: flex; flex-direction: column; gap: .05rem; min-width: 0; }
@@ -1350,17 +1323,17 @@
 /* Кнопки окна: продолжение подвала */
 .vedmak-dialog.check-dialog .form-footer {
   margin: 0; padding: .35rem .8rem .6rem; gap: .4rem;
-  background: linear-gradient(180deg, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4));
+  background: rgba(0, 0, 0, .4);
   border: none;
 }
 .vedmak-dialog.check-dialog .form-footer button {
   flex: none; height: 2rem; padding: 0 1.1rem;
   font-family: var(--vd-font-head, serif); font-size: .92rem; letter-spacing: .06em;
-  background: linear-gradient(180deg, var(--vd-btn-from), var(--vd-btn-to));
+  background: transparent;
   color: var(--vd-btn-text); border: 1px solid var(--vd-accent); border-radius: 2px;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .16);
+  box-shadow: none;
 }
-.vedmak-dialog.check-dialog .form-footer button:hover { filter: brightness(1.15); box-shadow: inset 0 1px 0 rgba(255, 235, 200, .22); }
+.vedmak-dialog.check-dialog .form-footer button:hover { filter: brightness(1.15); box-shadow: none; }
 .vedmak-dialog.check-dialog .form-footer button[data-action="cancel"] {
   margin-left: auto; order: -1;
   background: #241d15; color: var(--vd-text-dim, #97886c); border-color: var(--vd-line, #443a2b); box-shadow: none;
@@ -1376,11 +1349,11 @@
   position: relative; overflow: hidden;
   font-family: var(--vd-font-body); color: var(--vd-text); font-size: .82rem;
   background-color: #1d1710;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .4)), var(--vd-tex-tooled);
+  background-image: none;
   background-size: auto, 300px 300px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0d0a07; border-left: 3px solid var(--vd-steel); border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgba(180, 145, 78, .1);
+  box-shadow: none;
 }
 .vedmak-card.is-crit { border-left-color: var(--vd-gold-lite); }
 .vedmak-card.is-success, .vedmak-card.defense.is-miss, .vedmak-card.is-applied { border-left-color: #6d9a5b; }
@@ -1391,7 +1364,7 @@
 .chat-message.vedmak-message {
   padding: .3rem .35rem .35rem;
   background: #16120d; border: 1px solid #0d0a07; border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+  box-shadow: none;
 }
 .chat-message.vedmak-message .message-header { color: #97886c; margin-bottom: .2rem; }
 .chat-message.vedmak-message .message-header .message-sender { color: #ded3bb; font-family: "Vedmak Display", "Forum", serif; }
@@ -1402,7 +1375,7 @@
 .vedmak-card .card-head {
   display: flex; align-items: center; gap: .45rem;
   padding: .4rem .5rem;
-  background: linear-gradient(180deg, rgba(255, 240, 210, .06), rgba(0, 0, 0, .28));
+  background: rgba(255, 240, 210, .06);
   border-bottom: 1px solid #0d0a07;
 }
 .vedmak-card .card-head > img {
@@ -1415,20 +1388,20 @@
 }
 .vedmak-card .card-ident { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .05rem; }
 .vedmak-card .card-name {
-  font-family: var(--vd-font-head); font-size: 1rem; line-height: 1.15; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1rem; line-height: 1.15; color: var(--vd-silver);
   overflow-wrap: anywhere;
 }
 .vedmak-card .card-sub { font-size: .7rem; line-height: 1.25; color: var(--vd-text-dim); }
 .vedmak-card .card-value {
   flex: none; min-width: 2.9rem; display: flex; flex-direction: column; align-items: center;
   padding: .2rem .35rem .15rem;
-  background: #241d15; border: 1px solid #0f0b07; box-shadow: inset 0 1px 0 rgba(255, 235, 200, .1);
+  background: #241d15; border: 1px solid #0f0b07; box-shadow: none;
 }
 .vedmak-card .card-value b {
-  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.6rem; line-height: 1; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-weight: 400; font-size: 1.6rem; line-height: 1; color: var(--vd-silver);
 }
 .vedmak-card .card-value .cap {
-  font-family: var(--vd-font-head); font-size: .56rem; letter-spacing: .08em; text-transform: uppercase;
+  font-family: var(--vd-font-body); font-size: .56rem; letter-spacing: .08em; text-transform: uppercase;
   color: var(--vd-text-dim); white-space: nowrap;
 }
 .vedmak-card .card-value.blood b { color: #f3a99c; }
@@ -1444,12 +1417,12 @@
 .vedmak-card .roll-line { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; }
 .vedmak-card .roll-line .dice { display: flex; align-items: center; gap: .2rem; flex-wrap: wrap; }
 .vedmak-card .roll-sum { font-size: .74rem; color: var(--vd-text-dim); }
-.vedmak-card .roll-sum b { font-family: var(--vd-font-head); font-weight: 400; font-size: .92rem; color: var(--vd-text); }
+.vedmak-card .roll-sum b { font-family: var(--vd-font-body); font-weight: 400; font-size: .92rem; color: var(--vd-text); }
 .vedmak-card .die {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.55rem; height: 1.55rem;
   clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%);
-  font-family: var(--vd-font-head); font-size: .85rem; color: #f0e6d0;
+  font-family: var(--vd-font-body); font-size: .85rem; color: #f0e6d0;
   background: linear-gradient(180deg, #5a4c38, #3a3022);
 }
 .vedmak-card .die.max { background: linear-gradient(180deg, #d9b56a, #9a7a3c); color: #1b1610; }
@@ -1474,7 +1447,7 @@
 }
 .vedmak-card ul.parts li:last-child { border-bottom: none; }
 .vedmak-card ul.parts li span { color: var(--vd-text-dim); }
-.vedmak-card ul.parts li b { font-family: var(--vd-font-head); font-weight: 400; color: var(--vd-text); }
+.vedmak-card ul.parts li b { font-family: var(--vd-font-body); font-weight: 400; color: var(--vd-text); }
 .vedmak-card ul.parts li.luck b { color: var(--vd-gold-lite); }
 .vedmak-card ul.parts li.fumble-line b { color: var(--vd-blood-lite); }
 .vedmak-card ul.parts li.sum { border-top: 1px solid var(--vd-line); border-bottom: none; }
@@ -1484,7 +1457,7 @@
 
 /* Исход — спокойная лента с кромкой, а не плашка капсом во всю ширину */
 .vedmak-card .outcome {
-  padding: .2rem .45rem; font-family: var(--vd-font-head); font-size: .9rem; letter-spacing: .02em;
+  padding: .2rem .45rem; font-family: var(--vd-font-body); font-size: .9rem; letter-spacing: .02em;
   border-left: 2px solid currentColor;
 }
 .vedmak-card .outcome.success { color: #a9d096; background: rgba(62, 92, 52, .28); }
@@ -1499,7 +1472,7 @@
 .vedmak-card p.note { margin: 0; font-size: .76rem; line-height: 1.35; }
 .vedmak-card p.note.dim, .vedmak-card .dim { color: var(--vd-text-dim); }
 .vedmak-card .card-props { display: flex; flex-wrap: wrap; gap: .1rem .6rem; margin: 0; font-size: .72rem; color: var(--vd-text-dim); }
-.vedmak-card .card-props b { font-family: var(--vd-font-head); font-weight: 400; color: var(--vd-text); }
+.vedmak-card .card-props b { font-family: var(--vd-font-body); font-weight: 400; color: var(--vd-text); }
 .vedmak-card .fumble-note {
   padding: .25rem .4rem; font-size: .76rem;
   background: rgba(155, 44, 44, .18); border-left: 2px solid var(--vd-blood-lite);
@@ -1515,7 +1488,7 @@
 }
 .vedmak-card .applied-report p { margin: .1rem 0; }
 .vedmak-card .result-line { display: flex; align-items: baseline; gap: .35rem; font-size: .8rem; }
-.vedmak-card .result-line b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.05rem; color: var(--vd-silver); }
+.vedmak-card .result-line b { font-family: var(--vd-font-body); font-weight: 400; font-size: 1.05rem; color: var(--vd-silver); }
 .vedmak-card .dots-fill { flex: 1; border-bottom: 1px dotted var(--vd-line-soft); transform: translateY(-.2rem); min-width: .6rem; }
 .vedmak-card .description { font-size: .8rem; }
 
@@ -1523,7 +1496,7 @@
 .vedmak-card .card-section { padding: .35rem .5rem .4rem; border-top: 1px solid #0d0a07; background: rgba(0, 0, 0, .16); }
 .vedmak-card .card-section h4 {
   margin: 0 0 .25rem; border: none;
-  font-family: var(--vd-font-head); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+  font-family: var(--vd-font-body); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
   color: var(--vd-gold);
 }
 .vedmak-card .target-row { display: flex; flex-direction: column; gap: .2rem; margin-bottom: .3rem; }
@@ -1546,14 +1519,14 @@
 .vedmak-card button {
   display: inline-flex; align-items: center; justify-content: center; gap: .3rem;
   width: auto; min-width: 1.9rem; height: 1.75rem; line-height: 1; padding: 0 .5rem; margin: 0;
-  font-family: var(--vd-font-head); font-size: .8rem; letter-spacing: .03em;
+  font-family: var(--vd-font-body); font-size: .8rem; letter-spacing: .03em;
   color: var(--vd-text); background: #2a2119; border: 1px solid var(--vd-line); border-radius: 2px;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .07);
+  box-shadow: none;
 }
-.vedmak-card button:hover { color: var(--vd-gold-lite); border-color: var(--vd-steel); box-shadow: inset 0 1px 0 rgba(255, 235, 200, .12); }
+.vedmak-card button:hover { color: var(--vd-gold-lite); border-color: var(--vd-steel); box-shadow: none; }
 .vedmak-card button.primary {
-  color: #f3c9bf; background: linear-gradient(180deg, #5a2019, #33120e); border-color: var(--vd-blood);
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .14);
+  color: #f3c9bf; background: #5a2019; border-color: var(--vd-blood);
+  box-shadow: none;
 }
 .vedmak-card button.primary:hover { filter: brightness(1.15); color: #fff; }
 .vedmak-card button.quiet { color: var(--vd-text-dim); background: #241d15; }
@@ -1562,7 +1535,7 @@
 /* Старые сообщения: прежняя шапка и итог по центру, без капса и с полями */
 .vedmak-card:has(> .card-title) { padding: .4rem .55rem .5rem; }
 .vedmak-card .card-title h3 {
-  margin: 0; border: none; font-family: var(--vd-font-head); font-size: 1rem; line-height: 1.2;
+  margin: 0; border: none; font-family: var(--vd-font-body); font-size: 1rem; line-height: 1.2;
   color: var(--vd-silver); overflow-wrap: anywhere;
 }
 .vedmak-card .card-title .subtitle { margin: 0; font-size: .72rem; color: var(--vd-text-dim); }
@@ -1570,7 +1543,7 @@
 .vedmak-card .card-title.with-img img { width: 34px; height: 34px; border: 1px solid var(--vd-line); border-radius: 2px; }
 .vedmak-card .dice-line { display: flex; flex-wrap: wrap; gap: .2rem; margin: .35rem 0; align-items: center; }
 .vedmak-card .total-row { display: flex; align-items: baseline; justify-content: center; gap: .5rem; margin: .3rem 0 .1rem; }
-.vedmak-card .total-row .total { font-family: var(--vd-font-head); font-size: 1.8rem; color: var(--vd-silver); line-height: 1; }
+.vedmak-card .total-row .total { font-family: var(--vd-font-body); font-size: 1.8rem; color: var(--vd-silver); line-height: 1; }
 .vedmak-card .total-row .vs { color: var(--vd-text-dim); font-size: .8rem; }
 .vedmak-card:has(> .card-title) .card-buttons { padding: 0; margin-top: .35rem; }
 
@@ -1585,13 +1558,13 @@
 .vedmak .roll-btn {
   display: inline-flex; align-items: center; gap: .3rem; width: auto; height: 1.65rem; line-height: 1;
   padding: 0 .6rem; font-family: var(--vd-font-body); font-size: .8rem; color: var(--vd-text);
-  background: linear-gradient(180deg, #33261d, #241a13);
+  background: #33261d;
   border: 1px solid #5a2f28; border-radius: 2px; cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .09), 0 1px 3px rgba(0, 0, 0, .45);
+  box-shadow: none;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .6);
 }
 .vedmak .roll-btn:hover {
-  background: linear-gradient(180deg, #7c2a20, #5d1f17); border-color: var(--vd-blood-lite); color: #f3e3c9; box-shadow: inset 0 1px 0 rgba(255, 235, 200, .14), 0 0 10px rgba(142, 43, 34, .45);
+  background: #7c2a20; border-color: var(--vd-blood-lite); color: #f3e3c9; box-shadow: none;
 }
 
 
@@ -1613,18 +1586,18 @@
 .vedmak .panel-tools { display: flex; gap: .55rem; font-size: .85rem; color: var(--vd-text-dim); }
 .vedmak .panel-tools a:hover { color: var(--vd-gold-lite); }
 .vedmak .resist-text { display: grid; grid-template-columns: max-content 1fr; gap: .15rem .7rem; margin: 0 0 .5rem; font-size: .85rem; }
-.vedmak .resist-text dt { color: var(--vd-text-dim); font-family: var(--vd-font-head); letter-spacing: .03em; }
+.vedmak .resist-text dt { color: var(--vd-text-dim); font-family: var(--vd-font-body); letter-spacing: .03em; }
 .vedmak .resist-text dd { margin: 0; }
 .vedmak .ability-group { margin-top: .4rem; }
 .vedmak .ability-group h4 {
   margin: .2rem 0 .3rem; padding-bottom: .15rem; border-bottom: 1px solid var(--vd-line);
-  font-family: var(--vd-font-head); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-gold);
+  font-family: var(--vd-font-body); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-gold);
 }
 .vedmak .ability-group.weakness h4 { color: var(--vd-blood-lite); }
 .vedmak .ability-group.service h4, .vedmak .ability-group.note h4 { color: var(--vd-text-dim); }
 .vedmak .ability { padding: .25rem 0 .35rem; border-bottom: 1px dotted var(--vd-line-soft); }
 .vedmak .ability:last-child { border-bottom: none; }
-.vedmak .ability-name { font-family: var(--vd-font-head); font-size: .95rem; color: var(--vd-silver); }
+.vedmak .ability-name { font-family: var(--vd-font-body); font-size: .95rem; color: var(--vd-silver); }
 .vedmak .ability-name:hover { color: var(--vd-gold-lite); text-shadow: 0 0 6px rgba(227, 192, 120, .35); }
 .vedmak .ability-text { font-size: .85rem; line-height: 1.35; color: var(--vd-text); }
 .vedmak .ability-text p { margin: .15rem 0; }
@@ -1636,7 +1609,7 @@
 .vedmak .loot-list { list-style: none; margin: 0; padding: 0; }
 .vedmak .loot-list li { display: flex; align-items: baseline; gap: .4rem; padding: .18rem 0; font-size: .88rem; }
 .vedmak .loot-list .dots-fill { flex: 1; border-bottom: 1px dotted var(--vd-line); transform: translateY(-.2rem); }
-.vedmak .loot-list .loot-qty { font-family: var(--vd-font-head); color: var(--vd-gold-lite); }
+.vedmak .loot-list .loot-qty { font-family: var(--vd-font-body); color: var(--vd-gold-lite); }
 .vedmak .loot-list input[type="text"] { flex: 1; }
 .vedmak .loot-list input.qty { flex: 0 0 5.5rem; text-align: center; }
 .vedmak .source-line { display: flex; align-items: center; gap: .35rem; margin: .5rem 0 0; font-size: .8rem; }
@@ -1701,11 +1674,11 @@
   display: flex; align-items: center; gap: .5rem;
   padding: .35rem .45rem;
   background-color: #2a2119;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .34)), var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-radius: 2px;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .07);
+  box-shadow: none;
 }
 /* Кровавая кромка — оружие в руках; пунктир и тусклый тон — лежит в мешке */
 .vedmak .atk-row.ready { border-left: 2px solid var(--vd-blood); }
@@ -1715,7 +1688,7 @@
 .vedmak .atk-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .05rem; }
 .vedmak .atk-name {
   display: flex; align-items: baseline; gap: .35rem; flex-wrap: wrap;
-  font-family: var(--vd-font-head); font-size: .95rem; color: var(--vd-text);
+  font-family: var(--vd-font-body); font-size: .95rem; color: var(--vd-text);
 }
 .vedmak .atk-name a { color: inherit; }
 .vedmak .atk-name a:hover { color: var(--vd-gold-lite); }
@@ -1733,19 +1706,19 @@
 .vedmak .atk-rel .cap { font-size: .62rem; color: var(--vd-steel); }
 .vedmak .atk-num { flex: none; display: flex; flex-direction: column; align-items: center; gap: .05rem; min-width: 2.6rem; }
 .vedmak .atk-num.wide { min-width: 5.2rem; }
-.vedmak .atk-num b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.25rem; line-height: 1; color: var(--vd-silver); }
+.vedmak .atk-num b { font-family: var(--vd-font-body); font-weight: 400; font-size: 1.25rem; line-height: 1; color: var(--vd-silver); }
 .vedmak .atk-num.wide b { font-size: 1rem; }
 .vedmak .atk-num em {
   font-style: normal; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--vd-steel);
 }
 .vedmak .atk-go {
   flex: none; display: inline-flex; align-items: center; gap: .35rem; width: auto; height: 2rem; padding: 0 .9rem; margin: 0;
-  font-family: var(--vd-font-head); font-size: .92rem; letter-spacing: .05em; line-height: 1;
-  color: #f3c9bf; background: linear-gradient(180deg, #5a2019, #33120e);
+  font-family: var(--vd-font-body); font-size: .92rem; letter-spacing: .05em; line-height: 1;
+  color: #f3c9bf; background: #5a2019;
   border: 1px solid var(--vd-blood); border-radius: 2px; cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, .14);
+  box-shadow: none;
 }
-.vedmak .atk-go:hover { filter: brightness(1.18); box-shadow: inset 0 1px 0 rgba(255, 235, 200, .2); }
+.vedmak .atk-go:hover { filter: brightness(1.18); box-shadow: none; }
 .vedmak a.atk-go.quiet {
   color: var(--vd-text-dim); background: #241d15; border-color: var(--vd-line); box-shadow: none;
   display: inline-flex; align-items: center;
@@ -1767,7 +1740,7 @@
 .vedmak .def-row {
   display: flex; align-items: center; gap: .45rem; padding: .3rem .4rem; color: inherit;
   background-color: #2a2119;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .34)), var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-radius: 2px;
@@ -1775,7 +1748,7 @@
 .vedmak .def-row:hover { border-color: var(--vd-gold); }
 .vedmak .def-row .stamp {
   flex: none; width: 2.1rem; height: 2.1rem; display: grid; place-items: center;
-  font-family: var(--vd-font-head); font-size: 1.15rem; line-height: 1; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1.15rem; line-height: 1; color: var(--vd-silver);
   background: #191309; border: 1px solid var(--vd-line);
 }
 .vedmak .def-row:hover .stamp { border-color: var(--vd-gold); color: #f0dba6; }
@@ -1792,11 +1765,11 @@
 }
 .vedmak .save i { color: var(--vd-text-dim); }
 .vedmak .save .name { flex: 1; font-size: .8rem; color: var(--vd-text); }
-.vedmak .save b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; color: var(--vd-silver); }
+.vedmak .save b { font-family: var(--vd-font-body); font-weight: 400; font-size: 1rem; color: var(--vd-silver); }
 .vedmak .save:hover { border-color: var(--vd-gold); border-left-color: var(--vd-gold); }
 .vedmak .save.bad { background: #2a1a16; border-left-color: var(--vd-blood); }
 .vedmak .save.bad i, .vedmak .save.bad .name, .vedmak .save.bad b { color: var(--vd-blood-lite); }
-.vedmak .save.alert { box-shadow: inset 0 0 8px rgba(201, 74, 63, .45); }
+.vedmak .save.alert { box-shadow: none; }
 
 .vedmak .turn-row { display: flex; flex-wrap: wrap; gap: .3rem; }
 .vedmak button.turn-btn {
@@ -1812,7 +1785,7 @@
 .vedmak .armor-list {
   display: flex; flex-direction: column;
   background-color: #241d15;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .06), rgba(0, 0, 0, .34)), var(--vd-tex-stone);
+  background-image: none;
   background-size: auto, 300px 300px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07;
@@ -1825,7 +1798,7 @@
 }
 .vedmak .armor-line .track { flex: 1; height: .45rem; background: var(--vd-input); border: 1px solid #0f0b07; }
 .vedmak .armor-line .fill { display: block; height: 100%; background: linear-gradient(180deg, #8a8f9c, #4d525c); }
-.vedmak .armor-line b { width: 1.7rem; text-align: right; font-family: var(--vd-font-head); font-weight: 400; font-size: .92rem; color: var(--vd-text); }
+.vedmak .armor-line b { width: 1.7rem; text-align: right; font-family: var(--vd-font-body); font-weight: 400; font-size: .92rem; color: var(--vd-text); }
 .vedmak .armor-line .mult { width: 1.7rem; text-align: right; font-size: .68rem; color: var(--vd-steel); }
 .vedmak .armor-line .mult.bad { color: var(--vd-blood-lite); }
 .vedmak .armor-note {
@@ -1841,13 +1814,13 @@
 .vedmak .shield-line img { width: 1.3rem; height: 1.3rem; border: 1px solid var(--vd-line); }
 .vedmak .shield-line .name { flex: 1; color: var(--vd-text); }
 .vedmak .shield-line .cap { font-size: .66rem; color: var(--vd-steel); }
-.vedmak .shield-line b { font-family: var(--vd-font-head); font-weight: 400; font-size: .92rem; color: var(--vd-text); }
+.vedmak .shield-line b { font-family: var(--vd-font-body); font-weight: 400; font-size: .92rem; color: var(--vd-text); }
 
 /* Критические ранения — карточки с уровнем, местом и отметкой лечения */
 .vedmak .wound {
   display: flex; align-items: flex-start; gap: .45rem; padding: .35rem .45rem;
   background-color: #2a2119;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .06), rgba(0, 0, 0, .34)), var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-left: 2px solid var(--vd-steel);
@@ -1859,7 +1832,7 @@
 .vedmak .wound-icon { width: 1.9rem; height: 1.9rem; flex: none; border: 1px solid var(--vd-line); background: #191309; }
 .vedmak .wound-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1rem; }
 .vedmak .wound-head { display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap; }
-.vedmak .wound-name { font-family: var(--vd-font-head); font-size: .95rem; color: var(--vd-text); }
+.vedmak .wound-name { font-family: var(--vd-font-body); font-size: .95rem; color: var(--vd-text); }
 .vedmak .wound-head .tag.level { font-size: .66rem; padding: 0 .4rem; border: 1px solid var(--vd-line); border-radius: 999px; color: var(--vd-text-dim); }
 .vedmak .wound.level-deadly .tag.level { color: var(--vd-blood-lite); border-color: #5a2019; }
 .vedmak .wound-head .dim { font-size: .7rem; }
@@ -1915,10 +1888,10 @@
 }
 .vedmak .duel-resolve.broken { border-left-color: var(--vd-blood-lite); background: #2a1a16; }
 .vedmak .duel-resolve .rv-head { display: flex; align-items: baseline; gap: .35rem; }
-.vedmak .duel-resolve .rv-head .cap { font-family: var(--vd-font-head); font-size: .66rem; letter-spacing: .14em; color: var(--vd-text-dim); }
+.vedmak .duel-resolve .rv-head .cap { font-family: var(--vd-font-body); font-size: .66rem; letter-spacing: .14em; color: var(--vd-text-dim); }
 .vedmak .duel-resolve .rv-head input {
   width: 3rem; height: 1.6rem; margin-left: auto; padding: 0; text-align: right;
-  font-family: var(--vd-font-head); font-size: 1.45rem; line-height: 1; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1.45rem; line-height: 1; color: var(--vd-silver);
   background: transparent; border: 1px solid transparent;
 }
 .vedmak .duel-resolve .rv-head input:hover, .vedmak .duel-resolve .rv-head input:focus { border-color: var(--vd-line); }
@@ -1934,7 +1907,7 @@
 .vedmak .duel-row {
   display: flex; align-items: center; gap: .45rem; padding: .28rem .4rem; color: inherit;
   background-color: #2a2119;
-  background-image: linear-gradient(180deg, rgba(255, 240, 210, .07), rgba(0, 0, 0, .34)), var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 360px 360px;
   background-blend-mode: normal, overlay;
   border: 1px solid #0f0b07; border-left: 2px solid var(--vd-line); border-radius: 2px;
@@ -1946,21 +1919,21 @@
 .vedmak .duel-row:hover { border-color: var(--vd-gold); }
 .vedmak .duel-row .stamp {
   flex: none; width: 2.1rem; height: 2.1rem; display: grid; place-items: center;
-  font-family: var(--vd-font-head); font-size: 1.15rem; line-height: 1; color: var(--vd-silver);
+  font-family: var(--vd-font-body); font-size: 1.15rem; line-height: 1; color: var(--vd-silver);
   background: #191309; border: 1px solid var(--vd-line);
 }
 .vedmak .duel-row:hover .stamp { border-color: var(--vd-gold); color: #f0dba6; }
 .vedmak .duel-row .who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.vedmak .duel-row .name { font-family: var(--vd-font-head); font-size: .92rem; color: var(--vd-text); }
+.vedmak .duel-row .name { font-family: var(--vd-font-body); font-size: .92rem; color: var(--vd-text); }
 .vedmak .duel-row .about { font-size: .66rem; color: var(--vd-steel); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .vedmak .duel-row .dmg { flex: none; display: flex; flex-direction: column; align-items: center; min-width: 3.8rem; }
-.vedmak .duel-row .dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: .95rem; color: #c9b8f0; }
+.vedmak .duel-row .dmg b { font-family: var(--vd-font-body); font-weight: 400; font-size: .95rem; color: #c9b8f0; }
 .vedmak .duel-row .dmg em { font-style: normal; font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--vd-steel); }
 
 .vedmak .combat-tab .social .social-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; }
 .vedmak .combat-tab .social .status-line { margin: 0; font-size: .8rem; color: var(--vd-text); }
 .vedmak .combat-tab .social .hint { margin: 0; }
-.vedmak .status-now { font-family: var(--vd-font-head); font-size: .88rem; color: var(--vd-text); }
+.vedmak .status-now { font-family: var(--vd-font-body); font-size: .88rem; color: var(--vd-text); }
 .vedmak .status-now.bad { color: var(--vd-blood-lite); }
 
 /* Узкая вкладка (лист чудовища, свёрнутое окно): колонки в одну */
@@ -2042,8 +2015,7 @@
   display: flex; flex: none; gap: .15rem; padding: .35rem .5rem;
   border-bottom: 2px solid var(--vd-blood);
   background-color: #23201c;
-  background-image: linear-gradient(180deg, rgba(42, 33, 25, .9), rgba(28, 30, 33, .9)),
-    var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 330px 330px;
   background-blend-mode: normal, overlay;
 }
@@ -2081,17 +2053,16 @@
 .vedmak-wizard .pick-card {
   cursor: pointer; padding: .4rem .5rem; border: 1px solid var(--vd-line); border-radius: 4px;
   background-color: var(--vd-panel);
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .34), rgba(0, 0, 0, .46)),
-    var(--vd-tex-tooled);
+  background-image: none;
   background-size: auto, 300px 300px;
   background-blend-mode: normal, overlay;
 }
 .vedmak-wizard .pick-card:hover { border-color: var(--vd-steel); }
-.vedmak-wizard .pick-card.selected { border-color: var(--vd-gold); box-shadow: 0 0 0 1px rgba(201, 164, 92, .4); }
+.vedmak-wizard .pick-card.selected { border-color: var(--vd-gold); box-shadow: none; }
 .vedmak-wizard .pick-card.disabled { opacity: .4; cursor: not-allowed; }
 .vedmak-wizard .pick-card header { display: flex; align-items: center; gap: .5rem; }
 .vedmak-wizard .pick-card header img { width: 40px; height: 40px; border: 1px solid var(--vd-line); border-radius: 3px; }
-.vedmak-wizard .pick-card h3 { margin: 0; font-family: var(--vd-font-head); font-size: 1.3rem; color: var(--vd-silver); border: none; }
+.vedmak-wizard .pick-card h3 { margin: 0; font-family: var(--vd-font-body); font-size: 1.3rem; color: var(--vd-silver); border: none; }
 .vedmak-wizard .pick-card .desc { font-size: .8rem; color: var(--vd-text-dim); }
 .vedmak-wizard .pick-card .desc p { margin: .25rem 0; }
 .vedmak-wizard .pick-card .traits { margin: .2rem 0 0; padding-left: 1rem; font-size: .8rem; }
@@ -2218,7 +2189,7 @@
 .vedmak .purse .coin { display: flex; flex-direction: column; justify-content: flex-end; gap: .05rem; min-width: 0; }
 .vedmak .purse .coin .cap { font-size: .62rem; text-transform: uppercase; letter-spacing: .03em; color: var(--vd-text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vedmak .purse .coin input { width: 100%; height: 1.5rem; text-align: center; }
-.vedmak .purse .coin.main .cap { font-family: var(--vd-font-head); font-size: .95rem; text-transform: none; letter-spacing: 0; color: var(--vd-gold); }
+.vedmak .purse .coin.main .cap { font-family: var(--vd-font-body); font-size: .95rem; text-transform: none; letter-spacing: 0; color: var(--vd-gold); }
 .vedmak .purse .coin.main input { font-weight: bold; }
 .vedmak .purse .coin.empty:not(.main) { opacity: .55; }
 .vedmak .purse .coin.empty:not(.main):focus-within { opacity: 1; }
@@ -2285,14 +2256,13 @@
   color: var(--vd-text);
   /* Худ — стальная полоса поверх стола: холоднее листа, но той же выделки */
   background-color: #1a1c20;
-  background-image: linear-gradient(180deg, rgba(42, 45, 50, .97), rgba(22, 24, 27, .97)),
-    var(--vd-tex-steel);
+  background-image: none;
   background-size: auto, 340px 340px;
   background-blend-mode: normal, overlay;
   border: 1px solid var(--vd-line);
   border-top: 2px solid var(--vd-blood);
   border-radius: 5px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, .55);
+  box-shadow: none;
 }
 .vedmak-hud .hud-bar.my-turn { border-top-color: var(--vd-gold); }
 .vedmak-hud .hud-bar.collapsed .hud-rows { display: none; }
@@ -2305,7 +2275,7 @@
 .vedmak-hud .hud-bar.my-turn .portrait { border-color: var(--vd-gold); }
 .vedmak-hud .who { min-width: 8rem; max-width: 14rem; }
 .vedmak-hud .who .name, .vedmak-hud .who .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vedmak-hud .who .name { font-family: var(--vd-font-head); font-size: 1.25rem; color: var(--vd-silver); line-height: 1.1; }
+.vedmak-hud .who .name { font-family: var(--vd-font-body); font-size: 1.25rem; color: var(--vd-silver); line-height: 1.1; }
 .vedmak-hud .who .meta { font-size: .72rem; color: var(--vd-text-dim); }
 .vedmak-hud .who .meta b { color: var(--vd-text); font-weight: normal; }
 
@@ -2425,7 +2395,7 @@
 }
 .vedmak .lp-card-head i { color: var(--vd-gold); font-size: .85rem; }
 .vedmak .lp-card-head h4 {
-  flex: 1; margin: 0; border: none; font-family: var(--vd-font-head); font-size: 1.08rem;
+  flex: 1; margin: 0; border: none; font-family: var(--vd-font-body); font-size: 1.08rem;
   color: var(--vd-text); text-transform: none; letter-spacing: 0;
 }
 .vedmak .lp-card-head .lp-sub { font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; color: var(--vd-text-dim); }
@@ -2443,7 +2413,7 @@
   display: inline-flex; align-items: center; justify-content: center; gap: .2rem; flex: none;
   min-width: 2.5rem; height: 1.45rem; padding: 0 .35rem;
   border: 1px solid var(--vd-line); border-radius: 2px;
-  font-family: var(--vd-font-head); color: var(--vd-gold);
+  font-family: var(--vd-font-body); color: var(--vd-gold);
 }
 .vedmak .lp-die i { font-size: .7rem; color: var(--vd-steel); }
 .vedmak .lp-die:hover { border-color: var(--vd-gold); color: var(--vd-gold-lite); }
@@ -2453,7 +2423,7 @@
 .vedmak .lp-table th { padding: .1rem .3rem; text-align: left; font-weight: normal; font-size: .68rem; text-transform: uppercase; color: var(--vd-text-dim); }
 .vedmak .lp-table td { padding: .22rem .3rem; border-top: 1px dotted var(--vd-line-soft); vertical-align: top; }
 .vedmak .lp-table th:first-child, .vedmak .lp-table td.n { width: 1.2rem; }
-.vedmak .lp-table td.n { font-family: var(--vd-font-head); color: var(--vd-gold); }
+.vedmak .lp-table td.n { font-family: var(--vd-font-body); color: var(--vd-gold); }
 /* В таблице узко: вместо кости и списка — только список во всю ширину ячейки */
 .vedmak .lp-table .lp-ctl select { max-width: none; }
 .vedmak .lp-table .lp-ctl select + .lp-die { display: none; }
@@ -2472,10 +2442,10 @@
 .vedmak .lp-block .group-head { margin-bottom: .45rem; }
 .vedmak .lp-block .lp-sub { font-size: .74rem; font-style: italic; color: var(--vd-text-dim); }
 .vedmak .lp-cap {
-  display: block; font-family: var(--vd-font-head); font-size: .62rem; letter-spacing: .14em;
+  display: block; font-family: var(--vd-font-body); font-size: .62rem; letter-spacing: .14em;
   text-transform: uppercase; color: var(--vd-gold);
 }
-.vedmak .lp-head { margin: 0; border: none; font-family: var(--vd-font-head); font-weight: normal; font-size: 1.08rem; line-height: 1.25; color: var(--vd-silver); }
+.vedmak .lp-head { margin: 0; border: none; font-family: var(--vd-font-body); font-weight: normal; font-size: 1.08rem; line-height: 1.25; color: var(--vd-silver); }
 .vedmak .lp-body { margin: 0; font-size: .82rem; line-height: 1.5; color: var(--vd-text-dim); }
 .vedmak .lp-gold { margin: 0; font-size: .8rem; font-style: italic; color: var(--vd-gold); }
 
@@ -2497,7 +2467,7 @@
   padding: .25rem 0; border-bottom: 1px dotted var(--vd-line-soft); font-size: .84rem;
 }
 .vedmak .lp-people li i { width: .9rem; text-align: center; font-size: .8rem; color: var(--vd-gold); }
-.vedmak .lp-people li b { font-family: var(--vd-font-head); font-weight: normal; font-size: 1rem; color: var(--vd-silver); }
+.vedmak .lp-people li b { font-family: var(--vd-font-body); font-weight: normal; font-size: 1rem; color: var(--vd-silver); }
 .vedmak .lp-person { color: var(--vd-text-dim); }
 .vedmak .lp-person span + span::before { content: " · "; color: var(--vd-steel); }
 
@@ -2513,16 +2483,16 @@
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   width: 3.2rem; min-height: 3rem; padding: .2rem .1rem;
   background: #191309; border: 1px solid var(--vd-gold); border-radius: 2px;
-  box-shadow: 0 0 0 3px var(--vd-panel), inset 0 0 0 1px rgba(0, 0, 0, .6);
+  box-shadow: none;
 }
-.vedmak .lp-age b { font-family: var(--vd-font-head); font-weight: normal; font-size: 1.1rem; line-height: 1; color: var(--vd-gold-lite); white-space: nowrap; }
+.vedmak .lp-age b { font-family: var(--vd-font-body); font-weight: normal; font-size: 1.1rem; line-height: 1; color: var(--vd-gold-lite); white-space: nowrap; }
 .vedmak .lp-age small { margin-top: .1rem; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-text-dim); }
 .vedmak .lp-era-body { display: flex; flex-direction: column; gap: .5rem; min-width: 0; padding-top: .1rem; }
 .vedmak .lp-risk-note { font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--vd-steel); }
 .vedmak .lp-event { display: flex; flex-direction: column; gap: .15rem; }
 .vedmak .lp-event-head { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .5rem; }
 .vedmak .lp-event-head .lp-cap { display: inline; }
-.vedmak .lp-event-head b { font-family: var(--vd-font-head); font-weight: normal; font-size: 1.08rem; color: var(--vd-silver); }
+.vedmak .lp-event-head b { font-family: var(--vd-font-body); font-weight: normal; font-size: 1.08rem; color: var(--vd-silver); }
 .vedmak .lp-event.quiet .lp-event-head b { font-size: .95rem; color: var(--vd-text-dim); }
 .vedmak .lp-meta { margin: 0; font-size: .82rem; line-height: 1.5; color: var(--vd-text); }
 .vedmak .lp-meta span + span::before { content: " · "; color: var(--vd-steel); }
@@ -2554,7 +2524,7 @@
 
 /* Броски жизненного пути в чате */
 .vedmak-card .lp-chat-section {
-  margin-top: .15rem; font-family: var(--vd-font-head); font-size: .82rem; color: var(--vd-gold);
+  margin-top: .15rem; font-family: var(--vd-font-body); font-size: .82rem; color: var(--vd-gold);
   border-bottom: 1px solid var(--vd-line-soft);
 }
 .vedmak-card .lp-chat-row { display: flex; align-items: flex-start; gap: .45rem; }
@@ -2565,24 +2535,11 @@
 .vedmak-card .lp-chat-result b { color: var(--vd-silver); }
 .vedmak-card .lp-chat-result i { color: var(--vd-gold); }
 
-/* --------------------------- Облегчённая графика --------------------------- */
-/* Настройка клиента «Облегчённая графика»: фактуры и их наложение на цвет (overlay, soft-light) — самое
-   дорогое в отрисовке листа. Без них окна, чат и худ рисуются заметно быстрее на слабых машинах. */
-body.vedmak-lite .vedmak, body.vedmak-lite .vedmak-card {
-  --vd-tex-leather: none; --vd-tex-tooled: none; --vd-tex-iron: none; --vd-tex-steel: none; --vd-tex-bronze: none;
-  --vd-tex-brass: none; --vd-tex-canvas: none; --vd-tex-cloth: none; --vd-tex-parchment: none; --vd-tex-paper: none;
-  --vd-tex-stone: none; --vd-tex-slate: none; --vd-tex-wood: none;
-  --vd-material: none;
-}
-body.vedmak-lite .vedmak *, body.vedmak-lite .vedmak.sheet .window-content, body.vedmak-lite .vedmak-card,
-body.vedmak-lite .vedmak-card * { background-blend-mode: normal !important; }
-body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
-
 /* Замер скорости листа (module/apps/perf.mjs) — таблица в карточке чата */
 .vedmak-card .perf-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
 .vedmak-card .perf-table th { font-weight: normal; color: var(--vd-text-dim); text-align: left; padding: .1rem .2rem; border-bottom: 1px solid var(--vd-line); }
 .vedmak-card .perf-table td { padding: .1rem .2rem; border-bottom: 1px dotted var(--vd-line-soft); }
-.vedmak-card .perf-table td + td, .vedmak-card .perf-table th + th { text-align: right; font-family: var(--vd-font-head); }
+.vedmak-card .perf-table td + td, .vedmak-card .perf-table th + th { text-align: right; font-family: var(--vd-font-body); }
 .vedmak-card.perf-report .note { margin: .2rem 0; font-size: .74rem; }
 
 /* Ведьмачьи школы — настройки мира (templates/apps/schools.hbs): школа — вкладышем, механика — строками */
@@ -2600,7 +2557,7 @@ body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
 .vedmak .school-waive .check { display: flex; align-items: center; gap: .3rem; font-size: .85rem; }
 .vedmak .school-mods { display: flex; flex-direction: column; gap: .25rem; }
 .vedmak .school-summary { margin: 0; color: var(--vd-gold); }
-.vedmak .school-row .cap { font-family: var(--vd-font-head); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--vd-text-dim); }
+.vedmak .school-row .cap { font-family: var(--vd-font-body); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--vd-text-dim); }
 
 /* Лист без права правки (наблюдатель, закрытый компендиум): кнопки правки спрятаны, строки с проверками
    и переключателями видны, но не нажимаются (actor-sheet-base.mjs, #markLockedActions) */
@@ -2616,11 +2573,11 @@ body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
 .vedmak .vd-limited .portrait {
   display: block; width: 150px; height: 150px; object-fit: contain; background: #000;
   border: 1px solid var(--vd-steel); border-radius: 2px;
-  box-shadow: 0 0 0 1px #0d0a07, inset 0 0 12px rgba(0, 0, 0, .8), 0 2px 6px rgba(0, 0, 0, .55);
+  box-shadow: none;
 }
 .vedmak .vd-limited .identity { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .45rem; }
 .vedmak .vd-limited .name {
-  margin: 0; border: none; font-family: var(--vd-font-head); font-weight: 400; font-size: 1.6rem;
+  margin: 0; border: none; font-family: var(--vd-font-body); font-weight: 400; font-size: 1.6rem;
   color: var(--vd-gold-lite); overflow-wrap: anywhere;
 }
 .vedmak .vd-limited .facts { display: grid; grid-template-columns: auto 1fr; gap: .15rem .6rem; margin: 0; font-size: .85rem; }
@@ -2631,7 +2588,7 @@ body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
 /* ------------------------- Подсказки и курсор ------------------------- */
 
 /* Всплывающие подсказки Foundry (#tooltip, закреплённые .locked-tooltip) — в гамме листа: тиснёная кожа
-   на золе, кромка потемневшего золота с тонкой внутренней нитью, текст — кость, шрифт PT Serif. */
+   на золе, кромка потемневшего золота с тонкой внутренней нитью, текст — кость, шрифт IBM Plex Sans. */
 body.system-vedmak #tooltip,
 body.system-vedmak .locked-tooltip {
   padding: .4rem .7rem .45rem;
@@ -2656,12 +2613,10 @@ body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4, strong, b) { color: var(-
 body.system-vedmak #tooltip :is(h1, h2, h3, h4),
 body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4) {
   margin: 0 0 .25rem; padding-bottom: .2rem; border-bottom: 1px solid rgba(180, 145, 78, .35);
-  font-family: var(--vd-font-head); font-size: 1rem; font-weight: 400; letter-spacing: .04em;
+  font-family: var(--vd-font-body); font-size: 1rem; font-weight: 400; letter-spacing: .04em;
 }
 body.system-vedmak #tooltip :is(hr),
 body.system-vedmak .locked-tooltip :is(hr) { border: 0; border-top: 1px solid rgba(180, 145, 78, .3); margin: .35rem 0; }
-body.system-vedmak.vedmak-lite #tooltip,
-body.system-vedmak.vedmak-lite .locked-tooltip { background-image: linear-gradient(180deg, #2a2219, #16120d); background-size: auto; }
 
 /* Курсор-клинок (настройка «Курсор системы», assets/cursors). Поля ввода оставляют текстовый курсор,
    всё, что нажимается, — золотой. На холсте сцены курсор ставит vedmak.mjs через стили указателя PIXI. */
@@ -2678,3 +2633,71 @@ body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range
 .vedmak .loot-list .loot-coins.disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
 .vedmak .loot-list .loot-reset { margin-left: .35rem; font-size: .78rem; color: var(--vd-gold); }
 .vedmak .loot-list .loot-reset:hover { color: var(--vd-gold-lite); }
+
+/* ================================ Лёгкий вид ================================ */
+/* Поверх правил выше: интерфейс без фактур, бликов, виньеток и выпуклых рамок. Поверхность отличается
+   от фона только тоном, разделы — волосяными линиями, акцент — золото у того, что можно нажать.
+   Forum — только заголовки (имя, разделы, карточки, окна), всё остальное — IBM Plex Sans. */
+
+/* Тени у текста и наложение слоёв больше ничего не дают — фактур нет */
+.vedmak, .vedmak *, .vedmak-card, .vedmak-card * { text-shadow: none !important; background-blend-mode: normal !important; }
+
+/* Заголовки — Forum */
+.vedmak :is(h1, h2, h3, h4, legend), .vedmak .window-title, .vedmak input.name,
+.vedmak-card .card-name, .vedmak .vd-limited .name {
+  font-family: var(--vd-font-head) !important; font-weight: 400;
+}
+.vedmak .window-title { letter-spacing: .04em; }
+
+/* Окно: ровный фон без виньетки и разводов, планка окна — чуть темнее */
+.vedmak.sheet .window-content { background-image: none; background-color: var(--vd-bg); }
+.vedmak.sheet .window-content::after { content: none; display: none; }
+.vedmak.sheet .window-header { background-image: none; background-color: #100e0b; border-bottom: 1px solid var(--vd-line-soft); }
+.application.vedmak .window-content { line-height: 1.4; }
+
+/* Панели: тон и волосяная граница вместо выпуклости */
+.vedmak .vd-panel {
+  background-image: none; background-color: var(--vd-panel);
+  border: 1px solid var(--vd-line-soft); border-radius: 4px; box-shadow: none;
+}
+.vedmak .vd-panel h3 { font-size: 1.05rem; letter-spacing: .08em; color: var(--vd-text); }
+.vedmak .vd-panel h3::after { background: var(--vd-line); box-shadow: none; }
+.vedmak .derived { background-image: none; background-color: var(--vd-bg-2); border-color: var(--vd-line-soft); box-shadow: none; }
+
+/* Поля ввода: плоские, граница проявляется на фокусе */
+.vedmak.sheet :is(input, select, textarea), .vedmak-dialog :is(input, select, textarea) {
+  background-color: var(--vd-input); border-color: var(--vd-line-soft); box-shadow: none;
+}
+
+/* Кнопки: без градиентов и внутренних бликов */
+.vedmak :is(button, .roll-btn, .rail-btn), .vedmak-card button {
+  background-image: none; box-shadow: none; font-family: var(--vd-font-body);
+}
+
+/* Атака: без значка, подпись заглавными гротеском. Кровь — только цветом кнопки, без градиента и блика */
+.vedmak .atk-go {
+  font-family: var(--vd-font-body); font-weight: 600; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  color: #f6ddd6; background: var(--vd-blood); border-color: transparent; border-radius: 3px; box-shadow: none; filter: none;
+}
+.vedmak .atk-go:hover { background: #b23b2d; filter: none; box-shadow: none; }
+
+/* Карточки чата: плоские, без эмблемы в шапке — название говорит само */
+.vedmak-card { background-image: none; box-shadow: none; }
+.vedmak-card .card-glyph { display: none; }
+.vedmak-card .card-head { background-image: none; box-shadow: none; }
+
+/* Подсказки — тоже без фактуры */
+body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+  background-image: none; background-color: #1b1712; border-color: var(--vd-line);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .55); font-family: var(--vd-font-body);
+}
+/* Подписи разделов («ЧЕМ БЬЮ», «БРОНЯ», «ТЕЛО»): не плашка, а строка — золотые заглавные с разрядкой */
+.vedmak .bronze-tag {
+  padding: 0; background: none; border: none;
+  font-size: .66rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--vd-gold);
+}
+/* Кнопки подвала окон проверок — как «АТАКА»: заглавные гротеском с разрядкой, без значков */
+.vedmak-dialog.check-dialog .form-footer button {
+  font-family: var(--vd-font-body); font-weight: 600; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+}
+.vedmak-dialog .window-header .window-icon { display: none; }

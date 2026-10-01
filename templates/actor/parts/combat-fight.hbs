@@ -41,7 +41,7 @@
       {{#if a.equipped}}
       <button type="button" class="atk-go" data-action="attack" data-kind="{{a.kind}}" data-item-id="{{a.itemId}}"
               data-tooltip="Окно атаки (Shift — сразу)">
-        <i class="fa-solid fa-khanda"></i> {{#if a.isRanged}}Выстрел{{else}}Атака{{/if}}
+        {{#if a.isRanged}}Выстрел{{else}}Атака{{/if}}
       </button>
       {{else}}
       <a class="atk-go quiet" data-action="itemToggleEquip" data-item-id="{{a.itemId}}" data-tooltip="Взять в руки">В руки</a>
@@ -51,7 +51,6 @@
 
     {{#if adrenalineRule}}
     <label class="adrenaline" data-tooltip="Кость адреналина: +1d6 урона за −10 Вын, максимум — Телосложение">
-      <i class="fa-solid fa-bolt"></i>
       <span>Адреналин: кость +1d6 к урону за −10 Вын</span>
       <input type="number" name="system.adrenaline.value" value="{{system.adrenaline.value}}" min="0">
       <span class="cap">из {{system.stats.body.effective}}</span>
@@ -78,13 +77,11 @@
 
       <div class="save-grid">
         <a class="save rollable" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">
-          <i class="fa-solid fa-star-of-life"></i>
           <span class="name">Испытание Уст</span>
           <b>&lt; {{system.derived.stun}}</b>
         </a>
         <a class="save bad rollable{{#if system.derived.dying}} alert{{/if}}" data-action="deathSave"
            data-tooltip="d10 меньше Уст − накопленный штраф (Удача поднимает порог)">
-          <i class="fa-solid fa-skull"></i>
           <span class="name">Против смерти</span>
           <b>&lt; {{system.derived.stun}}{{#if system.deathSaves.penalty}} −{{system.deathSaves.penalty}}{{/if}}</b>
         </a>
@@ -96,19 +93,19 @@
       <div class="group-head"><span class="glabel">ХОД</span><span class="rule"></span></div>
       <div class="turn-row">
         <button type="button" class="turn-btn" data-action="restTurn" data-tooltip="Полный ход: восстановить Вын">
-          <i class="fa-solid fa-lungs"></i> Отдых (ход) <b>+{{system.derived.rec}}</b>
+          Отдых (ход) <b>+{{system.derived.rec}}</b>
         </button>
         <button type="button" class="turn-btn" data-action="restDays" data-tooltip="Дни отдыха: ПЗ, Вын, заживление ран">
-          <i class="fa-solid fa-bed"></i> Дни отдыха
+          Дни отдыха
         </button>
         <button type="button" class="turn-btn" data-action="manualDamage" data-tooltip="Падение, бомба, ловушка, огонь">
-          <i class="fa-solid fa-burst"></i> Урон без атаки
+          Урон без атаки
         </button>
         <button type="button" class="turn-btn quiet" data-action="controlCheck" data-tooltip="Реа + Верховая езда / Мореходство">
-          <i class="fa-solid fa-horse"></i> Управление
+          Управление
         </button>
         <button type="button" class="turn-btn quiet" data-action="ram" data-tooltip="Таран скакуном или транспортом">
-          <i class="fa-solid fa-horse-head"></i> Таран
+          Таран
         </button>
       </div>
     </section>
@@ -156,7 +153,7 @@
     <div class="group-head">
       <span class="bronze-tag">КРИТИЧЕСКИЕ РАНЕНИЯ</span>
       <span class="rule"></span>
-      <a class="add" data-action="critCreate" data-tooltip="Добавить вручную"><i class="fa-solid fa-plus"></i> добавить</a>
+      <a class="add" data-action="critCreate" data-tooltip="Добавить вручную">добавить</a>
     </div>
 
     {{#each critWounds as |w|}}

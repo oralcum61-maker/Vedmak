@@ -196,7 +196,7 @@ async function defenseDialog(actor, attack, cfg, items) {
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
   });
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Защита: ${actor.name}`, icon: "fa-solid fa-shield-halved" },
+    window: { title: `Защита: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "defense-dialog"],
     position: { width: 520 },
     content,
@@ -205,7 +205,7 @@ async function defenseDialog(actor, attack, cfg, items) {
       mods: form => -(Math.max(1, Number(form.elements.outnumbered?.value) || 1) - 1)
     }),
     buttons: [{
-      action: "defend", label: "Защищаться", icon: "fa-solid fa-shield-halved", default: true,
+      action: "defend", label: "Защищаться", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         const defense = f.defense.value;
@@ -217,7 +217,7 @@ async function defenseDialog(actor, attack, cfg, items) {
           outnumbered: Math.max(1, Number(f.outnumbered.value) || 1)
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -350,7 +350,7 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
         <span class="tot-hint">Попадание, если атака больше итоговой СЛ</span>
       </footer></div>`;
     const res = await foundry.applications.api.DialogV2.wait({
-      window: { title: `Без защиты: ${actor.name}`, icon: "fa-solid fa-bullseye" },
+      window: { title: `Без защиты: ${actor.name}` },
       classes: ["vedmak", "vedmak-dialog", "check-dialog"], position: { width: 460 }, content,
       render: (event, dialog) => bindDialog(dialog, {
         extra: form => {
@@ -359,9 +359,9 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
           if (out) out.textContent = String((Number(form.elements.dc.value) || 0) + (Number(size?.dataset.mod) || 0));
         }
       }),
-      buttons: [{ action: "ok", label: "Сравнить", icon: "fa-solid fa-bullseye", default: true,
+      buttons: [{ action: "ok", label: "Сравнить", default: true,
         callback: (e, b) => ({ dc: Number(b.form.elements.dc.value) || 0, size: b.form.elements.size.value }) },
-        { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+        { action: "cancel", label: "Отмена" }],
       rejectClose: false
     });
     if (!res || res === "cancel") return null;

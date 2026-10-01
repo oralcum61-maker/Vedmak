@@ -100,7 +100,7 @@ async function damageDialog(attack, target, cfg, attacker) {
     ...commonFields()
   });
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Урон: ${target.name}`, icon: "fa-solid fa-droplet" },
+    window: { title: `Урон: ${target.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "damage-dialog"],
     position: { width: 520 },
     content,
@@ -116,7 +116,7 @@ async function damageDialog(attack, target, cfg, attacker) {
       }
     }),
     buttons: [{
-      action: "roll", label: "Бросить урон", icon: "fa-solid fa-dice", default: true,
+      action: "roll", label: "Бросить урон", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -125,7 +125,7 @@ async function damageDialog(attack, target, cfg, attacker) {
           messageMode: f.messageMode?.value || "public"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;

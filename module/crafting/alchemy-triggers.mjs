@@ -78,7 +78,7 @@ export async function healCritDialog(actor) {
   if (!wounds.length) return ["Критических ранений нет — эффекта нет."];
   const options = wounds.map(w => `<option value="${w.id}">${w.name}</option>`).join("");
   const id = await DialogV2.wait({
-    window: { title: "Какое ранение вылечить", icon: "fa-solid fa-kit-medical" },
+    window: { title: "Какое ранение вылечить" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><select name="wound">${options}</select></div>`,
     buttons: [{ action: "ok", label: "Вылечить", default: true, callback: (e, b) => b.form.elements.wound.value }],

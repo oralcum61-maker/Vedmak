@@ -36,7 +36,7 @@
           <td class="small">{{#if it.toxicity}}<span class="badge tox" data-tooltip="Токсичность">{{it.toxicity}}%</span>{{/if}} {{it.duration}}</td>
           <td class="qty">×{{it.quantity}}</td>
           <td class="controls">
-            {{#if it.actionLabel}}{{#unless it.applied}}<a class="roll-btn" data-action="useAlchemical"><i class="{{it.actionIcon}}"></i> {{it.actionLabel}}</a>{{/unless}}{{/if}}
+            {{#if it.actionLabel}}{{#unless it.applied}}<a class="roll-btn" data-action="useAlchemical">{{it.actionLabel}}</a>{{/unless}}{{/if}}
             <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
           </td>
@@ -63,7 +63,7 @@
             <i class="fa-solid {{#if it.ready}}fa-circle-check{{else}}fa-circle-exclamation{{/if}}"></i>
           </td>
           <td class="controls">
-            <a class="roll-btn" data-action="craftRecipe" data-tooltip="Изготовить (Shift — без окна)"><i class="fa-solid {{#if it.formula}}fa-flask{{else}}fa-hammer{{/if}}"></i> Изготовить</a>
+            <a class="roll-btn" data-action="craftRecipe" data-tooltip="Изготовить (Shift — без окна)">Изготовить</a>
             <a data-action="toggleMemorized" class="{{#if it.memorized}}active{{/if}}" data-tooltip="{{#if it.memorized}}Запомнен{{else}}Запомнить{{/if}}"><i class="fa-solid fa-brain"></i></a>
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
           </td>
@@ -113,7 +113,7 @@
           <td class="name"><a data-action="itemEdit" data-tooltip="{{it.effect}}">{{it.name}}</a> <span class="dim">{{it.kindLabel}}</span></td>
           <td class="qty">×{{it.quantity}}</td>
           <td class="controls">
-            <a class="roll-btn" data-action="attachEnhancement"><i class="fa-solid fa-gem"></i> {{#if (eq it.kind "armor")}}Прикрепить{{else if (eq it.kind "crossbow")}}Поставить{{else}}Нанести{{/if}}</a>
+            <a class="roll-btn" data-action="attachEnhancement">{{#if (eq it.kind "armor")}}Прикрепить{{else if (eq it.kind "crossbow")}}Поставить{{else}}Нанести{{/if}}</a>
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
           </td>
         </tr>

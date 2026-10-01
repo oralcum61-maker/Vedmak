@@ -10,8 +10,8 @@
   <span class="roll-sum">основа <b>{{base}}</b> {{#if fumble}}− <b>{{fumbleValue}}</b>{{else}}+ <b>{{vedmakSum dice}}</b>{{/if}}</span>
 </div>
 
-{{#if crit}}<div class="badge crit"><i class="fa-solid fa-star"></i> Критический успех{{#if critValue}}: +{{critValue}} сверх десятки{{/if}}</div>{{/if}}
-{{#if fumble}}<div class="badge fumble"><i class="fa-solid fa-skull"></i> Критический провал: −{{fumbleValue}}</div>{{/if}}
+{{#if crit}}<div class="badge crit">Критический успех{{#if critValue}}: +{{critValue}} сверх десятки{{/if}}</div>{{/if}}
+{{#if fumble}}<div class="badge fumble">Критический провал: −{{fumbleValue}}</div>{{/if}}
 
 <details class="roll-parts">
   <summary>из чего сложилось</summary>

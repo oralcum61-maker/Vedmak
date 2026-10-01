@@ -264,7 +264,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
   });
 
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Атака: ${src.label}`, icon: "fa-solid fa-khanda" },
+    window: { title: `Атака: ${src.label}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "attack-dialog"],
     position: { width: 560 },
     content,
@@ -277,7 +277,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
       }
     }),
     buttons: [{
-      action: "attack", label: "Атаковать", icon: "fa-solid fa-khanda", default: true,
+      action: "attack", label: "Атаковать", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -292,7 +292,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
           weight: f.weight?.value ?? "light"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;

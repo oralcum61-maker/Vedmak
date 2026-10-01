@@ -102,7 +102,7 @@ export async function deathSaveDialog(actor) {
     hint: "После каждого испытания штраф растёт на 1. Потраченная Удача не возвращается."
   });
   const luck = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Испытание против смерти: ${actor.name}`, icon: "fa-solid fa-skull" },
+    window: { title: `Испытание против смерти: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "death-dialog"],
     position: { width: 440 },
     content,
@@ -115,9 +115,9 @@ export async function deathSaveDialog(actor) {
         if (box) box.textContent = String(threshold + spent);
       }
     }),
-    buttons: [{ action: "roll", label: "Бросить", icon: "fa-solid fa-skull", default: true,
+    buttons: [{ action: "roll", label: "Бросить", default: true,
       callback: (event, button) => Number(button.form.elements.luck.value) || 0 },
-      { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+      { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (luck === "cancel" || luck === null) return null;

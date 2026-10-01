@@ -64,9 +64,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static TABS = {
     primary: {
       tabs: [
-        { id: "details",     label: "Свойства", icon: "fa-solid fa-list" },
-        { id: "description", label: "Описание", icon: "fa-solid fa-book-open" },
-        { id: "effects",     label: "Эффекты",  icon: "fa-solid fa-bolt" }
+        { id: "details",     label: "Свойства" },
+        { id: "description", label: "Описание" },
+        { id: "effects",     label: "Эффекты" }
       ],
       initial: "details"
     }

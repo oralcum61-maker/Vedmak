@@ -222,7 +222,7 @@ export async function ritualFocus(message) {
   if (!actor?.isOwner) return ui.notifications.warn("Концентрацию проверяет проводящий ритуал.");
   const options = Object.entries(INTERRUPTIONS).map(([k, v]) => `<option value="${k}">${v.label} (СЛ ${v.dc})</option>`).join("");
   const key = await foundry.applications.api.DialogV2.wait({
-    window: { title: "Прерывание ритуала", icon: "fa-solid fa-circle-notch" },
+    window: { title: "Прерывание ритуала" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Что случилось</label><select name="kind">${options}</select></div></div>`,
     buttons: [{ action: "ok", label: "Проверка", default: true, callback: (e, b) => b.form.elements.kind.value },

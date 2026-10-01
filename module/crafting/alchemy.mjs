@@ -185,7 +185,7 @@ export async function drink(actor, item) {
     if (t.total > t.max) {
       await applyToxicPoison(actor);
       lines.push("Порог превышен — персонаж отравлен, пока токсичность не спадёт или он не пройдёт Стойкость СЛ 18 (это отменит последний эликсир).");
-      buttons.push({ action: "toxicitySave", label: "Стойкость СЛ 18", icon: "fa-solid fa-shield-virus" });
+      buttons.push({ action: "toxicitySave", label: "Стойкость СЛ 18" });
     } else if (await clearToxicPoison(actor)) {
       lines.push("Токсичность в пределах порога — отравление от неё прошло.");
     }
@@ -360,7 +360,7 @@ export async function throwItem(actor, item) {
     });
   } else if (u.damage || u.status) {
     lines.push("Цели не выбраны: выберите пострадавших (или одну цель — центр зоны) и нажмите кнопку ниже.");
-    buttons.push({ action: "trapTrigger", label: "Урон по выбранным целям", icon: "fa-solid fa-burst" });
+    buttons.push({ action: "trapTrigger", label: "Урон по выбранным целям" });
   }
   return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons,
     flags: { trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect } } });
@@ -372,7 +372,7 @@ export async function setTrap(actor, item) {
   const s = item.system;
   await spendOne(item);
   return card(actor, `Ловушка ${item.name}`, [s.effect, `Зона: ${s.use.area}. Заметить растяжку — Внимание против результата Знания ловушек установившего.`],
-    { subtitle: "Установлена", buttons: [{ action: "trapTrigger", label: "Сработала (выбранные цели)", icon: "fa-solid fa-burst" }],
+    { subtitle: "Установлена", buttons: [{ action: "trapTrigger", label: "Сработала (выбранные цели)" }],
       flags: { trap: { name: item.name, use: s.use.toObject?.() ?? foundry.utils.deepClone(s.use), effect: s.effect } } });
 }
 
@@ -398,11 +398,11 @@ export async function applyOil(actor, item) {
   if (!weapons.length) return ui.notifications.warn("Нет оружия, на которое можно нанести масло.");
   const options = weapons.map(w => `<option value="${w.id}" ${w.system.equipped ? "selected" : ""}>${w.name}${w.system.activeOil ? ` (сейчас: ${w.system.oil.name})` : ""}</option>`).join("");
   const id = await DialogV2.wait({
-    window: { title: item.name, icon: "fa-solid fa-droplet" },
+    window: { title: item.name },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><p>${item.system.effect}</p><div class="form-group"><label>Оружие</label><select name="weapon">${options}</select></div>
       <p class="hint">Нанесение занимает действие. Новое масло заменяет старое.</p></div>`,
-    buttons: [{ action: "ok", label: "Нанести", icon: "fa-solid fa-droplet", default: true, callback: (e, b) => b.form.elements.weapon.value },
+    buttons: [{ action: "ok", label: "Нанести", default: true, callback: (e, b) => b.form.elements.weapon.value },
       { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
@@ -423,7 +423,7 @@ export async function applyMutagen(actor, item) {
   const applied = actor.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;
   if (applied >= CRAFTING.mutagenLimit) return ui.notifications.warn(`Уже принято ${applied} мутагена — больше нельзя (стр. 251).`);
   const ok = await DialogV2.confirm({
-    window: { title: item.name, icon: "fa-solid fa-dna" },
+    window: { title: item.name },
     content: `<p>${s.effect}</p><p>Час подготовки и проверка Алхимии со СЛ <b>${s.mutagen.dc}</b>. Эффект постоянный, удалить мутаген нельзя.</p>
       ${isMutant(actor) ? "" : "<p class=\"warn\">Персонаж не мутант: мутаген отравит его (Стойкость или Первая помощь СЛ 18). Маг со способностью «Мутация» может мутировать подопытного.</p>"}`
   });
@@ -442,7 +442,7 @@ export async function applyMutagen(actor, item) {
     await applyStatus(actor, "poisoned");
     await spendOne(item);
     return card(actor, item.name, ["Простые люди и нелюди не могут использовать мутагены: персонаж отравлен (Стойкость или Первая помощь СЛ 18)."],
-      { subtitle: ALCHEMY_KINDS.mutagen, buttons: [{ action: "mutagenSave", label: "Стойкость СЛ 18", icon: "fa-solid fa-shield-virus" }] });
+      { subtitle: ALCHEMY_KINDS.mutagen, buttons: [{ action: "mutagenSave", label: "Стойкость СЛ 18" }] });
   }
   if ((s.quantity ?? 1) > 1) {
     await item.update({ "system.quantity": s.quantity - 1 });
