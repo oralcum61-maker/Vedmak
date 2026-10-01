@@ -349,7 +349,8 @@ export async function repair(actor, item) {
   const roll = await performCheck({ actor, title: `Починка: ${item.name}`, parts, dc, toChat: false });
   if (roll.success) {
     if (item.type === "weapon" || item.system.isShield) {
-      await item.update({ "system.reliability.value": item.system.reliability.max });
+      // Исходный максимум: в system он уже с модификациями арбалета
+      await item.update({ "system.reliability.value": item._source.system.reliability.max });
     } else {
       const sp = foundry.utils.deepClone(item.system.toObject().sp);
       for (const loc of Object.values(sp)) loc.value = loc.max;

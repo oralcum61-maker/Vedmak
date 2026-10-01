@@ -77,14 +77,15 @@
 
   <details class="bonus-fold">
     <summary>Бонусы к максимумам <span class="dim">— от реликвий, мутагенов и способностей</span></summary>
+    {{!-- Исходные значения, без эффектов: иначе каждое сохранение листа вписывало бы бонус эффекта в данные ещё раз --}}
     <div class="counters wide">
-      <label><span>ПЗ</span><input type="number" name="system.bonus.hp" value="{{system.bonus.hp}}"></label>
-      <label><span>Вын</span><input type="number" name="system.bonus.sta" value="{{system.bonus.sta}}"></label>
-      <label><span>Энергия</span><input type="number" name="system.bonus.vigor" value="{{system.bonus.vigor}}"></label>
-      <label><span>Уст</span><input type="number" name="system.bonus.stun" value="{{system.bonus.stun}}"></label>
-      <label><span>Отдых</span><input type="number" name="system.bonus.rec" value="{{system.bonus.rec}}"></label>
-      <label><span>Бег</span><input type="number" name="system.bonus.run" value="{{system.bonus.run}}"></label>
-      <label><span>Вес</span><input type="number" name="system.bonus.enc" value="{{system.bonus.enc}}"></label>
+      <label><span>ПЗ</span><input type="number" name="system.bonus.hp" value="{{source.system.bonus.hp}}"></label>
+      <label><span>Вын</span><input type="number" name="system.bonus.sta" value="{{source.system.bonus.sta}}"></label>
+      <label><span>Энергия</span><input type="number" name="system.bonus.vigor" value="{{source.system.bonus.vigor}}"></label>
+      <label><span>Уст</span><input type="number" name="system.bonus.stun" value="{{source.system.bonus.stun}}"></label>
+      <label><span>Отдых</span><input type="number" name="system.bonus.rec" value="{{source.system.bonus.rec}}"></label>
+      <label><span>Бег</span><input type="number" name="system.bonus.run" value="{{source.system.bonus.run}}"></label>
+      <label><span>Вес</span><input type="number" name="system.bonus.enc" value="{{source.system.bonus.enc}}"></label>
     </div>
   </details>
 </section>

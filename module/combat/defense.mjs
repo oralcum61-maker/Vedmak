@@ -231,10 +231,12 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   let damageOnBlock = false, fixedLocation = "";
   if (!hit) {
     if (cfg.defense === "block" && item) {
+      // Пишем в исходное значение: в system уже прибавлены модификации арбалета («Стремя» +5),
+      // и запись посчитанного числа поднимала бы надёжность с каждым блоком
+      const src = item.item._source.system.reliability;
+      await item.item.update({ "system.reliability.value": Math.max(0, src.value - 1) });
       const rel = item.item.system.reliability;
-      const value = Math.max(0, rel.value - 1);
-      await item.item.update({ "system.reliability.value": value });
-      notes.push(value > 0 ? `${item.item.name}: надёжность ${value}/${rel.max}.` : `${item.item.name} сломан — больше не защищает.`);
+      notes.push(rel.value > 0 ? `${item.item.name}: надёжность ${rel.value}/${rel.max}.` : `${item.item.name} сломан — больше не защищает.`);
     }
     if (cfg.defense === "brawlBlock") {
       damageOnBlock = !attack.noDamage;

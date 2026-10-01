@@ -213,5 +213,10 @@ async function roundsToTime(combat) {
       duration: { ...roundsAsTime(e.flags.vedmak.timed.rounds), expired: false }
     }));
     if (updates.length) await actor.updateEmbeddedDocuments("ActiveEffect", updates);
+    // Истёкшие в последнем раунде: начало хода, которое их сняло бы, уже не наступит, а реестр Foundry
+    // неактивные эффекты не отслеживает — без этого они висели бы вечно вместе со зрением
+    const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && e.duration?.expired)
+      .map(e => e.id);
+    if (expired.length) await actor.deleteEmbeddedDocuments("ActiveEffect", expired);
   }
 }

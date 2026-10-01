@@ -380,6 +380,15 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   _onRender(context, options) {
     super._onRender(context, options);
+    // Устаревшие скрытые вкладки держат прежние значения, а форма листа отправляется целиком: их поля ушли бы
+    // вместе с правкой на открытой вкладке и откатили бы чужие изменения (кроны от ведущего, навыки из мастера).
+    // Отключённые поля в форму не попадают; вкладку перерисует changeTab, когда её откроют.
+    for (const part of this.#staleParts) {
+      for (const el of this.element.querySelectorAll(`[data-application-part="${part}"] :is(input, select, textarea, prose-mirror)`)) {
+        el.disabled = true;
+        el.setAttribute("disabled", "");
+      }
+    }
     // Поля предметов прямо в списках (количество): пишем в предмет, а не в актора
     this._listen("input.item-field", "change", async (event, input) => {
       event.stopPropagation();

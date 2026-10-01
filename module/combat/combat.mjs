@@ -16,7 +16,7 @@ export class VedmakCombat extends Combat {
     const actor = combatant.actor;
     if (!actor || combatant.defeated || actor.statuses.has("dead")) return;
     try {
-      await startOfTurn(actor, this, context);
+      await startOfTurn(actor, this, { ...context, combatant });
     } catch (err) {
       console.error("vedmak | ошибка начала хода", err);
     }
@@ -129,7 +129,8 @@ export async function startOfTurn(actor, combat, context) {
   if (has("nauseated") && context.round % 3 === 0) lines.push(`Тошнота: d10 должен быть меньше Тел (${sys.stats.body.total}).`);
 
   if (!lines.length) return;
-  const tokenUuid = combat.combatant?.token?.uuid ?? null;
+  // Токен того, чей ход начался: v14 зовёт _onStartTurn и для пропущенных ходов, а combat.combatant тогда уже другой
+  const tokenUuid = context.combatant?.token?.uuid ?? actor.token?.uuid ?? null;
   await postCard({
     template: "systems/vedmak/templates/chat/turn.hbs",
     data: { name: actor.name, img: actor.img, round: context.round, lines, buttons, tokenUuid, actorUuid: actor.uuid },
