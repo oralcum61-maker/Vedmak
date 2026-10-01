@@ -174,6 +174,23 @@ export class VedmakActor extends Actor {
 
   /* -------------------------------------------------------------------------- */
 
+  /**
+   * Правка полосы токена. Ядро держит полосу в пределах 0…максимум, а ПЗ уходят в минус — это «при смерти»
+   * (стр. 162; на сколько ниже нуля — СЛ стабилизации). Нижнего предела книга не ставит. Вын и прочие полосы — как в ядре.
+   * Сигнатура и хук — как у Actor#modifyTokenAttribute в v14.
+   */
+  async modifyTokenAttribute(attribute, value, isDelta = false, isBar = true) {
+    if (attribute !== "hp" || !isBar) return super.modifyTokenAttribute(attribute, value, isDelta, isBar);
+    const hp = this.system.hp;
+    let update = isDelta ? hp.value + value : value;
+    // Сверху — максимум, но уже накопленное сверх него (временные ПЗ) правка вниз не срезает
+    update = Math.min(update, Math.max(hp.max, hp.value));
+    if (update === hp.value) return this;
+    const updates = { "system.hp.value": update };
+    const allowed = Hooks.call("modifyTokenAttribute", { attribute, value, isDelta, isBar }, updates, this);
+    return allowed !== false ? this.update(updates) : this;
+  }
+
   async _preUpdate(changed, options, user) {
     const hp = foundry.utils.getProperty(changed, "system.hp.value");
     // Вышел из «при смерти» — накопленный штраф испытаний сбрасывается

@@ -7,7 +7,9 @@ import {
 } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
-import { resolveActor, asGM, registerGMHandler, userOwnsAny, rollFormula, postCard } from "./common.mjs";
+import {
+  resolveActor, asGM, registerGMHandler, userOwnsAny, rollFormula, postCard, defaultMessageMode, markDone, allowRepeat
+} from "./common.mjs";
 import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 import { markDead } from "./saves.mjs";
 
@@ -24,12 +26,15 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
   if (!attacker?.isOwner) return ui.notifications.warn("Бросить урон может атакующий или ведущий.");
   const target = resolveActor(def.defender.tokenUuid) ?? resolveActor(def.defender.actorUuid);
   if (!target) return ui.notifications.warn("Цель атаки не найдена.");
+  // Один бросок урона на карточку защиты: повторный — только ведущим и с подтверждением
+  const prior = game.messages.some(m => m.flags.vedmak?.damage?.defenseMessageId === message.id);
+  if (prior && !(await allowRepeat(`Урон по «${def.defender.name}» от этой атаки уже брошен.`))) return null;
 
   const attack = def.attack;
   let cfg = {
     damageType: attack.weapon?.damageTypes?.[0] ?? "bludgeoning",
     location: def.fixedLocation || attack.aim || "",
-    cover: "none", mod: 0, adrenaline: 0, messageMode: undefined
+    cover: "none", mod: 0, adrenaline: 0, messageMode: defaultMessageMode()
   };
   if (!skipDialog) {
     cfg = await damageDialog(attack, target, cfg, attacker);
@@ -53,18 +58,31 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
     ...result,
     applied: false
   };
-  return postCard({
+  const card = await postCard({
     template: "systems/vedmak/templates/chat/damage.hbs", data, actor: attacker,
     flags: { damage: data }, rolls: result.rolls, messageMode: cfg.messageMode
   });
+  await markDone(message, card);
+  return card;
+}
+
+/**
+ * Формула урона для окна и подписи: правка из окна атаки и разбег идут после множителя сильной атаки —
+ * «двойной урон» удваивает урон оружия (стр. 153), а разбег прибавляется к урону (стр. 171).
+ */
+export function damageText(attack) {
+  const mult = attack.damageMult ?? 1;
+  let text = `${attack.damageFormula || "—"}${mult === 0.5 ? " ×½" : mult !== 1 ? ` ×${mult}` : ""}`;
+  if (attack.chargeFormula) text += ` + разбег ${attack.chargeFormula}`;
+  if (attack.damageMod) text += ` ${attack.damageMod > 0 ? "+" : "−"} ${Math.abs(attack.damageMod)}`;
+  return text;
 }
 
 async function damageDialog(attack, target, cfg, attacker) {
   const table = target.system.derived.bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
   const types = (attack.weapon?.damageTypes ?? ["bludgeoning"])
     .map(k => ({ key: k, label: CONFIG.VEDMAK.DAMAGE_TYPES[k]?.label ?? k, selected: k === cfg.damageType }));
-  const mult = attack.damageMult ?? 1;
-  const formula = `${attack.damageFormula || "—"}${mult > 1 ? ` ×${mult}` : ""}`;
+  const formula = damageText(attack);
   const content = await renderTemplate("systems/vedmak/templates/dialog/damage.hbs", {
     attack, target, cfg,
     head: {
@@ -172,6 +190,14 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     dmg = Math.floor(dmg * attack.damageMult);
     parts.push({ label: attack.damageMult > 1 ? `×${attack.damageMult} (${attack.typeLabel})` : `×½ (${attack.typeLabel})`, value: dmg - before });
   }
+  // После множителя: разбег прибавляется к урону (стр. 171), правка из окна атаки — как написано в окне
+  if (attack.chargeFormula) {
+    const c = await rollFormula(attack.chargeFormula);
+    if (c.roll) rolls.push(c.roll);
+    dmg += c.total;
+    parts.push({ label: `Разбег ${attack.chargeFormula}`, value: c.total });
+  }
+  if (attack.damageMod) { dmg += attack.damageMod; parts.push({ label: "Правка урона (окно атаки)", value: attack.damageMod }); }
 
   // Серебро и метеоритная сталь (стр. 162, 175)
   // Магия — не оружие: несеребряное сопротивление чудовищ к ней не относится (стр. 162)

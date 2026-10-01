@@ -2,8 +2,9 @@
 
 import { bindDialog, luckDots, luckNote } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
+import { defaultMessageMode } from "./common.mjs";
 
-/** Сообщение-карточка испытания. */
+/** Сообщение-карточка испытания. Видимость — режим чата пользователя: без него v14 отдаёт карточку всем. */
 async function saveCard(actor, data) {
   const content = await renderTemplate("systems/vedmak/templates/chat/save.hbs", data);
   return ChatMessage.create({
@@ -11,7 +12,7 @@ async function saveCard(actor, data) {
     content,
     rolls: data.rolls,
     flags: { vedmak: { save: { kind: data.kind, success: data.success, actorUuid: actor.uuid } } }
-  });
+  }, { messageMode: defaultMessageMode() });
 }
 
 /**

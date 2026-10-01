@@ -6,7 +6,9 @@ import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
-import { resolveActor, fallbackDefender, combatantFor, asGM, postCard } from "./common.mjs";
+import {
+  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat
+} from "./common.mjs";
 
 /** Чем можно блокировать или парировать. */
 function defenseItems(actor, attack, defense) {
@@ -22,6 +24,35 @@ function defenseItems(actor, attack, defense) {
     }
   }
   return out;
+}
+
+/** Защиты, которые делаются рукой с оружием или щитом: к ним идёт штраф ран руки. */
+const ARM_DEFENSES = ["block", "parry", "brawlBlock"];
+
+/**
+ * Ограничения защиты (стр. 164) — одни и те же для кнопки, окна и итога окна.
+ * Стрелы и болты не парируют; дистанционную атаку блокируют только щитом (ни оружием, ни рукой);
+ * «Блокирование» без оружия и щита — блок рукой (Борьба).
+ * @returns {{error: string}|{defense: string, items: object[]}}
+ */
+function resolveDefense(actor, attack, defense) {
+  if (defense === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) return { error: "Стрелы и болты нельзя парировать." };
+  if (defense === "brawlBlock" && attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
+  const items = defenseItems(actor, attack, defense);
+  if (defense === "block" && !items.length) {
+    if (attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
+    return { defense: "brawlBlock", items: [] };
+  }
+  return { defense, items };
+}
+
+/** Есть ли уже карточка защиты этой цели от этой атаки. Поиск по чату, а не отметка: её может не быть без ведущего. */
+function priorDefense(message, defender) {
+  const same = d => (defender.tokenUuid && d?.tokenUuid ? d.tokenUuid === defender.tokenUuid : d?.actorUuid === defender.actorUuid);
+  return game.messages.some(m => {
+    const def = m.flags.vedmak?.defense;
+    return def?.attackMessageId === message.id && same(def.defender);
+  });
 }
 
 /**
@@ -41,28 +72,35 @@ export async function defend(message, target, defense, { skipDialog = false } = 
 
   const defender = { actorUuid: actor.uuid, tokenUuid: info.tokenUuid ?? actor.token?.uuid ?? null, name: actor.name, img: info.img ?? actor.img };
   if (attack.spell && !attack.spell.works) return ui.notifications.warn("Магия не сработала — защищаться не от чего.");
-  if (defense === "none") return defendAgainstDC(message, attack, actor, defender, { skipDialog });
-  if (defense === "auto") return defendAuto(message, attack, actor, defender);
+  // Одна защита цели от одной атаки: повторная — только ведущим и с подтверждением
+  if (priorDefense(message, defender) && !(await allowRepeat(`${actor.name} уже защищался от этой атаки.`))) return null;
+  const mode = defaultMessageMode();
+  if (defense === "none") return defendAgainstDC(message, attack, actor, defender, { skipDialog, messageMode: mode });
+  if (defense === "auto") return defendAuto(message, attack, actor, defender, { messageMode: mode });
   if (defense === "willx3") {
     const dc = actor.system.stats.will.effective * 3;
-    return defendAgainstDC(message, attack, actor, defender, { skipDialog: true, dc, label: `Воля ×3 (${dc})` });
+    return defendAgainstDC(message, attack, actor, defender, { skipDialog: true, dc, label: `Воля ×3 (${dc})`, messageMode: mode });
   }
 
   // Ограничения защиты (стр. 164)
-  if (defense === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) {
-    return ui.notifications.warn("Стрелы и болты нельзя парировать.");
-  }
-  let items = defenseItems(actor, attack, defense);
-  if (defense === "block" && !items.length) {
-    if (attack.isRanged) return ui.notifications.warn("Дистанционную атаку можно блокировать только щитом.");
-    defense = "brawlBlock";
-  }
+  let check = resolveDefense(actor, attack, defense);
+  if (check.error) return ui.notifications.warn(check.error);
+  defense = check.defense;
+  let items = check.items;
 
-  let cfg = { defense, itemId: items[0]?.id ?? "", situations: [], outnumbered: 1, mod: 0, luck: 0, messageMode: undefined };
+  let cfg = { defense, itemId: items[0]?.id ?? "", situations: [], outnumbered: 1, mod: 0, luck: 0, messageMode: mode };
   if (!skipDialog) {
     cfg = await defenseDialog(actor, attack, cfg, items);
     if (!cfg) return null;
-    if (cfg.defense !== defense) items = defenseItems(actor, attack, cfg.defense);
+    // Итог окна — через те же ограничения: предмет в окне общий для блока и парирования
+    check = resolveDefense(actor, attack, cfg.defense);
+    if (check.error) return ui.notifications.warn(check.error);
+    cfg.defense = check.defense;
+    items = check.items;
+    if (!items.some(i => i.id === cfg.itemId)) {
+      if (cfg.itemId && items.length) ui.notifications.info(`${DEFENSE_TYPES[cfg.defense].label}: ${items[0].item.name}.`);
+      cfg.itemId = items[0]?.id ?? "";
+    }
   }
   return rollDefense(message, attack, actor, defender, cfg, items);
 }
@@ -81,7 +119,8 @@ function defenseBase(actor, typeKey, item) {
   let base = sum;
   if (skill.base !== Math.max(0, sum)) base += skill.base - sum;
   for (const m of statusRollMods(actor, "defense")) base += Number(m.value) || 0;
-  return Math.max(0, base);
+  if (ARM_DEFENSES.includes(typeKey)) for (const m of armWoundParts(actor)) base += m.value;
+  return base;
 }
 
 /**
@@ -99,10 +138,11 @@ export function bestDefense(actor, attack) {
   for (const [key, type] of Object.entries(DEFENSE_TYPES)) {
     if (spellDefenses ? !spellDefenses.includes(key) : type.magicOnly) continue;
     if (key === "brawlBlock") continue;
-    if (key === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) continue;
+    const check = resolveDefense(actor, attack, key);
+    if (check.error) continue;
     let item = null;
     if (key === "block" || key === "parry") {
-      item = defenseItems(actor, attack, key)[0] ?? null;
+      item = check.items[0] ?? null;
       if (!item) continue;
     }
     const value = defenseBase(actor, key, item) + (type.mod ?? 0) - (key === "parry" && attack.weapon?.isThrown ? 5 : 0);
@@ -113,10 +153,11 @@ export function bestDefense(actor, attack) {
 
 async function defenseDialog(actor, attack, cfg, items) {
   const spellDefenses = attack.spell?.defenses;
+  // В списке — только допустимые защиты (стр. 164); «Блокирование» без оружия и щита — это «Блок рукой»
   const allowed = Object.entries(DEFENSE_TYPES).filter(([k, t]) => {
-    if (spellDefenses) return spellDefenses.includes(k);
-    if (t.magicOnly) return false;
-    return !(k === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow));
+    if (spellDefenses ? !spellDefenses.includes(k) : t.magicOnly) return false;
+    const check = resolveDefense(actor, attack, k);
+    return !check.error && check.defense === k;
   });
   // Чем блокировать и парировать — единый список: вид защиты в окне меняется без перерисовки
   const byId = new Map();
@@ -146,7 +187,9 @@ async function defenseDialog(actor, attack, cfg, items) {
     },
     situations: Object.entries(DEFENSE_SITUATIONS).map(([key, s]) => ({ key, ...s })),
     foldSituations: foldState("defenseSituations", false),
-    statusMods: statusRollMods(actor, "defense"),
+    // Штраф ран руки — в той же строке «уже в основе»: основа окна пересчитывается по выбранной защите
+    statusMods: [...statusRollMods(actor, "defense"),
+      ...armWoundParts(actor).map(p => ({ ...p, label: `${p.label}: блок и парирование` }))],
     extraCost: defenseCostInfo(actor).cost,
     total: { base, hint: `Нужно больше ${attack.roll.total}` },
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
@@ -208,6 +251,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   if (cfg.outnumbered > 1) parts.push({ label: `Противников в ближнем бою: ${cfg.outnumbered}`, value: -(cfg.outnumbered - 1) });
   for (const key of cfg.situations) parts.push({ label: DEFENSE_SITUATIONS[key].label, value: DEFENSE_SITUATIONS[key].mod });
   parts.push(...statusRollMods(actor, "defense"));
+  if (ARM_DEFENSES.includes(cfg.defense)) parts.push(...armWoundParts(actor));
   if (cfg.mod) parts.push({ label: "Модификатор", value: cfg.mod });
 
   const label = item ? `${type.label}: ${item.item.name}` : type.label;
@@ -257,14 +301,20 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
     fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
   });
-  return postCard({
-    template: "systems/vedmak/templates/chat/defense.hbs", data, actor,
-    flags: { defense: data }, rolls: roll.rolls ?? [], messageMode: cfg.messageMode
+  return postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+}
+
+/** Карточка защиты в чат и отметка на карточке атаки (погасить кнопки этой цели). */
+async function postDefense(message, data, actor, { rolls = [], messageMode }) {
+  const card = await postCard({
+    template: "systems/vedmak/templates/chat/defense.hbs", data, actor, flags: { defense: data }, rolls, messageMode
   });
+  await markDone(message, card);
+  return card;
 }
 
 /** Беззащитная, дезориентированная или ничего не подозревающая цель: атака против СЛ. */
-async function defendAgainstDC(message, attack, actor, defender, { skipDialog, dc: fixedDc = null, label = "Без защиты" }) {
+async function defendAgainstDC(message, attack, actor, defender, { skipDialog, dc: fixedDc = null, label = "Без защиты", messageMode }) {
   let dc = fixedDc ?? (actor.statuses.has("disoriented") || actor.statuses.has("unconscious") ? 10
     : attack.isRanged && !attack.spell ? (RANGE_BANDS[attack.band]?.dc ?? 15) : 10);
   let size = "medium";
@@ -317,15 +367,15 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
   const data = buildOutcome(message, attack, defender, {
     defense: "none", label, roll: null, total, dc: total, hit: margin > 0, margin, notes: []
   });
-  return postCard({ template: "systems/vedmak/templates/chat/defense.hbs", data, actor, flags: { defense: data } });
+  return postDefense(message, data, actor, { messageMode });
 }
 
 /** Магия без защиты: срабатывает, если сотворение не провалено (стр. 168). */
-async function defendAuto(message, attack, actor, defender) {
+async function defendAuto(message, attack, actor, defender, { messageMode } = {}) {
   const data = buildOutcome(message, attack, defender, {
     defense: "auto", label: "Без защиты", roll: null, total: null, dc: null, hit: true, margin: 0, notes: [], auto: true
   });
-  return postCard({ template: "systems/vedmak/templates/chat/defense.hbs", data, actor, flags: { defense: data } });
+  return postDefense(message, data, actor, { messageMode });
 }
 
 function buildOutcome(message, attack, defender, r) {
@@ -341,6 +391,7 @@ function buildOutcome(message, attack, defender, r) {
       attacker: attack.attacker, label: attack.label, img: attack.img, typeLabel: attack.typeLabel,
       weapon: attack.weapon, attackType: attack.attackType, aim: attack.aim, isRanged: attack.isRanged,
       damageFormula: attack.damageFormula, damageMult: attack.damageMult, nonLethal: attack.nonLethal,
+      damageMod: attack.damageMod ?? 0, chargeFormula: attack.chargeFormula ?? "",
       noDamage: attack.noDamage, fixedLocation: attack.fixedLocation, hitText: attack.hitText,
       hitStatus: attack.hitStatus, stunSaveMod: attack.stunSaveMod, total: attack.roll.total,
       spell

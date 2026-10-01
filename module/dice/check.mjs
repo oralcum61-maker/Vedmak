@@ -3,7 +3,8 @@
 //  Итог = основа (параметр + навык) + модификаторы + Удача + бросок d10.
 //  • 10 — критический успех: бросаем ещё и прибавляем, каждая новая 10 взрывается дальше (стр. 58, 156).
 //  • 1 — критический провал: единица в итог не идёт; бросаем ещё d10 (тоже взрывается на 10)
-//    и вычитаем из основы. Основа ниже 0 не опускается (стр. 156–157).
+//    и вычитаем из основы. Вычитание провала не опускает основу ниже 0 (стр. 157);
+//    сама основа от штрафов может быть и отрицательной.
 //  • Проверка сложности успешна, только если итог БОЛЬШЕ СЛ (равно — провал, стр. 57).
 
 import { renderTemplate } from "../util.mjs";
@@ -46,12 +47,15 @@ export async function rollD10() {
  */
 export async function performCheck(cfg) {
   const { actor = null, title, subtitle = "", parts = [], dc = null, luck = 0,
-          messageMode, toChat = true, flags = {} } = cfg;
+          toChat = true, flags = {} } = cfg;
+  // Без окна (Shift) — режим чата пользователя: v14 применяет режим, только если его передали явно
+  const messageMode = cfg.messageMode ?? game.settings.get("core", "messageMode");
 
   const d10 = await rollD10();
-  const baseRaw = parts.reduce((s, p) => s + (Number(p.value) || 0), 0) + luck;
-  const base = Math.max(0, baseRaw);
-  const total = d10.fumble ? Math.max(0, base - d10.fumbleValue) : base + d10.rollValue;
+  // Основа может быть отрицательной (штрафы больше параметра с навыком). Предел «не ниже 0» в книге — только
+  // для вычитания критического провала (стр. 157): провал не опускает основу ниже 0, но и не поднимает её до 0
+  const base = parts.reduce((s, p) => s + (Number(p.value) || 0), 0) + luck;
+  const total = d10.fumble ? Math.max(Math.min(base, 0), base - d10.fumbleValue) : base + d10.rollValue;
 
   const result = {
     title, subtitle, parts: parts.filter(p => p.value || p.always), luck, base, total,

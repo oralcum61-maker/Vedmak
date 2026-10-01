@@ -12,7 +12,7 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import {
-  currentTargets, actorToken, tokenDistance, resolveActor, postCard
+  currentTargets, actorToken, tokenDistance, resolveActor, postCard, defaultMessageMode, armWoundParts
 } from "./common.mjs";
 
 const SHIELD_STEPS = { light: 0, medium: 2, heavy: 4 };
@@ -148,7 +148,7 @@ export async function attack(actor, source, opts = {}) {
     chargeMeters: opts.chargeMeters ?? 0, gallop: !!opts.gallop, weight: opts.weight ?? "light",
     situations: opts.situations ?? [], extraAction: !!opts.extraAction, mod: opts.mod ?? 0,
     damageMod: opts.damageMod ?? 0, luck: opts.luck ?? 0,
-    messageMode: opts.messageMode
+    messageMode: opts.messageMode ?? defaultMessageMode()
   };
 
   const suggested = suggestBand(actor, src, targets);
@@ -159,6 +159,17 @@ export async function attack(actor, source, opts = {}) {
     if (!cfg) return null;
   }
   return rollAttack(actor, src, targets, cfg);
+}
+
+/**
+ * Действует ли рукой: оружие, щит, удар рукой и приёмы Борьбы — да; пинки, подсечка, таран и приём
+ * другим навыком (финт — Обман) — нет. К таким атакам идёт штраф ран руки (стр. 158–160).
+ */
+function usesArm(src, typeKey) {
+  const typeCfg = src.types[typeKey] ?? Object.values(src.types)[0];
+  if (typeCfg.skill) return false;
+  if (src.kind === "unarmed") return typeCfg.damage !== "kick" && typeKey !== "trip";
+  return src.kind === "weapon" || src.kind === "shield";
 }
 
 /** Основа броска для вида атаки — та же арифметика, что в rollAttack. */
@@ -172,7 +183,8 @@ function attackBase(actor, src, typeKey) {
   if (skill.base !== Math.max(0, sum)) base += skill.base - sum;
   if (src.accuracy && !typeCfg.skill) base += src.accuracy;
   for (const m of statusRollMods(actor, "attack")) base += Number(m.value) || 0;
-  return Math.max(0, base);
+  if (usesArm(src, typeKey)) for (const m of armWoundParts(actor)) base += m.value;
+  return base;
 }
 
 /** Формула урона вида атаки для показа в окне: то же, что уйдёт в карточку. */
@@ -241,7 +253,9 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
     suggested, beyond: suggested.band === "beyond",
     situations: Object.entries(ATTACK_SITUATIONS).map(([key, s]) => ({ key, ...s, checked: autoSituations.has(key) })),
     foldSituations: foldState("attackSituations", false),
-    statusMods: statusRollMods(actor, "attack"),
+    // Штраф ран руки — в строке «уже в основе»; основа каждого вида атаки считает его сама (пинку — нет)
+    statusMods: [...statusRollMods(actor, "attack"),
+      ...armWoundParts(actor).map(p => ({ ...p, label: `${p.label}: атаки рукой` }))],
     weights: Object.entries(WEIGHT_MODS).map(([key, w]) => ({ key, label: w.label, selected: key === cfg.weight })),
     staCost: actor.type === "character",
     isMonster: actor.type === "monster",
@@ -254,7 +268,14 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "attack-dialog"],
     position: { width: 560 },
     content,
-    render: (event, dialog) => bindDialog(dialog),
+    render: (event, dialog) => bindDialog(dialog, {
+      // Разбег — после множителя сильной атаки, как и в броске урона (стр. 171)
+      damageExtra: form => {
+        const dice = form.elements.gallop?.checked ? 5 : Math.min(5, Math.floor((Number(form.elements.chargeMeters?.value) || 0) / 2));
+        const w = WEIGHT_MODS[form.elements.weight?.value]?.mult ?? 1;
+        return dice ? ` + ${dice}d6${w === 0.5 ? " ×½" : w !== 1 ? ` ×${w}` : ""}` : "";
+      }
+    }),
     buttons: [{
       action: "attack", label: "Атаковать", icon: "fa-solid fa-khanda", default: true,
       callback: (event, button) => {
@@ -338,6 +359,7 @@ export async function rollAttack(actor, src, targets, cfg) {
     if (s) parts.push({ label: s.label, value: s.mod });
   }
   parts.push(...statusRollMods(actor, "attack"));
+  if (usesArm(src, cfg.attackType)) parts.push(...armWoundParts(actor));
 
   // Дополнительное действие атаки: 3 Вын, −3 (стр. 151)
   const notes = ammoNote ? [ammoNote] : [];
@@ -368,18 +390,17 @@ export async function rollAttack(actor, src, targets, cfg) {
   if (!noDamage && damageFormula && damageBonus && !src.weapon.ram) {
     damageFormula = `${damageFormula} ${damageBonus > 0 ? "+" : "-"} ${Math.abs(damageBonus)}`;
   }
-  // Ручная правка урона из окна атаки
-  if (!noDamage && damageFormula && cfg.damageMod) {
-    damageFormula = `${damageFormula} ${cfg.damageMod > 0 ? "+" : "-"} ${Math.abs(cfg.damageMod)}`;
-    notes.push(`Правка урона: ${cfg.damageMod > 0 ? "+" : "−"}${Math.abs(cfg.damageMod)}.`);
-  }
+  // Ручная правка урона из окна атаки — отдельно от формулы: прибавляется после множителя сильной атаки,
+  // как и написано в окне («2d6+2 ×2 + 2»)
+  const damageMod = !noDamage && damageFormula ? cfg.damageMod ?? 0 : 0;
+  if (damageMod) notes.push(`Правка урона: ${damageMod > 0 ? "+" : "−"}${Math.abs(damageMod)}.`);
 
-  // Разбег верхом или таран: (метры/2, максимум 5; галоп — 5)d6 × модификатор веса цели (стр. 171)
+  // Разбег верхом или таран: (метры/2, максимум 5; галоп — 5)d6 × модификатор веса цели (стр. 171).
+  // Это дополнительный урон к урону оружия: сильная атака его не удваивает
   const chargeDice = cfg.gallop ? 5 : Math.min(5, Math.floor((cfg.chargeMeters ?? 0) / 2));
   const weightMult = WEIGHT_MODS[cfg.weight]?.mult ?? 1;
-  if (chargeDice && !noDamage && damageFormula) {
-    damageFormula = weightMult === 1 ? `${damageFormula} + ${chargeDice}d6` : `${damageFormula} + floor(${chargeDice}d6 * ${weightMult})`;
-  }
+  const chargeFormula = chargeDice && !noDamage && damageFormula
+    ? (weightMult === 1 ? `${chargeDice}d6` : `floor(${chargeDice}d6 * ${weightMult})`) : "";
 
   const fumbleKind = unarmed ? "unarmed" : src.isRanged ? "ranged" : "melee";
   const data = {
@@ -393,7 +414,7 @@ export async function rollAttack(actor, src, targets, cfg) {
     aim: cfg.aim, aimLabel,
     band: cfg.band ?? "", bandLabel: src.isRanged ? RANGE_BANDS[cfg.band]?.label ?? "" : "",
     isRanged: src.isRanged,
-    damageFormula, damageMult, nonLethal, noDamage,
+    damageFormula, damageMult, damageMod, chargeFormula, nonLethal, noDamage,
     fixedLocation: typeCfg.location ?? "",
     chargeDice, weightMult, mounted: !!src.mounted || chargeDice > 0,
     hitText: typeCfg.hit ?? "", hitStatus: typeCfg.status ?? "", stunSaveMod: typeCfg.stunSave ?? null,
