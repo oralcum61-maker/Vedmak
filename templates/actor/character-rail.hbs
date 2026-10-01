@@ -2,13 +2,12 @@
       которые спрашивают каждый ход. Остальное живёт во вкладках справа. --}}
 <aside class="vd-rail">
 
-  {{!-- Портрет — якорь колонки, имя вписано на него: так не тратится высота на отдельную строку --}}
+  {{!-- Портрет — якорь колонки, в рамке-колодце. Имя — под ним антиквой: на светлом арте вписанное
+        в портрет имя терялось, а затемнение под него съедало низ картинки --}}
   <div class="portrait-frame">
     <img class="portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img" data-tooltip="Сменить портрет">
-    <div class="portrait-name">
-      <input class="name" type="text" name="name" value="{{actor.name}}" placeholder="Имя" aria-label="Имя персонажа">
-    </div>
   </div>
+  <input class="name" type="text" name="name" value="{{actor.name}}" placeholder="Имя" aria-label="Имя персонажа">
 
   <div class="tags">
     {{#if race}}<a class="tag race" data-action="itemEdit" data-item-id="{{race.id}}" data-tooltip="Раса">{{race.name}}</a>

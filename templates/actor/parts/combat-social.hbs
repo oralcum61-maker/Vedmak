@@ -43,7 +43,7 @@
     {{#each g.actions as |a|}}
     <a class="duel-row rollable" data-action="verbalAction" data-verbal="{{a.key}}"
        data-tooltip="{{#if a.effect}}{{a.effect}}{{else}}Проверка: {{a.skillLabel}}{{/if}}">
-      <span class="stamp">{{a.base}}</span>
+      <span class="stamp"><b>{{a.base}}</b></span>
       <span class="who">
         <span class="name">{{a.label}}</span>
         <span class="about">{{a.skillLabel}}{{#if a.effect}} · {{a.effect}}{{/if}}</span>
