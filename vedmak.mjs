@@ -223,20 +223,26 @@ Hooks.once("ready", () => {
 
 /* ------------------------------- Курсор ------------------------------- */
 
-const CURSOR = {
-  default: 'url("systems/vedmak/assets/cursors/arrow.svg") 2 2, default',
-  pointer: 'url("systems/vedmak/assets/cursors/pointer.svg") 2 2, pointer'
-};
-
-/** Курсор-клинок: окна берут его из CSS по классу на body, холст сцены — из своих стилей указателя (PIXI). */
+/**
+ * Курсор-клинок: класс на body подменяет переменные курсоров Foundry (--cursor-default, --cursor-pointer
+ * и их «-down»), а холст сцены берёт курсоры из этих же переменных — так сделано и в ядре для «-down».
+ * Прямые картинки в стилях указателя холста не нужны: с ними курсор при нажатии слетал на системный.
+ */
 function applyCursor(on) {
   document.body.classList.toggle("vedmak-cursor", on);
+  // Полный путь, а не относительный из CSS: в стиле холста (PIXI ставит его прямо на элемент) url() в переменной
+  // разрешается от адреса страницы, и относительный путь вёл в никуда — над сценой курсор становился системным
+  const url = name => `url("${foundry.utils.getRoute(`systems/vedmak/assets/cursors/${name}.svg`)}") 2 2`;
+  for (const [key, file, fallback] of [["default", "arrow", "default"], ["default-down", "arrow", "default"],
+    ["pointer", "pointer", "pointer"], ["pointer-down", "pointer", "pointer"]]) {
+    if (on) document.body.style.setProperty(`--cursor-${key}`, `${url(file)}, ${fallback}`);
+    else document.body.style.removeProperty(`--cursor-${key}`);
+  }
   const styles = canvas?.app?.renderer?.events?.cursorStyles;
   if (!styles) return;
-  styles.default = on ? CURSOR.default : "inherit";
-  styles.pointer = on ? CURSOR.pointer : "pointer";
+  styles.default = "var(--cursor-default)";
+  styles.pointer = "var(--cursor-pointer)";
 }
-
 Hooks.on("canvasReady", () => applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor")));
 
 /**

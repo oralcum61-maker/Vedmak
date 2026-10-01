@@ -104,7 +104,7 @@
   height: 1rem;
   flex: none;
   vertical-align: middle;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   border: 1px solid var(--vd-line);
   border-radius: 3px;
   background: var(--vd-input) no-repeat center / .72rem .72rem;
@@ -122,7 +122,7 @@
   border-color: var(--vd-gold);
   box-shadow: 0 0 0 1px rgba(201, 164, 92, .35);
 }
-.vedmak input[type="checkbox"]:disabled { opacity: .45; cursor: default; }
+.vedmak input[type="checkbox"]:disabled { opacity: .45; cursor: var(--cursor-default); }
 .vedmak input[type="radio"] {
   --checkbox-size: 1rem;
   --checkbox-background-color: #3a3024;
@@ -170,7 +170,7 @@
   box-shadow: none;
 }
 /* Арт вписывается целиком: `cover` срезал у портретов верх и низ под пропорцию рамки */
-.vedmak .vd-rail .portrait { width: 100%; height: 100%; object-fit: contain; cursor: pointer; display: block; }
+.vedmak .vd-rail .portrait { width: 100%; height: 100%; object-fit: contain; cursor: var(--cursor-pointer); display: block; }
 /* Уголки-засечки — как на клейме: рамка читается и на светлом портрете, и на тёмном */
 .vedmak .vd-rail .portrait-frame::before,
 .vedmak .vd-rail .portrait-frame::after {
@@ -347,7 +347,7 @@
   object-fit: cover;
   border: 1px solid var(--vd-steel);
   border-radius: 2px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   background: #000;
   flex: none;
   box-shadow: none;
@@ -608,7 +608,7 @@
   text-align: center; font-size: 1.2rem; font-weight: bold; color: var(--vd-silver);
 }
 .vedmak .stat-grid .stat-row.reduced .total { color: var(--vd-blood-lite); }
-.vedmak .rollable { cursor: pointer; }
+.vedmak .rollable { cursor: var(--cursor-pointer); }
 .vedmak .rollable i { color: var(--vd-steel); font-size: .8em; }
 .vedmak .rollable:hover i { color: var(--vd-gold); }
 
@@ -671,7 +671,7 @@
 .vedmak.character .stat-row:hover { border-color: var(--vd-steel); }
 /* Бросок — по всей строке, а не по одной цифре: попасть в строку легче */
 .vedmak.character .stat-row .hit {
-  flex: 1; min-width: 0; display: flex; align-items: center; gap: .5rem; color: inherit; cursor: pointer;
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: .5rem; color: inherit; cursor: var(--cursor-pointer);
 }
 .vedmak.character .stat-row .stamp {
   position: relative; flex: none; width: 2.8rem; height: 2.8rem;
@@ -865,8 +865,8 @@
   padding: .08rem .25rem; border-radius: 2px;
 }
 .vedmak .skill-line:hover { background: rgba(255, 235, 200, .04); }
-.vedmak .skill-line .prof-mark { position: relative; flex: none; display: grid; place-items: center; width: .95rem; height: 1rem; margin: 0; cursor: pointer; }
-.vedmak .skill-line .prof-mark input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.vedmak .skill-line .prof-mark { position: relative; flex: none; display: grid; place-items: center; width: .95rem; height: 1rem; margin: 0; cursor: var(--cursor-pointer); }
+.vedmak .skill-line .prof-mark input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: var(--cursor-pointer); }
 .vedmak .skill-line .prof-mark i { font-size: .56rem; color: #3b3225; pointer-events: none; }
 .vedmak .skill-line .prof-mark:hover i { color: var(--vd-steel); }
 .vedmak .skill-line.prof .prof-mark i { color: var(--vd-gold); text-shadow: 0 0 4px rgba(201, 164, 92, .5); }
@@ -941,7 +941,7 @@
 .vedmak .skills-tab .ab-row a.base:hover { color: #f0dba6; border-color: var(--vd-gold); }
 .vedmak .skills-tab .ab-row .base.quiet { font-family: var(--vd-font-body); font-size: .66rem; color: var(--vd-text-dim); }
 .vedmak .skills-tab .ab-row a.improve { flex: none; min-width: 2.4rem; height: 1.35rem; font-size: .72rem; }
-.vedmak .skills-tab .ability details summary { width: fit-content; font-size: .7rem; color: var(--vd-steel); cursor: pointer; }
+.vedmak .skills-tab .ability details summary { width: fit-content; font-size: .7rem; color: var(--vd-steel); cursor: var(--cursor-pointer); }
 .vedmak .skills-tab .ability details summary:hover { color: var(--vd-gold-lite); }
 .vedmak .skills-tab .ability details p { margin: .15rem 0 0; font-size: .78rem; line-height: 1.4; color: var(--vd-text); }
 .vedmak .skills-tab .ability .lock-note { margin: 0; font-size: .68rem; color: #d9822b; }
@@ -1148,7 +1148,7 @@
 .vedmak-dialog.check-dialog .opt-grid.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vedmak-dialog.check-dialog .opt-grid.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 /* Редкие блоки (разбег верхом) свёрнуты, чтобы окно не росло без нужды */
-.vedmak-dialog.check-dialog details.fold > summary { cursor: pointer; list-style: none; }
+.vedmak-dialog.check-dialog details.fold > summary { cursor: var(--cursor-pointer); list-style: none; }
 .vedmak-dialog.check-dialog details.fold > summary::-webkit-details-marker { display: none; }
 .vedmak-dialog.check-dialog details.fold > summary::before { content: "▸ "; color: var(--vd-steel, #6b5c42); }
 .vedmak-dialog.check-dialog details.fold[open] > summary::before { content: "▾ "; }
@@ -1162,7 +1162,7 @@
 .vedmak-dialog.check-dialog .plate input,
 .vedmak-dialog.check-dialog .luck-row input,
 .vedmak-dialog.check-dialog .cost-row input { position: absolute; width: 1px; height: 1px; opacity: 0; margin: 0; }
-.vedmak-dialog.check-dialog .opt { position: relative; display: flex; margin: 0; cursor: pointer; }
+.vedmak-dialog.check-dialog .opt { position: relative; display: flex; margin: 0; cursor: var(--cursor-pointer); }
 .vedmak-dialog.check-dialog .opt > span {
   flex: 1; display: flex; align-items: baseline; justify-content: space-between; gap: .3rem;
   padding: .35rem .5rem; font-size: .82rem; color: var(--vd-text, #ded3bb);
@@ -1181,13 +1181,13 @@
 .vedmak-dialog.check-dialog .opt:has(input:focus-visible) > span { outline: 1px solid var(--vd-accent-lite); outline-offset: 1px; }
 
 /* Жетоны: обстоятельства, дистанция, цели */
-.vedmak-dialog.check-dialog .chip { position: relative; display: inline-flex; margin: 0; cursor: pointer; }
+.vedmak-dialog.check-dialog .chip { position: relative; display: inline-flex; margin: 0; cursor: var(--cursor-pointer); }
 .vedmak-dialog.check-dialog .chip > span, .vedmak-dialog.check-dialog .chip.static {
   display: inline-flex; align-items: baseline; gap: .25rem;
   padding: .2rem .55rem; font-size: .76rem; color: var(--vd-text, #ded3bb);
   background: #241d15; border: 1px solid var(--vd-line, #443a2b); border-radius: 999px;
 }
-.vedmak-dialog.check-dialog .chip.static { cursor: default; color: var(--vd-text-dim, #97886c); }
+.vedmak-dialog.check-dialog .chip.static { cursor: var(--cursor-default); color: var(--vd-text-dim, #97886c); }
 .vedmak-dialog.check-dialog .chip b { font-weight: 400; color: var(--vd-text-dim, #97886c); }
 .vedmak-dialog.check-dialog .chip:has(input:checked) > span {
   background: var(--vd-accent-bg); border-color: var(--vd-accent); color: var(--vd-accent-lite);
@@ -1197,7 +1197,7 @@
 
 /* Широкая плашка с галочкой: фокус, место силы, дополнительное действие */
 .vedmak-dialog.check-dialog .plate {
-  position: relative; display: flex; align-items: center; gap: .5rem; margin: 0; cursor: pointer;
+  position: relative; display: flex; align-items: center; gap: .5rem; margin: 0; cursor: var(--cursor-pointer);
   padding: .4rem .55rem; font-size: .8rem; color: var(--vd-text, #ded3bb);
   background: #241d15; border: 1px solid #0f0b07; border-left: 2px solid var(--vd-steel, #6b5c42); border-radius: 2px;
 }
@@ -1241,7 +1241,7 @@
   display: flex; align-items: center; gap: .3rem; height: 1.75rem; padding: 0 .5rem;
   background: #241d15; border: 1px solid #0f0b07; border-left: 2px solid var(--vd-gold, #b4914e); border-radius: 2px;
 }
-.vedmak-dialog.check-dialog .luck-row .dot { position: relative; display: block; margin: 0; cursor: pointer; }
+.vedmak-dialog.check-dialog .luck-row .dot { position: relative; display: block; margin: 0; cursor: var(--cursor-pointer); }
 .vedmak-dialog.check-dialog .luck-row .dot > span {
   display: block; width: .85rem; height: .85rem; border-radius: 50%;
   background: var(--vd-input, #120e09); border: 1px solid var(--vd-steel, #6b5c42);
@@ -1259,7 +1259,7 @@
 
 /* Вложенная Выносливость: столбики, как деления на манометре */
 .vedmak-dialog.check-dialog .cost-row { display: flex; align-items: center; gap: .25rem; }
-.vedmak-dialog.check-dialog .cost-row .bar { position: relative; display: block; margin: 0; cursor: pointer; }
+.vedmak-dialog.check-dialog .cost-row .bar { position: relative; display: block; margin: 0; cursor: var(--cursor-pointer); }
 .vedmak-dialog.check-dialog .cost-row .bar > span {
   display: block; width: 1.3rem; height: 1.6rem; border-radius: 2px;
   background: #171320; border: 1px solid #3a3248;
@@ -1298,7 +1298,7 @@
 .vedmak-dialog.check-dialog ul.req li.ok::before { content: "✓ "; color: var(--vd-green, #7d8a4a); }
 .vedmak-dialog.check-dialog ul.req li.no::before { content: "✗ "; color: var(--vd-blood-lite, #c0533f); }
 .vedmak-dialog.check-dialog ul.req li.no { color: #d9822b; }
-.vedmak-dialog.check-dialog .plate:has(input:disabled) { opacity: .55; cursor: default; }
+.vedmak-dialog.check-dialog .plate:has(input:disabled) { opacity: .55; cursor: var(--cursor-default); }
 .vedmak-dialog.check-dialog .warn { color: #d9822b; }
 
 /* Подвал: во что сложится бросок. Держится внизу, даже если окно прокручено. */
@@ -1432,7 +1432,7 @@
 
 /* Разбор слагаемых — под «из чего сложилось»: нужен редко, а места занимал больше итога */
 .vedmak-card details.roll-parts > summary {
-  cursor: pointer; list-style: none; width: fit-content; font-size: .68rem; color: var(--vd-steel);
+  cursor: var(--cursor-pointer); list-style: none; width: fit-content; font-size: .68rem; color: var(--vd-steel);
 }
 .vedmak-card details.roll-parts > summary::-webkit-details-marker { display: none; }
 .vedmak-card details.roll-parts > summary::before { content: "▸ "; }
@@ -1559,7 +1559,7 @@
   display: inline-flex; align-items: center; gap: .3rem; width: auto; height: 1.65rem; line-height: 1;
   padding: 0 .6rem; font-family: var(--vd-font-body); font-size: .8rem; color: var(--vd-text);
   background: #33261d;
-  border: 1px solid #5a2f28; border-radius: 2px; cursor: pointer;
+  border: 1px solid #5a2f28; border-radius: 2px; cursor: var(--cursor-pointer);
   box-shadow: none;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .6);
 }
@@ -1715,7 +1715,7 @@
   flex: none; display: inline-flex; align-items: center; gap: .35rem; width: auto; height: 2rem; padding: 0 .9rem; margin: 0;
   font-family: var(--vd-font-body); font-size: .92rem; letter-spacing: .05em; line-height: 1;
   color: #f3c9bf; background: #5a2019;
-  border: 1px solid var(--vd-blood); border-radius: 2px; cursor: pointer;
+  border: 1px solid var(--vd-blood); border-radius: 2px; cursor: var(--cursor-pointer);
   box-shadow: none;
 }
 .vedmak .atk-go:hover { filter: brightness(1.18); box-shadow: none; }
@@ -1775,7 +1775,7 @@
 .vedmak button.turn-btn {
   display: inline-flex; align-items: center; gap: .35rem; width: auto; height: 1.7rem; margin: 0; padding: 0 .7rem;
   font-family: var(--vd-font-body); font-size: .76rem; color: var(--vd-text);
-  background: #241d15; border: 1px solid var(--vd-line); border-radius: 999px; cursor: pointer;
+  background: #241d15; border: 1px solid var(--vd-line); border-radius: 999px; cursor: var(--cursor-pointer);
 }
 .vedmak button.turn-btn b { font-weight: 400; color: #a7b167; }
 .vedmak button.turn-btn:hover { color: var(--vd-gold-lite); border-color: var(--vd-steel); box-shadow: none; }
@@ -1856,7 +1856,7 @@
 .vedmak .state-chip:hover { border-color: var(--vd-blood-lite); }
 .vedmak .state-chip:hover i { color: var(--vd-blood-lite); }
 .vedmak .state-fold > summary {
-  cursor: pointer; list-style: none; width: fit-content;
+  cursor: var(--cursor-pointer); list-style: none; width: fit-content;
   font-size: .74rem; color: var(--vd-text-dim);
 }
 .vedmak .state-fold > summary::-webkit-details-marker { display: none; }
@@ -2051,7 +2051,7 @@
 .vedmak-wizard .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem; margin-bottom: .5rem; }
 .vedmak-wizard .card-grid.small { grid-template-columns: repeat(3, 1fr); }
 .vedmak-wizard .pick-card {
-  cursor: pointer; padding: .4rem .5rem; border: 1px solid var(--vd-line); border-radius: 4px;
+  cursor: var(--cursor-pointer); padding: .4rem .5rem; border: 1px solid var(--vd-line); border-radius: 4px;
   background-color: var(--vd-panel);
   background-image: none;
   background-size: auto, 300px 300px;
@@ -2175,7 +2175,7 @@
 .vedmak .trait-line { margin: .15rem 0; font-size: .84rem; }
 .vedmak .trait-line b { color: var(--vd-silver); }
 .vedmak .bonus-fold { margin-top: .5rem; border-top: 1px dotted var(--vd-line-soft); padding-top: .3rem; }
-.vedmak .bonus-fold summary { font-size: .8rem; color: var(--vd-text-dim); cursor: pointer; margin-bottom: .3rem; }
+.vedmak .bonus-fold summary { font-size: .8rem; color: var(--vd-text-dim); cursor: var(--cursor-pointer); margin-bottom: .3rem; }
 
 .vedmak .purse { display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; align-items: center; }
 .vedmak .purse .load { flex: 1 1 14rem; max-width: 26rem; }
@@ -2269,7 +2269,7 @@
 
 .vedmak-hud .hud-head { display: flex; align-items: center; gap: .6rem; }
 .vedmak-hud .portrait {
-  width: 44px; height: 44px; flex: none; object-fit: cover; cursor: pointer;
+  width: 44px; height: 44px; flex: none; object-fit: cover; cursor: var(--cursor-pointer);
   border: 1px solid var(--vd-steel); border-radius: 3px; background: #000;
 }
 .vedmak-hud .hud-bar.my-turn .portrait { border-color: var(--vd-gold); }
@@ -2321,7 +2321,7 @@
   display: inline-flex; align-items: center; gap: .28rem;
   width: auto; height: 1.65rem; line-height: 1; margin: 0; padding: 0 .45rem;
   font-size: .78rem; font-family: var(--vd-font-body); white-space: nowrap;
-  color: var(--vd-text); background: #241d15; border: 1px solid var(--vd-line); border-radius: 3px; cursor: pointer;
+  color: var(--vd-text); background: #241d15; border: 1px solid var(--vd-line); border-radius: 3px; cursor: var(--cursor-pointer);
 }
 .vedmak-hud .hud-btn img { width: 17px; height: 17px; border-radius: 2px; }
 .vedmak-hud .hud-btn b { color: var(--vd-gold); font-size: .85rem; }
@@ -2562,7 +2562,7 @@
 /* Лист без права правки (наблюдатель, закрытый компендиум): кнопки правки спрятаны, строки с проверками
    и переключателями видны, но не нажимаются (actor-sheet-base.mjs, #markLockedActions) */
 .vedmak.sheet .vd-locked { display: none !important; }
-.vedmak.sheet .vd-inert, .vedmak.sheet .vd-inert * { cursor: default !important; }
+.vedmak.sheet .vd-inert, .vedmak.sheet .vd-inert * { cursor: var(--cursor-default)!important; }
 /* Значок броска на строке, которую не бросить, только сбивает с толку */
 .vedmak.sheet .vd-inert > i.fa-certificate { visibility: hidden; }
 
@@ -2618,15 +2618,23 @@ body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4) {
 body.system-vedmak #tooltip :is(hr),
 body.system-vedmak .locked-tooltip :is(hr) { border: 0; border-top: 1px solid rgba(180, 145, 78, .3); margin: .35rem 0; }
 
-/* Курсор-клинок (настройка «Курсор системы», assets/cursors). Поля ввода оставляют текстовый курсор,
-   всё, что нажимается, — золотой. На холсте сцены курсор ставит vedmak.mjs через стили указателя PIXI. */
-body.vedmak-cursor { cursor: url("../assets/cursors/arrow.svg") 2 2, default; }
-body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data-action], [data-tab], .rollable,
-  .content-link, .inline-roll, input[type="checkbox"], input[type="radio"], input[type="range"], .directory-item .entry-name,
-  .document-name, .item-name, .control-tool, .scene-control, .ui-control, .window-header .header-control):not(:disabled):not([disabled]) {
-  cursor: url("../assets/cursors/pointer.svg") 2 2, pointer;
+/* Курсор-клинок (настройка «Курсор системы», assets/cursors). Foundry v14 ставит курсоры через свои переменные
+   (--cursor-default, --cursor-pointer и их «-down» — пока кнопка мыши зажата): ими пользуются правила ядра
+   и холст сцены. Подменяем сами переменные — иначе при нажатии, перетаскивании и над элементами ядра курсор
+   слетал на системный. Захват (окна, токены) и текстовый курсор в полях остаются как в Foundry. */
+body.vedmak-cursor {
+  --cursor-default: url("../assets/cursors/arrow.svg") 2 2, default;
+  --cursor-default-down: url("../assets/cursors/arrow.svg") 2 2, default;
+  --cursor-pointer: url("../assets/cursors/pointer.svg") 2 2, pointer;
+  --cursor-pointer-down: url("../assets/cursors/pointer.svg") 2 2, pointer;
+  cursor: var(--cursor-default);
 }
-body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, [contenteditable="true"], .ProseMirror) { cursor: text; }
+/* Кнопки и ссылки, у которых указатель задан словом pointer, а не переменной */
+body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data-action], [data-tab], .rollable,
+  .content-link, .inline-roll, input[type="checkbox"], input[type="radio"], input[type="range"]):not(:disabled):not([disabled]) {
+  cursor: var(--cursor-pointer);
+}
+body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, [contenteditable="true"], .ProseMirror) { cursor: var(--cursor-text); }
 
 /* Добыча чудовища: монеты уже взяты — строка притушена, кнопка не нажимается, у ведущего «вернуть» */
 .vedmak .loot-list li.taken .loot-name, .vedmak .loot-list li.taken .loot-qty { opacity: .45; text-decoration: line-through; }
