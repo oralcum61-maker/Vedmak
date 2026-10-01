@@ -10,7 +10,9 @@
   <div class="duel-resolve{{#if verbal.resolve.broken}} broken{{/if}}">
     <div class="rv-head">
       <span class="cap">РЕШИТЕЛЬНОСТЬ</span>
-      <input type="number" name="flags.vedmak.duelResolve" value="{{verbal.resolve.value}}" min="0"
+      {{!-- Без name: форма не пишет флаг при каждом сохранении (иначе «нет флага — максимум» ломается),
+            правку сохраняет свой обработчик в actor-sheet-base.mjs --}}
+      <input type="number" class="duel-resolve-value" value="{{verbal.resolve.value}}" min="0"
              data-tooltip="Решительность в текущей дуэли: вместо ПЗ" aria-label="Решительность">
       <span class="max">/ {{verbal.resolve.max}}</span>
     </div>

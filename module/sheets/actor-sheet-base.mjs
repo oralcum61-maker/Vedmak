@@ -15,11 +15,30 @@ import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
 import { compareRu, balanceColumns } from "../util.mjs";
 import { profileSheet } from "../apps/perf.mjs";
-import { verbalAction, verbalContext, resetDuel } from "../combat/verbal.mjs";
+import { verbalAction, verbalContext, resetDuel, setDuelResolve } from "../combat/verbal.mjs";
+import { detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
+import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
+
+/** Шаблон листа для тех, у кого право «Ограниченный»: только то, что видно со стороны. */
+const LIMITED_TEMPLATE = "systems/vedmak/templates/actor/limited.hbs";
+
+/**
+ * Действия, которые остаются у того, кто лист только смотрит (наблюдатель, закрытый компендиум):
+ * вкладки, просмотр предмета и эффекта, карточка в чат, монеты из добычи в свой кошелёк.
+ */
+const VIEW_ACTIONS = new Set(["tab", "itemEdit", "effectEdit", "itemPost", "abilityPost", "lootCoins",
+  "toggleTrainedOnly", "showPortrait"]);
+
+/**
+ * Действия на строках, которые сами что-то показывают (основа проверки, надето ли, включён ли эффект, какие
+ * состояния висят): без права правки строка остаётся, но не нажимается. Остальные кнопки правки прячутся.
+ */
+const INERT_ACTIONS = new Set(["rollSkill", "rollStat", "rollDefining", "rollAbility", "attack", "verbalAction",
+  "stunSave", "deathSave", "toggleStatus", "itemToggleEquip", "effectToggle", "toggleMemorized", "editImage"]);
 
 export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
@@ -54,14 +73,72 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       endMaintained: VedmakActorSheet.#onEndMaintained,
       profileSheet: VedmakActorSheet.#onProfileSheet,
       verbalAction: VedmakActorSheet.#onVerbalAction,
-      duelReset: VedmakActorSheet.#onDuelReset
+      duelReset: VedmakActorSheet.#onDuelReset,
+      detachEnhancement: VedmakActorSheet.#onDetachEnhancement,
+      detachCrossbowMod: VedmakActorSheet.#onDetachCrossbowMod,
+      showPortrait: VedmakActorSheet.#onShowPortrait
     }
   };
+
+  /* ------------------------- Ограниченный доступ ------------------------- */
+
+  /**
+   * Право ниже «Наблюдателя»: Foundry открывает лист уже с «Ограниченного» (viewPermission), и игрок видел бы
+   * всё — у чудовища заметки ведущего, знания, которые по правилам открывает проверка, добычу и параметры.
+   * Такому зрителю — один короткий лист: имя, портрет и то, что видно со стороны.
+   */
+  get limitedView() {
+    return !this.document.testUserPermission(game.user, "OBSERVER");
+  }
+
+  /**
+   * Имя для короткого листа — с токена, если лист открыт с несвязанного токена: ведущий мог назвать токен
+   * «Тварь из болота», чтобы не выдать, кто это.
+   */
+  get limitedName() {
+    return this.token?.name || this.actor.name;
+  }
+
+  /** Заголовок окна короткого листа — тем же именем, без вида актора. */
+  get title() {
+    return this.document && this.limitedView ? this.limitedName : super.title;
+  }
+
+  /** Какой вид листа нарисован сейчас: права могут смениться при открытом листе. */
+  #limited = false;
+
+  /** Короткий лист — узким окном по высоте содержимого. */
+  _initializeApplicationOptions(options) {
+    options = super._initializeApplicationOptions(options);
+    if (!options.document.testUserPermission(game.user, "OBSERVER")) {
+      options.position = { ...options.position, width: 480, height: "auto" };
+      options.classes.push("limited");
+    }
+    return options;
+  }
+
+  /** Вместо вкладок — одна часть «limited» (так же Foundry меняет набор частей в своих листах). */
+  _configureRenderParts(options) {
+    if (!this.#limited) return super._configureRenderParts(options);
+    return { limited: { template: LIMITED_TEMPLATE, templates: [] } };
+  }
+
+  /** Сменился вид листа — старые части убрать целиком, иначе новые встанут рядом с ними. */
+  _replaceHTML(result, content, options) {
+    if (options.vedmakResetParts) content.replaceChildren();
+    super._replaceHTML(result, content, options);
+  }
+
+  static #onShowPortrait() {
+    const actor = this.actor;
+    new foundry.applications.apps.ImagePopout({ src: actor.img, uuid: actor.uuid, window: { title: this.limitedName } })
+      .render({ force: true });
+  }
 
   /** В меню «…» заголовка — замер скорости листа (module/apps/perf.mjs): цифры с компьютера игрока. */
   _getHeaderControls() {
     const controls = super._getHeaderControls();
-    controls.push({ icon: "fa-solid fa-gauge-high", label: "Замер скорости листа", action: "profileSheet" });
+    if (!this.#limited) controls.push({ icon: "fa-solid fa-gauge-high", label: "Замер скорости листа", action: "profileSheet" });
     return controls;
   }
 
@@ -76,6 +153,18 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Новая словесная дуэль: Решительность снова полная, накопленные бонусы противников сброшены. */
   static async #onDuelReset() {
     await resetDuel(this.actor);
+  }
+
+  /** Снять набор усиления с брони (Изготовление СЛ 15): у чудовища броня с усилениями тоже бывает. */
+  static async #onDetachEnhancement(event, target) {
+    const item = VedmakActorSheet.#itemFrom.call(this, target);
+    if (item) await detachEnhancement(this.actor, item, Number(target.dataset.index));
+  }
+
+  /** Снять модификацию арбалета — обратно в снаряжение. */
+  static async #onDetachCrossbowMod(event, target) {
+    const item = VedmakActorSheet.#itemFrom.call(this, target);
+    if (item) await detachCrossbowMod(this.actor, item, Number(target.dataset.index));
   }
 
   /** Показывать только изученные навыки (состояние окна, не документа). */
@@ -93,8 +182,21 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    */
   _configureRenderOptions(options) {
     const firstRender = options.isFirstRender ?? !this.rendered;
-    const lazy = !firstRender && !options.parts;
+    // Права сменились при открытом листе (дали «Наблюдателя» или отняли) — другой вид, рисуем всё заново
+    const limited = this.limitedView;
+    const modeChanged = !firstRender && limited !== this.#limited;
+    this.#limited = limited;
+    if (modeChanged) {
+      options.parts = undefined;
+      options.vedmakResetParts = true;
+      this.#staleParts.clear();
+    }
+    const lazy = !firstRender && !modeChanged && !options.parts;
     super._configureRenderOptions(options);
+    if (this.#limited) {
+      options.parts = ["limited"];
+      return;
+    }
     const parts = options.parts ??= Object.keys(this.constructor.PARTS);
     if (!lazy) {
       for (const p of parts) this.#staleParts.delete(p);
@@ -154,8 +256,14 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       isGM: game.user.isGM,
       config: CONFIG.VEDMAK,
       isCharacter: actor.type === "character",
-      trainedOnly: this.trainedOnly
+      trainedOnly: this.trainedOnly,
+      limited: this.#limited
     });
+    // Короткому листу хватает имени и портрета; что ещё видно со стороны — добавляют листы персонажа и чудовища
+    if (this.#limited) {
+      context.limitedName = this.limitedName;
+      return context;
+    }
 
     context.stats = Object.entries(system.stats).map(([key, s]) => ({ key, ...s, rollable: key !== "luck" }));
 
@@ -380,6 +488,12 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   _onRender(context, options) {
     super._onRender(context, options);
+    if (options.vedmakResetParts) {
+      this.element.classList.toggle("limited", this.#limited);
+      this.setPosition(this.#limited ? { width: 480, height: "auto" } : { ...this.constructor.DEFAULT_OPTIONS.position });
+    }
+    // Наблюдатель: кнопки правки спрятаны, строки с проверками и переключателями видны, но не нажимаются
+    markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
     // Устаревшие скрытые вкладки держат прежние значения, а форма листа отправляется целиком: их поля ушли бы
     // вместе с правкой на открытой вкладке и откатили бы чужие изменения (кроны от ведущего, навыки из мастера).
     // Отключённые поля в форму не попадают; вкладку перерисует changeTab, когда её откроют.
@@ -389,6 +503,12 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         el.setAttribute("disabled", "");
       }
     }
+    // Решительность в дуэли — не поле формы: форма писала бы текущий максимум во флаг при каждом сохранении,
+    // и после смены Воли или Инт Решительность не была бы полной («нет флага — максимум», verbal.mjs)
+    this._listen("input.duel-resolve-value", "change", async (event, input) => {
+      event.stopPropagation();
+      if (!(await setDuelResolve(this.actor, input.value))) this.render();
+    });
     // Поля предметов прямо в списках (количество): пишем в предмет, а не в актора
     this._listen("input.item-field", "change", async (event, input) => {
       event.stopPropagation();
@@ -408,6 +528,14 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       }
       await item.update(update);
     });
+  }
+
+  /* ------------------------- Лист без права правки ------------------------- */
+
+  /** Перехват щелчков по кнопкам правки без права правки (view-only.mjs). */
+  _attachFrameListeners() {
+    super._attachFrameListeners();
+    guardLockedActions(this, VIEW_ACTIONS);
   }
 
   /* ------------------------------ Действия ------------------------------ */

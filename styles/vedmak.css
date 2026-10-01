@@ -2601,3 +2601,29 @@ body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
 .vedmak .school-mods { display: flex; flex-direction: column; gap: .25rem; }
 .vedmak .school-summary { margin: 0; color: var(--vd-gold); }
 .vedmak .school-row .cap { font-family: var(--vd-font-head); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--vd-text-dim); }
+
+/* Лист без права правки (наблюдатель, закрытый компендиум): кнопки правки спрятаны, строки с проверками
+   и переключателями видны, но не нажимаются (actor-sheet-base.mjs, #markLockedActions) */
+.vedmak.sheet .vd-locked { display: none !important; }
+.vedmak.sheet .vd-inert, .vedmak.sheet .vd-inert * { cursor: default !important; }
+/* Значок броска на строке, которую не бросить, только сбивает с толку */
+.vedmak.sheet .vd-inert > i.fa-certificate { visibility: hidden; }
+
+/* Право «Ограниченный» (templates/actor/limited.hbs): имя, портрет и то, что видно со стороны */
+.vedmak.sheet.limited .window-content { display: block; overflow-y: auto; }
+.vedmak .vd-limited { display: flex; gap: .9rem; align-items: flex-start; padding: .9rem; }
+.vedmak .vd-limited .portrait-frame { flex: none; display: block; cursor: zoom-in; }
+.vedmak .vd-limited .portrait {
+  display: block; width: 150px; height: 150px; object-fit: contain; background: #000;
+  border: 1px solid var(--vd-steel); border-radius: 2px;
+  box-shadow: 0 0 0 1px #0d0a07, inset 0 0 12px rgba(0, 0, 0, .8), 0 2px 6px rgba(0, 0, 0, .55);
+}
+.vedmak .vd-limited .identity { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .45rem; }
+.vedmak .vd-limited .name {
+  margin: 0; border: none; font-family: var(--vd-font-head); font-weight: 400; font-size: 1.6rem;
+  color: var(--vd-gold-lite); overflow-wrap: anywhere;
+}
+.vedmak .vd-limited .facts { display: grid; grid-template-columns: auto 1fr; gap: .15rem .6rem; margin: 0; font-size: .85rem; }
+.vedmak .vd-limited .facts dt { color: var(--vd-text-dim); }
+.vedmak .vd-limited .facts dd { margin: 0; }
+.vedmak .vd-limited .appearance { margin: 0; white-space: pre-line; line-height: 1.4; }

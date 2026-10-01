@@ -77,11 +77,17 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     hud.render({ force: true });
   }
 
-  /** Перерисовать, если изменился показанный сейчас актор (или его предмет). */
+  /**
+   * Перерисовать, если изменился показанный сейчас актор, его предмет или эффект — и эффект на предмете:
+   * у него родитель — предмет, а актор — родитель предмета, поэтому актор ищется вверх по родителям.
+   */
   static refreshFor(doc) {
-    const actor = doc?.documentName === "Actor" ? doc : doc?.parent;
+    let actor = doc;
+    while (actor && actor.documentName !== "Actor") actor = actor.parent;
     if (!CombatHud.#instance?.rendered) return;
-    if (actor && CombatHud.#instance.actor && actor.id !== CombatHud.#instance.actor.id) return;
+    // Предмет или эффект вне актора (в мире, в компендиуме) худ не показывает
+    if (!actor) return;
+    if (CombatHud.#instance.actor && actor.id !== CombatHud.#instance.actor.id) return;
     CombatHud.schedule();
   }
 

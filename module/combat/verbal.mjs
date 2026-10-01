@@ -83,6 +83,18 @@ export function currentResolve(actor) {
   return { value: Number.isFinite(value) ? value : max, max };
 }
 
+/**
+ * Правка Решительности с листа. Полная (не меньше максимума) — снова без флага: тогда она следует
+ * за Волей и Инт. Возвращает null, если сохранять нечего (не число или и так полная), — лист перерисуется.
+ */
+export async function setDuelResolve(actor, value) {
+  const n = Math.floor(Number(value));
+  if (!Number.isFinite(n)) return null;
+  const max = actor.system.derived?.resolve ?? 0;
+  if (n >= max) return actor.getFlag("vedmak", "duelResolve") === undefined ? null : actor.unsetFlag("vedmak", "duelResolve");
+  return actor.setFlag("vedmak", "duelResolve", Math.max(0, n));
+}
+
 /** Правки к проверкам дуэли: навык, раны, опьянение (−3 в словесной дуэли, стр. 36). */
 function duelParts(actor, def) {
   const skillDef = SKILLS[def.skill];

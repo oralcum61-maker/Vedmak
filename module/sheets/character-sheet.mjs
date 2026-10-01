@@ -13,7 +13,7 @@ import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
 import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS } from "../config/crafting.mjs";
 import { craft, readiness, requirements, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
-import { attachEnhancement, detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
+import { attachEnhancement } from "../crafting/enhancements.mjs";
 import { signed, compareRu } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
@@ -31,7 +31,39 @@ const ELDER_RACES = ["elf", "dwarf", "gnome", "vran", "bobolak"];
 function lifepathRegion(system) {
   if (system.details.origin) return system.details.origin;
   if (ELDER_RACES.includes(system.raceKey)) return "elder";
-  return HOMELANDS[system.details.homelandKey]?.region ?? "north";
+  return (HOMELANDS[system.details.homelandKey] ?? homelandByName(system.details.homeland))?.region ?? "north";
+}
+
+/** Без «ё» и регистра: «Эббинг» и «эббинг», «Темерия » и «Темерия» — одна родина. */
+const normName = text => String(text ?? "").trim().toLowerCase().replaceAll("ё", "е").replace(/\s+/g, " ");
+
+/**
+ * Родина по тексту с листа: «Родину» без мастера пишут словами, а homelandKey ставит только мастер.
+ * Совпадение с названием из HOMELANDS без учёта регистра; составные («Лирия и Ривия») — и по каждой части;
+ * «Нильфгаард» — сердце Империи.
+ */
+function homelandByName(text) {
+  const name = normName(text);
+  if (!name) return null;
+  for (const h of Object.values(HOMELANDS)) {
+    const label = normName(h.label);
+    if (label === name || label.split(" и ").includes(name)) return h;
+  }
+  return name === "нильфгаард" ? HOMELANDS.nilfgaard : null;
+}
+
+/**
+ * Остаток срока эффекта словами. Короткое (меньше минуты) — раундами по `CONFIG.time.roundTime` секунд:
+ * зелье на 5 раундов (15 с) показывалось «1 мин.»; истёкшее — «истёк», а не минус минуты.
+ */
+function remainingLabel(seconds) {
+  if (!Number.isFinite(seconds)) return "";
+  if (seconds <= 0) return "истёк";
+  if (seconds < 60) return `${Math.ceil(seconds / (CONFIG.time.roundTime || 3))} р.`;
+  const minutes = Math.ceil(seconds / 60);
+  if (minutes < 60) return `${minutes} мин.`;
+  const hours = Math.floor(minutes / 60);
+  return minutes % 60 ? `${hours} ч ${minutes % 60} мин.` : `${hours} ч`;
 }
 
 export class CharacterSheet extends VedmakActorSheet {
@@ -61,8 +93,6 @@ export class CharacterSheet extends VedmakActorSheet {
       useAlchemical: CharacterSheet.#onUseAlchemical,
       forage: CharacterSheet.#onForage,
       attachEnhancement: CharacterSheet.#onAttachEnhancement,
-      detachEnhancement: CharacterSheet.#onDetachEnhancement,
-      detachCrossbowMod: CharacterSheet.#onDetachCrossbowMod,
       repairItem: CharacterSheet.#onRepairItem,
       disassembleItem: CharacterSheet.#onDisassembleItem,
       endAlchemyEffect: CharacterSheet.#onEndAlchemyEffect,
@@ -135,6 +165,11 @@ export class CharacterSheet extends VedmakActorSheet {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    // Право «Ограниченный»: имя, портрет и внешность — то, что видно со стороны
+    if (context.limited) {
+      context.limitedText = this.actor.system.details.appearance;
+      return context;
+    }
     context.tabs = this._prepareTabs("primary");
     context.skillTabs = this._prepareTabs("skills");
     const actor = this.actor;
@@ -364,12 +399,9 @@ export class CharacterSheet extends VedmakActorSheet {
       ...s, key, count: comps.filter(c => c.system.substance === key).reduce((n, c) => n + c.system.quantity, 0)
     })).filter(s => s.count > 0);
 
-    const now = game.time.worldTime ?? 0;
     const activeEffects = actor.effects.filter(e => e.flags?.vedmak?.alchemy).map(e => {
-      let remaining = "";
       const rounds = e.flags.vedmak.timed?.rounds;
-      if (rounds) remaining = `${rounds} р.`;
-      else if (e.duration?.secondsRemaining && Number.isFinite(e.duration.secondsRemaining)) remaining = `${Math.ceil(e.duration.secondsRemaining / 60)} мин.`;
+      const remaining = rounds ? `${rounds} р.` : remainingLabel(e.duration?.secondsRemaining);
       return { id: e.id, name: e.name, img: e.img, toxicity: e.flags.vedmak.alchemy.toxicity, remaining };
     });
 
@@ -685,16 +717,6 @@ export class CharacterSheet extends VedmakActorSheet {
   static async #onAttachEnhancement(event, target) {
     const item = CharacterSheet.#item.call(this, target);
     if (item) await attachEnhancement(this.actor, item);
-  }
-
-  static async #onDetachEnhancement(event, target) {
-    const item = CharacterSheet.#item.call(this, target);
-    if (item) await detachEnhancement(this.actor, item, Number(target.dataset.index));
-  }
-
-  static async #onDetachCrossbowMod(event, target) {
-    const item = CharacterSheet.#item.call(this, target);
-    if (item) await detachCrossbowMod(this.actor, item, Number(target.dataset.index));
   }
 
   static async #onRepairItem(event, target) {

@@ -8,6 +8,7 @@ import { STATUS_EFFECTS } from "../combat/statuses.mjs";
 import { RACES, ABILITY_MECHANICS, modTargets } from "../config/character.mjs";
 import { SUBSTANCES } from "../config/crafting.mjs";
 import { describeChanges } from "../config/effects.mjs";
+import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -15,6 +16,10 @@ const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 /** Поля-массивы объектов, которые на форме идут как name="system.x.0.key". */
 const OBJECT_ARRAYS = ["effects", "traits", "automation.statuses", "mods", "skillChoices", "branches", "components"];
+
+/** Без права правки: что работает (вкладки, просмотр эффекта, в чат) и что видно, но не нажимается. */
+const VIEW_ACTIONS = new Set(["tab", "effectEdit", "post"]);
+const INERT_ACTIONS = new Set(["effectToggle", "editImage"]);
 
 /** Новая пустая строка для массива. */
 const ROW_TEMPLATES = {
@@ -188,6 +193,17 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context = await super._preparePartContext(partId, context, options);
     if (context.tabs?.[partId]) context.tab = context.tabs[partId];
     return context;
+  }
+
+  /** Без права правки (наблюдатель, компендиум): строки и эффекты не добавить и не удалить — кнопки спрятаны. */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
+  }
+
+  _attachFrameListeners() {
+    super._attachFrameListeners();
+    guardLockedActions(this, VIEW_ACTIONS);
   }
 
   /** name="system.effects.0.key" → массив (и вложенные способности ветвей древа). */

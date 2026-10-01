@@ -1,0 +1,17 @@
+{{!-- Лист для права «Ограниченный»: имя, портрет и то, что видно со стороны (actor-sheet-base.mjs, limitedView).
+      Параметры, снаряжение, знания и заметки ведущего такой зритель не видит. --}}
+<section class="vd-limited">
+  <a class="portrait-frame" data-action="showPortrait" data-tooltip="Посмотреть крупно">
+    <img class="portrait" src="{{actor.img}}" alt="{{limitedName}}">
+  </a>
+  <div class="identity">
+    <h1 class="name">{{limitedName}}</h1>
+    {{#if limitedFacts.length}}
+    <dl class="facts">
+      {{#each limitedFacts}}<dt>{{label}}</dt><dd>{{value}}</dd>{{/each}}
+    </dl>
+    {{/if}}
+    {{#if limitedText}}<p class="appearance">{{limitedText}}</p>{{/if}}
+    {{#if limitedHint}}<p class="hint">{{limitedHint}}</p>{{/if}}
+  </div>
+</section>
