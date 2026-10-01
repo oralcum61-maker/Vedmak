@@ -85,6 +85,16 @@ export class MonsterSheet extends VedmakActorSheet {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const system = this.actor.system;
+    // Право «Ограниченный»: только то, что видно глазами. Класс, описание, поверья и ведьмачьи знания
+    // открывает проверка Образования или Монстрологии против СЛ — их говорит ведущий, а не лист
+    if (context.limited) {
+      context.limitedFacts = [["Рост", system.info.height], ["Вес", system.info.weight]]
+        .filter(([, value]) => value).map(([label, value]) => ({ label, value }));
+      context.limitedHint = "Что известно о таком существе, ведущий расскажет после проверки знаний.";
+      return context;
+    }
+    // Две группы вкладок (с 4.42 — ещё подвкладки «Боя»): Foundry сам готовит вкладки, только когда группа одна
+    context.tabs = this._prepareTabs("primary");
     Object.assign(context, {
       monsterClasses: MONSTER_CLASSES,
       threatComplexity: THREAT_COMPLEXITY,
