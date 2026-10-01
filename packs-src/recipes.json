@@ -14223,1230 +14223,6 @@
   "_id": "87F4oesecOf2ppkZ"
  },
  {
-  "name": "Чертёж: Рунное слово: Горение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: чернобог (×1), даждьбог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Чернобог",
-     "quantity": 1
-    },
-    {
-     "name": "Даждьбог",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Горение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1175,
-   "cost": 2150,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "M4DHBRIJddsbUX9O"
- },
- {
-  "name": "Чертёж: Рунное слово: Отражение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: чернобог (×1), перун (×1), стрибог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "master",
-   "dc": 21,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Чернобог",
-     "quantity": 1
-    },
-    {
-     "name": "Перун",
-     "quantity": 1
-    },
-    {
-     "name": "Стрибог",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Отражение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1650,
-   "cost": 3300,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Мастер"
-  ],
-  "_id": "LbTQkyGZjCCwKBrs"
- },
- {
-  "name": "Чертёж: Рунное слово: Истощение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: стрибог (×1), триглав (×1), велес (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "master",
-   "dc": 21,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Стрибог",
-     "quantity": 1
-    },
-    {
-     "name": "Триглав",
-     "quantity": 1
-    },
-    {
-     "name": "Велес",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Истощение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1675,
-   "cost": 3350,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Мастер"
-  ],
-  "_id": "cXPIFVWwgshavdYY"
- },
- {
-  "name": "Чертёж: Рунное слово: Размещение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: марена (×1), стрибог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Марена",
-     "quantity": 1
-    },
-    {
-     "name": "Стрибог",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Размещение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1075,
-   "cost": 2150,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "GGmGSPEr2YgED7yo"
- },
- {
-  "name": "Чертёж: Рунное слово: Сохранение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: девана (×1), марена (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Девана",
-     "quantity": 1
-    },
-    {
-     "name": "Марена",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Сохранение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1150,
-   "cost": 2300,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "CFfGFoKBfvexlgFK"
- },
- {
-  "name": "Чертёж: Рунное слово: Продление",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: перун (×1), сварог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Перун",
-     "quantity": 1
-    },
-    {
-     "name": "Сварог",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Продление",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1175,
-   "cost": 2150,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "S0n46KqUcc2uqIQN"
- },
- {
-  "name": "Чертёж: Рунное слово: Омоложение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: перун (×1), сварог (×1), триглав (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "master",
-   "dc": 21,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Перун",
-     "quantity": 1
-    },
-    {
-     "name": "Сварог",
-     "quantity": 1
-    },
-    {
-     "name": "Триглав",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Омоложение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1750,
-   "cost": 3500,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Мастер"
-  ],
-  "_id": "VCWDeNhqijq97tQa"
- },
- {
-  "name": "Чертёж: Рунное слово: Стригущий",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: велес (×1), зоря (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Велес",
-     "quantity": 1
-    },
-    {
-     "name": "Зоря",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Рунное слово: Стригущий",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1150,
-   "cost": 2300,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "VtC48gAthMvtXZiq"
- },
- {
-  "name": "Чертёж: Глифово слово: Баланс",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф восстановления (×1), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф восстановления",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф укрепления",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Баланс",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 550,
-   "cost": 1100,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "r0OtVDcnusCDzJdk"
- },
- {
-  "name": "Чертёж: Глифово слово: Заблуждение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф огня (×1), глиф воды (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф огня",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф воды",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Заблуждение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1150,
-   "cost": 2300,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "p6wJjxvHZxFCg50F"
- },
- {
-  "name": "Чертёж: Глифово слово: Вес",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф восстановления (×1), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф восстановления",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф укрепления",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Вес",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 550,
-   "cost": 1100,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "XVnecr1NvuD1zT9m"
- },
- {
-  "name": "Чертёж: Глифово слово: Защита",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф земли (×1), глиф магии (×1), глиф сопротивления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "master",
-   "dc": 21,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф земли",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф магии",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф сопротивления",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Защита",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1450,
-   "cost": 2900,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Мастер"
-  ],
-  "_id": "con8URbHpAIDMDon"
- },
- {
-  "name": "Чертёж: Глифово слово: Возмездие",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф земли (×2), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "master",
-   "dc": 21,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф земли",
-     "quantity": 2
-    },
-    {
-     "name": "Глиф укрепления",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Возмездие",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 1250,
-   "cost": 2500,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Мастер"
-  ],
-  "_id": "Aii3rR01TAEXQTGs"
- },
- {
-  "name": "Чертёж: Глифово слово: Вращение",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф связывания (×1), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф связывания",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф укрепления",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Вращение",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 300,
-   "cost": 600,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "x3k3uXUtcrm0AHgS"
- },
- {
-  "name": "Чертёж: Глифово слово: Сияющий",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: глиф воздуха (×1), глиф сопротивления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "1 час",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Глиф воздуха",
-     "quantity": 1
-    },
-    {
-     "name": "Глиф сопротивления",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Глифово слово: Сияющий",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 875,
-   "cost": 1750,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "113"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Подмастерье"
-  ],
-  "_id": "GXxJSTYG01Fv1tRf"
- },
- {
-  "name": "Чертёж: Слот зачарования",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-magical.webp",
-  "system": {
-   "description": "<p>Компоненты: метеорит (×4), дымная пыль (×2).</p><p>У предмета должны быть полная надёжность или ПБ, а у мастера — инструменты для изготовления. Четыре часа работы и проверка Ремесла добавляют предмету пустую ячейку усиления: в неё войдут только руны и глифы, и больше трёх ячеек у предмета не бывает.</p>",
-   "kind": "blueprint",
-   "category": "enhancements",
-   "level": "master",
-   "dc": 25,
-   "time": "4 часа",
-   "skill": "crafting",
-   "components": [
-    {
-     "name": "Метеорит",
-     "quantity": 4
-    },
-    {
-     "name": "Дымная пыль",
-     "quantity": 2
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Слот зачарования",
-    "type": "enhancement",
-    "quantity": 1
-   },
-   "surcharge": 684,
-   "cost": 1368,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "115"
-   }
-  },
-  "folder": [
-   "Чертежи",
-   "Усиления и зачарования",
-   "Мастер"
-  ],
-  "_id": "q5rKCyD9Sp5kp6o8"
- },
- {
-  "name": "Формула: Анаболические стероиды",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
-  "system": {
-   "description": "<p>Субстанции: Ребис ×1, Аер ×1, Квебрит ×1, Гидраген ×2</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
-   "kind": "formula",
-   "category": "alchemy",
-   "level": "journeyman",
-   "dc": 16,
-   "time": "1/2 часа",
-   "skill": "alchemy",
-   "components": [
-    {
-     "name": "Алкагест",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 1,
-    "aether": 0,
-    "quebrith": 1,
-    "hydragenum": 2,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 1,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Анаболические стероиды",
-    "type": "alchemical",
-    "quantity": 1
-   },
-   "surcharge": 0,
-   "cost": 330,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "117"
-   }
-  },
-  "folder": [
-   "Формулы",
-   "Алхимические составы",
-   "Подмастерье"
-  ],
-  "_id": "XfFLYNGUUxswsSgE"
- },
- {
-  "name": "Формула: Последняя надежда",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
-  "system": {
-   "description": "<p>Субстанции: Солнце ×2, Купорос ×1, Эфир ×2, Киноварь ×3</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
-   "kind": "formula",
-   "category": "alchemy",
-   "level": "journeyman",
-   "dc": 22,
-   "time": "1 час",
-   "skill": "alchemy",
-   "components": [
-    {
-     "name": "Алкагест",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 1,
-    "rebis": 0,
-    "aether": 2,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 3,
-    "sol": 2,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Последняя надежда",
-    "type": "alchemical",
-    "quantity": 1
-   },
-   "surcharge": 0,
-   "cost": 400,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "117"
-   }
-  },
-  "folder": [
-   "Формулы",
-   "Алхимические составы",
-   "Подмастерье"
-  ],
-  "_id": "qhNJtp7NqCCux5th"
- },
- {
-  "name": "Формула: Молния",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
-  "system": {
-   "description": "<p>Субстанции: Купорос ×2, Киноварь ×2, Гидраген ×1</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
-   "kind": "formula",
-   "category": "alchemy",
-   "level": "journeyman",
-   "dc": 16,
-   "time": "15 минут",
-   "skill": "alchemy",
-   "components": [
-    {
-     "name": "Алкагест",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 2,
-    "rebis": 0,
-    "aether": 0,
-    "quebrith": 0,
-    "hydragenum": 1,
-    "vermilion": 2,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Молния",
-    "type": "alchemical",
-    "quantity": 1
-   },
-   "surcharge": 0,
-   "cost": 150,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "117"
-   }
-  },
-  "folder": [
-   "Формулы",
-   "Алхимические составы",
-   "Подмастерье"
-  ],
-  "_id": "WjsBHMcUyD5E0rB6"
- },
- {
-  "name": "Формула: Мангуст",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
-  "system": {
-   "description": "<p>Субстанции: Ребис ×2, Эфир ×2, Фульгор ×2</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
-   "kind": "formula",
-   "category": "alchemy",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "15 минут",
-   "skill": "alchemy",
-   "components": [
-    {
-     "name": "Алкагест",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 2,
-    "aether": 2,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 0,
-    "fulgur": 2
-   },
-   "result": {
-    "name": "Мангуст",
-    "type": "alchemical",
-    "quantity": 1
-   },
-   "surcharge": 0,
-   "cost": 100,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "117"
-   }
-  },
-  "folder": [
-   "Формулы",
-   "Алхимические составы",
-   "Подмастерье"
-  ],
-  "_id": "6uRAic1J4cO6sVOB"
- },
- {
-  "name": "Формула: Путник",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
-  "system": {
-   "description": "<p>Субстанции: Ребис ×2, Эфир ×1, Фульгор ×1, Аер ×1</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
-   "kind": "formula",
-   "category": "alchemy",
-   "level": "journeyman",
-   "dc": 16,
-   "time": "15 минут",
-   "skill": "alchemy",
-   "components": [
-    {
-     "name": "Алкагест",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 0,
-    "rebis": 2,
-    "aether": 1,
-    "quebrith": 0,
-    "hydragenum": 0,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 1,
-    "fulgur": 1
-   },
-   "result": {
-    "name": "Путник",
-    "type": "alchemical",
-    "quantity": 1
-   },
-   "surcharge": 0,
-   "cost": 128,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "117"
-   }
-  },
-  "folder": [
-   "Формулы",
-   "Алхимические составы",
-   "Подмастерье"
-  ],
-  "_id": "JWGUnNBS3gcWQqLM"
- },
- {
-  "name": "Формула: Буря",
-  "type": "recipe",
-  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
-  "system": {
-   "description": "<p>Субстанции: Купорос ×1, Эфир ×1, Квебрит ×1, Аер ×1, Гидраген ×1</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
-   "kind": "formula",
-   "category": "alchemy",
-   "level": "journeyman",
-   "dc": 15,
-   "time": "15 минут",
-   "skill": "alchemy",
-   "components": [
-    {
-     "name": "Алкагест",
-     "quantity": 1
-    }
-   ],
-   "substances": {
-    "vitriol": 1,
-    "rebis": 0,
-    "aether": 1,
-    "quebrith": 1,
-    "hydragenum": 1,
-    "vermilion": 0,
-    "sol": 0,
-    "caelum": 1,
-    "fulgur": 0
-   },
-   "result": {
-    "name": "Буря",
-    "type": "alchemical",
-    "quantity": 1
-   },
-   "surcharge": 0,
-   "cost": 104,
-   "needsForge": false,
-   "memorized": false,
-   "quantity": 1,
-   "weight": 0,
-   "source": {
-    "book": "Том Хаоса",
-    "page": "117"
-   }
-  },
-  "folder": [
-   "Формулы",
-   "Алхимические составы",
-   "Подмастерье"
-  ],
-  "_id": "XE7qinrPSr6kjMm9"
- },
- {
   "name": "Чертёж: Стальной меч школы Медведя",
   "type": "recipe",
   "img": "icons/sundries/scrolls/scroll-bound-sealed-red-gold.webp",
@@ -17403,6 +16179,1230 @@
   "_id": "sg0CF6QpqxjYeL1Z"
  },
  {
+  "name": "Чертёж: Рунное слово: Горение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: чернобог (×1), даждьбог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Чернобог»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Даждьбог»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Горение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1175,
+   "cost": 2150,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "M4DHBRIJddsbUX9O"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Отражение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: чернобог (×1), перун (×1), стрибог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "master",
+   "dc": 21,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Чернобог»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Перун»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Стрибог»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Отражение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1650,
+   "cost": 3300,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Мастер"
+  ],
+  "_id": "LbTQkyGZjCCwKBrs"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Истощение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: стрибог (×1), триглав (×1), велес (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "master",
+   "dc": 21,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Стрибог»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Триглав»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Велес»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Истощение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1675,
+   "cost": 3350,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Мастер"
+  ],
+  "_id": "cXPIFVWwgshavdYY"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Размещение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: марена (×1), стрибог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Марена»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Стрибог»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Размещение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1075,
+   "cost": 2150,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "GGmGSPEr2YgED7yo"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Сохранение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: девана (×1), марена (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Девана»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Марена»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Сохранение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1150,
+   "cost": 2300,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "CFfGFoKBfvexlgFK"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Продление",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: перун (×1), сварог (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Перун»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Сварог»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Продление",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1175,
+   "cost": 2150,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "S0n46KqUcc2uqIQN"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Омоложение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: перун (×1), сварог (×1), триглав (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "master",
+   "dc": 21,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Перун»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Сварог»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Триглав»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Омоложение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1750,
+   "cost": 3500,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Мастер"
+  ],
+  "_id": "VCWDeNhqijq97tQa"
+ },
+ {
+  "name": "Чертёж: Рунное слово: Стригущий",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: велес (×1), зоря (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Руна «Велес»",
+     "quantity": 1
+    },
+    {
+     "name": "Руна «Зоря»",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Рунное слово: Стригущий",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1150,
+   "cost": 2300,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "VtC48gAthMvtXZiq"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Баланс",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф восстановления (×1), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф восстановления",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф укрепления",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Баланс",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 550,
+   "cost": 1100,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "r0OtVDcnusCDzJdk"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Заблуждение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф огня (×1), глиф воды (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф огня",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф воды",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Заблуждение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1150,
+   "cost": 2300,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "p6wJjxvHZxFCg50F"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Вес",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф восстановления (×1), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф восстановления",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф укрепления",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Вес",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 550,
+   "cost": 1100,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "XVnecr1NvuD1zT9m"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Защита",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф земли (×1), глиф магии (×1), глиф сопротивления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "master",
+   "dc": 21,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф земли",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф магии",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф сопротивления",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Защита",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1450,
+   "cost": 2900,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Мастер"
+  ],
+  "_id": "con8URbHpAIDMDon"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Возмездие",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф земли (×2), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "master",
+   "dc": 21,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф земли",
+     "quantity": 2
+    },
+    {
+     "name": "Глиф укрепления",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Возмездие",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 1250,
+   "cost": 2500,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Мастер"
+  ],
+  "_id": "Aii3rR01TAEXQTGs"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Вращение",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф связывания (×1), глиф укрепления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф связывания",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф укрепления",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Вращение",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 300,
+   "cost": 600,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "x3k3uXUtcrm0AHgS"
+ },
+ {
+  "name": "Чертёж: Глифово слово: Сияющий",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: глиф воздуха (×1), глиф сопротивления (×1).</p><p>Нужны схема чар и набор инструментов Рунописца. Руна или глиф, уже стоящие на предмете и входящие в состав слова, засчитываются в компоненты.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "1 час",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Глиф воздуха",
+     "quantity": 1
+    },
+    {
+     "name": "Глиф сопротивления",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Глифово слово: Сияющий",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 875,
+   "cost": 1750,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "113"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Подмастерье"
+  ],
+  "_id": "GXxJSTYG01Fv1tRf"
+ },
+ {
+  "name": "Чертёж: Слот зачарования",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-magical.webp",
+  "system": {
+   "description": "<p>Компоненты: метеорит (×4), дымная пыль (×2).</p><p>У предмета должны быть полная надёжность или ПБ, а у мастера — инструменты для изготовления. Четыре часа работы и проверка Ремесла добавляют предмету пустую ячейку усиления: в неё войдут только руны и глифы, и больше трёх ячеек у предмета не бывает.</p>",
+   "kind": "blueprint",
+   "category": "enhancements",
+   "level": "master",
+   "dc": 25,
+   "time": "4 часа",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Метеорит",
+     "quantity": 4
+    },
+    {
+     "name": "Дымная пыль",
+     "quantity": 2
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Слот зачарования",
+    "type": "enhancement",
+    "quantity": 1
+   },
+   "surcharge": 684,
+   "cost": 1368,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "115"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Усиления и зачарования",
+   "Мастер"
+  ],
+  "_id": "q5rKCyD9Sp5kp6o8"
+ },
+ {
+  "name": "Формула: Анаболические стероиды",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+  "system": {
+   "description": "<p>Субстанции: Ребис ×1, Аер ×1, Квебрит ×1, Гидраген ×2</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
+   "kind": "formula",
+   "category": "alchemy",
+   "level": "journeyman",
+   "dc": 16,
+   "time": "1/2 часа",
+   "skill": "alchemy",
+   "components": [
+    {
+     "name": "Алкагест",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 1,
+    "aether": 0,
+    "quebrith": 1,
+    "hydragenum": 2,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 1,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Анаболические стероиды",
+    "type": "alchemical",
+    "quantity": 1
+   },
+   "surcharge": 0,
+   "cost": 330,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "117"
+   }
+  },
+  "folder": [
+   "Формулы",
+   "Алхимические составы",
+   "Подмастерье"
+  ],
+  "_id": "XfFLYNGUUxswsSgE"
+ },
+ {
+  "name": "Формула: Последняя надежда",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+  "system": {
+   "description": "<p>Субстанции: Солнце ×2, Купорос ×1, Эфир ×2, Киноварь ×3</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
+   "kind": "formula",
+   "category": "alchemy",
+   "level": "journeyman",
+   "dc": 22,
+   "time": "1 час",
+   "skill": "alchemy",
+   "components": [
+    {
+     "name": "Алкагест",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 1,
+    "rebis": 0,
+    "aether": 2,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 3,
+    "sol": 2,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Последняя надежда",
+    "type": "alchemical",
+    "quantity": 1
+   },
+   "surcharge": 0,
+   "cost": 400,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "117"
+   }
+  },
+  "folder": [
+   "Формулы",
+   "Алхимические составы",
+   "Подмастерье"
+  ],
+  "_id": "qhNJtp7NqCCux5th"
+ },
+ {
+  "name": "Формула: Молния",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+  "system": {
+   "description": "<p>Субстанции: Купорос ×2, Киноварь ×2, Гидраген ×1</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
+   "kind": "formula",
+   "category": "alchemy",
+   "level": "journeyman",
+   "dc": 16,
+   "time": "15 минут",
+   "skill": "alchemy",
+   "components": [
+    {
+     "name": "Алкагест",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 2,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 1,
+    "vermilion": 2,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Молния",
+    "type": "alchemical",
+    "quantity": 1
+   },
+   "surcharge": 0,
+   "cost": 150,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "117"
+   }
+  },
+  "folder": [
+   "Формулы",
+   "Алхимические составы",
+   "Подмастерье"
+  ],
+  "_id": "WjsBHMcUyD5E0rB6"
+ },
+ {
+  "name": "Формула: Мангуст",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+  "system": {
+   "description": "<p>Субстанции: Ребис ×2, Эфир ×2, Фульгор ×2</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
+   "kind": "formula",
+   "category": "alchemy",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "15 минут",
+   "skill": "alchemy",
+   "components": [
+    {
+     "name": "Алкагест",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 2,
+    "aether": 2,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 2
+   },
+   "result": {
+    "name": "Мангуст",
+    "type": "alchemical",
+    "quantity": 1
+   },
+   "surcharge": 0,
+   "cost": 100,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "117"
+   }
+  },
+  "folder": [
+   "Формулы",
+   "Алхимические составы",
+   "Подмастерье"
+  ],
+  "_id": "6uRAic1J4cO6sVOB"
+ },
+ {
+  "name": "Формула: Путник",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+  "system": {
+   "description": "<p>Субстанции: Ребис ×2, Эфир ×1, Фульгор ×1, Аер ×1</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
+   "kind": "formula",
+   "category": "alchemy",
+   "level": "journeyman",
+   "dc": 16,
+   "time": "15 минут",
+   "skill": "alchemy",
+   "components": [
+    {
+     "name": "Алкагест",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 2,
+    "aether": 1,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 1,
+    "fulgur": 1
+   },
+   "result": {
+    "name": "Путник",
+    "type": "alchemical",
+    "quantity": 1
+   },
+   "surcharge": 0,
+   "cost": 128,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "117"
+   }
+  },
+  "folder": [
+   "Формулы",
+   "Алхимические составы",
+   "Подмастерье"
+  ],
+  "_id": "JWGUnNBS3gcWQqLM"
+ },
+ {
+  "name": "Формула: Буря",
+  "type": "recipe",
+  "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
+  "system": {
+   "description": "<p>Субстанции: Купорос ×1, Эфир ×1, Квебрит ×1, Аер ×1, Гидраген ×1</p><p>Сверх перечисленного на каждый эликсир уходит бутылка алкагеста.</p>",
+   "kind": "formula",
+   "category": "alchemy",
+   "level": "journeyman",
+   "dc": 15,
+   "time": "15 минут",
+   "skill": "alchemy",
+   "components": [
+    {
+     "name": "Алкагест",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 1,
+    "rebis": 0,
+    "aether": 1,
+    "quebrith": 1,
+    "hydragenum": 1,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 1,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Буря",
+    "type": "alchemical",
+    "quantity": 1
+   },
+   "surcharge": 0,
+   "cost": 104,
+   "needsForge": false,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Том Хаоса",
+    "page": "117"
+   }
+  },
+  "folder": [
+   "Формулы",
+   "Алхимические составы",
+   "Подмастерье"
+  ],
+  "_id": "XE7qinrPSr6kjMm9"
+ },
+ {
   "_id": "HrmBWivP7cS7Xunx",
   "name": "Бронированная адаптация",
   "type": "recipe",
@@ -17494,7 +17494,7 @@
      "quantity": 1
     },
     {
-     "name": "Триглав",
+     "name": "Руна «Триглав»",
      "quantity": 1
     }
    ],
@@ -17762,7 +17762,7 @@
      "quantity": 1
     },
     {
-     "name": "Клыки вампира",
+     "name": "Зубы вампира",
      "quantity": 4
     },
     {
@@ -17823,7 +17823,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Слюна оборотня",
+     "name": "Слюна волколака",
      "quantity": 3
     },
     {
@@ -17831,7 +17831,7 @@
      "quantity": 2
     },
     {
-     "name": "Печень Тролля",
+     "name": "Печень тролля",
      "quantity": 1
     },
     {
@@ -17904,7 +17904,7 @@
      "quantity": 3
     },
     {
-     "name": "Глаз Беса",
+     "name": "Глаз беса",
      "quantity": 1
     }
    ],
@@ -17969,7 +17969,7 @@
      "quantity": 1
     },
     {
-     "name": "Слюна Эндриаги",
+     "name": "Слюна эндриаги",
      "quantity": 10
     },
     {
@@ -18111,7 +18111,7 @@
      "quantity": 2
     },
     {
-     "name": "Мозг Утопца",
+     "name": "Мозг утопца",
      "quantity": 1
     }
    ],
@@ -18237,7 +18237,7 @@
      "quantity": 1
     },
     {
-     "name": "Корень Мандрагоры",
+     "name": "Корень мандрагоры",
      "quantity": 1
     },
     {
@@ -18392,7 +18392,7 @@
      "quantity": 3
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 1
     },
     {
@@ -18461,19 +18461,19 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темное железо",
+     "name": "Тёмное железо",
      "quantity": 3
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 4
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 3
     },
     {
@@ -18586,15 +18586,15 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темное железо",
+     "name": "Тёмное железо",
      "quantity": 2
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 9
     },
     {
@@ -18659,11 +18659,11 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
@@ -18671,7 +18671,7 @@
      "quantity": 2
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 1
     },
     {
@@ -18732,7 +18732,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Вороний Глаз",
+     "name": "Вороний глаз",
      "quantity": 2
     },
     {
@@ -18910,7 +18910,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 4
     },
     {
@@ -18991,7 +18991,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 4
     },
     {
@@ -19065,7 +19065,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 12
     },
     {
@@ -19093,7 +19093,7 @@
      "quantity": 4
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 13
     },
     {
@@ -19507,7 +19507,7 @@
      "quantity": 2
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 2
     },
     {
@@ -19519,7 +19519,7 @@
      "quantity": 3
     },
     {
-     "name": "Optima Mater",
+     "name": "Optima mater",
      "quantity": 1
     }
    ],
@@ -19649,11 +19649,11 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 3
     },
     {
@@ -19722,15 +19722,15 @@
    "skill": "alchemy",
    "components": [
     {
-     "name": "*Темная пыль",
+     "name": "Темная пыль",
      "quantity": 1
     },
     {
-     "name": "*Кровь гернихоры",
+     "name": "Кровь гернихоры",
      "quantity": 1
     },
     {
-     "name": "*Яд кракена",
+     "name": "Яд кракена",
      "quantity": 1
     },
     {
@@ -19738,7 +19738,7 @@
      "quantity": 1
     },
     {
-     "name": "Краснолюдский Бессмертник",
+     "name": "Краснолюдский бессмертник",
      "quantity": 1
     }
    ],
@@ -19926,7 +19926,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 2
     },
     {
@@ -20015,7 +20015,7 @@
      "quantity": 1
     },
     {
-     "name": "Optima Mater",
+     "name": "Optima mater",
      "quantity": 1
     },
     {
@@ -20088,7 +20088,7 @@
      "quantity": 1
     },
     {
-     "name": "Листья Вольчего Алоэ",
+     "name": "Листья волчьего алоэ",
      "quantity": 1
     }
    ],
@@ -20146,11 +20146,11 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Кости лешего",
+     "name": "Кость лешего",
      "quantity": 3
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 2
     },
     {
@@ -20158,7 +20158,7 @@
      "quantity": 4
     },
     {
-     "name": "Шелк",
+     "name": "Шёлк",
      "quantity": 4
     },
     {
@@ -20178,7 +20178,7 @@
      "quantity": 4
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 1
     },
     {
@@ -20292,7 +20292,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 5
     },
     {
@@ -20304,11 +20304,11 @@
      "quantity": 1
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -20496,11 +20496,11 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
@@ -20508,7 +20508,7 @@
      "quantity": 2
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 2
     },
     {
@@ -20577,7 +20577,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 1
     },
     {
@@ -20585,7 +20585,7 @@
      "quantity": 5
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 1
     },
     {
@@ -20646,15 +20646,15 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темное железо",
+     "name": "Тёмное железо",
      "quantity": 1
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 9
     },
     {
@@ -20775,7 +20775,7 @@
      "quantity": 3
     },
     {
-     "name": "Optima Mater",
+     "name": "Optima mater",
      "quantity": 2
     }
    ],
@@ -20852,11 +20852,11 @@
      "quantity": 4
     },
     {
-     "name": "Самоцвет",
+     "name": "Самоцветы",
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 3
     },
     {
@@ -20864,7 +20864,7 @@
      "quantity": 1
     },
     {
-     "name": "Optima Mater",
+     "name": "Optima mater",
      "quantity": 1
     },
     {
@@ -20981,7 +20981,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 4
     },
     {
@@ -20989,11 +20989,11 @@
      "quantity": 2
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -21054,7 +21054,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 2
     },
     {
@@ -21062,11 +21062,11 @@
      "quantity": 3
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 3
     },
     {
-     "name": "Шелк",
+     "name": "Шёлк",
      "quantity": 1
     },
     {
@@ -21131,15 +21131,15 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 5
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 5
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 2
     },
     {
@@ -21273,7 +21273,7 @@
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -21362,7 +21362,7 @@
      "quantity": 2
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 2
     },
     {
@@ -21427,11 +21427,11 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -21508,11 +21508,11 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темное железо",
+     "name": "Тёмное железо",
      "quantity": 3
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 2
     },
     {
@@ -21520,11 +21520,11 @@
      "quantity": 2
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 7
     },
     {
@@ -21609,7 +21609,7 @@
      "quantity": 1
     },
     {
-     "name": "Самоцвет",
+     "name": "Самоцветы",
      "quantity": 1
     }
    ],
@@ -21670,7 +21670,7 @@
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 6
     },
     {
@@ -21938,11 +21938,11 @@
      "quantity": 3
     },
     {
-     "name": "Корень Мандрагоры",
+     "name": "Корень мандрагоры",
      "quantity": 5
     },
     {
-     "name": "Вороний Глаз",
+     "name": "Вороний глаз",
      "quantity": 3
     },
     {
@@ -21954,7 +21954,7 @@
      "quantity": 1
     },
     {
-     "name": "Волокна Хана",
+     "name": "Волокна хана",
      "quantity": 4
     }
    ],
@@ -22035,7 +22035,7 @@
      "quantity": 5
     },
     {
-     "name": "Самоцвет",
+     "name": "Самоцветы",
      "quantity": 1
     }
    ],
@@ -22165,7 +22165,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -22238,7 +22238,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 2
     },
     {
@@ -22246,7 +22246,7 @@
      "quantity": 1
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -22319,7 +22319,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 2
     },
     {
@@ -22331,7 +22331,7 @@
      "quantity": 2
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
@@ -22400,7 +22400,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Вороний Глаз",
+     "name": "Вороний глаз",
      "quantity": 2
     },
     {
@@ -22473,19 +22473,19 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Темное железо",
+     "name": "Тёмное железо",
      "quantity": 5
     },
     {
-     "name": "Темная сталь",
+     "name": "Тёмная сталь",
      "quantity": 4
     },
     {
-     "name": "Укрепленная кожа",
+     "name": "Укреплённая кожа",
      "quantity": 2
     },
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 1
     },
     {
@@ -22607,7 +22607,7 @@
    "skill": "crafting",
    "components": [
     {
-     "name": "Укрепленное дерево",
+     "name": "Укреплённое дерево",
      "quantity": 4
     },
     {

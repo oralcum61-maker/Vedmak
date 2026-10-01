@@ -21414,7 +21414,7 @@
     "type": "document",
     "name": "Посох связывания",
     "description": "",
-    "img": "icons/weapons/staves/staff-engraved-red.webp",
+    "img": "icons/weapons/staves/staff-ornate-eye.webp",
     "weight": 1,
     "range": [
      23,
@@ -22054,7 +22054,7 @@
     "type": "document",
     "name": "*Ожерелье с рубином",
     "description": "",
-    "img": "icons/equipment/neck/amulet-heart.webp",
+    "img": "icons/equipment/neck/necklace-jeweled-gold-red.webp",
     "weight": 1,
     "range": [
      6,
@@ -22764,7 +22764,7 @@
     "type": "document",
     "name": "Фальшивая монета",
     "description": "",
-    "img": "icons/commodities/currency/coin-plain-gold.webp",
+    "img": "icons/commodities/currency/coin-engraved-oval-steel.webp",
     "weight": 1,
     "range": [
      53,
@@ -23250,7 +23250,7 @@
     "type": "document",
     "name": "Шато де Конрад Каберне",
     "description": "",
-    "img": "icons/containers/bags/pack-leather-brown.webp",
+    "img": "icons/consumables/drinks/wine-amphora-clay-red.webp",
     "weight": 1,
     "range": [
      16,
@@ -23298,7 +23298,7 @@
     "type": "document",
     "name": "Белый гуль",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/alcohol/white-gull.webp",
+    "img": "icons/consumables/potions/potion-bottle-corked-white.webp",
     "weight": 1,
     "range": [
      2,
@@ -23368,7 +23368,7 @@
     "type": "document",
     "name": "Коньяк Виктора Моннарта",
     "description": "",
-    "img": "systems/vedmak/assets/fan/bs/alcohol/erveluce.webp",
+    "img": "icons/consumables/drinks/alcohol-jug-spirits-brown.webp",
     "weight": 1,
     "range": [
      7,
@@ -24425,7 +24425,7 @@
     "type": "document",
     "name": "*Формула: Эликсир Мец",
     "description": "",
-    "img": "icons/sundries/documents/document-writing-pink.webp",
+    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
      1,
@@ -24439,7 +24439,7 @@
     "type": "document",
     "name": "*Формула: Цитрусовая мазь",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      2,
@@ -24453,7 +24453,7 @@
     "type": "document",
     "name": "*Формула: Травяной чай",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      3,
@@ -24467,7 +24467,7 @@
     "type": "document",
     "name": "*Формула: Горячий суп",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      4,
@@ -24481,7 +24481,7 @@
     "type": "document",
     "name": "*Формула: Опиат Киновари",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      5,
@@ -24495,7 +24495,7 @@
     "type": "document",
     "name": "*Формула: Мытые коренья",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      6,
@@ -24556,7 +24556,7 @@
     "type": "document",
     "name": "Формула: Зелье берсерка",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
      3,
@@ -24626,7 +24626,7 @@
     "type": "document",
     "name": "Формула: Эликсир выносливости",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
      8,
@@ -24640,7 +24640,7 @@
     "type": "document",
     "name": "Формула: Эликсир живучести",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
      9,
@@ -24771,7 +24771,7 @@
     "type": "document",
     "name": "Формула: Летняя мазь",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      6,
@@ -25028,7 +25028,7 @@
     "type": "document",
     "name": "Формула: Селестин",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      9,
@@ -25042,7 +25042,7 @@
     "type": "document",
     "name": "Формула: Трупный яд",
     "description": "",
-    "img": "icons/sundries/documents/document-bound-white-tan.webp",
+    "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
      11,
@@ -25229,7 +25229,7 @@
     "type": "document",
     "name": "Формула: Масло против призраков",
     "description": "",
-    "img": "icons/sundries/documents/document-symbol-skull-tan.webp",
+    "img": "icons/sundries/scrolls/scroll-writing-tan-grey.webp",
     "weight": 1,
     "range": [
      8,
@@ -28016,7 +28016,7 @@
     "type": "document",
     "name": "Чертеж: Эльфийский щит",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-shield.webp",
+    "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
     "weight": 1,
     "range": [
      1,
@@ -28072,7 +28072,7 @@
     "type": "document",
     "name": "Чертеж: Броня скоя'таэлей",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-helmet.webp",
+    "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
     "weight": 1,
     "range": [
      5,
@@ -29507,7 +29507,7 @@
     "type": "document",
     "name": "Чертеж: Эльфийский мессер",
     "description": "",
-    "img": "icons/sundries/documents/blueprint-axe.webp",
+    "img": "icons/sundries/scrolls/scroll-runed-brown-green.webp",
     "weight": 1,
     "range": [
      2,
@@ -29759,7 +29759,7 @@
     "type": "document",
     "name": "Чертеж усиления: Эльфийское",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,
@@ -29794,7 +29794,7 @@
     "type": "document",
     "name": "Чертеж усиления: Тканевое",
     "description": "",
-    "img": "icons/sundries/scrolls/scroll-symbol-triangle-brown.webp",
+    "img": "icons/sundries/documents/blueprint-magical.webp",
     "weight": 1,
     "range": [
      1,

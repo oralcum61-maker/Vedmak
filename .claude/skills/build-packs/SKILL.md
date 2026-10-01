@@ -22,7 +22,10 @@ description: Пересобрать компендиумы системы — п
       (повторный запуск ничего не меняет, PLAN 4.30).
 
    `bs_items.py` идёт раньше `bs_bestiary.py` и `bs_tables.py`: он пишет `_tools/data/bs/aliases.json` —
-   разночтения перевода, по которым те ищут наши предметы.
+   разночтения перевода, по которым те ищут наши предметы. А `bs_bestiary.py` и `bs_tables.py` — **после**
+   `fix_icons.py`: они копируют значки предметов в инвентарь существ и строки таблиц, и до правки значков
+   скопировали бы старые. Порядок: `gen_*` → `dlc_*` → `gen_services` → `bs_items` → `fix_icons` →
+   `bs_bestiary` → `bs_tables` → `bs_rules` → `restructure_folders` → `square-icons`.
 
    Точный список скриптов посмотри в `D:\Witcher\_tools`. Если порядок для нового скрипта неясен, спроси пользователя.
 3. **Сборка** из `D:\Witcher\vedmak`: `node tools/build-packs.mjs` — все пакеты, или
