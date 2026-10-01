@@ -899,6 +899,15 @@ function replaceWarning(actor) {
   lines.push("постоянные бонусы ПЗ, Вын и Энергии, поправки эффекта «Жизненный путь»");
   const oldMagic = actor.itemTypes.spell?.filter(i => i.getFlag("vedmak", "wizardMagic")) ?? [];
   if (oldMagic.length) lines.push(`стартовая магия прежней профессии: ${oldMagic.map(i => esc(i.name)).join(", ")}`);
+  // Магия без метки мастера (стартовая, добавленная до метки, или изученная позже) не удаляется: если среди неё есть
+  // стартовая магия прежней профессии, её придётся убрать самим. Одноимённая магия новой профессии получит метку.
+  if (actor.itemTypes.profession?.length) {
+    const kept = actor.itemTypes.spell?.filter(i => !i.getFlag("vedmak", "wizardMagic")) ?? [];
+    if (kept.length) {
+      const names = kept.slice(0, 12).map(i => esc(i.name)).join(", ") + (kept.length > 12 ? ` и ещё ${kept.length - 12}` : "");
+      lines.push(`магия без метки мастера останутся: ${names} (если это стартовая магия прежней профессии, уберите её сами; одноимённая магия новой профессии получит метку и уйдёт при следующем запуске мастера)`);
+    }
+  }
   return `<p>У персонажа «${esc(actor.name)}» мастер заменит:</p><ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul>`
     + "<p>Остальные предметы останутся. Стартовое снаряжение, которое у персонажа уже есть (то же название и тип),"
     + " второй раз не добавится. Продолжить?</p>";
@@ -906,6 +915,9 @@ function replaceWarning(actor) {
 
 /** Биография, которую прежний мастер создания собирал из жизненного пути. */
 const GENERATED_BIO = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/;
+
+/** Предметы, у которых есть число штук: докладываются до нужного (остальные при повторе пропускаются). */
+const STACKABLE_TYPES = ["gear", "component", "alchemical"];
 
 async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   const { state: s, race, profession, stats, skills, profKeys, magic, native, statParts } = wizard.applyData;
@@ -976,22 +988,46 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
     p.system.definingSkill.value = s.defining + fx.definingBonus;
     items.push(p);
   }
+  const flagUpdates = [];
   for (const m of magic) {
     const doc = await fromUuid(m.uuid);
-    if (!doc || actor.items.some(i => i.type === "spell" && i.name === doc.name)) continue;
+    if (!doc) continue;
+    // Заклинание с таким именем уже есть (старая стартовая магия без флага мастера): не задваиваем, но метим, чтобы
+    // следующий запуск мастера смог убрать его вместе со стартовой магией профессии
+    const same = actor.items.find(i => i.type === "spell" && i.name === doc.name);
+    if (same) {
+      if (!same.getFlag("vedmak", "wizardMagic")) flagUpdates.push({ _id: same.id, "flags.vedmak.wizardMagic": true });
+      continue;
+    }
     // Флаг — чтобы повторный мастер мог убрать стартовую магию этой профессии
     const data = doc.toObject();
     foundry.utils.setProperty(data, "flags.vedmak.wizardMagic", true);
     items.push(data);
   }
-  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает
-  const owned = new Set(actor.items.map(i => `${i.type}\u0000${i.name}`));
+  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает.
+  // Исчисляемое (снаряжение, компоненты, алхимия, боеприпасы) докладывается до нужного числа: «болты ×20» при одном
+  // болте в колчане — ещё 19; оружие, броня и усиления (по одной штуке) пропускаются.
+  const key = i => `${i.type}\u0000${i.name}`;
+  const owned = new Map();
+  for (const i of actor.items) owned.set(key(i), [...(owned.get(key(i)) ?? []), i]);
+  const topUps = new Map();
   const gearNames = [...(race?.system.grants ?? []), ...(profession?.system.gearFixed ?? []), ...s.gear, ...fx.items];
   for (const name of gearNames) {
-    for (const data of await itemsForLabel(name)) if (!owned.has(`${data.type}\u0000${data.name}`)) items.push(data);
+    for (const data of await itemsForLabel(name)) {
+      const have = owned.get(key(data));
+      if (!have) { items.push(data); continue; }
+      if (!STACKABLE_TYPES.includes(data.type)) continue;
+      const want = Number(data.system.quantity) || 1;
+      const had = have.reduce((sum, i) => sum + (Number(i.system.quantity) || 0), 0);
+      // Новое число в первой из одноимённых стопок; повтор того же названия в списке не складывается, берётся большее
+      const total = Math.max(topUps.get(have[0].id) ?? 0, want - had + (Number(have[0].system.quantity) || 0));
+      if (want > had) topUps.set(have[0].id, total);
+    }
   }
   for (const data of items) delete data._id;
   await actor.createEmbeddedDocuments("Item", items);
+  const updates = [...flagUpdates, ...[...topUps].map(([_id, quantity]) => ({ _id, "system.quantity": quantity }))];
+  if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
 
   // Постоянные поправки жизненного пути — эффектом, чтобы их было видно
   const changes = [];
