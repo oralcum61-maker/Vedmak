@@ -45,6 +45,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       name: actor.name, gender: d.gender ?? "", age: Number.parseInt(d.age) || 25,
       raceUuid: "", origin: "", homeland: "", homelandRoll: null, vassalRoll: null, language: "",
       lifepath: true, rolls: {},
+      // Возраст 80 выставила раса «ведьмак», а не игрок: при смене расы вернём прежний (ageAuto — признак, ageBefore — прежний)
+      ageAuto: false, ageBefore: null,
       professionUuid: "", skillChoices: {},
       statMode: "points", level: "average",
       stats: Object.fromEntries(STAT_KEYS.map(k => [k, 5])),
@@ -560,15 +562,35 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       s.rolls[el.dataset.path] = value;
     } else if (field === "origin") {
       s.origin = value;
-      if (HOMELANDS[s.homeland]?.region !== value) s.homeland = "";
+      if (HOMELANDS[s.homeland]?.region !== value) { s.homeland = ""; s.language = ""; }
+      this.#pruneChoices();
     } else if (field === "homeland") {
       s.homeland = value;
       s.language = "";
+      this.#pruneChoices();
     } else if (field === "age") {
       s.age = clamp(value, 0, 1000);
+      // Возраст вписал игрок — расе «ведьмак» его уже не менять
+      s.ageAuto = false; s.ageBefore = null;
     } else if (field === "lifepath" || field === "statMode" || field === "level" || field === "name" || field === "gender" || field === "language") {
       s[field] = value;
+      if (field === "language") this.#pruneChoices();
     }
+  }
+
+  /**
+   * Выбор навыков профессии, которых уже нет среди предлагаемых: родной язык (его в списке нет, он и так на 8) после
+   * смены расы, родины или языка. Лишний выбор уносит свои очки через `#pruneSkills`.
+   */
+  #pruneChoices() {
+    const s = this.wiz;
+    const native = this.nativeLanguageKey;
+    const prof = this.profession;
+    for (const [idx, list] of Object.entries(s.skillChoices)) {
+      const offered = prof?.system.skillChoices[idx]?.options;
+      s.skillChoices[idx] = list.filter(k => k !== native && (!offered || offered.includes(k)));
+    }
+    this.#pruneSkills();
   }
 
   /**
@@ -635,7 +657,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const key = this.race?.system.key;
     if (key === "witcher") {
       s.origin = ""; s.homeland = ""; s.language = "langCommon";
-      if (s.age < 50) s.age = 80;
+      if (s.age < 50) { s.ageBefore = s.age; s.age = 80; s.ageAuto = true; }
       // Профессия ведьмака — так же, как выбором на шаге «Профессия»: капитал, очки и снаряжение прежней не остаются
       const witcher = this.data.professions.find(p => p.system.key === "witcher");
       if (witcher) this.#setProfession(witcher.uuid);
@@ -645,7 +667,12 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       else if (s.origin === "elder") { s.origin = ""; s.homeland = ""; }
       s.language = "";
       if (this.profession?.system.key === "witcher") this.#setProfession("");
+      // Возраст 80 поставила раса «ведьмак»: при уходе от неё возвращаем прежний, если игрок не вписал свой
+      if (s.ageAuto && s.ageBefore !== null) s.age = s.ageBefore;
+      s.ageAuto = false; s.ageBefore = null;
     }
+    // Родной язык и родина сменились: выбор навыка, которого теперь нет в списке, не должен остаться и считаться
+    this.#pruneChoices();
     this.render();
   }
 
@@ -674,6 +701,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       ui.notifications.info(`Регион: d10 = ${regionRoll} → ${ORIGIN_REGIONS[s.origin].label}; родина: ${HOMELANDS[s.homeland].label}.`);
     }
     s.language = "";
+    this.#pruneChoices();
     this.render();
   }
 
@@ -871,6 +899,15 @@ function replaceWarning(actor) {
   lines.push("постоянные бонусы ПЗ, Вын и Энергии, поправки эффекта «Жизненный путь»");
   const oldMagic = actor.itemTypes.spell?.filter(i => i.getFlag("vedmak", "wizardMagic")) ?? [];
   if (oldMagic.length) lines.push(`стартовая магия прежней профессии: ${oldMagic.map(i => esc(i.name)).join(", ")}`);
+  // Магия без метки мастера (стартовая, добавленная до метки, или изученная позже) не удаляется: если среди неё есть
+  // стартовая магия прежней профессии, её придётся убрать самим. Одноимённая магия новой профессии получит метку.
+  if (actor.itemTypes.profession?.length) {
+    const kept = actor.itemTypes.spell?.filter(i => !i.getFlag("vedmak", "wizardMagic")) ?? [];
+    if (kept.length) {
+      const names = kept.slice(0, 12).map(i => esc(i.name)).join(", ") + (kept.length > 12 ? ` и ещё ${kept.length - 12}` : "");
+      lines.push(`магия без метки мастера останутся: ${names} (если это стартовая магия прежней профессии, уберите её сами; одноимённая магия новой профессии получит метку и уйдёт при следующем запуске мастера)`);
+    }
+  }
   return `<p>У персонажа «${esc(actor.name)}» мастер заменит:</p><ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul>`
     + "<p>Остальные предметы останутся. Стартовое снаряжение, которое у персонажа уже есть (то же название и тип),"
     + " второй раз не добавится. Продолжить?</p>";
@@ -878,6 +915,9 @@ function replaceWarning(actor) {
 
 /** Биография, которую прежний мастер создания собирал из жизненного пути. */
 const GENERATED_BIO = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/;
+
+/** Предметы, у которых есть число штук: докладываются до нужного (остальные при повторе пропускаются). */
+const STACKABLE_TYPES = ["gear", "component", "alchemical"];
 
 async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   const { state: s, race, profession, stats, skills, profKeys, magic, native, statParts } = wizard.applyData;
@@ -948,22 +988,46 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
     p.system.definingSkill.value = s.defining + fx.definingBonus;
     items.push(p);
   }
+  const flagUpdates = [];
   for (const m of magic) {
     const doc = await fromUuid(m.uuid);
-    if (!doc || actor.items.some(i => i.type === "spell" && i.name === doc.name)) continue;
+    if (!doc) continue;
+    // Заклинание с таким именем уже есть (старая стартовая магия без флага мастера): не задваиваем, но метим, чтобы
+    // следующий запуск мастера смог убрать его вместе со стартовой магией профессии
+    const same = actor.items.find(i => i.type === "spell" && i.name === doc.name);
+    if (same) {
+      if (!same.getFlag("vedmak", "wizardMagic")) flagUpdates.push({ _id: same.id, "flags.vedmak.wizardMagic": true });
+      continue;
+    }
     // Флаг — чтобы повторный мастер мог убрать стартовую магию этой профессии
     const data = doc.toObject();
     foundry.utils.setProperty(data, "flags.vedmak.wizardMagic", true);
     items.push(data);
   }
-  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает
-  const owned = new Set(actor.items.map(i => `${i.type}\u0000${i.name}`));
+  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает.
+  // Исчисляемое (снаряжение, компоненты, алхимия, боеприпасы) докладывается до нужного числа: «болты ×20» при одном
+  // болте в колчане — ещё 19; оружие, броня и усиления (по одной штуке) пропускаются.
+  const key = i => `${i.type}\u0000${i.name}`;
+  const owned = new Map();
+  for (const i of actor.items) owned.set(key(i), [...(owned.get(key(i)) ?? []), i]);
+  const topUps = new Map();
   const gearNames = [...(race?.system.grants ?? []), ...(profession?.system.gearFixed ?? []), ...s.gear, ...fx.items];
   for (const name of gearNames) {
-    for (const data of await itemsForLabel(name)) if (!owned.has(`${data.type}\u0000${data.name}`)) items.push(data);
+    for (const data of await itemsForLabel(name)) {
+      const have = owned.get(key(data));
+      if (!have) { items.push(data); continue; }
+      if (!STACKABLE_TYPES.includes(data.type)) continue;
+      const want = Number(data.system.quantity) || 1;
+      const had = have.reduce((sum, i) => sum + (Number(i.system.quantity) || 0), 0);
+      // Новое число в первой из одноимённых стопок; повтор того же названия в списке не складывается, берётся большее
+      const total = Math.max(topUps.get(have[0].id) ?? 0, want - had + (Number(have[0].system.quantity) || 0));
+      if (want > had) topUps.set(have[0].id, total);
+    }
   }
   for (const data of items) delete data._id;
   await actor.createEmbeddedDocuments("Item", items);
+  const updates = [...flagUpdates, ...[...topUps].map(([_id, quantity]) => ({ _id, "system.quantity": quantity }))];
+  if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
 
   // Постоянные поправки жизненного пути — эффектом, чтобы их было видно
   const changes = [];

@@ -6,7 +6,7 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
-import { CREATION, MAGIC_ACCESS, MAGIC_LEARNING, HEX_DANGER_LEVEL, skillStepCost, statStepCost } from "../config/character.mjs";
+import { CREATION, MAGIC_ACCESS, MAGIC_LEARNING, HEX_DANGER_LEVEL, skillStepCost, statStepCost, witcherSchools } from "../config/character.mjs";
 import { levelLabel } from "../config/magic.mjs";
 import { postCard } from "../util.mjs";
 
@@ -22,37 +22,59 @@ export function skillOffer(actor, key) {
 }
 
 /**
- * Нынешнее значение параметра для развития (стр. 59: «нынешнее значение × 10»): основа с постоянными поправками —
- * расы и эффекта «Жизненный путь» — и с пределами расы (Эмп ведьмака от 1 до 6). Зелья, раны и перегруз не в счёт:
- * от них цена не должна прыгать. Ни одно поле модели так не считается (`raw` включает и временные эффекты).
+ * Постоянные поправки параметра для развития: расы, школы ведьмака и эффекта «Жизненный путь», пределы — расы и школы
+ * (так же, как в `prepareDerivedData` модели персонажа: цикл по `race.mods` и `school.mods`). Зелья, раны и перегруз
+ * не в счёт: от них цена не должна прыгать. Ни одно поле модели так не считается (`raw` включает и временные эффекты).
+ * @returns {{bonus:number, cap:(number|undefined), floor:(number|undefined), at:(base:number)=>number}}
+ *   `at(основа)` — нынешнее значение при такой основе (с поправками и пределами).
  */
-function currentStat(actor, key) {
+function statParts(actor, key) {
   const sys = actor.system;
-  let value = sys.stats[key]?.base ?? 0;
-  let cap, floor;
-  for (const { target, value: v } of sys.race?.system.mods ?? []) {
+  let bonus = 0, cap, floor;
+  const school = witcherSchools()[sys.details?.school] ?? {};
+  for (const { target, value: v } of [...(sys.race?.system.mods ?? []), ...(school.mods ?? [])]) {
     const [group, k] = String(target).split(".");
     if (k !== key) continue;
-    if (group === "stats") value += Number(v) || 0;
+    if (group === "stats") bonus += Number(v) || 0;
     else if (group === "cap") cap = Math.min(cap ?? Infinity, v);
     else if (group === "floor") floor = Math.max(floor ?? -Infinity, v);
   }
   for (const effect of actor.effects) {
     if (effect.disabled || !effect.getFlag("vedmak", "lifepath")) continue;
     for (const c of effect.system?.changes ?? []) {
-      if (c.key === `system.stats.${key}.mod`) value += Number(c.value) || 0;
+      if (c.key === `system.stats.${key}.mod`) bonus += Number(c.value) || 0;
     }
   }
-  if (cap !== undefined) value = Math.min(value, cap);
-  if (floor !== undefined) value = Math.max(value, floor);
-  return { value: Math.max(0, value), cap };
+  const at = base => {
+    let value = base + bonus;
+    if (cap !== undefined) value = Math.min(value, cap);
+    if (floor !== undefined) value = Math.max(value, floor);
+    return Math.max(0, value);
+  };
+  return { bonus, cap, floor, at };
 }
 
+/**
+ * Повышение параметра всегда поднимает НЫНЕШНЕЕ значение ровно на 1, а стоит оно «нынешнее × 10» (стр. 59).
+ * Основа поднимается ровно настолько, чтобы это вышло: у ведьмака Эмп 3 − 4 упирается в нижний предел 1, и
+ * прибавка к основе на 1 ничего бы не дала — поэтому основа прыгает до первого значения, где Эмп стал 2.
+ * Предел книги (10) относится к купленной основе, а не к итогу: расовая прибавка Реа и Лвк ведьмака идёт сверху
+ * (стр. 22 — «можно выше 10»), потому у ведьмака Реа и Лвк покупаются до 10 основы, то есть до 11 итога.
+ */
 export function statOffer(actor, key) {
-  const { value: from, cap } = currentStat(actor, key);
+  const { cap, at } = statParts(actor, key);
+  const base = actor.system.stats[key]?.base ?? 0;
+  const from = at(base);
   const out = { label: STATS[key].label, from, to: from + 1, cost: statStepCost(from) };
-  if (from >= CREATION.statCap) out.error = `Параметр уже на максимуме (${CREATION.statCap}).`;
+  // Первая основа, при которой нынешнее значение вырастет ровно до from + 1 (пределы расы могут «съедать» шаги)
+  let next = base + 1;
+  while (at(next) <= from && next < base + 20) next++;
+  out.base = next;
+  if (base >= CREATION.statCap) out.error = `Параметр уже на максимуме (${CREATION.statCap}).`;
   else if (cap !== undefined && from >= cap) out.error = `Раса не даёт поднять параметр выше ${cap}.`;
+  else if (at(next) <= from) out.error = "Параметр не удаётся поднять: мешают пределы расы.";
+  else if (next > CREATION.statCap) out.error = `Параметр уже на максимуме (${CREATION.statCap}).`;
+  else out.to = at(next);
   return out;
 }
 
@@ -106,8 +128,9 @@ export function improveSkill(actor, key, opts) {
 }
 
 export function improveStat(actor, key, opts) {
-  return spend(actor, statOffer(actor, key),
-    () => actor.update({ [`system.stats.${key}.base`]: actor.system.stats[key].base + 1 }), { ...opts, kind: "Параметр" });
+  const offer = statOffer(actor, key);
+  return spend(actor, offer,
+    () => actor.update({ [`system.stats.${key}.base`]: offer.base }), { ...opts, kind: "Параметр" });
 }
 
 export function improveDefining(actor, opts) {
