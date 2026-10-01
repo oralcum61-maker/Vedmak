@@ -24,12 +24,12 @@ export async function rollDialog({ title, parts, luckMax = 0, dc = null, optiona
   const base = parts.reduce((s, p) => s + (Number(p.value) || 0), 0);
   const content = await renderTemplate("systems/vedmak/templates/dialog/roll.hbs", {
     head: {
-      title, base: Math.max(0, base),
+      title, base,
       subtitle: parts.filter(p => p.value || p.always).map(partText).join(" · "),
       note: dc === null ? "" : `Нужно больше ${dc}`
     },
     optional: optional.map((o, i) => ({ ...o, index: i })),
-    total: { base: Math.max(0, base), damage, hint: "Shift — бросить сразу, без окна" },
+    total: { base, damage, hint: "Shift — бросить сразу, без окна" },
     ...commonFields({ luckMax, damage })
   });
 

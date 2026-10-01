@@ -3,7 +3,7 @@
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, HEALING_DAYS } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
-import { postCard, rollFormula, asGM, registerGMHandler, resolveActor } from "./common.mjs";
+import { postCard, rollFormula, asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "./common.mjs";
 import { applyDamageToActor } from "./damage.mjs";
 import { STATUS_EFFECTS } from "./statuses.mjs";
 
@@ -55,17 +55,24 @@ export async function manualDamage(actors, preset = {}) {
   // Один бросок на всех: бомба или ловушка бьёт всех в зоне одинаково
   const { roll, total } = await rollFormula(cfg.formula);
   const results = [];
+  const applies = [];
   for (const actor of actors) {
     const data = await computeManual(actor, { ...cfg, total });
     results.push(data);
-    await asGM("applyManualDamage", { uuid: actor.token?.uuid ?? actor.uuid, data });
+    applies.push({ uuid: actor.token?.uuid ?? actor.uuid, data });
   }
-  return postCard({
+  // Сначала карточка, потом применение: по карточке ведущий проверяет, что игрок вправе бить именно эти цели
+  // (бомбу бросает игрок, а цели — чужие токены). Автор карточки — настоящий отправитель, от сервера Foundry
+  const card = await postCard({
     template: "systems/vedmak/templates/chat/manual-damage.hbs",
     data: { ...cfg, total, results, statusLabel: CONFIG.statusEffects[cfg.status]?.name ?? "" },
-    actor: null, rolls: roll ? [roll] : [], messageMode: cfg.messageMode,
-    flags: { manualDamage: { total } }
+    // «Себе» у игрока спрятало бы карточку и от ведущего, а он по ней проверяет запрос: игроку — «Ведущему»
+    actor: null, rolls: roll ? [roll] : [], messageMode: !game.user.isGM && cfg.messageMode === "self" ? "gm" : cfg.messageMode,
+    flags: { manualDamage: { total, targets: applies.map(a => a.uuid) } }
   });
+  if (!card) return null;
+  for (const a of applies) await asGM("applyManualDamage", { ...a, messageId: card.id });
+  return card;
 }
 
 /** Урон по одной или всем частям тела с бронёй, сопротивлениями и множителями. */
@@ -110,9 +117,36 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
   return { name: actor.name, rows, final, nonLethal, wear, effects, crit: null, stunSave: null };
 }
 
-registerGMHandler("applyManualDamage", async ({ uuid, data }) => {
+/** Применения, которые идут прямо сейчас (по карточке и цели): второй такой же запрос не должен ударить ещё раз. */
+const applyingManual = new Set();
+
+registerGMHandler("applyManualDamage", async ({ uuid, data, messageId }, userId) => {
   const actor = resolveActor(uuid);
-  if (actor) await applyDamageToActor(actor, data);
+  if (!actor || !data || typeof data !== "object") return;
+  let key = null;
+  if (!userOwnsAny(userId, actor)) {
+    // Чужая цель (бомба, ловушка): только по карточке, которую создал сам отправитель, с этой целью в списке,
+    // и один раз на цель
+    const card = game.messages.get(messageId);
+    const flag = card?.flags.vedmak?.manualDamage;
+    key = `${messageId}|${uuid}`;
+    if (!flag?.targets?.includes(uuid) || card.author?.id !== userId
+      || flag.applied?.[doneKey(uuid)] || applyingManual.has(key)) {
+      return console.warn(`vedmak | отклонён урон без атаки от ${game.users.get(userId)?.name ?? userId}`);
+    }
+    applyingManual.add(key);
+    try {
+      await card.update({ [`flags.vedmak.manualDamage.applied.${doneKey(uuid)}`]: true });
+    } catch (err) {
+      applyingManual.delete(key);
+      throw err;
+    }
+  }
+  try {
+    await applyDamageToActor(actor, data);
+  } finally {
+    if (key) applyingManual.delete(key);
+  }
 });
 
 /* -------------------------------------------------------------------------- */

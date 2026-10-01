@@ -525,7 +525,10 @@ export async function repeatZonesForTurn(actor, combat) {
     if (!atk || !item) continue;
     const shape = region.shapes?.[0];
     const onScene = canvas?.scene?.id === scene?.id;
-    const targets = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor), showHidden: !actor.hasPlayerOwner }).map(targetInfo) : [];
+    const tokens = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor), showHidden: !actor.hasPlayerOwner }) : [];
+    const targets = tokens.map(targetInfo);
+    // Скрытый токен в зоне: имя и портрет в общей карточке выдали бы его — карточка уходит только ведущим
+    const hiddenIn = tokens.some(t => t.document.hidden);
     const s = item.system;
     const data = { ...atk, targets, notes: ["Защита — против того же результата сотворения."] };
     await postCard({
@@ -539,7 +542,8 @@ export async function repeatZonesForTurn(actor, combat) {
         defenseLabel: s.defenseText || SPELL_DEFENSES[s.defense]?.label,
         cost: atk.spell.cost, paid: atk.spell.paid, works: true, selfLines: []
       },
-      flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } }
+      flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } },
+      messageMode: hiddenIn ? "gm" : undefined
     });
     lines.push(`${item.name}: зона бьёт снова — целей ${targets.length}.`);
   }

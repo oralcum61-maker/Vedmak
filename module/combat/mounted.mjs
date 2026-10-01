@@ -13,8 +13,8 @@ const rowFor = (table, n) => table.find(([a, b]) => n >= a && n <= b);
 function controlBase(actor, mountKey) {
   const m = MOUNTS[mountKey] ?? MOUNTS.horse;
   const skill = actor.system.skills[m.skill];
-  const base = actor.system.stats.ref.effective + skill.total + m.mod + (skill.penalty || 0);
-  return Math.max(0, base);
+  // Отрицательная основа допустима: книга (стр. 157) обрезает только вычитание критического провала
+  return actor.system.stats.ref.effective + skill.total + m.mod + (skill.penalty || 0);
 }
 
 /** Проверка управления: Реа + Верховая езда (Мореходство) + модификатор скакуна + 1d10 против СЛ манёвра. */

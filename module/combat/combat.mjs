@@ -1,7 +1,7 @@
 // Бой: начало хода участника — эффекты урона за ход, конец ошеломления, испытания (стр. 161–162).
 
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER } from "../config/combat.mjs";
-import { postCard, defaultMessageMode } from "./common.mjs";
+import { postCard, defaultMessageMode, proxyMessageMode } from "./common.mjs";
 import { wearArmor } from "./damage.mjs";
 import { magicStartOfTurn } from "../magic/effects.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
@@ -140,6 +140,8 @@ export async function startOfTurn(actor, combat, context) {
   await postCard({
     template: "systems/vedmak/templates/chat/turn.hbs",
     data: { name: actor.name, img: actor.img, round: context.round, lines, buttons, tokenUuid, actorUuid: actor.uuid },
-    actor, flags: { turn: { actorUuid: actor.uuid, round: context.round } }, messageMode: defaultMessageMode()
+    actor, flags: { turn: { actorUuid: actor.uuid, round: context.round } },
+    // Карточку создаёт клиент ведущего: у актора игрока она не должна стать «Ведущему» из-за режима его чата
+    messageMode: proxyMessageMode(actor, defaultMessageMode())
   });
 }
