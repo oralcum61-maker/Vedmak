@@ -502,10 +502,16 @@ export async function wearArmor(actor, wear) {
  * Наложить статус; с длительностью в раундах (число или формула) — отсчёт в начале хода цели.
  */
 export async function applyStatus(actor, status, rounds = "") {
-  await actor.toggleStatusEffect(status, { active: true });
+  // Отравление от токсичности — свой эффект со статусом «отравлен» (alchemy.mjs). Ядро сочло бы статус уже
+  // наложенным и не создало бы второго: яд оружия слился бы с ним и снялся бы вместе с токсичностью
+  const own = e => e.statuses.has(status) && e.statuses.size === 1 && !e.flags?.vedmak?.toxicPoison;
+  if (actor.effects.some(e => e.statuses.has(status)) && !actor.effects.some(own)) {
+    const data = await ActiveEffect.implementation.fromStatusEffect(status);
+    await actor.createEmbeddedDocuments("ActiveEffect", [data.toObject()]);
+  } else await actor.toggleStatusEffect(status, { active: true });
   if (!rounds) return;
   const n = Number.isFinite(Number(rounds)) ? Number(rounds) : (await new Roll(String(rounds)).evaluate()).total;
-  const effect = actor.effects.find(e => e.statuses.has(status) && e.statuses.size === 1);
+  const effect = actor.effects.find(own);
   if (effect && n > 0) await effect.update({ "flags.vedmak.statusRounds": n });
 }
 

@@ -7,7 +7,6 @@ import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/da
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
 import { applyBuff, buffLine, deleteEffectsClamped } from "./buffs.mjs";
 import { isMagicTimed, timeIsUp, zeroShield, zeroShieldIfFree } from "./timed.mjs";
-import { clearToxicPoison } from "../crafting/alchemy.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
@@ -187,6 +186,9 @@ export async function magicStartOfTurn(actor) {
   if (shieldEnded) await zeroShieldIfFree(actor, unique);
 
   // Снятые выше эликсиры и отвары могли опустить токсичность до порога — отравление от неё проходит (стр. 247)
+  // Лениво: alchemy.mjs при загрузке регистрирует действия чата, а chat.mjs импортирует этот файл — прямой импорт
+  // замыкал цикл, и система не запускалась (ACTIONS ещё не объявлен)
+  const { clearToxicPoison } = await import("../crafting/alchemy.mjs");
   if (await clearToxicPoison(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
   return lines;
 }

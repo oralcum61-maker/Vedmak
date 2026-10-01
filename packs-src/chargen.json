@@ -4,7 +4,7 @@
   "name": "Генератор НПС",
   "img": "icons/environment/people/cleric-grey.webp",
   "description": "",
-  "formula": "1d2",
+  "formula": "1d3",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16,7 +16,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -58,8 +58,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.chargen.RollTable.oQhQ4TBjHnPZJ7DV"
@@ -72,8 +72,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -253,7 +253,7 @@
   "name": "Гетерохромия",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d17",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -265,7 +265,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      9
     ],
     "drawn": false,
@@ -293,8 +293,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -307,8 +307,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -321,8 +321,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -335,8 +335,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -349,8 +349,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -363,8 +363,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -377,8 +377,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -391,8 +391,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1171,7 +1171,7 @@
   "name": "Мужчина - Одежда торс",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1211,7 +1211,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -1225,8 +1225,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -1239,8 +1239,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -1253,8 +1253,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -1267,8 +1267,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -1281,8 +1281,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -1295,8 +1295,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -1309,8 +1309,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1323,8 +1323,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -1345,7 +1345,7 @@
   "name": "Мужчина - Причёска",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1385,7 +1385,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -1399,8 +1399,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -1413,8 +1413,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -1427,8 +1427,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -1441,8 +1441,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -1455,8 +1455,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -1469,8 +1469,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -1483,8 +1483,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1497,8 +1497,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -1839,7 +1839,7 @@
   "name": "Мужчина - одежда ноги",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1865,7 +1865,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -1893,8 +1893,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -1907,8 +1907,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -1921,8 +1921,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -1935,8 +1935,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -1949,8 +1949,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -1963,8 +1963,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -1977,8 +1977,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1991,8 +1991,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -2549,7 +2549,7 @@
   "name": "Мужчина одежда сапоги",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -2575,7 +2575,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -2603,8 +2603,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -2617,8 +2617,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -2631,8 +2631,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -2645,8 +2645,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -2659,8 +2659,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -2673,8 +2673,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -2687,8 +2687,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -2701,8 +2701,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -3043,7 +3043,7 @@
   "name": "Нпс - Голос",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d5",
+  "formula": "1d9",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -3069,7 +3069,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      5
     ],
     "drawn": false,
@@ -3083,8 +3083,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": null
@@ -3097,8 +3097,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -3111,8 +3111,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": null
@@ -3125,8 +3125,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -9451,7 +9451,7 @@
   "name": "Кто потерпевший",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1D2",
+  "formula": "1d2",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -9659,7 +9659,7 @@
   "name": "Место рождения старших",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1d2",
+  "formula": "1d3",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -9671,7 +9671,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -9699,8 +9699,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -11181,7 +11181,7 @@
   "name": "Профессия союзника",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d11",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -12903,7 +12903,7 @@
   "name": "Что случилось - исслед",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": true,
   "results": [
