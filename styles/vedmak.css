@@ -2672,3 +2672,9 @@ body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data
   cursor: url("../assets/cursors/pointer.svg") 2 2, pointer;
 }
 body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, [contenteditable="true"], .ProseMirror) { cursor: text; }
+
+/* Добыча чудовища: монеты уже взяты — строка притушена, кнопка не нажимается, у ведущего «вернуть» */
+.vedmak .loot-list li.taken .loot-name, .vedmak .loot-list li.taken .loot-qty { opacity: .45; text-decoration: line-through; }
+.vedmak .loot-list .loot-coins.disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+.vedmak .loot-list .loot-reset { margin-left: .35rem; font-size: .78rem; color: var(--vd-gold); }
+.vedmak .loot-list .loot-reset:hover { color: var(--vd-gold-lite); }

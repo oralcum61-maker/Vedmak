@@ -76,9 +76,10 @@ export class MonsterData extends foundry.abstract.TypeDataModel {
       abilities: new ArrayField(new SchemaField({
         name: str(""), kind: str("ability"), description: str("")
       })),
-      // Добыча: количество — формулой из книги («1d6/2»), uuid — ссылка на предмет компендиума
+      // Добыча: количество — формулой из книги («1d6/2»), uuid — ссылка на предмет компендиума,
+      // taken — монеты уже взяты (отмечает ведущий по сокету, «вернуть» снимает отметку)
       loot: new ArrayField(new SchemaField({
-        name: str(""), quantity: str("1"), uuid: str("")
+        name: str(""), quantity: str("1"), uuid: str(""), taken: new BooleanField({ initial: false })
       })),
       description: html(),
       commonKnowledge: html(),
