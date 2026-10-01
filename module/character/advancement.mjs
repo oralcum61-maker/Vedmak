@@ -21,10 +21,38 @@ export function skillOffer(actor, key) {
   return out;
 }
 
+/**
+ * Нынешнее значение параметра для развития (стр. 59: «нынешнее значение × 10»): основа с постоянными поправками —
+ * расы и эффекта «Жизненный путь» — и с пределами расы (Эмп ведьмака от 1 до 6). Зелья, раны и перегруз не в счёт:
+ * от них цена не должна прыгать. Ни одно поле модели так не считается (`raw` включает и временные эффекты).
+ */
+function currentStat(actor, key) {
+  const sys = actor.system;
+  let value = sys.stats[key]?.base ?? 0;
+  let cap, floor;
+  for (const { target, value: v } of sys.race?.system.mods ?? []) {
+    const [group, k] = String(target).split(".");
+    if (k !== key) continue;
+    if (group === "stats") value += Number(v) || 0;
+    else if (group === "cap") cap = Math.min(cap ?? Infinity, v);
+    else if (group === "floor") floor = Math.max(floor ?? -Infinity, v);
+  }
+  for (const effect of actor.effects) {
+    if (effect.disabled || !effect.getFlag("vedmak", "lifepath")) continue;
+    for (const c of effect.system?.changes ?? []) {
+      if (c.key === `system.stats.${key}.mod`) value += Number(c.value) || 0;
+    }
+  }
+  if (cap !== undefined) value = Math.min(value, cap);
+  if (floor !== undefined) value = Math.max(value, floor);
+  return { value: Math.max(0, value), cap };
+}
+
 export function statOffer(actor, key) {
-  const from = actor.system.stats[key]?.base ?? 0;
+  const { value: from, cap } = currentStat(actor, key);
   const out = { label: STATS[key].label, from, to: from + 1, cost: statStepCost(from) };
   if (from >= CREATION.statCap) out.error = `Параметр уже на максимуме (${CREATION.statCap}).`;
+  else if (cap !== undefined && from >= cap) out.error = `Раса не даёт поднять параметр выше ${cap}.`;
   return out;
 }
 

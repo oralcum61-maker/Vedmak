@@ -544,6 +544,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const list = new Set(s.skillChoices[idx] ?? []);
       if (value) list.add(key); else list.delete(key);
       s.skillChoices[idx] = [...list];
+      // Снятый навык уносит свои очки профессии, взятый — освоенные очки (иначе они считались бы дважды)
+      this.#pruneSkills();
     } else if (field === "magic") {
       const uuid = el.dataset.uuid;
       s.magic = value ? [...new Set([...s.magic, uuid])] : s.magic.filter(u => u !== uuid);
@@ -567,6 +569,33 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     } else if (field === "lifepath" || field === "statMode" || field === "level" || field === "name" || field === "gender" || field === "language") {
       s[field] = value;
     }
+  }
+
+  /**
+   * Очки навыков — по нынешней профессии. Очки профессии у навыка, который больше не навык профессии
+   * (снят с выбора, сменилась профессия), пропадают: проверка шага считает только навыки профессии, а итог
+   * сложил бы их как бесплатные. Освоенные очки у навыка, ставшего навыком профессии, тоже пропадают:
+   * в списке освоенных его уже нет, а бюджет Инт + Реа они ели бы дальше.
+   */
+  #pruneSkills() {
+    const s = this.wiz;
+    const keys = new Set(this.#professionSkillKeys());
+    for (const k of Object.keys(s.profSkills)) if (!keys.has(k)) delete s.profSkills[k];
+    for (const k of Object.keys(s.pickup)) if (keys.has(k)) delete s.pickup[k];
+  }
+
+  /** Сменить профессию: выборы, очки, магия, снаряжение и капитал прежней — заново. */
+  #setProfession(uuid) {
+    const s = this.wiz;
+    if (s.professionUuid === uuid) return;
+    s.professionUuid = uuid;
+    s.skillChoices = {};
+    s.profSkills = {};
+    s.defining = 1;
+    s.magic = [];
+    s.gear = [];
+    s.money = null;
+    this.#pruneSkills();
   }
 
   #clearDependents(path) {
@@ -607,27 +636,22 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (key === "witcher") {
       s.origin = ""; s.homeland = ""; s.language = "langCommon";
       if (s.age < 50) s.age = 80;
+      // Профессия ведьмака — так же, как выбором на шаге «Профессия»: капитал, очки и снаряжение прежней не остаются
       const witcher = this.data.professions.find(p => p.system.key === "witcher");
-      if (witcher) s.professionUuid = witcher.uuid;
+      if (witcher) this.#setProfession(witcher.uuid);
     } else {
       if (key === "elf") { s.origin = "elder"; s.homeland = "dolBlathanna"; }
       else if (MOUNTAIN_RACES.includes(key)) { s.origin = "elder"; s.homeland = "mahakam"; }
       else if (s.origin === "elder") { s.origin = ""; s.homeland = ""; }
       s.language = "";
-      if (this.profession?.system.key === "witcher") s.professionUuid = "";
+      if (this.profession?.system.key === "witcher") this.#setProfession("");
     }
     this.render();
   }
 
   static #onPickProfession(event, target) {
     if (target.classList.contains("disabled")) return;
-    this.wiz.professionUuid = target.dataset.uuid;
-    this.wiz.skillChoices = {};
-    this.wiz.profSkills = {};
-    this.wiz.defining = 1;
-    this.wiz.magic = [];
-    this.wiz.gear = [];
-    this.wiz.money = null;
+    this.#setProfession(target.dataset.uuid);
     this.render();
   }
 
@@ -719,17 +743,32 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
-  static async #onApply() {
+  /** Персонаж создаётся: второй щелчок по «Создать» не создаёт его дважды (две расы, двойное снаряжение). */
+  #applyBusy = false;
+
+  static async #onApply(event, target) {
+    if (this.#applyBusy) return;
+    this.#applyBusy = true;
+    const button = target instanceof HTMLButtonElement ? target : null;
+    if (button) button.disabled = true;
+    try {
+      await this.#apply();
+    } finally {
+      this.#applyBusy = false;
+      if (button?.isConnected) button.disabled = false;
+    }
+  }
+
+  async #apply() {
     const lp = this.#lifepath();
     const problems = this.#validate(lp);
     if (problems.summary) return ui.notifications.warn(problems.summary);
     const actor = this.actor;
     const hasData = actor.items.size > 0 || Object.values(actor.system.skills).some(sk => sk.value > 0);
     if (hasData || actor.system.lifepath) {
-      const path = actor.system.lifepath ? " и жизненный путь в «Дневнике»" : "";
       const ok = await DialogV2.confirm({
         window: { title: "Создать персонажа" },
-        content: `<p>Параметры, навыки, раса, профессия${path} персонажа «${actor.name}» будут заменены. Остальные предметы останутся. Продолжить?</p>`
+        content: replaceWarning(actor)
       });
       if (!ok) return;
     }
@@ -816,6 +855,27 @@ async function itemByName(name, qty = 1) {
   return { name, type: "gear", system: { quantity: qty, category: "general" } };
 }
 
+/**
+ * Что мастер заменит у уже заполненного персонажа — словами и с нынешними значениями, чтобы повторный
+ * мастер не обнулял кроны и О.У молча.
+ */
+function replaceWarning(actor) {
+  const sys = actor.system;
+  const esc = foundry.utils.escapeHTML;
+  const lines = [`параметры, навыки, раса и профессия${sys.lifepath ? ", жизненный путь в «Дневнике»" : ""}`];
+  lines.push(`кроны (сейчас ${sys.money?.crowns ?? 0}) — на стартовый капитал и кроны жизненного пути`);
+  const ip = sys.improvementPoints ?? {};
+  lines.push(`О.У обнулятся: сейчас ${ip.value ?? 0}, всего получено ${ip.total ?? 0}`);
+  lines.push(`репутация (сейчас ${sys.reputation?.value ?? 0}) — на итог жизненного пути`);
+  lines.push(`токсичность (сейчас ${sys.toxicity?.value ?? 0}) и адреналин обнулятся, зависимости — по жизненному пути`);
+  lines.push("постоянные бонусы ПЗ, Вын и Энергии, поправки эффекта «Жизненный путь»");
+  const oldMagic = actor.itemTypes.spell?.filter(i => i.getFlag("vedmak", "wizardMagic")) ?? [];
+  if (oldMagic.length) lines.push(`стартовая магия прежней профессии: ${oldMagic.map(i => esc(i.name)).join(", ")}`);
+  return `<p>У персонажа «${esc(actor.name)}» мастер заменит:</p><ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul>`
+    + "<p>Остальные предметы останутся. Стартовое снаряжение, которое у персонажа уже есть (то же название и тип),"
+    + " второй раз не добавится. Продолжить?</p>";
+}
+
 /** Биография, которую прежний мастер создания собирал из жизненного пути. */
 const GENERATED_BIO = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/;
 
@@ -828,7 +888,9 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   // Старые раса и профессия; клыки и эффекты черт прежней расы — вместе с ней
   const oldRace = actor.itemTypes.race[0];
   if (oldRace) await removeRaceExtras(actor, oldRace);
-  const old = actor.items.filter(i => ["race", "profession"].includes(i.type)).map(i => i.id);
+  // Стартовая магия прежнего мастера (помечена флагом) уходит вместе с профессией; изученное позже — остаётся
+  const old = actor.items.filter(i => ["race", "profession"].includes(i.type)
+    || (i.type === "spell" && i.getFlag("vedmak", "wizardMagic"))).map(i => i.id);
   if (old.length) await actor.deleteEmbeddedDocuments("Item", old);
   const oldEffects = actor.effects.filter(e => e.getFlag("vedmak", "lifepath")).map(e => e.id);
   if (oldEffects.length) await actor.deleteEmbeddedDocuments("ActiveEffect", oldEffects);
@@ -888,10 +950,18 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   }
   for (const m of magic) {
     const doc = await fromUuid(m.uuid);
-    if (doc && !actor.items.some(i => i.type === "spell" && i.name === doc.name)) items.push(doc.toObject());
+    if (!doc || actor.items.some(i => i.type === "spell" && i.name === doc.name)) continue;
+    // Флаг — чтобы повторный мастер мог убрать стартовую магию этой профессии
+    const data = doc.toObject();
+    foundry.utils.setProperty(data, "flags.vedmak.wizardMagic", true);
+    items.push(data);
   }
+  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает
+  const owned = new Set(actor.items.map(i => `${i.type}\u0000${i.name}`));
   const gearNames = [...(race?.system.grants ?? []), ...(profession?.system.gearFixed ?? []), ...s.gear, ...fx.items];
-  for (const name of gearNames) items.push(...await itemsForLabel(name));
+  for (const name of gearNames) {
+    for (const data of await itemsForLabel(name)) if (!owned.has(`${data.type}\u0000${data.name}`)) items.push(data);
+  }
   for (const data of items) delete data._id;
   await actor.createEmbeddedDocuments("Item", items);
 
