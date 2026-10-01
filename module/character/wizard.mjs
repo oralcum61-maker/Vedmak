@@ -45,6 +45,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       name: actor.name, gender: d.gender ?? "", age: Number.parseInt(d.age) || 25,
       raceUuid: "", origin: "", homeland: "", homelandRoll: null, vassalRoll: null, language: "",
       lifepath: true, rolls: {},
+      // Возраст 80 выставила раса «ведьмак», а не игрок: при смене расы вернём прежний (ageAuto — признак, ageBefore — прежний)
+      ageAuto: false, ageBefore: null,
       professionUuid: "", skillChoices: {},
       statMode: "points", level: "average",
       stats: Object.fromEntries(STAT_KEYS.map(k => [k, 5])),
@@ -560,15 +562,35 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       s.rolls[el.dataset.path] = value;
     } else if (field === "origin") {
       s.origin = value;
-      if (HOMELANDS[s.homeland]?.region !== value) s.homeland = "";
+      if (HOMELANDS[s.homeland]?.region !== value) { s.homeland = ""; s.language = ""; }
+      this.#pruneChoices();
     } else if (field === "homeland") {
       s.homeland = value;
       s.language = "";
+      this.#pruneChoices();
     } else if (field === "age") {
       s.age = clamp(value, 0, 1000);
+      // Возраст вписал игрок — расе «ведьмак» его уже не менять
+      s.ageAuto = false; s.ageBefore = null;
     } else if (field === "lifepath" || field === "statMode" || field === "level" || field === "name" || field === "gender" || field === "language") {
       s[field] = value;
+      if (field === "language") this.#pruneChoices();
     }
+  }
+
+  /**
+   * Выбор навыков профессии, которых уже нет среди предлагаемых: родной язык (его в списке нет, он и так на 8) после
+   * смены расы, родины или языка. Лишний выбор уносит свои очки через `#pruneSkills`.
+   */
+  #pruneChoices() {
+    const s = this.wiz;
+    const native = this.nativeLanguageKey;
+    const prof = this.profession;
+    for (const [idx, list] of Object.entries(s.skillChoices)) {
+      const offered = prof?.system.skillChoices[idx]?.options;
+      s.skillChoices[idx] = list.filter(k => k !== native && (!offered || offered.includes(k)));
+    }
+    this.#pruneSkills();
   }
 
   /**
@@ -635,7 +657,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const key = this.race?.system.key;
     if (key === "witcher") {
       s.origin = ""; s.homeland = ""; s.language = "langCommon";
-      if (s.age < 50) s.age = 80;
+      if (s.age < 50) { s.ageBefore = s.age; s.age = 80; s.ageAuto = true; }
       // Профессия ведьмака — так же, как выбором на шаге «Профессия»: капитал, очки и снаряжение прежней не остаются
       const witcher = this.data.professions.find(p => p.system.key === "witcher");
       if (witcher) this.#setProfession(witcher.uuid);
@@ -645,7 +667,12 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       else if (s.origin === "elder") { s.origin = ""; s.homeland = ""; }
       s.language = "";
       if (this.profession?.system.key === "witcher") this.#setProfession("");
+      // Возраст 80 поставила раса «ведьмак»: при уходе от неё возвращаем прежний, если игрок не вписал свой
+      if (s.ageAuto && s.ageBefore !== null) s.age = s.ageBefore;
+      s.ageAuto = false; s.ageBefore = null;
     }
+    // Родной язык и родина сменились: выбор навыка, которого теперь нет в списке, не должен остаться и считаться
+    this.#pruneChoices();
     this.render();
   }
 
@@ -674,6 +701,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       ui.notifications.info(`Регион: d10 = ${regionRoll} → ${ORIGIN_REGIONS[s.origin].label}; родина: ${HOMELANDS[s.homeland].label}.`);
     }
     s.language = "";
+    this.#pruneChoices();
     this.render();
   }
 
