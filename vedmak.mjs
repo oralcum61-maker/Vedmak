@@ -107,6 +107,14 @@ Hooks.once("init", () => {
     onChange: value => document.body.classList.toggle("vedmak-lite", !!value)
   });
   document.body.classList.toggle("vedmak-lite", !!game.settings.get(SYSTEM_ID, "liteGraphics"));
+  // Курсор-клинок (assets/cursors): в окнах — правилами styles/vedmak.css, на сцене — стилями указателя холста
+  game.settings.register(SYSTEM_ID, "themedCursor", {
+    name: "Курсор системы",
+    hint: "Указатель — клинок вороненой стали, над тем, что можно нажать, — раскалённый золотом. Выключите, чтобы вернуть обычный курсор.",
+    scope: "client", config: true, type: Boolean, default: true,
+    onChange: value => applyCursor(!!value)
+  });
+  applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor"));
   // Какие компендиумы уже разложены по папкам: новые паки системы раскладываются при следующем запуске
   game.settings.register(SYSTEM_ID, "packFoldersDone", {
     scope: "world", config: false, type: String, default: ""
@@ -220,6 +228,24 @@ Hooks.once("ready", () => {
   initSocket();
   sortCompendiaIntoFolders();
 });
+
+/* ------------------------------- Курсор ------------------------------- */
+
+const CURSOR = {
+  default: 'url("systems/vedmak/assets/cursors/arrow.svg") 2 2, default',
+  pointer: 'url("systems/vedmak/assets/cursors/pointer.svg") 2 2, pointer'
+};
+
+/** Курсор-клинок: окна берут его из CSS по классу на body, холст сцены — из своих стилей указателя (PIXI). */
+function applyCursor(on) {
+  document.body.classList.toggle("vedmak-cursor", on);
+  const styles = canvas?.app?.renderer?.events?.cursorStyles;
+  if (!styles) return;
+  styles.default = on ? CURSOR.default : "inherit";
+  styles.pointer = on ? CURSOR.pointer : "pointer";
+}
+
+Hooks.on("canvasReady", () => applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor")));
 
 /**
  * Разложить компендиумы по папкам из манифеста.

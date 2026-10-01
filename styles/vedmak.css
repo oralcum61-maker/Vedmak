@@ -8,7 +8,7 @@
 @font-face { font-family: "Vedmak Body"; src: url("../fonts/PT_Serif-Web-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Vedmak Body"; src: url("../fonts/PT_Serif-Web-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
 
-.vedmak, .vedmak-card {
+.vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   /* Тёплая гамма: зола, кожа, железо, кость, потемневшее золото, кровь */
   --vd-bg: #16120d;
   --vd-bg-2: #1e1811;
@@ -2627,3 +2627,48 @@ body.vedmak-lite .vedmak.sheet .window-content::after { display: none; }
 .vedmak .vd-limited .facts dt { color: var(--vd-text-dim); }
 .vedmak .vd-limited .facts dd { margin: 0; }
 .vedmak .vd-limited .appearance { margin: 0; white-space: pre-line; line-height: 1.4; }
+
+/* ------------------------- Подсказки и курсор ------------------------- */
+
+/* Всплывающие подсказки Foundry (#tooltip, закреплённые .locked-tooltip) — в гамме листа: тиснёная кожа
+   на золе, кромка потемневшего золота с тонкой внутренней нитью, текст — кость, шрифт PT Serif. */
+body.system-vedmak #tooltip,
+body.system-vedmak .locked-tooltip {
+  padding: .4rem .7rem .45rem;
+  max-width: 24rem;
+  color: var(--vd-text);
+  font-family: var(--vd-font-body);
+  font-size: .82rem;
+  line-height: 1.35;
+  letter-spacing: .01em;
+  background-color: #1b150f;
+  background-image: linear-gradient(180deg, rgba(58, 48, 34, .55), rgba(22, 18, 13, .2)), var(--vd-tex-tooled);
+  background-size: auto, 260px;
+  background-blend-mode: normal, overlay;
+  border: 1px solid #6e5631;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(10, 8, 5, .9), inset 0 0 0 2px rgba(180, 145, 78, .22),
+    0 6px 18px rgba(0, 0, 0, .6), 0 1px 0 rgba(227, 192, 120, .08);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .7);
+}
+body.system-vedmak #tooltip :is(h1, h2, h3, h4, strong, b),
+body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4, strong, b) { color: var(--vd-gold-lite); font-weight: 700; }
+body.system-vedmak #tooltip :is(h1, h2, h3, h4),
+body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4) {
+  margin: 0 0 .25rem; padding-bottom: .2rem; border-bottom: 1px solid rgba(180, 145, 78, .35);
+  font-family: var(--vd-font-head); font-size: 1rem; font-weight: 400; letter-spacing: .04em;
+}
+body.system-vedmak #tooltip :is(hr),
+body.system-vedmak .locked-tooltip :is(hr) { border: 0; border-top: 1px solid rgba(180, 145, 78, .3); margin: .35rem 0; }
+body.system-vedmak.vedmak-lite #tooltip,
+body.system-vedmak.vedmak-lite .locked-tooltip { background-image: linear-gradient(180deg, #2a2219, #16120d); background-size: auto; }
+
+/* Курсор-клинок (настройка «Курсор системы», assets/cursors). Поля ввода оставляют текстовый курсор,
+   всё, что нажимается, — золотой. На холсте сцены курсор ставит vedmak.mjs через стили указателя PIXI. */
+body.vedmak-cursor { cursor: url("../assets/cursors/arrow.svg") 2 2, default; }
+body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data-action], [data-tab], .rollable,
+  .content-link, .inline-roll, input[type="checkbox"], input[type="radio"], input[type="range"], .directory-item .entry-name,
+  .document-name, .item-name, .control-tool, .scene-control, .ui-control, .window-header .header-control):not(:disabled):not([disabled]) {
+  cursor: url("../assets/cursors/pointer.svg") 2 2, pointer;
+}
+body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, [contenteditable="true"], .ProseMirror) { cursor: text; }

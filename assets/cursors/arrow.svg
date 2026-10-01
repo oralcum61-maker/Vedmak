@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Курсор системы: остриё клинка из вороненой стали с кромкой потемневшего золота. Остриё — точка (2, 2). -->
+  <defs>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a5977d"/>
+      <stop offset=".55" stop-color="#5c5242"/>
+      <stop offset="1" stop-color="#2e271e"/>
+    </linearGradient>
+  </defs>
+  <path d="M2 2 L2 24 L8 18.5 L12.5 28.5 L16.5 26.8 L12 16.8 L20.5 16.8 Z"
+        fill="url(#steel)" stroke="#0a0805" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M2 2 L2 24 L8 18.5 L12.5 28.5 L16.5 26.8 L12 16.8 L20.5 16.8 Z"
+        fill="none" stroke="#d2ad64" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- блик по долу клинка -->
+  <path d="M3.6 5.6 L3.6 19.6" stroke="#e8dcc2" stroke-opacity=".8" stroke-width=".9" stroke-linecap="round"/>
+</svg>

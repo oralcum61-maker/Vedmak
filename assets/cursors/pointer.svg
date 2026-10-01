@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Курсор над тем, что можно нажать: тот же клинок, раскалённый золотом. Остриё — точка (2, 2). -->
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3d79a"/>
+      <stop offset=".45" stop-color="#e3c078"/>
+      <stop offset="1" stop-color="#8a6a32"/>
+    </linearGradient>
+  </defs>
+  <path d="M2 2 L2 24 L8 18.5 L12.5 28.5 L16.5 26.8 L12 16.8 L20.5 16.8 Z"
+        fill="url(#gold)" stroke="#120e09" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M2 2 L2 24 L8 18.5 L12.5 28.5 L16.5 26.8 L12 16.8 L20.5 16.8 Z"
+        fill="none" stroke="#8e2b22" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M3.6 5.6 L3.6 19.6" stroke="#fff6df" stroke-opacity=".75" stroke-width=".9" stroke-linecap="round"/>
+</svg>
