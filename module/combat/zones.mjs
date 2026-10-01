@@ -221,18 +221,20 @@ function tester(shape, region) {
 }
 
 /** Кого зона может задеть: не заклинатель, не павший; скрытых ведущим токенов игрок не видит — и зона их не выдаёт. */
-function eligible(t, exclude) {
+function eligible(t, exclude, showHidden) {
   if (!t.actor || t === exclude) return false;
-  if (t.document.hidden && !game.user.isGM) return false;
+  if (t.document.hidden && !showHidden) return false;
   return !t.actor.statuses?.has(CONFIG.specialStatusEffects.DEFEATED);
 }
 
 /**
  * Токены в зоне (без заклинателя).
+ * @param {object} [opts] — showHidden: брать ли скрытых; по умолчанию — только у ведущего. Повтор зоны игрока
+ *   в начале хода считает ведущий, и там скрытых брать нельзя: карточка уйдёт в общий чат
  * @returns {Token[]}
  */
-export function zoneTokens(shape, { region = null, exclude = null } = {}) {
-  const pick = test => canvas.tokens.placeables.filter(t => eligible(t, exclude) && tokenPoints(t).some(test));
+export function zoneTokens(shape, { region = null, exclude = null, showHidden = game.user.isGM } = {}) {
+  const pick = test => canvas.tokens.placeables.filter(t => eligible(t, exclude, showHidden) && tokenPoints(t).some(test));
   const own = pick(p => inShape(shape, p));
   if (!region) return own;
   // Область Foundry точнее (поворот, уровни сцены), но если она не нашла никого, а геометрия нашла —

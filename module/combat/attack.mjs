@@ -74,10 +74,10 @@ export function describeSource(actor, source) {
   else if (w.isThrown) types = pick(ATTACK_TYPES, ["fast", "strong"]);
   else types = pick(ATTACK_TYPES, ["fast", "strong", "charge", "pommel", "disarm", "trip", "feint", "dual"]);
 
-  // Урон: рукопашное оружие добавляет удар рукой; оружие ближнего боя — бонус урона по Тел (стр. 48, 72)
+  // Урон: рукопашное оружие добавляет удар рукой; ближнее и метательное — бонус урона по Тел (стр. 48, 72)
   let damage = w.damage || "0";
   if (w.effect("hands")) damage = `${damage} + ${d.punch}`;
-  else if (!w.isRanged && d.meleeBonus) damage = `${damage} ${d.meleeBonus > 0 ? "+" : "-"} ${Math.abs(d.meleeBonus)}`;
+  else if ((!w.isRanged || w.isThrown) && d.meleeBonus) damage = `${damage} ${d.meleeBonus > 0 ? "+" : "-"} ${Math.abs(d.meleeBonus)}`;
 
   return {
     kind: "weapon", key: item.id, label: item.name, img: item.img, item,

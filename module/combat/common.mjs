@@ -56,7 +56,11 @@ export function fallbackDefender() {
 export function combatantFor(actor) {
   const combat = game.combat;
   if (!combat?.started || !actor) return null;
-  return combat.combatants.find(c => c.actor === actor || c.actorId === actor.id) ?? null;
+  // Сначала точное совпадение: у несвязанных токенов одного прототипа actorId общий, и поиск по нему отдал бы
+  // всем бандитам первого — с одним счётчиком защит и Энергии на всех
+  const exact = combat.combatants.find(c => c.actor === actor);
+  if (exact || actor.isToken) return exact ?? null;
+  return combat.combatants.find(c => c.actorId === actor.id) ?? null;
 }
 
 /** Выполнить действие от имени ведущего (сразу, если пользователь — ГМ). */
@@ -68,7 +72,7 @@ export async function asGM(action, data) {
     ui.notifications.warn("Для этого действия нужен ведущий в игре.");
     return null;
   }
-  game.socket.emit(SOCKET, { action, data, userId: game.user.id });
+  game.socket.emit(SOCKET, { action, data });
   return null;
 }
 
@@ -87,7 +91,9 @@ export function userOwnsAny(userId, ...actors) {
 }
 
 export function initSocket() {
-  game.socket.on(SOCKET, async ({ action, data, userId }) => {
+  // Отправителя подставляет сервер Foundry вторым аргументом. Своё поле userId в теле запроса клиент может
+  // подделать из консоли — и выдать себя за ведущего, обойдя проверки владения у обработчиков
+  game.socket.on(SOCKET, async ({ action, data }, userId) => {
     if (!game.users.activeGM?.isSelf) return;
     try {
       await HANDLERS[action]?.(data, userId);

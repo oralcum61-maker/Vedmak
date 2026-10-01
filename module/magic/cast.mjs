@@ -483,7 +483,7 @@ export async function repeatZonesForTurn(actor, combat) {
     if (!atk || !item) continue;
     const shape = region.shapes?.[0];
     const onScene = canvas?.scene?.id === scene?.id;
-    const targets = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor) }).map(targetInfo) : [];
+    const targets = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor), showHidden: !actor.hasPlayerOwner }).map(targetInfo) : [];
     const s = item.system;
     const data = { ...atk, targets, notes: ["Защита — против того же результата сотворения."] };
     await postCard({
