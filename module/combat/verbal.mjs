@@ -10,7 +10,8 @@ import { rollDialog } from "../dice/roll-dialog.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import { renderTemplate } from "../util.mjs";
 import {
-  asGM, registerGMHandler, resolveActor, postCard, rollFormula, fallbackDefender, currentTargets, actorToken, userOwnsAny
+  asGM, registerGMHandler, resolveActor, postCard, rollFormula, fallbackDefender, currentTargets, actorToken, userOwnsAny,
+  defaultMessageMode, markDone, allowRepeat, doneKey
 } from "./common.mjs";
 import { registerChatAction } from "./chat.mjs";
 
@@ -88,6 +89,10 @@ export function currentResolve(actor) {
  * за Волей и Инт. Возвращает null, если сохранять нечего (не число или и так полная), — лист перерисуется.
  */
 export async function setDuelResolve(actor, value) {
+  // Пустое поле — не «0» (Number("") даёт 0), а «без правки»: полная Решительность, без флага
+  if (value === null || value === undefined || String(value).trim() === "") {
+    return actor.getFlag("vedmak", "duelResolve") === undefined ? null : actor.unsetFlag("vedmak", "duelResolve");
+  }
   const n = Math.floor(Number(value));
   if (!Number.isFinite(n)) return null;
   const max = actor.system.derived?.resolve ?? 0;
@@ -141,7 +146,7 @@ export function verbalContext(actor) {
       actions: g.actions.map(a => ({
         ...a,
         skillLabel: SKILLS[a.skill]?.label ?? a.skill,
-        base: Math.max(0, duelParts(actor, a).reduce((sum, p) => sum + (Number(p.value) || 0), 0)),
+        base: duelParts(actor, a).reduce((sum, p) => sum + (Number(p.value) || 0), 0),
         damageLabel: damageText(actor, a)
       }))
     }))
@@ -213,7 +218,8 @@ function targetStateParts(def, target) {
 async function duelRoll(actor, def, { skipDialog = false, title = def.label, optional = [] } = {}) {
   const parts = duelParts(actor, def);
   const all = [...(actor.socialParts?.(def.skill) ?? []), ...optional];
-  let choice = { mod: 0, damageMod: 0, luck: 0, messageMode: undefined, optional: all.filter(o => o.checked) };
+  // Без окна (Shift) режим не выбирался — берём режим чата, иначе v14 отдаст карточку всем
+  let choice = { mod: 0, damageMod: 0, luck: 0, messageMode: defaultMessageMode(), optional: all.filter(o => o.checked) };
   if (!skipDialog) {
     choice = await rollDialog({ title: `${title} · словесная дуэль`, parts, luckMax: actor.luckAvailable ?? 0, optional: all,
       damage: damageText(actor, def) });
@@ -258,7 +264,7 @@ export async function verbalAction(actor, key, { skipDialog = false, targets: fo
     return postCard({
       template: "systems/vedmak/templates/chat/verbal.hbs", data, actor,
       flags: { verbal: { kind: "attack", key, label: def.label, total: roll.total, damageMod, empathic: !!def.empathic,
-        attacker: refOf(actor), targets, actorUuid: actor.uuid } },
+        attacker: refOf(actor), targets, actorUuid: actor.uuid, messageMode: choice.messageMode } },
       rolls: roll.rolls ?? [], messageMode: choice.messageMode
     });
   }
@@ -286,7 +292,8 @@ export async function verbalAction(actor, key, { skipDialog = false, targets: fo
 /* -------------------------------------------------------------------------- */
 
 /** Основа действия — для выбора лучшей защиты и списка контраргументов. */
-const actionBase = (actor, def) => Math.max(0, duelParts(actor, def).reduce((sum, p) => sum + (Number(p.value) || 0), 0));
+// Основа может быть отрицательной (стр. 157 обрезает только вычитание провала), поэтому лучшую сравниваем по настоящему значению
+const actionBase = (actor, def) => duelParts(actor, def).reduce((sum, p) => sum + (Number(p.value) || 0), 0);
 
 /** Лучшая защита для автоматического броска: Игнорировать или Смена темы — что выше. */
 export function bestVerbalDefense(actor) {
@@ -318,8 +325,9 @@ async function pickCounter(actor, skipDialog) {
  * @param {ChatMessage} message — карточка атаки
  * @param {object} target — {tokenUuid, actorUuid} или пусто (выделенный токен)
  * @param {string} defense — ignore | changeSubject | disengage | counter | none
+ * @param {object} [opts] — {skipDialog, messageMode}; messageMode — когда карточку создаёт клиент ведущего за НИП
  */
-export async function verbalDefend(message, target, defense, { skipDialog = false } = {}) {
+export async function verbalDefend(message, target, defense, { skipDialog = false, messageMode } = {}) {
   const atk = message.flags.vedmak?.verbal;
   if (atk?.kind !== "attack") return null;
   const info = target?.tokenUuid || target?.actorUuid ? target : fallbackDefender();
@@ -330,6 +338,9 @@ export async function verbalDefend(message, target, defense, { skipDialog = fals
   if (!attacker) return ui.notifications.warn("Атакующий не найден.");
   const action = ACTIONS[atk.key];
   const who = refOf(defender, info.tokenUuid);
+  // Одна защита цели от одной атаки (как в бою): иначе игрок бросал бы, пока не повезёт, и каждый исход снимал бы Решительность.
+  // Повтор — только ведущему и с подтверждением
+  if (priorVerbalDefense(message, who) && !(await allowRepeat(`${defender.name} уже отвечал на эту атаку.`))) return null;
 
   // Бросок защиты или контраргумента
   let defAction = null, res = null, label = "Без защиты";
@@ -380,9 +391,20 @@ export async function verbalDefend(message, target, defense, { skipDialog = fals
     attack: { label: atk.label, total: atk.total }, attacker: atk.attacker, defender: who,
     label, roll: res?.roll ?? null, total: defTotal, hit, loss, stack, lines, applied: false, report: []
   };
-  return postCard({
+  const card = await postCard({
     template: "systems/vedmak/templates/chat/verbal-outcome.hbs", data, actor: defender,
-    flags: { verbal: data }, rolls, messageMode: res?.choice.messageMode
+    flags: { verbal: data }, rolls, messageMode: res?.choice.messageMode ?? messageMode ?? defaultMessageMode()
+  });
+  await markDone(message, card);
+  return card;
+}
+
+/** Есть ли уже исход ответа этой цели на эту атаку. Поиск по чату, а не отметка: её может не быть без ведущего. */
+function priorVerbalDefense(message, who) {
+  const same = d => (who.tokenUuid && d?.tokenUuid ? d.tokenUuid === who.tokenUuid : d?.actorUuid === who.actorUuid);
+  return game.messages.some(m => {
+    const v = m.flags.vedmak?.verbal;
+    return v?.kind === "outcome" && v.attackMessageId === message.id && same(v.defender);
   });
 }
 
@@ -395,8 +417,24 @@ async function applyResolve({ uuid, amount }) {
   await actor.setFlag("vedmak", "duelResolve", next);
   return { name: actor.name, from: value, to: next, max };
 }
-// Старые карточки с кнопкой «−N Решительности цели»
-registerGMHandler("applyResolve", applyResolve);
+// Старые карточки с кнопкой «−N Решительности цели». Запрос игрока: цель — его, либо карточка его собственная
+// (messageId, автор — отправитель, он же владелец действовавшего), сумма — ровно из карточки, и один раз на цель
+registerGMHandler("applyResolve", async ({ uuid, amount, messageId }, userId) => {
+  const actor = resolveActor(uuid);
+  const n = Number(amount);
+  if (!actor || !Number.isFinite(n)) return null;
+  if (!userOwnsAny(userId, actor)) {
+    const card = game.messages.get(messageId);
+    const v = card?.flags.vedmak?.verbal;
+    const key = doneKey(uuid);
+    if (!v?.damage || n !== v.damage || card.author?.id !== userId || v.resolveApplied?.[key]
+      || !userOwnsAny(userId, resolveActor(v.actorUuid))) {
+      return console.warn(`vedmak | отклонена потеря Решительности от ${game.users.get(userId)?.name ?? userId}`);
+    }
+    await card.update({ [`flags.vedmak.verbal.resolveApplied.${key}`]: true });
+  }
+  return applyResolve({ uuid, amount: n });
+});
 
 const applyingOutcomes = new Set();
 
@@ -464,7 +502,7 @@ registerChatAction("verbalDamage", async message => {
   if (!actor) return ui.notifications.warn("Выберите цель или выделите токен того, кто проиграл обмен.");
   const { value } = currentResolve(actor);
   const next = Math.max(0, value - v.damage);
-  await asGM("applyResolve", { uuid, amount: v.damage });
+  await asGM("applyResolve", { uuid, amount: v.damage, messageId: message.id });
   ui.notifications.info(`${actor.name}: Решительность ${value} → ${next}${next <= 0 ? " — проигрывает дуэль" : ""}.`);
   return null;
 });

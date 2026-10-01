@@ -60,9 +60,10 @@ function priorDefense(message, defender) {
  * @param {ChatMessage} message — карточка атаки
  * @param {object} target — {tokenUuid, actorUuid, name} или пусто (выделенный токен)
  * @param {string} defense — ключ DEFENSE_TYPES или "none"
- * @param {object} [opts] — {skipDialog}
+ * @param {object} [opts] — {skipDialog, messageMode}; messageMode — когда карточку создаёт клиент ведущего за НИП:
+ *   режим чата ведущего для неё не годится
  */
-export async function defend(message, target, defense, { skipDialog = false } = {}) {
+export async function defend(message, target, defense, { skipDialog = false, messageMode } = {}) {
   const attack = message.flags.vedmak?.attack;
   if (!attack) return null;
   const info = target?.tokenUuid || target?.actorUuid ? target : fallbackDefender();
@@ -74,7 +75,7 @@ export async function defend(message, target, defense, { skipDialog = false } = 
   if (attack.spell && !attack.spell.works) return ui.notifications.warn("Магия не сработала — защищаться не от чего.");
   // Одна защита цели от одной атаки: повторная — только ведущим и с подтверждением
   if (priorDefense(message, defender) && !(await allowRepeat(`${actor.name} уже защищался от этой атаки.`))) return null;
-  const mode = defaultMessageMode();
+  const mode = messageMode ?? defaultMessageMode();
   if (defense === "none") return defendAgainstDC(message, attack, actor, defender, { skipDialog, messageMode: mode });
   if (defense === "auto") return defendAuto(message, attack, actor, defender, { messageMode: mode });
   if (defense === "willx3") {
@@ -287,10 +288,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
       fixedLocation = Math.random() < 0.5 ? "rightArm" : "leftArm";
       notes.push("Удар принят на руку: урон по подставленной конечности, броня работает.");
     }
-    if (cfg.defense === "parry") {
-      notes.push("Парирование: атака отменена, атакующий ошеломлён.");
-      await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true });
-    }
+    if (cfg.defense === "parry") notes.push("Парирование: атака отменена, атакующий ошеломлён.");
     if (cfg.defense === "reposition") notes.push(`Можно сместиться на ${Math.floor(actor.system.stats.spd.effective / 2)} м.`);
     if (attack.attackType === "charge" && cfg.defense === "block") notes.push("Атака с разбега заблокирована: встречная Сила против Силы, чтобы сбить с ног.");
   }
@@ -303,7 +301,12 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
     fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
   });
-  return postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+  const card = await postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+  // Ошеломление атакующего — после карточки: ведущий проверяет по ней, что парирование было и кто парировал
+  if (!hit && cfg.defense === "parry" && card) {
+    await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true, messageId: card.id });
+  }
+  return card;
 }
 
 /** Карточка защиты в чат и отметка на карточке атаки (погасить кнопки этой цели). */

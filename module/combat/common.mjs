@@ -108,7 +108,27 @@ export function initSocket() {
  * явно, — без этого карточка уходила всем, даже если в чате выбрано «Ведущему».
  */
 export function defaultMessageMode() {
-  return game.settings.get("core", "messageMode") || "public";
+  return safeMessageMode(game.settings.get("core", "messageMode"));
+}
+
+/**
+ * Режим карточки системы: «ic» (в роли) превращает карточку в речевой пузырь персонажа — для боевых карточек он не
+ * годится, поэтому он идёт как «всем». Пустой режим тоже «всем».
+ */
+export function safeMessageMode(mode) {
+  return !mode || mode === "ic" ? "public" : mode;
+}
+
+/**
+ * Режим карточки, которую клиент ведущего создаёт за другого (защита НИП, урон за игрока, начало хода игрока).
+ * Режим чата самого ведущего тут нельзя брать: поставив «Ведущему», он спрятал бы карточку от игроков, которым она
+ * нужна. Для карточки по чужой атаке — режим, выбранный в атаке (если атакует НИП ведущего), иначе всем.
+ * @param {Actor|null} owner — чья это карточка по смыслу (атакующий или тот, чей ход)
+ * @param {string} [stored] — режим исходной карточки
+ */
+export function proxyMessageMode(owner, stored) {
+  if (owner?.hasPlayerOwner) return "public";
+  return safeMessageMode(stored);
 }
 
 /**
@@ -143,11 +163,23 @@ export async function markDone(source, result) {
 async function applyDoneMark(source, result) {
   const def = result.flags.vedmak?.defense;
   const dmg = result.flags.vedmak?.damage;
+  const duel = result.flags.vedmak?.verbal;
   if (def?.attackMessageId === source.id) {
     await source.update({ [`flags.vedmak.defended.${doneKey(def.defender.tokenUuid ?? def.defender.actorUuid)}`]: result.id });
   } else if (dmg?.defenseMessageId === source.id) {
     await source.update({ "flags.vedmak.damaged": result.id });
+  } else if (duel?.kind === "outcome" && duel.attackMessageId === source.id) {
+    // Словесная дуэль: исход — это «защита» цели от карточки атаки
+    await source.update({ [`flags.vedmak.defended.${doneKey(duel.defender.tokenUuid ?? duel.defender.actorUuid)}`]: result.id });
   }
+}
+
+/** Карточка-источник результата (атака для защиты, защита для урона, атака дуэли для исхода) или null. */
+export function sourceOfResult(result) {
+  const f = result?.flags?.vedmak;
+  const id = f?.defense?.attackMessageId ?? f?.damage?.defenseMessageId
+    ?? (f?.verbal?.kind === "outcome" ? f.verbal.attackMessageId : null);
+  return id ? game.messages.get(id) ?? null : null;
 }
 
 registerGMHandler("markDone", async ({ messageId, resultId }, userId) => {
@@ -179,6 +211,8 @@ export async function allowRepeat(what) {
 /** Создать карточку боя из шаблона. */
 export async function postCard({ template, data, actor, flags, rolls, messageMode, speaker }) {
   const content = await renderTemplate(template, data);
+  // Пустой режим v14 не применяет вовсе (карточка уходит всем), «ic» — только защита от пузыря речи
+  if (messageMode === "ic") messageMode = "public";
   return ChatMessage.create({
     speaker: speaker ?? ChatMessage.getSpeaker({ actor }),
     content,

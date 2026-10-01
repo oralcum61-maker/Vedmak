@@ -49,7 +49,9 @@ export async function performCheck(cfg) {
   const { actor = null, title, subtitle = "", parts = [], dc = null, luck = 0,
           toChat = true, flags = {} } = cfg;
   // Без окна (Shift) — режим чата пользователя: v14 применяет режим, только если его передали явно
-  const messageMode = cfg.messageMode ?? game.settings.get("core", "messageMode");
+  // «В роли» (ic) делает карточку речевым пузырём персонажа — для карточек системы это «всем»
+  const chosen = cfg.messageMode ?? game.settings.get("core", "messageMode");
+  const messageMode = !chosen || chosen === "ic" ? "public" : chosen;
 
   const d10 = await rollD10();
   // Основа может быть отрицательной (штрафы больше параметра с навыком). Предел «не ниже 0» в книге — только

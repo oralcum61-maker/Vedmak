@@ -163,12 +163,91 @@ export async function removeZones(regions) {
   }
 }
 
+/* ------------------- Область, присланная игроком, — только из белого списка ------------------- */
+
+const finite = (v, { min = -1e6, max = 1e6 } = {}) => Number.isFinite(v) && v >= min && v <= max;
+const text = (v, max = 200) => (typeof v === "string" ? v.slice(0, max) : "");
+const flag = v => (typeof v === "boolean" ? v : undefined);
+
+/** Фигура области: только известные виды и только числовые поля (иначе null). */
+function cleanShape(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const out = { type: raw.type };
+  const nums = (keys, opts) => keys.every(k => finite(raw[k], opts) && (out[k] = raw[k]) !== undefined);
+  const angles = keys => keys.every(k => raw[k] === undefined || (finite(raw[k], { min: -3600, max: 3600 }) && (out[k] = raw[k]) !== undefined));
+  let ok = false;
+  switch (raw.type) {
+    case "circle": ok = nums(["x", "y"]) && nums(["radius"], { min: 0 }); break;
+    case "ellipse": ok = nums(["x", "y"]) && nums(["radiusX", "radiusY"], { min: 0 }) && angles(["rotation"]); break;
+    case "rectangle": ok = nums(["x", "y"]) && nums(["width", "height"], { min: 0 }) && angles(["rotation"])
+      && (raw.anchorX === undefined || nums(["anchorX", "anchorY"], { min: 0, max: 1 })); break;
+    case "cone":
+      ok = nums(["x", "y"]) && nums(["radius"], { min: 0 }) && nums(["angle"], { min: 0, max: 360 }) && angles(["rotation"]);
+      if (ok && ["round", "flat", "semicircle"].includes(raw.curvature)) out.curvature = raw.curvature;
+      break;
+    case "polygon":
+      ok = Array.isArray(raw.points) && raw.points.length >= 4 && raw.points.length <= 400 && raw.points.length % 2 === 0
+        && raw.points.every(n => finite(n));
+      if (ok) out.points = [...raw.points];
+      break;
+  }
+  if (!ok) return null;
+  if (flag(raw.gridBased) !== undefined) out.gridBased = raw.gridBased;
+  if (flag(raw.hole) !== undefined) out.hole = raw.hole;
+  return out;
+}
+
+/**
+ * Область для создания из присланных игроком данных. Создаёт ведущий, а у него права на всё, поэтому берутся
+ * только известные поля (в первую очередь — без поведений: «Выполнить скрипт» исполнился бы с правами ведущего).
+ * @returns {object|null} null — данные негодны
+ */
+function cleanRegionData(raw, scene, userId) {
+  if (!raw || typeof raw !== "object") return null;
+  const shapes = (Array.isArray(raw.shapes) ? raw.shapes : []).map(cleanShape);
+  if (!shapes.length || shapes.length > 8 || shapes.some(sh => !sh)) return null;
+  const z = raw.flags?.vedmak?.zone;
+  if (!z || typeof z !== "object") return null;
+  const visibilities = Object.values(CONST.REGION_VISIBILITY ?? {});
+  const levels = (Array.isArray(raw.levels) ? raw.levels : []).filter(id => typeof id === "string" && scene.levels?.has?.(id));
+  // Цвет пользователя по сокету приходит числом (Color — наследник Number), а из окна — строкой «#rrggbb»
+  const asCss = c => /^#[0-9a-f]{6}$/i.test(c) ? c
+    : (Number.isInteger(c) && c >= 0 && c <= 0xffffff ? `#${c.toString(16).padStart(6, "0")}` : null);
+  const color = asCss(raw.color) ?? game.users.get(userId)?.color?.css ?? "#ff6400";
+  return {
+    name: text(raw.name, 100) || "Зона",
+    color,
+    shapes,
+    ...(levels.length ? { levels } : {}),
+    visibility: visibilities.includes(raw.visibility) ? raw.visibility : (CONST.REGION_VISIBILITY?.ALWAYS ?? 2),
+    highlightMode: raw.highlightMode === "shapes" ? "shapes" : "coverage",
+    displayMeasurements: raw.displayMeasurements !== false,
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE, [userId]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+    flags: {
+      core: { MeasuredTemplate: true },
+      vedmak: { zone: {
+        actorUuid: typeof z.actorUuid === "string" ? z.actorUuid : null,
+        itemName: text(z.itemName),
+        instant: !!z.instant,
+        combatId: typeof z.combatId === "string" ? z.combatId : null,
+        until: finite(z.until, { min: 0, max: 1e6 }) ? z.until : null,
+        rounds: finite(z.rounds, { min: 0, max: 1e6 }) ? z.rounds : null,
+        maintain: typeof z.maintain === "string" ? z.maintain : null,
+        ...(typeof z.itemId === "string" ? { itemId: z.itemId } : {}),
+        ...(typeof z.repeat === "boolean" ? { repeat: z.repeat } : {})
+      } }
+    }
+  };
+}
+
 registerGMHandler("createZone", async ({ sceneId, data }, userId) => {
   const scene = game.scenes.get(sceneId);
   const actor = resolveActor(data?.flags?.vedmak?.zone?.actorUuid);
   if (!scene || !userOwnsAny(userId, actor)) return;
-  const [region] = await scene.createEmbeddedDocuments("Region", [data]);
-  const zone = data.flags.vedmak.zone;
+  const clean = cleanRegionData(data, scene, userId);
+  if (!clean) return console.warn(`vedmak | отклонена область от ${game.users.get(userId)?.name ?? userId}`);
+  const [region] = await scene.createEmbeddedDocuments("Region", [clean]);
+  const zone = clean.flags.vedmak.zone;
   if (region && zone.instant && !zone.combatId) scheduleRemoval(region);
 });
 

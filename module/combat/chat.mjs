@@ -4,7 +4,7 @@ import { defend } from "./defense.mjs";
 import { repeatAttack } from "./attack.mjs";
 import { damageFromDefense, requestApplyDamage } from "./damage.mjs";
 import { rollStunSave, deathSaveDialog } from "./saves.mjs";
-import { resolveActor, asGM, doneKey } from "./common.mjs";
+import { resolveActor, asGM, doneKey, sourceOfResult } from "./common.mjs";
 import { requestSpellEffects, ritualFocus } from "../magic/effects.mjs";
 
 const ACTIONS = {
@@ -29,7 +29,8 @@ const ACTIONS = {
     if (!def?.hit || !def.attack.hitStatus) return;
     const attacker = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
     if (!game.user.isGM && !attacker?.isOwner) return ui.notifications.warn("Применить эффект может атакующий или ведущий.");
-    return asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status: def.attack.hitStatus, active: true });
+    // messageId — карточка защиты: по ней ведущий проверяет, что просит атакующий, а цель — из этой карточки
+    return asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status: def.attack.hitStatus, active: true, messageId: message.id });
   },
 
   async stunSave(message, button) {
@@ -72,7 +73,7 @@ function markDoneButtons(message, html) {
     for (const row of html.querySelectorAll(".target-row[data-target-token], .target-row[data-target-actor]")) {
       const id = flags.defended[doneKey(row.dataset.targetToken || row.dataset.targetActor)];
       if (!id || !game.messages.has(id)) continue;
-      for (const b of row.querySelectorAll('[data-vedmak="defend"]')) done(b, "Защита уже брошена");
+      for (const b of row.querySelectorAll('[data-vedmak="defend"], [data-vedmak="verbalDefend"]')) done(b, "Защита уже брошена");
     }
   }
   if (flags?.damaged && game.messages.has(flags.damaged)) {
@@ -81,6 +82,12 @@ function markDoneButtons(message, html) {
 }
 
 export function registerChatListeners() {
+  // Ведущий удалил карточку результата (защиту, урон, исход дуэли) — кнопка на карточке-источнике должна вернуться.
+  // Погасла она при отрисовке источника, а при удалении результата источник сам не перерисовывается
+  Hooks.on("deleteChatMessage", message => {
+    const source = sourceOfResult(message);
+    if (source) ui.chat?.updateMessage(source)?.catch?.(err => console.error("vedmak | перерисовка карточки", err));
+  });
   Hooks.on("renderChatMessageHTML", (message, html) => {
     // Сообщение с карточкой системы — отдельный класс: раньше CSS искал её селектором :has(),
     // и браузер перепроверял его на каждое изменение в чате

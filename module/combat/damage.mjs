@@ -19,7 +19,7 @@ const LEGS = ["rightLeg", "leftLeg"];
 const EFFECT_RESIST_KEY = { bleeding: "bleeding", poison: "poison", burning: "fire", freeze: "frost", staggering: null };
 
 /** Урон из карточки защиты. */
-export async function damageFromDefense(message, { skipDialog = false } = {}) {
+export async function damageFromDefense(message, { skipDialog = false, messageMode } = {}) {
   const def = message.flags.vedmak?.defense;
   if (!def?.canDamage) return null;
   const attacker = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
@@ -34,7 +34,7 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
   let cfg = {
     damageType: attack.weapon?.damageTypes?.[0] ?? "bludgeoning",
     location: def.fixedLocation || attack.aim || "",
-    cover: "none", mod: 0, adrenaline: 0, messageMode: defaultMessageMode()
+    cover: "none", mod: 0, adrenaline: 0, messageMode: messageMode ?? defaultMessageMode()
   };
   if (!skipDialog) {
     cfg = await damageDialog(attack, target, cfg, attacker);
@@ -560,9 +560,37 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   }
 });
 
-registerGMHandler("setStatus", async ({ uuid, status, active }) => {
+const actorOfRef = ref => resolveActor(ref?.tokenUuid) ?? resolveActor(ref?.actorUuid);
+
+/**
+ * Может ли отправитель менять статус цели. Ведущий и владелец цели — всегда. Остальным — только по карточке защиты
+ * (messageId), которую можно проверить на стороне ведущего:
+ *  • попадание: статус от приёма атаки (сбить с ног и т.п.) просит владелец атакующего, цель — защитник карточки;
+ *  • успешное парирование: «ошеломлён» на атакующем просит владелец защитника, а атакующий — из настоящей карточки атаки.
+ * Карточку защиты создаёт владелец защитника (или ведущий), поэтому подделать её на чужого защитника нельзя.
+ */
+function canSetStatus(userId, actor, status, active, messageId) {
+  if (userOwnsAny(userId, actor)) return true;
+  const card = game.messages.get(messageId);
+  const def = card?.flags.vedmak?.defense;
+  if (def?.kind !== "defense" || !active) return false;
+  const defender = actorOfRef(def.defender);
+  if (!defender || !userOwnsAny(card.author?.id, defender)) return false;
+  if (def.hit) {
+    return status === def.attack?.hitStatus && defender === actor && userOwnsAny(userId, actorOfRef(def.attack.attacker));
+  }
+  if (def.defense !== "parry" || status !== "staggered" || !userOwnsAny(userId, defender)) return false;
+  const attack = game.messages.get(def.attackMessageId)?.flags.vedmak?.attack;
+  return attack?.kind === "attack" && actorOfRef(attack.attacker) === actor;
+}
+
+registerGMHandler("setStatus", async ({ uuid, status, active, messageId }, userId) => {
   const actor = resolveActor(uuid);
-  if (actor) await actor.toggleStatusEffect(status, { active });
+  if (!actor || !CONFIG.statusEffects.some(s => s.id === status)) return;
+  if (!canSetStatus(userId, actor, status, !!active, messageId)) {
+    return console.warn(`vedmak | отклонена смена статуса от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  await actor.toggleStatusEffect(status, { active: !!active });
 });
 
 /** Кнопка «Применить». */
