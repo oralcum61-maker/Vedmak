@@ -46,9 +46,12 @@ export function inCombat(actor) {
 /**
  * Срок в раундах, но временем: вне боя раунды отсчитывать некому (свой счётчик `flags.vedmak.timed` убывает
  * в начале хода), а время мира Foundry переводит в срок эффекта сама. Раунд — `CONFIG.time.roundTime` секунд.
+ * `expiry: null` — явно: схема v14 для числового срока подставляет «turnStart», и такой эффект Foundry снимает
+ * по времени мира только у актора вне боя (даже нестартовавшего), а у участника боя — лишь в начале его хода.
+ * При null (`isExpiryEvent`: «срок определяется одной длительностью») эффект истекает на любом сдвиге времени.
  */
 export function roundsAsTime(rounds) {
-  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds" };
+  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds", expiry: null };
 }
 
 /** Словарь {key: label|{label}} → массив опций для selectOptions. */

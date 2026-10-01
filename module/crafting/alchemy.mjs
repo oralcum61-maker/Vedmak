@@ -21,6 +21,8 @@ import { applyStatus } from "../combat/damage.mjs";
 import { alchemyAuto, anyoneCanDrink } from "../config/alchemy-auto.mjs";
 import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
 import { inCombat, roundsAsTime } from "../util.mjs";
+import { timeIsUp } from "../magic/timed.mjs";
+import { deleteEffectsClamped } from "../magic/buffs.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -143,7 +145,8 @@ export async function drink(actor, item) {
       system: { changes },
       flags: { vedmak: { alchemy: { toxicity: s.toxicity, kind: s.kind, itemName: item.name, at: Date.now() }, ...triggers } }
     };
-    if (minutes) effect.duration = { value: minutes, units: "minutes" };
+    // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+    if (minutes) effect.duration = { value: minutes, units: "minutes", expiry: null };
     if (rounds || regen || auto.regen !== undefined) {
       // Вне боя раунды не отсчитываются — срок ставится временем мира; регенерация идёт, если начнётся бой
       const combat = inCombat(actor);
@@ -197,25 +200,57 @@ registerChatAction("toxicitySave", async message => {
   if (!check?.success) return;
   const last = alchemyEffects(actor).at(-1);
   if (last) await last.delete({ vedmakToxicityChecked: true });
-  if (actor.statuses.has("poisoned")) await actor.toggleStatusEffect("poisoned", { active: false });
+  // Снимается отравление от токсичности; яд оружия и прочее — само по себе
+  await dropToxicPoison(actor);
   return card(actor, "Токсичность", [`Отравление прошло${last ? `; эффект «${last.name}» отменён` : ""}.`]);
 });
 
 /* ------------------------- Отравление токсичностью ------------------------- */
 
-/** Эффект-статус «Отравлен», наложенный токсичностью (флаг `toxicPoison`). */
-const toxicPoisonEffect = actor => actor.effects.find(e => e.flags?.vedmak?.toxicPoison && e.statuses.has("poisoned"));
+/** Эффект «Отравлен», наложенный токсичностью (флаг `toxicPoison`). */
+const toxicPoisonEffect = actor => actor.effects.find(e => e.flags?.vedmak?.toxicPoison);
 
 /**
- * Отравить токсичностью. Отравление из другого источника (яд, оружие) не трогаем и не помечаем:
- * снимать его, когда токсичность спадёт, нельзя.
+ * Очередь на актора: проверки токсичности идут из хуков и из начала хода одновременно, и без неё две из них
+ * удаляли один и тот же эффект («does not exist»), а снятие по порогу обгоняло снятие истёкших зелий.
+ * Внутри очереди нельзя вызывать другие функции с очередью — они ждали бы сами себя.
  */
-async function applyToxicPoison(actor) {
-  if (actor.statuses.has("poisoned")) return;
-  await applyStatus(actor, "poisoned");
-  const effect = actor.effects.find(e => e.statuses.has("poisoned") && e.statuses.size === 1);
-  if (effect) await effect.update({ "flags.vedmak.toxicPoison": true });
+const queues = new Map();
+function exclusive(actor, task) {
+  const key = actor.uuid;
+  const run = (queues.get(key) ?? Promise.resolve()).then(task);
+  const tail = run.catch(() => {});
+  queues.set(key, tail);
+  tail.then(() => { if (queues.get(key) === tail) queues.delete(key); });
+  return run;
 }
+
+/**
+ * Отравить токсичностью — отдельным эффектом «Отравление (токсичность)», независимым от яда оружия и прочих
+ * отравлений: статус `poisoned` у актора один, а их эффектов может быть несколько. Такой эффект без срока,
+ * снимает его только порог (clearToxicPoison) или проверка Стойкости; `toggleStatusEffect` вернул бы чужой
+ * эффект того же статуса, и флаг токсичности смешался бы со сроком яда.
+ */
+function applyToxicPoison(actor) {
+  return exclusive(actor, async () => {
+    if (toxicPoisonEffect(actor)) return;
+    const base = (await CONFIG.ActiveEffect.documentClass.fromStatusEffect("poisoned", { parent: actor })).toObject();
+    delete base._id;
+    base.name = "Отравление (токсичность)";
+    base.statuses = ["poisoned"];
+    foundry.utils.setProperty(base, "flags.vedmak.toxicPoison", true);
+    await actor.createEmbeddedDocuments("ActiveEffect", [base]);
+  });
+}
+
+/** Снять отравление от токсичности без проверки порога (Стойкость пройдена). */
+async function dropToxicPoisonNow(actor) {
+  const effect = toxicPoisonEffect(actor);
+  if (!effect || !actor.effects.has(effect.id)) return false;
+  await actor.deleteEmbeddedDocuments("ActiveEffect", [effect.id]);
+  return true;
+}
+const dropToxicPoison = actor => exclusive(actor, () => dropToxicPoisonNow(actor));
 
 /** Токсичность сейчас: по самим эффектам, а не по подготовленным данным — они могут ещё не пересчитаться. */
 function toxicityNow(actor) {
@@ -231,15 +266,14 @@ function toxicityNow(actor) {
  * Отравление от токсичности длится, пока она выше порога (стр. 247): как только спала — снимаем.
  * @returns {Promise<boolean>} снято ли
  */
-export async function clearToxicPoison(actor) {
-  if (actor?.type !== "character") return false;
-  const effect = toxicPoisonEffect(actor);
-  if (!effect) return false;
+async function clearToxicPoisonNow(actor) {
+  if (actor?.type !== "character" || !toxicPoisonEffect(actor)) return false;
   const t = toxicityNow(actor);
   if (t.total > t.max) return false;
-  await effect.delete();
-  return true;
+  return dropToxicPoisonNow(actor);
 }
+export const clearToxicPoison = actor => actor?.type === "character"
+  ? exclusive(actor, () => clearToxicPoisonNow(actor)) : Promise.resolve(false);
 
 // Эликсир или отвар снят (истёк, отменён, удалён руками) или ручная токсичность уменьшена — проверить порог.
 // Проверяет тот, кто внёс изменение; начало хода (expireAlchemy) проверяет само и пишет об этом в чат.
@@ -445,21 +479,27 @@ export function useAlchemical(actor, item) {
 }
 
 /** Снять истёкшие по времени эффекты алхимии и масла (вызывается в начале хода). */
-export async function expireAlchemy(actor) {
-  const lines = [];
-  const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && e.duration?.expired).map(e => e.id);
-  if (expired.length) {
-    lines.push(...expired.map(id => `${actor.effects.get(id).name}: действие закончилось.`));
-    await actor.deleteEmbeddedDocuments("ActiveEffect", expired, { vedmakToxicityChecked: true });
-  }
-  // Токсичность спала до порога — отравление от неё проходит само (стр. 247)
-  if (await clearToxicPoison(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
-  const now = game.time.worldTime ?? 0;
-  for (const w of actor.itemTypes?.weapon ?? []) {
-    if (w.system.oil.target && w.system.oil.until <= now) {
-      lines.push(`${w.name}: масло «${w.system.oil.name}» выдохлось.`);
-      await w.update({ "system.oil": { name: "", target: "", until: 0 } });
+export function expireAlchemy(actor) {
+  return exclusive(actor, async () => {
+    const lines = [];
+    // v14 помечает `duration.expired` уже после хуков системы (Combat#_onStartTurn идёт раньше обновления реестра),
+    // поэтому срок проверяем так же, как у магии, — по остатку на сейчас, иначе зелье жило бы лишний ход
+    const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && timeIsUp(e));
+    if (expired.length) {
+      lines.push(...expired.map(e => `${e.name}: действие закончилось.`));
+      // ПЗ после баффа с бонусом урезаются здесь же и с ожиданием (иначе гонка с уроном за ход)
+      await deleteEffectsClamped(actor, expired.map(e => e.id), { vedmakToxicityChecked: true });
     }
-  }
-  return lines;
+    // Токсичность спала до порога — отравление от неё проходит само (стр. 247). Ещё раз — в конце
+    // magicStartOfTurn, после снятия зелий на раунды
+    if (await clearToxicPoisonNow(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
+    const now = game.time.worldTime ?? 0;
+    for (const w of actor.itemTypes?.weapon ?? []) {
+      if (w.system.oil.target && w.system.oil.until <= now) {
+        lines.push(`${w.name}: масло «${w.system.oil.name}» выдохлось.`);
+        await w.update({ "system.oil": { name: "", target: "", until: 0 } });
+      }
+    }
+    return lines;
+  });
 }

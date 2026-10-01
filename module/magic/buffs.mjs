@@ -52,9 +52,33 @@ export function hpAfterBonus(hp, max, bonus) {
   return Math.min(hp, Math.max(max, hp - bonus));
 }
 
+/**
+ * Урезать текущие ПЗ после конца бонуса к максимуму — сразу и с ожиданием записи. Нужна там, где за снятием
+ * баффа идёт чтение ПЗ (начало хода: кровотечение пишет «ПЗ минус урон» от прочитанного значения), — отложенная
+ * правка `clampHpLater` успевала бы после него и перезаписывала бы результат.
+ */
+export async function clampHpNow(actor, bonus) {
+  const { value, max } = actor.system.hp;
+  const hp = hpAfterBonus(value, max, bonus);
+  if (hp !== value) await actor.update({ "system.hp.value": hp });
+}
+
+/**
+ * Снять эффекты и, если среди них были баффы с бонусом к ПЗ, урезать ПЗ до возврата. Хук удаления такое снятие
+ * пропускает (`vedmakHpHandled`), поэтому ПЗ правятся ровно один раз.
+ */
+export async function deleteEffectsClamped(actor, ids, options = {}) {
+  const list = ids.filter(id => actor.effects.has(id));
+  if (!list.length) return;
+  const bonus = list.reduce((sum, id) => sum + (actor.effects.get(id).flags?.vedmak?.hpBonus ?? 0), 0);
+  await actor.deleteEmbeddedDocuments("ActiveEffect", list, { ...options, vedmakHpHandled: true });
+  if (bonus > 0) await clampHpNow(actor, bonus);
+}
+
 /** Снятые эффекты с бонусом к ПЗ, по акторам: несколько в одном удалении — одна правка. */
 const endedHpBonus = new Map();
 
+/** Урезание ПЗ для ручного удаления (хук): после всех хуков этого удаления, без ожидания. */
 function clampHpLater(actor, bonus) {
   const queued = endedHpBonus.has(actor);
   endedHpBonus.set(actor, (endedHpBonus.get(actor) ?? 0) + bonus);
@@ -98,7 +122,8 @@ export async function applyBuff(actor, buff) {
     statuses: buff.statuses ?? [],
     flags: { vedmak }
   };
-  if (buff.minutes) effect.duration = { value: buff.minutes, units: "minutes" };
+  // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+  if (buff.minutes) effect.duration = { value: buff.minutes, units: "minutes", expiry: null };
   else if (buff.rounds && !combat) effect.duration = roundsAsTime(buff.rounds);
   const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
   if (created && buff.vision) await applyVision(actor, created, buff.vision);

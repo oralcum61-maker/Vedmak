@@ -33,6 +33,15 @@ export async function zeroShield(actor) {
   if (shield?.value || shield?.max) await actor.update({ "system.shield.value": 0, "system.shield.max": 0 });
 }
 
+/**
+ * Обнулить щит, только если не осталось другого эффекта щита (например, поддерживаемый «Активный щит» и Квен
+ * делят одно поле `system.shield`). `removing` — id эффектов, которые снимаются прямо сейчас.
+ */
+export async function zeroShieldIfFree(actor, removing = []) {
+  if (actor?.effects.some(e => isShieldEffect(e) && !removing.includes(e.id))) return;
+  await zeroShield(actor);
+}
+
 /** Бой кончился: остаток раундов щитов, регенерации и статусов становится временем, иначе они вечны. */
 async function roundsToTime(combat) {
   for (const actor of new Set(combat.combatants.map(c => c.actor).filter(Boolean))) {
@@ -79,7 +88,8 @@ export function registerTimedHooks() {
       return;
     }
     const rounds = foundry.utils.getProperty(changes, "flags.vedmak.statusRounds");
-    if (rounds > 0) statusRoundsChanged(effect, rounds).catch(err => console.warn("vedmak | срок статуса", err));
+    // Отравление от токсичности держится порогом, а не сроком (alchemy.mjs): срок статуса на него не вешаем
+    if (rounds > 0 && !effect.flags?.vedmak?.toxicPoison) statusRoundsChanged(effect, rounds).catch(err => console.warn("vedmak | срок статуса", err));
   });
   // Щит снят (срок, «прекратить», конец поддержания) — он больше не поглощает урон. Обнуляет тот, кто снял;
   // `vedmakKeepShield` — замена эффекта при новом сотворении, новый щит уже поставлен

@@ -81,6 +81,9 @@ export async function castSpell(actor, item, opts = {}) {
     if (!cfg) return null;
   }
 
+  // Зоны этого же поддерживаемого заклинания от прошлого сотворения: запоминаем до постановки новой
+  const previousZones = maintainedZonesOf(actor, item);
+
   // Зона на сцене: конус или круг ставится мышью, цели — все, кто в неё попал; отмена — отмена сотворения
   const area = opts.targets ? null : parseArea(s.range);
   let region = null;
@@ -99,8 +102,20 @@ export async function castSpell(actor, item, opts = {}) {
 
   const message = await performCast(actor, item, cfg, targets);
   // Заклинание не сработало — зона не нужна
-  if (region && !message?.flags?.vedmak?.cast?.works) await removeZones([region]);
+  const works = !!message?.flags?.vedmak?.cast?.works;
+  if (region && !works) await removeZones([region]);
+  // Повторное сотворение поддерживаемого заклинания заменяет поддержание (см. performCast), а вместе с ним —
+  // и прежние зоны: иначе повтор зоны бил бы с обеих
+  if (works && previousZones.length) await removeZones(previousZones);
   return message;
+}
+
+/** Зоны поддерживаемого заклинания этого заклинателя на всех сценах (флаг `zone.maintain` — id предмета). */
+function maintainedZonesOf(actor, item) {
+  return game.scenes.contents.flatMap(scene => zonesOf(scene).filter(r => {
+    const z = r.flags.vedmak.zone;
+    return z.maintain === item.id && z.actorUuid === actor.uuid;
+  }));
 }
 
 /** Основа проверки сотворения: Воля + навык магии со всеми постоянными правками. */
@@ -450,7 +465,8 @@ export async function setTimedEffect(actor, { name, img, key, rounds = 0, minute
     name, img, transfer: false,
     flags: { vedmak: { timed: { key, rounds: combat && !minutes ? rounds : 0 }, ...extra } }
   };
-  if (minutes) data.duration = { value: minutes, units: "minutes" };
+  // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+  if (minutes) data.duration = { value: minutes, units: "minutes", expiry: null };
   else if (rounds && !combat) data.duration = roundsAsTime(rounds);
   const [effect] = await actor.createEmbeddedDocuments("ActiveEffect", [data]);
   return effect;
