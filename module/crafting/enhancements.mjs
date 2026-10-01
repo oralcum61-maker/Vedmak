@@ -62,7 +62,7 @@ export async function attachEnhancement(actor, item) {
     label: `${a.name}${a.system.equipped ? "" : " (не надета)"} — ячеек свободно: ${a.system.freeSlots}`
   }));
   const chosen = await pickTargets(`${item.name}: на какую броню`, candidates, {
-    multiple: true, hint: `Набор ставится на все выбранные части. Изготовление СЛ ${CRAFTING.attachDc}, полный ход, нужны инструменты ремесленника.`
+    multiple: true, hint: `Один набор ставится на все выбранные части и снимается с них разом. Изготовление СЛ ${CRAFTING.attachDc}, полный ход, нужны инструменты ремесленника.`
   });
   if (!chosen) return null;
   const noSlot = chosen.filter(c => c.item.system.freeSlots <= 0);
@@ -70,6 +70,9 @@ export async function attachEnhancement(actor, item) {
   const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление брони: ${item.name}`);
   if (!check.success) return null;
 
+  // Один набор — одно наложение (стр. 90): все выбранные части помнят общий номер набора
+  // во флаге `armorKits`, чтобы снять набор целиком и вернуть ровно один. Вес набора — на первой части.
+  const kit = foundry.utils.randomID();
   for (const [i, c] of chosen.entries()) {
     const armor = c.item;
     const sp = foundry.utils.deepClone(armor.system.toObject().sp);
@@ -78,9 +81,12 @@ export async function attachEnhancement(actor, item) {
     }
     const enhancements = [...armor.system.toObject().enhancements,
       { name: item.name, kind: "armor", sp: s.sp, resist: [...s.resistances], effect: s.effect, element: "" }];
-    const update = { "system.sp": sp, "system.enhancements": enhancements };
-    // Вес набора прибавляется один раз
-    if (i === 0) update["system.weight"] = Math.round((armor.system.weight + s.weight) * 10) / 10;
+    const weight = i === 0 ? s.weight : 0;
+    const update = {
+      "system.sp": sp, "system.enhancements": enhancements,
+      "flags.vedmak.armorKits": [...armorKits(armor), { id: kit, name: item.name, weight }]
+    };
+    if (weight) update["system.weight"] = Math.round((armor.system.weight + weight) * 10) / 10;
     await armor.update(update);
   }
   await spendOne(item);
@@ -92,27 +98,61 @@ function resistLabel(key) {
   return { slashing: "режущему", piercing: "колющему", bludgeoning: "дробящему", elemental: "огню/стихиям", bleeding: "кровотечению", poison: "яду" }[key] ?? key;
 }
 
-/** Снять усиление брони (Изготовление СЛ 15), вернуть набор в инвентарь. */
+/** Наборы усиления на части брони: [{id, name, weight}] — общий номер у всех частей одного набора. */
+function armorKits(armor) {
+  return foundry.utils.deepClone(armor.flags?.vedmak?.armorKits ?? []);
+}
+
+/**
+ * Снять усиление брони (Изготовление СЛ 15), вернуть набор в инвентарь.
+ * Набор, наложенный на несколько частей, снимается со всех разом и возвращается один (стр. 90);
+ * его вес уходит с той части, на которую был записан.
+ */
 export async function detachEnhancement(actor, armor, index) {
   const e = armor.system.enhancements[index];
   if (!e) return null;
   if (e.kind !== "armor") return ui.notifications.warn("Руны и глифы снять нельзя (стр. 256).");
+  const kitId = armorKits(armor).find(k => k.name === e.name)?.id;
+  // Части с тем же набором; у наложенных до этой правки номера нет — снимается только эта часть
+  const pieces = kitId
+    ? actor.itemTypes.armor.filter(a => armorKits(a).some(k => k.id === kitId))
+    : [armor];
   const check = await craftingCheck(actor, CRAFTING.detachDc, `Снять усиление: ${e.name}`);
   if (!check.success) return null;
-  const sp = foundry.utils.deepClone(armor.system.toObject().sp);
-  for (const loc of Object.keys(ARMOR_LOCATIONS)) {
-    if (sp[loc].max > 0) { sp[loc].max = Math.max(0, sp[loc].max - e.sp); sp[loc].value = Math.min(sp[loc].value, sp[loc].max); }
+  for (const piece of pieces) {
+    const enhancements = piece.system.toObject().enhancements;
+    const at = piece === armor ? index : enhancements.findIndex(x => x.kind === "armor" && x.name === e.name);
+    if (at < 0) continue;
+    const [removed] = enhancements.splice(at, 1);
+    const sp = foundry.utils.deepClone(piece.system.toObject().sp);
+    for (const loc of Object.keys(ARMOR_LOCATIONS)) {
+      if (sp[loc].max > 0) { sp[loc].max = Math.max(0, sp[loc].max - removed.sp); sp[loc].value = Math.min(sp[loc].value, sp[loc].max); }
+    }
+    const update = { "system.sp": sp, "system.enhancements": enhancements };
+    if (kitId) {
+      const kits = armorKits(piece);
+      const own = kits.find(k => k.id === kitId);
+      if (own?.weight) update["system.weight"] = Math.max(0, Math.round((piece.system.weight - own.weight) * 10) / 10);
+      update["flags.vedmak.armorKits"] = kits.filter(k => k.id !== kitId);
+    }
+    await piece.update(update);
   }
-  const enhancements = armor.system.toObject().enhancements;
-  enhancements.splice(index, 1);
-  await armor.update({ "system.sp": sp, "system.enhancements": enhancements });
   await giveItem(actor, await findItemData(e.name, "enhancement"), 1);
-  return postCard(actor, "Усиление снято", `<p><b>${e.name}</b> снято с «${armor.name}» и возвращено в снаряжение.</p>`, { icon: "fa-solid fa-shield-halved" });
+  const from = pieces.map(p => `«${p.name}»`).join(", ");
+  return postCard(actor, "Усиление снято", `<p><b>${e.name}</b> снято с ${from} и возвращено в снаряжение.</p>`, { icon: "fa-solid fa-shield-halved" });
+}
+
+/** Стоит ли на предмете рунное или глифово слово: зачарование других рун и глифов не пускает (PLAN 4.11). */
+export function isEnchanted(item) {
+  if (item.type === "weapon") return item.system.runes.some(e => (e.slots || 1) > 1);
+  if (item.type === "armor") return item.system.enhancements.some(e => e.kind === "glyph" && (e.slots || 1) > 1);
+  return false;
 }
 
 async function attachRune(actor, item) {
-  const weapons = actor.itemTypes.weapon.filter(w => w.system.freeSlots > 0);
-  if (!weapons.length) return ui.notifications.warn("Нет оружия со свободной ячейкой усиления.");
+  // Поверх рунного слова руну не нанести, даже если ячейка свободна
+  const weapons = actor.itemTypes.weapon.filter(w => w.system.freeSlots > 0 && !isEnchanted(w));
+  if (!weapons.length) return ui.notifications.warn("Нет оружия со свободной ячейкой усиления (на зачарованное руну не нанести).");
   const chosen = await pickTargets(`${item.name}: на какое оружие`, weapons.map(w => ({ item: w, label: `${w.name} — ячеек: ${w.system.freeSlots}` })),
     { hint: "Руну нельзя снять; камень расходуется." });
   if (!chosen) return null;
@@ -126,8 +166,9 @@ async function attachRune(actor, item) {
 }
 
 async function attachGlyph(actor, item) {
-  const armors = actor.itemTypes.armor.filter(a => a.system.freeSlots > 0);
-  if (!armors.length) return ui.notifications.warn("Нет брони со свободной ячейкой усиления.");
+  // Поверх глифова слова глиф не нанести, даже если ячейка свободна
+  const armors = actor.itemTypes.armor.filter(a => a.system.freeSlots > 0 && !isEnchanted(a));
+  if (!armors.length) return ui.notifications.warn("Нет брони со свободной ячейкой усиления (на зачарованную глиф не нанести).");
   const chosen = await pickTargets(`${item.name}: на какую броню`, armors.map(a => ({ item: a, label: `${a.name} — ячеек: ${a.system.freeSlots}` })),
     { hint: "Глиф нельзя снять; камень расходуется." });
   if (!chosen) return null;
@@ -199,9 +240,10 @@ async function attachEnchantment(actor, item) {
   const targets = weapon
     ? actor.itemTypes.weapon
     : actor.itemTypes.armor.filter(a => !a.system.isShield || s.effect.includes("щит"));
-  const free = targets.filter(t => t.system.freeSlots >= slots);
+  // Предмет несёт только одно зачарование: второе слово поверх первого не ляжет
+  const free = targets.filter(t => t.system.freeSlots >= slots && !isEnchanted(t));
   if (!free.length) {
-    return ui.notifications.warn(`Нужен предмет со свободными ячейками усиления: ${slots}.`);
+    return ui.notifications.warn(`Нужен незачарованный предмет со свободными ячейками усиления: ${slots}.`);
   }
   const chosen = await pickTargets(`${item.name}: на что наложить`,
     free.map(t => ({ item: t, label: `${t.name} — ячеек свободно: ${t.system.freeSlots}` })),

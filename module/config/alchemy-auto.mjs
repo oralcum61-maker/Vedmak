@@ -18,6 +18,8 @@
 //   untilHit     — эффект снимается после следующего нанесённого физического урона
 //   doubleAdrenaline — каждая кость адреналина — две
 //   healCrit     — вылечить одно критическое ранение на выбор
+//   hpNow        — сразу прибавить к текущим ПЗ (вместе с ростом максимума), не выше нового максимума
+//   anyone       — эликсир не ведьмачий: пьёт кто угодно без Стойкости СЛ 18 у не-мутанта
 //   note         — что осталось текстом
 
 const M = (key, value) => ({ key, type: "add", value, phase: "initial" });
@@ -42,21 +44,37 @@ export const ALCHEMY_AUTO = {
   "отвар из виверны": { onHit: { damage: 1 } },
   "отвар из волколака": { note: "Долгий бег не тратит Выносливость." },
 
-  // «Фургончик Родольфа»
-  "зелье живучести": { rounds: "2d6", changes: [M("system.fx.ignoreWound", 1)] },
-  "зелье выносливости": { restore: { sta: "3d6" } },
-  "зелье раффара белого": { rounds: "4d6", regen: 1 },
+  // «Фургончик Родольфа»: обычные эликсиры, пьются без проверки на отравление
+  "зелье живучести": { anyone: true, rounds: "2d6", changes: [M("system.fx.ignoreWound", 1)] },
+  "зелье выносливости": { anyone: true, restore: { sta: "3d6" } },
+  "зелье раффара белого": { anyone: true, rounds: "4d6", regen: 1 },
 
-  // «Том Хаоса»
-  "анаболические стероиды": { minutes: 10,
+  // «Том Хаоса»: эликсиры магов, «пить его может кто угодно»
+  "анаболические стероиды": { anyone: true, minutes: 10, hpNow: 10,
     changes: [M("system.fx.hp", 10), M("system.skills.endurance.mod", 2), M("system.skills.physique.mod", 2)],
     note: "Час после приёма пьющий невыносимо зол на всех вокруг." },
-  "молния": { changes: [M("system.fx.damage", 3)], untilHit: true },
-  "мангуст": { minutes: 30, immune: ["poisoned"] },
-  "буря": { changes: [M("system.fx.statusChance", 10)] },
-  "последняя надежда": { healCrit: true },
-  "путник": { minutes: 1440, note: "Сутки без сна и без последствий." }
+  "молния": { anyone: true, changes: [M("system.fx.damage", 3)], untilHit: true },
+  "мангуст": { anyone: true, minutes: 30, immune: ["poisoned"] },
+  "буря": { anyone: true, changes: [M("system.fx.statusChance", 10)] },
+  "последняя надежда": { anyone: true, healCrit: true },
+  "путник": { anyone: true, minutes: 1440, note: "Сутки без сна и без последствий." },
+  "церебральный эликсир": { anyone: true },
+
+  // Не ведьмачьи составы других книг: лекарство от катрионы и зелье, которое подливают как яд
+  "эликсир мец": { anyone: true },
+  "зелье берсерка": { anyone: true }
 };
+
+/**
+ * Книги, где эликсиры не ведьмачьи: обычные эликсиры «Фургончика Родольфа» и эликсиры магов «Тома Хаоса».
+ * Их пьёт кто угодно — проверки Стойкости СЛ 18 у не-мутанта нет (стр. 246 касается ведьмачьих).
+ */
+export const ANYONE_BOOKS = ["Фургончик Родольфа", "Том Хаоса"];
+
+/** Пьёт ли состав кто угодно — по книге предмета или по пометке справочника. */
+export function anyoneCanDrink(item) {
+  return ANYONE_BOOKS.includes(item?.system?.source?.book) || !!alchemyAuto(item?.name)?.anyone;
+}
 
 /** Название без кавычек и регистра. */
 export const alchemyKey = name => String(name ?? "").toLowerCase().replace(/[«»"„“”]/g, "").replace(/\s+/g, " ").trim();

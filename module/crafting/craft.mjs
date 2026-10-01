@@ -20,13 +20,28 @@ const { DialogV2 } = foundry.applications.api;
 export const PHYSICAL_TYPES = ["weapon", "armor", "gear", "component", "alchemical", "enhancement"];
 const STACKABLE = ["gear", "component", "alchemical", "enhancement"];
 
-const norm = s => String(s ?? "").toLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
+// Звёздочка впереди — метка домашних правил модуля BS & Tobi, а не часть названия
+const norm = s => String(s ?? "").toLowerCase().replace(/ё/g, "е").replace(/^\*+\s*/, "").replace(/\s+/g, " ").trim();
 
 /* ------------------------------- Инвентарь ------------------------------- */
 
+/**
+ * Годится ли предмет в материалы. Принятый мутаген уже в крови, а не в сумке. Из усилений в чертежи
+ * идут только руны и глифы (рунные и глифовы слова): набор накладок «Укреплённая кожа» — не то же самое,
+ * что компонент «Укреплённая кожа», и ни один чертёж не требует набор усиления или модификацию арбалета.
+ */
+function isMaterial(item) {
+  if (!PHYSICAL_TYPES.includes(item.type)) return false;
+  if (item.type === "alchemical" && item.system.applied) return false;
+  if (item.type === "enhancement" && !["rune", "glyph"].includes(item.system.kind)) return false;
+  return true;
+}
+
+/** Материалы с этим названием: сперва компоненты, надетое и взятое в руки — последним. */
 export function itemsNamed(actor, name) {
   const n = norm(name);
-  return actor.items.filter(i => PHYSICAL_TYPES.includes(i.type) && norm(i.name) === n);
+  const order = i => (i.type === "component" ? 0 : 1) + (i.system.equipped ? 2 : 0);
+  return actor.items.filter(i => isMaterial(i) && norm(i.name) === n).sort((a, b) => order(a) - order(b));
 }
 
 export function countNamed(actor, name) {
@@ -63,7 +78,8 @@ export async function giveItem(actor, data, quantity = 1) {
   data = foundry.utils.deepClone(data);
   delete data._id;
   if (STACKABLE.includes(data.type)) {
-    const same = actor.items.find(i => i.type === data.type && norm(i.name) === norm(data.name));
+    // К принятому мутагену не прибавлять: он уже не в сумке
+    const same = actor.items.find(i => i.type === data.type && norm(i.name) === norm(data.name) && !i.system.applied);
     if (same) return same.update({ "system.quantity": (same.system.quantity ?? 1) + quantity });
   }
   if (data.system) data.system.quantity = STACKABLE.includes(data.type) || data.type === "weapon" ? quantity : 1;
@@ -192,7 +208,11 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
   // Материалы: доплата или расход из инвентаря (расходуются и при провале)
   const consumed = [];
   if (cfg.surcharge) {
-    await actor.update({ "system.money.crowns": crowns - r.surcharge });
+    // Кошелёк перечитывается сейчас: пока окно было открыто, кроны могли потратить или получить,
+    // и запись прежнего числа затёрла бы эти изменения
+    const now = actor.system.money?.crowns ?? 0;
+    if (now < r.surcharge) return ui.notifications.warn(`Не хватает крон на доплату: нужно ${r.surcharge}, есть ${now}.`);
+    await actor.update({ "system.money.crowns": now - r.surcharge });
   } else {
     for (const c of r.components) {
       let left = c.quantity;
@@ -251,18 +271,32 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
 
 /* ------------------------------ Переработка ------------------------------ */
 
+/** Карточки, которые перерабатываются прямо сейчас: двойной щелчок не должен вернуть материалы дважды. */
+const recycling = new Set();
+
 registerChatAction("recycle", async message => {
   const c = message.flags.vedmak?.craft;
-  if (!c || c.recycled) return ui.notifications.info("Переработка уже была.");
+  if (!c || c.recycled || recycling.has(message.id)) return ui.notifications.info("Переработка уже была.");
   const actor = resolveActor(c.actorUuid);
   if (!actor?.isOwner) return ui.notifications.warn("Переработать может владелец персонажа или ведущий.");
+  recycling.add(message.id);
+  try {
+    // Метка ставится до броска: пока бросок и выдача идут, второй щелчок уже видит «переработано»
+    await message.setFlag("vedmak", "craft.recycled", true);
+    return await recycle(c, actor);
+  } finally {
+    recycling.delete(message.id);
+  }
+});
+
+/** Переработка после провала: та же СЛ, возвращается половина материалов (формула — одна субстанция). */
+async function recycle(c, actor) {
   const parts = [
     { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
     { label: SKILLS[c.skill].label, value: actor.system.skills[c.skill].total, always: true }
   ];
   if (c.blueprint) parts.push({ label: c.formula ? "Формула перед глазами" : "Чертёж перед глазами", value: CRAFTING.blueprintBonus });
   const roll = await performCheck({ actor, title: `Переработка: ${c.resultName}`, parts, dc: c.dc, toChat: false });
-  await message.setFlag("vedmak", "craft.recycled", true);
   const returned = [];
   if (roll.success) {
     if (c.formula) {
@@ -282,7 +316,7 @@ registerChatAction("recycle", async message => {
     data: { ...roll, recycle: true, recipeName: c.recipeName, resultName: c.resultName, returned: returned.join(", ") },
     actor, rolls: roll.rolls
   });
-});
+}
 
 /* ----------------------------- Собирательство ---------------------------- */
 

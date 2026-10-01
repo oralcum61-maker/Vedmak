@@ -3,6 +3,7 @@
 //  • Эликсиры и отвары имеют токсичность; пока сумма ≤ порога (100%, «Крепкий желудок» — до 150%) — без последствий,
 //    сверх — отравление, пока токсичность не спадёт или не пройдена Стойкость СЛ 18 (отменяет последний эликсир).
 //  • Не-ведьмак, выпив эликсир или отвар, проходит Стойкость СЛ 18, иначе отравлен и эффекта нет.
+//    Обычные эликсиры «Фургончика Родольфа» и эликсиры магов «Тома Хаоса» пьёт кто угодно (anyoneCanDrink).
 //  • Масло для меча — +5 урона по классу чудовищ на 30 минут.
 //  • Мутаген — час подготовки и проверка Алхимии; эффект навсегда, не больше двух; не-мутанты отравляются.
 //  • Бомбы — метательное оружие (Атлетика, Тел×4 м), урон по всем частям тела всем в зоне.
@@ -17,7 +18,7 @@ import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zo
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
-import { alchemyAuto } from "../config/alchemy-auto.mjs";
+import { alchemyAuto, anyoneCanDrink } from "../config/alchemy-auto.mjs";
 import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
 import { inCombat, roundsAsTime } from "../util.mjs";
 
@@ -64,7 +65,7 @@ export async function drink(actor, item) {
   const u = s.use;
   const lines = [s.effect];
   const rolls = [];
-  const witcherBrew = ["elixir", "decoction"].includes(s.kind);
+  const witcherBrew = ["elixir", "decoction"].includes(s.kind) && !anyoneCanDrink(item);
 
   // Не-мутант и ведьмачий эликсир (стр. 246)
   if (witcherBrew && actor.type === "character" && !isMutant(actor)) {
@@ -79,8 +80,8 @@ export async function drink(actor, item) {
   // «Белый мёд»: токсичность в ноль, все эликсиры отменены
   if (u.clearToxicity) {
     const ids = alchemyEffects(actor).map(e => e.id);
-    if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
-    await actor.update({ "system.toxicity.value": 0 });
+    if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids, { vedmakToxicityChecked: true });
+    await actor.update({ "system.toxicity.value": 0 }, { vedmakToxicityChecked: true });
     if (actor.statuses.has("poisoned")) await actor.toggleStatusEffect("poisoned", { active: false });
     lines.push(`Отменено эликсиров и отваров: ${ids.length}.`);
   }
@@ -135,7 +136,8 @@ export async function drink(actor, item) {
   if (hasEffect) {
     // Одинаковые эликсиры не суммируются — старый заменяется
     const same = alchemyEffects(actor).filter(e => e.flags.vedmak.alchemy.itemName === item.name).map(e => e.id);
-    if (same.length) await actor.deleteEmbeddedDocuments("ActiveEffect", same);
+    // Порог проверяется ниже, когда новый эффект уже на месте
+    if (same.length) await actor.deleteEmbeddedDocuments("ActiveEffect", same, { vedmakToxicityChecked: true });
     const effect = {
       name: item.name, img: item.img,
       system: { changes },
@@ -156,6 +158,15 @@ export async function drink(actor, item) {
       if (n) lines.push(`Зрение токена: ${auto.vision.visionMode === "darkvision" ? "в темноте" : auto.vision.visionMode}, ${auto.vision.range} м.`);
     }
   }
+  // Сверх максимума ПЗ эликсир даёт и сами ПЗ («Анаболические стероиды»): максимум уже поднят эффектом
+  if (auto.hpNow) {
+    const hp = actor.system.hp;
+    const value = Math.min(hp.max, hp.value + auto.hpNow);
+    if (value > hp.value) {
+      await actor.update({ "system.hp.value": value });
+      lines.push(`+${value - hp.value} ПЗ (${value} из ${hp.max}).`);
+    }
+  }
   if (auto.note) lines.push(auto.note);
   if (u.heal) {
     await actor.update({ "system.hp.value": actor.system.hp.value + u.heal });
@@ -169,9 +180,11 @@ export async function drink(actor, item) {
     const t = actor.system.toxicity;
     lines.push(`Токсичность: ${t.total}% из ${t.max}%.`);
     if (t.total > t.max) {
-      await applyStatus(actor, "poisoned");
+      await applyToxicPoison(actor);
       lines.push("Порог превышен — персонаж отравлен, пока токсичность не спадёт или он не пройдёт Стойкость СЛ 18 (это отменит последний эликсир).");
       buttons.push({ action: "toxicitySave", label: "Стойкость СЛ 18", icon: "fa-solid fa-shield-virus" });
+    } else if (await clearToxicPoison(actor)) {
+      lines.push("Токсичность в пределах порога — отравление от неё прошло.");
     }
   }
   return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons, rolls });
@@ -183,9 +196,61 @@ registerChatAction("toxicitySave", async message => {
   const check = await enduranceCheck(actor, CRAFTING.toxicitySaveDc, "Токсичность");
   if (!check?.success) return;
   const last = alchemyEffects(actor).at(-1);
-  if (last) await last.delete();
+  if (last) await last.delete({ vedmakToxicityChecked: true });
   if (actor.statuses.has("poisoned")) await actor.toggleStatusEffect("poisoned", { active: false });
   return card(actor, "Токсичность", [`Отравление прошло${last ? `; эффект «${last.name}» отменён` : ""}.`]);
+});
+
+/* ------------------------- Отравление токсичностью ------------------------- */
+
+/** Эффект-статус «Отравлен», наложенный токсичностью (флаг `toxicPoison`). */
+const toxicPoisonEffect = actor => actor.effects.find(e => e.flags?.vedmak?.toxicPoison && e.statuses.has("poisoned"));
+
+/**
+ * Отравить токсичностью. Отравление из другого источника (яд, оружие) не трогаем и не помечаем:
+ * снимать его, когда токсичность спадёт, нельзя.
+ */
+async function applyToxicPoison(actor) {
+  if (actor.statuses.has("poisoned")) return;
+  await applyStatus(actor, "poisoned");
+  const effect = actor.effects.find(e => e.statuses.has("poisoned") && e.statuses.size === 1);
+  if (effect) await effect.update({ "flags.vedmak.toxicPoison": true });
+}
+
+/** Токсичность сейчас: по самим эффектам, а не по подготовленным данным — они могут ещё не пересчитаться. */
+function toxicityNow(actor) {
+  let total = actor.system.toxicity.value ?? 0;
+  for (const e of actor.effects) {
+    const tox = e.flags?.vedmak?.alchemy?.toxicity;
+    if (tox && e.active) total += tox;
+  }
+  return { total, max: actor.system.toxicity.max };
+}
+
+/**
+ * Отравление от токсичности длится, пока она выше порога (стр. 247): как только спала — снимаем.
+ * @returns {Promise<boolean>} снято ли
+ */
+export async function clearToxicPoison(actor) {
+  if (actor?.type !== "character") return false;
+  const effect = toxicPoisonEffect(actor);
+  if (!effect) return false;
+  const t = toxicityNow(actor);
+  if (t.total > t.max) return false;
+  await effect.delete();
+  return true;
+}
+
+// Эликсир или отвар снят (истёк, отменён, удалён руками) или ручная токсичность уменьшена — проверить порог.
+// Проверяет тот, кто внёс изменение; начало хода (expireAlchemy) проверяет само и пишет об этом в чат.
+Hooks.on("deleteActiveEffect", (effect, options, userId) => {
+  if (!effect.flags?.vedmak?.alchemy || options.vedmakToxicityChecked || userId !== game.user.id) return;
+  if (effect.parent?.documentName !== "Actor") return;
+  clearToxicPoison(effect.parent).catch(err => console.warn("vedmak | отравление токсичностью", err));
+});
+Hooks.on("updateActor", (actor, changes, options, userId) => {
+  if (changes.system?.toxicity?.value === undefined || options.vedmakToxicityChecked || userId !== game.user.id) return;
+  clearToxicPoison(actor).catch(err => console.warn("vedmak | отравление токсичностью", err));
 });
 
 /* ------------------------------- Применить ------------------------------- */
@@ -385,8 +450,10 @@ export async function expireAlchemy(actor) {
   const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && e.duration?.expired).map(e => e.id);
   if (expired.length) {
     lines.push(...expired.map(id => `${actor.effects.get(id).name}: действие закончилось.`));
-    await actor.deleteEmbeddedDocuments("ActiveEffect", expired);
+    await actor.deleteEmbeddedDocuments("ActiveEffect", expired, { vedmakToxicityChecked: true });
   }
+  // Токсичность спала до порога — отравление от неё проходит само (стр. 247)
+  if (await clearToxicPoison(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
   const now = game.time.worldTime ?? 0;
   for (const w of actor.itemTypes?.weapon ?? []) {
     if (w.system.oil.target && w.system.oil.until <= now) {
