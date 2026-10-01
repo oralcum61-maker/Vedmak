@@ -115,5 +115,5 @@ export const GEAR_CATEGORIES = {
   general: "Стандартное снаряжение", container: "Ёмкости", food: "Еда и питьё",
   clothing: "Одежда", tools: "Наборы инструментов", mount: "Упряжь и транспорт",
   alchemical: "Алхимические составы", component: "Компоненты", valuable: "Ценности",
-  service: "Услуги", lodging: "Проживание", other: "Прочее"
+  service: "Услуги", lodging: "Проживание", ammo: "Боеприпасы", other: "Прочее"
 };

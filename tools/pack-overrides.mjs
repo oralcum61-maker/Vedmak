@@ -33,6 +33,8 @@ export const OVERRIDES = [
   // Кинжал и стилет меняются картинками
   { op: "set", pack: "weapons", name: "Кинжал", set: { img: `${W}t3-knife-ritual.webp` } },
   { op: "set", pack: "weapons", name: "Стилет", set: { img: `${W}t3-knife-assassin.webp` } },
+  // Эльфский зефар (стр. 83) — лук на 350 м, а генератор записал его посохом: атака шла бы без Лвк и без дистанций
+  { op: "set", pack: "weapons", name: "Эльфский зефар", set: { "system.category": "bow", "system.skill": "archery" } },
   // Орион — метательная звезда, а не меч
   { op: "set", pack: "weapons", name: "Орион", set: { img: "icons/weapons/thrown/throwing-star-quad-steel.webp" } },
   // Ловушки и бомбы в «Оружии» были копиями алхимических из-за ошибки bs_items.py — исправлено в генераторе,
