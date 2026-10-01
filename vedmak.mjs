@@ -288,8 +288,14 @@ Hooks.on("preCreateActor", (actor, data) => {
   if (actor.type === "monster" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
     actor.updateSource({ img: "systems/vedmak/assets/fan/monsters/mons-wraith.webp" });
   }
-  // Токен персонажа привязан к актору и видит
+  // Токен персонажа привязан к актору, дружелюбен и видит — если создатель не задал этого сам:
+  // копия, импорт или враждебный НИП-персонаж сохраняют свои настройки токена
   if (actor.type === "character") {
-    actor.updateSource({ prototypeToken: { actorLink: true, disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY, sight: { enabled: true } } });
+    const has = key => foundry.utils.hasProperty(data, `prototypeToken.${key}`);
+    const token = {};
+    if (!has("actorLink")) token.actorLink = true;
+    if (!has("disposition")) token.disposition = CONST.TOKEN_DISPOSITIONS.FRIENDLY;
+    if (!has("sight.enabled")) token.sight = { enabled: true };
+    if (Object.keys(token).length) actor.updateSource({ prototypeToken: token });
   }
 });

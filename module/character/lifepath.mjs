@@ -518,6 +518,13 @@ export function dependents(path) {
   if (path === "siblingsCount") return ["sibling"];
   if (path === "wAge" || path === "wTraining") return ["wTrials"];
   if (path === "wStart") return ["decade"];
+  // Броски-соседи, а не вложенные пути: «жив ли» решает, бросать ли «когда умер» и «как», поворот охоты —
+  // бросать ли, какой он, подробности неудачи — бросать ли месяцы (у «Изуродован» их нет)
+  const near = path.match(/^(decade\.\d+\.(?:enemy|ally))\.alive$/);
+  if (near) return [`${near[1]}.when`, `${near[1]}.death`];
+  if (/^decade\.\d+\.hunt\.twist$/.test(path)) return [`${path}What`];
+  const sub = path.match(/^(event\.\d+\.misfortune)\.sub$/);
+  if (sub) return [`${sub[1]}.months`];
   const m = path.match(/^(event\.\d+|decade\.\d+)\.(kind|luck|side|love|danger|dangerKind|outcome|event|benefit|fortune|misfortune)$/);
   if (m) {
     const [, base, what] = m;
