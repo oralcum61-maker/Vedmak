@@ -2701,3 +2701,27 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-body); font-weight: 600; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
 }
 .vedmak-dialog .window-header .window-icon { display: none; }
+/* ------------------------------ Фактурность ------------------------------ */
+/* Не картинки, а шум прямо в стилях (SVG feTurbulence): мелкое зерно — поверхность как материал, крупные мягкие
+   разводы — как у выделанной кожи. Файлов нет, рисуется один раз на плитку; сила — альфой в матрице цвета */
+.vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+  --vd-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .78 0 0 0 0 .62 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --vd-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .42 0 0 0 0 .26 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+}
+/* Фон окна: разводы, зерно и мягкий свет сверху */
+.vedmak.sheet .window-content, .vedmak-dialog .window-content {
+  background-image: radial-gradient(120% 70% at 50% -10%, rgba(184, 151, 90, .07), rgba(0, 0, 0, 0) 60%), var(--vd-mottle), var(--vd-grain);
+  background-size: auto, 640px 640px, 180px 180px;
+}
+/* Панели, карточки и подсказки — только зерно, чтобы не рябило */
+.vedmak .vd-panel, .vedmak .derived, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+  background-image: var(--vd-grain); background-size: 180px 180px;
+}
+/* Планка окна — зерно плотнее, как вороненая сталь */
+.vedmak .window-header { background-image: var(--vd-grain); background-size: 120px 120px; }
+/* Колонка персонажа и полоса вкладок — тот же материал, что и окно, чуть темнее */
+.vedmak.character .vd-rail, .vedmak .vd-header {
+  background-image: linear-gradient(rgba(0, 0, 0, .18), rgba(0, 0, 0, .18)), var(--vd-mottle), var(--vd-grain);
+  background-size: auto, 640px 640px, 180px 180px;
+}
+.vedmak.sheet nav.sheet-tabs { background-image: var(--vd-grain); background-size: 180px 180px; }
