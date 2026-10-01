@@ -2640,7 +2640,7 @@ body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range
    Forum — только заголовки (имя, разделы, карточки, окна), всё остальное — IBM Plex Sans. */
 
 /* Тени у текста и наложение слоёв больше ничего не дают — фактур нет */
-.vedmak, .vedmak *, .vedmak-card, .vedmak-card * { text-shadow: none !important; background-blend-mode: normal !important; }
+.vedmak, .vedmak *, .vedmak-card, .vedmak-card * { text-shadow: none !important; }
 
 /* Заголовки — Forum */
 .vedmak :is(h1, h2, h3, h4, legend), .vedmak .window-title, .vedmak input.name,
@@ -2701,27 +2701,68 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-body); font-weight: 600; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
 }
 .vedmak-dialog .window-header .window-icon { display: none; }
+
 /* ------------------------------ Фактурность ------------------------------ */
-/* Не картинки, а шум прямо в стилях (SVG feTurbulence): мелкое зерно — поверхность как материал, крупные мягкие
-   разводы — как у выделанной кожи. Файлов нет, рисуется один раз на плитку; сила — альфой в матрице цвета */
+/* Шум прямо в стилях (SVG feTurbulence), серый и наложенный режимом overlay: он меняет только светлоту, а цвет
+   поверхности остаётся своим. Мелкое зерно — поверхность как материал; крупные пятна — как у выделанной кожи.
+   Середина шума — 50 % серого (для overlay это «без изменений»), сила — наклоном slope в feFunc. */
 .vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
-  --vd-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .78 0 0 0 0 .62 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  --vd-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .42 0 0 0 0 .26 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  --vd-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='.34' intercept='.33'/%3E%3CfeFuncG type='linear' slope='.34' intercept='.33'/%3E%3CfeFuncB type='linear' slope='.34' intercept='.33'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --vd-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.005' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='.4' intercept='.3'/%3E%3CfeFuncG type='linear' slope='.4' intercept='.3'/%3E%3CfeFuncB type='linear' slope='.4' intercept='.3'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
 }
-/* Фон окна: разводы, зерно и мягкий свет сверху */
-.vedmak.sheet .window-content, .vedmak-dialog .window-content {
-  background-image: radial-gradient(120% 70% at 50% -10%, rgba(184, 151, 90, .07), rgba(0, 0, 0, 0) 60%), var(--vd-mottle), var(--vd-grain);
-  background-size: auto, 640px 640px, 180px 180px;
+/* Фон окна, колонка персонажа, шапка чудовища: пятна и зерно */
+.vedmak.sheet .window-content, .vedmak-dialog .window-content, .vedmak.character .vd-rail, .vedmak .vd-header {
+  background-image: var(--vd-mottle), var(--vd-grain) !important;
+  background-size: 700px 700px, 200px 200px !important;
+  background-blend-mode: overlay, overlay !important;
 }
-/* Панели, карточки и подсказки — только зерно, чтобы не рябило */
-.vedmak .vd-panel, .vedmak .derived, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
-  background-image: var(--vd-grain); background-size: 180px 180px;
+.vedmak.character .vd-rail, .vedmak .vd-header { background-color: #100d0a; }
+/* Панели, карточки, подсказки, вкладки и планка окна — только зерно, чтобы не рябило */
+.vedmak .vd-panel, .vedmak .derived, .vedmak .dlist, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip,
+.vedmak.sheet nav.sheet-tabs, .vedmak .window-header {
+  background-image: var(--vd-grain) !important; background-size: 200px 200px !important;
+  background-blend-mode: overlay !important;
 }
-/* Планка окна — зерно плотнее, как вороненая сталь */
-.vedmak .window-header { background-image: var(--vd-grain); background-size: 120px 120px; }
-/* Колонка персонажа и полоса вкладок — тот же материал, что и окно, чуть темнее */
-.vedmak.character .vd-rail, .vedmak .vd-header {
-  background-image: linear-gradient(rgba(0, 0, 0, .18), rgba(0, 0, 0, .18)), var(--vd-mottle), var(--vd-grain);
-  background-size: auto, 640px 640px, 180px 180px;
+
+/* --------------------------------- Контраст -------------------------------- */
+/* Подписи ярче, панели заметнее отделены от фона, линии видны */
+.vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+  --vd-bg: #12100c;
+  --vd-bg-2: #1c1813;
+  --vd-panel: #251f18;
+  --vd-line: #4b4032;
+  --vd-line-soft: #362e24;
+  --vd-text: #eee6d3;
+  --vd-text-dim: #b6a88b;
+  --vd-steel: #8a7a60;
 }
-.vedmak.sheet nav.sheet-tabs { background-image: var(--vd-grain); background-size: 180px 180px; }
+
+/* ------------------------------ Заголовки — антиква ------------------------------ */
+/* Forum — у всего, что называет раздел: вкладки, подвкладки, подписи групп, разделы окон проверок */
+.vedmak.sheet nav.sheet-tabs > a, .vedmak nav.pane-switch > a, .vedmak .bronze-tag, .vedmak .group-head .glabel,
+.vedmak .fate-bar > .cap, .vedmak-dialog .dlg-label, .vedmak-wizard .wizard-steps a, .vedmak-wizard .wizard-steps span {
+  font-family: var(--vd-font-head) !important; font-weight: 400;
+}
+.vedmak.sheet nav.sheet-tabs > a { font-size: .98rem; letter-spacing: .03em; }
+.vedmak .bronze-tag, .vedmak .fate-bar > .cap, .vedmak-dialog .dlg-label { font-size: .82rem; letter-spacing: .12em; font-weight: 400; }
+.vedmak .group-head .glabel { font-size: .92rem; letter-spacing: .04em; color: var(--vd-gold); text-transform: none; }
+
+/* ------------------------- Производные: четыре плотных колонки ------------------------- */
+/* Раньше список тянулся на всю свободную высоту вкладки (flex: 1, space-evenly) — строки разъезжались.
+   Теперь — четыре группы в ряд, каждая на своей панели, строки вплотную */
+.vedmak.character .derived-lists {
+  grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; flex: none; align-content: start; margin: .2rem 0 .6rem;
+}
+.vedmak .dlist {
+  gap: .1rem; padding: .4rem .6rem .45rem; background-color: var(--vd-panel);
+  border: 1px solid var(--vd-line-soft); border-radius: 4px;
+}
+.vedmak .dlist .group-head { margin-bottom: .2rem; }
+.vedmak .dlist .group-head .rule { display: none; }
+.vedmak .dline { font-size: .8rem; line-height: 1.35; }
+.vedmak .dline .t { color: var(--vd-text-dim); }
+.vedmak .dline b { font-size: .95rem; font-weight: 500; color: var(--vd-silver); }
+.vedmak .dline .dots-fill { flex: 1; }
+@container (max-width: 46rem) {
+  .vedmak.character .derived-lists { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
