@@ -1,4 +1,4 @@
-// Общие помощники боевых карточек: поиск документов, цели, сокет ведущего.
+// Общие помощники боевых карточек: поиск документов, цели, сокет ведущего, отметки «уже брошено».
 
 import { renderTemplate } from "../util.mjs";
 
@@ -101,6 +101,79 @@ export function initSocket() {
       console.error(`vedmak | ошибка действия ${action}`, err);
     }
   });
+}
+
+/**
+ * Видимость карточки без окна (Shift): режим чата пользователя. v14 применяет режим, только если его передали
+ * явно, — без этого карточка уходила всем, даже если в чате выбрано «Ведущему».
+ */
+export function defaultMessageMode() {
+  return game.settings.get("core", "messageMode") || "public";
+}
+
+/**
+ * Штраф ран руки к действиям этой рукой (−2 вывих, −3 перелом; стр. 158–160). В какой руке оружие,
+ * система не знает — берём худшую руку и показываем отдельной строкой, чтобы Мастер видел и мог поправить.
+ */
+export function armWoundParts(actor) {
+  const d = actor?.system?.derived;
+  return d?.armMod ? [{ label: `Ранение руки${d.armLabel ? ` (${d.armLabel})` : ""}`, value: d.armMod }] : [];
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Один бросок на карточку: защита на цель, урон на защиту                   */
+/* -------------------------------------------------------------------------- */
+
+/** Ключ цели во флагах: точки UUID превратили бы его во вложенный путь. */
+export function doneKey(uuid) {
+  return String(uuid ?? "").replaceAll(".", "_");
+}
+
+/**
+ * Отметить на карточке-источнике, что по ней уже бросили: атака → защита цели, защита → урон.
+ * Отметка нужна, чтобы при перерисовке погасить кнопки. Карточку-источник часто создал другой игрок,
+ * поэтому чужую карточку отмечает ведущий; без ведущего отметки нет, но повтор всё равно ловит поиск по чату.
+ */
+export async function markDone(source, result) {
+  if (!source || !result) return;
+  if (source.isOwner) return applyDoneMark(source, result);
+  if (game.users.activeGM) return asGM("markDone", { messageId: source.id, resultId: result.id });
+}
+
+async function applyDoneMark(source, result) {
+  const def = result.flags.vedmak?.defense;
+  const dmg = result.flags.vedmak?.damage;
+  if (def?.attackMessageId === source.id) {
+    await source.update({ [`flags.vedmak.defended.${doneKey(def.defender.tokenUuid ?? def.defender.actorUuid)}`]: result.id });
+  } else if (dmg?.defenseMessageId === source.id) {
+    await source.update({ "flags.vedmak.damaged": result.id });
+  }
+}
+
+registerGMHandler("markDone", async ({ messageId, resultId }, userId) => {
+  const source = game.messages.get(messageId);
+  const result = game.messages.get(resultId);
+  if (!source || !result) return;
+  // Отмечать можно только своей карточкой-итогом и только её источник (что именно — читаем из самой карточки)
+  if (result.author?.id !== userId && !game.users.get(userId)?.isGM) return;
+  await applyDoneMark(source, result);
+});
+
+/**
+ * Повтор броска, который уже сделан: игроку — отказ, ведущему — подтверждение
+ * (у Мастера всегда есть ручная правка: перебросить после ошибки или спорного случая).
+ * @param {string} what — «Защита Геральта уже брошена.»
+ */
+export async function allowRepeat(what) {
+  if (!game.user.isGM) {
+    ui.notifications.warn(`${what} Перебросить может ведущий.`);
+    return false;
+  }
+  return !!(await foundry.applications.api.DialogV2.confirm({
+    window: { title: "Повторный бросок", icon: "fa-solid fa-rotate-right" },
+    content: `<p>${what}</p><p>Бросить ещё раз? Прежняя карточка останется в чате — лишнюю удалите сами.</p>`,
+    rejectClose: false
+  }));
 }
 
 /** Создать карточку боя из шаблона. */

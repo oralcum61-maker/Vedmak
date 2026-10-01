@@ -73,8 +73,9 @@ export function readCommon(elements, luckMax = 0) {
  * @param {(form: HTMLFormElement) => void} [opts.extra] — доп. пересчёт окна (энергия сотворения)
  * @param {(form: HTMLFormElement) => number} [opts.base] — своя основа, когда её не описать data-base
  * @param {(form: HTMLFormElement) => number} [opts.mods] — правки, которых нет в data-mod (числовые поля)
+ * @param {(form: HTMLFormElement) => string} [opts.damageExtra] — добавка к урону после множителя (разбег)
  */
-export function bindDialog(dialog, { extra, base: baseFn, mods: modsFn } = {}) {
+export function bindDialog(dialog, { extra, base: baseFn, mods: modsFn, damageExtra } = {}) {
   const root = dialog.element;
   const form = root.querySelector("form") ?? root;
   if (!form) return;
@@ -88,7 +89,8 @@ export function bindDialog(dialog, { extra, base: baseFn, mods: modsFn } = {}) {
   const update = () => {
     const checked = [...form.querySelectorAll("input:checked")];
     const picked = checked.find(i => i.dataset.base !== undefined);
-    const base = Math.max(0, baseFn ? baseFn(form) : picked ? Number(picked.dataset.base) || 0 : baseDefault);
+    // Основа может быть отрицательной: ниже 0 её не пускает только вычитание критического провала (стр. 157)
+    const base = baseFn ? baseFn(form) : picked ? Number(picked.dataset.base) || 0 : baseDefault;
     const luck = Number(form.elements.luck?.value) || 0;
     const mods = checked.reduce((sum, i) => sum + (Number(i.dataset.mod) || 0), 0)
       + (Number(form.elements.mod?.value) || 0) + luck + (modsFn ? modsFn(form) : 0);
@@ -97,14 +99,16 @@ export function bindDialog(dialog, { extra, base: baseFn, mods: modsFn } = {}) {
       const value = baseBox.querySelector("b");
       if (value) value.textContent = String(base);
     }
-    if (rollOut) rollOut.textContent = `d10 + ${base}${mods ? ` ${mods > 0 ? "+" : "−"} ${Math.abs(mods)}` : ""}`;
+    if (rollOut) rollOut.textContent = `d10 ${base < 0 ? "−" : "+"} ${Math.abs(base)}${mods ? ` ${mods > 0 ? "+" : "−"} ${Math.abs(mods)}` : ""}`;
     if (dmgOut) {
+      // Порядок как в броске урона: формула × множитель, затем разбег и правка урона
       const picked2 = checked.find(i => i.dataset.damage !== undefined);
       const formula = picked2 ? picked2.dataset.damage : dmgOut.dataset.damage ?? "";
       const mult = picked ? Number(picked.dataset.dmult) || 1 : 1;
       const dmg = Number(form.elements.damageMod?.value) || 0;
+      const multText = mult === 0.5 ? " ×½" : mult !== 1 ? ` ×${mult}` : "";
       dmgOut.textContent = formula
-        ? `${formula}${mult > 1 ? ` ×${mult}` : ""}${dmg ? ` ${dmg > 0 ? "+" : "−"} ${Math.abs(dmg)}` : ""}`
+        ? `${formula}${multText}${damageExtra?.(form) ?? ""}${dmg ? ` ${dmg > 0 ? "+" : "−"} ${Math.abs(dmg)}` : ""}`
         : "—";
     }
     // Порог успеха выбранного действия (манёвр верхом), если он объявлен через data-dc

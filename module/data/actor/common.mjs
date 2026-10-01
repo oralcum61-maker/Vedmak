@@ -70,7 +70,9 @@ export function collectCritMods(actor) {
     stats: {}, skills: {}, derived: {}, mult: {},
     action: 0, magic: 0, duel: 0, empathicDuel: 0, sight: 0, arm: 0,
     headMult: 3, bleedExtra: 0, acid: 0, bleeding: false, poisoned: false, suffocating: false,
-    armDisabled: false, death: false, wounds: []
+    armDisabled: false, death: false, wounds: [],
+    // Штрафы ран руки по рукам: действуют только на действия той рукой, поэтому две руки не складываются
+    armBy: {}
   };
   for (const item of actor?.itemTypes?.critWound ?? []) {
     const m = item.system.mods;
@@ -81,6 +83,10 @@ export function collectCritMods(actor) {
     // Множители не складываются: берём самый суровый
     for (const [k, v] of Object.entries(m.mult ?? {})) out.mult[k] = Math.min(out.mult[k] ?? 1, v);
     for (const k of ["action", "magic", "duel", "empathicDuel", "sight", "arm", "bleedExtra", "acid"]) out[k] += m[k] ?? 0;
+    if (m.arm) {
+      const loc = item.system.location || "arm";
+      out.armBy[loc] = (out.armBy[loc] ?? 0) + m.arm;
+    }
     if (m.headMult) out.headMult = Math.max(out.headMult, m.headMult);
     for (const k of ["bleeding", "poisoned", "suffocating", "armDisabled", "death"]) out[k] ||= !!m[k];
   }
@@ -114,8 +120,9 @@ export function computeArmor(actor, { natural = 0, innate = 0, bodyType = "human
       const hi = Math.max(sp, layer.value), lo = Math.min(sp, layer.value);
       sp = hi + layerBonus(hi - lo);
     }
+    // Сопротивление дают только слои, что ещё держат удар: разбитый слой (ПБ 0) не защищает и от типа урона
     const resist = new Set();
-    for (const l of layers) {
+    for (const l of active) {
       if (!l.item) continue;
       for (const k of l.item.system.allResistances ?? []) resist.add(k);
     }
@@ -238,7 +245,10 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   d.duelMod = crit.duel;
   d.empathicDuelMod = crit.empathicDuel;
   d.sightMod = crit.sight;
-  d.armMod = crit.arm;
+  // Ранение руки (стр. 158–160): в какой руке оружие, система не знает — берём худшую руку
+  const [armLoc, armMod] = Object.entries(crit.armBy).sort((a, b) => a[1] - b[1])[0] ?? ["", 0];
+  d.armMod = Math.min(0, armMod);
+  d.armLabel = d.armMod ? (LOCATIONS_HUMANOID[armLoc]?.label ?? LOCATIONS_MONSTER[armLoc]?.label ?? "").toLowerCase() : "";
   d.headMult = crit.headMult;
   d.crit = crit;
 
@@ -252,6 +262,12 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
     if (d.dying) eff = Math.floor(eff / 3);
     else if (d.wounded && ["ref", "dex", "int", "will"].includes(key)) eff = Math.floor(eff / 2);
     stat.effective = eff;
+  }
+  // При смерти ⅓ и у дополнительных параметров (стр. 162): Бег и Прыжок посчитаны выше от итоговой Скор.
+  // Уст не трогаем — порог испытания против смерти берётся до штрафа
+  if (d.dying) {
+    d.run = Math.floor(d.run / 3);
+    d.leap = Math.floor(d.run / 5);
   }
 
   // Навыки: основа = параметр + навык (стр. 50) + штрафы ранений; СД вычитается из магических навыков (стр. 79)

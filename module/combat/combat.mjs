@@ -1,7 +1,7 @@
 // Бой: начало хода участника — эффекты урона за ход, конец ошеломления, испытания (стр. 161–162).
 
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER } from "../config/combat.mjs";
-import { postCard } from "./common.mjs";
+import { postCard, defaultMessageMode } from "./common.mjs";
 import { wearArmor } from "./damage.mjs";
 import { magicStartOfTurn } from "../magic/effects.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
@@ -15,6 +15,11 @@ export class VedmakCombat extends Combat {
     await super._onStartTurn(combatant, context);
     const actor = combatant.actor;
     if (!actor || combatant.defeated || actor.statuses.has("dead")) return;
+    // Один старт хода на раунд: v14 зовёт его снова при смене порядка инициативы и при проходе вперёд после
+    // отката хода — кровотечение и горение иначе списались бы дважды. Пропущенные ходы (context.skipped) идут как обычные
+    if (combatant.getFlag("vedmak", "turnStarted") === context.round) return;
+    await combatant.setFlag("vedmak", "turnStarted", context.round);
+
     try {
       await startOfTurn(actor, this, { ...context, combatant });
     } catch (err) {
@@ -33,9 +38,10 @@ function effectMult(actor, key, { armorResist = false } = {}) {
   return mult;
 }
 
-/** Есть ли у надетой брони сопротивление (кровотечению, отравлению). */
+/** Есть ли у надетой брони сопротивление (кровотечению, отравлению). Разбитая броня (ПБ 0 везде) не защищает. */
 function armorResists(actor, key) {
-  return (actor.itemTypes.armor ?? []).some(i => i.system.equipped && i.system.resistances?.[key]);
+  return (actor.itemTypes.armor ?? []).some(i => i.system.equipped && !i.system.isShield
+    && i.system.allResistances.includes(key) && Object.values(i.system.sp).some(s => s.value > 0));
 }
 
 export async function startOfTurn(actor, combat, context) {
@@ -134,6 +140,6 @@ export async function startOfTurn(actor, combat, context) {
   await postCard({
     template: "systems/vedmak/templates/chat/turn.hbs",
     data: { name: actor.name, img: actor.img, round: context.round, lines, buttons, tokenUuid, actorUuid: actor.uuid },
-    actor, flags: { turn: { actorUuid: actor.uuid, round: context.round } }
+    actor, flags: { turn: { actorUuid: actor.uuid, round: context.round } }, messageMode: defaultMessageMode()
   });
 }

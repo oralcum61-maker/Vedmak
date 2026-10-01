@@ -4,7 +4,7 @@ import { defend } from "./defense.mjs";
 import { repeatAttack } from "./attack.mjs";
 import { damageFromDefense, requestApplyDamage } from "./damage.mjs";
 import { rollStunSave, deathSaveDialog } from "./saves.mjs";
-import { resolveActor, asGM } from "./common.mjs";
+import { resolveActor, asGM, doneKey } from "./common.mjs";
 import { requestSpellEffects, ritualFocus } from "../magic/effects.mjs";
 
 const ACTIONS = {
@@ -57,11 +57,35 @@ function actorFrom(button) {
   return actor;
 }
 
+/**
+ * Погасить кнопки уже сделанного броска: защиты цели, по которой защита брошена, и урона после броска урона.
+ * Ведущему кнопка остаётся (повтор с подтверждением), но приглушена.
+ */
+function markDoneButtons(message, html) {
+  const flags = message.flags.vedmak;
+  const done = (button, tooltip) => {
+    button.dataset.tooltip = tooltip;
+    if (game.user.isGM) button.style.opacity = "0.5";
+    else button.disabled = true;
+  };
+  if (flags?.defended) {
+    for (const row of html.querySelectorAll(".target-row[data-target-token], .target-row[data-target-actor]")) {
+      const id = flags.defended[doneKey(row.dataset.targetToken || row.dataset.targetActor)];
+      if (!id || !game.messages.has(id)) continue;
+      for (const b of row.querySelectorAll('[data-vedmak="defend"]')) done(b, "Защита уже брошена");
+    }
+  }
+  if (flags?.damaged && game.messages.has(flags.damaged)) {
+    for (const b of html.querySelectorAll('[data-vedmak="damage"]')) done(b, "Урон уже брошен");
+  }
+}
+
 export function registerChatListeners() {
   Hooks.on("renderChatMessageHTML", (message, html) => {
     // Сообщение с карточкой системы — отдельный класс: раньше CSS искал её селектором :has(),
     // и браузер перепроверял его на каждое изменение в чате
     if (html.querySelector(".vedmak-card")) html.classList.add("vedmak-message");
+    markDoneButtons(message, html);
     for (const button of html.querySelectorAll("[data-vedmak]")) {
       button.addEventListener("click", async event => {
         event.preventDefault();
