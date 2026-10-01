@@ -137,7 +137,8 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
     if (item.type === "weapon") {
       context.damageTypeOptions = Object.fromEntries(Object.entries(V.DAMAGE_TYPES).map(([k, v]) => [k, v.label]));
-      context.weaponEffects = system.effects.map((e, i) => ({ ...e, index: i, hasParam: !!V.WEAPON_EFFECTS[e.key]?.param, paramHint: V.WEAPON_EFFECTS[e.key]?.param }));
+      // Строки — из исходных данных: эффекты модификаций арбалета добавляются при подготовке и в данные не пишутся
+      context.weaponEffects = item._source.system.effects.map((e, i) => ({ ...e, index: i, hasParam: !!V.WEAPON_EFFECTS[e.key]?.param, paramHint: V.WEAPON_EFFECTS[e.key]?.param }));
     }
     if (item.type === "critWound") {
       context.woundGroups = Object.entries(CRIT_LEVELS).map(([level, cfg]) => ({
@@ -223,7 +224,7 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   static async #onRowAdd(event, target) {
     const field = target.dataset.field;
-    const rows = foundry.utils.deepClone(foundry.utils.getProperty(this.item.system, field) ?? []);
+    const rows = foundry.utils.deepClone(foundry.utils.getProperty(this.item._source.system, field) ?? []);
     rows.push(foundry.utils.deepClone(ROW_TEMPLATES[field] ?? {}));
     await this.item.update({ [`system.${field}`]: rows });
   }
@@ -231,7 +232,7 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static async #onRowDelete(event, target) {
     const field = target.dataset.field;
     const index = Number(target.closest("[data-index]").dataset.index);
-    const rows = foundry.utils.deepClone(foundry.utils.getProperty(this.item.system, field) ?? []);
+    const rows = foundry.utils.deepClone(foundry.utils.getProperty(this.item._source.system, field) ?? []);
     rows.splice(index, 1);
     await this.item.update({ [`system.${field}`]: rows });
   }
