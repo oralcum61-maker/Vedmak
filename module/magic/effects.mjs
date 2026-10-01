@@ -6,6 +6,7 @@ import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny } from "..
 import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
 import { applyBuff, buffLine } from "./buffs.mjs";
+import { isMagicTimed, timeIsUp, zeroShield } from "./timed.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
@@ -66,8 +67,8 @@ async function applySpellEffectsNow(messageId, userId) {
     lines.push(`${label}${rollText}: ${ok ? "да" : "нет"}.`);
   }
   if (spell.regen) {
-    await applyRegen(actor, { hp: spell.regen.hp, rounds: spell.regen.rounds, name: def.attack.label, img: def.attack.img });
-    lines.push(`Регенерация: +${spell.regen.hp} ПЗ за ход${spell.regen.rounds ? ` (${spell.regen.rounds} раундов)` : ", пока поддерживается"}.`);
+    const { term } = await applyRegen(actor, { ...spell.regen, name: def.attack.label, img: def.attack.img });
+    lines.push(`Регенерация: +${spell.regen.hp} ПЗ за ход${term}.`);
   }
   if (spell.hex) {
     const item = caster?.items.get(spell.itemId);
@@ -101,6 +102,7 @@ export async function magicStartOfTurn(actor) {
 
   // Поддержание активных заклинаний
   let sta = sys.sta.value;
+  const ended = new Set(); // заклинания, чьё поддержание прекратилось сейчас
   for (const effect of actor.effects.filter(e => e.flags?.vedmak?.maintain)) {
     const cost = effect.flags.vedmak.maintain.cost ?? 0;
     if (sta >= cost) {
@@ -109,16 +111,34 @@ export async function magicStartOfTurn(actor) {
       await addVigorUsed(actor, cost);
     } else {
       toDelete.push(effect.id);
+      ended.add(effect.flags.vedmak.maintain.itemId);
       lines.push(`${effect.name}: не хватает Вын — заклинание прекращено.`);
-      if (effect.flags.vedmak.maintain.shield) await actor.update({ "system.shield.value": 0 });
+      if (effect.flags.vedmak.maintain.shield) await zeroShield(actor);
     }
   }
   if (sta !== sys.sta.value) await actor.update({ "system.sta.value": sta });
+
+  // Срок во времени (вне боя раунды не считаются) вышел, а v14 пометит это только после начала хода —
+  // снимаем сейчас, без лишнего тика регенерации
+  for (const effect of actor.effects.filter(e => isMagicTimed(e) && timeIsUp(e))) {
+    toDelete.push(effect.id);
+    lines.push(`${effect.name}: ${effect.flags.vedmak.statusRounds !== undefined ? "прошло" : "действие закончилось"}.`);
+    if (effect.flags.vedmak.timed?.key === "shield") await zeroShield(actor);
+  }
 
   // Регенерация и щиты с отсчётом раундов
   let hp = actor.system.hp.value;
   for (const effect of actor.effects.filter(e => e.flags?.vedmak?.timed)) {
     const timed = effect.flags.vedmak.timed;
+    // Снятое выше, выключенное и истёкшее (в том числе зелья — их снимает expireAlchemy) не лечит
+    if (toDelete.includes(effect.id) || !effect.active || timeIsUp(effect)) continue;
+    // Регенерация поддерживаемого заклинания живёт, пока его поддерживают
+    const link = effect.flags.vedmak.spellLink;
+    if (link?.maintain && !isMaintained(link, actor, ended)) {
+      toDelete.push(effect.id);
+      lines.push(`${effect.name}: заклинание больше не поддерживается.`);
+      continue;
+    }
     if (effect.flags.vedmak.regen) {
       const heal = Math.min(effect.flags.vedmak.regen, Math.max(0, actor.system.hp.max - hp));
       if (heal) { hp += heal; lines.push(`${effect.name}: +${heal} ПЗ.`); }
@@ -132,7 +152,7 @@ export async function magicStartOfTurn(actor) {
       if (left <= 0) {
         toDelete.push(effect.id);
         lines.push(`${effect.name}: действие закончилось.`);
-        if (timed.key === "shield") await actor.update({ "system.shield.value": 0, "system.shield.max": 0 });
+        if (timed.key === "shield") await zeroShield(actor);
       } else {
         await effect.update({ "flags.vedmak.timed.rounds": left });
       }
@@ -141,7 +161,7 @@ export async function magicStartOfTurn(actor) {
   if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
 
   // Статусы с длительностью в раундах
-  for (const effect of actor.effects.filter(e => e.flags?.vedmak?.statusRounds)) {
+  for (const effect of actor.effects.filter(e => e.flags?.vedmak?.statusRounds > 0 && !toDelete.includes(e.id))) {
     const left = effect.flags.vedmak.statusRounds - 1;
     if (left <= 0) {
       toDelete.push(effect.id);
@@ -156,11 +176,22 @@ export async function magicStartOfTurn(actor) {
   return lines;
 }
 
+/** Поддерживает ли заклинатель заклинание из связи эффекта (ended — прекращённые в этот ход носителя). */
+function isMaintained(link, actor, ended) {
+  if (link.casterUuid === actor.uuid && ended.has(link.itemId)) return false;
+  const caster = fromUuidSync(link.casterUuid);
+  return !!caster?.effects?.some(e => e.flags?.vedmak?.maintain?.itemId === link.itemId);
+}
+
 /** Прекратить поддерживаемое заклинание (и щит, если это он). */
 export async function endMaintained(actor, effectId) {
   const effect = actor.effects.get(effectId);
   if (!effect) return;
-  if (effect.flags?.vedmak?.maintain?.shield) await removeShieldEffects(actor);
+  if (effect.flags?.vedmak?.maintain?.shield) {
+    // Без обнуления щит продолжал бы поглощать урон (damage.mjs смотрит на system.shield)
+    await removeShieldEffects(actor);
+    await zeroShield(actor);
+  }
   if (actor.effects.has(effectId)) await effect.delete();
 }
 

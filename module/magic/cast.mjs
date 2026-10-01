@@ -7,7 +7,7 @@ import {
 } from "../config/magic.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
-import { renderTemplate } from "../util.mjs";
+import { renderTemplate, inCombat, roundsAsTime } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
 import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf } from "../combat/zones.mjs";
@@ -307,21 +307,32 @@ export async function performCast(actor, item, cfg, targets) {
     selfLines.push("Вын исчерпана: дезориентация, испытание Уст и отдых до 20 Вын.");
   }
 
+  // Регенерация: срок — свой у автоматизации, иначе из «Длительности»; у поддерживаемого заклинания —
+  // пока его поддерживают (снимается вместе с поддержанием)
+  const regen = a.regen.hp ? await regenData(actor, item, a.regen, cost) : null;
+
   // Эффекты на себя при успехе
   if (works) {
     if (a.shieldPerSta) {
       const value = a.shieldPerSta * cost;
-      await actor.update({ "system.shield.value": value, "system.shield.max": value });
+      // Сначала метка (старая снимается без обнуления щита), потом новый щит
       await setTimedEffect(actor, { name: `Щит: ${item.name}`, img: item.img, key: "shield", rounds: a.shieldRounds || 0 });
+      await actor.update({ "system.shield.value": value, "system.shield.max": value });
       selfLines.push(`${item.name}: щит ${value} ПЗ${a.shieldRounds ? ` на ${a.shieldRounds} раундов` : ""}.`);
     }
     const maintain = s.maintainFor(cost);
     if (maintain > 0) {
-      await actor.createEmbeddedDocuments("ActiveEffect", [{
-        name: `Поддержание: ${item.name}`, img: item.img, transfer: false,
+      const data = {
+        name: `Поддержание: ${item.name}`, img: item.img,
         description: `Каждый раунд ${maintain} Вын. Пока поддерживается, нельзя творить другие заклинания.`,
         flags: { vedmak: { maintain: { cost: maintain, itemId: item.id, shield: !!a.shieldPerSta } } }
-      }]);
+      };
+      // То же заклинание сотворено снова — поддержание заменяется, а не добавляется второе (иначе Вын
+      // списывается дважды). Обновлением, а не удалением: удаление поддержания снимает баффы, регенерацию
+      // и зону этого заклинания — в том числе только что поставленные
+      const existing = maintainedSpells(actor).find(e => e.flags.vedmak.maintain.itemId === item.id);
+      if (existing) await existing.update(data);
+      else await actor.createEmbeddedDocuments("ActiveEffect", [{ ...data, transfer: false }]);
       selfLines.push(`Поддержание: ${maintain} Вын за раунд.`);
     }
     // Бафф на себя из справочника (config/spell-auto.mjs)
@@ -331,9 +342,9 @@ export async function performCast(actor, item, cfg, targets) {
       selfLines.push(buffLine(buff));
     }
     if (reg?.note) notes.push(reg.note);
-    if (s.kind === "ritual" && a.regen.hp && !targets.length) {
-      await applyRegen(actor, { hp: a.regen.hp, rounds: a.regen.rounds, name: item.name, img: item.img });
-      selfLines.push(`${item.name}: +${a.regen.hp} ПЗ за ход.`);
+    if (s.kind === "ritual" && regen && !targets.length) {
+      const { term } = await applyRegen(actor, { ...regen, name: item.name, img: item.img });
+      selfLines.push(`${item.name}: +${regen.hp} ПЗ за ход${term}.`);
     }
   }
 
@@ -357,7 +368,7 @@ export async function performCast(actor, item, cfg, targets) {
       ...(statusesByCost ? [{ status: statusesByCost, chance: 100 }] : [])
     ],
     statusRounds: a.statusRounds,
-    regen: a.regen.hp ? { hp: a.regen.hp, rounds: a.regen.rounds } : null,
+    regen,
     hex: s.kind === "hex",
     buff: reg?.target ? buffData(item, actor, reg.target, buffTime) : null,
     allLocations: a.location === "all",
@@ -425,22 +436,53 @@ export function spellDefenseButtons(keys) {
 /*  Эффекты с длительностью                                                    */
 /* -------------------------------------------------------------------------- */
 
-/** Эффект-метка с отсчётом раундов в начале хода (0 — без ограничения). */
-export async function setTimedEffect(actor, { name, img, key, rounds = 0, extra = {} }) {
+/**
+ * Эффект-метка со сроком. В бою — отсчёт раундов в начале хода носителя, вне боя раунды считать некому:
+ * срок ставится временем мира (после боя остаток переводит timed.mjs). Ни раундов, ни минут — без срока
+ * (щит до исчерпания, поддерживаемое заклинание).
+ */
+export async function setTimedEffect(actor, { name, img, key, rounds = 0, minutes = 0, extra = {} }) {
   const existing = actor.effects.find(e => e.flags?.vedmak?.timed?.key === key);
-  if (existing) await existing.delete();
-  const [effect] = await actor.createEmbeddedDocuments("ActiveEffect", [{
+  // Замена: новый щит ставится следом — снятие старой метки его не обнуляет (timed.mjs)
+  if (existing) await existing.delete({ vedmakKeepShield: true });
+  const combat = inCombat(actor);
+  const data = {
     name, img, transfer: false,
-    flags: { vedmak: { timed: { key, rounds }, ...extra } }
-  }]);
+    flags: { vedmak: { timed: { key, rounds: combat && !minutes ? rounds : 0 }, ...extra } }
+  };
+  if (minutes) data.duration = { value: minutes, units: "minutes" };
+  else if (rounds && !combat) data.duration = roundsAsTime(rounds);
+  const [effect] = await actor.createEmbeddedDocuments("ActiveEffect", [data]);
   return effect;
 }
 
-/** Регенерация: +N ПЗ в начале каждого хода, rounds — число или формула (пусто — пока поддерживается). */
-export async function applyRegen(actor, { hp, rounds, name, img }) {
+/**
+ * Данные регенерации заклинания для карточки: {hp, rounds, minutes, maintain, casterUuid, itemId}.
+ * rounds — число или формула из автоматизации; пусто — срок из «Длительности» или поддержание.
+ */
+async function regenData(actor, item, auto, cost) {
+  const regen = { hp: auto.hp, rounds: auto.rounds || "", casterUuid: actor.uuid, itemId: item.id };
+  if (regen.rounds) return regen;
+  if (item.system.maintainFor(cost) > 0) return { ...regen, maintain: true };
+  const time = await buffDuration(item.system.duration);
+  if (time.rounds) regen.rounds = String(time.rounds);
+  else if (time.minutes) regen.minutes = time.minutes;
+  return regen;
+}
+
+/**
+ * Регенерация: +N ПЗ в начале каждого хода. rounds — число или формула, minutes — срок временем,
+ * maintain — пока заклинатель поддерживает заклинание (снимает buffs.mjs вместе с поддержанием).
+ * @returns {Promise<{effect: ActiveEffect, term: string}>} term — срок для карточки: « (5 раундов)»
+ */
+export async function applyRegen(actor, { hp, rounds, minutes = 0, maintain = false, casterUuid, itemId, name, img }) {
   let n = 0;
-  if (rounds) n = Number.isFinite(Number(rounds)) ? Number(rounds) : (await new Roll(rounds).evaluate()).total;
-  return setTimedEffect(actor, { name: `Регенерация: ${name}`, img, key: `regen:${name}`, rounds: n, extra: { regen: hp } });
+  if (rounds) n = Number.isFinite(Number(rounds)) ? Number(rounds) : (await new Roll(String(rounds)).evaluate()).total;
+  const extra = { regen: hp };
+  if (casterUuid) extra.spellLink = { casterUuid, itemId, maintain: !!maintain };
+  const effect = await setTimedEffect(actor, { name: `Регенерация: ${name}`, img, key: `regen:${name}`, rounds: n, minutes, extra });
+  const term = n ? ` (${n} раундов)` : minutes ? ` (${minutes} мин)` : maintain ? ", пока поддерживается" : "";
+  return { effect, term };
 }
 
 /** Порча как эффект на жертве: описание и условия снятия. */

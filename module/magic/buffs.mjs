@@ -1,11 +1,13 @@
 // Баффы заклинаний на заклинателе и целях (справочник — config/spell-auto.mjs): эффект с изменениями,
 // невосприимчивостью, модификаторами бросков, статусами и зрением. Срок — из поля «Длительность»:
 // раунды считаются в начале хода носителя, минуты и часы — по мировому времени, «активное» —
-// пока заклинатель поддерживает заклинание.
+// пока заклинатель поддерживает заклинание. Бонус к максимуму ПЗ (`system.fx.hp`) прибавляется и к текущим,
+// а по окончании текущие не остаются выше максимума.
 
 import { applyVision } from "../crafting/alchemy-triggers.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { inCombat, roundsAsTime } from "../util.mjs";
+import { registerTimedHooks } from "./timed.mjs";
 
 /**
  * Срок баффа по тексту длительности.
@@ -34,11 +36,57 @@ export function buffData(item, caster, cfg, duration) {
   };
 }
 
-/** Наложить бафф; такой же от того же заклинания заменяется. */
+/* ------------------------------ Бонус к ПЗ ------------------------------ */
+
+/** Сколько ПЗ изменения прибавляют к максимуму (`system.fx.hp`, «прибавить»). */
+export function hpBonusOf(changes) {
+  return (changes ?? []).filter(c => c.key === "system.fx.hp" && (c.type ?? "add") === "add")
+    .reduce((sum, c) => sum + (Number(c.value) || 0), 0);
+}
+
+/**
+ * Текущие ПЗ после конца бонуса к максимуму: не выше нового максимума, но запас сверх максимума,
+ * который был и без бонуса (временные ПЗ зелий), не сгорает. max — максимум уже без бонуса.
+ */
+export function hpAfterBonus(hp, max, bonus) {
+  return Math.min(hp, Math.max(max, hp - bonus));
+}
+
+/** Снятые эффекты с бонусом к ПЗ, по акторам: несколько в одном удалении — одна правка. */
+const endedHpBonus = new Map();
+
+function clampHpLater(actor, bonus) {
+  const queued = endedHpBonus.has(actor);
+  endedHpBonus.set(actor, (endedHpBonus.get(actor) ?? 0) + bonus);
+  if (queued) return;
+  // Хуки удаления идут подряд для всех снятых эффектов — правка после них, одна на всех
+  queueMicrotask(() => {
+    const total = endedHpBonus.get(actor);
+    endedHpBonus.delete(actor);
+    const { value, max } = actor.system.hp;
+    const hp = hpAfterBonus(value, max, total);
+    if (hp !== value) actor.update({ "system.hp.value": hp }).catch(err => console.error("vedmak | ПЗ после баффа", err));
+  });
+}
+
+/* --------------------------------- Баффы --------------------------------- */
+
+/**
+ * Наложить бафф; такой же от того же заклинания заменяется. Бонус к максимуму ПЗ прибавляется и к текущим
+ * («дополнительно получает 25 ПЗ»); при замене прежний бонус сначала снимается.
+ */
 export async function applyBuff(actor, buff) {
-  const same = actor.effects.filter(e => e.flags?.vedmak?.spellBuff?.name === buff.name).map(e => e.id);
-  if (same.length) await actor.deleteEmbeddedDocuments("ActiveEffect", same);
+  const same = actor.effects.filter(e => e.flags?.vedmak?.spellBuff?.name === buff.name);
+  let hp = actor.system.hp.value;
+  if (same.length) {
+    const oldBonus = same.reduce((sum, e) => sum + (e.flags.vedmak.hpBonus ?? 0), 0);
+    // ПЗ пересчитываются здесь, а не хуком удаления: иначе прибавка ниже прочла бы ещё не урезанные ПЗ
+    await actor.deleteEmbeddedDocuments("ActiveEffect", same.map(e => e.id), { vedmakHpHandled: true });
+    if (oldBonus) hp = hpAfterBonus(hp, actor.system.hp.max, oldBonus);
+  }
+  const hpBonus = hpBonusOf(buff.changes);
   const vedmak = { spellBuff: { name: buff.name, casterUuid: buff.casterUuid, itemId: buff.itemId, maintain: !!buff.maintain } };
+  if (hpBonus > 0) vedmak.hpBonus = hpBonus;
   if (buff.immune?.length) vedmak.immune = buff.immune;
   if (buff.rollMods) vedmak.rollMods = buff.rollMods;
   // Вне боя раунды не отсчитываются — такой срок ставится временем мира
@@ -54,6 +102,8 @@ export async function applyBuff(actor, buff) {
   else if (buff.rounds && !combat) effect.duration = roundsAsTime(buff.rounds);
   const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
   if (created && buff.vision) await applyVision(actor, created, buff.vision);
+  if (created && hpBonus > 0) hp += hpBonus;
+  if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
   return created;
 }
 
@@ -71,8 +121,18 @@ export function buffLine(buff) {
   return `${buff.name}: ${bits.filter(Boolean).join(" · ")}${time ? ` (${time})` : ""}.`;
 }
 
-/** Конец поддержания: снять баффы этого заклинания со всех, на ком они висят (у активного ведущего). */
+/**
+ * Конец поддержания: снять баффы и регенерацию этого заклинания со всех, на ком они висят (у активного ведущего).
+ * Конец эффекта с бонусом к ПЗ: текущие ПЗ не выше нового максимума. Сроки щита, регенерации и статусов — timed.mjs.
+ */
 export function registerBuffHooks() {
+  registerTimedHooks();
+  // Правит тот, кто снял эффект: у него есть права на актора. К хуку данные актора уже без эффекта
+  Hooks.on("deleteActiveEffect", (effect, options, userId) => {
+    const bonus = effect.flags?.vedmak?.hpBonus;
+    if (!(bonus > 0) || userId !== game.user.id || options?.vedmakHpHandled) return;
+    if (effect.parent?.documentName === "Actor") clampHpLater(effect.parent, bonus);
+  });
   Hooks.on("deleteActiveEffect", effect => {
     const maintain = effect.flags?.vedmak?.maintain;
     const caster = effect.parent;
@@ -80,7 +140,7 @@ export function registerBuffHooks() {
     const actors = new Set([caster, ...game.actors, ...(canvas?.tokens?.placeables ?? []).map(t => t.actor).filter(Boolean)]);
     for (const actor of actors) {
       const ids = actor.effects.filter(e => {
-        const b = e.flags?.vedmak?.spellBuff;
+        const b = e.flags?.vedmak?.spellBuff ?? e.flags?.vedmak?.spellLink;
         return b?.maintain && b.casterUuid === caster.uuid && b.itemId === maintain.itemId;
       }).map(e => e.id);
       if (ids.length) actor.deleteEmbeddedDocuments("ActiveEffect", ids).catch(err => console.error("vedmak | баффы", err));
