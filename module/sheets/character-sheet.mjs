@@ -574,11 +574,19 @@ export class CharacterSheet extends VedmakActorSheet {
 
   /** Добросить остаток пути разом — все броски одной карточкой в чат. */
   static async #onLifepathRest() {
-    const data = readLifepath(this.actor.system.lifepath);
-    if (!data) return;
-    const res = rollLifepathRest(data.rolls, savedOpts(data));
-    await this.actor.update({ "system.lifepath": writeLifepath(data) });
-    await postLifepathRolls(this.actor, res.rows);
+    // Тот же замок, что у «Раздела»: второй щелчок читал бы путь до записи первого — две разные карточки в чате,
+    // а на листе остался бы только второй результат
+    if (this.#lifepathBusy) return;
+    this.#lifepathBusy = true;
+    try {
+      const data = readLifepath(this.actor.system.lifepath);
+      if (!data) return;
+      const res = rollLifepathRest(data.rolls, savedOpts(data));
+      await this.actor.update({ "system.lifepath": writeLifepath(data) });
+      await postLifepathRolls(this.actor, res.rows);
+    } finally {
+      this.#lifepathBusy = false;
+    }
   }
 
   /**

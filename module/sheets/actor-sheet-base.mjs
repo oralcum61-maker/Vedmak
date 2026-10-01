@@ -107,6 +107,18 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Какой вид листа нарисован сейчас: права могут смениться при открытом листе. */
   #limited = false;
 
+  /** Размер окна для вида листа: короткий — узкий и по высоте содержимого, полный — как в DEFAULT_OPTIONS класса. */
+  #viewPosition(limited) {
+    if (limited) return { width: 480, height: "auto" };
+    const position = {};
+    // DEFAULT_OPTIONS есть у каждого класса цепочки: от общего предка к листу, поздние перекрывают ранние
+    const chain = [...this.constructor.inheritanceChain()].reverse();
+    for (const cls of chain) {
+      if (Object.hasOwn(cls, "DEFAULT_OPTIONS")) Object.assign(position, cls.DEFAULT_OPTIONS.position);
+    }
+    return position;
+  }
+
   /** Короткий лист — узким окном по высоте содержимого. */
   _initializeApplicationOptions(options) {
     options = super._initializeApplicationOptions(options);
@@ -190,9 +202,16 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       options.parts = undefined;
       options.vedmakResetParts = true;
       this.#staleParts.clear();
+      // Размер короткого листа («auto» по высоте) записан в options.position, а ApplicationV2 после каждой
+      // отрисовки применяет его снова — позже _onRender, и setPosition оттуда перебивался бы. Поэтому меняем сами
+      // параметры окна, до super: тогда и автоподбор размера не вернётся, и после смены размер правильный.
+      Object.assign(this.options.position, this.#viewPosition(limited));
     }
     const lazy = !firstRender && !modeChanged && !options.parts;
     super._configureRenderOptions(options);
+    // Заголовок окна Foundry обновляет, только когда у документа сменилось имя; у короткого листа заголовок —
+    // имя с токена, у полного — с видом актора, так что при смене вида обновляем его принудительно
+    if (modeChanged && this.hasFrame) options.window = Object.assign(options.window ?? {}, { title: this.title });
     if (this.#limited) {
       options.parts = ["limited"];
       return;
@@ -221,6 +240,28 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (group === "primary" && this.#staleParts.has(tab)) {
       this.#staleParts.delete(tab);
       this.render({ parts: [tab] });
+    }
+  }
+
+  /**
+   * Привести вкладки к текущему состоянию `tabGroups`. Отрисовка идёт долго (контекст готовится асинхронно), и если
+   * за это время переключили вкладку, перерисованная часть приходит с классом `active` по старому состоянию, а новая
+   * вкладка уже получила его от changeTab: открытыми оказываются две. Поэтому после каждой отрисовки класс
+   * расставляется заново — только у вкладки из `tabGroups`.
+   */
+  #syncTabs() {
+    if (this.#limited) return;
+    for (const [group, tab] of Object.entries(this.tabGroups)) {
+      if (!tab) continue;
+      const sections = this.element.querySelectorAll(`.tab[data-group="${group}"]`);
+      // Нужной вкладки в разметке нет (часть ещё не нарисована) — ничего не гасим, иначе не останется ни одной
+      if (!Array.from(sections).some(s => s.dataset.tab === tab)) continue;
+      for (const section of sections) section.classList.toggle("active", section.dataset.tab === tab);
+      for (const nav of this.element.querySelectorAll(`.tabs [data-group="${group}"]`)) {
+        const on = nav.dataset.tab === tab;
+        nav.classList.toggle("active", on);
+        if (nav.localName === "button") nav.ariaPressed = `${on}`;
+      }
     }
   }
 
@@ -490,7 +531,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     super._onRender(context, options);
     if (options.vedmakResetParts) {
       this.element.classList.toggle("limited", this.#limited);
-      this.setPosition(this.#limited ? { width: 480, height: "auto" } : { ...this.constructor.DEFAULT_OPTIONS.position });
+      this.setPosition(this.#viewPosition(this.#limited));
     }
     // Наблюдатель: кнопки правки спрятаны, строки с проверками и переключателями видны, но не нажимаются
     markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
@@ -503,6 +544,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         el.setAttribute("disabled", "");
       }
     }
+    this.#syncTabs();
     // Решительность в дуэли — не поле формы: форма писала бы текущий максимум во флаг при каждом сохранении,
     // и после смены Воли или Инт Решительность не была бы полной («нет флага — максимум», verbal.mjs)
     this._listen("input.duel-resolve-value", "change", async (event, input) => {

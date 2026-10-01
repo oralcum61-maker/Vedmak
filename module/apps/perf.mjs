@@ -49,6 +49,11 @@ export async function profileSheet(sheet = openSheet()) {
     ui.notifications.warn("Откройте лист персонажа или чудовища — замер идёт на нём.");
     return null;
   }
+  // Короткий лист (право «Ограниченный») без вкладок: changeTab упал бы на «No matching tab element»
+  if (sheet.limitedView || !sheet.element.querySelector('.tabs [data-group="primary"]')) {
+    ui.notifications.warn("У этого листа нет вкладок (ограниченный вид): замерять нечего. Откройте полный лист.");
+    return null;
+  }
   ui.notifications.info("Замер листа: несколько секунд лист будет перерисовываться и листать вкладки.");
   const parts = Object.keys(sheet.constructor.PARTS);
   const tabDefs = sheet.constructor.TABS?.primary?.tabs ?? [];
