@@ -3,3 +3,4 @@ packs/*/LOG
 packs/*/LOG.old
 node_modules/
 dist/
+.claude/worktrees/
