@@ -4805,3 +4805,152 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-card .lp-chat-result { font-family: var(--vd-font-head); font-size: .98rem; line-height: 1.25; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.85); }
 .vedmak-card .lp-chat-result b { font-weight: 400; color: #f1ece0; }
 .vedmak-card .lp-chat-result i { font-family: var(--vd-font-body); font-style: normal; font-size: .7rem; color: #e0c98f; }
+
+/* ---------------------------- Чат — пергамент (03.10, PLAN 4.50) ---------------------------- */
+/* Броски в чате — запись на пергаменте, а не стальная пластина листа: тёплая бумага с волокном и разводами,
+   опалённые края, текст — тушью, итог — оттиском штампа (урон — сургучной печатью), кости — тушью по бумаге,
+   кнопки — кожей. Цвет исхода — чернилами: успех — зелёные, провал и урон — киноварь, магия — фиолетовые.
+   Сначала всё в сообщении — тушью (старые правила карточек красили текст светлым под сталь), затем частности. */
+.chat-message.vedmak-message {
+  --ink: #2b2117; --ink-2: #574532; --ink-3: #7a664e; --ink-red: #8e2a1c; --ink-green: #3f5a2a; --ink-violet: #4f3d82; --ink-gold: #8a5a14;
+  --rule: rgba(90, 60, 30, .38);
+  --vd-parch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='a' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.008 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .29 0 0 0 0 .14 0 0 0 -1.6 1.05'/%3E%3C/filter%3E%3Cfilter id='b' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75 .22' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .21 0 0 0 0 .11 0 0 0 -2.4 1.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)' opacity='.55'/%3E%3Crect width='100%25' height='100%25' filter='url(%23b)' opacity='.3'/%3E%3C/svg%3E");
+  --vd-thread: #6e5232;
+  color: var(--ink);
+  background-color: #e6d8b8;
+  background-image: radial-gradient(ellipse 120% 95% at 50% 40%, transparent 58%, rgba(120, 78, 32, .3) 100%), var(--vd-parch), var(--vd-t-stains);
+  background-size: 100% 100%, 320px 320px, 512px 512px; background-blend-mode: normal, multiply, soft-light;
+  border: 1px solid #6e5232; border-radius: 2px;
+  box-shadow: inset 0 3px 0 var(--vd-thread), inset 0 0 18px rgba(110, 70, 30, .32), 0 3px 8px rgba(0, 0, 0, .6);
+}
+.chat-message.vedmak-message:has(.vedmak-card.is-success, .vedmak-card.defense.is-miss) { --vd-thread: #4f6b35; }
+.chat-message.vedmak-message:has(.vedmak-card.attack, .vedmak-card.damage, .vedmak-card.is-failure, .vedmak-card.is-fumble, .vedmak-card.defense.is-hit) { --vd-thread: #8e2a1c; }
+.chat-message.vedmak-message:has(.vedmak-card.cast) { --vd-thread: #4f3d82; }
+.chat-message.vedmak-message:has(.vedmak-card.cast.is-fumble) { --vd-thread: #8e2a1c; }
+.chat-message.vedmak-message:has(.vedmak-card.damage.is-applied) { --vd-thread: #6e3a2a; }
+
+.chat-message.vedmak-message .vedmak-card, .chat-message.vedmak-message .vedmak-card * { color: var(--ink); text-shadow: none; }
+.chat-message.vedmak-message .message-header {
+  background: none; border-bottom: 1px solid var(--rule); box-shadow: 0 1px 0 rgba(255, 250, 235, .35);
+}
+.chat-message.vedmak-message .message-header .message-sender { font-family: var(--vd-font-head); font-size: .9rem; color: #3a2c1e; text-shadow: none; }
+.chat-message.vedmak-message .message-header :is(.message-timestamp, a, .whisper-to) { color: var(--ink-3); }
+.chat-message.vedmak-message .vedmak-card .card-head, .chat-message.vedmak-message .vedmak-card.is-crit .card-head { box-shadow: none; }
+.chat-message.vedmak-message .vedmak-card .card-head > img, .chat-message.vedmak-message .vedmak-card.lifepath-roll .lp-seal {
+  background: rgba(255, 250, 235, .35); border: 1px solid #6e5232; box-shadow: inset 0 0 0 2px rgba(255, 250, 235, .5), 0 1px 2px rgba(60, 35, 10, .35);
+}
+.chat-message.vedmak-message .vedmak-card .card-name { color: #2a2016; }
+.chat-message.vedmak-message .vedmak-card .card-sub, .chat-message.vedmak-message .vedmak-card .note.dim { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card .note { color: var(--ink); }
+
+/* Итог — оттиск штампа: двойная рамка тушью, чуть наискось; урон — сургучная печать; магия — фиолетовые чернила */
+.chat-message.vedmak-message .vedmak-card .card-value {
+  background: none; border: 2px solid var(--ink); border-radius: 2px; transform: rotate(-3deg);
+  box-shadow: inset 0 0 0 2px rgba(230, 216, 184, .9), inset 0 0 0 3px var(--ink); filter: drop-shadow(0 0 .5px rgba(43, 33, 23, .6));
+}
+.chat-message.vedmak-message .vedmak-card .card-value b, .chat-message.vedmak-message .vedmak-card.is-crit .card-value b,
+.chat-message.vedmak-message .vedmak-card.is-fumble .card-value b, .chat-message.vedmak-message .vedmak-card .card-value.arcane b {
+  background: none; -webkit-background-clip: border-box; background-clip: border-box; color: var(--ink); filter: none;
+}
+.chat-message.vedmak-message .vedmak-card .card-value .cap { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card.is-failure .card-value:not(.blood, .arcane) b,
+.chat-message.vedmak-message .vedmak-card.check.is-fumble .card-value b { color: var(--ink-red); }
+.chat-message.vedmak-message .vedmak-card.is-failure .card-value:not(.blood, .arcane),
+.chat-message.vedmak-message .vedmak-card.check.is-fumble .card-value { border-color: var(--ink-red); box-shadow: inset 0 0 0 2px rgba(230, 216, 184, .9), inset 0 0 0 3px var(--ink-red); }
+.chat-message.vedmak-message .vedmak-card .card-value.arcane { border-color: var(--ink-violet); box-shadow: inset 0 0 0 2px rgba(230, 216, 184, .9), inset 0 0 0 3px var(--ink-violet); }
+.chat-message.vedmak-message .vedmak-card .card-value.arcane b, .chat-message.vedmak-message .vedmak-card .card-value.arcane .cap { color: var(--ink-violet); }
+.chat-message.vedmak-message .vedmak-card .card-value.blood {
+  width: 3.4rem; height: 3.4rem; min-width: 0; min-height: 0; border: 0; border-radius: 50%; transform: rotate(-6deg);
+  background: radial-gradient(circle at 38% 32%, #c4503a, #8e2a1c 55%, #5a170c);
+  box-shadow: inset 0 0 0 3px rgba(90, 23, 12, .55), inset 0 0 0 5px rgba(255, 200, 180, .18), inset 0 -3px 6px rgba(40, 8, 4, .5), 0 2px 4px rgba(60, 20, 8, .5);
+  filter: none;
+}
+.chat-message.vedmak-message .vedmak-card .card-value.blood b { color: #f8e2d6; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7); }
+.chat-message.vedmak-message .vedmak-card .card-value.blood .cap { color: #f0c8b8; }
+.chat-message.vedmak-message .vedmak-card.damage.is-applied .card-value.blood { filter: grayscale(.5) brightness(.8); }
+.chat-message.vedmak-message .vedmak-card.damage.is-applied .card-value b { color: #e8d2c4; text-decoration-color: rgba(43, 33, 23, .8); }
+
+/* Кости — тушью по бумаге в разлинованной рамке */
+.chat-message.vedmak-message .vedmak-card .roll-line, .chat-message.vedmak-message .vedmak-card .applied-report,
+.chat-message.vedmak-message .vedmak-card .lp-chat-rows {
+  background: rgba(255, 250, 235, .32); border: 1px solid var(--rule); border-radius: 2px; box-shadow: inset 0 1px 3px rgba(90, 60, 30, .18);
+}
+.chat-message.vedmak-message .vedmak-card .die.d10 { background-image: url("../assets/glyphs/die-ink-ok.svg"); filter: none; }
+.chat-message.vedmak-message .vedmak-card .die.d10.max { background-image: url("../assets/glyphs/die-ink-max.svg"); filter: drop-shadow(0 0 3px rgba(217, 164, 65, .55)); }
+.chat-message.vedmak-message .vedmak-card .die.d10.min { background-image: url("../assets/glyphs/die-ink-min.svg"); }
+.chat-message.vedmak-message .vedmak-card .die.d10.min b { color: var(--ink-red); }
+.chat-message.vedmak-message .vedmak-card .die.d10.fumble-die { background-image: url("../assets/glyphs/die-ink-burn.svg"); }
+.chat-message.vedmak-message .vedmak-card .die.d10.fumble-die b { color: #f8e2d6; }
+.chat-message.vedmak-message .vedmak-card .die.d10 b, .chat-message.vedmak-message .vedmak-card .die.d10.max b { color: var(--ink); }
+.chat-message.vedmak-message .vedmak-card .roll-sum { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card .roll-line .minus { color: var(--ink-red); }
+
+/* Исход — тканая лента; крит и провал — пометки чернилами */
+.chat-message.vedmak-message .vedmak-card .outcome.success, .chat-message.vedmak-message .vedmak-card .outcome.success * {
+  color: #f1ecd8;
+}
+.chat-message.vedmak-message .vedmak-card .outcome.success { background-image: var(--vd-grain), linear-gradient(180deg, #557039, #2f4320); text-shadow: 0 1px 0 rgba(0, 0, 0, .45); }
+.chat-message.vedmak-message .vedmak-card .outcome.failure, .chat-message.vedmak-message .vedmak-card .outcome.failure * { color: #fbe7dd; }
+.chat-message.vedmak-message .vedmak-card .outcome.failure { background-image: var(--vd-grain), linear-gradient(180deg, #a3382a, #6a1a0e); text-shadow: 0 1px 0 rgba(0, 0, 0, .4); }
+.chat-message.vedmak-message .vedmak-card .badge.crit { background: rgba(217, 164, 65, .16); border: 1px solid rgba(138, 90, 20, .55); box-shadow: none; }
+.chat-message.vedmak-message .vedmak-card .badge.crit, .chat-message.vedmak-message .vedmak-card .badge.crit * { color: #5a3a10; }
+.chat-message.vedmak-message .vedmak-card .badge.crit::before { color: var(--ink-gold); }
+.chat-message.vedmak-message .vedmak-card .badge.fumble { background: rgba(142, 42, 28, .1); border: 1px solid rgba(142, 42, 28, .5); }
+.chat-message.vedmak-message .vedmak-card .badge.fumble, .chat-message.vedmak-message .vedmak-card .badge.fumble * { color: #6e1d10; }
+.chat-message.vedmak-message .vedmak-card .badge.fumble::before { color: var(--ink-red); }
+
+/* Разбор, заметки, ранение */
+.chat-message.vedmak-message .vedmak-card .roll-parts summary { color: var(--ink-3); }
+.chat-message.vedmak-message .vedmak-card ul.parts li { border-bottom: 1px dotted var(--rule); box-shadow: none; }
+.chat-message.vedmak-message .vedmak-card ul.parts li span { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card ul.parts li.luck b { color: var(--ink-gold); }
+.chat-message.vedmak-message .vedmak-card ul.parts li.fumble-line b { color: var(--ink-red); }
+.chat-message.vedmak-message .vedmak-card .card-props > span { background: rgba(255, 250, 235, .3); border: 1px solid var(--rule); }
+.chat-message.vedmak-message .vedmak-card :is(.fumble-note, .crit-box) {
+  background: rgba(142, 42, 28, .08); border: 1px solid rgba(142, 42, 28, .5); box-shadow: none;
+}
+.chat-message.vedmak-message .vedmak-card .crit-box { border-top: 3px solid var(--ink-red); }
+.chat-message.vedmak-message .vedmak-card :is(.fumble-note, .crit-box) b { color: #6e1d10; }
+.chat-message.vedmak-message .vedmak-card :is(.fumble-note, .crit-box) :is(p, span) { color: #4a3626; }
+.chat-message.vedmak-message .vedmak-card .crit-box .dim { color: var(--ink-red); }
+.chat-message.vedmak-message .vedmak-card.cast .fumble-note { background: rgba(79, 61, 130, .08); border-color: rgba(79, 61, 130, .45); }
+.chat-message.vedmak-message .vedmak-card.cast .fumble-note b { color: var(--ink-violet); }
+
+/* Кто защищается и кнопки — кожа */
+.chat-message.vedmak-message .vedmak-card .card-section {
+  background: rgba(90, 60, 30, .07); background-image: none; border-top: 1px solid var(--rule); box-shadow: inset 0 1px 0 rgba(255, 250, 235, .35);
+}
+.chat-message.vedmak-message .vedmak-card .card-section h4 { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card .card-section + .card-buttons { background: rgba(90, 60, 30, .07); }
+.chat-message.vedmak-message .vedmak-card .target-name img { box-shadow: 0 0 0 1px #6e5232; }
+.chat-message.vedmak-message .vedmak-card button, .chat-message.vedmak-message .vedmak-card button * { color: #f2e6cf; }
+.chat-message.vedmak-message .vedmak-card button {
+  background-color: #5a3e26; background-image: var(--vd-grain), linear-gradient(180deg, rgba(255, 240, 210, .16), rgba(0, 0, 0, .25));
+  background-size: 160px 160px, 100% 100%; background-blend-mode: overlay, normal;
+  border: 1px solid #2a1a0c; box-shadow: inset 0 1px 0 rgba(255, 235, 200, .2), 0 2px 3px rgba(60, 35, 10, .4); text-shadow: 0 -1px 0 rgba(0, 0, 0, .45);
+}
+.chat-message.vedmak-message .vedmak-card button:hover { background-color: #6c4b2e; filter: none; }
+.chat-message.vedmak-message .vedmak-card button.primary { background-color: #8e2a1c; border-color: #3a0e06; }
+.chat-message.vedmak-message .vedmak-card button.primary:hover { background-color: #a3382a; }
+.chat-message.vedmak-message .vedmak-card.cast .card-buttons button.primary { background-color: #4f3d82; border-color: #1c1430; }
+.chat-message.vedmak-message .vedmak-card button.quiet, .chat-message.vedmak-message .vedmak-card .card-buttons button.quiet {
+  background: transparent; border: 1px solid #6e5232; box-shadow: none; text-shadow: none;
+}
+.chat-message.vedmak-message .vedmak-card button.quiet, .chat-message.vedmak-message .vedmak-card button.quiet * { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card button.quiet:hover { background: rgba(90, 60, 30, .1); }
+.chat-message.vedmak-message .vedmak-card button:disabled { filter: grayscale(.6) opacity(.6); }
+
+/* Жизненный путь на пергаменте */
+.chat-message.vedmak-message .vedmak-card.lifepath-roll .lp-seal {
+  border-radius: 50%; background: radial-gradient(circle at 38% 32%, #c4503a, #8e2a1c 55%, #5a170c); border: 0;
+  box-shadow: inset 0 0 0 3px rgba(90, 23, 12, .55), inset 0 -3px 6px rgba(40, 8, 4, .5), 0 2px 4px rgba(60, 20, 8, .5);
+}
+.chat-message.vedmak-message .vedmak-card.lifepath-roll .lp-seal, .chat-message.vedmak-message .vedmak-card.lifepath-roll .lp-seal * { color: #f8e2d6; }
+.chat-message.vedmak-message .vedmak-card .lp-chat-section { color: var(--ink-2); }
+.chat-message.vedmak-message .vedmak-card .lp-chat-section::before { background: var(--ink-2); box-shadow: none; }
+.chat-message.vedmak-message .vedmak-card .lp-chat-section::after { border-top: 1px solid var(--rule); border-bottom: 0; }
+.chat-message.vedmak-message .vedmak-card .lp-chat-row { border-bottom: 1px dotted var(--rule); box-shadow: none; }
+.chat-message.vedmak-message .vedmak-card .lp-chat-row:last-child { border-bottom: 0; }
+.chat-message.vedmak-message .vedmak-card .lp-chat-label { color: var(--ink-3); }
+.chat-message.vedmak-message .vedmak-card .lp-chat-result i { color: #7a4a1a; }
+.chat-message.vedmak-message .vedmak-card .lp-chat-row .die.dn { background: rgba(255, 250, 235, .45); border: 1.5px solid var(--ink); box-shadow: inset 0 0 0 2px rgba(255, 250, 235, .5); }

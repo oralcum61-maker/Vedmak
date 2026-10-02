@@ -71,4 +71,19 @@ for (const [state, d] of Object.entries(DICE)) {
     `<path d="${EDGE}" fill="none" stroke="${d.edge}" stroke-width=".8"/>${d.extra ?? ""}</svg>\n`;
   writeFileSync(new URL(`die-${state}.svg`, OUT), svg);
 }
+// Кости для пергамента чата: тушь по бумаге — обычная, десятка (сусальное золото), единица с красной трещиной,
+// кость провала (киноварь)
+const INK = {
+  "ink-ok": { stops: [[0, "#f6eedb"], [1, "#d9cba9"]], stroke: "#2b2117", edge: "rgba(43,33,23,.45)" },
+  "ink-max": { stops: [[0, "#f7d98c"], [.5, "#d9a441"], [1, "#9a6a1c"]], stroke: "#4a2f0c", edge: "rgba(74,47,12,.5)" },
+  "ink-min": { stops: [[0, "#d8ccb0"], [1, "#a8997a"]], stroke: "#2b2117", edge: "rgba(43,33,23,.4)",
+    extra: `<path d="M9 5.5L12 10.5L10 14L13 19L11.5 24" fill="none" stroke="#8e2a1c" stroke-width="1.1"/>` },
+  "ink-burn": { stops: [[0, "#c4503a"], [.55, "#8e2a1c"], [1, "#5a170c"]], stroke: "#3a0e06", edge: "rgba(58,14,6,.5)" }
+};
+for (const [state, d] of Object.entries(INK)) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 30"><defs>${grad("f", d.stops)}</defs>` +
+    `<path d="${FACE}" fill="url(#f)" stroke="${d.stroke}" stroke-width="1.3" stroke-linejoin="round"/>` +
+    `<path d="${EDGE}" fill="none" stroke="${d.edge}" stroke-width=".8"/>${d.extra ?? ""}</svg>\n`;
+  writeFileSync(new URL(`die-${state}.svg`, OUT), svg);
+}
 console.log("assets/glyphs: готово");
