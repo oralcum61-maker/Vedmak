@@ -11,6 +11,7 @@
       <span class="rule"></span>
       <span class="stat-stamp" data-tooltip="{{group.label}}: значение параметра">{{group.value}}</span>
     </div>
+    <div class="skill-rows">
     {{#each group.skills as |skill|}}
     <div class="skill-line{{#if skill.trained}} trained{{/if}}{{#if skill.profession}} prof{{/if}}">
       <label class="prof-mark" data-tooltip="Навык профессии">
@@ -31,6 +32,7 @@
       {{/with}}{{/if}}
     </div>
     {{/each}}
+    </div>
   </section>
   {{/each}}
   </div>

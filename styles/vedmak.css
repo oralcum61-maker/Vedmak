@@ -15,7 +15,7 @@
   --vd-line: #3a3c42;
   --vd-line-soft: #2a2c31;
   --vd-text: #e2ddd0;
-  --vd-text-dim: #a29d92;
+  --vd-text-dim: #bab4a8;
   --vd-silver: #f1ece0;
   --vd-steel: #6f6b62;
   --vd-gold: #cfc8b8;
@@ -1109,7 +1109,7 @@
 .vedmak-dialog.check-dialog .dlg-title {
   font-family: var(--vd-font-head, serif); font-size: 1.3rem; line-height: 1.1; color: var(--vd-silver, #ddd8cd);
 }
-.vedmak-dialog.check-dialog .dlg-sub { font-size: .76rem; color: var(--vd-text-dim, #89847a); }
+.vedmak-dialog.check-dialog .dlg-sub { font-size: .76rem; color: var(--vd-text-dim, #a8a296); }
 .vedmak-dialog.check-dialog .dlg-base {
   flex: none; display: flex; flex-direction: column; align-items: center; gap: .05rem;
   min-width: 4.6rem; padding: .35rem .6rem;
@@ -1120,7 +1120,7 @@
 }
 .vedmak-dialog.check-dialog .cap {
   font-family: var(--vd-font-head, serif); font-size: .62rem; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--vd-text-dim, #89847a);
+  text-transform: uppercase; color: var(--vd-text-dim, #a8a296);
 }
 
 /* Тело окна */
@@ -1133,7 +1133,7 @@
 }
 .vedmak-dialog.check-dialog .dlg-label .dim, .vedmak-dialog.check-dialog .dim { color: var(--vd-steel, #50545d); }
 .vedmak-dialog.check-dialog .dlg-row { display: flex; align-items: flex-end; gap: .6rem; }
-.vedmak-dialog.check-dialog .hint { margin: .1rem 0 0; font-size: .74rem; color: var(--vd-text-dim, #89847a); }
+.vedmak-dialog.check-dialog .hint { margin: .1rem 0 0; font-size: .74rem; color: var(--vd-text-dim, #a8a296); }
 .vedmak-dialog.check-dialog .hint.grow { flex: 1; align-self: center; }
 
 /* Кнопки выбора вместо выпадающих списков */
@@ -1164,7 +1164,7 @@
 .vedmak-dialog.check-dialog .opt.tall > span { flex-direction: column; align-items: center; gap: .05rem; text-align: center; }
 .vedmak-dialog.check-dialog .opt.tall b { font-family: var(--vd-font-head, serif); font-size: .92rem; font-weight: 400; }
 .vedmak-dialog.check-dialog .opt small, .vedmak-dialog.check-dialog .opt em {
-  font-size: .68rem; font-style: normal; color: var(--vd-text-dim, #89847a);
+  font-size: .68rem; font-style: normal; color: var(--vd-text-dim, #a8a296);
 }
 .vedmak-dialog.check-dialog .opt em.bad { color: var(--vd-blood-lite, #c0533f); }
 .vedmak-dialog.check-dialog .opt:hover > span { border-color: var(--vd-line, #33363c); }
@@ -1180,8 +1180,8 @@
   padding: .2rem .55rem; font-size: .76rem; color: var(--vd-text, #d6d0c3);
   background: #1a1c1f; border: 1px solid var(--vd-line, #33363c); border-radius: 999px;
 }
-.vedmak-dialog.check-dialog .chip.static { cursor: var(--cursor-default); color: var(--vd-text-dim, #89847a); }
-.vedmak-dialog.check-dialog .chip b { font-weight: 400; color: var(--vd-text-dim, #89847a); }
+.vedmak-dialog.check-dialog .chip.static { cursor: var(--cursor-default); color: var(--vd-text-dim, #a8a296); }
+.vedmak-dialog.check-dialog .chip b { font-weight: 400; color: var(--vd-text-dim, #a8a296); }
 .vedmak-dialog.check-dialog .chip:has(input:checked) > span {
   background: var(--vd-accent-bg); border-color: var(--vd-accent); color: var(--vd-accent-lite);
 }
@@ -1196,7 +1196,7 @@
 }
 .vedmak-dialog.check-dialog .plate .plate-text { flex: 1; }
 .vedmak-dialog.check-dialog .plate .plate-value {
-  font-family: var(--vd-font-head, serif); font-weight: 400; font-size: .92rem; color: var(--vd-text-dim, #89847a);
+  font-family: var(--vd-font-head, serif); font-weight: 400; font-size: .92rem; color: var(--vd-text-dim, #a8a296);
 }
 .vedmak-dialog.check-dialog .plate:has(input:checked) { border-left-color: var(--vd-accent); }
 .vedmak-dialog.check-dialog .plate:has(input:checked) .plate-value { color: var(--vd-accent-lite); }
@@ -1245,10 +1245,10 @@
 }
 .vedmak-dialog.check-dialog .luck-row .dot.zero > span {
   width: auto; height: auto; padding: 0 .2rem; border-radius: 2px; font-size: .7rem; line-height: .85rem;
-  color: var(--vd-text-dim, #89847a); background: transparent; border-color: transparent;
+  color: var(--vd-text-dim, #a8a296); background: transparent; border-color: transparent;
 }
 .vedmak-dialog.check-dialog .luck-row .dot.zero:has(input:checked) > span { color: var(--vd-gold-lite, #e3c078); }
-.vedmak-dialog.check-dialog .luck-note { margin-left: auto; font-size: .74rem; color: var(--vd-text-dim, #89847a); }
+.vedmak-dialog.check-dialog .luck-note { margin-left: auto; font-size: .74rem; color: var(--vd-text-dim, #a8a296); }
 
 /* Вложенная Выносливость: столбики, как деления на манометре */
 .vedmak-dialog.check-dialog .cost-row { display: flex; align-items: center; gap: .25rem; }
@@ -1260,7 +1260,7 @@
 .vedmak-dialog.check-dialog .cost-row .bar.on > span {
   background: linear-gradient(180deg, #7b6ba8, #4a3d70); border-color: #2a2338;
 }
-.vedmak-dialog.check-dialog .cost-note { flex: 1; margin-left: .3rem; font-size: .74rem; color: var(--vd-text-dim, #89847a); }
+.vedmak-dialog.check-dialog .cost-note { flex: 1; margin-left: .3rem; font-size: .74rem; color: var(--vd-text-dim, #a8a296); }
 .vedmak-dialog.check-dialog .cost-value {
   font-family: var(--vd-font-head, serif); font-weight: 400; font-size: 1.3rem; color: var(--vd-accent-lite, #c9b8f0);
 }
@@ -1329,7 +1329,7 @@
 .vedmak-dialog.check-dialog .form-footer button:hover { filter: brightness(1.15); box-shadow: none; }
 .vedmak-dialog.check-dialog .form-footer button[data-action="cancel"] {
   margin-left: auto; order: -1;
-  background: #1a1c1f; color: var(--vd-text-dim, #89847a); border-color: var(--vd-line, #33363c); box-shadow: none;
+  background: #1a1c1f; color: var(--vd-text-dim, #a8a296); border-color: var(--vd-line, #33363c); box-shadow: none;
 }
 
 /* ---------------------------- Карточки чата --------------------------- */
@@ -1338,7 +1338,7 @@
    слагаемых свёрнут. Кромка слева говорит, чем кончилось. Старые сообщения держат прежние классы
    (.card-title, .total-row) — они оформлены в конце раздела. */
 .vedmak-card {
-  --vd-card-dim: #89847a;
+  --vd-card-dim: #a8a296;
   position: relative; overflow: hidden;
   font-family: var(--vd-font-body); color: var(--vd-text); font-size: .82rem;
   background-color: #151618;
@@ -1359,7 +1359,7 @@
   background: #101113; border: 1px solid #090a0b; border-radius: 3px;
   box-shadow: none;
 }
-.chat-message.vedmak-message .message-header { color: #89847a; margin-bottom: .2rem; }
+.chat-message.vedmak-message .message-header { color: #a8a296; margin-bottom: .2rem; }
 .chat-message.vedmak-message .message-header .message-sender { color: #d6d0c3; font-family: "Vedmak Display", "Forum", serif; }
 .chat-message.vedmak-message .message-header a, .chat-message.vedmak-message .message-header .message-timestamp { color: #50545d; }
 .chat-message.vedmak-message .message-header .whisper-to { color: #b0a99a; }
@@ -2514,7 +2514,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
   --vd-well: #0c0d0f;
   --vd-brass: #c9a352;
   --vd-brass-lite: #f0d68f;
-  --vd-ash: #8e897e;
+  --vd-ash: #a8a296;
   /* Выпуклое и утопленное */
   --vd-lift: inset 0 1px 0 rgba(255, 240, 215, .1), inset 0 -1px 0 rgba(0, 0, 0, .55), 0 2px 3px rgba(0, 0, 0, .55), 0 14px 24px -14px rgba(0, 0, 0, .95);
   --vd-lift-sm: inset 0 1px 0 rgba(255, 245, 225, .13), inset 0 -1px 0 rgba(0, 0, 0, .4), 0 3px 8px -3px rgba(0, 0, 0, .85);
@@ -2779,7 +2779,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
   color: #f1ece0; background: transparent; border-color: transparent; box-shadow: none; text-shadow: var(--vd-engrave);
 }
 .vedmak .vd-rail .rv-head input:hover, .vedmak .vd-rail .rv-head input:focus { border-color: #3a3c42; box-shadow: none; }
-.vedmak .vd-rail .rv-head .max { color: #6c685f; }
+.vedmak .vd-rail .rv-head .max { color: #8c867b; }
 .vedmak .vd-rail .rv .track { height: .58rem; }
 
 .vedmak .vd-rail .rail-luck { padding: .35rem .5rem; }
@@ -2863,7 +2863,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 .vedmak.character .stat-row.tone-up .stamp b { background-image: var(--vd-metal-green); }
 .vedmak.character .stat-row.tone-down .about { color: var(--vd-blood-lite); }
 .vedmak.character .stat-row.tone-up .about { color: #b4c79c; }
-.vedmak.character .stat-row .base .cap { color: #6c685f; }
+.vedmak.character .stat-row .base .cap { color: #8c867b; }
 
 /* Производные: один колодец на четыре столбца с бороздками между ними */
 .vedmak.character .derived-lists {
@@ -2911,7 +2911,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 .vedmak .atk-about { font-size: .72rem; color: var(--vd-text-dim); }
 .vedmak .atk-num b { font-size: 1.45rem; }
 .vedmak .atk-num.wide b { font-size: 1.3rem; }
-.vedmak .atk-num em { color: #6c685f; }
+.vedmak .atk-num em { color: #8c867b; }
 .vedmak .atk-rel .track { height: .42rem; }
 
 /* Защиты — колодцы с выпуклым клеймом */
@@ -3171,7 +3171,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .gear-tab .purse .load-track { height: .6rem; background: #08090a; border: 1px solid #040405; box-shadow: inset 0 1px 3px rgba(0,0,0,.95), 0 1px 0 rgba(255,240,215,.07); }
 .vedmak .gear-tab .purse .load-track .fill { background-color: #b9b3a6; background-image: var(--vd-gloss); }
 .vedmak .gear-tab .purse .load-track .fill.over { background-color: #b8432c; }
-.vedmak .gear-tab .purse .load .dim { font-size: .72rem; color: #6c685f; }
+.vedmak .gear-tab .purse .load .dim { font-size: .72rem; color: #8c867b; }
 
 /* Стойка: заголовок раздела и кнопка «Добавить» */
 .vedmak .gear-rack { padding: .65rem .9rem .3rem; }
@@ -3300,7 +3300,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .vd-part.worn .scr { stroke: rgba(255,255,255,.4); stroke-width: .6; }
 .vedmak .vd-part.broken .crk { stroke: #140402; stroke-width: 1; }
 .vedmak .vd-part.ok b { color: #f1ece0; }
-.vedmak .vd-part.worn b { color: #a29d92; }
+.vedmak .vd-part.worn b { color: #bab4a8; }
 .vedmak .vd-part.broken b { color: #e0604a; }
 .vedmak .vd-part.none b { color: #3a3c42; }
 
@@ -3327,7 +3327,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   max-width: 100%; text-align: center; font-size: .78rem; line-height: 1.25; color: #ece7db; text-shadow: 0 1px 0 rgba(0,0,0,.8);
   overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 1.95rem;
 }
-.vedmak .gear-tile .tile-meta { font-size: .66rem; color: #6c685f; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .gear-tile .tile-meta { font-size: .66rem; color: #8c867b; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 .vedmak .gear-tile .tile-tools { display: flex; gap: 3px; opacity: 0; transition: opacity .12s; }
 .vedmak .gear-tile:hover .tile-tools, .vedmak .gear-tile:focus-within .tile-tools { opacity: 1; }
 .vedmak .gear-tile .tile-tools a { width: 26px; height: 24px; font-size: .7rem; }
@@ -3338,7 +3338,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
    чертежи и формулы с «есть / нужно», компоненты ячейками с отбором по субстанции, усиления с ячейками предметов. */
 .vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard) [hidden] { display: none !important; }
 .vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard) .cap {
-  font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: #8e897e; text-shadow: 0 1px 0 rgba(0,0,0,.9); white-space: nowrap;
+  font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0,0,0,.9); white-space: nowrap;
 }
 .vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard) .cap.bad { color: var(--vd-blood-lite); }
 .vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard) .dim { font-size: .72rem; color: var(--vd-text-dim); }
@@ -3412,7 +3412,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .craft-tab .work-tool svg { width: 26px; height: 26px; overflow: visible; }
 .vedmak .craft-tab .work-tool .shell { fill: url(#vd-metal-ok); stroke: #050607; stroke-width: 1.1; stroke-linejoin: round; }
 .vedmak .craft-tab .work-tool .ink { fill: none; stroke: #050607; stroke-width: .9; }
-.vedmak .craft-tab .work-tool > span { font-size: .6rem; letter-spacing: .06em; color: #a29d92; }
+.vedmak .craft-tab .work-tool > span { font-size: .6rem; letter-spacing: .06em; color: #bab4a8; }
 .vedmak .craft-tab .work-tool.missing .shell { fill: #17181b; stroke: #3a3c42; }
 .vedmak .craft-tab .work-tool.missing .ink { stroke: #2a2c31; }
 .vedmak .craft-tab .work-tool.missing > span { color: #55575d; text-decoration: line-through; }
@@ -3437,7 +3437,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-head); font-weight: 400; font-size: 1.05rem; line-height: 1;
   background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
 }
-.vedmak .craft-tab .sub-name { max-width: 100%; font-size: .6rem; color: #8e897e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .craft-tab .sub-name { max-width: 100%; font-size: .6rem; color: #a8a296; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vedmak .craft-tab :is(.sub, .sub-filter).zero .subwell { box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 1px 0 rgba(255,240,215,.08); }
 .vedmak .craft-tab :is(.sub, .sub-filter).zero img { filter: grayscale(.85) brightness(.45); }
 .vedmak .craft-tab :is(.sub, .sub-filter).zero > b { background: none; color: #4a4c52; filter: none; }
@@ -3480,7 +3480,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .craft-tab .alch-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
 .vedmak .craft-tab .alch-body .item-name { font-size: 1.05rem; }
 .vedmak .craft-tab .alch-effect {
-  font-size: .74rem; line-height: 1.35; color: #a29d92;
+  font-size: .74rem; line-height: 1.35; color: #bab4a8;
   overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
 .vedmak .craft-tab .alch-meta { display: flex; align-items: center; gap: .45rem; margin-top: auto; }
@@ -3502,7 +3502,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .craft-tab .recipe-body, .vedmak .craft-tab .enh-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .45rem; }
 .vedmak .craft-tab .recipe-head { display: flex; align-items: center; gap: .5rem; min-height: 2.1rem; }
 .vedmak .craft-tab .memo {
-  flex: none; width: 30px; height: 30px; display: grid; place-items: center; color: #6c685f;
+  flex: none; width: 30px; height: 30px; display: grid; place-items: center; color: #8c867b;
   background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
 .vedmak .craft-tab .memo svg { width: 18px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; }
@@ -3526,7 +3526,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .craft-tab .need i { font-style: normal; font-size: .7rem; color: #9fb48a; }
 .vedmak .craft-tab .need img { width: 16px; height: 16px; border: 0; }
 .vedmak .craft-tab .need b { font-family: var(--vd-font-head); font-weight: 400; font-size: .95rem; color: #f1ece0; }
-.vedmak .craft-tab .need .of { color: #6c685f; margin-left: -.15rem; }
+.vedmak .craft-tab .need .of { color: #8c867b; margin-left: -.15rem; }
 .vedmak .craft-tab .need.no { border-color: #3a120a; box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(184,67,44,.35); }
 .vedmak .craft-tab .need.no :is(i, b) { color: var(--vd-blood-lite); }
 .vedmak .craft-tab .recipe-foot { display: flex; align-items: center; gap: .45rem; }
@@ -3566,7 +3566,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   display: inline-flex; align-items: center; gap: .4rem; padding: .15rem .5rem; font-size: .74rem; color: #d6d0c2; white-space: nowrap;
   background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
-.vedmak .craft-tab .target.full { color: #6c685f; }
+.vedmak .craft-tab .target.full { color: #8c867b; }
 .vedmak .craft-tab .slots { display: inline-flex; gap: 2px; }
 .vedmak .craft-tab .slots i { width: 7px; height: 7px; background: #08090a; box-shadow: inset 0 1px 1px rgba(0,0,0,.9), 0 0 0 1px #34363c; }
 .vedmak .craft-tab .slots i.used { background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
@@ -3592,7 +3592,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .magic-tab .segs i.spent { background: linear-gradient(180deg, #8f84ad, #3e3456); box-shadow: inset 0 0 0 1px rgba(201,189,240,.25); }
 .vedmak .magic-tab .segs i.plan { background: linear-gradient(180deg, #d6ccf3, #6a5a98); box-shadow: inset 0 0 0 1px rgba(201,189,240,.45), 0 0 6px rgba(134,118,176,.35); }
 .vedmak .magic-tab .segs i.burn { background: repeating-linear-gradient(45deg, #e0604a 0 3px, #6e2a22 3px 6px); box-shadow: inset 0 0 0 1px rgba(0,0,0,.4); }
-.vedmak .magic-tab .energy-note { font-size: .7rem; color: #8e897e; }
+.vedmak .magic-tab .energy-note { font-size: .7rem; color: #a8a296; }
 .vedmak .magic-tab .energy-note.bad { color: var(--vd-blood-lite); }
 .vedmak .magic-tab .source .sta { width: 7.6rem; }
 .vedmak .magic-tab .source .num { display: flex; align-items: center; gap: .3rem; }
@@ -3601,7 +3601,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
 }
 .vedmak .magic-tab .source .num b { font-size: 1.4rem; }
-.vedmak .magic-tab .source .of { font-size: .7rem; color: #6c685f; }
+.vedmak .magic-tab .source .of { font-size: .7rem; color: #8c867b; }
 .vedmak .magic-tab .source .trough { display: block; height: .4rem; background: #08090a; border: 1px solid #040405; box-shadow: inset 0 1px 3px rgba(0,0,0,.95), 0 1px 0 rgba(255,240,215,.07); }
 .vedmak .magic-tab .source .trough span { display: block; height: 100%; background-color: #7f9a6c; background-image: var(--vd-gloss); }
 .vedmak .magic-tab .source .skill { align-items: center; width: 5.2rem; padding-left: .5rem; padding-right: .5rem; }
@@ -3654,7 +3654,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   box-shadow: inset 0 3px 10px rgba(0,0,0,.9), inset 0 0 0 5px #141518, inset 0 0 0 6px rgba(201,189,240,.5), 0 0 14px rgba(134,118,176,.35);
 }
 .vedmak .magic-tab .sign-name { font-family: var(--vd-font-head); font-size: 1.15rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
-.vedmak .magic-tab .sign-meta { display: flex; align-items: center; gap: .35rem; font-size: .68rem; color: #8e897e; }
+.vedmak .magic-tab .sign-meta { display: flex; align-items: center; gap: .35rem; font-size: .68rem; color: #a8a296; }
 .vedmak .magic-tab .el {
   flex: none; width: 1.3rem; height: 1.3rem; display: grid; place-items: center; border-radius: 50%;
   background: #0b0c0e; border: 1px solid #040405; box-shadow: inset 0 1px 3px rgba(0,0,0,.9);
@@ -3680,7 +3680,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   display: inline-flex; gap: 2px; padding: 2px; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
 .vedmak .magic-tab .form-switch .sw {
-  width: auto; height: 1.8rem; margin: 0; padding: 0 .6rem; font-family: var(--vd-font-head); font-size: .9rem; line-height: 1; color: #8e897e;
+  width: auto; height: 1.8rem; margin: 0; padding: 0 .6rem; font-family: var(--vd-font-head); font-size: .9rem; line-height: 1; color: #a8a296;
   background: transparent; border: 1px solid transparent; border-radius: 2px; box-shadow: none;
 }
 .vedmak .magic-tab .form-switch .sw.on { color: #f3eee2; background: #2a2c31; border-color: #060708; box-shadow: inset 0 1px 0 rgba(255,245,225,.12); }
@@ -3710,7 +3710,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   width: 2.8rem; height: 2rem; display: grid; place-items: center; font-family: var(--vd-font-head); font-size: 1.35rem; color: #f1ece0;
   background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
-.vedmak .magic-tab .cost-note { flex: 1 1 8rem; min-width: 0; font-size: .74rem; color: #8e897e; }
+.vedmak .magic-tab .cost-note { flex: 1 1 8rem; min-width: 0; font-size: .74rem; color: #a8a296; }
 .vedmak .magic-tab .cost-note.bad { color: var(--vd-blood-lite); }
 
 /* Карточки заклинаний */
@@ -3729,14 +3729,14 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak .magic-tab .cost-stamp { width: 3.3rem; height: 2.6rem; }
 .vedmak .magic-tab .cost-stamp b { font-size: 1.25rem; }
-.vedmak .magic-tab .cost-stamp .cap { font-size: .5rem; color: #a29d92; }
+.vedmak .magic-tab .cost-stamp .cap { font-size: .5rem; color: #bab4a8; }
 .vedmak .magic-tab .spell-text {
-  font-size: .76rem; line-height: 1.45; color: #a29d92;
+  font-size: .76rem; line-height: 1.45; color: #bab4a8;
   overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
 .vedmak .magic-tab .spell-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .9rem; }
 .vedmak .magic-tab .meta { display: inline-flex; align-items: center; gap: .3rem; font-size: .72rem; color: #c9c3b6; min-width: 0; }
-.vedmak .magic-tab .meta svg { width: .8rem; height: .85rem; flex: none; fill: none; stroke: #8e897e; stroke-width: 1.7; stroke-linejoin: round; }
+.vedmak .magic-tab .meta svg { width: .8rem; height: .85rem; flex: none; fill: none; stroke: #a8a296; stroke-width: 1.7; stroke-linejoin: round; }
 .vedmak .magic-tab .spell-meta .grow { flex: 1 0 0; }
 .vedmak .magic-tab .spell-meta .mini { flex: none; }
 .vedmak .magic-tab .spell-group.hex .item-frame { box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(142,42,58,.5), 0 1px 0 rgba(255,240,215,.08); }
@@ -3750,7 +3750,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak .magic-tab .add-kind:hover { color: var(--vd-silver); background: #25262b; }
 .vedmak .magic-tab .learn {
-  padding: .55rem .9rem; font-size: .74rem; color: #a29d92;
+  padding: .55rem .9rem; font-size: .74rem; color: #bab4a8;
   background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
 .vedmak .magic-tab .learn summary { cursor: var(--cursor-pointer); font-family: var(--vd-font-head); font-size: .95rem; color: #d6d0c2; }
@@ -3807,10 +3807,10 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .bio-tab .lp-age-field input { width: 3.4rem; height: 1.6rem; }
 .vedmak .bio-tab .lp-story { gap: .9rem; }
 .vedmak .bio-tab .lp-block .group-head { margin-bottom: .4rem; }
-.vedmak .bio-tab .lp-block .group-head .bronze-tag { font-size: .7rem; letter-spacing: .22em; color: #a29d92; }
-.vedmak .bio-tab .lp-cap { font-size: .58rem; letter-spacing: .16em; color: #8e897e; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak .bio-tab .lp-block .group-head .bronze-tag { font-size: .7rem; letter-spacing: .22em; color: #bab4a8; }
+.vedmak .bio-tab .lp-cap { font-size: .58rem; letter-spacing: .16em; color: #a8a296; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
 .vedmak .bio-tab .lp-head { font-family: var(--vd-font-head); font-size: 1.12rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
-.vedmak .bio-tab .lp-body { font-size: .78rem; color: #a29d92; }
+.vedmak .bio-tab .lp-body { font-size: .78rem; color: #bab4a8; }
 .vedmak .bio-tab .lp-gold { font-style: normal; font-size: .74rem; color: #e0c98f; }
 .vedmak .bio-tab .lp-featured { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .5rem; margin-bottom: .35rem; }
 .vedmak .bio-tab .lp-feature {
@@ -3840,7 +3840,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-head); font-size: 1.3rem;
   background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
 }
-.vedmak .bio-tab .lp-age small { font-size: .48rem; color: #a29d92; }
+.vedmak .bio-tab .lp-age small { font-size: .48rem; color: #bab4a8; }
 .vedmak .bio-tab .lp-event-head b { font-family: var(--vd-font-head); font-size: 1.1rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
 .vedmak .bio-tab .lp-event.quiet { opacity: .6; }
 .vedmak .bio-tab .lp-event.quiet .lp-event-head b { font-size: 1rem; color: #cfc8b8; }
@@ -3869,7 +3869,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   padding: .55rem .75rem .6rem; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
 .vedmak .bio-tab .trait h4 { margin: 0 0 .2rem; padding: 0; border: 0; font-family: var(--vd-font-head); font-weight: 400; font-size: 1.02rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
-.vedmak .bio-tab .trait p { margin: 0; font-size: .78rem; line-height: 1.45; color: #a29d92; }
+.vedmak .bio-tab .trait p { margin: 0; font-size: .78rem; line-height: 1.45; color: #bab4a8; }
 
 /* Зависимости: засечки по пять */
 .vedmak .bio-tab .addiction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .5rem; margin-top: .45rem; }
@@ -3886,7 +3886,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .bio-tab .days input { width: 2.6rem; height: 1.6rem; }
 .vedmak .bio-tab .add-tools { display: flex; align-items: center; gap: .3rem; }
 .vedmak .bio-tab .add-tools .go-btn { height: 1.6rem; padding: 0 .6rem; letter-spacing: .1em; }
-.vedmak .bio-tab .addictions .hint { margin: .5rem 0 0; font-size: .72rem; color: #6c685f; }
+.vedmak .bio-tab .addictions .hint { margin: .5rem 0 0; font-size: .72rem; color: #8c867b; }
 
 /* История и заметки рядом */
 .vedmak .bio-tab .notes-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: .8rem; margin-bottom: .8rem; }
@@ -3935,11 +3935,11 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .wp.done .node i { background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607, 0 1px 2px rgba(0,0,0,.8); }
 .vedmak-wizard .wp.active .node i { width: 12px; height: 12px; background: linear-gradient(135deg, #ff9a7e, #b8432c); box-shadow: 0 0 0 1px #2a0c06, 0 0 10px rgba(224,96,74,.6); }
 .vedmak-wizard .wp-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding-top: 2px; }
-.vedmak-wizard .wp-label { font-family: var(--vd-font-head); font-size: 1.05rem; line-height: 1.15; color: #8e897e; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak-wizard .wp-label { font-family: var(--vd-font-head); font-size: 1.05rem; line-height: 1.15; color: #a8a296; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
 .vedmak-wizard .wp.done .wp-label { color: #cfc8b8; }
 .vedmak-wizard .wp.active .wp-label { color: #f3eee2; }
 .vedmak-wizard .wp-note { font-size: .66rem; color: #55585f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vedmak-wizard .wp.done .wp-note { color: #8e897e; }
+.vedmak-wizard .wp.done .wp-note { color: #a8a296; }
 .vedmak-wizard .wp.active .wp-note { color: #e0937f; }
 
 .vedmak-wizard .wiz-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
@@ -4008,18 +4008,18 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .card-body { position: relative; z-index: 1; margin-top: -1.7rem; padding: 0 .7rem .7rem; display: flex; flex-direction: column; gap: .35rem; }
 .vedmak-wizard .card-name { font-family: var(--vd-font-head); font-size: 1.45rem; line-height: 1; color: #f1ece0; text-shadow: 0 2px 4px rgba(0,0,0,.95); }
 .vedmak-wizard .card-text {
-  font-size: .7rem; line-height: 1.4; color: #a29d92; min-height: 1.95rem;
+  font-size: .7rem; line-height: 1.4; color: #bab4a8; min-height: 1.95rem;
   overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
-.vedmak-wizard .limits { font-size: .64rem; color: #6c685f; }
+.vedmak-wizard .limits { font-size: .64rem; color: #8c867b; }
 .vedmak-wizard .limits.bad { color: #e0937f; }
 .vedmak-wizard .card-meta { display: flex; align-items: center; gap: .4rem; }
 .vedmak-wizard .vig { display: inline-flex; gap: 2px; }
 .vedmak-wizard .vig i { width: 8px; height: 10px; background: linear-gradient(180deg, #d6ccf3, #6a5a98); box-shadow: inset 0 0 0 1px rgba(201,189,240,.35); }
 .vedmak-wizard .vig em { font-style: normal; font-size: .62rem; color: #55585f; }
-.vedmak-wizard .money { font-size: .66rem; color: #a29d92; white-space: nowrap; }
+.vedmak-wizard .money { font-size: .66rem; color: #bab4a8; white-space: nowrap; }
 .vedmak-wizard .trait-cols { columns: 2 16rem; column-gap: 1.3rem; margin-top: .45rem; }
-.vedmak-wizard .trait-cols p { break-inside: avoid; margin: 0 0 .4rem; font-size: .78rem; line-height: 1.45; color: #a29d92; }
+.vedmak-wizard .trait-cols p { break-inside: avoid; margin: 0 0 .4rem; font-size: .78rem; line-height: 1.45; color: #bab4a8; }
 .vedmak-wizard .trait-cols b { font-weight: 500; color: #ece7db; }
 
 /* Профессия: определяющий навык, навыки, магия на старте, древо */
@@ -4036,11 +4036,11 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-head); font-weight: 400; font-size: 1.5rem; line-height: 1;
   background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
 }
-.vedmak-wizard .quota > span > span { font-size: .64rem; color: #a29d92; }
+.vedmak-wizard .quota > span > span { font-size: .64rem; color: #bab4a8; }
 .vedmak-wizard .branches { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: .4rem; }
 .vedmak-wizard .branch { display: flex; flex-direction: column; gap: .15rem; padding: .45rem .55rem; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm); }
 .vedmak-wizard .branch b { font-family: var(--vd-font-head); font-weight: 400; font-size: .98rem; color: #f1ece0; }
-.vedmak-wizard .branch span { font-size: .68rem; color: #a29d92; }
+.vedmak-wizard .branch span { font-size: .68rem; color: #bab4a8; }
 .vedmak-wizard .choice-set { margin: .2rem 0 0; padding: 0; border: 0; }
 .vedmak-wizard .choice-set legend { padding: 0; margin-bottom: .25rem; }
 .vedmak-wizard .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: .2rem .6rem; }
@@ -4048,7 +4048,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .check-grid label.dim { opacity: .5; }
 .vedmak-wizard .prof-desc { margin-top: .6rem; }
 .vedmak-wizard .prof-desc summary { cursor: var(--cursor-pointer); font-family: var(--vd-font-head); font-size: .95rem; color: #d6d0c2; }
-.vedmak-wizard .prof-desc .desc { margin-top: .35rem; font-size: .78rem; line-height: 1.5; color: #a29d92; }
+.vedmak-wizard .prof-desc .desc { margin-top: .35rem; font-size: .78rem; line-height: 1.5; color: #bab4a8; }
 
 /* Клеймо — общее для параметров, итога и героя */
 .vedmak-wizard .stamp {
@@ -4071,7 +4071,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .method { display: flex; flex-direction: column; gap: .3rem; }
 .vedmak-wizard .switch { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 2px; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm); }
 .vedmak-wizard .switch .sw {
-  width: auto; height: 1.9rem; margin: 0; padding: 0 .7rem; font-family: var(--vd-font-head); font-size: .95rem; line-height: 1; color: #8e897e;
+  width: auto; height: 1.9rem; margin: 0; padding: 0 .7rem; font-family: var(--vd-font-head); font-size: .95rem; line-height: 1; color: #a8a296;
   background: transparent; border: 1px solid transparent; border-radius: 2px; box-shadow: none;
 }
 .vedmak-wizard .switch .sw:hover { color: #d6d0c2; }
@@ -4079,7 +4079,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .left { display: flex; flex-direction: column; align-items: flex-end; gap: .2rem; }
 .vedmak-wizard .left > span:last-child { display: flex; align-items: baseline; gap: .3rem; }
 .vedmak-wizard .left b { font-size: 2.1rem; }
-.vedmak-wizard .left .of { font-size: .72rem; color: #6c685f; }
+.vedmak-wizard .left .of { font-size: .72rem; color: #8c867b; }
 .vedmak-wizard .left.off b { background: none; color: var(--vd-blood-lite); filter: none; }
 .vedmak-wizard .stat-grid9 { display: grid; grid-template-columns: repeat(auto-fill, minmax(14.5rem, 1fr)); gap: .6rem; }
 .vedmak-wizard .stat-card {
@@ -4121,13 +4121,13 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   border-bottom: 1px solid rgba(0,0,0,.5); box-shadow: 0 1px 0 rgba(255,240,215,.04); font-size: .8rem;
 }
 .vedmak-wizard .wskill:first-of-type { margin-top: .35rem; }
-.vedmak-wizard .wskill .name { color: #a29d92; line-height: 1.2; overflow-wrap: anywhere; }
+.vedmak-wizard .wskill .name { color: #bab4a8; line-height: 1.2; overflow-wrap: anywhere; }
 .vedmak-wizard .wskill .stepper .step-btn { width: 1.45rem; height: 1.45rem; font-size: .9rem; }
 .vedmak-wizard .wskill .stepper input { width: 2.1rem; height: 1.45rem; font-size: .95rem; }
 .vedmak-wizard .wskill.used .name, .vedmak-wizard .wskill.defining .name { color: #f1ece0; }
 .vedmak-wizard .wskill.defining .name { font-family: var(--vd-font-head); font-size: 1.02rem; }
-.vedmak-wizard .wskill .name .dim { font-size: .62rem; color: #6c685f; }
-.vedmak-wizard .wskill .difficult { font-style: normal; font-size: .5rem; color: #8e897e; vertical-align: super; }
+.vedmak-wizard .wskill .name .dim { font-size: .62rem; color: #8c867b; }
+.vedmak-wizard .wskill .difficult { font-style: normal; font-size: .5rem; color: #a8a296; vertical-align: super; }
 .vedmak-wizard .wskill .bonus { font-size: .64rem; color: #9fb48a; text-align: center; }
 .vedmak-wizard .wskill .final { font-family: var(--vd-font-head); font-size: 1.1rem; text-align: center; color: #f1ece0; }
 
@@ -4140,7 +4140,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard :is(.magic-pick, .gear-pick) input { flex: none; margin: 0; }
 .vedmak-wizard .magic-pick img { width: 28px; height: 28px; flex: none; border: 0; border-radius: 2px; }
 .vedmak-wizard .mp-name { flex: 1; min-width: 0; font-size: .78rem; color: #d6d0c2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vedmak-wizard .mp-cost { font-size: .62rem; color: #8e897e; white-space: nowrap; }
+.vedmak-wizard .mp-cost { font-size: .62rem; color: #a8a296; white-space: nowrap; }
 .vedmak-wizard .magic-pick.on { background-color: #1b1726; box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(134,118,176,.6); }
 .vedmak-wizard .magic-pick.on .mp-name { color: #f2edff; }
 .vedmak-wizard .gear-picks { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
@@ -4153,8 +4153,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   width: 2rem; height: 2rem; display: grid; place-items: center; font-family: var(--vd-font-head); font-size: 1.15rem; color: #1a1b1e;
   background: linear-gradient(135deg, #f2ece0, #9b958a); border-radius: 3px; box-shadow: 0 0 0 1px #050607, 0 2px 4px rgba(0,0,0,.7);
 }
-.vedmak-wizard .eq { font-size: .85rem; color: #8e897e; }
-.vedmak-wizard .crowns { display: inline-flex; align-items: baseline; gap: .3rem; font-size: .8rem; color: #a29d92; }
+.vedmak-wizard .eq { font-size: .85rem; color: #a8a296; }
+.vedmak-wizard .crowns { display: inline-flex; align-items: baseline; gap: .3rem; font-size: .8rem; color: #bab4a8; }
 .vedmak-wizard .crowns b { font-size: 1.7rem; }
 
 /* Жизненный путь в мастере */
@@ -4174,7 +4174,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard :is(.portrait, .hero-art)::after { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(226,221,208,.2); box-shadow: inset 0 0 30px rgba(0,0,0,.7); pointer-events: none; }
 .vedmak-wizard .summary-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .6rem; }
 .vedmak-wizard .summary-name { display: block; font-size: 2rem; margin-bottom: .2rem; }
-.vedmak-wizard .summary-body .dim { font-size: .78rem; color: #a29d92; }
+.vedmak-wizard .summary-body .dim { font-size: .78rem; color: #bab4a8; }
 .vedmak-wizard .summary-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .5rem; }
 .vedmak-wizard .summary-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: .8rem; align-items: start; }
 .vedmak-wizard .summary-side { display: flex; flex-direction: column; gap: .8rem; }
@@ -4190,7 +4190,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .st .stamp { width: 2.4rem; height: 2.1rem; }
 .vedmak-wizard .st .stamp b { font-size: 1.1rem; }
 .vedmak-wizard .st .cap { font-size: .52rem; letter-spacing: .1em; }
-.vedmak-wizard .st.dim-st .stamp b { background: none; color: #6c685f; filter: none; }
+.vedmak-wizard .st.dim-st .stamp b { background: none; color: #8c867b; filter: none; }
 
 /* Герой */
 .vedmak-wizard .wiz-hero {
@@ -4201,9 +4201,9 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .hero-art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; border: 0; display: block; }
 .vedmak-wizard .hero-id { display: flex; flex-direction: column; gap: .15rem; }
 .vedmak-wizard .hero-name { font-family: var(--vd-font-head); font-size: 1.55rem; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95); overflow-wrap: anywhere; }
-.vedmak-wizard .hero-id .dim { font-size: .74rem; color: #a29d92; }
-.vedmak-wizard .hero-id .faint { color: #6c685f; }
-.vedmak-wizard .hero-note { font-size: .7rem; line-height: 1.45; color: #8e897e; }
+.vedmak-wizard .hero-id .dim { font-size: .74rem; color: #bab4a8; }
+.vedmak-wizard .hero-id .faint { color: #8c867b; }
+.vedmak-wizard .hero-note { font-size: .7rem; line-height: 1.45; color: #a8a296; }
 
 /* Низ шага: состояние и кнопки */
 .vedmak-wizard .wizard-footer {
@@ -4267,11 +4267,11 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak-dialog.check-dialog .dlg-ident { gap: .3rem; }
 .vedmak-dialog.check-dialog .dlg-title { font-size: 1.55rem; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95); }
-.vedmak-dialog.check-dialog .dlg-sub { font-size: .72rem; line-height: 1.4; color: #8e897e; }
+.vedmak-dialog.check-dialog .dlg-sub { font-size: .72rem; line-height: 1.4; color: #a8a296; }
 .vedmak-dialog.check-dialog .dlg-sub.warn { color: #e0937f; }
 .vedmak-dialog.check-dialog .dlg-base { min-width: 4.6rem; padding: .5rem .6rem .4rem; }
 .vedmak-dialog.check-dialog .dlg-base b { font-size: 2.15rem; }
-.vedmak-dialog.check-dialog .cap { font-family: var(--vd-font-body); font-size: .55rem; letter-spacing: .16em; color: #a29d92; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak-dialog.check-dialog .cap { font-family: var(--vd-font-body); font-size: .55rem; letter-spacing: .16em; color: #bab4a8; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
 
 /* Тело: подписи разделов — ромб, подпись, борозда */
 .vedmak-dialog.check-dialog .dlg-body { gap: 1.05rem; padding: 1rem .85rem 1.1rem; }
@@ -4288,25 +4288,25 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg);
   background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607, 0 1px 2px rgba(0,0,0,.8);
 }
-.vedmak-dialog.check-dialog details.fold > summary.dlg-label::before { content: "▸"; flex: none; font-size: .7rem; letter-spacing: 0; color: #8e897e; }
+.vedmak-dialog.check-dialog details.fold > summary.dlg-label::before { content: "▸"; flex: none; font-size: .7rem; letter-spacing: 0; color: #a8a296; }
 .vedmak-dialog.check-dialog details.fold[open] > summary.dlg-label::before { content: "▾"; }
 .vedmak-dialog.check-dialog .dlg-label .dim, .vedmak-dialog.check-dialog .fold-note {
-  order: 2; font-size: .68rem; letter-spacing: .02em; text-transform: none; color: #8e897e;
+  order: 2; font-size: .68rem; letter-spacing: .02em; text-transform: none; color: #a8a296;
 }
 .vedmak-dialog.check-dialog .fold-note:not(:empty) { color: #b4c79c; }
-.vedmak-dialog.check-dialog .hint { font-size: .7rem; line-height: 1.45; color: #8e897e; }
+.vedmak-dialog.check-dialog .hint { font-size: .7rem; line-height: 1.45; color: #a8a296; }
 .vedmak-dialog.check-dialog .hint.warn { color: #e0937f; }
 
 /* Плашки выбора: вид удара, защита, способ */
 .vedmak-dialog.check-dialog .opt-grid { gap: 5px; }
 .vedmak-dialog.check-dialog .opt-grid.g3 { grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr)); }
 .vedmak-dialog.check-dialog .opt > span {
-  min-height: 2.4rem; padding: .45rem .55rem; font-size: .78rem; color: #a29d92;
+  min-height: 2.4rem; padding: .45rem .55rem; font-size: .78rem; color: #bab4a8;
   background: #141518; border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.04);
 }
 .vedmak-dialog.check-dialog .opt.tall > span { align-items: flex-start; justify-content: flex-start; gap: .25rem; min-height: 3.6rem; text-align: left; }
 .vedmak-dialog.check-dialog .opt.tall b { font-size: 1rem; line-height: 1.05; color: #d6d0c2; }
-.vedmak-dialog.check-dialog .opt small, .vedmak-dialog.check-dialog .opt em { font-size: .64rem; line-height: 1.3; color: #8e897e; }
+.vedmak-dialog.check-dialog .opt small, .vedmak-dialog.check-dialog .opt em { font-size: .64rem; line-height: 1.3; color: #a8a296; }
 .vedmak-dialog.check-dialog .opt:hover > span { color: #e2ddd0; border-color: #060708; }
 .vedmak-dialog.check-dialog .opt:has(input:checked) > span {
   color: #e2ddd0; background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.22));
@@ -4341,14 +4341,14 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-dialog.check-dialog .opt.loc:has(input:checked) .loc-glyph.leg { background-image: url("../assets/glyphs/part-leg-ok.svg"); }
 .vedmak-dialog.check-dialog .opt.loc:has(input:checked) .loc-glyph.die { background-image: url("../assets/glyphs/part-die-ok.svg"); }
 .vedmak-dialog.check-dialog .opt.loc .loc-name { font-size: .6rem; line-height: 1.15; color: inherit; }
-.vedmak-dialog.check-dialog .opt.loc em { font-family: var(--vd-font-head); font-size: .95rem; line-height: 1; color: #8e897e; }
+.vedmak-dialog.check-dialog .opt.loc em { font-family: var(--vd-font-head); font-size: .95rem; line-height: 1; color: #a8a296; }
 .vedmak-dialog.check-dialog .opt.loc em.bad { color: #e0937f; }
 
 
 /* Жетоны: обстоятельства (с ящичком), дистанция, цели */
 .vedmak-dialog.check-dialog .opt-row { gap: 5px; }
 .vedmak-dialog.check-dialog .chip > span, .vedmak-dialog.check-dialog .chip.static {
-  align-items: center; gap: .45rem; height: 1.95rem; padding: 0 .65rem; font-size: .74rem; color: #a29d92;
+  align-items: center; gap: .45rem; height: 1.95rem; padding: 0 .65rem; font-size: .74rem; color: #bab4a8;
   background: #141518; border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.04);
 }
 .vedmak-dialog.check-dialog .chip:has(input[type="checkbox"]) > span::before {
@@ -4375,7 +4375,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   gap: 2px; padding: 2px; background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
 .vedmak-dialog.check-dialog .dlg-group.vis .chip > span {
-  height: 1.8rem; padding: 0 .75rem; font-family: var(--vd-font-head); font-size: .92rem; color: #8e897e;
+  height: 1.8rem; padding: 0 .75rem; font-family: var(--vd-font-head); font-size: .92rem; color: #a8a296;
   background: transparent; border-color: transparent; box-shadow: none;
 }
 .vedmak-dialog.check-dialog .dlg-group.vis .chip:has(input:checked) > span {
@@ -4384,13 +4384,13 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 
 /* Широкая плашка с ящичком: фокус, место силы, дополнительное действие */
 .vedmak-dialog.check-dialog .plate {
-  gap: .6rem; min-height: 2.5rem; padding: 0 .75rem; font-size: .8rem; color: #a29d92;
+  gap: .6rem; min-height: 2.5rem; padding: 0 .75rem; font-size: .8rem; color: #bab4a8;
   background: #141518; border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.04);
 }
 .vedmak-dialog.check-dialog .plate::before {
   content: ""; flex: none; width: 11px; height: 11px; background: #0a0b0c; border: 1px solid #3a3c42; box-shadow: inset 0 1px 2px rgba(0,0,0,.9);
 }
-.vedmak-dialog.check-dialog .plate .plate-value { font-size: .95rem; color: #8e897e; }
+.vedmak-dialog.check-dialog .plate .plate-value { font-size: .95rem; color: #a8a296; }
 .vedmak-dialog.check-dialog .plate:has(input:checked) { color: #f1ece0; background: #2a2c31; border-color: #060708; box-shadow: inset 0 1px 0 rgba(255,245,225,.13); }
 .vedmak-dialog.check-dialog .plate:has(input:checked)::before { background: linear-gradient(135deg, #f2ece0, #77726a); border-color: #050607; }
 .vedmak-dialog.check-dialog .plate:has(input:checked) .plate-value { color: var(--vd-accent); }
@@ -4411,7 +4411,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-dialog.check-dialog .stepper input { width: 3.2rem; }
 .vedmak-dialog.check-dialog label.num { gap: .3rem; }
 .vedmak-dialog.check-dialog label.num select { height: 2.05rem; }
-.vedmak-dialog.check-dialog .mod-field .cap { color: #8e897e; }
+.vedmak-dialog.check-dialog .mod-field .cap { color: #a8a296; }
 
 /* Удача — монетами */
 .vedmak-dialog.check-dialog .luck-row { gap: .4rem; height: 2.05rem; padding: 0; background: none; border: 0; }
@@ -4423,11 +4423,11 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   box-shadow: 0 0 0 1px #2a1d08, 0 2px 4px rgba(0,0,0,.7), 0 0 8px rgba(224,180,90,.35);
 }
 .vedmak-dialog.check-dialog .luck-row .dot.zero > span {
-  width: 22px; height: 22px; padding: 0; display: grid; place-items: center; font-size: .8rem; line-height: 1; color: #6c685f;
+  width: 22px; height: 22px; padding: 0; display: grid; place-items: center; font-size: .8rem; line-height: 1; color: #8c867b;
   background: transparent; border-color: transparent; box-shadow: none; border-radius: 2px;
 }
 .vedmak-dialog.check-dialog .luck-row .dot.zero:has(input:checked) > span { color: #f1ece0; background: #2a2c31; border-color: #060708; }
-.vedmak-dialog.check-dialog .luck-note { margin-left: .3rem; font-size: .7rem; color: #8e897e; }
+.vedmak-dialog.check-dialog .luck-note { margin-left: .3rem; font-size: .7rem; color: #a8a296; }
 
 /* Вложенная Выносливость — деления */
 .vedmak-dialog.check-dialog .cost-row { gap: 4px; padding: 6px 7px 5px; background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm); }
@@ -4439,7 +4439,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 /* Энергия за раунд */
 .vedmak-dialog.check-dialog .energy { gap: .4rem; padding: .6rem .75rem .65rem; background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink); }
 .vedmak-dialog.check-dialog .energy.is-over { border-color: #3a120a; }
-.vedmak-dialog.check-dialog .energy-text { font-family: var(--vd-font-head); font-size: .95rem; color: #a29d92; }
+.vedmak-dialog.check-dialog .energy-text { font-family: var(--vd-font-head); font-size: .95rem; color: #bab4a8; }
 .vedmak-dialog.check-dialog .energy.is-over .energy-text { color: #e0937f; }
 .vedmak-dialog.check-dialog .energy-bar { height: .7rem; gap: 0; background: #2b2438; border: 0; box-shadow: inset 0 0 0 1px rgba(201,189,240,.25); }
 .vedmak-dialog.check-dialog .energy-bar .fill { background: linear-gradient(180deg, #d6ccf3, #6a5a98); }
@@ -4455,15 +4455,15 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-dialog.check-dialog .dlg-total .tot { gap: .15rem; }
 .vedmak-dialog.check-dialog .dlg-total .tot b { font-size: 1.35rem; line-height: 1.1; color: #f1ece0; }
 .vedmak-dialog.check-dialog .dlg-total .tot-roll { display: flex; align-items: baseline; gap: .4rem; }
-.vedmak-dialog.check-dialog .dlg-total .tot-roll .dx { font-family: var(--vd-font-head); font-size: 1.1rem; color: #8e897e; white-space: nowrap; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .dx { font-family: var(--vd-font-head); font-size: 1.1rem; color: #a8a296; white-space: nowrap; }
 .vedmak-dialog.check-dialog .dlg-total .tot-roll b {
   font-size: 2.15rem; line-height: 1;
   background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
 }
-.vedmak-dialog.check-dialog .dlg-total .tot-parts { font-size: .66rem; color: #8e897e; white-space: nowrap; }
+.vedmak-dialog.check-dialog .dlg-total .tot-parts { font-size: .66rem; color: #a8a296; white-space: nowrap; }
 .vedmak-dialog.check-dialog .dlg-total .tot.dmg { padding-left: 1rem; border-left: 1px solid #050607; box-shadow: inset 1px 0 0 rgba(255,240,215,.06); }
 .vedmak-dialog.check-dialog .dlg-total .tot.dmg b { font-size: 1.5rem; }
-.vedmak-dialog.check-dialog .tot-hint { align-self: center; font-size: .66rem; font-style: normal; line-height: 1.35; color: #6c685f; }
+.vedmak-dialog.check-dialog .tot-hint { align-self: center; font-size: .66rem; font-style: normal; line-height: 1.35; color: #8c867b; }
 .vedmak-dialog.check-dialog .form-footer { padding: .4rem .85rem .8rem; gap: .45rem; }
 .vedmak-dialog.check-dialog .form-footer button {
   height: 2.6rem; padding: 0 1.1rem; font-family: var(--vd-font-body); font-weight: 600; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
@@ -4498,7 +4498,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   margin: 0; padding: .4rem .65rem .35rem; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045);
 }
 .chat-message.vedmak-message .message-header .message-sender { font-family: var(--vd-font-head); font-size: .88rem; color: #cfc8b8; }
-.chat-message.vedmak-message .message-header .message-timestamp { font-size: .62rem; color: #6c685f; }
+.chat-message.vedmak-message .message-header .message-timestamp { font-size: .62rem; color: #8c867b; }
 .chat-message.vedmak-message .message-content { padding: 0; }
 
 .vedmak-card { background: transparent; border: 0; box-shadow: none; font-size: .78rem; }
@@ -4512,10 +4512,10 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   border: 1px solid #040405; border-radius: 0; box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 1px 0 rgba(255,240,215,.08);
 }
 .vedmak-card .card-name { font-size: 1.05rem; line-height: 1.08; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
-.vedmak-card .card-sub { font-size: .66rem; line-height: 1.35; color: #8e897e; }
+.vedmak-card .card-sub { font-size: .66rem; line-height: 1.35; color: #a8a296; }
 .vedmak-card .card-value { min-width: 3.3rem; min-height: 3.1rem; padding: .3rem .4rem .25rem; }
 .vedmak-card .card-value b { font-size: 1.6rem; }
-.vedmak-card .card-value .cap { font-size: .52rem; letter-spacing: .16em; color: #a29d92; }
+.vedmak-card .card-value .cap { font-size: .52rem; letter-spacing: .16em; color: #bab4a8; }
 .vedmak-card .card-value.blood {
   background-color: #3a1610;
   background-image: repeating-linear-gradient(135deg, rgba(255,200,180,.07) 0 1px, transparent 1px 4px), var(--vd-t-scratch),
@@ -4534,7 +4534,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-card .card-value.arcane .cap { color: #c9bdf0; }
 .vedmak-card.is-failure .card-value:not(.blood, .arcane) b, .vedmak-card.check.is-fumble .card-value b { background: none; color: #e0937f; filter: none; }
 .vedmak-card.damage.is-applied .card-value { background-color: #222328; background-image: none; }
-.vedmak-card.damage.is-applied .card-value b { color: #8e897e; text-decoration: line-through; text-decoration-color: rgba(184,67,44,.8); }
+.vedmak-card.damage.is-applied .card-value b { color: #a8a296; text-decoration: line-through; text-decoration-color: rgba(184,67,44,.8); }
 
 .vedmak-card .card-body { display: flex; flex-direction: column; gap: .5rem; padding: 0 .65rem .65rem; }
 .vedmak-card .card-body > * { margin: 0; }
@@ -4546,7 +4546,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak-card .roll-line .dice { gap: .3rem; flex-wrap: wrap; }
 .vedmak-card .roll-line .minus { font-family: var(--vd-font-head); font-size: 1.1rem; color: #e0937f; }
-.vedmak-card .roll-sum { flex: 1; text-align: right; font-size: .68rem; color: #8e897e; white-space: nowrap; }
+.vedmak-card .roll-sum { flex: 1; text-align: right; font-size: .68rem; color: #a8a296; white-space: nowrap; }
 .vedmak-card .roll-sum b { font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0; }
 .vedmak-card .die.d10 {
   position: relative; display: inline-block; flex: none; width: 28px; height: 30px; clip-path: none; border: 0; border-radius: 0; box-shadow: none;
@@ -4580,14 +4580,14 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-card .badge.fumble::before { content: "▲"; font-size: .6rem; color: #b8432c; }
 
 /* Из чего сложилось */
-.vedmak-card .roll-parts summary { font-size: .66rem; color: #8e897e; cursor: var(--cursor-pointer); }
+.vedmak-card .roll-parts summary { font-size: .66rem; color: #a8a296; cursor: var(--cursor-pointer); }
 .vedmak-card .roll-parts[open] summary { margin-bottom: .25rem; }
 .vedmak-card ul.parts { font-size: .72rem; }
 .vedmak-card ul.parts li {
   display: flex; align-items: baseline; gap: .5rem; padding: .25rem 0;
   border-bottom: 1px solid rgba(0,0,0,.55); box-shadow: 0 1px 0 rgba(255,240,215,.04);
 }
-.vedmak-card ul.parts li span { flex: 1; color: #a29d92; }
+.vedmak-card ul.parts li span { flex: 1; color: #bab4a8; }
 .vedmak-card ul.parts li b { font-family: var(--vd-font-head); font-size: .92rem; color: #e2ddd0; }
 .vedmak-card ul.parts li.luck b { color: #ffcf8a; }
 .vedmak-card ul.parts li.fumble-line b { color: #e0937f; }
@@ -4598,7 +4598,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-card .card-props > span { display: inline-flex; align-items: center; gap: .3rem; padding: .1rem .45rem; background: #141518; border: 1px solid #060708; border-radius: 2px; }
 .vedmak-card .card-props b { font-family: var(--vd-font-head); font-size: .85rem; color: #f1ece0; }
 .vedmak-card .note { font-size: .7rem; line-height: 1.4; color: #c9c3b6; }
-.vedmak-card .note.dim { color: #6c685f; }
+.vedmak-card .note.dim { color: #8c867b; }
 .vedmak-card .fumble-note, .vedmak-card .crit-box {
   display: flex; flex-direction: column; gap: .2rem; padding: .45rem .55rem .5rem; font-size: .7rem; line-height: 1.4; color: #c9a59b;
   background: #1c1110; border: 1px solid #3a120a; border-radius: 2px;
@@ -4622,7 +4622,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak-card .card-section h4 {
   margin: 0; padding: 0; border: 0; font-family: var(--vd-font-body); font-size: .55rem; font-weight: 400; letter-spacing: .16em;
-  text-transform: uppercase; color: #8e897e;
+  text-transform: uppercase; color: #a8a296;
 }
 .vedmak-card .target-row { display: flex; flex-direction: column; gap: .35rem; }
 .vedmak-card .target-name { display: flex; align-items: center; gap: .45rem; font-family: var(--vd-font-head); font-size: .9rem; color: #e2ddd0; }
@@ -4636,7 +4636,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-card.cast .card-buttons button.primary { --vd-go: #6a5a98; border-color: #17102a; }
 .vedmak-card .card-buttons button.quiet {
   flex: 0 0 auto; margin-left: auto; height: 1.85rem; padding: 0 .75rem; font-size: .64rem; font-weight: 600; letter-spacing: .14em;
-  text-transform: uppercase; color: #a29d92; background: transparent; border: 1px solid #2a2c31; box-shadow: none;
+  text-transform: uppercase; color: #bab4a8; background: transparent; border: 1px solid #2a2c31; box-shadow: none;
 }
 .vedmak-card .card-buttons button.quiet:hover { color: #e2ddd0; border-color: #3a3c42; }
 .vedmak-dialog.check-dialog .dlg-row.mods { align-items: flex-start; gap: 1.2rem; }
@@ -4662,7 +4662,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak.character .stat-row, .vedmak.character .stat-row:last-child { margin-bottom: 5px; padding: .45rem .65rem .45rem .45rem; }
 .vedmak.character .stat-row:last-child { margin-bottom: 0; }
 .vedmak.character .stat-row:hover { border-color: rgba(0, 0, 0, .72); background-color: rgba(255, 245, 225, .035); }
-.vedmak.character .stat-row .base .cap { color: #8e897e; }
+.vedmak.character .stat-row .base .cap { color: #a8a296; }
 
 .vedmak .atk-row, .vedmak .atk-row.off, .vedmak .combat-block > .atk-row:last-of-type { margin-bottom: 5px; padding: .5rem .65rem .5rem .5rem; }
 .vedmak .combat-block > .atk-row:last-of-type { margin-bottom: 0; }
@@ -4700,7 +4700,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   background: #141518; border: 1px solid #060708; border-radius: 2px;
 }
 .vedmak .bio-tab .lp-meta span + span::before { content: none; }
-.vedmak .bio-tab .lp-meta i { color: #8e897e; }
+.vedmak .bio-tab .lp-meta i { color: #a8a296; }
 .vedmak .bio-tab :is(.lp-body, .lp-fact p, .lp-feature .lp-body) { max-width: 46rem; }
 .vedmak .bio-tab .lp-event.quiet { opacity: .7; }
 .vedmak .bio-tab .lp-era:has(.lp-event.quiet:only-child) .lp-era-body { background-color: transparent; border-color: rgba(0, 0, 0, .4); box-shadow: none; }
@@ -4712,3 +4712,32 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .lp-people li { grid-template-columns: auto minmax(0, 1fr); gap: .6rem; }
 /* Свойства заклинания переносятся — кнопки карточки держатся правого края, а не уезжают влево под строку */
 .vedmak .magic-tab .spell-acts { display: flex; align-items: center; gap: .3rem; margin-left: auto; }
+
+/* Дневник: сведения досье, строки летописи и «Братья и сёстры» — тоже в лотках, а не на голой фактуре */
+.vedmak .bio-tab .facts, .vedmak .bio-tab .lp-people, .vedmak .bio-tab .lp-fact {
+  background-color: rgba(8, 9, 10, .44); border: 1px solid rgba(0, 0, 0, .72); border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04), 0 1px 0 rgba(255, 240, 215, .05);
+}
+.vedmak .bio-tab .facts { padding: .15rem .75rem .2rem; align-self: start; }
+.vedmak .bio-tab .facts .line:last-child { border-bottom: 0; box-shadow: none; }
+.vedmak .bio-tab .line input::placeholder { color: #55585f; }
+.vedmak .bio-tab .lp-fact { margin-bottom: 5px; padding: .5rem .75rem; }
+.vedmak .bio-tab .lp-fact .lp-cap { padding-top: .2rem; }
+.vedmak .bio-tab .lp-people { padding: .15rem .75rem; }
+.vedmak .bio-tab .lp-people li:last-child { border-bottom: 0; box-shadow: none; }
+/* Школа в досье: подпись — над строкой, медальон и название получают всю ширину колонки */
+.vedmak .bio-tab .line.school { flex-wrap: wrap; row-gap: .35rem; }
+.vedmak .bio-tab .line.school > .cap { width: 100%; }
+/* Навыки: строки группы — в общем лотке, а не на фактуре; неизученные читаются, не теряются в пятнах */
+.vedmak .skill-group .skill-rows {
+  padding: .1rem .5rem; background-color: rgba(8, 9, 10, .44); border: 1px solid rgba(0, 0, 0, .72); border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04), 0 1px 0 rgba(255, 240, 215, .05);
+}
+.vedmak .skill-group .skill-rows:empty { display: none; }
+/* Ремесло: ряд субстанций (запас и отбор) — в лотке; подписи пустых тусклее полных, но не исчезают в фактуре */
+.vedmak .craft-tab .subs {
+  padding: .4rem .3rem .35rem; background-color: rgba(8, 9, 10, .44); border: 1px solid rgba(0, 0, 0, .72); border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04), 0 1px 0 rgba(255, 240, 215, .05);
+}
+.vedmak .craft-tab :is(.sub, .sub-filter).zero .sub-name { color: #7d786f; }
+.vedmak .craft-tab .sub-name { font-size: .62rem; }
