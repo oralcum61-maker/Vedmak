@@ -130,7 +130,7 @@ function castBase(actor, skillKey) {
 }
 
 /** Что даёт вложенная Выносливость: урон и шансы статусов. */
-function costNote(a, cost) {
+export function costNote(a, cost) {
   const bits = [];
   const damage = resolveSta(a.damage, cost);
   if (damage) bits.push(`урон ${damage}`);

@@ -8,8 +8,9 @@ import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
 import { manualDamage, restTurn, restDays } from "../combat/manual.mjs";
 import { controlCheck } from "../combat/mounted.mjs";
 import { MOUNTS } from "../config/combat.mjs";
-import { levelLabel } from "../config/magic.mjs";
-import { castSpell, vigorUsed, maintainedSpells } from "../magic/cast.mjs";
+import { levelLabel, ELEMENT_GLYPHS, SIGN_FORMS, MAGIC_LEARNING } from "../config/magic.mjs";
+import { spellAutomation } from "../config/spell-auto.mjs";
+import { castSpell, vigorUsed, maintainedSpells, costNote } from "../magic/cast.mjs";
 import { endMaintained } from "../magic/effects.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
@@ -72,6 +73,128 @@ function weaponRow(item) {
 }
 
 /** Части тела по таблице попаданий: символ части, в левой половине тела — зеркально. */
+/* --------------------------------- Магия --------------------------------- */
+
+const LEVEL_ORDER = { novice: 0, journeyman: 1, master: 2, archPriest: 3 };
+const plainText = html => String(html ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+// Эмаль кнопки по виду магии: заклинание, знак и дар — фиолет, инвокация — золото, ритуал — сталь, порча — багрянец
+const CAST_GO = { spell: "arcane", sign: "arcane", gift: "arcane", invocation: "holy", ritual: "ritual", hex: "hex" };
+
+/** Карточка заклинания, знака, инвокации, ритуала или порчи для вкладки «Магия». */
+function spellCard(item) {
+  const s = item.system;
+  const kind = s.kind;
+  const levels = kind === "sign" || kind === "gift" ? 2 : kind === "invocation" ? 4 : 3;
+  const level = (LEVEL_ORDER[s.level] ?? 0) + 1;
+  const glyph = ELEMENT_GLYPHS[s.element];
+  const max = s.maxCost || 7;
+  const keep = s.maintainMode === "half" ? "½ стоимости / раунд" : s.maintainMode ? "стоимость / раунд"
+    : s.maintainCost ? `+${s.maintainCost} Вын / раунд` : "";
+  return {
+    id: item.id, name: item.name, img: item.img, kind, system: s,
+    levelLabel: levelLabel(kind, s.level),
+    pips: Array.from({ length: levels }, (_, n) => ({ on: n < level })),
+    element: glyph && ["spell", "sign"].includes(kind)
+      ? { ...glyph, label: CONFIG.VEDMAK.MAGIC_ELEMENTS[s.element] ?? "" } : null,
+    cost: s.variableCost ? `1–${max}` : String(s.staCost ?? 0),
+    variable: !!s.variableCost, maxCost: max, keep,
+    text: plainText(s.effect || s.description),
+    range: s.range, duration: s.duration,
+    defense: s.defenseText || CONFIG.VEDMAK.MAGIC_DEFENSES?.[s.defense] || "",
+    dc: s.dc || s.dcText || "", preparation: s.preparation,
+    castLabel: kind === "ritual" ? "Провести" : kind === "hex" ? "Навести" : "Сотворить",
+    go: CAST_GO[kind] ?? "arcane"
+  };
+}
+
+/**
+ * Данные вкладки «Магия»: источник (Энергия, Вын, навыки, фокус, щит), поддерживаемое, знаки ведьмака парами
+ * «основной / второй» с подробностью выбранного и карточки остальной магии по видам.
+ */
+function magicContext(actor, spells) {
+  const system = actor.system;
+  const d = system.derived;
+  const used = vigorUsed(actor).used;
+  const skill = key => system.skills[key]?.base ?? 0;
+  const sorted = spells.slice().sort((a, b) =>
+    (LEVEL_ORDER[a.system.level] - LEVEL_ORDER[b.system.level]) || compareRu(a.name, b.name));
+
+  // Знаки: пять пар по названию, прочие (Сомна, Супирре, свои) — отдельными медалями
+  const signs = sorted.filter(s => s.system.kind === "sign");
+  const byName = new Map(signs.map(s => [s.name, s]));
+  const paired = new Set();
+  const signForms = [];
+  for (const f of SIGN_FORMS) {
+    const base = byName.get(f.base);
+    if (!base) continue;
+    const alt = byName.get(f.alt);
+    paired.add(base.id);
+    if (alt) paired.add(alt.id);
+    signForms.push({ base: spellCard(base), alt: alt ? spellCard(alt) : null, altName: f.alt, altImg: alt?.img ?? f.altImg });
+  }
+  for (const s of signs) if (!paired.has(s.id)) signForms.push({ base: spellCard(s), alt: null, altName: "", altImg: "" });
+  // Подробность выбранного знака: Вын ступенькой, что даёт каждое очко — подсказкой
+  const signDetails = signForms.flatMap(f => [f.base, f.alt].filter(Boolean).map(card => {
+    const item = actor.items.get(card.id);
+    const auto = spellAutomation(item);
+    const max = card.variable ? card.maxCost : 0;
+    const start = card.variable ? Math.min(max, Math.max(1, d.vigor - used || 1)) : Number(card.system.staCost) || 0;
+    return { ...card, pairId: f.base.id, isAlt: card.id !== f.base.id, hasAlt: !!f.alt, altId: f.alt?.id ?? "",
+      start, notes: JSON.stringify(card.variable ? Array.from({ length: max }, (_, n) => costNote(auto, n + 1)) : [costNote(auto, start)]) };
+  }));
+
+  const spellGroups = Object.entries(CONFIG.VEDMAK.MAGIC_KINDS).filter(([kind]) => kind !== "sign").map(([kind, label]) => ({
+    kind, label, go: CAST_GO[kind],
+    note: kind === "ritual" ? `Воля + Проведение ритуалов · ${skill("ritualCrafting")}`
+      : kind === "hex" ? `Воля + Наведение порчи · ${skill("hexWeaving")}` : `Воля + Сотворение заклинаний · ${skill("spellCasting")}`,
+    items: sorted.filter(s => s.system.kind === kind).map(spellCard)
+  }));
+  const has = kind => sorted.some(s => s.system.kind === kind);
+
+  // Щит Квена: сколько осталось — по метке щита (timed.key = "shield")
+  const shieldFx = actor.effects.find(e => e.flags?.vedmak?.timed?.key === "shield");
+  const shieldLeft = shieldFx ? (shieldFx.flags.vedmak.timed.rounds ? `ещё ${shieldFx.flags.vedmak.timed.rounds} р.`
+    : Number.isFinite(shieldFx.duration?.secondsRemaining) ? `ещё ${Math.max(0, Math.ceil(shieldFx.duration.secondsRemaining / (CONFIG.time.roundTime || 3)))} р.` : "") : "";
+  const sta = system.sta ?? { value: 0, max: 0 };
+  const maintained = maintainedSpells(actor).map(e => {
+    const cost = e.flags.vedmak.maintain.cost;
+    return { id: e.id, name: e.name, img: e.img, cost, segs: Array.from({ length: Math.min(cost || 0, 10) }, () => ({})) };
+  });
+  return {
+    spellGroups, signForms, signDetails,
+    hasSigns: !!signForms.length,
+    hasMagic: !!sorted.length,
+    magic: {
+      used, vigor: d.vigor ?? 0,
+      energy: energySegments(d.vigor ?? 0, used, 0),
+      energyNote: used ? `${used} из ${d.vigor} уже влито в этом раунде` : "Энергия — сколько Вын можно без вреда влить за раунд",
+      sta: { value: sta.value, max: sta.max, pct: sta.max ? Math.round(Math.max(0, Math.min(1, sta.value / sta.max)) * 100) : 0 },
+      skills: [
+        { key: "spellCasting", label: "Сотворение", value: skill("spellCasting"), show: true },
+        { key: "ritualCrafting", label: "Ритуалы", value: skill("ritualCrafting"), show: has("ritual") },
+        { key: "hexWeaving", label: "Порча", value: skill("hexWeaving"), show: has("hex") }
+      ].filter(k => k.show).map(k => ({ ...k, title: `Воля + ${SKILLS[k.key]?.label ?? k.label}` })),
+      focus: d.focus ?? 0, focusItem: d.focusItem ?? "", showFocus: !!d.focus || sorted.some(x => x.system.kind !== "sign"),
+      signNote: `Воля + Сотворение заклинаний · ${skill("spellCasting")}`,
+      kinds: Object.entries(CONFIG.VEDMAK.MAGIC_KINDS).map(([kind, label]) => ({ kind, label })),
+      shield: system.shield?.value ?? 0, shieldLeft, showShield: !!(system.shield?.value || has("sign")),
+      maintained,
+      learning: Object.entries(MAGIC_LEARNING).map(([level, l]) => ({
+        label: levelLabel("spell", level), pips: [1, 2, 3, 4].map(n => ({ on: n <= LEVEL_ORDER[level] + 1 })), ...l,
+        checksLabel: `${l.checks} ${l.checks < 5 ? "проверки" : "проверок"}`
+      }))
+    }
+  };
+}
+
+/** Деления Энергии: влито в этом раунде, будет влито сейчас, перегрузка сверх Энергии и свободное. */
+function energySegments(vigor, used, planned) {
+  const total = Math.max(vigor, used + planned);
+  return Array.from({ length: Math.min(total, 20) }, (_, n) => ({
+    cls: n < used ? (n < vigor ? "spent" : "burn") : n < used + planned ? (n < vigor ? "plan" : "burn") : "free"
+  }));
+}
+
 const ARMOR_PARTS = [
   { key: "head", kind: "head" }, { key: "torso", kind: "torso" },
   { key: "rightArm", kind: "arm" }, { key: "leftArm", kind: "arm", flip: true },
@@ -467,26 +590,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       { key: "resolve", value: d.resolve }
     ].map(x => ({ ...DERIVED[x.key], ...x }));
 
-    const LEVEL_ORDER = { novice: 0, journeyman: 1, master: 2, archPriest: 3 };
-    context.spellGroups = Object.entries(CONFIG.VEDMAK.MAGIC_KINDS).map(([kind, label]) => ({
-      kind, label,
-      items: context.items.spells.filter(s => s.system.kind === kind)
-        .sort((a, b) => (LEVEL_ORDER[a.system.level] - LEVEL_ORDER[b.system.level]) || compareRu(a.name, b.name))
-        .map(item => ({
-          id: item.id, name: item.name, img: item.img, system: item.system,
-          levelLabel: levelLabel(kind, item.system.level),
-          elementLabel: ["spell", "sign"].includes(kind) ? CONFIG.VEDMAK.MAGIC_ELEMENTS[item.system.element] : "",
-          maintain: item.system.maintainMode ? (item.system.maintainMode === "half" ? "½" : "=") : item.system.maintainCost,
-          castLabel: kind === "ritual" ? "Провести" : kind === "hex" ? "Навести" : "Сотворить"
-        }))
-    }));
-    context.hasMagic = context.spellGroups.some(g => g.items.length);
-    const skill = key => system.skills[key].base;
-    context.magic = {
-      used: vigorUsed(actor).used,
-      casting: skill("spellCasting"), rituals: skill("ritualCrafting"), hexes: skill("hexWeaving"),
-      maintained: maintainedSpells(actor).map(e => ({ id: e.id, name: e.name, img: e.img, cost: e.flags.vedmak.maintain.cost }))
-    };
+    Object.assign(context, magicContext(actor, context.items.spells));
 
     // Бой
     context.attacks = attackSources(actor).map(src => {
@@ -638,6 +742,81 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       }
       await item.update(update);
     });
+    // «Магия»: выбор знака, его формы и Вын ступенькой — без перерисовки листа, выбор живёт в окне
+    this._listen("button[data-sign-pick]", "click", (event, btn) => {
+      event.preventDefault();
+      this.signPick = btn.dataset.signPick;
+      this.#applySignPick();
+    });
+    this._listen("button.cost-step", "click", (event, btn) => {
+      event.preventDefault();
+      const detail = btn.closest(".sign-detail");
+      this.signCost[detail.dataset.itemId] = (Number(detail.dataset.cost) || 1) + Number(btn.dataset.step);
+      this.#applySignCost(detail);
+    });
+    this.#applySignPick();
+  }
+
+  /* --------------------------- Магия: выбор знака --------------------------- */
+
+  /** Выбранный знак (id предмета) и вложенная Вын по знакам. */
+  signPick = "";
+  signCost = {};
+
+  #applySignPick() {
+    const tab = this.element?.querySelector(".magic-tab");
+    const details = [...(tab?.querySelectorAll(".sign-detail") ?? [])];
+    if (!details.length) return;
+    const cur = details.find(d => d.dataset.itemId === this.signPick) ?? details[0];
+    this.signPick = cur.dataset.itemId;
+    for (const d of details) d.hidden = d !== cur;
+    for (const btn of tab.querySelectorAll("button.sign-medal")) {
+      const on = btn.dataset.pairId === cur.dataset.pairId;
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    }
+    this.#applySignCost(cur);
+  }
+
+  /** Вын выбранного знака: число, что даёт каждое очко, и как это ляжет на Энергию раунда. */
+  #applySignCost(detail) {
+    const id = detail.dataset.itemId;
+    const variable = detail.dataset.variable === "true";
+    const max = Number(detail.dataset.max) || 7;
+    const cost = variable ? Math.max(1, Math.min(max, this.signCost[id] ?? (Number(detail.dataset.start) || 1)))
+      : Number(detail.dataset.start) || 0;
+    if (variable) this.signCost[id] = cost;
+    detail.dataset.cost = String(cost);
+    const out = detail.querySelector(".cost-value");
+    if (out) out.textContent = String(cost);
+    for (const btn of detail.querySelectorAll("button.cost-step")) {
+      btn.disabled = Number(btn.dataset.step) < 0 ? cost <= 1 : cost >= max;
+    }
+    const notes = JSON.parse(detail.dataset.notes || "[]");
+    const strip = this.element.querySelector(".magic-tab .energy");
+    if (!strip) return;
+    const vigor = Number(strip.dataset.vigor) || 0;
+    const used = Number(strip.dataset.used) || 0;
+    const focus = Number(strip.dataset.focus) || 0;
+    const paid = focus ? Math.max(1, cost - focus) : cost;
+    const over = Math.max(0, used + paid - vigor);
+    const segs = strip.querySelector(".segs");
+    segs.replaceChildren(...energySegments(vigor, used, paid).map(s => {
+      const i = document.createElement("i");
+      i.className = s.cls;
+      return i;
+    }));
+    strip.querySelector(".cap b").textContent = `${Math.min(used + paid, vigor)} из ${vigor}`;
+    const note = strip.querySelector(".energy-note");
+    note.classList.toggle("bad", !!over);
+    note.textContent = over ? `«${detail.dataset.name}» за ${cost}: перегрузка на ${over} — −${over * 5} ПЗ и стихийный откат`
+      : `«${detail.dataset.name}» за ${cost}: уйдёт ${paid} Вын${focus ? ` (фокус −${focus})` : ""}`;
+    const what = detail.querySelector(".cost-note");
+    if (what) {
+      const gives = notes[variable ? cost - 1 : 0] || "";
+      what.textContent = over ? `сверх Энергии на ${over}` : gives || `в пределах Энергии (${vigor})`;
+      what.classList.toggle("bad", !!over);
+    }
   }
 
   /* ------------------------- Лист без права правки ------------------------- */
@@ -737,7 +916,9 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onCastSpell(event, target) {
     const item = this.actor.items.get(target.closest("[data-item-id]")?.dataset.itemId);
-    if (item) await castSpell(this.actor, item, { skipDialog: event.shiftKey });
+    // Из подробности знака — с Вын, выставленной ступенькой (окно сотворения откроется с ней же)
+    const cost = item?.system.variableCost ? Number(target.closest(".sign-detail")?.dataset.cost) || undefined : undefined;
+    if (item) await castSpell(this.actor, item, { skipDialog: event.shiftKey, cost });
   }
 
   static async #onEndMaintained(event, target) {

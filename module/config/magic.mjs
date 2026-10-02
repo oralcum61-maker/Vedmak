@@ -84,3 +84,24 @@ export function targetingFor(range) {
   if (/зона|конус|радиус/.test(r)) return "area";
   return "direct";
 }
+
+/** Знаки стихий на листе — алхимические треугольники: путь в поле 20 × 20 и цвет обводки. */
+export const ELEMENT_GLYPHS = {
+  air:   { color: "#d6e0e8", path: "M10 3L17.5 16.5H2.5ZM4.8 11.5H15.2" },
+  fire:  { color: "#e0604a", path: "M10 3L17.5 16.5H2.5Z" },
+  water: { color: "#6a9fd4", path: "M10 17L2.5 3.5H17.5Z" },
+  earth: { color: "#c09a58", path: "M10 17L2.5 3.5H17.5ZM4.8 8.5H15.2" },
+  mixed: { color: "#cfc8b8", path: "M10 2.5A7.5 7.5 0 1 1 9.99 2.5ZM10 2.5V17.5M2.5 10H17.5" }
+};
+
+/**
+ * Пять ведьмачьих знаков и их вторые формы (продвинутые, подмастерье; стр. 116–117) — по названию в компендиуме.
+ * Значок второй формы нужен и тогда, когда она не выучена: на листе она видна погашенной.
+ */
+export const SIGN_FORMS = [
+  { base: "Аард",  alt: "Сметающий Аард",     altImg: "systems/vedmak/assets/fan/magic/sg-sweep.webp" },
+  { base: "Игни",  alt: "Огненный поток",     altImg: "systems/vedmak/assets/fan/magic/sg-firestream.webp" },
+  { base: "Ирден", alt: "Магическая ловушка", altImg: "systems/vedmak/assets/fan/magic/sg-trap.webp" },
+  { base: "Квен",  alt: "Активный щит",       altImg: "systems/vedmak/assets/fan/magic/sg-shield.webp" },
+  { base: "Аксий", alt: "Марионетка",         altImg: "systems/vedmak/assets/fan/magic/sg-puppet.webp" }
+];
