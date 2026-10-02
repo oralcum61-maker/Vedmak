@@ -4643,3 +4643,72 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-card .card-buttons { flex-wrap: wrap; }
 .vedmak-card .card-buttons button { flex: 1 1 auto; white-space: nowrap; }
 .vedmak-card .card-buttons button.primary { letter-spacing: .14em; }
+
+/* --------------------- Лотки: строки и плитки не сливаются (03.10, PLAN 4.48) --------------------- */
+/* Строки-карточки лежали прямо на фактурной пластине и делились одной бороздкой: фактура проступала под текстом,
+   соседние строки читались одной массой. Теперь каждая — в своём утопленном лотке с промежутком до соседней:
+   параметры, «Чем бью», оружие и броня, плитки снаряжения, рецепты, заклинания, усиления, десятилетия летописи. */
+.vedmak.character .stat-row, .vedmak.character .stat-row:last-child,
+.vedmak .atk-row, .vedmak .atk-row.off, .vedmak .combat-block > .atk-row:last-of-type,
+.vedmak .gear-item, .vedmak .gear-item:last-of-type,
+.vedmak .gear-tile,
+.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card),
+.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card):last-child,
+.vedmak .bio-tab .lp-era-body {
+  background-color: rgba(8, 9, 10, .44); background-image: none;
+  border: 1px solid rgba(0, 0, 0, .72); border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04), 0 1px 0 rgba(255, 240, 215, .05);
+}
+.vedmak.character .stat-row, .vedmak.character .stat-row:last-child { margin-bottom: 5px; padding: .45rem .65rem .45rem .45rem; }
+.vedmak.character .stat-row:last-child { margin-bottom: 0; }
+.vedmak.character .stat-row:hover { border-color: rgba(0, 0, 0, .72); background-color: rgba(255, 245, 225, .035); }
+.vedmak.character .stat-row .base .cap { color: #8e897e; }
+
+.vedmak .atk-row, .vedmak .atk-row.off, .vedmak .combat-block > .atk-row:last-of-type { margin-bottom: 5px; padding: .5rem .65rem .5rem .5rem; }
+.vedmak .combat-block > .atk-row:last-of-type { margin-bottom: 0; }
+.vedmak .atk-row:hover { background-color: rgba(255, 245, 225, .03); }
+.vedmak .atk-row.off { opacity: .68; }
+/* Числа строки — ячейками с бороздой между ними, а не россыпью */
+.vedmak .atk-row .atk-num + .atk-num, .vedmak .atk-row .atk-rel + .atk-num {
+  padding-left: .75rem; border-left: 1px solid rgba(0, 0, 0, .6); box-shadow: inset 1px 0 0 rgba(255, 240, 215, .04);
+}
+
+.vedmak .gear-item, .vedmak .gear-item:last-of-type { margin-bottom: 6px; padding: .65rem .75rem .65rem .65rem; }
+.vedmak .gear-item:last-of-type { margin-bottom: .2rem; }
+
+.vedmak .gear-grid { gap: 6px; }
+.vedmak .gear-tile { padding: .55rem .4rem .45rem; }
+.vedmak .gear-tile:hover, .vedmak .gear-tile:focus-within { background-color: rgba(255, 245, 225, .04); border-color: rgba(0, 0, 0, .72); }
+.vedmak .gear-tile .tile-meta:empty { display: none; }
+.vedmak .gear-rack .gear-cat {
+  display: flex; align-items: center; gap: .6rem; margin: .8rem 0 .4rem;
+}
+.vedmak .gear-rack .gear-cat::after {
+  content: ""; flex: 1; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07);
+}
+
+.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card),
+.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card):last-child { margin-bottom: 6px; padding: .65rem .75rem .65rem .65rem; }
+.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card):last-child { margin-bottom: .2rem; }
+
+/* Летопись: каждое десятилетие — в лотке, события внутри — через борозду, свойства — бирками, строки не шире чтения */
+.vedmak .bio-tab .lp-era-body { gap: .55rem; padding: .55rem .75rem .65rem; }
+.vedmak .bio-tab .lp-event + .lp-event { padding-top: .55rem; border-top: 1px solid rgba(0, 0, 0, .6); box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04); }
+.vedmak .bio-tab .lp-meta { display: flex; flex-wrap: wrap; gap: 4px; }
+.vedmak .bio-tab .lp-meta span {
+  padding: .12rem .5rem; font-size: .72rem; color: #e2ddd0;
+  background: #141518; border: 1px solid #060708; border-radius: 2px;
+}
+.vedmak .bio-tab .lp-meta span + span::before { content: none; }
+.vedmak .bio-tab .lp-meta i { color: #8e897e; }
+.vedmak .bio-tab :is(.lp-body, .lp-fact p, .lp-feature .lp-body) { max-width: 46rem; }
+.vedmak .bio-tab .lp-event.quiet { opacity: .7; }
+.vedmak .bio-tab .lp-era:has(.lp-event.quiet:only-child) .lp-era-body { background-color: transparent; border-color: rgba(0, 0, 0, .4); box-shadow: none; }
+/* Узкий лист: название оружия не сжимается в ноль и не уходит под полосу надёжности — числа переносятся на строку ниже */
+.vedmak .atk-row { flex-wrap: wrap; row-gap: .45rem; }
+.vedmak .atk-row .atk-who { flex: 1 1 9rem; min-width: 9rem; }
+.vedmak .atk-row > .atk-go { margin-left: auto; }
+/* Братья и сёстры: значка в строке нет — сетка на две колонки, иначе «Сестра» налезала на «младше вас» */
+.vedmak .lp-people li { grid-template-columns: auto minmax(0, 1fr); gap: .6rem; }
+/* Свойства заклинания переносятся — кнопки карточки держатся правого края, а не уезжают влево под строку */
+.vedmak .magic-tab .spell-acts { display: flex; align-items: center; gap: .3rem; margin-left: auto; }

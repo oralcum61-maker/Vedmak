@@ -141,10 +141,11 @@
           {{#if s.duration}}<span class="meta" data-tooltip="Длительность"><svg viewBox="0 0 20 22" aria-hidden="true"><path d="M4 2h12M4 20h12M5.5 2c0 5 4.5 6 4.5 9s-4.5 4-4.5 9M14.5 2c0 5-4.5 6-4.5 9s4.5 4 4.5 9"/></svg>{{s.duration}}</span>{{/if}}
           {{#if s.defense}}<span class="meta" data-tooltip="Чем цель защищается"><svg viewBox="0 0 20 22" aria-hidden="true"><path d="M2.5 2.5h15v7.5c0 5.5-7.5 9.5-7.5 9.5S2.5 15.5 2.5 10Z"/></svg>{{s.defense}}</span>{{/if}}
           {{#if s.dc}}<span class="meta" data-tooltip="Сложность">СЛ {{s.dc}}</span>{{/if}}
-          <span class="grow"></span>
-          <a class="mini" data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
-          <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
-          <button type="button" class="go-btn {{s.go}}" data-action="castSpell" data-tooltip="Shift — без окна">{{s.castLabel}}</button>
+          <span class="spell-acts">
+            <a class="mini" data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+            <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+            <button type="button" class="go-btn {{s.go}}" data-action="castSpell" data-tooltip="Shift — без окна">{{s.castLabel}}</button>
+          </span>
         </div>
       </div>
     </div>
