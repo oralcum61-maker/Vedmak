@@ -219,7 +219,22 @@ Hooks.once("init", () => {
 Hooks.once("ready", () => {
   initSocket();
   sortCompendiaIntoFolders();
+  injectMetalDefs();
 });
+
+/**
+ * Градиенты кованого металла для значков листа (части брони, инструменты, гнёзда): один раз на страницу,
+ * а не в шаблоне вкладки — в скрытой вкладке и при нескольких открытых листах ссылки url(#…) путались.
+ */
+function injectMetalDefs() {
+  if (document.getElementById("vd-metal-ok")) return;
+  const stops = c => c.map(([o, color]) => `<stop offset="${o}" stop-color="${color}"/>`).join("");
+  const grad = (id, c) => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops(c)}</linearGradient>`;
+  document.body.insertAdjacentHTML("beforeend", `<svg class="vd-defs" width="0" height="0" aria-hidden="true"><defs>${
+    grad("vd-metal-ok", [[0, "#f6f2ea"], [.45, "#b3ada2"], [.7, "#74706a"], [1, "#3e3d3a"]])}${
+    grad("vd-metal-worn", [[0, "#b9b4aa"], [.45, "#7d7972"], [.7, "#4f4d49"], [1, "#2c2b29"]])}${
+    grad("vd-metal-broken", [[0, "#f08a72"], [.45, "#c4452f"], [.7, "#7a2414"], [1, "#3a120a"]])}</defs></svg>`);
+}
 
 /* ------------------------------- Курсор ------------------------------- */
 

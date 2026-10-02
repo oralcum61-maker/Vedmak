@@ -1,125 +1,240 @@
 <section class="tab craft-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
 
-  <div class="vd-panel craft-summary">
-    <div class="mutagens"><span class="label">Мутагены</span> <b>{{craft.mutagenCount}}</b> <span class="dim">из 2</span></div>
-    <div class="memo"><span class="label">Запомнено рецептов</span> <b class="{{#if craft.memoOver}}bad{{/if}}">{{craft.memorized}}</b> <span class="dim">из {{craft.memoLimit}} (Инт)</span></div>
-    <div class="tools"><span class="label">Инструменты</span>
-      {{#each craft.tools}}<span class="tool-tag">{{this}}</span>{{else}}<span class="dim">нет</span>{{/each}}
+  {{!-- Верстак: всё ремесло одной полосой символов — гнёзда мутагенов, печати памяти, инструменты, запас субстанций --}}
+  <div class="vd-panel bench">
+    <div class="group-head"><span class="bronze-tag">Верстак</span><span class="rule"></span></div>
+    <div class="bench-row">
+      <div class="bench-cell">
+        <span class="cap">Мутагены · {{craft.mutagenCount}} из {{craft.mutagenLimit}}</span>
+        <span class="sockets">
+          {{#each craft.sockets as |m|}}
+          {{#if m.empty}}<span class="socket empty" data-tooltip="Свободное гнездо мутагена"><i></i></span>
+          {{else}}<span class="socket {{m.color}}" data-item-id="{{m.id}}" data-tooltip="{{m.name}}: {{m.effect}}"><img src="{{m.img}}" alt="{{m.name}}"></span>{{/if}}
+          {{/each}}
+        </span>
+      </div>
+      <div class="bench-cell">
+        <span class="cap{{#if craft.memoOver}} bad{{/if}}">Запомнено рецептов · {{craft.memorized}} из {{craft.memoLimit}} (Инт)</span>
+        <span class="seals" data-tooltip="Запомненный рецепт можно изготовить без чертежа под рукой">
+          {{#each craft.seals}}<i class="{{#if on}}on{{/if}}{{#if over}} over{{/if}}"></i>{{/each}}
+        </span>
+      </div>
+      <div class="bench-cell">
+        <span class="cap">Инструменты</span>
+        <span class="work-tools">
+          {{#each craft.workTools as |t|}}
+          <span class="work-tool{{#unless t.has}} missing{{/unless}}" data-tooltip="{{t.title}}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              {{#if t.alch}}<path class="shell" d="M9 2.4h6v1.8h-1v5.1l5.4 8.8c1 1.6-.2 3.7-2 3.7H6.6c-1.8 0-3-2.1-2-3.7L10 9.3V4.2H9Z"/><path class="ink" d="M6.4 15.6h11.2"/>{{/if}}
+              {{#if t.craft}}<path class="shell" d="M3 6.6L8.6 2l3.2 3.2-1.7 1.7 10.6 10.4-2.5 2.5L7.8 9.4 6.1 11.1Z"/><path class="shell" d="M14.6 3.2l6.2 6.2-2 2-2.2-2.2-1.2 1.2-1.6-1.6 1.2-1.2-2.4-2.4Z"/>{{/if}}
+              {{#if t.forge}}<path class="shell" d="M2.6 6.2h14c0 2.6 2.2 3.8 4.8 4v1.6h-5.2l-1.6 2.6v2.8h2.6v3.2H6.8v-3.2h2.6v-2.8L7.8 11.8C4.8 11.8 2.6 9.4 2.6 6.2Z"/><path class="ink" d="M3.4 8.4h12.8M9.4 14.4h4.8"/>{{/if}}
+            </svg>
+            <span>{{t.short}}</span>
+          </span>
+          {{/each}}
+        </span>
+        {{#if craft.otherTools.length}}<span class="dim other-tools">{{#each craft.otherTools}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+      </div>
+    </div>
+    <div class="subs-strip">
+      <span class="cap">Субстанции в запасе</span>
+      <div class="subs">
+        {{#each craft.substances as |s|}}
+        <span class="sub{{#if s.zero}} zero{{/if}}" style="--sub: {{s.color}}" data-tooltip="{{s.label}}: {{s.count}}">
+          <span class="subwell"><img src="{{s.img}}" alt="{{s.label}}"></span>
+          <b>{{s.count}}</b><span class="sub-name">{{s.label}}</span>
+        </span>
+        {{/each}}
+      </div>
     </div>
   </div>
 
   {{#if craft.activeEffects.length}}
-  <div class="vd-panel">
-    <h3>Действуют</h3>
-    {{#each craft.activeEffects}}
-    <div class="effect-row" data-effect-id="{{id}}">
-      <img src="{{img}}" alt=""> <span class="name">{{name}}</span>
-      {{#if toxicity}}<span class="badge tox">{{toxicity}}%</span>{{/if}}
-      <span class="dim">{{remaining}}</span>
-      <a data-action="endAlchemyEffect" data-tooltip="Прекратить"><i class="fa-solid fa-xmark"></i></a>
+  <div class="vd-panel active-now">
+    <div class="group-head">
+      <span class="bronze-tag">Действует сейчас</span><span class="rule"></span>
+      {{#if craft.toxicity}}<span class="dim">Токсичность {{craft.toxicity}}</span>{{/if}}
     </div>
-    {{/each}}
+    <div class="active-grid">
+      {{#each craft.activeEffects}}
+      <div class="active-card" data-effect-id="{{id}}">
+        <div class="item-frame small"><img src="{{img}}" alt=""></div>
+        <div class="active-body">
+          <div class="active-head"><span class="name">{{name}}</span><span class="grow"></span><b>{{remaining}}</b></div>
+          <span class="active-bar{{#if oil}} oil{{/if}}"><span style="width: {{pct}}%"></span></span>
+          {{#if toxicity}}<span class="dim">токсичность {{toxicity}}</span>{{/if}}
+        </div>
+        <a class="end" data-action="endAlchemyEffect" data-tooltip="Прекратить"><i class="fa-solid fa-xmark"></i></a>
+      </div>
+      {{/each}}
+    </div>
   </div>
   {{/if}}
 
-  <div class="vd-panel">
-    <h3>Алхимия <a class="add" data-action="itemCreate" data-type="alchemical" data-tooltip="Добавить алхимический предмет"><i class="fa-solid fa-plus"></i></a></h3>
+  <div class="skills-head craft-head">
+    <nav class="tabs pane-switch" aria-label="Разделы ремесла">
+      <a class="{{craftTabs.alchemy.cssClass}}" data-action="tab" data-group="craft" data-tab="alchemy"><span>Алхимия</span><span class="count">{{craft.counts.alchemy}}</span></a>
+      <a class="{{craftTabs.recipes.cssClass}}" data-action="tab" data-group="craft" data-tab="recipes"><span>Чертежи и формулы</span><span class="count">{{craft.counts.recipes}}</span></a>
+      <a class="{{craftTabs.components.cssClass}}" data-action="tab" data-group="craft" data-tab="components"><span>Компоненты</span><span class="count">{{craft.counts.components}}</span></a>
+      <a class="{{craftTabs.enhancements.cssClass}}" data-action="tab" data-group="craft" data-tab="enhancements"><span>Усиления</span><span class="count">{{craft.counts.enhancements}}</span></a>
+    </nav>
+  </div>
+
+  {{!-- ============================== Алхимия ============================== --}}
+  <div class="tab pane alchemy-pane {{craftTabs.alchemy.cssClass}}" data-group="craft" data-tab="alchemy">
     {{#each craft.alchemy as |group|}}
-    <h4>{{group.label}}</h4>
-    <table class="vd-table alchemy-table">
-      <tbody>
-      {{#each group.items as |it|}}
-        <tr data-item-id="{{it.id}}" class="{{#if it.applied}}applied{{/if}}">
-          <td><img src="{{it.img}}" class="icon"></td>
-          <td class="name"><a data-action="itemEdit" data-tooltip="{{it.effect}}">{{it.name}}</a>{{#if it.applied}} <span class="badge">принят</span>{{/if}}
-            {{#if it.effect}}<span class="row-note">{{it.effect}}</span>{{/if}}</td>
-          <td class="small">{{#if it.toxicity}}<span class="badge tox" data-tooltip="Токсичность">{{it.toxicity}}%</span>{{/if}} {{it.duration}}</td>
-          <td class="qty">×{{it.quantity}}</td>
-          <td class="controls">
-            {{#if it.actionLabel}}{{#unless it.applied}}<a class="roll-btn" data-action="useAlchemical">{{it.actionLabel}}</a>{{/unless}}{{/if}}
-            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
-            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
-          </td>
-        </tr>
-      {{/each}}
-      </tbody>
-    </table>
-    {{else}}<p class="hint">Нет алхимических предметов. Их можно взять из компендиума «Алхимия» или изготовить по формуле.</p>
-    {{/each}}
-  </div>
-
-  <div class="vd-panel">
-    <h3>Чертежи и формулы <a class="add" data-action="itemCreate" data-type="recipe" data-tooltip="Добавить рецепт"><i class="fa-solid fa-plus"></i></a></h3>
-    {{#each craft.recipes as |group|}}
-    <h4>{{group.label}}</h4>
-    <table class="vd-table recipe-table">
-      <tbody>
-      {{#each group.items as |it|}}
-        <tr data-item-id="{{it.id}}">
-          <td><img src="{{it.img}}" class="icon"></td>
-          <td class="name"><a data-action="itemEdit">{{it.name}}</a> <span class="dim">{{it.levelLabel}}</span></td>
-          <td class="small" data-tooltip="Сложность и время">СЛ {{it.dc}} · {{it.time}}</td>
-          <td class="ready {{#if it.ready}}ok{{else}}no{{/if}}" data-tooltip="{{it.readyHint}}">
-            <i class="fa-solid {{#if it.ready}}fa-circle-check{{else}}fa-circle-exclamation{{/if}}"></i>
-          </td>
-          <td class="controls">
-            <a class="roll-btn" data-action="craftRecipe" data-tooltip="Изготовить (Shift — без окна)">Изготовить</a>
-            <a data-action="toggleMemorized" class="{{#if it.memorized}}active{{/if}}" data-tooltip="{{#if it.memorized}}Запомнен{{else}}Запомнить{{/if}}"><i class="fa-solid fa-brain"></i></a>
-            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
-          </td>
-        </tr>
-      {{/each}}
-      </tbody>
-    </table>
-    {{else}}<p class="hint">Нет чертежей и формул. Компендиум «Чертежи и формулы» — перетащите нужный рецепт на лист.</p>
-    {{/each}}
-  </div>
-
-  <div class="vd-panel">
-    <h3>Компоненты и ингредиенты <a class="add" data-action="itemCreate" data-type="component" data-tooltip="Добавить компонент"><i class="fa-solid fa-plus"></i></a></h3>
-    {{#if craft.substances.length}}
-    <div class="substance-totals">
-      {{#each craft.substances}}<span class="substance" data-tooltip="{{label}}"><span class="sub-dot" style="background:{{color}}">{{symbol}}</span> {{count}}</span>{{/each}}
+    <div class="vd-panel">
+      <div class="group-head"><span class="bronze-tag">{{group.label}}</span><span class="rule"></span>
+        {{#if @first}}<a class="add" data-action="itemCreate" data-type="alchemical" data-tooltip="Добавить алхимический предмет">+ Добавить</a>{{/if}}</div>
+      <div class="alchemy-grid">
+        {{#each group.items as |it|}}
+        <div class="alch-card" data-item-id="{{it.id}}">
+          <div class="item-frame{{#if it.applied}} on{{/if}}">
+            {{#if it.applied}}<span class="ribbon">действует</span>{{/if}}
+            <img src="{{it.img}}" alt="">
+            <span class="qty-badge">×{{it.quantity}}</span>
+          </div>
+          <div class="alch-body">
+            <a class="item-name" data-action="itemEdit">{{it.name}}</a>
+            {{#if it.effect}}<span class="alch-effect">{{it.effect}}</span>{{/if}}
+            <div class="alch-meta">
+              {{#if it.toxicity}}<span class="tox" data-tooltip="Токсичность"><svg viewBox="0 0 20 22"><path d="M10 2C13.4 6.6 16 9.8 16 13.2a6 6 0 0 1-12 0C4 9.8 6.6 6.6 10 2Z"/></svg>{{it.toxicity}}%</span>{{/if}}
+              {{#if it.duration}}<span class="dur" data-tooltip="Длительность"><svg viewBox="0 0 20 22"><path d="M4 2h12M4 20h12M5.5 2c0 5 4.5 6 4.5 9s-4.5 4-4.5 9M14.5 2c0 5-4.5 6-4.5 9s4.5 4 4.5 9"/></svg>{{it.duration}}</span>{{/if}}
+              <span class="grow"></span>
+              {{#if it.actionLabel}}{{#unless it.applied}}<button type="button" class="go-btn {{it.goCls}}" data-action="useAlchemical">{{it.actionLabel}}</button>{{/unless}}{{/if}}
+              <a class="mini" data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+              <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
     </div>
-    {{/if}}
+    {{else}}
+    <div class="vd-panel"><div class="group-head"><span class="bronze-tag">Алхимия</span><span class="rule"></span><a class="add" data-action="itemCreate" data-type="alchemical">+ Добавить</a></div>
+      <p class="hint">Нет алхимических предметов. Их можно взять из компендиума «Алхимия» или изготовить по формуле.</p></div>
+    {{/each}}
+  </div>
+
+  {{!-- ========================= Чертежи и формулы ========================= --}}
+  <div class="tab pane recipes-pane {{craftTabs.recipes.cssClass}}" data-group="craft" data-tab="recipes">
+    {{#each craft.recipes as |group|}}
+    <div class="vd-panel">
+      <div class="group-head"><span class="bronze-tag">{{group.label}}</span><span class="rule"></span><span class="dim">{{group.note}}</span>
+        {{#if @first}}<a class="add" data-action="itemCreate" data-type="recipe" data-tooltip="Добавить рецепт">+ Добавить</a>{{/if}}</div>
+      {{#each group.items as |r|}}
+      <div class="recipe-card{{#if r.ready}} ready{{/if}}" data-item-id="{{r.id}}">
+        <div class="recipe-side">
+          <div class="item-frame"><img src="{{r.img}}" alt=""></div>
+          <span class="lvl" data-tooltip="Уровень: {{r.levelLabel}}">{{#each r.pips}}<i class="{{#if on}}on{{/if}}"></i>{{/each}}</span>
+        </div>
+        <div class="recipe-body">
+          <div class="recipe-head">
+            <div class="item-title">
+              <a class="item-name" data-action="itemEdit">{{r.name}}{{#if r.resultQty}} ×{{r.resultQty}}{{/if}}</a>
+              <span class="item-sub">{{r.categoryLabel}} · {{r.levelLabel}}{{#if r.time}} · <svg class="hg" viewBox="0 0 20 22"><path d="M4 2h12M4 20h12M5.5 2c0 5 4.5 6 4.5 9s-4.5 4-4.5 9M14.5 2c0 5-4.5 6-4.5 9s4.5 4 4.5 9"/></svg>{{r.time}}{{/if}}</span>
+            </div>
+            <span class="grow"></span>
+            <a class="memo{{#if r.memorized}} active{{/if}}" data-action="toggleMemorized" data-tooltip="{{#if r.memorized}}Запомнен — можно без чертежа{{else}}Запомнить{{/if}}"><svg viewBox="0 0 20 22"><path d="M10 1.8l7 4v8.4l-7 4-7-4V5.8z"/><path d="M10 6.4v7.2M6.6 8.4l6.8 3.2M13.4 8.4l-6.8 3.2"/></svg></a>
+            <div class="dc-stamp" data-tooltip="Сложность"><span class="cap">СЛ</span><b>{{r.dc}}</b></div>
+          </div>
+          <div class="needs">
+            {{#each r.components}}<span class="need{{#unless ok}} no{{/unless}}" data-tooltip="{{name}}: {{#if ok}}хватает{{else}}не хватает {{need}}{{/if}}"><i>{{#if ok}}✓{{else}}!{{/if}}</i>{{name}} <b>{{have}}</b><span class="of">/ {{need}}</span></span>{{/each}}
+            {{#each r.substances}}<span class="need{{#unless ok}} no{{/unless}}" data-tooltip="{{label}}: {{#if ok}}хватает{{else}}не хватает{{/if}}"><img src="{{img}}" alt="">{{label}} <b>{{have}}</b><span class="of">/ {{need}}</span></span>{{/each}}
+            <span class="grow"></span>
+            {{#each r.tools}}
+            <span class="work-tool tiny{{#unless ok}} missing{{/unless}}" data-tooltip="{{label}}{{#unless ok}} — нет{{/unless}}"><svg viewBox="0 0 24 24" aria-hidden="true">
+              {{#if (eq kind "alch")}}<path class="shell" d="M9 2.4h6v1.8h-1v5.1l5.4 8.8c1 1.6-.2 3.7-2 3.7H6.6c-1.8 0-3-2.1-2-3.7L10 9.3V4.2H9Z"/>{{/if}}
+              {{#if (eq kind "craft")}}<path class="shell" d="M3 6.6L8.6 2l3.2 3.2-1.7 1.7 10.6 10.4-2.5 2.5L7.8 9.4 6.1 11.1Z"/><path class="shell" d="M14.6 3.2l6.2 6.2-2 2-2.2-2.2-1.2 1.2-1.6-1.6 1.2-1.2-2.4-2.4Z"/>{{/if}}
+              {{#if (eq kind "forge")}}<path class="shell" d="M2.6 6.2h14c0 2.6 2.2 3.8 4.8 4v1.6h-5.2l-1.6 2.6v2.8h2.6v3.2H6.8v-3.2h2.6v-2.8L7.8 11.8C4.8 11.8 2.6 9.4 2.6 6.2Z"/>{{/if}}
+            </svg></span>
+            {{/each}}
+          </div>
+          <div class="recipe-foot">
+            <span class="state{{#if r.ready}} ok{{/if}}">{{r.state}}{{#if r.surcharge}} · докупить недостающее — {{r.surcharge}} кр.{{/if}}</span>
+            <span class="grow"></span>
+            <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+            <button type="button" class="go-btn {{#if r.ready}}blood{{else}}steel{{/if}}" data-action="craftRecipe" data-tooltip="Изготовить (Shift — без окна)">Изготовить</button>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <div class="vd-panel"><div class="group-head"><span class="bronze-tag">Чертежи и формулы</span><span class="rule"></span><a class="add" data-action="itemCreate" data-type="recipe">+ Добавить</a></div>
+      <p class="hint">Нет чертежей и формул. Компендиум «Чертежи и формулы» — перетащите нужный рецепт на лист.</p></div>
+    {{/each}}
+  </div>
+
+  {{!-- ============================== Компоненты ============================== --}}
+  <div class="tab pane components-pane {{craftTabs.components.cssClass}}" data-group="craft" data-tab="components" data-filter="">
+    <div class="sub-filters">
+      <span class="cap">Отбор по субстанции</span>
+      <div class="subs">
+        {{#each craft.substances as |s|}}
+        <button type="button" class="sub-filter{{#if s.zero}} zero{{/if}}" style="--sub: {{s.color}}" data-substance="{{s.key}}" aria-pressed="false" data-tooltip="{{s.label}}: {{s.count}} в запасе — щелчок оставит только ингредиенты с ней">
+          <span class="subwell"><img src="{{s.img}}" alt=""></span><b>{{s.count}}</b><span class="sub-name">{{s.label}}</span>
+        </button>
+        {{/each}}
+      </div>
+    </div>
     {{#each craft.components as |group|}}
-    <h4>{{group.label}}</h4>
-    <table class="vd-table">
-      <tbody>
-      {{#each group.items as |it|}}
-        <tr data-item-id="{{it.id}}">
-          <td><img src="{{it.img}}" class="icon"></td>
-          <td class="name"><a data-action="itemEdit">{{it.name}}</a>{{#if it.substance}} <span class="sub-dot" style="background:{{it.substance.color}}" data-tooltip="{{it.substance.label}}">{{it.substance.symbol}}</span>{{/if}}</td>
-          <td class="qty"><input type="number" class="item-field" data-field="system.quantity" value="{{it.quantity}}" min="0" data-tooltip="Количество"></td>
-          <td class="controls">
+    <div class="vd-panel comp-group{{#if group.alchemy}} alchemy{{/if}}">
+      <div class="group-head"><span class="bronze-tag">{{group.label}}</span><span class="rule"></span>
+        {{#if @first}}<a class="add" data-action="itemCreate" data-type="component" data-tooltip="Добавить компонент">+ Добавить</a>{{/if}}</div>
+      <div class="gear-grid">
+        {{#each group.items as |it|}}
+        <div class="gear-tile" data-item-id="{{it.id}}"{{#if it.substance}} data-substance="{{it.substance.key}}"{{/if}}>
+          <div class="item-frame">
+            {{#if it.substance}}<span class="sub-badge subwell" style="--sub: {{it.substance.color}}" data-tooltip="{{it.substance.label}}"><img src="{{it.substance.img}}" alt="{{it.substance.label}}"></span>{{/if}}
+            <img src="{{it.img}}" alt="">
+            <input type="number" class="qty item-field" data-field="system.quantity" value="{{it.quantity}}" min="0" data-tooltip="Количество" aria-label="Количество">
+          </div>
+          <a class="tile-name" data-action="itemEdit">{{it.name}}</a>
+          <span class="tile-meta">{{#if it.where}}{{it.where}}{{#if it.dc}} · СЛ {{it.dc}}{{/if}}{{else}}&nbsp;{{/if}}</span>
+          <div class="tile-tools">
             {{#if it.canForage}}<a data-action="forage" data-tooltip="Собрать: {{it.where}} (СЛ {{it.dc}}, {{it.forageQty}})"><i class="fa-solid fa-leaf"></i></a>{{/if}}
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
-          </td>
-        </tr>
-      {{/each}}
-      </tbody>
-    </table>
-    {{else}}<p class="hint">Компонентов нет.</p>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{else}}
+    <div class="vd-panel"><div class="group-head"><span class="bronze-tag">Компоненты</span><span class="rule"></span><a class="add" data-action="itemCreate" data-type="component">+ Добавить</a></div>
+      <p class="hint">Компонентов нет.</p></div>
     {{/each}}
+    <p class="hint filter-empty" hidden>Ингредиентов с этой субстанцией нет — их можно собрать или купить у травника.</p>
   </div>
 
-  <div class="vd-panel">
-    <h3>Усиления, руны и глифы <a class="add" data-action="itemCreate" data-type="enhancement" data-tooltip="Добавить усиление"><i class="fa-solid fa-plus"></i></a></h3>
-    <table class="vd-table">
-      <tbody>
-      {{#each craft.enhancements as |it|}}
-        <tr data-item-id="{{it.id}}">
-          <td><img src="{{it.img}}" class="icon"></td>
-          <td class="name"><a data-action="itemEdit" data-tooltip="{{it.effect}}">{{it.name}}</a> <span class="dim">{{it.kindLabel}}</span></td>
-          <td class="qty">×{{it.quantity}}</td>
-          <td class="controls">
-            <a class="roll-btn" data-action="attachEnhancement">{{#if (eq it.kind "armor")}}Прикрепить{{else if (eq it.kind "crossbow")}}Поставить{{else}}Нанести{{/if}}</a>
-            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
-          </td>
-        </tr>
-      {{else}}<tr class="empty"><td colspan="4">Пусто</td></tr>
+  {{!-- =============================== Усиления =============================== --}}
+  <div class="tab pane enh-pane {{craftTabs.enhancements.cssClass}}" data-group="craft" data-tab="enhancements">
+    <div class="vd-panel">
+      <div class="group-head"><span class="bronze-tag">Усиления, руны и глифы</span><span class="rule"></span>
+        <a class="add" data-action="itemCreate" data-type="enhancement" data-tooltip="Добавить усиление">+ Добавить</a></div>
+      {{#each craft.enhancements as |e|}}
+      <div class="enh-card" data-item-id="{{e.id}}">
+        <div class="item-frame"><img src="{{e.img}}" alt=""><span class="qty-badge">×{{e.quantity}}</span></div>
+        <div class="enh-body">
+          <div class="recipe-head">
+            <a class="item-name" data-action="itemEdit">{{e.name}}</a>
+            <span class="kind-chip{{#if e.magic}} magic{{/if}}">{{e.kindLabel}}</span>
+            <span class="grow"></span>
+            <button type="button" class="go-btn {{#if e.magic}}arcane{{else}}steel{{/if}}" data-action="attachEnhancement">{{e.goLabel}}</button>
+            <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+          </div>
+          {{#if e.effect}}<span class="alch-effect">{{e.effect}}</span>{{/if}}
+          <div class="targets">
+            <span class="cap">Куда</span>
+            {{#each e.targets as |t|}}
+            <span class="target{{#unless t.free}} full{{/unless}}" data-tooltip="{{t.title}}">{{t.name}} <span class="slots">{{#each t.slots}}<i class="{{#if used}}used{{/if}}"></i>{{/each}}</span></span>
+            {{else}}<span class="dim">нет предметов с ячейками</span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      {{else}}<p class="hint">Пусто.</p>
       {{/each}}
-      </tbody>
-    </table>
+    </div>
   </div>
 </section>

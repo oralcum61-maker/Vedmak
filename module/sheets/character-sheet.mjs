@@ -10,8 +10,8 @@ import {
 } from "../character/advancement.mjs";
 import { CharacterWizard } from "../character/wizard.mjs";
 import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
-import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS } from "../config/crafting.mjs";
-import { craft, readiness, requirements, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
+import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, crossbowModLimit } from "../config/crafting.mjs";
+import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
 import { signed, compareRu } from "../util.mjs";
@@ -154,6 +154,15 @@ export class CharacterSheet extends VedmakActorSheet {
         { id: "profession", label: "Профессия" }
       ],
       initial: "list"
+    },
+    craft: {
+      tabs: [
+        { id: "alchemy",      label: "Алхимия" },
+        { id: "recipes",      label: "Чертежи и формулы" },
+        { id: "components",   label: "Компоненты" },
+        { id: "enhancements", label: "Усиления" }
+      ],
+      initial: "alchemy"
     }
   };
 
@@ -172,6 +181,7 @@ export class CharacterSheet extends VedmakActorSheet {
     }
     context.tabs = this._prepareTabs("primary");
     context.skillTabs = this._prepareTabs("skills");
+    context.craftTabs = this._prepareTabs("craft");
     const actor = this.actor;
     const system = actor.system;
 
@@ -356,68 +366,161 @@ export class CharacterSheet extends VedmakActorSheet {
   #craftContext() {
     const actor = this.actor;
     const items = type => actor.itemTypes[type]?.slice().sort((a, b) => compareRu(a.name, b.name)) ?? [];
-    const ACTION_ICONS = { drink: "fa-solid fa-wine-bottle", apply: "fa-solid fa-hand-holding-droplet", throw: "fa-solid fa-bomb",
-      oil: "fa-solid fa-droplet", mutagen: "fa-solid fa-dna", trap: "fa-solid fa-dharmachakra" };
+    const subImg = key => `systems/vedmak/assets/substances/${key}.svg`;
+    const LEVEL_ORDER = Object.keys(RECIPE_LEVELS);
+    // Цвет главной кнопки по действию: выпить — фиолет (как полоса токсичности), масло — зелень, бросок — киноварь
+    const GO = { drink: "arcane", apply: "arcane", oil: "oil", throw: "blood", trap: "blood", mutagen: "arcane" };
 
     const alchemy = Object.entries(ALCHEMY_KINDS).map(([kind, label]) => ({
       kind, label,
-      items: items("alchemical").filter(i => i.system.kind === kind).map(i => ({
+      items: items("alchemical").filter(i => i.system.kind === kind && !(i.system.isMutagen && i.system.applied)).map(i => ({
         id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, toxicity: i.system.toxicity, duration: i.system.duration,
         effect: i.system.effect, applied: i.system.applied,
         action: i.system.use.action, actionLabel: ALCHEMY_ACTIONS[i.system.use.action] && i.system.use.action ? ALCHEMY_ACTIONS[i.system.use.action] : "",
-        actionIcon: ACTION_ICONS[i.system.use.action] ?? "fa-solid fa-flask"
+        goCls: GO[i.system.use.action] ?? "arcane"
       }))
     })).filter(g => g.items.length);
 
+    // Рецепт целиком: компоненты и субстанции «есть / нужно», инструменты символами, уровень ромбами
     const recipesAll = items("recipe");
-    const recipes = [["blueprint", "Чертежи"], ["formula", "Формулы"]].map(([kind, label]) => ({
-      label,
-      items: recipesAll.filter(r => r.system.kind === kind).map(r => {
-        const req = requirements(actor, r);
-        const missing = [...req.components.filter(c => !c.ok).map(c => `${c.name} ${c.have}/${c.need}`),
-          ...req.substances.filter(s => !s.ok).map(s => `${s.label} ${s.have}/${s.need}`),
-          ...req.tools.filter(t => !t.ok).map(t => t.label)];
-        return {
-          id: r.id, name: r.name.replace(/^(Чертёж|Формула): /, ""), img: r.img, dc: r.system.dc, time: r.system.time,
-          levelLabel: RECIPE_LEVELS[r.system.level] ?? "", memorized: r.system.memorized, formula: r.system.isFormula,
-          ready: !missing.length, readyHint: missing.length ? `Не хватает: ${missing.join(", ")}` : "Всё готово"
-        };
-      })
-    })).filter(g => g.items.length);
+    const toolKind = t => t.forge ? "forge" : /алхимик/i.test(t.label) ? "alch" : "craft";
+    const recipes = [["formula", "Формулы", "нужны инструменты алхимика"], ["blueprint", "Чертежи", "нужны инструменты ремесленника"]]
+      .map(([kind, label, note]) => ({
+        label, note,
+        items: recipesAll.filter(r => r.system.kind === kind).map(r => {
+          const req = requirements(actor, r);
+          const missing = [...req.components.filter(c => !c.ok), ...req.substances.filter(s => !s.ok)].length;
+          const level = Math.max(0, LEVEL_ORDER.indexOf(r.system.level)) + 1;
+          const ready = !missing && req.toolsOk;
+          return {
+            id: r.id, name: r.name.replace(/^(Чертёж|Формула): /, ""), img: r.img, dc: r.system.dc, time: r.system.time,
+            levelLabel: RECIPE_LEVELS[r.system.level] ?? "", memorized: r.system.memorized, formula: r.system.isFormula,
+            categoryLabel: RECIPE_CATEGORIES[r.system.category] ?? "",
+            resultQty: (r.system.result?.quantity ?? 1) > 1 ? r.system.result.quantity : 0,
+            pips: [1, 2, 3, 4].map(n => ({ on: n <= level })),
+            components: req.components, substances: req.substances.map(s => ({ ...s, img: subImg(s.key) })),
+            tools: req.tools.map(t => ({ ...t, kind: toolKind(t) })),
+            ready, surcharge: !ready && r.system.surcharge > 0 ? r.system.surcharge : 0,
+            state: ready ? "Всё под рукой"
+              : [missing ? `не хватает: ${missing}` : "", req.toolsOk ? "" : "нет нужного инструмента"].filter(Boolean).join(" · ")
+          };
+        })
+      })).filter(g => g.items.length);
 
     const comps = items("component");
     const components = Object.entries(COMPONENT_GROUPS).map(([group, label]) => ({
-      label,
-      items: comps.filter(c => (c.system.group || "other") === group).map(c => ({
-        id: c.id, name: c.name, img: c.img, quantity: c.system.quantity,
-        substance: SUBSTANCES[c.system.substance] ? { ...SUBSTANCES[c.system.substance] } : null,
-        canForage: !!(c.system.forage.dc || c.system.forage.quantity), where: c.system.forage.where, dc: c.system.forage.dc,
-        forageQty: c.system.forage.quantity
-      }))
+      label, alchemy: group === "alchemy",
+      items: comps.filter(c => (c.system.group || "other") === group).map(c => {
+        const sub = SUBSTANCES[c.system.substance];
+        return {
+          id: c.id, name: c.name, img: c.img, quantity: c.system.quantity,
+          substance: sub ? { ...sub, key: c.system.substance, img: subImg(c.system.substance) } : null,
+          canForage: !!(c.system.forage.dc || c.system.forage.quantity), where: c.system.forage.where, dc: c.system.forage.dc,
+          forageQty: c.system.forage.quantity
+        };
+      })
     })).filter(g => g.items.length);
-    const substances = Object.entries(SUBSTANCES).map(([key, s]) => ({
-      ...s, key, count: comps.filter(c => c.system.substance === key).reduce((n, c) => n + c.system.quantity, 0)
-    })).filter(s => s.count > 0);
-
-    const activeEffects = actor.effects.filter(e => e.flags?.vedmak?.alchemy).map(e => {
-      const rounds = e.flags.vedmak.timed?.rounds;
-      const remaining = rounds ? `${rounds} р.` : remainingLabel(e.duration?.secondsRemaining);
-      return { id: e.id, name: e.name, img: e.img, toxicity: e.flags.vedmak.alchemy.toxicity, remaining };
+    // Все девять субстанций — и те, которых нет: пустая гаснет
+    const substances = Object.entries(SUBSTANCES).map(([key, s]) => {
+      const count = comps.filter(c => c.system.substance === key).reduce((n, c) => n + c.system.quantity, 0);
+      return { ...s, key, img: subImg(key), count, zero: !count };
     });
 
+    // Действует сейчас: что осталось от срока — полосой
+    const activeEffects = actor.effects.filter(e => e.flags?.vedmak?.alchemy).map(e => {
+      const timed = e.flags.vedmak.timed;
+      const rounds = timed?.rounds;
+      const remaining = rounds ? `${rounds} р.` : remainingLabel(e.duration?.secondsRemaining);
+      const total = timed?.total ?? e.duration?.seconds;
+      const left = rounds ?? e.duration?.secondsRemaining;
+      const pct = total > 0 && Number.isFinite(left) ? Math.max(0, Math.min(100, Math.round(left / total * 100))) : 100;
+      return { id: e.id, name: e.name, img: e.img, toxicity: e.flags.vedmak.alchemy.toxicity, remaining, pct,
+        oil: e.flags.vedmak.alchemy.kind === "oil" };
+    });
+
+    // Верстак: гнёзда мутагенов, печати памяти, три инструмента
+    const taken = items("alchemical").filter(i => i.system.isMutagen && i.system.applied);
+    const sockets = Array.from({ length: CRAFTING.mutagenLimit }, (_, n) => {
+      const m = taken[n];
+      return m ? { id: m.id, img: m.img, name: m.name, effect: m.system.effect, color: m.system.mutagen?.color || "" } : { empty: true };
+    });
     const memorized = recipesAll.filter(r => r.system.memorized).length;
     const memoLimit = actor.system.stats.int.total;
+    const seals = Array.from({ length: Math.max(memoLimit, memorized) }, (_, n) => ({ on: n < memorized, over: n >= memoLimit }));
+    const workTools = [["alchemist", "алхимика", "Инструменты алхимика"], ["craftsman", "ремесл.", "Инструменты ремесленника"],
+      ["forge", "кузница", "Кузница (походная или в поселении)"]].map(([kind, short, title]) => {
+      const has = hasTool(actor, kind);
+      return { kind, alch: kind === "alchemist", craft: kind === "craftsman", forge: kind === "forge", short, has,
+        title: `${title}${has ? "" : " — нет"}` };
+    });
+    const otherTools = actor.itemTypes.gear.filter(g => g.system.tool && !["alchemist", "craftsman", "forge"].includes(g.system.tool))
+      .map(g => TOOL_KINDS[g.system.tool] ?? g.name);
+
+    // Усиления: куда можно нанести — оружие или броня с ячейками (занятые и свободные)
+    const weapons = actor.itemTypes.weapon ?? [];
+    const armors = (actor.itemTypes.armor ?? []).filter(a => !a.system.isShield);
+    const slotTarget = (item, used, total) => ({
+      name: item.name, slots: Array.from({ length: total }, (_, n) => ({ used: n < used })), free: used < total,
+      title: used < total ? `${item.name}: свободно ${total - used} из ${total}` : `${item.name}: ячеек нет`
+    });
+    const targetsFor = kind => {
+      if (kind === "crossbow") return weapons.filter(w => w.system.isCrossbow)
+        .map(w => slotTarget(w, w.system.crossbowMods.length, crossbowModLimit(w)));
+      if (["glyph", "glyphword", "armor"].includes(kind)) return armors.filter(a => a.system.enhancementSlots > 0)
+        .map(a => slotTarget(a, a.system.usedSlots, a.system.enhancementSlots));
+      return weapons.filter(w => w.system.enhancementSlots > 0).map(w => slotTarget(w, w.system.usedSlots, w.system.enhancementSlots));
+    };
+    const enhancements = items("enhancement").map(e => ({
+      id: e.id, name: e.name, img: e.img, quantity: e.system.quantity, effect: e.system.effect,
+      kind: e.system.kind, kindLabel: ENHANCEMENT_KINDS[e.system.kind] ?? "",
+      goLabel: e.system.kind === "armor" ? "Прикрепить" : e.system.kind === "crossbow" ? "Поставить" : "Нанести",
+      magic: !["armor", "crossbow"].includes(e.system.kind), targets: targetsFor(e.system.kind)
+    }));
+
+    const toxicity = actor.system.toxicity;
     return {
       alchemy, recipes, components, substances, activeEffects, memorized, memoLimit, memoOver: memorized > memoLimit,
-      mutagenCount: actor.system.derived.mutagens ?? 0,
-      tools: actor.itemTypes.gear.filter(g => g.system.tool).map(g => TOOL_KINDS[g.system.tool] ?? g.name),
-      enhancements: items("enhancement").map(e => ({ id: e.id, name: e.name, img: e.img, quantity: e.system.quantity, effect: e.system.effect,
-        kind: e.system.kind, kindLabel: ENHANCEMENT_KINDS[e.system.kind] ?? "" }))
+      mutagenCount: taken.length, mutagenLimit: CRAFTING.mutagenLimit, sockets, seals, workTools, otherTools, enhancements,
+      readyCount: recipes.reduce((n, g) => n + g.items.filter(r => r.ready).length, 0),
+      counts: {
+        alchemy: alchemy.reduce((n, g) => n + g.items.length, 0), recipes: recipesAll.length,
+        components: comps.length, enhancements: enhancements.length
+      },
+      toxicity: toxicity ? `${toxicity.total ?? toxicity.value} из ${toxicity.max}` : "",
+      filter: this.craftFilter ?? ""
     };
+  }
+
+  /** «Ремесло» → «Компоненты»: отбор по субстанции (ключ или ""); живёт в окне, без перерисовки листа. */
+  craftFilter = "";
+
+  #applyCraftFilter() {
+    const pane = this.element?.querySelector(".craft-tab .components-pane");
+    if (!pane) return;
+    const f = this.craftFilter;
+    pane.dataset.filter = f;
+    for (const btn of pane.querySelectorAll("button.sub-filter")) {
+      const on = btn.dataset.substance === f;
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    }
+    // Плитки без этой субстанции и опустевшие группы прячутся; ничего не нашлось — подсказка, где взять
+    const match = el => el.querySelector(`.gear-tile[data-substance="${f}"]`);
+    for (const tile of pane.querySelectorAll(".gear-tile")) tile.hidden = !!f && tile.dataset.substance !== f;
+    for (const group of pane.querySelectorAll(".comp-group")) group.hidden = !!f && !match(group);
+    const empty = pane.querySelector(".filter-empty");
+    if (empty) empty.hidden = !f || !!match(pane);
   }
 
   _onRender(context, options) {
     super._onRender(context, options);
+    // Отбор компонентов по субстанции: щелчок по знаку ещё раз снимает отбор
+    this._listen("button.sub-filter", "click", (event, btn) => {
+      event.preventDefault();
+      this.craftFilter = this.craftFilter === btn.dataset.substance ? "" : btn.dataset.substance;
+      this.#applyCraftFilter();
+    });
+    this.#applyCraftFilter();
     // Жизненный путь: свой результат из списка, поведение ведьмака в десятилетии, возраст
     const onLifepath = (selector, fn) => this._listen(selector, "change", (event, el) => {
       event.stopPropagation();

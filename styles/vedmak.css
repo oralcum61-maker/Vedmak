@@ -2120,27 +2120,6 @@
   color: #fff; font-weight: bold; font-size: .75rem; line-height: 1; vertical-align: middle; text-shadow: 0 0 2px rgba(0, 0, 0, .6);
 }
 
-.vedmak .craft-summary { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; align-items: baseline; }
-.vedmak .craft-summary .label { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--vd-text-dim); }
-.vedmak .craft-summary b { color: var(--vd-gold); font-size: 1.1rem; }
-.vedmak .craft-summary .tox.over b { color: #f0a8a0; }
-.vedmak .craft-summary b.bad { color: #d9822b; }
-.vedmak .craft-summary .tools { flex-basis: 100%; }
-.vedmak .craft-summary .tool-tag { margin-right: .35rem; padding: 0 .35rem; border: 1px solid var(--vd-line); border-radius: 3px; font-size: .78rem; }
-
-.vedmak .craft-tab h4 { margin: .35rem 0 .15rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--vd-text-dim); border: none; }
-.vedmak .craft-tab .effect-row { display: flex; align-items: center; gap: .4rem; padding: .1rem 0; border-bottom: 1px dotted var(--vd-line-soft); }
-.vedmak .craft-tab .effect-row img { width: 22px; height: 22px; border: 1px solid var(--vd-line); }
-.vedmak .craft-tab .effect-row .name { flex: 1; }
-.vedmak .craft-tab tr.applied td.name a { color: var(--vd-gold); }
-.vedmak .craft-tab td.small { font-size: .75rem; color: var(--vd-text-dim); white-space: nowrap; }
-.vedmak .craft-tab td.ready.ok i { color: var(--vd-green); }
-.vedmak .craft-tab td.ready.no i { color: #d9822b; }
-.vedmak .craft-tab .controls a.active { color: var(--vd-gold); }
-.vedmak .craft-tab .controls .roll-btn { margin-right: .2rem; }
-.vedmak .substance-totals { display: flex; flex-wrap: wrap; gap: .3rem .8rem; margin: .1rem 0 .4rem; }
-.vedmak .substance-totals .substance { font-weight: bold; }
-
 .vedmak-dialog .craft-dialog h4 { margin: .4rem 0 .1rem; font-size: .8rem; border: none; }
 .vedmak-dialog .craft-dialog ul.req { list-style: none; margin: 0 0 .3rem; padding: 0; columns: 2; font-size: .85rem; }
 .vedmak-dialog .craft-dialog ul.req li.ok::before { content: "✓ "; color: #6d9a5b; }
@@ -2223,19 +2202,6 @@
 .vedmak .add-row .add-btn:hover { border-color: var(--vd-gold); color: var(--vd-gold); }
 .vedmak table.vd-table tr.expired td.name a { text-decoration: line-through; color: var(--vd-text-dim); }
 
-.vedmak .craft-tab table.vd-table { table-layout: fixed; }
-.vedmak .craft-tab table.vd-table td:first-child { width: 30px; }
-.vedmak .craft-tab table.vd-table td.name { width: auto; text-align: left; }
-.vedmak .craft-tab table.vd-table td.qty { width: 4rem; }
-.vedmak .craft-tab table.vd-table td.qty input { width: 3.2rem; height: 1.4rem; }
-.vedmak .row-note {
-  display: block; font-size: .74rem; color: var(--vd-text-dim);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.vedmak .craft-tab table.vd-table td.small { width: 9rem; }
-.vedmak .craft-tab table.vd-table td.ready { width: 1.8rem; }
-.vedmak .craft-tab table.vd-table td.controls { width: 12.5rem; text-align: right; }
-.vedmak .craft-tab table.vd-table.recipe-table td.small { width: 8rem; }
 
 /* ---------------------------- Боевой худ ---------------------------- */
 
@@ -3235,11 +3201,12 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 /* ------------------------------- Подвкладки ------------------------------- */
 /* Утопленная полоса, выбранная — выпуклая пластина */
 .vedmak nav.pane-switch {
+  flex-wrap: wrap; max-width: 100%;
   padding: 3px; gap: 3px; background-color: var(--vd-well); background-image: var(--vd-grain);
   background-size: 160px 160px; background-blend-mode: overlay;
   border: 1px solid #040405; box-shadow: var(--vd-sink-sm);
 }
-.vedmak nav.pane-switch > a { font-size: .98rem; letter-spacing: .02em; color: var(--vd-ash); text-shadow: 0 1px 0 rgba(0, 0, 0, .9); }
+.vedmak nav.pane-switch > a { white-space: nowrap; font-size: .98rem; letter-spacing: .02em; color: var(--vd-ash); text-shadow: 0 1px 0 rgba(0, 0, 0, .9); }
 .vedmak nav.pane-switch > a.active {
   color: #f3eee2; background-color: #2a2c31;
   background-image: var(--vd-grain), linear-gradient(180deg, rgba(255, 245, 225, .1), rgba(0, 0, 0, .22));
@@ -3335,7 +3302,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 /* Вместо таблиц — строки-карточки: крупный значок в утопленной раме с лентой «в руках», под названием —
    выбитая полоса характеристик символами: тип урона, хват перчатками, надёжность насечками, у брони —
    кованые части тела с прочностью (parts/armor-part.hbs). Прочее снаряжение — ячейками, как инвентарь. */
-.vedmak .vd-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.vd-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 /* Кошелёк: кроны крупно слева, прочие валюты — к правому краю; нагрузка — отдельной ячейкой */
 .vedmak .gear-tab .purse { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 0; padding: 0; }
@@ -3537,3 +3504,242 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .gear-tile .tile-tools { display: flex; gap: 3px; opacity: 0; transition: opacity .12s; }
 .vedmak .gear-tile:hover .tile-tools, .vedmak .gear-tile:focus-within .tile-tools { opacity: 1; }
 .vedmak .gear-tile .tile-tools a { width: 26px; height: 24px; font-size: .7rem; }
+
+/* ---------------------------- «Ремесло» — верстак ---------------------------- */
+/* Сверху — верстак одной плитой: гнёзда мутагенов, печати запомненных рецептов, кованые инструменты и запас
+   девяти субстанций их знаками (assets/substances). Ниже — четыре раздела переключателем: алхимия карточками,
+   чертежи и формулы с «есть / нужно», компоненты ячейками с отбором по субстанции, усиления с ячейками предметов. */
+.vedmak .craft-tab [hidden] { display: none !important; }
+.vedmak .craft-tab .cap {
+  font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: #8e897e; text-shadow: 0 1px 0 rgba(0,0,0,.9); white-space: nowrap;
+}
+.vedmak .craft-tab .cap.bad { color: var(--vd-blood-lite); }
+.vedmak .craft-tab .dim { font-size: .72rem; color: var(--vd-text-dim); }
+.vedmak .craft-tab .grow { flex: 1; }
+.vedmak .craft-tab .group-head .add {
+  flex: none; white-space: nowrap; margin-left: .2rem; padding: .2rem .65rem; font-size: .66rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-text);
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px; box-shadow: var(--vd-lift-sm);
+}
+.vedmak .craft-tab .group-head .add:hover { color: var(--vd-silver); }
+.vedmak .craft-tab .pane.active { display: flex; flex-direction: column; gap: .5rem; }
+.vedmak .craft-tab .pane:not(.active) { display: none; }
+.vedmak .craft-tab .craft-head { margin: .2rem 0 .1rem; }
+
+/* Эмалевая кнопка действия: выпить / нанести — фиолет, масло — зелень, бросить и изготовить — киноварь */
+.vedmak .craft-tab .go-btn {
+  flex: none; width: auto; height: 1.75rem; padding: 0 .8rem; margin: 0; line-height: 1;
+  font-family: var(--vd-font-body); font-weight: 600; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: #fff3ea;
+  background-color: var(--vd-go, #b8432c); background-image: var(--vd-gloss);
+  border: 1px solid #060708; border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255,235,220,.4), inset 0 -2px 0 rgba(0,0,0,.3), 0 5px 12px -4px rgba(0,0,0,.9);
+  text-shadow: 0 -1px 0 rgba(0,0,0,.5);
+}
+.vedmak .craft-tab .go-btn:hover { filter: brightness(1.12); }
+.vedmak .craft-tab .go-btn:active { box-shadow: inset 0 2px 4px rgba(0,0,0,.45); }
+.vedmak .craft-tab .go-btn.blood { --vd-go: #b8432c; }
+.vedmak .craft-tab .go-btn.arcane { --vd-go: #6b4f9a; }
+.vedmak .craft-tab .go-btn.oil { --vd-go: #5c6e34; }
+.vedmak .craft-tab .go-btn.steel {
+  color: var(--vd-text); background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28));
+  box-shadow: var(--vd-lift-sm); text-shadow: 0 1px 0 rgba(0,0,0,.8);
+}
+.vedmak .craft-tab .mini {
+  flex: none; width: 26px; height: 26px; display: grid; place-items: center; font-size: .72rem; color: var(--vd-text-dim);
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255,245,225,.13), 0 3px 8px -3px rgba(0,0,0,.85);
+}
+.vedmak .craft-tab .mini:hover { color: var(--vd-silver); background-color: #2d2f34; }
+.vedmak .craft-tab .item-frame.on { box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(196,69,47,.55), 0 1px 0 rgba(255,240,215,.08); }
+.vedmak .craft-tab .qty-badge {
+  position: absolute; right: -6px; bottom: -6px; z-index: 2; min-width: 1.4rem; height: 1.25rem; padding: 0 .3rem; display: grid; place-items: center;
+  font-family: var(--vd-font-head); font-size: .85rem; line-height: 1; color: #f1ece0;
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.3)); border: 1px solid #060708; border-radius: .65rem; box-shadow: 0 2px 4px rgba(0,0,0,.8);
+}
+
+/* Верстак */
+.vedmak .craft-tab .bench { padding: .65rem .9rem .75rem; }
+.vedmak .craft-tab .bench-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .8rem 1.8rem; margin-top: .35rem; }
+.vedmak .craft-tab .bench-cell { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.vedmak .craft-tab .sockets { display: flex; gap: .4rem; }
+.vedmak .craft-tab .socket {
+  width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
+  background: #0b0c0e radial-gradient(circle at 50% 35%, rgba(255,245,225,.07), transparent 70%);
+  border: 1px solid #040405; box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 1px 0 rgba(255,240,215,.08);
+}
+.vedmak .craft-tab .socket img { width: 30px; height: 30px; object-fit: contain; border: 0; border-radius: 50%; }
+.vedmak .craft-tab .socket.empty i { width: 7px; height: 7px; transform: rotate(45deg); border: 1px solid #34363c; }
+.vedmak .craft-tab .socket.red { box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 0 0 1px #b8432c, 0 0 8px rgba(184,67,44,.35); }
+.vedmak .craft-tab .socket.green { box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 0 0 1px #6f8f4e, 0 0 8px rgba(111,143,78,.35); }
+.vedmak .craft-tab .socket.blue { box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 0 0 1px #5a6fb0, 0 0 8px rgba(90,111,176,.35); }
+.vedmak .craft-tab .seals { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-height: 40px; max-width: 16rem; }
+.vedmak .craft-tab .seals i {
+  width: 15px; height: 17px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: linear-gradient(180deg, #5c5e65, #2a2b30);
+}
+.vedmak .craft-tab .seals i.on { background: linear-gradient(135deg, #f2ece0, #77726a); }
+.vedmak .craft-tab .seals i.over { background: linear-gradient(135deg, #f08a72, #7a2414); }
+.vedmak .craft-tab .work-tools { display: flex; gap: .35rem; }
+.vedmak .craft-tab .work-tool {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px; min-width: 3.4rem; padding: .3rem .4rem .25rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .craft-tab .work-tool svg { width: 26px; height: 26px; overflow: visible; }
+.vedmak .craft-tab .work-tool .shell { fill: url(#vd-metal-ok); stroke: #050607; stroke-width: 1.1; stroke-linejoin: round; }
+.vedmak .craft-tab .work-tool .ink { fill: none; stroke: #050607; stroke-width: .9; }
+.vedmak .craft-tab .work-tool > span { font-size: .6rem; letter-spacing: .06em; color: #a29d92; }
+.vedmak .craft-tab .work-tool.missing .shell { fill: #17181b; stroke: #3a3c42; }
+.vedmak .craft-tab .work-tool.missing .ink { stroke: #2a2c31; }
+.vedmak .craft-tab .work-tool.missing > span { color: #55575d; text-decoration: line-through; }
+.vedmak .craft-tab .work-tool.tiny { min-width: 0; padding: 0; background: none; border: 0; box-shadow: none; }
+.vedmak .craft-tab .work-tool.tiny svg { width: 20px; height: 20px; }
+.vedmak .craft-tab .work-tool.tiny.missing .shell { fill: #2a0f0a; stroke: #b8432c; }
+.vedmak .craft-tab .other-tools { max-width: 14rem; }
+
+/* Девять субстанций: знак в утопленной лунке, под ним число; цвет субстанции — кромкой лунки */
+.vedmak .craft-tab .subs-strip { margin-top: .7rem; padding-top: .55rem; border-top: 1px solid #050607; box-shadow: inset 0 1px 0 rgba(255,240,215,.07); }
+/* В «Компонентах» та же полоса — отбором, верхняя не дублирует её */
+.vedmak .craft-tab:has(.components-pane.active) .bench .subs-strip { display: none; }
+.vedmak .craft-tab .subs { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: .2rem; margin-top: .35rem; }
+.vedmak .craft-tab .sub, .vedmak .craft-tab .sub-filter { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+.vedmak .craft-tab .subwell {
+  width: 36px; height: 36px; display: grid; place-items: center; flex: none; border-radius: 50%;
+  background: #0b0c0e radial-gradient(circle at 50% 35%, rgba(255,245,225,.07), transparent 70%);
+  border: 1px solid #040405; box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 0 0 1px color-mix(in srgb, var(--sub, #34363c) 45%, transparent), 0 1px 0 rgba(255,240,215,.08);
+}
+.vedmak .craft-tab .subwell img { width: 22px; height: 22px; border: 0; filter: drop-shadow(0 1px 1px rgba(0,0,0,.85)); }
+.vedmak .craft-tab :is(.sub, .sub-filter) > b {
+  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.05rem; line-height: 1;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
+}
+.vedmak .craft-tab .sub-name { max-width: 100%; font-size: .6rem; color: #8e897e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .craft-tab :is(.sub, .sub-filter).zero .subwell { box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 1px 0 rgba(255,240,215,.08); }
+.vedmak .craft-tab :is(.sub, .sub-filter).zero img { filter: grayscale(.85) brightness(.45); }
+.vedmak .craft-tab :is(.sub, .sub-filter).zero > b { background: none; color: #4a4c52; filter: none; }
+.vedmak .craft-tab :is(.sub, .sub-filter).zero .sub-name { color: #55575d; }
+
+/* Действует сейчас */
+.vedmak .craft-tab .active-now { padding: .6rem .9rem .7rem; }
+.vedmak .craft-tab .active-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .45rem; margin-top: .35rem; }
+.vedmak .craft-tab .active-card {
+  display: flex; align-items: center; gap: .55rem; padding: .4rem .5rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .craft-tab .item-frame.small { width: 40px; height: 40px; }
+.vedmak .craft-tab .item-frame.small::after { inset: 3px; }
+.vedmak .craft-tab .item-frame.small img { width: 32px; height: 32px; }
+.vedmak .craft-tab .active-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .25rem; }
+.vedmak .craft-tab .active-head { display: flex; align-items: baseline; gap: .4rem; }
+.vedmak .craft-tab .active-head .name { font-family: var(--vd-font-head); font-size: .98rem; color: #f1ece0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .craft-tab .active-head b { font-family: var(--vd-font-head); font-weight: 400; font-size: .9rem; color: #d6d0c2; white-space: nowrap; }
+.vedmak .craft-tab .active-bar { display: block; height: .4rem; background: #08090a; border: 1px solid #040405; box-shadow: inset 0 1px 3px rgba(0,0,0,.95); }
+.vedmak .craft-tab .active-bar span { display: block; height: 100%; background-color: #7c5aa6; background-image: var(--vd-gloss); }
+.vedmak .craft-tab .active-bar.oil span { background-color: #6f8a3e; }
+.vedmak .craft-tab .active-card .end {
+  flex: none; width: 24px; height: 24px; display: grid; place-items: center; font-size: .7rem; color: var(--vd-text-dim);
+  background: #25262b; border: 1px solid var(--vd-edge); border-radius: 2px;
+}
+.vedmak .craft-tab .active-card .end:hover { color: var(--vd-blood-lite); }
+
+/* Алхимия карточками */
+.vedmak .craft-tab .alchemy-pane .vd-panel, .vedmak .craft-tab .recipes-pane .vd-panel,
+.vedmak .craft-tab .enh-pane .vd-panel, .vedmak .craft-tab .comp-group { padding: .6rem .9rem .5rem; }
+.vedmak .craft-tab .alchemy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: .45rem; margin: .4rem 0 .3rem; }
+.vedmak .craft-tab .alch-card {
+  display: flex; gap: .7rem; padding: .55rem .6rem .55rem .55rem;
+  background: rgba(0,0,0,.18); border: 1px solid rgba(0,0,0,.55); border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.04);
+}
+.vedmak .craft-tab .alch-card:hover { background: rgba(255,245,225,.03); }
+.vedmak .craft-tab .alch-card .item-frame { width: 62px; height: 62px; }
+.vedmak .craft-tab .alch-card .item-frame img { width: 50px; height: 50px; }
+.vedmak .craft-tab .alch-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.vedmak .craft-tab .alch-body .item-name { font-size: 1.05rem; }
+.vedmak .craft-tab .alch-effect {
+  font-size: .74rem; line-height: 1.35; color: #a29d92;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.vedmak .craft-tab .alch-meta { display: flex; align-items: center; gap: .45rem; margin-top: auto; }
+.vedmak .craft-tab :is(.tox, .dur) { display: inline-flex; align-items: center; gap: .2rem; font-size: .72rem; color: #d6d0c2; white-space: nowrap; }
+.vedmak .craft-tab .tox svg { width: .7rem; height: .78rem; fill: #8e5aa0; stroke: #050607; stroke-width: 1.2; }
+.vedmak .craft-tab :is(.dur svg, svg.hg) { width: .7rem; height: .78rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.vedmak .craft-tab svg.hg { vertical-align: -1px; margin-right: 1px; }
+
+/* Чертежи и формулы */
+.vedmak .craft-tab .recipe-card { display: flex; gap: .85rem; padding: .7rem 0; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: var(--vd-groove); }
+.vedmak .craft-tab .recipe-card:last-child { border-bottom: none; box-shadow: none; }
+.vedmak .craft-tab .recipe-card.ready .item-frame { box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(127,154,108,.6), 0 1px 0 rgba(255,240,215,.08); }
+.vedmak .craft-tab .recipe-side { display: flex; flex-direction: column; align-items: center; gap: .4rem; }
+.vedmak .craft-tab .recipe-side .item-frame { width: 64px; height: 64px; }
+.vedmak .craft-tab .recipe-side .item-frame img { width: 52px; height: 52px; }
+.vedmak .craft-tab .lvl { display: flex; gap: 4px; }
+.vedmak .craft-tab .lvl i { width: 6px; height: 6px; transform: rotate(45deg); background: #2a2c31; box-shadow: 0 0 0 1px #050607; }
+.vedmak .craft-tab .lvl i.on { background: linear-gradient(135deg, #f2ece0, #77726a); }
+.vedmak .craft-tab .recipe-body, .vedmak .craft-tab .enh-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .45rem; }
+.vedmak .craft-tab .recipe-head { display: flex; align-items: center; gap: .5rem; min-height: 2.1rem; }
+.vedmak .craft-tab .memo {
+  flex: none; width: 30px; height: 30px; display: grid; place-items: center; color: #6c685f;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .craft-tab .memo svg { width: 18px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; }
+.vedmak .craft-tab .memo:hover { color: #d6d0c2; }
+.vedmak .craft-tab .memo.active { color: #050607; background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border-color: var(--vd-edge); box-shadow: var(--vd-lift-sm); }
+.vedmak .craft-tab .memo.active svg path:first-child { fill: url(#vd-metal-ok); }
+.vedmak .craft-tab .dc-stamp {
+  flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 3.1rem; height: 2.6rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 1px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .craft-tab .dc-stamp .cap { font-size: .52rem; }
+.vedmak .craft-tab .dc-stamp b {
+  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.3rem; line-height: 1;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
+}
+.vedmak .craft-tab .needs { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
+.vedmak .craft-tab .need {
+  display: inline-flex; align-items: center; gap: .3rem; padding: .15rem .5rem .15rem .35rem; font-size: .74rem; color: #d6d0c2; white-space: nowrap;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .craft-tab .need i { font-style: normal; font-size: .7rem; color: #9fb48a; }
+.vedmak .craft-tab .need img { width: 16px; height: 16px; border: 0; }
+.vedmak .craft-tab .need b { font-family: var(--vd-font-head); font-weight: 400; font-size: .95rem; color: #f1ece0; }
+.vedmak .craft-tab .need .of { color: #6c685f; margin-left: -.15rem; }
+.vedmak .craft-tab .need.no { border-color: #3a120a; box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(184,67,44,.35); }
+.vedmak .craft-tab .need.no :is(i, b) { color: var(--vd-blood-lite); }
+.vedmak .craft-tab .recipe-foot { display: flex; align-items: center; gap: .45rem; }
+.vedmak .craft-tab .recipe-foot .state { font-size: .72rem; color: #c49283; }
+.vedmak .craft-tab .recipe-foot .state.ok { color: #9fb48a; }
+
+/* Компоненты: отбор по субстанции и ячейки */
+.vedmak .craft-tab .sub-filters { padding: .55rem .9rem .6rem; }
+.vedmak .craft-tab button.sub-filter {
+  width: auto; height: auto; margin: 0; padding: .35rem .1rem .4rem; line-height: 1; color: inherit; font: inherit;
+  background: none; border: 1px solid transparent; border-radius: 2px; box-shadow: none;
+}
+.vedmak .craft-tab button.sub-filter:hover { background: rgba(255,245,225,.04); border-color: rgba(0,0,0,.5); }
+.vedmak .craft-tab button.sub-filter.on {
+  background: #2a2c31 linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.22)); border-color: #060708; box-shadow: var(--vd-lift-sm);
+}
+.vedmak .craft-tab button.sub-filter.on .subwell {
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.85), 0 0 0 1px var(--sub, #d6d0c2), 0 0 10px color-mix(in srgb, var(--sub, #d6d0c2) 45%, transparent);
+}
+.vedmak .craft-tab .comp-group .gear-grid { margin-top: .35rem; }
+.vedmak .craft-tab .gear-tile .sub-badge { position: absolute; left: -7px; top: -7px; z-index: 2; width: 24px; height: 24px; }
+.vedmak .craft-tab .gear-tile .sub-badge img { width: 15px; height: 15px; }
+.vedmak .craft-tab .filter-empty { margin: .2rem .2rem 0; }
+
+/* Усиления */
+.vedmak .craft-tab .enh-card { display: flex; gap: .85rem; padding: .7rem 0; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: var(--vd-groove); }
+.vedmak .craft-tab .enh-card:last-child { border-bottom: none; box-shadow: none; }
+.vedmak .craft-tab .enh-card > .item-frame { width: 62px; height: 62px; }
+.vedmak .craft-tab .enh-card > .item-frame img { width: 50px; height: 50px; }
+.vedmak .craft-tab .kind-chip {
+  flex: none; padding: .05rem .45rem; font-size: .66rem; color: #d6d0c2; white-space: nowrap;
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.08), rgba(0,0,0,.25)); border: 1px solid var(--vd-edge); border-radius: 2px;
+}
+.vedmak .craft-tab .kind-chip.magic { color: #ece4ff; background-color: #4c4170; border-color: #17102a; }
+.vedmak .craft-tab .targets { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
+.vedmak .craft-tab .target {
+  display: inline-flex; align-items: center; gap: .4rem; padding: .15rem .5rem; font-size: .74rem; color: #d6d0c2; white-space: nowrap;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .craft-tab .target.full { color: #6c685f; }
+.vedmak .craft-tab .slots { display: inline-flex; gap: 2px; }
+.vedmak .craft-tab .slots i { width: 7px; height: 7px; background: #08090a; box-shadow: inset 0 1px 1px rgba(0,0,0,.9), 0 0 0 1px #34363c; }
+.vedmak .craft-tab .slots i.used { background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
