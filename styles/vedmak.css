@@ -6,7 +6,7 @@
 @font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: normal; font-display: swap; }
 @font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: italic; font-display: swap; }
 
-.vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+.vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   /* Холодная сталь и тёплое серебро: акцент держится светлотой; киноварь — атака и опасность, латунь — Удача
      (переменные латуни и материалов — в слое «Гравюра») */
   --vd-bg: #17181b;
@@ -2502,7 +2502,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
    только светлоту поверхности, но не её цвет. Киноварь — атака, урон и опасность; латунь — только Удача;
    остальное — сталь и серебро. Forum — имена, вкладки, разделы и числа; IBM Plex Sans — текст. */
 
-.vedmak, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+.vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   --vd-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncG type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncB type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncA type='linear' slope='0' intercept='.5'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
   --vd-t-leather: url("../assets/textures/leather.webp");
   --vd-t-plate: url("../assets/textures/steel-plate.webp");
@@ -4741,3 +4741,67 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak .craft-tab :is(.sub, .sub-filter).zero .sub-name { color: #7d786f; }
 .vedmak .craft-tab .sub-name { font-size: .62rem; }
+
+/* ---------------------- Чат: фактура и броски жизненного пути (03.10, PLAN 4.49) ---------------------- */
+/* Сообщение лежало вне области, где объявлены переменные фактур (.vedmak, .vedmak-card): фон с var(--vd-t-plate)
+   браузер отбрасывал целиком, и пластина выходила гладкой. Теперь переменные есть и у сообщения: пластина — сталь
+   с зерном, шапка сообщения — шлифованная планка, полоса костей и ленты — с зерном. */
+.chat-message.vedmak-message {
+  background-color: #1f2024;
+  background-image: var(--vd-grain), var(--vd-t-plate), linear-gradient(180deg, rgba(255,245,225,.07), rgba(255,245,225,0) 28%, rgba(0,0,0,.26));
+  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+}
+.chat-message.vedmak-message .message-header {
+  background-color: #17181b;
+  background-image: var(--vd-grain), var(--vd-t-brushed), linear-gradient(180deg, rgba(255,245,225,.06), rgba(0,0,0,.2));
+  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255,240,215,.07), 0 1px 0 rgba(255,240,215,.045);
+}
+.chat-message.vedmak-message .message-header .message-sender { text-shadow: 0 1px 0 rgba(0,0,0,.95); }
+.vedmak-card .card-head { box-shadow: inset 0 1px 0 rgba(255,240,215,.05); }
+.vedmak-card .roll-line, .vedmak-card .applied-report {
+  background-color: #0c0d0f; background-image: var(--vd-grain); background-size: 160px 160px; background-blend-mode: overlay;
+}
+.vedmak-card .outcome.success {
+  background-image: var(--vd-grain), linear-gradient(180deg, #55663f, #252e1d); background-size: 160px 160px, 100% 100%; background-blend-mode: overlay, normal;
+}
+.vedmak-card .outcome.failure {
+  background-image: var(--vd-grain), linear-gradient(180deg, #9a3522, #4a150c); background-size: 160px 160px, 100% 100%; background-blend-mode: overlay, normal;
+}
+.vedmak-card .card-section { background-color: rgba(0,0,0,.18); background-image: var(--vd-grain); background-size: 160px 160px; background-blend-mode: overlay; }
+
+/* Броски жизненного пути: печать-свиток, разделы с ромбом и бороздой, броски — строками в лотке */
+.vedmak-card.lifepath-roll .lp-seal {
+  flex: none; width: 40px; height: 40px; display: grid; place-items: center; font-size: 1.05rem; color: #d6d0c2;
+  background: #0b0c0e radial-gradient(circle at 50% 42%, rgba(255,245,225,.1), transparent 66%);
+  border: 1px solid #040405; box-shadow: inset 0 2px 8px rgba(0,0,0,.85), inset 0 0 0 3px #141518, inset 0 0 0 4px rgba(226,221,208,.14), 0 1px 0 rgba(255,240,215,.08);
+  text-shadow: 0 1px 0 rgba(0,0,0,.9);
+}
+.vedmak-card.lifepath-roll .card-body { gap: .45rem; }
+.vedmak-card .lp-chat-section {
+  display: flex; align-items: center; gap: .5rem; margin: .1rem 0 0; padding: 0; border: 0;
+  font-family: var(--vd-font-body); font-size: .56rem; letter-spacing: .2em; text-transform: uppercase; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.9);
+}
+.vedmak-card .lp-chat-section::before {
+  content: ""; flex: none; width: 5px; height: 5px; transform: rotate(45deg);
+  background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607;
+}
+.vedmak-card .lp-chat-section::after { content: ""; flex: 1; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255,240,215,.07); }
+.vedmak-card .lp-chat-rows {
+  padding: .1rem .55rem; background-color: rgba(8,9,10,.5); background-image: var(--vd-grain); background-size: 160px 160px; background-blend-mode: overlay;
+  border: 1px solid rgba(0,0,0,.72); border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.04), 0 1px 0 rgba(255,240,215,.05);
+}
+.vedmak-card .lp-chat-row { align-items: center; gap: .6rem; padding: .4rem 0; border-bottom: 1px solid rgba(0,0,0,.55); box-shadow: 0 1px 0 rgba(255,240,215,.04); }
+.vedmak-card .lp-chat-row:last-child { border-bottom: 0; box-shadow: none; }
+.vedmak-card .lp-chat-row .die { margin-top: 0; }
+.vedmak-card .lp-chat-row .die.dn {
+  position: relative; display: grid; place-items: center; flex: none; width: 28px; height: 28px; clip-path: none; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #4a4c52, #1c1d21 70%); border: 1px solid #050607;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.3), inset 0 0 0 3px rgba(226,221,208,.16), 0 2px 4px rgba(0,0,0,.7);
+}
+.vedmak-card .lp-chat-row .die.dn b { font-family: var(--vd-font-head); font-weight: 400; font-size: .85rem; line-height: 1; color: #f1ece0; }
+.vedmak-card .lp-chat-text { gap: .12rem; }
+.vedmak-card .lp-chat-label { font-size: .54rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.vedmak-card .lp-chat-result { font-family: var(--vd-font-head); font-size: .98rem; line-height: 1.25; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.85); }
+.vedmak-card .lp-chat-result b { font-weight: 400; color: #f1ece0; }
+.vedmak-card .lp-chat-result i { font-family: var(--vd-font-body); font-style: normal; font-size: .7rem; color: #e0c98f; }
