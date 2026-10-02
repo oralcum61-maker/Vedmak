@@ -4998,3 +4998,66 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .chat-message.vedmak-message .vedmak-card .lp-chat-result { font-family: var(--vd-font-head); font-size: .96rem; line-height: 1.22; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.85); }
 .chat-message.vedmak-message .vedmak-card .lp-chat-result b { font-weight: 400; color: #f1ece0; }
 .chat-message.vedmak-message .vedmak-card .lp-chat-result i { font-family: var(--vd-font-body); font-style: normal; font-size: .7rem; color: #e0c98f; }
+
+/* ------------------------- Ползунок прокрутки — ремень (03.10, PLAN 4.52) ------------------------- */
+/* По холсту design/09-scrollbar, вариант «Ремень»: дорожка — кожаный ремень со строчкой по краям, ползунок — стальная
+   пряжка на двух заклёпках с тремя насечками под палец. Во всём интерфейсе, пока активна система. Foundry ставит всем
+   элементам scrollbar-color, а при нём Chromium не рисует ::-webkit-scrollbar — там свойство снимается. Firefox
+   псевдоэлементов не знает: ему остаются цвета пряжки и ремня. */
+body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
+@supports selector(::-webkit-scrollbar) {
+  body.system-vedmak * { scrollbar-color: auto !important; scrollbar-width: auto !important; }
+  /* Где Foundry ползунок прячет (переполнение уведомлений чата) — прячем и мы */
+  body.system-vedmak #chat-notifications .overflow { scrollbar-width: none !important; }
+  body.system-vedmak ::-webkit-scrollbar { width: 14px; height: 14px; }
+  body.system-vedmak ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+  body.system-vedmak ::-webkit-scrollbar-corner { background: #1a1714; }
+  body.system-vedmak ::-webkit-scrollbar-track {
+    background-color: #26211c;
+    background-image: linear-gradient(90deg, transparent 2px, rgba(214,206,190,.38) 2px 3px, transparent 3px calc(100% - 3px), rgba(214,206,190,.38) calc(100% - 3px) calc(100% - 2px), transparent calc(100% - 2px)),
+      repeating-linear-gradient(180deg, #26211c 0 2px, transparent 2px 5px),
+      linear-gradient(rgba(38,33,28,.4), rgba(38,33,28,.4)), url("../assets/textures/leather.webp");
+    background-size: 100% 100%, 100% 100%, 100% 100%, 300px 300px;
+    background-blend-mode: normal, normal, normal, overlay;
+    border-left: 1px solid #060708;
+    box-shadow: inset 1px 0 0 rgba(255,240,215,.06), inset 0 0 6px rgba(0,0,0,.7);
+  }
+  body.system-vedmak ::-webkit-scrollbar-track:horizontal {
+    background-image: linear-gradient(180deg, transparent 2px, rgba(214,206,190,.38) 2px 3px, transparent 3px calc(100% - 3px), rgba(214,206,190,.38) calc(100% - 3px) calc(100% - 2px), transparent calc(100% - 2px)),
+      repeating-linear-gradient(90deg, #26211c 0 2px, transparent 2px 5px),
+      linear-gradient(rgba(38,33,28,.4), rgba(38,33,28,.4)), url("../assets/textures/leather.webp");
+    border-left: 0; border-top: 1px solid #060708;
+    box-shadow: inset 0 1px 0 rgba(255,240,215,.06), inset 0 0 6px rgba(0,0,0,.7);
+  }
+  body.system-vedmak ::-webkit-scrollbar-thumb {
+    min-height: 28px;
+    background-color: #8e8b85;
+    background-image: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
+      radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
+      linear-gradient(180deg, transparent calc(50% - 5px), rgba(0,0,0,.55) calc(50% - 5px) calc(50% - 4px), rgba(255,250,240,.35) calc(50% - 4px) calc(50% - 3px),
+        transparent calc(50% - 3px) calc(50% - 1px), rgba(0,0,0,.55) calc(50% - 1px) 50%, rgba(255,250,240,.35) 50% calc(50% + 1px),
+        transparent calc(50% + 1px) calc(50% + 3px), rgba(0,0,0,.55) calc(50% + 3px) calc(50% + 4px), rgba(255,250,240,.35) calc(50% + 4px) calc(50% + 5px), transparent calc(50% + 5px)),
+      linear-gradient(90deg, #77736c 0%, #d6d1c6 28%, #a5a197 60%, #5e5b55 100%);
+    background-position: center 4px, center calc(100% - 4px), 0 0, 0 0;
+    background-size: 7px 7px, 7px 7px, 100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+    border: 1px solid #060708; border-radius: 2px;
+    box-shadow: inset 0 1px 0 rgba(255,250,240,.45), inset 0 -1px 0 rgba(0,0,0,.4), 0 2px 3px rgba(0,0,0,.8);
+  }
+  body.system-vedmak ::-webkit-scrollbar-thumb:horizontal {
+    min-width: 28px;
+    background-image: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
+      radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
+      linear-gradient(90deg, transparent calc(50% - 5px), rgba(0,0,0,.55) calc(50% - 5px) calc(50% - 4px), rgba(255,250,240,.35) calc(50% - 4px) calc(50% - 3px),
+        transparent calc(50% - 3px) calc(50% - 1px), rgba(0,0,0,.55) calc(50% - 1px) 50%, rgba(255,250,240,.35) 50% calc(50% + 1px),
+        transparent calc(50% + 1px) calc(50% + 3px), rgba(0,0,0,.55) calc(50% + 3px) calc(50% + 4px), rgba(255,250,240,.35) calc(50% + 4px) calc(50% + 5px), transparent calc(50% + 5px)),
+      linear-gradient(180deg, #d6d1c6 0%, #a5a197 55%, #5e5b55 100%);
+    background-position: 4px center, calc(100% - 4px) center, 0 0, 0 0;
+  }
+  body.system-vedmak ::-webkit-scrollbar-thumb:hover {
+    box-shadow: inset 0 0 0 30px rgba(255,250,240,.14), inset 0 1px 0 rgba(255,250,240,.5), 0 2px 3px rgba(0,0,0,.8);
+  }
+  body.system-vedmak ::-webkit-scrollbar-thumb:active {
+    box-shadow: inset 0 0 0 30px rgba(0,0,0,.08), inset 0 1px 3px rgba(0,0,0,.6), 0 1px 1px rgba(0,0,0,.8);
+  }
+}

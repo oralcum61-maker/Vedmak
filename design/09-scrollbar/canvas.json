@@ -1,0 +1,53 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-02T22:10:00Z"
+  },
+  "title": "Ведьмак: ползунок прокрутки",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 600,
+      "h": 620,
+      "title": "Дол",
+      "is_interactive": true
+    },
+    "Strap.dc.html": {
+      "x": 680,
+      "y": 0,
+      "w": 600,
+      "h": 620,
+      "title": "Ремень",
+      "is_interactive": true
+    },
+    "Notch.dc.html": {
+      "x": 1360,
+      "y": 0,
+      "w": 600,
+      "h": 620,
+      "title": "Насечки",
+      "is_interactive": true
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Strap.dc.html",
+    "Notch.dc.html"
+  ],
+  "notes": {
+    "head": {
+      "x": 0,
+      "y": -300,
+      "text": "Ползунок прокрутки из деталей листа: три пути",
+      "kind": "title1",
+      "maxW": 1880
+    }
+  },
+  "designSystems": []
+}
