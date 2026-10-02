@@ -74,3 +74,16 @@ export function postCard(actor, title, body, { subtitle = "", icon = "", cls = "
     + `<div class="card-body">${body}</div></div>`;
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls, flags });
 }
+
+/** Разметка кольца медальона карточки чата (см. хелпер vedmakRing). dice — число, массив граней d10 или ничего. */
+export function ringHtml(dice) {
+  const arr = Array.isArray(dice) ? dice : (typeof dice === "number" || typeof dice === "string") ? [dice] : [];
+  const lit = {};
+  arr.forEach((raw, i) => {
+    const v = Number(raw);
+    if (!(v >= 1 && v <= 10) || lit[v]) return;
+    lit[v] = v === 10 ? " on hot" : v === 1 && i === 0 ? " on low" : " on";
+  });
+  const notches = Array.from({ length: 10 }, (_, k) => `<i class="n${k}${lit[k || 10] ?? ""}"></i>`).join("");
+  return `<span class="vd-ring" aria-hidden="true">${notches}</span>`;
+}

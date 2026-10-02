@@ -6,9 +6,9 @@
       <span class="card-sub">против «{{attack.label}}» · {{attack.attacker.name}} {{attack.total}}</span>
     </div>
     {{#if roll}}
-    <div class="card-value"><b>{{total}}</b><span class="cap">защита</span></div>
+    <div class="card-value">{{vedmakRing roll.dice}}<b>{{total}}</b><span class="cap">защита</span></div>
     {{else}}{{#unless auto}}
-    <div class="card-value"><b>{{dc}}</b><span class="cap">СЛ</span></div>
+    <div class="card-value">{{vedmakRing roll.dice}}<b>{{dc}}</b><span class="cap">СЛ</span></div>
     {{/unless}}{{/if}}
   </header>
 

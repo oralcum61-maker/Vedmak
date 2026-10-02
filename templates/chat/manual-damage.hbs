@@ -4,7 +4,7 @@
       <span class="card-name">{{#if reason}}{{reason}}{{else}}Урон без атаки{{/if}}</span>
       <span class="card-sub">{{formula}} · {{vedmakLabel "DAMAGE_TYPES" damageType}}{{#if nonLethal}} · несмертельный{{/if}}{{#if ignoreArmor}} · мимо брони{{/if}}{{#if statusLabel}} · {{statusLabel}}{{/if}}</span>
     </div>
-    <div class="card-value blood">
+    <div class="card-value blood">{{vedmakRing}}
       <b>{{total}}</b>
       <span class="cap">бросок</span>
     </div>

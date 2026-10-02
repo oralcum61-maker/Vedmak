@@ -1,6 +1,6 @@
 // Хелперы Handlebars и предзагрузка шаблонов.
 
-import { signed } from "./util.mjs";
+import { signed, ringHtml } from "./util.mjs";
 
 export function registerHelpers() {
   const H = Handlebars;
@@ -9,6 +9,10 @@ export function registerHelpers() {
 
   /** Сумма массива чисел (кости d10 в карточке). */
   H.registerHelper("vedmakSum", arr => (Array.isArray(arr) ? arr.reduce((s, v) => s + (Number(v) || 0), 0) : 0));
+
+  /** Кольцо медальона в карточке чата: десять насечек, десятка сверху; выпавшие грани d10 светятся
+      (десятка — калёная, единица первой кости — киноварь). Без костей — простое кольцо. */
+  H.registerHelper("vedmakRing", dice => new H.SafeString(ringHtml(dice)));
 
   /** Подпись из справочника CONFIG.VEDMAK[group][key] (строка или {label}). */
   H.registerHelper("vedmakLabel", (group, key) => {

@@ -2,7 +2,7 @@
 
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, HEALING_DAYS } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
-import { renderTemplate } from "../util.mjs";
+import { renderTemplate, ringHtml } from "../util.mjs";
 import { postCard, rollFormula, asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "./common.mjs";
 import { applyDamageToActor } from "./damage.mjs";
 import { STATUS_EFFECTS } from "./statuses.mjs";
@@ -162,7 +162,7 @@ export async function restTurn(actor) {
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="vedmak-card turn"><header class="card-head"><span class="card-glyph"><i class="fa-solid fa-lungs"></i></span>`
       + `<div class="card-ident"><span class="card-name">Отдых</span><span class="card-sub">полный ход</span></div>`
-      + `<div class="card-value"><b>+${value - sys.sta.value}</b><span class="cap">Вын</span></div></header>`
+      + `<div class="card-value">${ringHtml()}<b>+${value - sys.sta.value}</b><span class="cap">Вын</span></div></header>`
       + `<div class="card-body"><p class="note">${actor.name} переводит дух: Вын ${sys.sta.value} → ${value}.</p></div></div>`
   });
 }

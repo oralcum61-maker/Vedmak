@@ -5,7 +5,7 @@
       <span class="card-name">{{label}}</span>
       <span class="card-sub">{{kindLabel}} · {{levelLabel}}{{#if elementLabel}} · {{elementLabel}}{{/if}}</span>
     </div>
-    <div class="card-value arcane">
+    <div class="card-value arcane">{{vedmakRing roll.dice}}
       <b>{{roll.total}}</b>
       <span class="cap">{{#if dc}}против {{dc}}{{else}}сотворение{{/if}}</span>
     </div>

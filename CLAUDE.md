@@ -119,6 +119,7 @@
 | `design/05-gravure` | [Ведьмак: новый облик листа](https://claude.ai/artifact/U4C9XoLqYACmyGrUAsZLyX) | 4.45 |
 | `design/06-tabs` | [Снаряжение, ремесло, магия, дневник, мастер и курсоры](https://claude.ai/artifact/LEfcJsPuVxDbDGDQ7oYe8a) | 4.46 |
 | `design/07-dialogs` | [Окна проверок и карточки чата](https://claude.ai/artifact/5TmpWK5jDLiXMc6DMLgjPP) | 4.47 |
+| `design/08-chat-medal` | [Карточки чата в духе листа: «Медальон»](https://claude.ai/artifact/6r5nKNduXpwfgnZBvmViKZ) | 4.51 |
 
 В каждой папке `canvas.json` хранит раскладку холста и заметки «что было — что стало».
 Файлы `*.dc.html` — артборды в формате холста: сами по себе они не открываются, им нужен `support.js` холста.
