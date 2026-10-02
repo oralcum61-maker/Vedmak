@@ -2616,23 +2616,41 @@ body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4) {
 body.system-vedmak #tooltip :is(hr),
 body.system-vedmak .locked-tooltip :is(hr) { border: 0; border-top: 1px solid rgba(176, 169, 154, .3); margin: .35rem 0; }
 
-/* Курсор-клинок (настройка «Курсор системы», assets/cursors). Foundry v14 ставит курсоры через свои переменные
-   (--cursor-default, --cursor-pointer и их «-down» — пока кнопка мыши зажата): ими пользуются правила ядра
-   и холст сцены. Подменяем сами переменные — иначе при нажатии, перетаскивании и над элементами ядра курсор
-   слетал на системный. Захват (окна, токены) и текстовый курсор в полях остаются как в Foundry. */
+/* Курсоры системы (настройка «Курсоры системы», assets/cursors). Foundry v14 ставит курсоры через свои переменные
+   (--cursor-default, --cursor-pointer, --cursor-grab, --cursor-text и их «-down» — пока кнопка мыши зажата):
+   ими пользуются правила ядра и холст сцены. Значения всех переменных, и своих (--cursor-not-allowed,
+   --cursor-wait, --cursor-nwse-resize…), ставит applyCursor (vedmak.mjs) на body полным путём; здесь — запасные
+   на время до запуска и правила для того, что ядро задаёт словом, а не переменной. */
 body.vedmak-cursor {
-  --cursor-default: url("../assets/cursors/arrow.svg") 2 2, default;
-  --cursor-default-down: url("../assets/cursors/arrow.svg") 2 2, default;
+  --cursor-default: url("../assets/cursors/default.svg") 2 2, default;
+  --cursor-default-down: url("../assets/cursors/default-down.svg") 2 2, default;
   --cursor-pointer: url("../assets/cursors/pointer.svg") 2 2, pointer;
-  --cursor-pointer-down: url("../assets/cursors/pointer.svg") 2 2, pointer;
+  --cursor-pointer-down: url("../assets/cursors/pointer-down.svg") 2 2, pointer;
   cursor: var(--cursor-default);
 }
-/* Кнопки и ссылки, у которых указатель задан словом pointer, а не переменной */
+body.vedmak-cursor:active { cursor: var(--cursor-default-down); }
+/* Кнопки и ссылки, у которых указатель задан словом pointer, а не переменной; зажатая — «нажимаю» */
 body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data-action], [data-tab], .rollable,
   .content-link, .inline-roll, input[type="checkbox"], input[type="radio"], input[type="range"]):not(:disabled):not([disabled]) {
   cursor: var(--cursor-pointer);
 }
+body.vedmak-cursor :is(a, button, summary, [role="button"], [data-action], [data-tab], .rollable):not(:disabled):not([disabled]):active {
+  cursor: var(--cursor-pointer-down);
+}
 body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, [contenteditable="true"], .ProseMirror) { cursor: var(--cursor-text); }
+/* Запертое — «нельзя»: выключенные кнопки и поля, недоступные карточки мастера, сломанное оружие */
+body.vedmak-cursor :is(button, input, select, textarea, a, [data-action]):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor .vedmak :is(.locked, .pick-card.disabled) { cursor: var(--cursor-not-allowed); }
+/* Подсказка без действия — «справка»: строки производных, сокращения, значки правил */
+body.vedmak-cursor .vedmak [data-tooltip]:not(a, button, input, select, label, [data-action], .rollable, [data-tab]),
+body.vedmak-cursor :is(abbr[title], .warning[data-tooltip]) { cursor: var(--cursor-help); }
+/* Размеры: угол окна, край редактора; портрет — «рассмотреть»; планка окна — захват ядра */
+body.vedmak-cursor .application .window-resize-handle { cursor: var(--cursor-nwse-resize); }
+body.vedmak-cursor .ProseMirror.resize-cursor { cursor: var(--cursor-ew-resize); }
+body.vedmak-cursor .vedmak .vd-limited .portrait-frame { cursor: var(--cursor-zoom-in); }
+/* Ожидание и загрузка Foundry ставит на body прямо в стиле элемента — перебиваем важностью */
+body.vedmak-cursor[style*="cursor: wait"], body.vedmak-cursor[style*="cursor: wait"] * { cursor: var(--cursor-wait) !important; }
+body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="true"] { cursor: var(--cursor-progress) !important; }
 
 /* Добыча чудовища: монеты уже взяты — строка притушена, кнопка не нажимается, у ведущего «вернуть» */
 .vedmak .loot-list li.taken .loot-name, .vedmak .loot-list li.taken .loot-qty { opacity: .45; text-decoration: line-through; }
@@ -3312,3 +3330,210 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-body); color: var(--vd-text);
   box-shadow: inset 0 1px 0 rgba(255, 240, 215, .1), 0 12px 24px -6px rgba(0, 0, 0, .9);
 }
+
+/* ------------------------ «Снаряжение» — оружейная стойка ------------------------ */
+/* Вместо таблиц — строки-карточки: крупный значок в утопленной раме с лентой «в руках», под названием —
+   выбитая полоса характеристик символами: тип урона, хват перчатками, надёжность насечками, у брони —
+   кованые части тела с прочностью (parts/armor-part.hbs). Прочее снаряжение — ячейками, как инвентарь. */
+.vedmak .vd-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Кошелёк: кроны крупно слева, прочие валюты — к правому краю; нагрузка — отдельной ячейкой */
+.vedmak .gear-tab .purse { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 0; padding: 0; }
+.vedmak .gear-tab .purse .coins { padding: .7rem .9rem .8rem; gap: .5rem; }
+.vedmak .gear-tab .purse .coins .group-head .dim { font-size: .74rem; color: var(--vd-text-dim); }
+.vedmak .gear-tab .purse .exchange {
+  padding: .2rem .7rem; font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--vd-text);
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px;
+  box-shadow: var(--vd-lift-sm);
+}
+.vedmak .gear-tab .purse .coin-row { display: flex; align-items: center; gap: 1.1rem; }
+.vedmak .gear-tab .purse .coin-main { flex: none; display: flex; align-items: baseline; gap: .45rem; white-space: nowrap; }
+.vedmak .gear-tab .purse .coin-main input {
+  width: 5.6rem; height: 2.3rem; padding: 0; text-align: left; font-family: var(--vd-font-head); font-size: 2.1rem; line-height: 1;
+  color: #f1ece0; background: transparent; border: 1px solid transparent; box-shadow: none; text-shadow: var(--vd-engrave);
+}
+.vedmak .gear-tab .purse .coin-main input:hover, .vedmak .gear-tab .purse .coin-main input:focus { border-color: #3a3c42; }
+.vedmak .gear-tab .purse .coin-main .cap { color: #cfc8b8; }
+.vedmak .gear-tab .purse .coin-grid { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .35rem; margin-left: auto; min-width: 0; }
+.vedmak .gear-tab .purse .coin {
+  flex-direction: row; align-items: center; gap: .3rem; padding: .12rem .2rem .12rem .55rem; font-size: .72rem; color: var(--vd-text);
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .gear-tab .purse .coin input {
+  width: 2.4rem; height: 1.35rem; font-family: var(--vd-font-head); font-size: .95rem; background: transparent; border: 0; box-shadow: none;
+}
+.vedmak .gear-tab .purse .coin.empty { opacity: .5; }
+.vedmak .gear-tab .purse .load {
+  max-width: none; padding: .7rem .9rem .8rem; display: flex; flex-direction: column; justify-content: center; gap: .45rem;
+  border-left: 1px solid var(--vd-edge); box-shadow: inset 1px 0 0 rgba(255,240,215,.05);
+}
+.vedmak .gear-tab .purse .load-head { display: flex; align-items: baseline; gap: .4rem; margin: 0; }
+.vedmak .gear-tab .purse .load-head .grow { flex: 1; }
+.vedmak .gear-tab .purse .load-head b {
+  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.5rem; line-height: 1;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
+}
+.vedmak .gear-tab .purse .load-head b.bad { background: none; color: #e0937f; }
+.vedmak .gear-tab .purse .load-track { height: .6rem; background: #08090a; border: 1px solid #040405; box-shadow: inset 0 1px 3px rgba(0,0,0,.95), 0 1px 0 rgba(255,240,215,.07); }
+.vedmak .gear-tab .purse .load-track .fill { background-color: #b9b3a6; background-image: var(--vd-gloss); }
+.vedmak .gear-tab .purse .load-track .fill.over { background-color: #b8432c; }
+.vedmak .gear-tab .purse .load .dim { font-size: .72rem; color: #6c685f; }
+
+/* Стойка: заголовок раздела и кнопка «Добавить» */
+.vedmak .gear-rack { padding: .65rem .9rem .3rem; }
+.vedmak .gear-rack > .group-head { margin-bottom: .2rem; }
+.vedmak .gear-rack > .group-head .add {
+  margin-left: .2rem; padding: .2rem .65rem; font-size: .66rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-text);
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px; box-shadow: var(--vd-lift-sm);
+}
+.vedmak .gear-rack > .group-head .add:hover { color: var(--vd-silver); }
+
+/* Строка предмета */
+.vedmak .gear-item { display: flex; gap: .9rem; padding: .75rem 0; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: var(--vd-groove); }
+.vedmak .gear-item:last-of-type { border-bottom: none; box-shadow: none; }
+.vedmak .item-frame {
+  position: relative; flex: none; width: 76px; height: 76px; display: grid; place-items: center;
+  background: #0b0c0e radial-gradient(circle at 50% 42%, rgba(255,245,225,.09), transparent 66%);
+  border: 1px solid #040405; box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 1px 0 rgba(255,240,215,.08);
+}
+.vedmak .item-frame::after { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(226,221,208,.13); pointer-events: none; }
+.vedmak .item-frame img { width: 64px; height: 64px; object-fit: contain; border: 0; }
+.vedmak .gear-item:not(.stowed) .item-frame, .vedmak .gear-tile.held .item-frame {
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(196,69,47,.55), 0 1px 0 rgba(255,240,215,.08);
+}
+.vedmak .gear-item.stowed .item-frame img { filter: grayscale(.65) brightness(.72); }
+.vedmak .gear-item.broken .item-frame img { filter: grayscale(.4) brightness(.6) sepia(.3); }
+.vedmak .item-frame .ribbon {
+  position: absolute; left: -1px; top: -1px; z-index: 2; padding: 2px 6px 2px 5px;
+  font-size: .53rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #fff3ea;
+  background: #b8432c linear-gradient(180deg, rgba(255,255,255,.22), rgba(0,0,0,.25)); border: 1px solid #2a0c06; box-shadow: 0 2px 4px rgba(0,0,0,.7);
+}
+.vedmak .item-frame .ribbon.steel { color: #f1ece0; background-color: #3a3c42; border-color: var(--vd-edge); }
+.vedmak .item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .5rem; }
+.vedmak .item-head { display: flex; align-items: center; gap: .5rem; min-height: 2.1rem; }
+.vedmak .item-head .grow { flex: 1; }
+.vedmak .item-title { min-width: 0; display: flex; flex-direction: column; gap: .2rem; }
+.vedmak .item-name {
+  font-family: var(--vd-font-head); font-size: 1.2rem; line-height: 1.1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vedmak .gear-item.stowed .item-name { color: #cfc8b8; }
+.vedmak .item-sub { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; font-size: .72rem; color: var(--vd-text-dim); }
+.vedmak .item-sub .chip {
+  display: inline-flex; align-items: center; gap: .25rem; padding: .05rem .45rem; font-size: .68rem; color: #d6d0c2;
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.08), rgba(0,0,0,.25)); border: 1px solid var(--vd-edge); border-radius: 2px;
+}
+.vedmak .item-sub .chip.oil { color: #eef3e2; background-color: #4e5a33; border-color: #1c2210; }
+.vedmak .item-sub .chip.rune { color: #ece4ff; background-color: #4c4170; border-color: #17102a; }
+.vedmak .item-sub .pips { display: inline-flex; gap: 2px; }
+.vedmak .item-sub .pips i { width: 9px; height: 11px; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%); background: #2a2c31; }
+.vedmak .item-sub .pips i.on { background: #d9d3c6; }
+.vedmak .item-head .atk-go { flex: none; }
+.vedmak .item-tools {
+  display: flex; gap: 3px; padding: 2px; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .item-tools a, .vedmak .tile-tools a {
+  width: 30px; height: 30px; display: grid; place-items: center; font-size: .8rem; color: var(--vd-text-dim);
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255,245,225,.13), 0 3px 8px -3px rgba(0,0,0,.85);
+}
+.vedmak .item-tools a:hover, .vedmak .tile-tools a:hover { color: var(--vd-silver); background-color: #2d2f34; }
+.vedmak .item-tools a.active, .vedmak .tile-tools a.active { color: #f0b3a5; }
+
+/* Выбитая полоса характеристик */
+.vedmak .item-stats {
+  display: flex; align-items: stretch; min-height: 2.9rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink);
+}
+.vedmak .item-stats .cell { display: flex; flex-direction: column; justify-content: center; gap: .22rem; padding: .35rem .7rem; min-width: 0; }
+.vedmak .item-stats .cell + .cell { border-left: 1px solid #040405; box-shadow: inset 1px 0 0 rgba(255,240,215,.05); }
+.vedmak .item-stats .cell.narrow { flex: none; width: 3.5rem; }
+.vedmak .item-stats .cell.wide { flex: none; width: 6.2rem; }
+.vedmak .item-stats .cell.grow { flex: 1; }
+.vedmak .item-stats .cap { font-size: .58rem; letter-spacing: .14em; }
+.vedmak .item-stats .cell > b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.05rem; line-height: 1; color: #d6d0c2; text-shadow: var(--vd-engrave); }
+.vedmak .item-stats .cell > b.dmg {
+  align-self: flex-start; font-size: 1.2rem;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95)); text-shadow: none;
+}
+.vedmak .item-stats .val { font-size: .8rem; color: #d6d0c2; white-space: nowrap; }
+.vedmak .item-stats .glyphs { display: flex; gap: .3rem; color: #d6d0c2; }
+.vedmak .item-stats .glyphs svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.vedmak .item-stats .glyphs.hands { gap: 1px; }
+.vedmak .item-stats .glyphs.hands svg { stroke-width: 1.5; }
+.vedmak .item-stats .notches { display: flex; gap: 2px; align-items: center; }
+.vedmak .item-stats .notches i { width: 4px; height: 9px; border-radius: 1px; background: #25272b; box-shadow: inset 0 1px 1px rgba(0,0,0,.8); }
+.vedmak .item-stats .notches i.on { background: #d9d3c6; box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
+.vedmak .item-stats .rel-bar { display: block; height: .45rem; background: #08090a; border: 1px solid #040405; box-shadow: inset 0 1px 3px rgba(0,0,0,.95); }
+.vedmak .item-stats .rel-bar span { display: block; height: 100%; background-color: #b9b3a6; background-image: var(--vd-gloss); }
+.vedmak .item-stats .enc { display: inline-flex; align-items: center; gap: .3rem; font-family: var(--vd-font-head); font-size: 1rem; color: var(--vd-text-dim); }
+.vedmak .item-stats .enc.bad { color: #e0937f; }
+.vedmak .item-stats .enc svg { width: 1rem; height: .8rem; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.vedmak .item-stats .shield-line { display: flex; align-items: center; gap: .55rem; }
+.vedmak .vd-shield { width: 26px; height: 26px; flex: none; }
+.vedmak .vd-shield .shell { fill: url(#vd-metal-ok); stroke: #050607; stroke-width: 1.3; }
+.vedmak .vd-shield .ink { fill: none; stroke: #050607; stroke-width: .85; }
+.vedmak .vd-shield .boss { stroke-width: 1; }
+
+/* Кованые части тела: цела — светлая сталь, изношена — тёмная в царапинах, разбита — раскалённая с трещиной,
+   не закрыта — чёрное железо */
+.vedmak .parts { display: flex; align-items: flex-end; }
+.vedmak .vd-part { display: flex; flex-direction: column; align-items: center; gap: 1px; width: 31px; }
+.vedmak .vd-part:nth-child(2) { margin-left: 2px; }
+.vedmak .vd-part:nth-child(3), .vedmak .vd-part:nth-child(5) { margin-left: .5rem; }
+.vedmak .vd-part svg { width: 26px; height: 26px; overflow: visible; }
+.vedmak .vd-part .shell { stroke-width: 1.3; stroke-linejoin: miter; stroke-miterlimit: 4; }
+.vedmak .vd-part .ink { fill: none; stroke-width: .9; }
+.vedmak .vd-part .hi { fill: none; stroke-width: .8; }
+.vedmak .vd-part .scr, .vedmak .vd-part .crk { fill: none; stroke: none; }
+.vedmak .vd-part b { font-family: var(--vd-font-head); font-weight: 400; font-size: .95rem; line-height: 1; }
+.vedmak .vd-part.ok .shell { fill: url(#vd-metal-ok); stroke: #050607; }
+.vedmak .vd-part.worn .shell { fill: url(#vd-metal-worn); stroke: #050607; }
+.vedmak .vd-part.broken .shell { fill: url(#vd-metal-broken); stroke: #1a0603; }
+.vedmak .vd-part.none .shell { fill: #17181b; stroke: #34363c; }
+.vedmak .vd-part.ok :is(.ink), .vedmak .vd-part.worn :is(.ink) { stroke: #050607; }
+.vedmak .vd-part.ok .slit, .vedmak .vd-part.worn .slit { fill: #050607; }
+.vedmak .vd-part.broken .ink { stroke: #1a0603; }
+.vedmak .vd-part.broken .slit { fill: #1a0603; }
+.vedmak .vd-part.none .ink { stroke: #2a2c31; }
+.vedmak .vd-part.none .slit, .vedmak .vd-part.none .rv { fill: #2a2c31; }
+.vedmak .vd-part.ok .hi { stroke: rgba(255,255,255,.55); }
+.vedmak .vd-part.worn .hi { stroke: rgba(255,255,255,.28); }
+.vedmak .vd-part.broken .hi { stroke: rgba(255,220,200,.45); }
+.vedmak .vd-part.ok .rv { fill: #f1ece0; }
+.vedmak .vd-part.worn .rv { fill: #c9c3b6; }
+.vedmak .vd-part.broken .rv { fill: #ffd9cf; }
+.vedmak .vd-part.worn .scr { stroke: rgba(255,255,255,.4); stroke-width: .6; }
+.vedmak .vd-part.broken .crk { stroke: #140402; stroke-width: 1; }
+.vedmak .vd-part.ok b { color: #f1ece0; }
+.vedmak .vd-part.worn b { color: #a29d92; }
+.vedmak .vd-part.broken b { color: #e0604a; }
+.vedmak .vd-part.none b { color: #3a3c42; }
+
+/* Снаряжение ячейками */
+.vedmak .gear-rack .gear-cat {
+  display: block; margin: .55rem 0 .15rem; font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--vd-ash);
+  text-shadow: 0 1px 0 rgba(0,0,0,.9);
+}
+.vedmak .gear-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(106px, 1fr)); gap: .25rem; margin-bottom: .35rem; }
+.vedmak .gear-tile {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .5rem .35rem .55rem;
+  border: 1px solid transparent; border-radius: 2px;
+}
+.vedmak .gear-tile:hover, .vedmak .gear-tile:focus-within { background: rgba(255,245,225,.035); border-color: rgba(0,0,0,.5); }
+.vedmak .gear-tile .item-frame { width: 70px; height: 70px; }
+.vedmak .gear-tile .item-frame img { width: 58px; height: 58px; }
+.vedmak .gear-tile .qty {
+  position: absolute; right: -7px; bottom: -7px; z-index: 2; width: 2.2rem; height: 1.3rem; padding: 0; text-align: center;
+  font-family: var(--vd-font-head); font-size: .9rem; color: #f1ece0;
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.3)); border: 1px solid var(--vd-edge); border-radius: .65rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,.8);
+}
+.vedmak .gear-tile .tile-name {
+  max-width: 100%; text-align: center; font-size: .78rem; line-height: 1.25; color: #ece7db; text-shadow: 0 1px 0 rgba(0,0,0,.8);
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 1.95rem;
+}
+.vedmak .gear-tile .tile-meta { font-size: .66rem; color: #6c685f; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .gear-tile .tile-tools { display: flex; gap: 3px; opacity: 0; transition: opacity .12s; }
+.vedmak .gear-tile:hover .tile-tools, .vedmak .gear-tile:focus-within .tile-tools { opacity: 1; }
+.vedmak .gear-tile .tile-tools a { width: 26px; height: 24px; font-size: .7rem; }

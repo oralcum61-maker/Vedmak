@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Растянуть по высоте. Точка — (16, 16). -->
+  <defs>
+    <linearGradient id="s" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f6f2ea"/>
+      <stop offset=".55" stop-color="#a9a49a"/>
+      <stop offset="1" stop-color="#4a4845"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 2.5 L22.4 9 H18.2 V23 H22.4 L16 29.5 L9.6 23 H13.8 V9 H9.6 Z"
+        fill="url(#s)" stroke="#050607" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke"/>
+  <path d="M14.8 10 V22" stroke="#ffffff" stroke-opacity=".6" stroke-width=".7" stroke-linecap="round"/>
+</svg>

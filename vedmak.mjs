@@ -99,10 +99,10 @@ Hooks.once("init", () => {
   game.settings.register(SYSTEM_ID, "combatHudCollapsed", {
     scope: "client", config: false, type: Boolean, default: false
   });
-  // Курсор-клинок (assets/cursors): в окнах — правилами styles/vedmak.css, на сцене — стилями указателя холста
+  // Курсоры системы (assets/cursors): в окнах — правилами styles/vedmak.css, на сцене — стилями указателя холста
   game.settings.register(SYSTEM_ID, "themedCursor", {
-    name: "Курсор системы",
-    hint: "Указатель — клинок вороненой стали, над тем, что можно нажать, — раскалённый золотом. Выключите, чтобы вернуть обычный курсор.",
+    name: "Курсоры системы",
+    hint: "Свои курсоры на все случаи: стальной клинок, кромка киновари над тем, что нажимается, латная перчатка для перетаскивания, прицел, песочные часы, курсоры размеров. Выключите, чтобы вернуть обычные.",
     scope: "client", config: true, type: Boolean, default: true,
     onChange: value => applyCursor(!!value)
   });
@@ -224,24 +224,46 @@ Hooks.once("ready", () => {
 /* ------------------------------- Курсор ------------------------------- */
 
 /**
- * Курсор-клинок: класс на body подменяет переменные курсоров Foundry (--cursor-default, --cursor-pointer
- * и их «-down»), а холст сцены берёт курсоры из этих же переменных — так сделано и в ядре для «-down».
- * Прямые картинки в стилях указателя холста не нужны: с ними курсор при нажатии слетал на системный.
+ * Курсоры системы (assets/cursors, 32 × 32): переменная → файл, точка клика, системный запасной.
+ * Первые восемь — переменные самого Foundry v14 (CONFIG.cursors): ими пользуются правила ядра и холст сцены,
+ * «-down» — пока кнопка мыши зажата. Остальные — свои переменные под курсоры, которые ядро задаёт словом
+ * (угол окна, «нельзя», ожидание): их подхватывают правила «Курсоры» в styles/vedmak.css и стили холста ниже.
+ */
+const CURSORS = {
+  default: ["default", 2, 2, "default"], "default-down": ["default-down", 2, 2, "default"],
+  pointer: ["pointer", 2, 2, "pointer"], "pointer-down": ["pointer-down", 2, 2, "pointer"],
+  grab: ["grab", 16, 13, "grab"], "grab-down": ["grabbing", 16, 13, "grabbing"],
+  text: ["text", 16, 16, "text"], "text-down": ["text", 16, 16, "text"],
+  help: ["help", 2, 2, "help"], "not-allowed": ["not-allowed", 2, 2, "not-allowed"],
+  progress: ["progress", 2, 2, "progress"], wait: ["wait", 16, 16, "wait"],
+  crosshair: ["crosshair", 16, 16, "crosshair"], move: ["move", 16, 16, "move"], "zoom-in": ["zoom-in", 13, 13, "zoom-in"],
+  "ew-resize": ["ew-resize", 16, 16, "ew-resize"], "ns-resize": ["ns-resize", 16, 16, "ns-resize"],
+  "nwse-resize": ["nwse-resize", 16, 16, "nwse-resize"], "nesw-resize": ["nesw-resize", 16, 16, "nesw-resize"]
+};
+
+/**
+ * Курсоры системы: класс на body подменяет переменные курсоров Foundry, а холст сцены берёт курсоры
+ * из этих же переменных — так сделано и в ядре для «-down». Прямые картинки в стилях указателя холста
+ * не нужны: с ними курсор при нажатии слетал на системный.
  */
 function applyCursor(on) {
   document.body.classList.toggle("vedmak-cursor", on);
   // Полный путь, а не относительный из CSS: в стиле холста (PIXI ставит его прямо на элемент) url() в переменной
   // разрешается от адреса страницы, и относительный путь вёл в никуда — над сценой курсор становился системным
-  const url = name => `url("${foundry.utils.getRoute(`systems/vedmak/assets/cursors/${name}.svg`)}") 2 2`;
-  for (const [key, file, fallback] of [["default", "arrow", "default"], ["default-down", "arrow", "default"],
-    ["pointer", "pointer", "pointer"], ["pointer-down", "pointer", "pointer"]]) {
-    if (on) document.body.style.setProperty(`--cursor-${key}`, `${url(file)}, ${fallback}`);
+  const url = (file, x, y) => `url("${foundry.utils.getRoute(`systems/vedmak/assets/cursors/${file}.svg`)}") ${x} ${y}`;
+  for (const [key, [file, x, y, fallback]] of Object.entries(CURSORS)) {
+    if (on) document.body.style.setProperty(`--cursor-${key}`, `${url(file, x, y)}, ${fallback}`);
     else document.body.style.removeProperty(`--cursor-${key}`);
   }
   const styles = canvas?.app?.renderer?.events?.cursorStyles;
   if (!styles) return;
-  styles.default = "var(--cursor-default)";
-  styles.pointer = "var(--cursor-pointer)";
+  // Ядро само заводит стили холста для своих восьми; режимы, которые холст ставит словом (линейка, сдвиг,
+  // «нельзя»), направляем на свои переменные — без них над сценой курсор становился системным
+  for (const key of Object.keys(CURSORS)) {
+    const mode = key === "grab-down" ? "grabbing" : key;
+    if (on) styles[mode] = `var(--cursor-${key})`;
+    else if (!(key in CONFIG.cursors)) delete styles[mode];
+  }
 }
 Hooks.on("canvasReady", () => applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor")));
 

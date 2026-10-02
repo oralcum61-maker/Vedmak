@@ -40,6 +40,69 @@ const VIEW_ACTIONS = new Set(["tab", "itemEdit", "effectEdit", "itemPost", "abil
 const INERT_ACTIONS = new Set(["rollSkill", "rollStat", "rollDefining", "rollAbility", "attack", "verbalAction",
   "stunSave", "deathSave", "toggleStatus", "itemToggleEquip", "effectToggle", "toggleMemorized", "editImage"]);
 
+/* ----------------------- Вкладка «Снаряжение»: строки ----------------------- */
+
+/** Насечки шкалы: по одной на единицу; длинная шкала (больше 20) — просто доля полосы. */
+function notches(value, max) {
+  if (!(max > 0)) return { segs: [], pct: 0, long: false };
+  const long = max > 20;
+  return {
+    long, pct: Math.max(0, Math.min(100, Math.round((value / max) * 100))),
+    segs: long ? [] : Array.from({ length: max }, (_, i) => ({ on: i < value }))
+  };
+}
+
+/** Оружие: символы урона и хвата, насечки надёжности, ленты состояния. */
+function weaponRow(item) {
+  const s = item.system;
+  const types = new Set(s.damageTypes ?? []);
+  const rel = s.reliability ?? { value: 0, max: 0 };
+  return {
+    id: item.id, img: item.img, name: item.name, system: s,
+    equipped: !!s.equipped, broken: rel.max > 0 && rel.value <= 0, relic: !!s.relic,
+    oil: s.activeOil ? s.oil.name : "", runes: s.runes ?? [], crossbowMods: s.crossbowMods ?? [],
+    skillLabel: SKILLS[s.skill]?.label ?? "", silver: s.isSilver ? `серебро ${s.silverDamage}` : "",
+    acc: s.accuracy > 0 ? `+${s.accuracy}` : `${s.accuracy}`,
+    slashing: types.has("slashing"), piercing: types.has("piercing"), bludgeoning: types.has("bludgeoning"), elemental: types.has("elemental"),
+    typesLabel: [...types].map(t => CONFIG.VEDMAK.DAMAGE_TYPES[t]?.label ?? t).join(", ") || "—",
+    twoHanded: (s.hands ?? 1) >= 2, noHands: (s.hands ?? 1) === 0,
+    rel: { value: rel.value, max: rel.max, ...notches(rel.value, rel.max) },
+    range: s.range || "—", weight: s.weight ?? 0, goLabel: s.isRanged ? "Выстрел" : "Атака"
+  };
+}
+
+/** Части тела по таблице попаданий: символ части, в левой половине тела — зеркально. */
+const ARMOR_PARTS = [
+  { key: "head", kind: "head" }, { key: "torso", kind: "torso" },
+  { key: "rightArm", kind: "arm" }, { key: "leftArm", kind: "arm", flip: true },
+  { key: "rightLeg", kind: "leg" }, { key: "leftLeg", kind: "leg", flip: true }
+];
+
+/** Броня: символы закрытых частей с прочностью (цела, изношена, разбита, не закрыта), класс щитками. */
+function armorRow(item) {
+  const s = item.system;
+  const LOC = CONFIG.VEDMAK.ARMOR_LOCATIONS ?? {};
+  const parts = ARMOR_PARTS.map(p => {
+    const sp = s.sp?.[p.key] ?? { value: 0, max: 0 };
+    const covered = sp.max > 0;
+    const state = !covered ? "none" : sp.value <= 0 ? "broken" : sp.value <= sp.max / 2 ? "worn" : "ok";
+    return {
+      ...p, state, covered, value: sp.value, max: sp.max,
+      tip: covered ? `${LOC[p.key] ?? p.key}: ${sp.value} / ${sp.max}` : `${LOC[p.key] ?? p.key}: не закрыта`
+    };
+  });
+  const cls = { light: 1, medium: 2, heavy: 3 }[s.weightClass] ?? 1;
+  const rel = s.reliability ?? { value: 0, max: 0 };
+  return {
+    id: item.id, img: item.img, name: item.name, system: s,
+    equipped: !!s.equipped, relic: !!s.relic, enhancements: s.enhancements ?? [],
+    isShield: !!s.isShield, parts, pips: [1, 2, 3].map(i => ({ on: i <= cls })),
+    classLabel: CONFIG.VEDMAK.ARMOR_WEIGHT_CLASS?.[s.weightClass] ?? "",
+    rel: { value: rel.value, max: rel.max, ...notches(rel.value, rel.max) },
+    encumbrance: s.encumbrance ?? 0, weight: s.weight ?? 0
+  };
+}
+
 export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static DEFAULT_OPTIONS = {
@@ -332,6 +395,11 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       gear: byType("gear"),
       spells: byType("spell")
     };
+
+    // Вкладка «Снаряжение»: строки оружия и брони символами вместо букв (тип урона, хват, насечки надёжности,
+    // части тела с прочностью) — шаблону остаётся только выводить
+    context.weaponRows = context.items.weapons.map(weaponRow);
+    context.armorRows = context.items.armor.map(armorRow);
 
     // Снаряжение по категориям книги; пустые категории не показываем
     const CATS = CONFIG.VEDMAK.GEAR_CATEGORIES ?? {};

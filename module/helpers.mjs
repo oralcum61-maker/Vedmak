@@ -73,6 +73,7 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/chat/alchemy.hbs",
   "systems/vedmak/templates/actor/parts/vitals.hbs",
   "systems/vedmak/templates/actor/parts/vitals-rail.hbs",
+  "systems/vedmak/templates/actor/parts/armor-part.hbs",
   "systems/vedmak/templates/hud/combat-hud.hbs",
   "systems/vedmak/templates/actor/tab-stats.hbs",
   "systems/vedmak/templates/actor/parts/effects.hbs",

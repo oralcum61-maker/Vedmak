@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Мастер создания — параметры</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--tb:url(/_blob/b037b57d4e5b684c7960b22211c4d384);--ts:url(/_blob/e91804a6889c91a09ad16182ed1514a8)}
+button{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.rail{background-color:#121316;background-image:var(--tb),radial-gradient(140% 50% at 50% 0%,rgba(255,240,215,.06),transparent 60%);background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.btn:disabled{opacity:.35}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.wp{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 10px 7px 0;text-decoration:none;border-radius:2px}
+.node{position:relative;z-index:1;flex-shrink:0;width:26px;height:26px;display:grid;place-items:center;margin-top:1px}
+.node i{display:block;width:14px;height:14px;transform:rotate(45deg)}
+.sw{height:32px;padding:0 13px;font-family:Forum,serif;font-size:15px;color:#8e897e;background:transparent;border:1px solid transparent;border-radius:2px}
+.sw.on{color:#f3eee2;background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12)}
+.step{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:17px;line-height:1}
+.st{display:flex;flex-direction:column;align-items:center;gap:2px}
+.drow{display:flex;align-items:baseline;gap:8px;font-size:12.5px;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.55);box-shadow:0 1px 0 rgba(255,240,215,.04)}
+</style>
+</helmet>
+<div style="width: 1200px; height: 860px; box-sizing: border-box; display: flex; flex-direction: column; background: #0b0c0e; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums; border: 1px solid #040405">
+  <header class="rail" style="height: 34px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 12px; border-bottom: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.08)">
+    <span style="font-family: Forum, serif; font-size: 15px; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95); flex-grow: 1">Мастер создания персонажа: Мирра из Вызимы</span>
+    <span aria-hidden="true" style="color: #8e897e">×</span>
+  </header>
+
+  <div style="flex-grow: 1; min-height: 0; display: flex">
+    <nav class="rail" aria-label="Шаги мастера" style="width: 214px; flex-shrink: 0; box-sizing: border-box; padding: 16px 12px 16px 16px; display: flex; flex-direction: column; border-right: 1px solid #060708; box-shadow: 8px 0 22px -8px rgba(0,0,0,.9); position: relative; z-index: 1">
+      <span class="cap" style="margin-bottom: 10px">Тракт · 4 из 9</span>
+      <div style="position: relative; display: flex; flex-direction: column">
+        <span style="position: absolute; left: 12px; top: 14px; bottom: 14px; border-left: 1px solid #050607; box-shadow: 1px 0 0 rgba(255,240,215,.07)"></span>
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="9">
+          <a href="#" class="wp">
+            <span class="node"><i style="background: {{s.nodeBg}}; box-shadow: {{s.nodeSh}}"></i></span>
+            <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+              <span style="font-family: Forum, serif; font-size: 17px; line-height: 1.15; color: {{s.color}}; text-shadow: 0 1px 0 rgba(0,0,0,.9)">{{s.label}}</span>
+              <span style="font-size: 11px; color: {{s.noteColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.note}}</span>
+            </span>
+          </a>
+        </sc-for>
+      </div>
+    </nav>
+
+    <main class="mat" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column">
+      <div style="flex-grow: 1; min-height: 0; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: flex-end; gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span class="cap">Шаг 5 · чем силён</span>
+            <h1 style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 30px; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Параметры</h1>
+          </div>
+          <div class="groove" style="flex-grow: 1; margin-bottom: 8px"></div>
+        </div>
+
+        <section class="plate" style="padding: 12px 14px; display: flex; align-items: center; gap: 18px">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span class="cap">Способ</span>
+            <div class="well" style="display: inline-flex; gap: 2px; padding: 2px">
+              <button type="button" class="sw on">Распределить очки</button>
+              <button type="button" class="sw">Бросить 9 × d10</button>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span class="cap">Уровень игры</span>
+            <div class="well" style="display: inline-flex; gap: 2px; padding: 2px">
+              <sc-for list="{{levels}}" as="l" hint-placeholder-count="4"><button type="button" class="sw {{l.cls}}" onClick="{{l.pick}}" title="{{l.points}} очков">{{l.label}}</button></sc-for>
+            </div>
+          </div>
+          <span style="flex-grow: 1"></span>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+            <span class="cap">Осталось очков</span>
+            <span style="display: flex; align-items: baseline; gap: 6px"><span class="metal" style="font-family: Forum, serif; font-size: 40px; line-height: 1; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95)) {{leftGlow}}">{{left}}</span><span style="font-size: 13px; color: #6c685f">из {{budget}}</span></span>
+          </div>
+        </section>
+        <div class="well" style="height: 8px; border-radius: 1px; position: relative; overflow: hidden; margin-top: -6px">
+          <div style="position: absolute; left: 0; top: 0; bottom: 0; width: {{spentPct}}; background: {{barColor}} linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 50%, rgba(0,0,0,.3))"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="9">
+            <section class="plate" style="padding: 10px 12px; display: flex; align-items: center; gap: 12px">
+              <div class="stamp" style="width: 56px; height: 56px; flex-shrink: 0"><span class="metal" style="font-family: Forum, serif; font-size: 30px; line-height: 1">{{r.final}}</span></div>
+              <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+                <span style="font-family: Forum, serif; font-size: 18px; line-height: 1; color: #f1ece0">{{r.name}}</span>
+                <span style="font-size: 11px; color: #8e897e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.hint}}</span>
+                <span style="display: flex; align-items: center; gap: 4px; margin-top: 3px">
+                  <button type="button" class="btn step" onClick="{{r.minus}}" disabled="{{r.minOff}}" aria-label="Меньше: {{r.name}}">−</button>
+                  <span class="well" style="width: 34px; height: 30px; display: grid; place-items: center; font-family: Forum, serif; font-size: 18px; color: #e2ddd0">{{r.base}}</span>
+                  <button type="button" class="btn step" onClick="{{r.plus}}" disabled="{{r.maxOff}}" aria-label="Больше: {{r.name}}">+</button>
+                  <span style="font-size: 10.5px; color: #6c685f; margin-left: 4px">{{r.mods}}</span>
+                </span>
+              </div>
+            </section>
+          </sc-for>
+        </div>
+        <span style="font-size: 11.5px; color: #6c685f">Значение — от 1 до 10; расовые черты и мутации могут это превысить (стр. 47). Удача тратится на любой бросок.</span>
+      </div>
+
+      <footer class="rail" style="height: 58px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-top: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.07)">
+        <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: {{statusColor}}">{{status}}</span>
+        <span style="flex-grow: 1"></span>
+        <button type="button" class="btn" style="height: 38px; padding: 0 16px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase">Назад</button>
+        <button type="button" class="enamel" style="height: 38px; padding: 0 20px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase">Далее · Навыки</button>
+      </footer>
+    </main>
+
+    <aside class="rail" aria-label="Герой" style="width: 256px; flex-shrink: 0; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; border-left: 1px solid #060708; box-shadow: -8px 0 22px -8px rgba(0,0,0,.9)">
+      <span class="cap">Герой</span>
+      <div class="well" style="position: relative; height: 150px; overflow: hidden">
+        <img src="/_blob/37e56d783807304e86b687e121e3341a" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block">
+        <span style="position: absolute; inset: 5px; border: 1px solid rgba(226,221,208,.2); box-shadow: inset 0 0 30px rgba(0,0,0,.7); pointer-events: none"></span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 3px">
+        <span style="font-family: Forum, serif; font-size: 24px; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Мирра из Вызимы</span>
+        <span style="font-size: 12px; color: #a29d92">Человек · Маг</span>
+      </div>
+      <div class="well" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 8px">
+        <sc-for list="{{mini}}" as="t" hint-placeholder-count="9">
+          <span class="st"><span class="stamp" style="width: 38px; height: 32px"><span class="metal" style="font-family: Forum, serif; font-size: 17px; line-height: 1">{{t.v}}</span></span><span class="cap" style="font-size: 8.5px; letter-spacing: .1em">{{t.k}}</span></span>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <span class="cap" style="margin-bottom: 4px">Получится</span>
+        <sc-for list="{{derived}}" as="d" hint-placeholder-count="6">
+          <div class="drow"><span style="color: #a29d92">{{d.k}}</span><span style="flex-grow: 1"></span><span style="font-family: Forum, serif; font-size: 16px; color: #f1ece0">{{d.v}}</span></div>
+        </sc-for>
+      </div>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":860}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { level: 'average', s: { int: 9, ref: 6, dex: 5, body: 5, spd: 5, emp: 7, cra: 5, will: 9, luck: 5 } };
+  }
+  renderVals() {
+    const L = { average: ['Середнячки', 60], skilled: ['Опытные', 70], heroic: ['Герои', 75], legendary: ['Легенды', 80] };
+    const S = [
+      ['int', 'Интеллект', 'Инт', 'знания, дедукция, магия'], ['ref', 'Реакция', 'Реа', 'ближний бой, уклонение'], ['dex', 'Ловкость', 'Лвк', 'стрельба, атлетика'],
+      ['body', 'Телосложение', 'Тел', 'ПЗ, сила, удар'], ['spd', 'Скорость', 'Скор', 'бег и прыжок'], ['emp', 'Эмпатия', 'Эмп', 'убеждение, обаяние'],
+      ['cra', 'Ремесло', 'Рем', 'изготовление, алхимия'], ['will', 'Воля', 'Воля', 'ПЗ, Вын, сотворение'], ['luck', 'Удача', 'Удача', 'тратится на броски']
+    ];
+    const { level, s } = this.state;
+    const budget = L[level][1];
+    const spent = Object.values(s).reduce((a, b) => a + b, 0);
+    const left = budget - spent;
+    const set = (k, v) => this.setState({ s: { ...s, [k]: v } });
+    const rows = S.map(([k, name, abbr, hint]) => ({
+      name, hint, base: s[k], final: s[k], mods: 'раса 0 · путь 0',
+      minOff: s[k] <= 1, maxOff: s[k] >= 10 || left <= 0,
+      minus: () => set(k, Math.max(1, s[k] - 1)), plus: () => { if (left > 0) set(k, Math.min(10, s[k] + 1)); }
+    }));
+    const levels = Object.entries(L).map(([k, [label, points]]) => ({ label, points, cls: k === level ? 'on' : '', pick: () => this.setState({ level: k }) }));
+    const base = Math.floor((s.body + s.will) / 2);
+    const derived = [
+      { k: 'Пункты здоровья', v: base * 5 }, { k: 'Выносливость', v: base * 5 }, { k: 'Устойчивость', v: Math.min(10, base) },
+      { k: 'Отдых', v: base }, { k: 'Бег', v: s.spd * 3 + ' м' }, { k: 'Энергия', v: 5 }
+    ];
+    const mini = S.map(([k, , abbr]) => ({ k: abbr, v: s[k] }));
+    const STEP = [
+      ['Раса', 'Человек', 'done'], ['Происхождение', 'Север · Темерия', 'done'], ['Жизненный путь', 'брошен · 2 события', 'done'], ['Профессия', 'Маг', 'done'],
+      ['Параметры', left === 0 ? 'всё распределено' : `осталось ${left}`, 'cur'], ['Навыки', '—', ''], ['Магия', '—', ''], ['Снаряжение', '—', ''], ['Итог', '—', '']
+    ];
+    const steps = STEP.map(([label, note, st]) => ({
+      label, note,
+      nodeBg: st === 'cur' ? 'linear-gradient(135deg, #ff9a7e, #b8432c)' : st === 'done' ? 'linear-gradient(135deg, #f6f2ea, #8e897e)' : '#1c1d21',
+      nodeSh: st === 'cur' ? '0 0 0 1px #2a0c06, 0 0 10px rgba(224,96,74,.6)' : st === 'done' ? '0 0 0 1px #050607, 0 2px 4px rgba(0,0,0,.8)' : '0 0 0 1px #050607, inset 0 1px 2px rgba(0,0,0,.9)',
+      color: st === 'cur' ? '#f3eee2' : st === 'done' ? '#d6d0c2' : '#8e897e',
+      noteColor: st === 'cur' ? '#e0937f' : st === 'done' ? '#a29d92' : '#55585f'
+    }));
+    return {
+      rows, levels, budget, left, steps, mini, derived,
+      spentPct: Math.min(100, Math.round(spent / budget * 100)) + '%',
+      barColor: left < 0 ? '#b8432c' : left === 0 ? '#7f9a6c' : '#b9b3a6',
+      leftGlow: left === 0 ? 'drop-shadow(0 0 6px rgba(127,154,108,.5))' : '',
+      status: left === 0 ? '✓ Все очки распределены' : left > 0 ? `Распределено ${spent} очков из ${budget}` : `Перебор на ${-left}`,
+      statusColor: left === 0 ? '#b4c79c' : '#e0c98f'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Ремесло — чертежи и формулы</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--ts:url(/_blob/e91804a6889c91a09ad16182ed1514a8)}
+a{color:#e2ddd0}a:hover{color:#fffaf0}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;background-image:radial-gradient(circle at 50% 42%,rgba(255,245,225,.09),transparent 66%);border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08)}
+.frame::after{content:"";position:absolute;inset:4px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.ibtn{width:30px;height:30px;padding:0;display:grid;place-items:center;color:#a29d92}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.enamel:hover{filter:brightness(1.1)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.sw{display:flex;align-items:center;gap:8px;height:34px;padding:0 13px;font-family:Forum,serif;font-size:16px;color:#8e897e;text-decoration:none;border:1px solid transparent;border-radius:2px;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.sw b{min-width:20px;height:18px;padding:0 5px;box-sizing:border-box;display:grid;place-items:center;font-family:Forum,serif;font-weight:400;font-size:13px;color:#a29d92;background:#08090a;border:1px solid #040405;border-radius:9px;box-shadow:inset 0 1px 2px rgba(0,0,0,.9)}
+.sw-on{color:#f3eee2;background-color:#2a2c31;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.22));border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.flt{height:28px;padding:0 11px;font-size:11.5px;color:#a29d92;background:transparent;border:1px solid transparent;border-radius:2px}
+.flt-on{color:#f3eee2;background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12)}
+.sig{position:relative;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:Forum,serif;font-size:16px;line-height:1;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.85);border:1px solid #050607;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.18),inset 0 -3px 6px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.7)}
+.need{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 9px 0 10px;font-size:12px;border-radius:2px;white-space:nowrap}
+.need b{font-family:Forum,serif;font-weight:400;font-size:15px}
+.need-ok{color:#e2ddd0;background:#1c1d21;border:1px solid #060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.08)}
+.need-no{color:#f0b3a5;background:#2a1512;border:1px solid #5a2019;box-shadow:inset 0 0 0 1px rgba(184,67,44,.25)}
+.mark{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:700;line-height:1}
+</style>
+</helmet>
+<div class="mat" style="width: 820px; height: 1140px; box-sizing: border-box; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums">
+  <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+    <defs>
+      <linearGradient id="vdOk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f2ea"></stop><stop offset=".45" stop-color="#b3ada2"></stop><stop offset=".7" stop-color="#74706a"></stop><stop offset="1" stop-color="#3e3d3a"></stop></linearGradient>
+    </defs>
+  </svg>
+
+  <div style="display: flex; align-items: center; gap: 10px">
+    <nav class="well" style="display: inline-flex; gap: 3px; padding: 3px" aria-label="Разделы ремесла">
+      <a href="#" class="sw">Алхимия <b>8</b></a>
+      <a href="#" class="sw sw-on">Чертежи и формулы <b>4</b></a>
+      <a href="#" class="sw">Компоненты <b>15</b></a>
+      <a href="#" class="sw">Усиления <b>4</b></a>
+    </nav>
+    <span style="flex-grow: 1"></span>
+    <div class="well" style="display: inline-flex; gap: 2px; padding: 2px">
+      <button type="button" class="flt flt-on">Все</button>
+      <button type="button" class="flt">Готово к работе · 2</button>
+      <button type="button" class="flt">Запомненные</button>
+    </div>
+  </div>
+
+  <sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+    <section class="plate" style="padding: 10px 14px 4px; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2px">
+        <span class="gem"></span>
+        <h3 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 13px; letter-spacing: .24em; text-transform: uppercase">{{g.label}}</h3>
+        <div class="groove" style="flex-grow: 1"></div>
+        <span style="font-size: 11.5px; color: #6c685f">{{g.note}}</span>
+      </div>
+      <sc-for list="{{g.items}}" as="r" hint-placeholder-count="2">
+        <div style="display: flex; gap: 14px; padding: 12px 0; border-bottom: {{r.edge}}; box-shadow: {{r.shine}}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0">
+            <div class="frame" style="width: 72px; height: 72px"><img src="{{r.img}}" alt="" style="width: 60px; height: 60px; object-fit: contain"></div>
+            <span title="Уровень: {{r.level}}" style="display: flex; gap: 4px">
+              <sc-for list="{{r.pips}}" as="p" hint-placeholder-count="4"><span style="width: 7px; height: 7px; transform: rotate(45deg); background: {{p.bg}}; box-shadow: 0 0 0 1px #050607"></span></sc-for>
+            </span>
+          </div>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; align-items: flex-start; gap: 10px">
+              <div style="min-width: 0; display: flex; flex-direction: column; gap: 3px">
+                <a href="#" style="font-family: Forum, serif; font-size: 19px; line-height: 1.1; color: #f1ece0; text-decoration: none; text-shadow: 0 1px 0 rgba(0,0,0,.9)">{{r.name}}</a>
+                <span style="font-size: 11.5px; color: #8e897e">{{r.kind}} · {{r.level}} · <span style="display: inline-flex; align-items: center; gap: 3px; vertical-align: -2px"><svg width="11" height="13" viewBox="0 0 20 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 2h12M4 20h12M5.5 2c0 5 4.5 6 4.5 9s-4.5 4-4.5 9M14.5 2c0 5-4.5 6-4.5 9s4.5 4 4.5 9"/></svg>{{r.time}}</span></span>
+              </div>
+              <span style="flex-grow: 1"></span>
+              <button type="button" title="{{r.memoTitle}}" aria-label="{{r.memoTitle}}" class="btn ibtn" style="width: 32px; height: 32px; color: {{r.memoColor}}">
+                <svg width="16" height="18" viewBox="0 0 20 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 1.8l7 4v8.4l-7 4-7-4V5.8z"/><path d="M10 6.4v7.2M6.6 8.4l6.8 3.2M13.4 8.4l-6.8 3.2" stroke-width="1.2"/></svg>
+              </button>
+              <div class="stamp" style="width: 56px; height: 52px; flex-shrink: 0" title="Сложность">
+                <span class="cap" style="font-size: 8.5px; color: #a29d92">СЛ</span>
+                <span class="metal" style="font-family: Forum, serif; font-size: 24px; line-height: 1">{{r.dc}}</span>
+              </div>
+            </div>
+            <div class="well" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 7px 8px">
+              <sc-for list="{{r.comps}}" as="c" hint-placeholder-count="3">
+                <span class="need {{c.cls}}" title="{{c.title}}">
+                  <span class="mark" style="background: {{c.markBg}}; color: {{c.markFg}}">{{c.mark}}</span>{{c.name}} <b>{{c.have}}</b><span style="color: #6c685f">/ {{c.need}}</span>
+                </span>
+              </sc-for>
+              <sc-for list="{{r.subs}}" as="s" hint-placeholder-count="2">
+                <span class="need {{s.cls}}" title="{{s.title}}" style="padding-left: 3px">
+                  <img src="{{s.img}}" alt="" style="width: 24px; height: 24px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.85))">{{s.label}} <b>{{s.have}}</b><span style="color: #6c685f">/ {{s.need}}</span>
+                </span>
+              </sc-for>
+              <span style="flex-grow: 1"></span>
+              <span style="display: flex; gap: 4px">
+                <sc-for list="{{r.tools}}" as="t" hint-placeholder-count="1">
+                  <span title="{{t.title}}" style="width: 32px; height: 30px; display: grid; place-items: center; border-radius: 2px; background: {{t.bg}}; border: 1px solid {{t.border}}">
+                    <sc-if value="{{t.alch}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 24 24" stroke-linejoin="miter"><path d="M9 2.4h6v1.8h-1v5.1l5.4 8.8c1 1.6-.2 3.7-2 3.7H6.6c-1.8 0-3-2.1-2-3.7L10 9.3V4.2H9Z" fill="{{t.fill}}" stroke="{{t.edge}}" stroke-width="1.3"></path><path d="M6.4 15.6h11.2" stroke="{{t.edge}}" stroke-width=".9"></path></svg></sc-if>
+                    <sc-if value="{{t.craft}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 24 24" stroke-linejoin="miter"><path d="M3 6.6L8.6 2l3.2 3.2-1.7 1.7 10.6 10.4-2.5 2.5L7.8 9.4 6.1 11.1Z" fill="{{t.fill}}" stroke="{{t.edge}}" stroke-width="1.3"></path><path d="M14.6 3.2l6.2 6.2-2 2-2.2-2.2-1.2 1.2-1.6-1.6 1.2-1.2-2.4-2.4Z" fill="{{t.fill}}" stroke="{{t.edge}}" stroke-width="1.1"></path></svg></sc-if>
+                    <sc-if value="{{t.forge}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 24 24" stroke-linejoin="miter"><path d="M2.6 6.2h14c0 2.6 2.2 3.8 4.8 4v1.6h-5.2l-1.6 2.6v2.8h2.6v3.2H6.8v-3.2h2.6v-2.8L7.8 11.8C4.8 11.8 2.6 9.4 2.6 6.2Z" fill="{{t.fill}}" stroke="{{t.edge}}" stroke-width="1.3"></path><path d="M3.4 8.4h12.8M9.4 14.4h4.8" stroke="{{t.edge}}" stroke-width=".9"></path></svg></sc-if>
+                  </span>
+                </sc-for>
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span style="font-size: 12px; color: {{r.stateColor}}">{{r.state}}</span>
+              <span style="flex-grow: 1"></span>
+              <sc-if value="{{r.buy}}" hint-placeholder-val="{{false}}"><button type="button" class="btn" style="height: 30px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase">{{r.buyLabel}}</button></sc-if>
+              <sc-if value="{{r.ready}}" hint-placeholder-val="{{true}}"><button type="button" class="enamel" style="height: 32px; padding: 0 16px; font-size: 11.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase">Изготовить</button></sc-if>
+              <sc-if value="{{r.notReady}}" hint-placeholder-val="{{false}}"><button type="button" class="btn" style="height: 32px; padding: 0 14px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #a29d92">Изготовить</button></sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":1140}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const LEVELS = { 'Новичок': 1, 'Подмастерье': 2, 'Мастер': 3, 'Великий мастер': 4 };
+    const SUB = { 'Купорос': ['2d1bdee502dfb3c7676d7711ac6269fe', 4], 'Ребис': ['af34d2df79ef0ab1a5b9be14a8706b83', 3], 'Эфир': ['4478b39f82f690f862cfb83e01a3c8c0', 2],
+      'Квебрит': ['0f68862fbe9dc1a448b42d1b256c6143', 1], 'Гидраген': ['5d0e6f687fd2ad52b2822e81439dcf46', 1], 'Киноварь': ['1f49b32969ddebb106243b55fbeaedd9', 2],
+      'Солнце': ['3c5b3ce5891d39fa3404bd3bbeaa8ce4', 2], 'Аер': ['cb5468d3805410744ded3d2836d0073c', 1], 'Фульгор': ['c3a53ec3bc1f26f4b6fcad59f6945861', 1] };
+    const tool = (kind, has) => ({
+      alch: kind === 'alch', craft: kind === 'craft', forge: kind === 'forge',
+      title: { alch: 'Инструменты алхимика', craft: 'Инструменты ремесленника', forge: 'Кузница' }[kind] + (has ? ' — есть' : ' — нет'),
+      fill: has ? 'url(#vdOk)' : '#17181b', edge: has ? '#050607' : '#5a2019',
+      bg: has ? '#1c1d21' : '#2a1512', border: has ? '#060708' : '#5a2019'
+    });
+    const comp = (name, have, need) => {
+      const ok = have >= need;
+      return { name, have, need, cls: ok ? 'need-ok' : 'need-no', mark: ok ? '✓' : '!', markBg: ok ? '#d9d3c6' : '#b8432c', markFg: ok ? '#121316' : '#fff3ea',
+        title: ok ? `${name}: хватает` : `${name}: не хватает ${need - have}` };
+    };
+    const sub = (label, need) => {
+      const [id, have] = SUB[label];
+      const ok = have >= need;
+      return { label, img: '/_blob/' + id, have, need, cls: ok ? 'need-ok' : 'need-no', title: ok ? `${label}: хватает` : `${label}: не хватает ${need - have}` };
+    };
+    const rec = (o) => {
+      const missing = [...(o.comps || []), ...(o.subs || [])].filter(x => x.cls === 'need-no').length;
+      const toolsOk = o.tools.every(t => t.edge === '#050607');
+      const ready = !missing && toolsOk;
+      return {
+        ...o, comps: o.comps || [], subs: o.subs || [], ready, notReady: !ready,
+        pips: [1, 2, 3, 4].map(i => ({ bg: i <= LEVELS[o.level] ? 'linear-gradient(135deg, #f6f2ea, #8e897e)' : '#1c1d21' })),
+        memoTitle: o.memo ? 'Запомнен — можно без чертежа' : 'Запомнить',
+        memoColor: o.memo ? '#f1ece0' : '#55585f',
+        state: ready ? 'Всё под рукой' : [missing ? `не хватает: ${missing}` : '', toolsOk ? '' : 'нет нужного инструмента'].filter(Boolean).join(' · '),
+        stateColor: ready ? '#b4c79c' : '#e0937f'
+      };
+    };
+    const edge = (items) => items.map((r, i) => ({ ...r, edge: i === items.length - 1 ? '0' : '1px solid rgba(0,0,0,.6)', shine: i === items.length - 1 ? 'none' : '0 1px 0 rgba(255,240,215,.045)' }));
+    const groups = [
+      { label: 'Формулы', note: 'нужны инструменты алхимика', items: edge([
+        rec({ img: '/_blob/7fc1a64fe14b2fe32b97cb697143df77', name: '«Ласточка»', kind: 'Ведьмачий эликсир', level: 'Мастер', time: '½ часа', dc: 16, memo: true,
+          subs: [sub('Купорос', 1), sub('Эфир', 1), sub('Аер', 1)], tools: [tool('alch', true)] }),
+        rec({ img: '/_blob/d195bafde95a2c475c77127ed1349301', name: 'Масло против трупоедов', kind: 'Масло для меча', level: 'Мастер', time: '15 минут', dc: 16, memo: true,
+          comps: [comp('Собачье сало', 1, 1)], subs: [sub('Купорос', 1), sub('Квебрит', 1), sub('Гидраген', 1), sub('Солнце', 1)], tools: [tool('alch', true)] }),
+        rec({ img: '/_blob/1bac862b47d54851150e60db5001a169', name: '«Самум»', kind: 'Бомба', level: 'Мастер', time: '½ часа', dc: 18, memo: false, buy: true, buyLabel: 'Докупить · 98 кр.',
+          comps: [comp('Речная глина', 2, 2), comp('Воск', 1, 1), comp('Зерриканская смесь', 0, 1), comp('Ласточкина трава', 3, 2), comp('Фосфор', 1, 2)], tools: [tool('alch', true)] })
+      ]) },
+      { label: 'Чертежи', note: 'нужны инструменты ремесленника', items: edge([
+        rec({ img: '/_blob/d760875a683677eb6b3f8af66d46d776', name: 'Стальной меч школы Волка', kind: 'Ведьмачье снаряжение', level: 'Мастер', time: '9 часов', dc: 18, memo: false, buy: true, buyLabel: 'Докупить · 656 кр.',
+          comps: [comp('Укреплённое дерево', 2, 2), comp('Кожа', 2, 2), comp('Метеорит', 0, 2), comp('Сталь', 3, 3), comp('Точильный порошок', 2, 2),
+            comp('Мозг утковола', 0, 1), comp('Травильная кислота', 2, 2), comp('Эфирная смазка', 1, 1), comp('Нитки', 1, 1)],
+          tools: [tool('craft', true), tool('forge', false)] })
+      ]) }
+    ];
+    return { groups };
+  }
+}
+</script>
+</body>
+</html>
