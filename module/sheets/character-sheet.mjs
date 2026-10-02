@@ -285,6 +285,18 @@ export class CharacterSheet extends VedmakActorSheet {
     const school = schools[system.details.school];
     const mechanics = school?.custom ? schoolMechanics(school, modTargets(STATS, SKILLS)) : "";
     context.schoolHint = [school?.hint, mechanics].filter(Boolean).join(" ");
+    // Медальон школы в досье: свой у пяти школ корника и Мантикоры, у прочих — общий ведьмачий
+    const MEDALLIONS = ["wolf", "griffin", "cat", "viper", "bear", "manticore"];
+    context.schoolCard = { img: `systems/vedmak/assets/fan/gear/${MEDALLIONS.includes(system.details.school)
+      ? `med-school-${system.details.school}` : "g-medallion"}.webp` };
+    // Зависимости: дни без дозы засечками, порог проверки словами (actor.rollAddiction)
+    const will = system.stats.will.effective;
+    context.addictionRows = (system.addictions ?? []).map((a, index) => ({
+      ...a, index, tally: Array.from({ length: Math.min(a.days, 30) }, () => ({})),
+      checkText: will - a.days > 1
+        ? `Проверка: d10 меньше Воли ${will} − ${a.days} дн., то есть меньше ${will - a.days}`
+        : `Воля ${will} − ${a.days} дн.: проверку без дозы не пройти — ломка`
+    }));
 
     // Развитие: стоимость на вкладках параметров и навыков
     if (this.advanceMode) {

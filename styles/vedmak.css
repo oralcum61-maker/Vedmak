@@ -770,8 +770,6 @@
 
 /* Особенности расы — двумя колонками текста */
 .vedmak .traits { columns: 2 250px; column-gap: 1.3rem; }
-.vedmak .trait-line { break-inside: avoid; margin: 0 0 .35rem; font-size: .84rem; line-height: 1.35; }
-.vedmak .trait-line b { color: var(--vd-silver); }
 
 /* Счётчики, которые ведутся вручную */
 .vedmak .counters { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; }
@@ -1957,9 +1955,6 @@
 
 /* Биография: статус и зависимости */
 .vedmak .social .status-line { margin: .4rem 0 0; }
-.vedmak .addiction-row { display: grid; grid-template-columns: 1fr 6rem repeat(4, 1.3rem); gap: .3rem; align-items: center; margin-bottom: .25rem; }
-.vedmak .addiction-row label { display: flex; align-items: center; gap: .25rem; font-size: .78rem; color: var(--vd-text-dim); }
-.vedmak .addiction-row input[type="number"] { width: 3rem; height: 1.5rem; }
 .vedmak .social .social-grid { display: grid; grid-template-columns: 1fr; gap: .35rem; }
 .vedmak .social .social-grid label { display: grid; grid-template-columns: 6rem 1fr; align-items: center; font-size: .85rem; color: var(--vd-text-dim); }
 .vedmak .social .social-grid label.check { display: flex; align-items: center; gap: .35rem; }
@@ -2127,8 +2122,6 @@
 .vedmak .load-track .fill.over { background: linear-gradient(180deg, #d9822b, #8a4b13); }
 .vedmak .load-panel .stat-val.bad, .vedmak .purse b.bad { color: #d9822b; }
 .vedmak .warn-line { margin: .35rem 0 0; font-size: .8rem; color: #d9822b; }
-.vedmak .trait-line { margin: .15rem 0; font-size: .84rem; }
-.vedmak .trait-line b { color: var(--vd-silver); }
 .vedmak .bonus-fold { margin-top: .5rem; border-top: 1px dotted var(--vd-line-soft); padding-top: .3rem; }
 .vedmak .bonus-fold summary { font-size: .8rem; color: var(--vd-text-dim); cursor: var(--cursor-pointer); margin-bottom: .3rem; }
 
@@ -3476,24 +3469,24 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 /* Сверху — верстак одной плитой: гнёзда мутагенов, печати запомненных рецептов, кованые инструменты и запас
    девяти субстанций их знаками (assets/substances). Ниже — четыре раздела переключателем: алхимия карточками,
    чертежи и формулы с «есть / нужно», компоненты ячейками с отбором по субстанции, усиления с ячейками предметов. */
-.vedmak :is(.craft-tab, .magic-tab) [hidden] { display: none !important; }
-.vedmak :is(.craft-tab, .magic-tab) .cap {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) [hidden] { display: none !important; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .cap {
   font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: #8e897e; text-shadow: 0 1px 0 rgba(0,0,0,.9); white-space: nowrap;
 }
-.vedmak :is(.craft-tab, .magic-tab) .cap.bad { color: var(--vd-blood-lite); }
-.vedmak :is(.craft-tab, .magic-tab) .dim { font-size: .72rem; color: var(--vd-text-dim); }
-.vedmak :is(.craft-tab, .magic-tab) .grow { flex: 1; }
-.vedmak :is(.craft-tab, .magic-tab) .group-head .add {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .cap.bad { color: var(--vd-blood-lite); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .dim { font-size: .72rem; color: var(--vd-text-dim); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .grow { flex: 1; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .group-head .add {
   flex: none; white-space: nowrap; margin-left: .2rem; padding: .2rem .65rem; font-size: .66rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--vd-text);
   background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px; box-shadow: var(--vd-lift-sm);
 }
-.vedmak :is(.craft-tab, .magic-tab) .group-head .add:hover { color: var(--vd-silver); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .group-head .add:hover { color: var(--vd-silver); }
 .vedmak .craft-tab .pane.active { display: flex; flex-direction: column; gap: .5rem; }
 .vedmak .craft-tab .pane:not(.active) { display: none; }
 .vedmak .craft-tab .craft-head { margin: .2rem 0 .1rem; }
 
 /* Эмалевая кнопка действия: выпить / нанести — фиолет, масло — зелень, бросить и изготовить — киноварь */
-.vedmak :is(.craft-tab, .magic-tab) .go-btn {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn {
   flex: none; width: auto; height: 1.75rem; padding: 0 .8rem; margin: 0; line-height: 1;
   font-family: var(--vd-font-body); font-weight: 600; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: #fff3ea;
   background-color: var(--vd-go, #b8432c); background-image: var(--vd-gloss);
@@ -3501,21 +3494,21 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   box-shadow: inset 0 1px 0 rgba(255,235,220,.4), inset 0 -2px 0 rgba(0,0,0,.3), 0 5px 12px -4px rgba(0,0,0,.9);
   text-shadow: 0 -1px 0 rgba(0,0,0,.5);
 }
-.vedmak :is(.craft-tab, .magic-tab) .go-btn:hover { filter: brightness(1.12); }
-.vedmak :is(.craft-tab, .magic-tab) .go-btn:active { box-shadow: inset 0 2px 4px rgba(0,0,0,.45); }
-.vedmak :is(.craft-tab, .magic-tab) .go-btn.blood { --vd-go: #b8432c; }
-.vedmak :is(.craft-tab, .magic-tab) .go-btn.arcane { --vd-go: #6b4f9a; }
-.vedmak :is(.craft-tab, .magic-tab) .go-btn.oil { --vd-go: #5c6e34; }
-.vedmak :is(.craft-tab, .magic-tab) .go-btn.steel {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn:hover { filter: brightness(1.12); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn:active { box-shadow: inset 0 2px 4px rgba(0,0,0,.45); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn.blood { --vd-go: #b8432c; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn.arcane { --vd-go: #6b4f9a; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn.oil { --vd-go: #5c6e34; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .go-btn.steel {
   color: var(--vd-text); background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28));
   box-shadow: var(--vd-lift-sm); text-shadow: 0 1px 0 rgba(0,0,0,.8);
 }
-.vedmak :is(.craft-tab, .magic-tab) .mini {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .mini {
   flex: none; width: 26px; height: 26px; display: grid; place-items: center; font-size: .72rem; color: var(--vd-text-dim);
   background: #25262b linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28)); border: 1px solid var(--vd-edge); border-radius: 2px;
   box-shadow: inset 0 1px 0 rgba(255,245,225,.13), 0 3px 8px -3px rgba(0,0,0,.85);
 }
-.vedmak :is(.craft-tab, .magic-tab) .mini:hover { color: var(--vd-silver); background-color: #2d2f34; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .mini:hover { color: var(--vd-silver); background-color: #2d2f34; }
 .vedmak .craft-tab .item-frame.on { box-shadow: inset 0 2px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(196,69,47,.55), 0 1px 0 rgba(255,240,215,.08); }
 .vedmak .craft-tab .qty-badge {
   position: absolute; right: -6px; bottom: -6px; z-index: 2; min-width: 1.4rem; height: 1.25rem; padding: 0 .3rem; display: grid; place-items: center;
@@ -3590,9 +3583,9 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   display: flex; align-items: center; gap: .55rem; padding: .4rem .5rem;
   background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
-.vedmak :is(.craft-tab, .magic-tab) .item-frame.small { width: 40px; height: 40px; }
-.vedmak :is(.craft-tab, .magic-tab) .item-frame.small::after { inset: 3px; }
-.vedmak :is(.craft-tab, .magic-tab) .item-frame.small img { width: 32px; height: 32px; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .item-frame.small { width: 40px; height: 40px; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .item-frame.small::after { inset: 3px; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .item-frame.small img { width: 32px; height: 32px; }
 .vedmak .craft-tab .active-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .25rem; }
 .vedmak .craft-tab .active-head { display: flex; align-items: baseline; gap: .4rem; }
 .vedmak .craft-tab .active-head .name { font-family: var(--vd-font-head); font-size: .98rem; color: #f1ece0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -3636,9 +3629,9 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .craft-tab .recipe-side { display: flex; flex-direction: column; align-items: center; gap: .4rem; }
 .vedmak .craft-tab .recipe-side .item-frame { width: 64px; height: 64px; }
 .vedmak .craft-tab .recipe-side .item-frame img { width: 52px; height: 52px; }
-.vedmak :is(.craft-tab, .magic-tab) .lvl { display: flex; gap: 4px; }
-.vedmak :is(.craft-tab, .magic-tab) .lvl i { width: 6px; height: 6px; transform: rotate(45deg); background: #2a2c31; box-shadow: 0 0 0 1px #050607; }
-.vedmak :is(.craft-tab, .magic-tab) .lvl i.on { background: linear-gradient(135deg, #f2ece0, #77726a); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .lvl { display: flex; gap: 4px; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .lvl i { width: 6px; height: 6px; transform: rotate(45deg); background: #2a2c31; box-shadow: 0 0 0 1px #050607; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab) .lvl i.on { background: linear-gradient(135deg, #f2ece0, #77726a); }
 .vedmak .craft-tab .recipe-body, .vedmak .craft-tab .enh-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .45rem; }
 .vedmak .craft-tab .recipe-head { display: flex; align-items: center; gap: .5rem; min-height: 2.1rem; }
 .vedmak .craft-tab .memo {
@@ -3897,3 +3890,153 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .magic-tab .learn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: .6rem; margin-top: .6rem; }
 .vedmak .magic-tab .learn-col { display: flex; flex-direction: column; gap: .2rem; }
 .vedmak .magic-tab .learn-col b { font-weight: 500; color: #ece7db; }
+
+/* ------------------------------ «Дневник» — досье ------------------------------ */
+/* Досье: сведения выбитыми строками (поле без рамки, пока не в фокусе), медальон школы, облик, нрав и ценности —
+   цитатами шрифтом заголовков. Летопись — жизненный путь: главное плашками в лунках, десятилетия — клеймом на
+   линии времени, итоги — бирками. Особенности расы и зависимости (дни засечками) — плашками; история и заметки рядом. */
+.vedmak .bio-tab .dossier, .vedmak .bio-tab .lifepath-panel, .vedmak .bio-tab .traits-panel,
+.vedmak .bio-tab .addictions, .vedmak .bio-tab .editor-panel { padding: .65rem .9rem .8rem; }
+.vedmak .bio-tab .dossier-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .2rem 1.6rem; margin-top: .35rem; }
+.vedmak .bio-tab .facts { display: flex; flex-direction: column; }
+.vedmak .bio-tab .line {
+  display: flex; align-items: center; gap: .6rem; min-height: 2.2rem; padding: .15rem 0;
+  border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045);
+}
+.vedmak .bio-tab .line > .cap { flex: none; width: 6.4rem; }
+.vedmak .bio-tab .line input, .vedmak .bio-tab .quote textarea, .vedmak .bio-tab .add-name, .vedmak .bio-tab .school select {
+  background: transparent; border-color: transparent; box-shadow: none;
+}
+.vedmak .bio-tab .line input { flex: 1; min-width: 0; height: 1.8rem; padding: 0 .3rem; font-size: .9rem; color: #ece7db; }
+.vedmak .bio-tab :is(.line input, .quote textarea, .add-name, .school select):hover { background: rgba(0,0,0,.18); }
+.vedmak .bio-tab :is(.line input, .quote textarea, .add-name, .school select):focus {
+  background-color: #0a0b0c; border-color: #6f6b62; box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(241,236,224,.18);
+}
+.vedmak .bio-tab .line.school { border-bottom: 0; box-shadow: none; padding-top: .45rem; }
+.vedmak .bio-tab .school .medal {
+  flex: none; width: 2.9rem; height: 2.9rem; display: grid; place-items: center; border-radius: 50%;
+  background: #0b0c0e radial-gradient(circle at 50% 38%, rgba(255,245,225,.1), transparent 68%); border: 1px solid #040405;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,.9), inset 0 0 0 3px #141518, inset 0 0 0 4px rgba(226,221,208,.16), 0 1px 0 rgba(255,240,215,.08);
+}
+.vedmak .bio-tab .school .medal img { width: 76%; height: 76%; object-fit: contain; border: 0; }
+.vedmak .bio-tab .school-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1rem; }
+.vedmak .bio-tab .school select { width: 100%; height: 1.9rem; padding: 0 .2rem; font-family: var(--vd-font-head); font-size: 1.1rem; color: #f1ece0; }
+.vedmak .bio-tab .school-note { padding: 0 .25rem; font-size: .72rem; line-height: 1.35; color: #e0c98f; }
+.vedmak .bio-tab .quotes { display: flex; flex-direction: column; gap: .45rem; padding-top: .35rem; }
+.vedmak .bio-tab .quote {
+  display: flex; flex-direction: column; gap: .2rem; padding: .45rem .6rem .5rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .quote textarea {
+  width: 100%; min-height: 2.6rem; padding: .1rem .25rem; resize: vertical;
+  font-family: var(--vd-font-head); font-size: 1.02rem; line-height: 1.35; color: #e2ddd0;
+}
+.vedmak .bio-tab .quote textarea::placeholder { color: #55575d; }
+
+/* Летопись */
+.vedmak .bio-tab .lifepath-panel > .group-head { margin-bottom: .5rem; }
+.vedmak .bio-tab .panel-tools { display: flex; align-items: center; gap: .35rem; }
+.vedmak .bio-tab .lp-age-field { display: flex; align-items: center; gap: .3rem; font-size: .72rem; color: var(--vd-text-dim); }
+.vedmak .bio-tab .lp-age-field input { width: 3.4rem; height: 1.6rem; }
+.vedmak .bio-tab .lp-story { gap: .9rem; }
+.vedmak .bio-tab .lp-block .group-head { margin-bottom: .4rem; }
+.vedmak .bio-tab .lp-block .group-head .bronze-tag { font-size: .7rem; letter-spacing: .22em; color: #a29d92; }
+.vedmak .bio-tab .lp-cap { font-size: .58rem; letter-spacing: .16em; color: #8e897e; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak .bio-tab .lp-head { font-family: var(--vd-font-head); font-size: 1.12rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak .bio-tab .lp-body { font-size: .78rem; color: #a29d92; }
+.vedmak .bio-tab .lp-gold { font-style: normal; font-size: .74rem; color: #e0c98f; }
+.vedmak .bio-tab .lp-featured { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .5rem; margin-bottom: .35rem; }
+.vedmak .bio-tab .lp-feature {
+  gap: .3rem; padding: .55rem .7rem .65rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .lp-fact { border-top: 0; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045); }
+.vedmak .bio-tab .lp-fact .lp-head { font-family: var(--vd-font-head); font-weight: 400; font-size: .98rem; color: #ece7db; }
+.vedmak .bio-tab .lp-people li { border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045); }
+.vedmak .bio-tab .lp-people li b { font-family: var(--vd-font-head); color: #f1ece0; }
+/* Десятилетия: клеймо возраста на выбитой линии времени */
+.vedmak .bio-tab .lp-timeline::before {
+  left: calc(1.8rem - 1px); width: 0; background: none; opacity: 1;
+  border-left: 1px solid #050607; box-shadow: 1px 0 0 rgba(255,240,215,.07);
+}
+.vedmak .bio-tab .lp-era { grid-template-columns: 3.6rem minmax(0, 1fr); gap: .9rem; padding: .35rem 0 .7rem; }
+.vedmak .bio-tab .lp-age {
+  width: 3.6rem; min-height: 2.9rem; padding: .25rem .1rem; border-radius: 1px;
+  background-color: #222328;
+  background-image: repeating-linear-gradient(135deg, rgba(240,232,215,.075) 0 1px, transparent 1px 4px), var(--vd-t-scratch),
+    radial-gradient(circle at 32% 22%, rgba(255,245,225,.14), transparent 62%), linear-gradient(180deg, #2d2e33, #17181b);
+  background-size: auto, 256px 256px, auto, auto; background-blend-mode: normal, overlay, normal, normal;
+  border: 1px solid #050607;
+  box-shadow: inset 0 0 0 3px rgba(0,0,0,.3), inset 0 0 0 4px rgba(240,232,215,.12), inset 0 1px 0 rgba(255,245,225,.22), 0 3px 7px rgba(0,0,0,.65);
+}
+.vedmak .bio-tab .lp-age b {
+  font-family: var(--vd-font-head); font-size: 1.3rem;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,.95));
+}
+.vedmak .bio-tab .lp-age small { font-size: .48rem; color: #a29d92; }
+.vedmak .bio-tab .lp-event-head b { font-family: var(--vd-font-head); font-size: 1.1rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak .bio-tab .lp-event.quiet { opacity: .6; }
+.vedmak .bio-tab .lp-event.quiet .lp-event-head b { font-size: 1rem; color: #cfc8b8; }
+.vedmak .bio-tab .lp-meta { font-size: .78rem; color: #c9c3b6; }
+.vedmak .bio-tab .lp-traits { gap: .5rem; }
+.vedmak .bio-tab .lp-traits dl {
+  padding: .5rem .7rem .55rem; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .lp-traits dd { font-size: .8rem; border-top: 1px solid rgba(0,0,0,.55); box-shadow: inset 0 1px 0 rgba(255,240,215,.04); }
+.vedmak .bio-tab .lp-next-bar {
+  background: var(--vd-well); border: 1px solid #040405; border-left: 2px solid #b8432c; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .lp-summary {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin-top: .8rem; padding: .5rem .7rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .lp-summary ul { margin: 0; gap: .3rem; }
+.vedmak .bio-tab .lp-summary li {
+  padding: .1rem .5rem; font-size: .72rem; color: #d6d0c2;
+  background: #25262b linear-gradient(180deg, rgba(255,245,225,.08), rgba(0,0,0,.25)); border: 1px solid var(--vd-edge); border-radius: 2px;
+}
+
+/* Особенности расы */
+.vedmak .bio-tab .trait-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .5rem; margin-top: .45rem; }
+.vedmak .bio-tab .trait {
+  padding: .55rem .75rem .6rem; background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .trait h4 { margin: 0 0 .2rem; padding: 0; border: 0; font-family: var(--vd-font-head); font-weight: 400; font-size: 1.02rem; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak .bio-tab .trait p { margin: 0; font-size: .78rem; line-height: 1.45; color: #a29d92; }
+
+/* Зависимости: засечки по пять */
+.vedmak .bio-tab .addiction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .5rem; margin-top: .45rem; }
+.vedmak .bio-tab .addiction {
+  display: flex; flex-direction: column; gap: .4rem; padding: .5rem .65rem .55rem;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .bio-tab .add-head { display: flex; align-items: center; gap: .5rem; }
+.vedmak .bio-tab .add-name { flex: 1; min-width: 0; height: 1.9rem; padding: 0 .25rem; font-family: var(--vd-font-head); font-size: 1.12rem; color: #f1ece0; }
+.vedmak .bio-tab .tally { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px; max-width: 7rem; }
+.vedmak .bio-tab .tally i { width: 2px; height: 13px; background: #d6d0c2; box-shadow: 0 1px 0 rgba(0,0,0,.9); }
+.vedmak .bio-tab .tally i:nth-child(5n) { margin-right: 4px; transform: skewX(-24deg); }
+.vedmak .bio-tab .days { flex: none; display: flex; align-items: center; gap: .2rem; font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0; }
+.vedmak .bio-tab .days input { width: 2.6rem; height: 1.6rem; }
+.vedmak .bio-tab .add-tools { display: flex; align-items: center; gap: .3rem; }
+.vedmak .bio-tab .add-tools .go-btn { height: 1.6rem; padding: 0 .6rem; letter-spacing: .1em; }
+.vedmak .bio-tab .addictions .hint { margin: .5rem 0 0; font-size: .72rem; color: #6c685f; }
+
+/* История и заметки рядом */
+.vedmak .bio-tab .notes-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: .8rem; margin-bottom: .8rem; }
+.vedmak .bio-tab .notes-row .vd-panel { margin-bottom: 0; display: flex; flex-direction: column; }
+.vedmak .bio-tab .editor-panel > .group-head { margin-bottom: .45rem; }
+.vedmak .bio-tab .editor-panel prose-mirror {
+  flex: 1; min-height: 9rem; padding: .5rem .7rem; font-size: .84rem; line-height: 1.6; color: #c9c3b6;
+  background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+/* Заголовки внутри текста истории и заметок — текст, а не шапки панелей (правило .vd-panel h3 сюда не относится) */
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) :is(h1, h2, h3, h4) {
+  display: block; margin: .7rem 0 .3rem; padding: 0; border: 0; text-transform: none; letter-spacing: .02em;
+  font-family: var(--vd-font-head); font-weight: 400; line-height: 1.2; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9);
+}
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) :is(h1, h2, h3, h4)::before,
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) :is(h1, h2, h3, h4)::after { content: none; display: none; }
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) h1 { font-size: 1.3rem; }
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) h2 { font-size: 1.12rem; }
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) :is(h3, h4) { font-size: .98rem; color: #d6d0c2; }
+.vedmak .bio-tab .editor-panel :is(prose-mirror, .editor-content) :is(h1, h2, h3, h4):first-child { margin-top: 0; }
