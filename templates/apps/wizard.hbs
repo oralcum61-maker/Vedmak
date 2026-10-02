@@ -1,34 +1,65 @@
-<div class="wizard">
-  <nav class="wizard-steps">
-    {{#each steps}}
-    <a class="wstep{{#if active}} active{{/if}}{{#if done}} done{{/if}}{{#if problem}} problem{{/if}}" data-action="step" data-step="{{id}}" data-tooltip="{{#if problem}}{{problem}}{{else}}Готово{{/if}}">
-      <span>{{label}}</span>
-    </a>
-    {{/each}}
+{{!-- Мастер создания: слева — тракт из девяти шагов, в середине — шаг, справа — герой, каким он выходит.
+      Ступеньки «− / +» — действие fieldStep, переключатели кнопками — setField (module/character/wizard.mjs). --}}
+{{#*inline "stepper"}}
+<span class="stepper">
+  <button type="button" class="step-btn" data-action="fieldStep" data-field="{{field}}" data-step="-1" aria-label="Меньше"{{#if minOff}} disabled{{/if}}>−</button>
+  <input type="number" data-field="{{field}}" value="{{value}}" min="{{min}}" max="{{max}}" aria-label="{{label}}">
+  <button type="button" class="step-btn" data-action="fieldStep" data-field="{{field}}" data-step="1" aria-label="Больше"{{#if maxOff}} disabled{{/if}}>+</button>
+</span>
+{{/inline}}
+<div class="wizard trail">
+
+  <nav class="wiz-rail" aria-label="Шаги мастера">
+    <span class="cap">Тракт · {{doneCount}} из {{steps.length}}</span>
+    <div class="waypoints">
+      {{#each steps}}
+      <a class="wp{{#if active}} active{{/if}}{{#if done}} done{{/if}}{{#if problem}} problem{{/if}}" data-action="step" data-step="{{id}}"
+        {{#if active}}aria-current="step"{{/if}} data-tooltip="{{#if problem}}{{problem}}{{else}}Готово{{/if}}">
+        <span class="node"><i></i></span>
+        <span class="wp-text"><span class="wp-label">{{label}}</span><span class="wp-note">{{note}}</span></span>
+      </a>
+      {{/each}}
+    </div>
   </nav>
 
+  <main class="wiz-main">
   <div class="wizard-body">
+    <header class="step-head">
+      <div><span class="cap">Шаг {{step.n}} · {{step.eyebrow}}</span><h1>{{step.label}}</h1></div>
+      <span class="rule"></span>
+    </header>
 
   {{!-- ============================== РАСА ============================== --}}
   {{#if is_race}}
-    <div class="vd-panel wizard-basics">
-      <label>Имя <input type="text" data-field="name" value="{{state.name}}"></label>
-      <label>Пол <input type="text" data-field="gender" value="{{state.gender}}"></label>
-      <label>Возраст <input type="number" data-field="age" value="{{state.age}}" min="0"></label>
+    <div class="vd-panel basics">
+      <label class="line grow2"><span class="cap">Имя</span><input type="text" data-field="name" value="{{state.name}}"></label>
+      <label class="line"><span class="cap">Пол</span><input type="text" data-field="gender" value="{{state.gender}}"></label>
+      <label class="line narrow"><span class="cap">Возраст</span><input type="number" data-field="age" value="{{state.age}}" min="0"></label>
     </div>
-    <div class="card-grid">
+    <div class="card-grid races">
       {{#each races}}
-      <div class="pick-card{{#if selected}} selected{{/if}}" data-action="pickRace" data-uuid="{{uuid}}">
-        <header><img src="{{img}}" alt=""><h3>{{name}}</h3></header>
-        <div class="desc">{{{description}}}</div>
-        <ul class="traits">
-          {{#each traits}}<li><b>{{name}}.</b> {{effect}}</li>{{/each}}
-        </ul>
+      <div class="pick-card{{#if selected}} selected{{/if}}" data-action="pickRace" data-uuid="{{uuid}}" role="button" tabindex="0" aria-pressed="{{#if selected}}true{{else}}false{{/if}}">
+        <div class="art"><img src="{{img}}" alt=""></div>
+        {{#if selected}}<span class="seal">выбрано</span>{{/if}}
+        <div class="card-body">
+          <span class="card-name">{{name}}</span>
+          <span class="card-text">{{blurb}}</span>
+          <span class="chips">{{#each traits}}<span class="chip">{{name}}</span>{{/each}}</span>
+          <span class="limits{{#if limitBad}} bad{{/if}}">{{limits}}</span>
+        </div>
       </div>
       {{else}}
       <p class="warning">Не найдено ни одной расы. Проверьте, что компендиум «Расы» системы доступен.</p>
       {{/each}}
     </div>
+    {{#if race}}
+    <div class="vd-panel">
+      <div class="group-head"><span class="bronze-tag">{{race.name}} · особенности</span><span class="rule"></span></div>
+      <div class="trait-cols">
+        {{#each race.system.traits}}<p><b>{{name}}.</b> {{effect}}</p>{{/each}}
+      </div>
+    </div>
+    {{/if}}
     <p class="hint">Социальный статус расы зависит от территории (стр. 21). Ведьмак может быть только ведьмаком, маг и жрец — только человек или эльф.</p>
   {{/if}}
 
@@ -36,33 +67,34 @@
   {{#if is_origin}}
     {{#if isWitcher}}
       <div class="vd-panel">
-        <h3>Происхождение ведьмака</h3>
-        <p>Ведьмаков забирают в школу детьми — вместо родины и семьи у них школа, тренировки и Испытание травами (следующий шаг).</p>
-        <label>Родной язык (8)
+        <div class="group-head"><span class="bronze-tag">Происхождение ведьмака</span><span class="rule"></span></div>
+        <p class="lead">Ведьмаков забирают в школу детьми — вместо родины и семьи у них школа, тренировки и Испытание травами (следующий шаг).</p>
+        <label class="line"><span class="cap">Родной язык · 8</span>
           <select data-field="language">{{#each languages}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
         </label>
       </div>
     {{else}}
       <div class="vd-panel">
-        <h3>Откуда вы родом <a class="roll-btn" data-action="rollOrigin" data-tooltip="Бросить регион и родину">Бросить</a></h3>
-        <div class="wizard-basics">
-          <label>Регион
+        <div class="group-head"><span class="bronze-tag">Откуда вы родом</span><span class="rule"></span>
+          <button type="button" class="go-btn blood" data-action="rollOrigin" data-tooltip="Бросить регион и родину">Бросить</button></div>
+        <div class="origin-lines">
+          <label class="line"><span class="cap">Регион</span>
             <select data-field="origin">
               <option value="" {{#unless state.origin}}selected{{/unless}}>—</option>
               {{#each origins}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
             </select>
           </label>
-          <label>Родина
+          <label class="line"><span class="cap">Родина</span>
             <select data-field="homeland">
               <option value="" {{#unless state.homeland}}selected{{/unless}}>—</option>
               {{#each homelands}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
             </select>
           </label>
-          <label>Родной язык (8)
+          <label class="line"><span class="cap">Родной язык · 8</span>
             <select data-field="language">{{#each languages}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
           </label>
         </div>
-        {{#if homelandInfo}}<p>Бонус родины: <b>+1 к навыку «{{homelandSkill}}»</b>.</p>{{/if}}
+        {{#if homelandInfo}}<p class="boon">Бонус родины: <b>+1 к навыку «{{homelandSkill}}»</b></p>{{/if}}
         <p class="hint">{{originHint}} Нильфгаардцы: 1–3 — сердце Империи, 4–10 — вассальное государство (ещё d10). Родной язык: Север — всеобщий, Нильфгаард, Скеллиге и Доль Блатанна — Старшая Речь, Махакам — краснолюдский (стр. 25).</p>
       </div>
     {{/if}}
@@ -73,13 +105,14 @@
     <div class="vd-panel lifepath-toolbar">
       <label class="check"><input type="checkbox" data-field="lifepath" {{checked state.lifepath}}> Использовать жизненный путь</label>
       {{#if state.lifepath}}
-        <label>Возраст <input type="number" data-field="age" value="{{state.age}}" min="0"></label>
+        <label class="age-field">Возраст <input type="number" data-field="age" value="{{state.age}}" min="0"></label>
+        <span class="grow"></span>
         {{#if lifepathNext}}
-        <a class="roll-btn" data-action="lpStep" data-tooltip="Бросок уйдёт в чат">Бросить: {{lifepathNext.label}}</a>
-        <a class="roll-btn" data-action="lpSection" data-tooltip="Все броски раздела по очереди — каждый в чат">Раздел: {{lifepathNext.cardTitle}}</a>
-        <a class="roll-btn" data-action="lpRest" data-tooltip="Все оставшиеся броски — одной карточкой в чат">До конца</a>
+        <button type="button" class="go-btn blood" data-action="lpStep" data-tooltip="Бросок уйдёт в чат">Бросить: {{lifepathNext.label}}</button>
+        <button type="button" class="go-btn steel" data-action="lpSection" data-tooltip="Все броски раздела по очереди — каждый в чат">Раздел</button>
+        <button type="button" class="go-btn steel" data-action="lpRest" data-tooltip="Все оставшиеся броски — одной карточкой в чат">До конца</button>
         {{else}}
-        <a class="roll-btn" data-action="rerollAll">Перебросить всё</a>
+        <button type="button" class="go-btn steel" data-action="rerollAll">Перебросить всё</button>
         {{/if}}
       {{/if}}
       <span class="hint">{{#if isWitcher}}Ведьмак живёт от 50 до 260 лет; события — за каждое десятилетие странствий (стр. 241).{{else}}Событие — за каждые полные 10 лет жизни (стр. 31).{{/if}}
@@ -90,9 +123,9 @@
 
       {{#if lifeChoices.length}}
       <div class="vd-panel">
-        <h3>Выбор навыков</h3>
+        <div class="group-head"><span class="bronze-tag">Выбор навыков</span><span class="rule"></span></div>
         {{#each lifeChoices}}
-        <label class="choice-row">{{label}}
+        <label class="line"><span class="cap wide">{{label}}</span>
           <select data-field="choice.{{@index}}" data-path="{{path}}">
             <option value="">—</option>
             {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
@@ -104,8 +137,8 @@
       {{/if}}
 
       <div class="vd-panel">
-        <h3>Что это даёт</h3>
-        {{#if effectsSummary.length}}<ul class="effects-list">{{#each effectsSummary}}<li>{{this}}</li>{{/each}}</ul>
+        <div class="group-head"><span class="bronze-tag">Что это даёт</span><span class="rule"></span></div>
+        {{#if effectsSummary.length}}<span class="chips">{{#each effectsSummary}}<span class="chip gold">{{this}}</span>{{/each}}</span>
         {{else}}<p class="hint">Механических последствий нет — только история.</p>{{/if}}
       </div>
     {{/if}}
@@ -113,116 +146,144 @@
 
   {{!-- ============================== ПРОФЕССИЯ ========================= --}}
   {{#if is_profession}}
-    <div class="card-grid small">
+    <div class="card-grid profs">
       {{#each professions}}
       <div class="pick-card{{#if selected}} selected{{/if}}{{#unless allowed}} disabled{{/unless}}" data-action="pickProfession" data-uuid="{{uuid}}"
-        {{#unless allowed}}data-tooltip="Недоступно для выбранной расы"{{/unless}}>
-        <header><img src="{{img}}" alt=""><h3>{{name}}</h3></header>
-        <p class="meta">{{defining}} · Энергия {{vigor}}</p>
+        role="button" tabindex="0" aria-pressed="{{#if selected}}true{{else}}false{{/if}}" {{#unless allowed}}data-tooltip="Недоступно для выбранной расы"{{/unless}}>
+        <div class="art"><img src="{{img}}" alt=""></div>
+        {{#if selected}}<span class="seal">выбрано</span>{{/if}}
+        {{#if lock}}<span class="lock">{{lock}}</span>{{/if}}
+        <div class="card-body">
+          <span class="card-name">{{name}}</span>
+          <span class="card-text">{{defining}}</span>
+          <span class="card-meta">
+            <span class="vig" data-tooltip="Энергия {{vigor}}">{{#each vigorSegs}}<i></i>{{else}}<em>без магии</em>{{/each}}</span>
+            <span class="grow"></span><span class="money">{{money}} кр.</span>
+          </span>
+        </div>
       </div>
       {{/each}}
     </div>
     {{#if profInfo}}
     <div class="vd-panel prof-info">
-      <h3>{{profession.name}}</h3>
-      <div class="desc">{{{profInfo.description}}}</div>
-      <p><b>Определяющий навык:</b> {{profInfo.defining.name}} ({{profInfo.definingStat}}). {{profInfo.defining.effect}}</p>
-      <p><b>Навыки:</b> {{profInfo.skills}}</p>
-      {{#if profInfo.magic}}<p><b>Магические способности:</b> {{profInfo.magic}}</p>{{/if}}
-      <p><b>Начальный капитал:</b> {{profInfo.money}} × 2d6 крон</p>
-      <p><b>Древо:</b> {{#each profInfo.branches}}<span class="branch-line">{{name}}: {{abilities}}</span>{{/each}}</p>
-      {{#each profInfo.choices as |c|}}
-      <fieldset class="vd-fieldset">
-        <legend>{{c.label}}</legend>
-        <div class="check-grid">
-          {{#each c.options}}
-          <label class="check{{#if taken}} dim{{/if}}"><input type="checkbox" data-field="skillChoice.{{c.index}}.{{key}}" {{checked checked}} {{#if taken}}disabled{{/if}}> {{label}}</label>
+      <div class="group-head"><span class="bronze-tag">{{profession.name}}</span><span class="rule"></span></div>
+      <div class="prof-cols">
+        <div class="prof-main">
+          <div class="defining">
+            <span class="stamp"><span class="cap">{{profInfo.definingAbbr}}</span></span>
+            <div><span class="cap">Определяющий навык</span><b>{{profInfo.defining.name}}</b><span class="dim" data-tooltip="{{profInfo.defining.effect}}">{{profInfo.defining.effect}}</span></div>
+          </div>
+          <span class="cap">Навыки профессии · 44 очка</span>
+          <span class="chips">{{#each profInfo.skillList}}<span class="chip">{{this}}</span>{{/each}}</span>
+          {{#each profInfo.choices as |c|}}
+          <fieldset class="choice-set">
+            <legend class="cap">{{c.label}}</legend>
+            <div class="check-grid">
+              {{#each c.options}}
+              <label class="check{{#if taken}} dim{{/if}}"><input type="checkbox" data-field="skillChoice.{{c.index}}.{{key}}" {{checked checked}} {{#if taken}}disabled{{/if}}> {{label}}</label>
+              {{/each}}
+            </div>
+          </fieldset>
           {{/each}}
         </div>
-      </fieldset>
-      {{/each}}
+        <div class="prof-side">
+          {{#if profInfo.quota.length}}
+          <span class="cap">Магия на старте</span>
+          <div class="quota">{{#each profInfo.quota}}<span><b>{{n}}</b><span>{{label}}</span></span>{{/each}}</div>
+          {{/if}}
+          <span class="cap">Древо · ветви</span>
+          <div class="branches">
+            {{#each profInfo.branches}}<div class="branch"><b>{{name}}</b>{{#each list}}<span>{{this}}</span>{{/each}}</div>{{/each}}
+          </div>
+          <span class="cap">Начальный капитал · {{profInfo.money}} × 2d6 крон</span>
+        </div>
+      </div>
+      {{#if profInfo.description}}<details class="prof-desc"><summary>Описание профессии</summary><div class="desc">{{{profInfo.description}}}</div></details>{{/if}}
     </div>
     {{/if}}
   {{/if}}
 
   {{!-- ============================== ПАРАМЕТРЫ ========================= --}}
   {{#if is_stats}}
-    <div class="vd-panel wizard-basics">
-      <label>Способ
-        <select data-field="statMode">
-          <option value="points" {{#if (eq state.statMode "points")}}selected{{/if}}>Распределить очки</option>
-          <option value="random" {{#if (eq state.statMode "random")}}selected{{/if}}>Случайно (9 × d10, 1–2 перебрасываются)</option>
-        </select>
-      </label>
-      {{#if (eq state.statMode "points")}}
-      <label>Уровень игры
-        <select data-field="level">{{#each levels}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-      </label>
-      <div class="budget{{#if remaining}} off{{/if}}">Осталось очков: <b>{{remaining}}</b> из {{budget}}</div>
+    <div class="vd-panel stat-method">
+      <div class="method">
+        <span class="cap">Способ</span>
+        <span class="switch">
+          <button type="button" class="sw{{#if isPoints}} on{{/if}}" data-action="setField" data-field="statMode" data-value="points">Распределить очки</button>
+          <button type="button" class="sw{{#unless isPoints}} on{{/unless}}" data-action="setField" data-field="statMode" data-value="random">Бросить 9 × d10</button>
+        </span>
+      </div>
+      {{#if isPoints}}
+      <div class="method">
+        <span class="cap">Уровень игры</span>
+        <span class="switch">{{#each levels}}<button type="button" class="sw{{#if selected}} on{{/if}}" data-action="setField" data-field="level" data-value="{{key}}" data-tooltip="{{points}} очков">{{short}}</button>{{/each}}</span>
+      </div>
+      <span class="grow"></span>
+      <div class="left{{#if remaining}} off{{/if}}"><span class="cap">Осталось очков</span><span><b>{{remaining}}</b><span class="of">из {{budget}}</span></span></div>
       {{else}}
-      <a class="roll-btn" data-action="rollStats">Бросить 9 × d10</a>
+      <span class="grow"></span>
+      <button type="button" class="go-btn blood" data-action="rollStats">{{#if state.pool.length}}Перебросить{{else}}Бросить{{/if}} 9 × d10</button>
       {{/if}}
     </div>
-    <div class="vd-panel">
-      <table class="vd-table wizard-stats">
-        <thead><tr><th class="name">Параметр</th><th>Основа</th><th>Раса</th><th>Путь</th><th>Итог</th></tr></thead>
-        <tbody>
-        {{#each statRows}}
-        <tr>
-          <td class="name">{{label}} <span class="dim">({{abbr}})</span></td>
-          <td>
-            {{#if (eq ../state.statMode "points")}}
-              <input type="number" data-field="stats.{{key}}" value="{{base}}" min="1" max="10">
+    <div class="stat-grid9">
+      {{#each statRows}}
+      <div class="stat-card">
+        <span class="stamp"><b>{{final}}</b></span>
+        <div class="stat-body">
+          <span class="stat-name">{{label}}</span>
+          <span class="dim">{{about}}</span>
+          <span class="stat-ctl">
+            {{#if ../isPoints}}
+              {{> stepper field=(concat "stats." key) value=base min=1 max=10 minOff=minOff maxOff=maxOff label=label}}
             {{else}}
-              <select data-field="assign.{{key}}">
+              <select data-field="assign.{{key}}" aria-label="{{label}}">
                 <option value="">—</option>
                 {{#each poolOptions}}<option value="{{index}}" {{#if selected}}selected{{/if}} {{#if used}}disabled{{/if}}>{{value}}</option>{{/each}}
               </select>
             {{/if}}
-          </td>
-          <td>{{vedmakSigned race}}</td>
-          <td>{{vedmakSigned life}}</td>
-          <td class="final">{{final}}</td>
-        </tr>
-        {{/each}}
-        </tbody>
-      </table>
-      {{#if witcherNote}}<p class="hint">{{witcherNote}}</p>{{/if}}
-      <div class="derived-grid">
-        {{#each preview}}<div class="derived"><span class="abbr">{{label}}</span><span class="value">{{value}}</span></div>{{/each}}
+            {{#if mods}}<span class="mods">{{mods}}</span>{{/if}}
+          </span>
+        </div>
       </div>
-      <p class="hint">Значение параметра — от 1 до 10; расовые черты и мутации могут это преодолеть (стр. 47).</p>
+      {{/each}}
     </div>
+    <div class="vd-panel derived-row">
+      {{#each preview}}<span class="drv"><b>{{value}}</b><span class="cap">{{label}}</span></span>{{/each}}
+    </div>
+    {{#if witcherNote}}<p class="hint">{{witcherNote}}</p>{{/if}}
+    <p class="hint">Значение параметра — от 1 до 10; расовые черты и мутации могут это преодолеть (стр. 47). Удача тратится на любой бросок.</p>
   {{/if}}
 
   {{!-- ================================ НАВЫКИ ========================== --}}
   {{#if is_skills}}
-    <div class="vd-columns wizard-skills">
+    <div class="skill-cols">
       <div class="vd-panel">
-        <h3>Навыки профессии <span class="budget{{#if profRemaining}} off{{/if}}">осталось {{profRemaining}} из {{profBudget}}</span></h3>
+        <div class="group-head"><span class="bronze-tag">Навыки профессии</span><span class="rule"></span>
+          <span class="budget{{#if profRemaining}} off{{/if}}"><b>{{profRemaining}}</b> из {{profBudget}}</span></div>
         {{#if definingSkill}}
         <div class="wskill defining">
-          <span class="name">{{definingSkill.name}} <span class="dim">({{definingSkill.stat}})</span></span>
-          <input type="number" data-field="defining" value="{{definingSkill.value}}" min="1" max="{{cap}}">
+          <span class="name">{{definingSkill.name}} <span class="dim">{{definingSkill.stat}}</span></span>
+          {{> stepper field="defining" value=definingSkill.value min=1 max=cap label=definingSkill.name}}
           <span class="bonus"></span><span class="final">{{definingSkill.value}}</span>
         </div>
         {{/if}}
         {{#each profSkillRows}}
         <div class="wskill">
-          <span class="name">{{label}} <span class="dim">({{stat}})</span>{{#if difficult}} <i class="fa-solid fa-asterisk difficult" data-tooltip="Сложный навык: 2 очка за уровень"></i>{{/if}}</span>
-          <input type="number" data-field="profSkills.{{key}}" value="{{value}}" min="1" max="{{../cap}}">
+          <span class="name">{{label}} <span class="dim">{{stat}}</span>{{#if difficult}} <i class="difficult" data-tooltip="Сложный навык: 2 очка за уровень">◆</i>{{/if}}</span>
+          {{> stepper field=(concat "profSkills." key) value=value min=1 max=../cap label=label}}
           <span class="bonus">{{#if bonus}}+{{bonus}}{{/if}}{{#if native}}родной{{/if}}</span>
           <span class="final">{{final}}</span>
         </div>
         {{/each}}
-        <p class="hint">44 очка на 11 навыков профессии, в каждый хотя бы 1, не больше 6. Сложные навыки стоят 2 очка за уровень (стр. 49).</p>
+        <p class="hint">44 очка на навыки профессии, в каждый хотя бы 1, не больше 6. Сложные навыки (◆) стоят 2 очка за уровень (стр. 49).</p>
       </div>
       <div class="vd-panel">
-        <h3>Освоенные навыки <span class="budget{{#if (lt pickupRemaining 0)}} off{{/if}}">осталось {{pickupRemaining}} из {{pickupBudget}} (Инт + Реа)</span></h3>
+        <div class="group-head"><span class="bronze-tag">Освоенные навыки</span><span class="rule"></span>
+          <span class="budget{{#if (lt pickupRemaining 0)}} off{{/if}}" data-tooltip="Инт + Реа"><b>{{pickupRemaining}}</b> из {{pickupBudget}}</span></div>
         {{#each pickupRows}}
         <div class="wskill{{#if value}} used{{/if}}">
-          <span class="name">{{label}} <span class="dim">({{stat}})</span>{{#if difficult}} <i class="fa-solid fa-asterisk difficult"></i>{{/if}}</span>
-          <input type="number" data-field="pickup.{{key}}" value="{{value}}" min="0" max="{{../cap}}">
+          <span class="name">{{label}} <span class="dim">{{stat}}</span>{{#if difficult}} <i class="difficult" data-tooltip="Сложный навык: 2 очка за уровень">◆</i>{{/if}}</span>
+          {{> stepper field=(concat "pickup." key) value=value min=0 max=../cap label=label}}
           <span class="bonus">{{#if bonus}}+{{bonus}}{{/if}}{{#if native}}родной{{/if}}</span>
           <span class="final">{{final}}</span>
         </div>
@@ -236,43 +297,53 @@
   {{#if is_magic}}
     {{#each magicGroups as |g|}}
     <div class="vd-panel">
-      <h3>{{g.label}}{{#unless g.auto}} <span class="budget{{#if (ne g.chosen g.count)}} off{{/if}}">выбрано {{g.chosen}} из {{g.count}}</span>{{/unless}}</h3>
-      <div class="check-grid">
+      <div class="group-head"><span class="bronze-tag">{{g.label}}</span><span class="rule"></span>
+        {{#unless g.auto}}<span class="budget{{#if (ne g.chosen g.count)}} off{{/if}}">выбрано <b>{{g.chosen}}</b> из {{g.count}}</span>{{/unless}}</div>
+      <div class="magic-grid">
         {{#each g.items}}
-        <label class="check"><input type="checkbox" data-field="magic" data-uuid="{{uuid}}" {{checked checked}} {{#if g.auto}}disabled{{/if}}>
-          <img src="{{img}}" alt=""> {{name}}{{#if cost}} <span class="dim">({{cost}} Вын)</span>{{/if}}</label>
+        <label class="magic-pick{{#if checked}} on{{/if}}"><input type="checkbox" data-field="magic" data-uuid="{{uuid}}" {{checked checked}} {{#if g.auto}}disabled{{/if}}>
+          <img src="{{img}}" alt=""><span class="mp-name">{{name}}</span>{{#if cost}}<span class="mp-cost">{{cost}} Вын</span>{{/if}}</label>
         {{else}}<p class="warning">В компендиумах нет подходящей магии.</p>
         {{/each}}
       </div>
     </div>
     {{else}}
-    <div class="vd-panel"><p>У этой профессии нет стартовой магии.</p></div>
+    <div class="vd-panel"><p class="lead">У этой профессии нет стартовой магии.</p></div>
     {{/each}}
   {{/if}}
 
   {{!-- ============================== СНАРЯЖЕНИЕ ======================== --}}
   {{#if is_gear}}
     {{#if profession}}
-    <div class="vd-panel">
-      <h3>Начальный капитал</h3>
-      <p>{{moneyBase}} × 2d6 крон (стр. 71).
-        <a class="roll-btn" data-action="rollMoney">{{#if state.money}}Перебросить{{else}}Бросить{{/if}}</a>
-        {{#if state.money}} 2d6 = {{state.money.dice.[0]}} + {{state.money.dice.[1]}} = {{state.money.sum}} → <b>{{state.money.total}} крон</b>{{/if}}
-      </p>
+    <div class="vd-panel money">
+      <div class="group-head"><span class="bronze-tag">Начальный капитал</span><span class="rule"></span><span class="dim">стр. 71</span></div>
+      <div class="money-row">
+        <span class="formula">{{moneyBase}} × 2d6</span>
+        {{#if state.money}}
+        <span class="dice">{{#each state.money.dice}}<span class="die">{{this}}</span>{{/each}}</span>
+        <span class="eq">= {{state.money.sum}} →</span>
+        <span class="crowns"><b>{{state.money.total}}</b> крон</span>
+        {{/if}}
+        <span class="grow"></span>
+        <button type="button" class="go-btn {{#if state.money}}steel{{else}}blood{{/if}}" data-action="rollMoney">{{#if state.money}}Перебросить{{else}}Бросить 2d6{{/if}}</button>
+      </div>
     </div>
     {{#if gearOptions.length}}
     <div class="vd-panel">
-      <h3>Снаряжение профессии <span class="budget{{#if (ne state.gear.length gearCount)}} off{{/if}}">выбрано {{state.gear.length}} из {{gearCount}}</span></h3>
-      <div class="check-grid">
-        {{#each gearOptions}}<label class="check"><input type="checkbox" data-field="gear" data-name="{{name}}" {{checked checked}}> {{name}}</label>{{/each}}
+      <div class="group-head"><span class="bronze-tag">Снаряжение профессии</span><span class="rule"></span>
+        <span class="budget{{#if (ne state.gear.length gearCount)}} off{{/if}}">выбрано <b>{{state.gear.length}}</b> из {{gearCount}}</span></div>
+      <div class="gear-picks">
+        {{#each gearOptions}}<label class="gear-pick{{#if checked}} on{{/if}}"><input type="checkbox" data-field="gear" data-name="{{name}}" {{checked checked}}> {{name}}</label>{{/each}}
       </div>
     </div>
     {{/if}}
     {{#if gearFixed.length}}
-    <div class="vd-panel"><h3>Особое снаряжение</h3><p>{{#each gearFixed}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p></div>
+    <div class="vd-panel"><div class="group-head"><span class="bronze-tag">Особое снаряжение</span><span class="rule"></span></div>
+      <span class="chips">{{#each gearFixed}}<span class="chip">{{this}}</span>{{/each}}</span></div>
     {{/if}}
     {{#if lifeItems.length}}
-    <div class="vd-panel"><h3>Из жизненного пути</h3><p>{{#each lifeItems}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p></div>
+    <div class="vd-panel"><div class="group-head"><span class="bronze-tag">Из жизненного пути</span><span class="rule"></span></div>
+      <span class="chips">{{#each lifeItems}}<span class="chip gold">{{this}}</span>{{/each}}</span></div>
     {{/if}}
     <p class="hint">Предметы ищутся по названию в компендиумах; если их там нет, создаётся простое снаряжение с этим названием. Докупить остальное можно на оставшиеся кроны.</p>
     {{/if}}
@@ -280,31 +351,64 @@
 
   {{!-- ================================ ИТОГ ============================ --}}
   {{#if is_summary}}
-    <div class="vd-panel summary">
-      <h3>{{summary.name}}</h3>
-      <p>{{summary.race}} · {{summary.profession}} · {{summary.gender}} · {{summary.age}} лет · {{summary.homeland}}</p>
-      <div class="derived-grid nine">
-        {{#each summary.stats}}<div class="derived"><span class="abbr">{{abbr}}</span><span class="value">{{value}}</span></div>{{/each}}
+    <div class="vd-panel summary-hero">
+      <div class="portrait">{{#if summary.art}}<img src="{{summary.art}}" alt="">{{/if}}</div>
+      <div class="summary-body">
+        <div><span class="summary-name">{{summary.name}}</span><span class="dim">{{summary.line}}</span></div>
+        <div class="stat-stamps nine">{{#each summary.stats}}<span class="st"><span class="stamp"><b>{{value}}</b></span><span class="cap">{{abbr}}</span></span>{{/each}}</div>
+        <div class="derived-row inset">{{#each summary.derived}}<span class="drv"><b>{{value}}</b><span class="cap">{{label}}</span></span>{{/each}}</div>
+        <div class="summary-chips">
+          {{#if summary.definingName}}<span class="cap">Определяющий</span><span class="chip">{{summary.definingName}} <b>{{summary.definingValue}}</b></span>{{/if}}
+          <span class="cap">Кроны</span><span class="chip">{{#if summary.moneyRoll}}{{summary.moneyRoll}} = {{/if}}<b>{{summary.money}}</b></span>
+        </div>
       </div>
-      <p><b>Определяющий навык:</b> {{summary.defining}}</p>
-      <p><b>Навыки:</b> {{summary.skills}}</p>
-      {{#if summary.magic}}<p><b>Магия:</b> {{summary.magic}}</p>{{/if}}
-      <p><b>Кроны:</b> {{summary.money}}</p>
-      <p><b>Снаряжение:</b> {{summary.gear}}</p>
-      {{#if summary.effects.length}}<p><b>Жизненный путь:</b> {{#each summary.effects}}{{this}}{{#unless @last}}; {{/unless}}{{/each}}</p>{{/if}}
+    </div>
+    <div class="summary-cols">
+      <div class="vd-panel">
+        <div class="group-head"><span class="bronze-tag">Навыки</span><span class="rule"></span></div>
+        <span class="chips">{{#each summary.skillList}}<span class="chip">{{n}} <b>{{v}}</b></span>{{/each}}</span>
+      </div>
+      <div class="summary-side">
+        {{#if summary.magicList.length}}
+        <div class="vd-panel">
+          <div class="group-head"><span class="bronze-tag">Магия</span><span class="rule"></span></div>
+          <span class="chips">{{#each summary.magicList}}<span class="chip sp"><img src="{{img}}" alt="">{{n}}</span>{{/each}}</span>
+        </div>
+        {{/if}}
+        <div class="vd-panel">
+          <div class="group-head"><span class="bronze-tag">С собой</span><span class="rule"></span></div>
+          <span class="chips">{{#each summary.gearList}}<span class="chip">{{this}}</span>{{/each}}{{#each summary.effects}}<span class="chip gold">{{this}}</span>{{/each}}</span>
+        </div>
+      </div>
     </div>
   {{/if}}
   </div>
 
   <footer class="wizard-footer">
-    {{#if problem}}<span class="problem">{{problem}}</span>{{else}}<span class="ok">Шаг заполнен</span>{{/if}}
+    {{#if problem}}<span class="problem">{{problem}}</span>{{else}}<span class="ok"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>{{#if isLast}}Всё готово — героя можно создавать{{else}}Шаг заполнен{{/if}}</span>{{/if}}
     <div class="buttons">
-      {{#unless isFirst}}<button type="button" data-action="prev">Назад</button>{{/unless}}
+      <button type="button" class="steel" data-action="prev"{{#if isFirst}} disabled{{/if}}>Назад</button>
       {{#if isLast}}
         <button type="button" class="primary" data-action="apply">Создать персонажа</button>
       {{else}}
-        <button type="button" class="primary" data-action="next">Далее <i class="fa-solid fa-arrow-right"></i></button>
+        <button type="button" class="primary" data-action="next">Далее · {{nextLabel}}</button>
       {{/if}}
     </div>
   </footer>
+  </main>
+
+  <aside class="wiz-hero" aria-label="Герой">
+    <span class="cap">Герой</span>
+    <div class="hero-art">{{#if hero.art}}<img src="{{hero.art}}" alt="">{{/if}}</div>
+    <div class="hero-id">
+      <span class="hero-name">{{hero.name}}</span>
+      <span class="dim">{{hero.line}}</span>
+      {{#if hero.sub}}<span class="dim faint">{{hero.sub}}</span>{{/if}}
+    </div>
+    <div class="stat-stamps">
+      {{#each hero.stats}}<span class="st{{#if dim}} dim-st{{/if}}" data-tooltip="{{title}}"><span class="stamp"><b>{{v}}</b></span><span class="cap">{{k}}</span></span>{{/each}}
+    </div>
+    {{#if hero.note}}<span class="hero-note">{{hero.note}}</span>{{/if}}
+    {{#if hero.mods.length}}<span class="chips">{{#each hero.mods}}<span class="chip gold">{{this}}</span>{{/each}}</span>{{/if}}
+  </aside>
 </div>

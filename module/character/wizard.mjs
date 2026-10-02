@@ -18,21 +18,50 @@ import { compareRu } from "../util.mjs";
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
 const STEPS = [
-  { id: "race",       label: "Раса" },
-  { id: "origin",     label: "Происхождение" },
-  { id: "lifepath",   label: "Жизненный путь" },
-  { id: "profession", label: "Профессия" },
-  { id: "stats",      label: "Параметры" },
-  { id: "skills",     label: "Навыки" },
-  { id: "magic",      label: "Магия" },
-  { id: "gear",       label: "Снаряжение" },
-  { id: "summary",    label: "Итог" }
+  { id: "race",       label: "Раса",           eyebrow: "кем родился" },
+  { id: "origin",     label: "Происхождение",  eyebrow: "откуда родом" },
+  { id: "lifepath",   label: "Жизненный путь", eyebrow: "что было до" },
+  { id: "profession", label: "Профессия",      eyebrow: "ремесло жизни" },
+  { id: "stats",      label: "Параметры",      eyebrow: "чем силён" },
+  { id: "skills",     label: "Навыки",         eyebrow: "чему обучен" },
+  { id: "magic",      label: "Магия",          eyebrow: "что подвластно" },
+  { id: "gear",       label: "Снаряжение",     eyebrow: "что с собой" },
+  { id: "summary",    label: "Итог",           eyebrow: "перед дорогой" }
 ];
 
 const STAT_KEYS = Object.keys(STATS);
 
 /** Горные народы: родина по умолчанию — Махакам (краснолюды — корник, гномы, враны, боболаки — «Книга сказаний»). */
 const MOUNTAIN_RACES = ["dwarf", "gnome", "vran", "bobolak"];
+
+/** Склонение по числу: plural(5, ["заклинание", "заклинания", "заклинаний"]). */
+function plural(n, [one, few, many]) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+}
+const plainText = html => String(html ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+const signedNum = v => `${v > 0 ? "+" : "−"}${Math.abs(v)}`;
+
+/** Поправка расы словами — биркой у героя: «+1 Реа», «Эмп не выше 6», «броня 4». */
+function raceModLabel({ target, value }) {
+  const [g, k] = String(target).split(".");
+  if (g === "stats") return `${signedNum(value)} ${STATS[k]?.abbr ?? k}`;
+  if (g === "skills") return `${signedNum(value)} ${SKILLS[k]?.label ?? k}`;
+  if (g === "cap") return `${STATS[k]?.abbr ?? k} не выше ${value}`;
+  if (g === "floor") return `${STATS[k]?.abbr ?? k} не ниже ${value}`;
+  if (g === "armor") return `броня ${value}`;
+  if (target === "bonus.enc") return `${signedNum(value)} к весу`;
+  if (target === "melee.body") return `рукопашная: Тел ${signedNum(value)}`;
+  return "";
+}
+
+/** Стартовая магия профессии словами: «5 заклинаний», «все базовые знаки». */
+const QUOTA_WORDS = {
+  spell: ["заклинание", "заклинания", "заклинаний"], invocation: ["инвокация", "инвокации", "инвокаций"],
+  ritual: ["ритуал", "ритуала", "ритуалов"], hex: ["порча", "порчи", "порч"], sign: ["знак", "знака", "знаков"]
+};
 
 export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
@@ -63,7 +92,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     classes: ["vedmak", "sheet", "vedmak-wizard"],
     tag: "div",
     window: { title: "Мастер создания персонажа", resizable: true },
-    position: { width: 900, height: 780 },
+    position: { width: 1180, height: 820 },
     actions: {
       step: CharacterWizard.#onStep,
       next: CharacterWizard.#onNext,
@@ -78,6 +107,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       lpRest: CharacterWizard.#onLifepathRest,
       rollStats: CharacterWizard.#onRollStats,
       rollMoney: CharacterWizard.#onRollMoney,
+      setField: CharacterWizard.#onSetField,
+      fieldStep: CharacterWizard.#onFieldStep,
       apply: CharacterWizard.#onApply
     }
   };
@@ -241,18 +272,43 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const stepIndex = STEPS.findIndex(x => x.id === s.step);
     const validation = this.#validate(lp);
 
+    // Тракт: под каждым шагом — что выбрано или что не так
+    const noteFor = id => {
+      if (id === "race" && race) return race.name;
+      if (id === "origin" && this.isWitcher) return "ведьмачья школа";
+      if (id === "origin" && HOMELANDS[s.homeland]) return HOMELANDS[s.homeland].label;
+      if (id === "lifepath") return !s.lifepath ? "без жизненного пути" : !race ? "сначала раса" : lp.next ? "брошен не до конца" : "брошен";
+      if (id === "profession" && prof) return prof.name;
+      if (id === "magic" && prof && !this.#magicGroups().length) return "у профессии нет";
+      return validation[id] ?? "готово";
+    };
+    // Путь без расы ещё не брошен — вешка не светлеет, хотя шаг и не помечен ошибкой
+    const steps = STEPS.map((x, i) => ({ ...x, n: i + 1, active: x.id === s.step, problem: validation[x.id], note: noteFor(x.id),
+      done: !validation[x.id] && !(x.id === "lifepath" && s.lifepath && !race) }));
+    // Следующий шаг — подписью на кнопке «Далее» (магию без стартовой магии пропускаем)
+    let nextStep = STEPS[stepIndex + 1];
+    if (nextStep?.id === "magic" && !this.#magicGroups().length) nextStep = STEPS[stepIndex + 2];
+
     Object.assign(context, {
       state: s, stepIndex, isFirst: stepIndex === 0, isLast: stepIndex === STEPS.length - 1,
-      steps: STEPS.map((x, i) => ({ ...x, active: x.id === s.step, done: !validation[x.id], problem: validation[x.id] })),
+      steps, doneCount: steps.filter(x => x.done).length, step: { ...STEPS[stepIndex], n: stepIndex + 1 }, nextLabel: nextStep?.label ?? "",
       stepId: s.step, problem: validation[s.step], [`is_${s.step}`]: true,
-      race, profession: prof, isWitcher: this.isWitcher
+      race, profession: prof, isWitcher: this.isWitcher,
+      hero: this.#hero(lp, stepIndex)
     });
 
     if (s.step === "race") {
-      context.races = this.data.races.map(r => ({
-        uuid: r.uuid, name: r.name, img: r.img, selected: r.uuid === s.raceUuid,
-        description: r.system.description, traits: r.system.traits
-      }));
+      // Чем раса ограничивает выбор профессии — строкой под карточкой
+      const others = this.data.professions.filter(p => p.system.key !== "witcher");
+      context.races = this.data.races.map(r => {
+        const key = r.system.key;
+        const barred = others.filter(p => p.system.allowedRaces.length && !p.system.allowedRaces.includes(key)).map(p => p.name.toLowerCase());
+        const limits = key === "witcher" ? "только профессия «Ведьмак»" : barred.length ? `не может быть: ${barred.join(", ")}` : "любая профессия";
+        return {
+          uuid: r.uuid, name: r.name, img: r.img, selected: r.uuid === s.raceUuid,
+          blurb: plainText(r.system.description), traits: r.system.traits, limits, limitBad: key === "witcher" || !!barred.length
+        };
+      });
     }
 
     if (s.step === "origin") {
@@ -283,17 +339,27 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       context.professions = this.data.professions.map(p => {
         const allowed = !p.system.allowedRaces.length || !this.raceKey || p.system.allowedRaces.includes(this.raceKey);
         return { uuid: p.uuid, name: p.name, img: p.img, selected: p.uuid === s.professionUuid, allowed,
-          vigor: p.system.vigor, defining: p.system.definingSkill.name };
+          vigor: p.system.vigor, vigorSegs: Array.from({ length: Math.min(p.system.vigor, 8) }, () => ({})),
+          defining: p.system.definingSkill.name, money: `${p.system.startingMoney} × 2d6`,
+          lock: allowed ? "" : p.system.allowedRaces.length === 1 ? "только ведьмаку" : "недоступно расе" };
       });
       if (prof) {
+        const q = prof.system.magicQuota ?? {};
         context.profInfo = {
           description: prof.system.description,
           defining: prof.system.definingSkill,
           definingStat: STATS[prof.system.definingSkill.stat]?.label,
+          definingAbbr: STATS[prof.system.definingSkill.stat]?.abbr,
           skills: prof.system.skills.map(k => SKILLS[k]?.label ?? k).join(", "),
+          skillList: prof.system.skills.map(k => SKILLS[k]?.label ?? k),
           money: prof.system.startingMoney,
           magic: prof.system.magicAbilities,
-          branches: prof.system.branches.map(b => ({ name: b.name, abilities: b.abilities.map(a => a.name).join(" → ") })),
+          quota: [
+            ...(q.allBasicSigns ? [{ n: "все", label: "базовые знаки" }] : []),
+            ...Object.entries(QUOTA_WORDS).filter(([k]) => q[k] > 0).map(([k, w]) => ({ n: q[k], label: plural(q[k], w) }))
+          ],
+          branches: prof.system.branches.map(b => ({ name: b.name, abilities: b.abilities.map(a => a.name).join(" → "),
+            list: b.abilities.map(a => a.name) })),
           choices: prof.system.skillChoices.map((c, i) => ({
             label: c.label, count: c.count, index: i,
             options: c.options.filter(k => k !== this.nativeLanguageKey).map(k => ({
@@ -311,20 +377,21 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const final = this.#finalStats(lp);
       const budget = STAT_POINT_BUY[s.level]?.points ?? 60;
       const spent = STAT_KEYS.reduce((sum, k) => sum + (s.stats[k] || 0), 0);
-      context.levels = Object.entries(STAT_POINT_BUY).map(([k, v]) => ({ key: k, label: `${v.label} (${v.points})`, selected: k === s.level }));
-      context.statRows = STAT_KEYS.map(k => ({
-        key: k, label: STATS[k].label, abbr: STATS[k].abbr, base: base[k], race: rm[k] ?? 0, life: life[k] ?? 0, final: final[k],
-        poolOptions: s.pool.map((v, i) => ({ index: i, value: v, selected: s.assign[k] === i,
-          used: Object.entries(s.assign).some(([sk, idx]) => idx === i && sk !== k) }))
-      }));
+      context.levels = Object.entries(STAT_POINT_BUY).map(([k, v]) => ({ key: k, label: `${v.label} (${v.points})`, short: v.label,
+        points: v.points, selected: k === s.level }));
+      context.isPoints = s.statMode === "points";
+      context.statRows = STAT_KEYS.map(k => {
+        const mods = [rm[k] ? `раса ${signedNum(rm[k])}` : "", life[k] ? `путь ${signedNum(life[k])}` : ""].filter(Boolean).join(" · ");
+        return {
+          key: k, label: STATS[k].label, abbr: STATS[k].abbr, about: STATS[k].about, base: base[k], race: rm[k] ?? 0, life: life[k] ?? 0,
+          final: s.statMode === "random" && s.assign[k] === undefined ? "·" : final[k], mods,
+          minOff: base[k] <= CREATION.statMin, maxOff: base[k] >= CREATION.statCap,
+          poolOptions: s.pool.map((v, i) => ({ index: i, value: v, selected: s.assign[k] === i,
+            used: Object.entries(s.assign).some(([sk, idx]) => idx === i && sk !== k) }))
+        };
+      });
       context.budget = budget; context.spent = spent; context.remaining = budget - spent;
-      const bw = Math.floor((final.body + final.will) / 2);
-      context.preview = [
-        { label: "ПЗ", value: bw * 5 + (lp.effects?.hpBonus ?? 0) }, { label: "Вын", value: bw * 5 + (lp.effects?.staBonus ?? 0) },
-        { label: "Уст", value: Math.min(10, bw) }, { label: "Отдых", value: bw },
-        { label: "Бег", value: final.spd * 3 }, { label: "Вес", value: final.body * 10 },
-        { label: "Реш", value: Math.floor((final.will + final.int) / 2) * 5 }
-      ];
+      context.preview = this.#derivedPreview(final, lp);
       context.witcherNote = this.isWitcher ? "Ведьмак: −4 к Эмп (не ниже 1, не выше 6), +1 к Реа и Лвк (могут быть больше 10)." : "";
     }
 
@@ -480,13 +547,53 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     return lines;
   }
 
+  /** Производные по итоговым параметрам: ПЗ, Вын, Уст, Отдых, Бег, Вес, Реш. */
+  #derivedPreview(final, lp) {
+    const bw = Math.floor((final.body + final.will) / 2);
+    return [
+      { label: "ПЗ", value: bw * 5 + (lp.effects?.hpBonus ?? 0) }, { label: "Вын", value: bw * 5 + (lp.effects?.staBonus ?? 0) },
+      { label: "Уст", value: Math.min(10, bw) }, { label: "Отдых", value: bw },
+      { label: "Бег", value: final.spd * 3 }, { label: "Вес", value: final.body * 10 },
+      { label: "Реш", value: Math.floor((final.will + final.int) / 2) * 5 }
+    ];
+  }
+
+  /** Герой справа от шагов: арт профессии или расы, имя, кто он, девять параметров клеймами, поправки расы. */
+  #hero(lp, stepIndex) {
+    const s = this.wiz;
+    const race = this.race, prof = this.profession;
+    const final = this.#finalStats(lp);
+    const unset = k => s.statMode === "random" && s.assign[k] === undefined;
+    const statsStep = STEPS.findIndex(x => x.id === "stats");
+    return {
+      art: prof?.img || race?.img || "",
+      name: s.name || "Без имени",
+      line: race ? `${race.name} · ${prof?.name ?? "профессия не выбрана"}` : "раса не выбрана",
+      sub: [s.gender, s.age ? `${s.age} ${plural(s.age, ["год", "года", "лет"])}` : ""].filter(Boolean).join(" · "),
+      stats: STAT_KEYS.map(k => ({ k: STATS[k].abbr, title: STATS[k].label, v: unset(k) ? "·" : final[k], dim: unset(k) || stepIndex < statsStep })),
+      note: stepIndex < statsStep ? "Параметры — на пятом шаге; поправки расы уже учтены." : "",
+      mods: (race?.system.mods ?? []).map(raceModLabel).filter(Boolean)
+    };
+  }
+
   #summary(lp) {
     const s = this.wiz;
     const prof = this.profession;
     const final = this.#finalStats(lp);
     const skills = this.#finalSkills(lp);
     const money = (s.money?.total ?? 0) + (lp.effects?.crowns ?? 0);
+    const magicChosen = this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || s.magic.includes(i.uuid)));
     return {
+      art: prof?.img || this.race?.img || "",
+      line: [this.race?.name, prof?.name, s.gender, s.age ? `${s.age} ${plural(s.age, ["год", "года", "лет"])}` : "",
+        HOMELANDS[s.homeland]?.label].filter(Boolean).join(" · "),
+      derived: this.#derivedPreview(final, lp),
+      skillList: Object.entries(skills).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1] || compareRu(SKILLS[a[0]].label, SKILLS[b[0]].label))
+        .map(([k, v]) => ({ n: SKILLS[k].label, v })),
+      magicList: magicChosen.map(i => ({ n: i.name, img: i.img })),
+      gearList: [...(prof?.system.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? [])],
+      definingName: prof?.system.definingSkill.name ?? "", definingValue: prof ? s.defining + (lp.effects?.definingBonus ?? 0) : 0,
+      moneyRoll: s.money ? `${prof?.system.startingMoney ?? 0} × ${s.money.sum}` : "",
       name: s.name, race: this.race?.name, profession: prof?.name, age: s.age, gender: s.gender,
       homeland: HOMELANDS[s.homeland]?.label ?? "—",
       stats: STAT_KEYS.map(k => ({ abbr: STATS[k].abbr, value: final[k] })),
@@ -760,6 +867,23 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     pool.sort((a, b) => b - a);
     this.wiz.pool = pool;
     this.wiz.assign = {};
+    this.render();
+  }
+
+  /** Переключатель кнопками (способ параметров, уровень игры): поле и значение — в data-field / data-value. */
+  static #onSetField(event, target) {
+    this.#setField(target.dataset.field, target.dataset.value, target);
+    this.render();
+  }
+
+  /** Ступенька «− / +» у числа: параметр, навык профессии, освоенный или определяющий навык. */
+  static #onFieldStep(event, target) {
+    const s = this.wiz;
+    const field = target.dataset.field;
+    const [group, key] = field.split(".");
+    const current = field === "defining" ? s.defining
+      : group === "stats" ? s.stats[key] : group === "profSkills" ? s.profSkills[key] ?? 0 : group === "pickup" ? s.pickup[key] ?? 0 : 0;
+    this.#setField(field, current + Number(target.dataset.step), target);
     this.render();
   }
 
