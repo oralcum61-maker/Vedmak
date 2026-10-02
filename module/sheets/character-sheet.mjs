@@ -14,7 +14,7 @@ import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY
 import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
-import { signed, compareRu } from "../util.mjs";
+import { signed, compareRu, worldSetting } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
@@ -275,7 +275,7 @@ export class CharacterSheet extends VedmakActorSheet {
       .map(x => `${SKILLS[x.k].label} ${signed(x.v)}`);
     context.social = { ...social, mods: mods.join(", ") };
     let worldRegion = "north";
-    try { worldRegion = game.settings.get("vedmak", "region"); } catch { /* до регистрации настроек */ }
+    worldRegion = worldSetting("region", worldRegion);
     context.regionOptions = { "": `Из настроек мира (${REGIONS[worldRegion]?.label ?? worldRegion})`,
       ...Object.fromEntries(Object.entries(REGIONS).map(([k, v]) => [k, v.label])) };
     context.isWitcher = system.raceKey === "witcher" || system.professionKey === "witcher" || !!system.details.school;

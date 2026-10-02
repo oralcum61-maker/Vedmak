@@ -1,5 +1,6 @@
 // Чудовище / НИП бестиария (корник стр. 267–313).
 
+import { worldSetting } from "../../util.mjs";
 import { int, str, html, source } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
 import { BOOK_METEORITE_CLASSES, BOOK_SILVER_CLASSES } from "../../config/combat.mjs";
@@ -98,7 +99,7 @@ export class MonsterData extends foundry.abstract.TypeDataModel {
     if (this.materialWeakness !== "auto") return this.materialWeakness;
     const cls = this.monsterClass;
     if (cls === "humanoid") return null;
-    if (game.settings.settings.has("vedmak.booksMonsters") && game.settings.get("vedmak", "booksMonsters")) {
+    if (worldSetting("booksMonsters", false)) {
       if (BOOK_SILVER_CLASSES.includes(cls)) return "silver";
       if (BOOK_METEORITE_CLASSES.includes(cls)) return "meteorite";
       return null;

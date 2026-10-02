@@ -99,7 +99,37 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/effect/changes.hbs",
   "systems/vedmak/templates/effect/header.hbs",
   "systems/vedmak/templates/effect/details.hbs",
-  "systems/vedmak/templates/effect/duration.hbs"
+  "systems/vedmak/templates/effect/duration.hbs",
+  // Части листов, окон и предметов — тоже заранее (PLAN 4.54): иначе каждый шаблон скачивается и компилируется
+  // при первом открытии своего окна или вкладки, и первый клик подвисает
+  "systems/vedmak/templates/actor/character-rail.hbs",
+  "systems/vedmak/templates/actor/limited.hbs",
+  "systems/vedmak/templates/actor/monster-header.hbs",
+  "systems/vedmak/templates/actor/monster-lore.hbs",
+  "systems/vedmak/templates/actor/monster-stats.hbs",
+  "systems/vedmak/templates/actor/tab-bio.hbs",
+  "systems/vedmak/templates/actor/tab-combat.hbs",
+  "systems/vedmak/templates/actor/tab-magic.hbs",
+  "systems/vedmak/templates/apps/currencies-footer.hbs",
+  "systems/vedmak/templates/apps/currencies.hbs",
+  "systems/vedmak/templates/apps/schools-footer.hbs",
+  "systems/vedmak/templates/apps/schools.hbs",
+  "systems/vedmak/templates/apps/wizard.hbs",
+  "systems/vedmak/templates/chat/lifepath.hbs",
+  "systems/vedmak/templates/item/description.hbs",
+  "systems/vedmak/templates/item/details-alchemical.hbs",
+  "systems/vedmak/templates/item/details-armor.hbs",
+  "systems/vedmak/templates/item/details-component.hbs",
+  "systems/vedmak/templates/item/details-critWound.hbs",
+  "systems/vedmak/templates/item/details-enhancement.hbs",
+  "systems/vedmak/templates/item/details-gear.hbs",
+  "systems/vedmak/templates/item/details-profession.hbs",
+  "systems/vedmak/templates/item/details-race.hbs",
+  "systems/vedmak/templates/item/details-recipe.hbs",
+  "systems/vedmak/templates/item/details-spell.hbs",
+  "systems/vedmak/templates/item/details-weapon.hbs",
+  "systems/vedmak/templates/item/effects.hbs",
+  "systems/vedmak/templates/item/header.hbs"
 ];
 
 export function preloadTemplates() {

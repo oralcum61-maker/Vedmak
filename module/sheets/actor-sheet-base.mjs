@@ -14,7 +14,7 @@ import { castSpell, vigorUsed, maintainedSpells, costNote } from "../magic/cast.
 import { endMaintained } from "../magic/effects.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
-import { compareRu, balanceColumns } from "../util.mjs";
+import { compareRu, balanceColumns, worldSetting } from "../util.mjs";
 import { profileSheet } from "../apps/perf.mjs";
 import { verbalAction, verbalContext, resetDuel, setDuelResolve } from "../combat/verbal.mjs";
 import { detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
@@ -76,7 +76,18 @@ function weaponRow(item) {
 /* --------------------------------- Магия --------------------------------- */
 
 const LEVEL_ORDER = { novice: 0, journeyman: 1, master: 2, archPriest: 3 };
-const plainText = html => String(html ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+// Описание без разметки: одно и то же описание чистится регулярками на каждую перерисовку «Магии» — запоминаем
+const PLAIN_CACHE = new Map();
+const plainText = html => {
+  const src = String(html ?? "");
+  let out = PLAIN_CACHE.get(src);
+  if (out === undefined) {
+    out = src.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+    if (PLAIN_CACHE.size > 1000) PLAIN_CACHE.clear();
+    PLAIN_CACHE.set(src, out);
+  }
+  return out;
+};
 // Эмаль кнопки по виду магии: заклинание, знак и дар — фиолет, инвокация — золото, ритуал — сталь, порча — багрянец
 const CAST_GO = { spell: "arcane", sign: "arcane", gift: "arcane", invocation: "holy", ritual: "ritual", hex: "hex" };
 
@@ -668,7 +679,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     });
     context.activeStatuses = context.statusList.filter(s => s.active);
     context.locTable = locTable;
-    context.adrenalineRule = game.settings.get("vedmak", "adrenaline") && actor.type === "character";
+    context.adrenalineRule = worldSetting("adrenaline", false) && actor.type === "character";
 
     // Эффекты
     context.effects = [...actor.allApplicableEffects()].map(e => ({
@@ -681,7 +692,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     // Словесная дуэль (стр. 176–177) — у персонажа и чудовища. Необязательное правило: без неё «Бой» —
     // только обычный бой. Решительность — (Воля + Инт) / 2 × 5 у любого актора
-    context.showSocialCombat = game.settings.get("vedmak", "verbalDuel");
+    context.showSocialCombat = worldSetting("verbalDuel", true);
     if (context.showSocialCombat) context.verbal = verbalContext(actor);
     if (this.constructor.TABS?.combat) context.combatTabs = this._prepareTabs("combat");
 

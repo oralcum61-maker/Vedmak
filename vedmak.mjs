@@ -20,7 +20,7 @@ import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
 import { performCheck, rollD10 } from "./module/dice/check.mjs";
-import { SYSTEM_ID } from "./module/util.mjs";
+import { SYSTEM_ID, forgetSetting } from "./module/util.mjs";
 import { registerStatusEffects } from "./module/combat/statuses.mjs";
 import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
@@ -186,6 +186,13 @@ Hooks.once("init", () => {
     scope: "world", config: true, type: Boolean, default: true,
     onChange: () => game.actors.forEach(a => a.sheet?.rendered && a.sheet.render())
   });
+  // Запомненные значения настроек мира (worldSetting) забываются раньше своих onChange: те пересчитывают актёров,
+  // а хук updateSetting, который тоже сбрасывает запомненное, приходит уже после них
+  for (const [id, cfg] of game.settings.settings) {
+    if (cfg.namespace !== SYSTEM_ID || cfg.scope !== "world") continue;
+    const onChange = cfg.onChange;
+    cfg.onChange = (...args) => { forgetSetting(id.slice(SYSTEM_ID.length + 1)); return onChange?.(...args); };
+  }
 
   // Листы
   const DSC = foundry.applications.apps.DocumentSheetConfig;

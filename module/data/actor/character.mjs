@@ -1,5 +1,6 @@
 // Персонаж игрока (корник стр. 20–60).
 
+import { worldSetting } from "../../util.mjs";
 import { int, str, html } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
 import { SOCIAL_TABLE, REGIONS, witcherSchools, abilityBonus, socialLabel } from "../../config/character.mjs";
@@ -128,7 +129,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
   socialStatus(regionKey) {
     let region = regionKey || this.social.region;
     if (!region) {
-      try { region = game.settings.get("vedmak", "region"); } catch { region = "north"; }
+      region = worldSetting("region", "north");
     }
     const row = SOCIAL_TABLE[region] ?? SOCIAL_TABLE.north;
     const status = { region, regionLabel: REGIONS[region]?.label ?? region, level: "equal", feared: !!this.social.feared };

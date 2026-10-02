@@ -1,5 +1,7 @@
 // Персонаж: расы, социальный статус, родина, ведьмачьи школы, развитие за О.У (корник стр. 20–60, 124, 237–245).
 
+import { worldSetting, memoBySource } from "../util.mjs";
+
 /** Ключи рас: механика черт завязана на ключ, а не на название предмета. */
 export const RACES = {
   human:   { label: "Человек" },
@@ -145,13 +147,13 @@ export const WITCHER_SCHOOLS = {
 export const SCHOOL_WAIVABLE = { strong: "Сильная атака", charge: "Атака с разбега", dual: "Парное оружие" };
 
 /** Все школы: корника и свои (настройка мира «Ведьмачьи школы», module/apps/school-config.mjs). */
-export function witcherSchools() {
-  let custom = [];
-  try { custom = game.settings.get("vedmak", "witcherSchools")?.list ?? []; } catch { /* до регистрации настроек */ }
+export const witcherSchools = () => mergeSchools(worldSetting("witcherSchools", null));
+// Пересобирается, только когда настройку поменяли; результат общий — не менять
+const mergeSchools = memoBySource(raw => {
   const out = { ...WITCHER_SCHOOLS };
-  for (const s of custom) if (s?.key && s.label && !(s.key in WITCHER_SCHOOLS)) out[s.key] = { ...s, custom: true };
+  for (const s of raw?.list ?? []) if (s?.key && s.label && !(s.key in WITCHER_SCHOOLS)) out[s.key] = { ...s, custom: true };
   return out;
-}
+});
 
 /**
  * Механика школы словами: «+2 к Энергии · СД −2 · без штрафа: сильная атака · Навык: Внимание +1».
