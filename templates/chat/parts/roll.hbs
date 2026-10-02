@@ -1,10 +1,11 @@
-{{!-- Кости и сумма броска. Итог стоит в шапке карточки, здесь — из чего он вышел. Контекст — результат performCheck. --}}
+{{!-- Кости и сумма броска. Итог стоит в шапке карточки, здесь — из чего он вышел. Контекст — результат performCheck.
+      Кость — гранёная d10 (parts/die.hbs): десятка калёная, единица с трещиной, кость провала раскалённая. --}}
 <div class="roll-line">
   <span class="dice">
-    {{#each dice}}<span class="die d10{{#if (eq this 10)}} max{{/if}}{{#if (eq this 1)}} min{{/if}}">{{this}}</span>{{/each}}
+    {{#each dice}}{{> "systems/vedmak/templates/chat/parts/die.hbs" v=this}}{{/each}}
     {{#if fumble}}
       <span class="minus">−</span>
-      {{#each fumbleDice}}<span class="die d10 fumble-die{{#if (eq this 10)}} max{{/if}}">{{this}}</span>{{/each}}
+      {{#each fumbleDice}}{{> "systems/vedmak/templates/chat/parts/die.hbs" v=this burn=true}}{{/each}}
     {{/if}}
   </span>
   <span class="roll-sum">основа <b>{{base}}</b> {{#if fumble}}− <b>{{fumbleValue}}</b>{{else}}+ <b>{{vedmakSum dice}}</b>{{/if}}</span>

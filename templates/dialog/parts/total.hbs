@@ -1,9 +1,11 @@
-{{!-- Подвал окна: во что сложится бросок. Контекст — объект total. --}}
+{{!-- Подвал окна: во что сложится бросок. Контекст — объект total.
+      «d10 +» и число пишет bindDialog (module/dice/dialog-ui.mjs) в data-total-dx / data-total-roll, строку «основа · правки · Удача» — в data-total-parts. --}}
 <footer class="dlg-total">
   {{#unless noRoll}}
-  <div class="tot">
+  <div class="tot roll">
     <span class="cap">БРОСОК</span>
-    <b data-total-roll>d10 + {{base}}</b>
+    <span class="tot-roll"><span class="dx" data-total-dx>d10 +</span><b data-total-roll>{{base}}</b></span>
+    <span class="tot-parts" data-total-parts>основа {{base}}</span>
   </div>
   {{/unless}}
   {{#if damage}}

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Окно защиты</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/25612d673b3b274e866a8cf86c3d2833);--tp:url(/_blob/0fd0aebb9a4144aaf6db521a13c98d51);--ts:url(/_blob/156614f725e3402f6b23739d306af141);--tb:url(/_blob/da2f0eb7e517d3ac1b3d1bda263bcf1e)}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button{cursor:pointer}
+button:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.rail{background-color:#121316;background-image:var(--tb),radial-gradient(140% 60% at 50% 0%,rgba(255,240,215,.06),transparent 60%);background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.enamel{background-image:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0) 46%,rgba(0,0,0,.3));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.25),0 5px 12px -4px rgba(0,0,0,.9)}
+.enamel:hover{filter:brightness(1.08)}
+.enamel.steel{color:#16171a;background-color:#cfc8b8;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08);overflow:hidden}
+.frame::after{content:"";position:absolute;inset:4px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.head-h{display:flex;align-items:center;gap:10px}
+.lbl{color:#d6d0c2;letter-spacing:.22em}
+.def{display:flex;align-items:center;gap:10px;min-height:62px;padding:8px 10px;text-align:left;color:#a29d92;background:#141518;border:1px solid #060708;border-radius:2px}
+.def:hover{color:#e2ddd0}
+.def .nm{display:flex;flex-direction:column;gap:3px;flex-grow:1;min-width:0}
+.def .nm b{font-family:Forum,serif;font-weight:400;font-size:16px;line-height:1.05;color:#d6d0c2}
+.def .nm small{font-size:10.5px;line-height:1.3}
+.def .v{font-family:Forum,serif;font-size:24px;line-height:1;color:#8e897e}
+.def.on{color:#e2ddd0;background-color:#2a2c31;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.22));box-shadow:inset 0 2px 0 #cfc8b8,inset 0 1px 0 rgba(255,245,225,.13),0 4px 10px -4px rgba(0,0,0,.9)}
+.def.on .nm b{color:#f3eee2}
+.def.on .v{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.item{display:flex;align-items:center;gap:9px;height:44px;padding:0 10px 0 4px;color:#a29d92;background:#141518;border:1px solid #060708;border-radius:2px;text-align:left}
+.item.on{color:#f1ece0;background:#2a2c31;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.notch{display:inline-flex;gap:2px}
+.notch i{width:3px;height:8px;border-radius:1px;background:#d9d3c6}
+.fold{width:100%;display:flex;align-items:center;gap:10px;padding:0;text-align:left;background:transparent;border:0;color:#d6d0c2}
+.chev{width:10px;height:10px;flex-shrink:0;color:#8e897e}
+.step{width:34px;height:34px;padding:0;display:grid;place-items:center;font-size:18px;line-height:1}
+.sw{height:30px;padding:0 13px;font-family:Forum,serif;font-size:15px;color:#8e897e;background:transparent;border:1px solid transparent;border-radius:2px}
+.sw.on{color:#f3eee2;background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12)}
+.coin{width:22px;height:22px;padding:0;border-radius:50%;background:#16140f;border:1px solid #050607;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,240,215,.06)}
+.coin.on{background:radial-gradient(circle at 35% 30%,#fbe7b0,#c9a052 55%,#6e5121);box-shadow:0 0 0 1px #2a1d08,0 2px 4px rgba(0,0,0,.7),0 0 8px rgba(224,180,90,.35)}
+.coin.zero{display:grid;place-items:center;font-size:13px;color:#6c685f;background:transparent;border-color:transparent;box-shadow:none}
+.coin.zero.on{color:#f1ece0;background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12)}
+</style>
+</helmet>
+<div class="mat" style="width: 480px; min-height: 820px; box-sizing: border-box; display: flex; flex-direction: column; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums; border: 1px solid #040405; box-shadow: 0 24px 60px rgba(0,0,0,.8)">
+  <header class="rail" style="height: 34px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; border-bottom: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.08)">
+    <span style="flex-grow: 1; font-family: Forum, serif; font-size: 15px; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Защита: Ведьмак-тест</span>
+    <button type="button" aria-label="Закрыть" style="width: 28px; height: 28px; padding: 0; display: grid; place-items: center; color: #8e897e; background: transparent; border: 0"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+  </header>
+
+  <section class="plate" style="margin: 14px 14px 0; padding: 12px 14px 12px 12px; display: flex; align-items: center; gap: 13px; box-shadow: inset 0 2px 0 #cfc8b8, inset 0 3px 0 rgba(0,0,0,.4), inset 0 -1px 0 rgba(0,0,0,.55), 0 2px 3px rgba(0,0,0,.55)">
+    <div class="frame" style="width: 64px; height: 64px"><img src="/_blob/20afe6c06d54b4db8890436f71098284" alt="" style="width: 62px; height: 62px; object-fit: cover"></div>
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+      <span class="cap">Против атаки</span>
+      <h1 style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 22px; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Утопец · когти</h1>
+      <span style="font-size: 11.5px; color: #8e897e">ближний бой · в туловище</span>
+    </div>
+    <div class="stamp" style="width: 70px; height: 66px; flex-shrink: 0">
+      <span class="cap" style="font-size: 8px; color: #a29d92">атака</span>
+      <span style="font-family: Forum, serif; font-size: 32px; line-height: 1; color: #e0937f; text-shadow: 0 1px 0 rgba(0,0,0,.95)">16</span>
+    </div>
+  </section>
+
+  <div style="flex-grow: 1; padding: 16px 14px 18px; display: flex; flex-direction: column; gap: 17px">
+    <div style="display: flex; flex-direction: column; gap: 9px">
+      <div class="head-h"><span class="gem"></span><span class="cap lbl">Чем отвечаем</span><div class="groove" style="flex-grow: 1"></div></div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px">
+        <sc-for list="{{types}}" as="t" hint-placeholder-count="5">
+          <button type="button" class="{{t.cls}}" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}">
+            <span class="nm"><b>{{t.label}}</b><small>{{t.note}}</small></span>
+            <span class="v">{{t.v}}</span>
+          </button>
+        </sc-for>
+      </div>
+      <span style="font-size: 11px; line-height: 1.4; color: #8e897e">{{typeHint}}</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px">
+      <div class="head-h"><span class="gem"></span><span class="cap lbl">Блок или парирование</span><div class="groove" style="flex-grow: 1"></div></div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px">
+        <button type="button" class="item on" aria-pressed="true">
+          <span class="frame" style="width: 34px; height: 34px"><img src="/_blob/72f43b8b013119963123dd04111aecb4" alt="" style="width: 28px; height: 28px; object-fit: contain"></span>
+          <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Серебряный меч</span><span class="notch" aria-label="Надёжность 10 из 10"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>
+        </button>
+        <button type="button" class="item" aria-pressed="false">
+          <span class="frame" style="width: 34px; height: 34px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a29d92" stroke-width="1.6" stroke-linejoin="round"><path d="M7 11V5.5a1.5 1.5 0 0 1 3 0V10M10 9.5V4a1.5 1.5 0 0 1 3 0v6M13 9V5a1.5 1.5 0 0 1 3 0v6M16 10.5V8a1.5 1.5 0 0 1 3 0v5.5c0 4-2.6 7-6.5 7S6 18 5 15l-1.5-4a1.4 1.4 0 0 1 2.4-1.4L7 11.5"/></svg></span>
+          <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px">Рукой · Борьба</span><span style="font-size: 10.5px; color: #6c685f">урон в подставленную руку</span></span>
+        </button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px">
+      <button type="button" class="fold" aria-expanded="false">
+        <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" style="transform: rotate(-90deg)"><path d="M2 3.5l3 3 3-3"/></svg>
+        <span class="cap lbl">Обстоятельства</span><div class="groove" style="flex-grow: 1"></div><span style="font-size: 11px; color: #6c685f">не выбрано</span>
+      </button>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 4px">
+        <button type="button" class="btn step" aria-label="Меньше противников" onClick="{{lessFoes}}">−</button>
+        <span class="well" style="width: 46px; height: 34px; display: grid; place-items: center; font-family: Forum, serif; font-size: 21px; color: #f1ece0">{{foes}}</span>
+        <button type="button" class="btn step" aria-label="Больше противников" onClick="{{moreFoes}}">+</button>
+      </div>
+      <span style="display: flex; flex-direction: column; gap: 2px"><span class="cap lbl">Противников рядом</span><span style="font-size: 11px; color: {{foesColor}}">{{foesNote}}</span></span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 18px">
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <div class="head-h"><span class="gem"></span><span class="cap lbl">Модификатор</span><div class="groove" style="flex-grow: 1"></div></div>
+        <div style="display: flex; align-items: center; gap: 4px">
+          <button type="button" class="btn step" aria-label="Меньше" onClick="{{minus}}">−</button>
+          <span class="well" style="width: 50px; height: 34px; display: grid; place-items: center; font-family: Forum, serif; font-size: 21px; color: #f1ece0">{{modVal}}</span>
+          <button type="button" class="btn step" aria-label="Больше" onClick="{{plus}}">+</button>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <div class="head-h"><span class="gem"></span><span class="cap lbl">Удача · 4</span><div class="groove" style="flex-grow: 1"></div></div>
+        <div style="display: flex; align-items: center; gap: 6px; height: 34px">
+          <button type="button" class="coin zero on" aria-label="Не тратить Удачу">—</button>
+          <button type="button" class="coin" aria-label="Потратить Удачу: 1"></button><button type="button" class="coin" aria-label="Потратить Удачу: 2"></button><button type="button" class="coin" aria-label="Потратить Удачу: 3"></button><button type="button" class="coin" aria-label="Потратить Удачу: 4"></button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px">
+      <span class="cap lbl">Кому видно</span>
+      <div class="well" style="display: inline-flex; gap: 2px; padding: 2px">
+        <button type="button" class="sw on" aria-pressed="true">Всем</button><button type="button" class="sw" aria-pressed="false">Ведущему</button><button type="button" class="sw" aria-pressed="false">Втёмную</button><button type="button" class="sw" aria-pressed="false">Себе</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="rail" style="flex-shrink: 0; display: flex; align-items: center; gap: 12px; padding: 14px 14px 14px 16px; border-top: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.07)">
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+      <span class="cap">Бросок</span>
+      <span style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: Forum, serif; font-size: 19px; color: #8e897e">d10 +</span><span class="metal" style="font-family: Forum, serif; font-size: 34px; line-height: 1">{{sum}}</span><span style="font-size: 12px; color: #8e897e">против <span style="font-family: Forum, serif; font-size: 18px; color: #e0937f">16</span></span></span>
+      <span style="font-size: 11px; color: #8e897e">{{chance}}</span>
+    </div>
+    <button type="button" class="btn" style="height: 42px; padding: 0 16px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase">Отмена</button>
+    <button type="button" class="enamel steel" style="height: 42px; padding: 0 20px; font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase">Защищаться</button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":480,"height":820}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { type: 'dodge', foes: 1, mod: 0 }; }
+  renderVals() {
+    const s = this.state;
+    const fmt = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
+    const T = [
+      { k: 'dodge', label: 'Уклонение', note: 'Реа 10 · Уклонение 5', v: 15, hint: 'Уходите с линии удара. Успех — атака мимо.' },
+      { k: 'reposition', label: 'Изменение позиции', note: 'Лвк 10 · Атлетика 4', v: 14, hint: 'При успехе можно сместиться на ½ Скор.' },
+      { k: 'block', label: 'Блокирование', note: 'Реа 10 · Владение мечом 6', v: 16, hint: 'Предмет теряет 1 надёжность. Дистанционные атаки — только щитом.' },
+      { k: 'parry', label: 'Парирование', note: 'Владение мечом · −3', v: 13, hint: 'Успех: атака отменена, оружие цело, атакующий ошеломлён. Стрелы и болты — нельзя.' },
+      { k: 'brawl', label: 'Блок рукой', note: 'Реа 10 · Борьба 3', v: 13, hint: 'Урон приходится в подставленную руку, броня работает.' }
+    ];
+    const t = T.find(x => x.k === s.type);
+    const foesMod = -(s.foes - 1);
+    const sum = t.v + foesMod + s.mod;
+    // Ничья — в пользу защиты; единица на d10 — провал при любой основе, десятка — добрасывается
+    const need = 16 - sum;
+    const chance = need <= 1 ? 'устоите при любом броске, кроме провала на 1'
+      : need > 10 ? 'устоять можно только критом — десяткой с добросом'
+      : 'нужно выбросить ' + need + ' или больше · около ' + (11 - need) * 10 + '%';
+    return {
+      types: T.map(x => ({ label: x.label, note: x.note, v: x.v, cls: x.k === s.type ? 'def on' : 'def', pressed: x.k === s.type ? 'true' : 'false', pick: () => this.setState({ type: x.k }) })),
+      typeHint: t.hint, sum,
+      foes: s.foes, foesNote: s.foes > 1 ? 'лишние в ближнем бою: ' + fmt(foesMod) : 'один — без штрафа', foesColor: s.foes > 1 ? '#e0937f' : '#6c685f',
+      lessFoes: () => this.setState({ foes: Math.max(1, s.foes - 1) }), moreFoes: () => this.setState({ foes: s.foes + 1 }),
+      modVal: s.mod ? fmt(s.mod) : '0', minus: () => this.setState({ mod: s.mod - 1 }), plus: () => this.setState({ mod: s.mod + 1 }),
+      chance
+    };
+  }
+}
+</script>
+</body>
+</html>

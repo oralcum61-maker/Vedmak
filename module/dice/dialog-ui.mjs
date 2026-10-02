@@ -99,7 +99,22 @@ export function bindDialog(dialog, { extra, base: baseFn, mods: modsFn, damageEx
       const value = baseBox.querySelector("b");
       if (value) value.textContent = String(base);
     }
-    if (rollOut) rollOut.textContent = `d10 ${base < 0 ? "−" : "+"} ${Math.abs(base)}${mods ? ` ${mods > 0 ? "+" : "−"} ${Math.abs(mods)}` : ""}`;
+    // Итог броска одним числом («d10 + 15»), под ним — из чего: основа, правки, Удача
+    const dxOut = root.querySelector("[data-total-dx]");
+    const partsOut = root.querySelector("[data-total-parts]");
+    const signed = v => `${v > 0 ? "+" : "−"}${Math.abs(v)}`;
+    if (rollOut && dxOut) {
+      const sum = base + mods;
+      dxOut.textContent = sum < 0 ? "d10 −" : "d10 +";
+      rollOut.textContent = String(Math.abs(sum));
+    } else if (rollOut) {
+      rollOut.textContent = `d10 ${base < 0 ? "−" : "+"} ${Math.abs(base)}${mods ? ` ${mods > 0 ? "+" : "−"} ${Math.abs(mods)}` : ""}`;
+    }
+    if (partsOut) {
+      const other = mods - luck;
+      partsOut.textContent = [`основа ${base}`, other ? `правки ${signed(other)}` : "", luck ? `Удача +${luck}` : ""]
+        .filter(Boolean).join(" · ");
+    }
     if (dmgOut) {
       // Порядок как в броске урона: формула × множитель, затем разбег и правка урона
       const picked2 = checked.find(i => i.dataset.damage !== undefined);

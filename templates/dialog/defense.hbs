@@ -35,7 +35,7 @@
         {{#each situations}}
         <label class="chip">
           <input type="checkbox" name="sit.{{key}}" data-mod="{{mod}}">
-          <span>{{label}} <b>{{vedmakSigned mod}}</b></span>
+          <span>{{label}} <b class="{{#if (lt mod 0)}}neg{{else}}pos{{/if}}">{{vedmakSigned mod}}</b></span>
         </label>
         {{/each}}
       </div>

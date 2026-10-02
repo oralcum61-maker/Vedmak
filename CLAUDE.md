@@ -100,6 +100,8 @@
   надёжность насечками, инструменты, уровень ромбами, стихии — алхимическими треугольниками (`ELEMENT_GLYPHS`),
   субстанции — знаками автора (`assets/substances`). Металл значков — градиенты `#vd-metal-ok/worn/broken`: их один раз
   на страницу ставит `injectMetalDefs` (vedmak.mjs), в шаблоны их не копировать.
+- **Окна проверок и чат вычищают встроенный `<svg>`** (DialogV2 и ChatMessage чистят разметку): значки там — файлы
+  `assets/glyphs/*.svg` фоном через CSS (`node tools/make-glyphs.mjs`), а не подшаблон со `<svg>`.
 - **Курсоры** — 18 своих рисунков в `assets/cursors`; таблица `CURSORS` в vedmak.mjs ставит их переменными на body и
   в стили холста. Новый курсор — файл, строка в `CURSORS` и правило в разделе «Курсоры» стилей.
 - Общие мелочи вкладок «Ремесло», «Магия», «Дневник» и мастера (`.cap`, `.go-btn`, `.mini`, `.lvl`) собраны правилами
@@ -116,6 +118,7 @@
 | `design/04-combat-tab` | [Вкладка «Бой»](https://claude.ai/artifact/639jmEa5tfgT32WAjFasGA) | 4.19 |
 | `design/05-gravure` | [Ведьмак: новый облик листа](https://claude.ai/artifact/U4C9XoLqYACmyGrUAsZLyX) | 4.45 |
 | `design/06-tabs` | [Снаряжение, ремесло, магия, дневник, мастер и курсоры](https://claude.ai/artifact/LEfcJsPuVxDbDGDQ7oYe8a) | 4.46 |
+| `design/07-dialogs` | [Окна проверок и карточки чата](https://claude.ai/artifact/5TmpWK5jDLiXMc6DMLgjPP) | 4.47 |
 
 В каждой папке `canvas.json` хранит раскладку холста и заметки «что было — что стало».
 Файлы `*.dc.html` — артборды в формате холста: сами по себе они не открываются, им нужен `support.js` холста.

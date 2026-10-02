@@ -1,0 +1,88 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Attack.dc.html": {
+      "h": 960,
+      "is_interactive": true,
+      "title": "Атака",
+      "w": 480,
+      "x": 560,
+      "y": 0
+    },
+    "Cast.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "title": "Сотворение",
+      "w": 480,
+      "x": 1680,
+      "y": 0
+    },
+    "ChatChecks.dc.html": {
+      "h": 820,
+      "title": "Чат: проверки и магия",
+      "w": 320,
+      "x": 400,
+      "y": 1360
+    },
+    "ChatCombat.dc.html": {
+      "h": 1180,
+      "title": "Чат: бой",
+      "w": 320,
+      "x": 0,
+      "y": 1360
+    },
+    "Defense.dc.html": {
+      "h": 820,
+      "is_interactive": true,
+      "title": "Защита",
+      "w": 480,
+      "x": 1120,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 600,
+      "is_interactive": true,
+      "title": "Проверка навыка",
+      "w": 480,
+      "x": 16,
+      "y": 1
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-02T14:30:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "chat": {
+      "kind": "title1",
+      "maxW": 720,
+      "text": "Карточки в чате",
+      "w": 240,
+      "x": 0,
+      "y": 1110
+    },
+    "dialogs": {
+      "kind": "title1",
+      "maxW": 2160,
+      "text": "Окна проверок",
+      "w": 240,
+      "x": 0,
+      "y": -250
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Attack.dc.html",
+    "Defense.dc.html",
+    "Cast.dc.html",
+    "ChatCombat.dc.html",
+    "ChatChecks.dc.html"
+  ],
+  "pages": [],
+  "title": "Ведьмак: окна проверок и карточки чата"
+}

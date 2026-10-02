@@ -1,0 +1,3 @@
+{{!-- Гранёная кость d10. v — выпавшее число, burn — кость провала. Грань — картинка assets/glyphs/die-*.svg фоном:
+      чат вычищает встроенный <svg> из сообщений. --}}
+<span class="die d10{{#if (eq v 10)}} max{{/if}}{{#if (eq v 1)}} min{{/if}}{{#if burn}} fumble-die{{/if}}" aria-label="d10: {{v}}"><b>{{v}}</b></span>
