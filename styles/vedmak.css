@@ -2459,8 +2459,8 @@ body.system-vedmak .locked-tooltip :is(hr) { border: 0; border-top: 1px solid rg
 body.vedmak-cursor {
   --cursor-default: url("../assets/cursors/default.svg") 2 2, default;
   --cursor-default-down: url("../assets/cursors/default-down.svg") 2 2, default;
-  --cursor-pointer: url("../assets/cursors/pointer.svg") 2 2, pointer;
-  --cursor-pointer-down: url("../assets/cursors/pointer-down.svg") 2 2, pointer;
+  --cursor-pointer: url("../assets/cursors/pointer.svg") 11 2, pointer;
+  --cursor-pointer-down: url("../assets/cursors/pointer-down.svg") 11 2, pointer;
   cursor: var(--cursor-default);
 }
 body.vedmak-cursor:active { cursor: var(--cursor-default-down); }

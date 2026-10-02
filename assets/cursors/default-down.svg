@@ -1,16 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <!-- Нажатие: та же сталь в тени и искра у острия. Остриё — точка (2, 2). -->
+  <!-- Нажатие: тот же клинок, сталь в тени — без искр и цвета, чтобы не резало глаз. Остриё — точка (2, 2). -->
   <defs>
     <linearGradient id="s" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#d9d4ca"/>
-      <stop offset=".42" stop-color="#9a958c"/>
-      <stop offset=".6" stop-color="#64615b"/>
-      <stop offset="1" stop-color="#2c2b29"/>
+      <stop offset="0" stop-color="#d6d1c7"/>
+      <stop offset=".42" stop-color="#9f9a91"/>
+      <stop offset=".6" stop-color="#6c6963"/>
+      <stop offset="1" stop-color="#333230"/>
     </linearGradient>
   </defs>
-  <path d="M2 2 L2 24 L8 18.5 L12.5 28.5 L16.5 26.8 L12 16.8 L20.5 16.8 Z"
+  <path d="M2 2 L2 23.5 L7.2 18.3 L10.8 26.6 L14 25.2 L10.4 17 L17.6 17 Z"
         fill="url(#s)" stroke="#050607" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke"/>
-  <path d="M3.1 4.4 L10.6 15.6" stroke="#050607" stroke-opacity=".38" stroke-width=".8" stroke-linecap="round"/>
-  <path d="M3.4 6 L3.4 20.4" stroke="#ffffff" stroke-opacity=".5" stroke-width=".9" stroke-linecap="round"/>
-  <path d="M6.2 1.2 L8.4 0.4 M6.8 4 L9 4.4 M1.2 6.4 L0.6 8.6" stroke="#ff8a6e" stroke-width="1" stroke-linecap="round"/>
+  <path d="M3.4 5 L7.6 14.4" stroke="#050607" stroke-opacity=".4" stroke-width=".8" stroke-linecap="round"/>
+  <path d="M3.4 6 L3.4 20" stroke="#ffffff" stroke-opacity=".45" stroke-width=".9" stroke-linecap="round"/>
 </svg>

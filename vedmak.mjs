@@ -246,7 +246,7 @@ function injectMetalDefs() {
  */
 const CURSORS = {
   default: ["default", 2, 2, "default"], "default-down": ["default-down", 2, 2, "default"],
-  pointer: ["pointer", 2, 2, "pointer"], "pointer-down": ["pointer-down", 2, 2, "pointer"],
+  pointer: ["pointer", 11, 2, "pointer"], "pointer-down": ["pointer-down", 11, 2, "pointer"],
   grab: ["grab", 16, 13, "grab"], "grab-down": ["grabbing", 16, 13, "grabbing"],
   text: ["text", 16, 16, "text"], "text-down": ["text", 16, 16, "text"],
   help: ["help", 2, 2, "help"], "not-allowed": ["not-allowed", 2, 2, "not-allowed"],
