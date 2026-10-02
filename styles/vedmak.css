@@ -2509,6 +2509,8 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
   --vd-t-brushed: url("../assets/textures/steel-brushed.webp");
   --vd-t-scratch: url("../assets/textures/scratches.webp");
   --vd-t-stains: url("../assets/textures/stains.webp");
+  --vd-t-paper-fiber: url("../assets/textures/paper-fiber.webp");
+  --vd-t-paper-crease: url("../assets/textures/paper-crease.webp");
   --vd-edge: #060708;
   --vd-plate: #1f2024;
   --vd-well: #0c0d0f;
@@ -4954,3 +4956,10 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .chat-message.vedmak-message .vedmak-card .lp-chat-label { color: var(--ink-3); }
 .chat-message.vedmak-message .vedmak-card .lp-chat-result i { color: #7a4a1a; }
 .chat-message.vedmak-message .vedmak-card .lp-chat-row .die.dn { background: rgba(255, 250, 235, .45); border: 1.5px solid var(--ink); box-shadow: inset 0 0 0 2px rgba(255, 250, 235, .5); }
+/* Пергамент: настоящая бумага ambientCG — волокно (Paper006) и складки мятого листа (Paper003) поверх тона и разводов */
+.chat-message.vedmak-message {
+  background-image: radial-gradient(ellipse 120% 95% at 50% 40%, transparent 58%, rgba(120, 78, 32, .3) 100%),
+    var(--vd-t-paper-crease), var(--vd-t-paper-fiber), var(--vd-parch), var(--vd-t-stains);
+  background-size: 100% 100%, 512px 512px, 384px 384px, 320px 320px, 512px 512px;
+  background-blend-mode: normal, overlay, overlay, multiply, soft-light;
+}
