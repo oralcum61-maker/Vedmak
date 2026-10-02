@@ -1,4 +1,4 @@
-{{!-- Кованый символ части тела (вкладка «Снаряжение»). p = {kind: head|torso|arm|leg, flip, state: ok|worn|broken|none, tip, value, covered}.
+{{!-- Кованый символ части тела (вкладка «Снаряжение», окна атаки и урона). p = {kind: head|torso|arm|leg|die, flip, state: ok|worn|broken|none, tip, value, covered, bare — без числа}.
       Цвет металла по состоянию задают классы .vd-part.* в styles/vedmak.css (градиенты — #vd-metal-* в tab-gear.hbs). --}}
 <span class="vd-part {{p.state}}" data-tooltip="{{p.tip}}" aria-label="{{p.tip}}">
   <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><g{{#if p.flip}} transform="translate(24 0) scale(-1 1)"{{/if}}>
@@ -27,6 +27,10 @@
     <path class="hi" d="M5.8 9.6V13.4"/>
     <path class="scr" d="M7.4 10.2L10.4 12.2M11.6 3.2L14 6.2"/>
     <path class="crk" d="M10.6 2.4L9.8 6L11.6 9L10.2 13L11.4 17.4"/>
+  {{else if (eq p.kind "die")}}
+    <path class="shell" d="M12 1.5L22.5 10L12 22.5L1.5 10Z"/>
+    <path class="ink" d="M1.5 10L12 14L22.5 10M12 14V22.5M12 1.5L7.4 11.6M12 1.5L16.6 11.6"/>
+    <path class="hi" d="M3.6 10.4L11 13.2"/>
   {{else}}
     <path class="shell" d="M7.2 1.6H13.4L14 11.4L13.2 16.4L19.4 18.4L21.4 21.8H7.6L6.6 16.4L6.2 11.4Z"/>
     <path class="shell" d="M5.4 8L7 5.6H13.8L15.2 8L13.8 10.4H7Z"/>
@@ -37,5 +41,5 @@
     <path class="crk" d="M11.6 1.8L10.6 5.4M11.4 10.8L12.6 13.6L11.6 16.2"/>
   {{/if}}
   </g></svg>
-  <b>{{#if p.covered}}{{p.value}}{{else}}·{{/if}}</b>
+  {{#unless p.bare}}<b>{{#if p.covered}}{{p.value}}{{else}}·{{/if}}</b>{{/unless}}
 </span>

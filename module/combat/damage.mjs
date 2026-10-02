@@ -3,7 +3,7 @@
 
 import {
   LOCATIONS_HUMANOID, LOCATIONS_MONSTER, CRIT_LEVELS, CRIT_WOUNDS, COVER, EFFECT_STATUS, STATUS_RESIST_KEY,
-  critWoundFor, aimedCritWound
+  critWoundFor, aimedCritWound, locationGlyph
 } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
@@ -90,8 +90,9 @@ async function damageDialog(attack, target, cfg, attacker) {
       subtitle: `${attack.label} · ${attack.typeLabel} · урон ${formula}${attack.nonLethal ? " (несмертельный)" : ""}`
     },
     damageTypes: types, manyTypes: types.length > 1, singleType: types[0]?.key ?? "bludgeoning",
-    locations: [{ key: "", label: "Броском", note: "d10", selected: !cfg.location }].concat(
-      Object.entries(table).map(([key, l]) => ({ key, label: l.label, note: l.mult === 0.5 ? "×½" : `×${l.mult}`, selected: key === cfg.location }))
+    locations: [{ key: "", label: "Броском", note: "d10", selected: !cfg.location, glyph: locationGlyph("") }].concat(
+      Object.entries(table).map(([key, l]) => ({ key, label: l.label, note: l.mult === 0.5 ? "×½" : `×${l.mult}`, selected: key === cfg.location,
+        glyph: locationGlyph(key, l) }))
     ),
     covers: Object.entries(COVER).map(([key, c]) => ({ key, label: c.label, sp: c.sp, selected: key === cfg.cover })),
     coverNote: COVER[cfg.cover]?.label ?? "",

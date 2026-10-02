@@ -5,7 +5,7 @@ import { punchSteps } from "../config/stats.mjs";
 import { witcherSchools } from "../config/character.mjs";
 import {
   ATTACK_TYPES, UNARMED_ATTACKS, ATTACK_SITUATIONS, RANGE_BANDS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MOUNTS, WEIGHT_MODS,
-  fumbleText
+  fumbleText, locationGlyph
 } from "../config/combat.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
@@ -234,8 +234,9 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
   const current = types.find(t => t.selected) ?? types[0];
 
   const locList = (target?.system.derived?.bodyType ?? "humanoid") === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
-  const locations = [{ key: "", label: "Случайно", note: "d10", mod: 0, selected: !cfg.aim }].concat(
-    Object.entries(locList).map(([key, l]) => ({ key, label: l.label, note: String(l.penalty), mod: l.penalty, selected: key === cfg.aim }))
+  const locations = [{ key: "", label: "Случайно", note: "d10", mod: 0, selected: !cfg.aim, glyph: locationGlyph("") }].concat(
+    Object.entries(locList).map(([key, l]) => ({ key, label: l.label, note: String(l.penalty), mod: l.penalty, selected: key === cfg.aim,
+      glyph: locationGlyph(key, l) }))
   );
 
   const skillLabel = SKILLS[src.types[current.key]?.skill ?? src.skill].label;
