@@ -2503,7 +2503,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
    остальное — сталь и серебро. Forum — имена, вкладки, разделы и числа; IBM Plex Sans — текст. */
 
 .vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
-  --vd-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncG type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncB type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncA type='linear' slope='0' intercept='.5'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --vd-grain: url("../assets/textures/grain.png");
   --vd-t-leather: url("../assets/textures/leather.webp");
   --vd-t-plate: url("../assets/textures/steel-plate.webp");
   --vd-t-brushed: url("../assets/textures/steel-brushed.webp");
@@ -2511,6 +2511,17 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
   --vd-t-stains: url("../assets/textures/stains.webp");
   --vd-t-paper-fiber: url("../assets/textures/paper-fiber.webp");
   --vd-t-paper-crease: url("../assets/textures/paper-crease.webp");
+  /* Запечённые поверхности (tools/bake-surfaces.sh): фактура уже сведена с цветом, смешение не нужно */
+  --vd-s-window: url("../assets/textures/baked/window.webp");
+  --vd-s-header: url("../assets/textures/baked/header.webp");
+  --vd-s-plate: url("../assets/textures/baked/plate.webp");
+  --vd-s-chat: url("../assets/textures/baked/chat.webp");
+  --vd-s-chat-head: url("../assets/textures/baked/chat-head.webp");
+  --vd-s-btn: url("../assets/textures/baked/btn-steel.webp");
+  --vd-s-ok: url("../assets/textures/baked/plaque-ok.webp");
+  --vd-s-bad: url("../assets/textures/baked/plaque-bad.webp");
+  --vd-s-go: url("../assets/textures/baked/go-red.webp");
+  --vd-s-go-arcane: url("../assets/textures/baked/go-violet.webp");
   --vd-edge: #060708;
   --vd-plate: #1f2024;
   --vd-well: #0c0d0f;
@@ -2546,19 +2557,18 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 /* Основа окна — выделанная кожа под зерном, с мягкими разводами и тенью по краям */
 .application.vedmak:not(.vedmak-hud) .window-content {
   background-color: var(--vd-bg);
-  background-image: var(--vd-grain), var(--vd-t-leather), var(--vd-t-stains),
-    radial-gradient(130% 100% at 50% 0%, rgba(255, 240, 215, .04), transparent 50%, rgba(0, 0, 0, .35));
-  background-size: 160px 160px, 512px 512px, 640px 640px, 100% 100%;
-  background-blend-mode: overlay, overlay, overlay, normal;
+  background-image: radial-gradient(130% 100% at 50% 0%, rgba(255, 240, 215, .04), transparent 50%, rgba(0, 0, 0, .35)), var(--vd-s-window);
+  background-size: 100% 100%, 512px 512px;
+  background-blend-mode: normal;
 }
 .vedmak.sheet .window-content::after { content: none; display: none; }
 
 /* Планка окна — шлифованная сталь */
 .application.vedmak .window-header {
   background-color: #131417;
-  background-image: var(--vd-grain), var(--vd-t-brushed), linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(0, 0, 0, .25));
-  background-size: 160px 160px, 512px 512px, 100% 100%;
-  background-blend-mode: overlay, overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(0, 0, 0, .25)), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px;
+  background-blend-mode: normal;
   border-bottom: 1px solid var(--vd-edge);
   box-shadow: inset 0 1px 0 rgba(255, 240, 215, .08);
 }
@@ -2568,10 +2578,9 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 .vedmak .vd-panel, .vedmak.character .stat-col, .vedmak .combat-block, .vedmak .fate-bar, .vedmak .advance-bar,
 .vedmak .vd-rail .rail-luck, .vedmak-card, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   background-color: var(--vd-plate);
-  background-image: var(--vd-grain), var(--vd-t-plate),
-    linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24));
-  background-size: 160px 160px, 512px 512px, 100% 100%;
-  background-blend-mode: overlay, overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px;
+  background-blend-mode: normal;
   border: 1px solid var(--vd-edge);
   border-radius: 2px;
   box-shadow: var(--vd-lift);
@@ -2724,20 +2733,19 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
   position: relative; z-index: 1;
   gap: .65rem; padding: .8rem .75rem .7rem;
   background-color: #121316;
-  background-image: var(--vd-grain), var(--vd-t-brushed),
-    radial-gradient(140% 50% at 50% 0%, rgba(255, 240, 215, .06), transparent 60%),
-    linear-gradient(90deg, rgba(0, 0, 0, .3), transparent 25%, transparent 80%, rgba(0, 0, 0, .45));
-  background-size: 160px 160px, 512px 512px, 100% 100%, 100% 100%;
-  background-blend-mode: overlay, overlay, normal, normal;
+  background-image: radial-gradient(140% 50% at 50% 0%, rgba(255, 240, 215, .06), transparent 60%),
+    linear-gradient(90deg, rgba(0, 0, 0, .3), transparent 25%, transparent 80%, rgba(0, 0, 0, .45)), var(--vd-s-header);
+  background-size: 100% 100%, 100% 100%, 512px 512px;
+  background-blend-mode: normal;
   border-right: 1px solid var(--vd-edge);
   box-shadow: inset -1px 0 0 rgba(255, 240, 215, .05), 8px 0 22px -8px rgba(0, 0, 0, .9);
 }
 /* Шапка чудовища — та же шлифованная сталь, что колонка персонажа */
 .vedmak .vd-header {
   background-color: #121316;
-  background-image: var(--vd-grain), var(--vd-t-brushed), radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%);
-  background-size: 160px 160px, 512px 512px, 100% 100%;
-  background-blend-mode: overlay, overlay, normal;
+  background-image: radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px;
+  background-blend-mode: normal;
   border-bottom: 1px solid var(--vd-edge);
   box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .85);
 }
@@ -2824,9 +2832,9 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 .vedmak.sheet nav.sheet-tabs > a.active {
   color: #f3eee2; padding-bottom: .52rem;
   background-color: var(--vd-bg);
-  background-image: var(--vd-grain), var(--vd-t-leather), linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0));
-  background-size: 160px 160px, 512px 512px, 100% 100%;
-  background-blend-mode: overlay, overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0)), var(--vd-s-window);
+  background-size: 100% 100%, 512px 512px;
+  background-blend-mode: normal;
   border-color: var(--vd-edge);
   box-shadow: inset 0 1px 0 rgba(255, 240, 215, .1);
   text-shadow: var(--vd-engrave);
@@ -2988,8 +2996,8 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 .vedmak-dialog.check-dialog .luck-row { border-left: 1px solid #040405; }
 .vedmak-dialog.check-dialog .stepper input { font-family: var(--vd-font-head); }
 .vedmak-dialog.check-dialog .dlg-total {
-  background-color: #17181b; background-image: var(--vd-grain), var(--vd-t-brushed);
-  background-size: 160px 160px, 512px 512px; background-blend-mode: overlay, overlay;
+  background-color: #17181b; background-image: var(--vd-s-header);
+  background-size: 512px 512px; background-blend-mode: normal;
   border-top: 1px solid var(--vd-edge); box-shadow: inset 0 1px 0 rgba(255, 240, 215, .07);
 }
 .vedmak-dialog.check-dialog .dlg-total b { font-family: var(--vd-font-head); font-size: 1.15rem; color: #f3eee2; }
@@ -3094,8 +3102,8 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
 .vedmak .skill-group { gap: 0; margin-bottom: .8rem; padding: .55rem .7rem .5rem; }
 .vedmak .skill-group {
   background-color: var(--vd-plate);
-  background-image: var(--vd-grain), var(--vd-t-plate), linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24));
-  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
   border: 1px solid var(--vd-edge); border-radius: 2px; box-shadow: var(--vd-lift);
 }
 .vedmak .skill-group .group-head { margin-bottom: .35rem; }
@@ -3918,8 +3926,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .wizard.trail { display: flex; height: 100%; min-height: 0; }
 .vedmak-wizard :is(.wiz-rail, .wiz-hero, .wizard-footer) {
   background-color: #121316;
-  background-image: var(--vd-grain), var(--vd-t-brushed), radial-gradient(140% 50% at 50% 0%, rgba(255,240,215,.06), transparent 60%);
-  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+  background-image: radial-gradient(140% 50% at 50% 0%, rgba(255,240,215,.06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
 }
 .vedmak-wizard .wiz-rail {
   position: relative; z-index: 1; flex: none; width: 13.2rem; padding: 1rem .7rem 1rem 1rem; overflow-y: auto;
@@ -3989,8 +3997,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .pick-card {
   position: relative; display: flex; flex-direction: column; overflow: hidden; padding: 0; cursor: var(--cursor-pointer);
   background-color: var(--vd-plate);
-  background-image: var(--vd-grain), var(--vd-t-plate), linear-gradient(180deg, rgba(255,245,225,.06), rgba(0,0,0,.24));
-  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255,245,225,.06), rgba(0,0,0,.24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
   border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.1), 0 10px 20px -12px rgba(0,0,0,.95);
 }
 .vedmak-wizard .pick-card > * { pointer-events: none; }
@@ -4087,8 +4095,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .stat-card {
   display: flex; gap: .7rem; padding: .6rem .7rem;
   background-color: var(--vd-plate);
-  background-image: var(--vd-grain), var(--vd-t-plate), linear-gradient(180deg, rgba(255,245,225,.06), rgba(0,0,0,.24));
-  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255,245,225,.06), rgba(0,0,0,.24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
   border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.1), 0 8px 16px -10px rgba(0,0,0,.95);
 }
 .vedmak-wizard .stat-card .stamp { width: 3.3rem; height: 3.3rem; }
@@ -4250,16 +4258,16 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-dialog.cast-dialog { --vd-accent: #6a5a98; --vd-go: #6a5a98; --vd-go-text: #f2edff; --vd-go-edge: #17102a; --vd-go-shadow: 0 -1px 0 rgba(20,10,40,.6); }
 .vedmak-dialog.check-dialog .window-content {
   background-color: #17181b;
-  background-image: var(--vd-t-leather), radial-gradient(130% 100% at 50% 0%, rgba(255,240,215,.04), transparent 50%, rgba(0,0,0,.35));
-  background-size: 512px 512px, 100% 100%; background-blend-mode: overlay, normal;
+  background-image: radial-gradient(130% 100% at 50% 0%, rgba(255,240,215,.04), transparent 50%, rgba(0,0,0,.35)), var(--vd-s-window);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
 }
 
 /* Шапка — пластина с нитью цвета действия */
 .vedmak-dialog.check-dialog .dlg-head {
   gap: .8rem; margin: .85rem .85rem 0; padding: .8rem .85rem .8rem .8rem;
   background-color: #1f2024;
-  background-image: var(--vd-t-plate), linear-gradient(180deg, rgba(255,245,225,.06), rgba(255,245,225,0) 35%, rgba(0,0,0,.24));
-  background-size: 512px 512px, 100% 100%; background-blend-mode: overlay, normal;
+  background-image: linear-gradient(180deg, rgba(255,245,225,.06), rgba(255,245,225,0) 35%, rgba(0,0,0,.24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
   border: 1px solid #060708; border-radius: 2px;
   box-shadow: inset 0 2px 0 var(--vd-accent), inset 0 3px 0 rgba(0,0,0,.4), inset 0 -1px 0 rgba(0,0,0,.55), 0 2px 3px rgba(0,0,0,.55);
 }
@@ -4450,8 +4458,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 /* Подвал: итог одним числом, под ним — из чего; кнопки — продолжение той же планки */
 .vedmak-dialog.check-dialog .dlg-total, .vedmak-dialog.check-dialog .form-footer {
   background-color: #121316;
-  background-image: var(--vd-grain), var(--vd-t-brushed), radial-gradient(140% 60% at 50% 0%, rgba(255,240,215,.06), transparent 60%);
-  background-size: 160px 160px, 512px 512px, 100% 100%; background-blend-mode: overlay, overlay, normal;
+  background-image: radial-gradient(140% 60% at 50% 0%, rgba(255,240,215,.06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
 }
 .vedmak-dialog.check-dialog .dlg-total { align-items: flex-end; gap: 1rem; padding: .75rem .85rem .35rem; border-top: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.07); }
 .vedmak-dialog.check-dialog .dlg-total .tot { gap: .15rem; }
@@ -4486,16 +4494,10 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   --vd-thread: #55585f;
   padding: 0; overflow: hidden;
   background-color: #1f2024;
-  background-image: var(--vd-t-plate), linear-gradient(180deg, rgba(255,245,225,.06), rgba(255,245,225,0) 30%, rgba(0,0,0,.24));
-  background-size: 512px 512px, 100% 100%; background-blend-mode: overlay, normal;
+  background-image: none;
   border: 1px solid #060708; border-radius: 2px;
   box-shadow: inset 0 2px 0 var(--vd-thread), 0 6px 14px -8px rgba(0,0,0,.9);
 }
-.chat-message.vedmak-message:has(.vedmak-card.is-success, .vedmak-card.defense.is-miss) { --vd-thread: #7d9461; }
-.chat-message.vedmak-message:has(.vedmak-card.attack, .vedmak-card.damage, .vedmak-card.is-failure, .vedmak-card.is-fumble, .vedmak-card.defense.is-hit) { --vd-thread: #b8432c; }
-.chat-message.vedmak-message:has(.vedmak-card.cast) { --vd-thread: #6a5a98; }
-.chat-message.vedmak-message:has(.vedmak-card.cast.is-fumble) { --vd-thread: #b8432c; }
-.chat-message.vedmak-message:has(.vedmak-card.damage.is-applied) { --vd-thread: #5a2019; }
 .chat-message.vedmak-message .message-header {
   margin: 0; padding: .4rem .65rem .35rem; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045);
 }
@@ -4754,13 +4756,12 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
    Заменяет слои 4.49 (фактура) и 4.50 (пергамент). */
 .chat-message.vedmak-message {
   --vm-rivet: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.2px, #3c3b38 2.4px, #050607 3px, transparent 3.5px);
-  --vm-well: linear-gradient(rgba(12, 13, 15, .6), rgba(12, 13, 15, .6)), var(--vd-grain);
+  --vm-well: linear-gradient(#0c0d0f, #0c0d0f), linear-gradient(transparent, transparent);
   position: relative; padding: 0; overflow: visible; color: var(--vd-text);
   background-color: #1e1f23;
-  background-image: linear-gradient(180deg, rgba(255,245,225,.06), rgba(255,245,225,0) 35%, rgba(0,0,0,.24)),
-    linear-gradient(rgba(30,31,35,.5), rgba(30,31,35,.5)), var(--vd-grain), var(--vd-t-leather);
-  background-size: 100% 100%, 100% 100%, 220px 220px, 720px 720px;
-  background-blend-mode: normal, normal, overlay, overlay;
+  background-image: linear-gradient(180deg, rgba(255,245,225,.06), rgba(255,245,225,0) 35%, rgba(0,0,0,.24)), var(--vd-s-chat);
+  background-size: 100% 100%, 720px 720px;
+  background-blend-mode: normal;
   border: 1px solid #060708; border-radius: 7px;
   box-shadow: inset 0 1px 0 rgba(255,240,215,.08), inset 0 -1px 0 rgba(0,0,0,.5), 0 2px 3px rgba(0,0,0,.6), 0 16px 26px -14px rgba(0,0,0,.95);
 }
@@ -4772,12 +4773,11 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .chat-message.vedmak-message .message-header {
   position: relative; z-index: 1; margin: 0; padding: .3rem 1.05rem; min-height: 26px; align-items: center;
   background-color: #16171a;
-  background-image: var(--vm-rivet), linear-gradient(180deg, rgba(255,245,225,.09), rgba(0,0,0,.26)),
-    linear-gradient(rgba(22,23,26,.4), rgba(22,23,26,.4)), var(--vd-grain), var(--vd-t-brushed);
-  background-position: 4px 50%, 0 0, 0 0, 0 0, 0 0;
-  background-size: 7px 7px, 100% 100%, 100% 100%, 220px 220px, 512px 512px;
-  background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
-  background-blend-mode: normal, normal, normal, overlay, overlay;
+  background-image: var(--vm-rivet), linear-gradient(180deg, rgba(255,245,225,.09), rgba(0,0,0,.26)), var(--vd-s-chat-head);
+  background-position: 4px 50%, 0 0, 0 0;
+  background-size: 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-blend-mode: normal;
   border: 0; border-bottom: 1px solid #060708; border-radius: 6px 6px 0 0;
   box-shadow: inset 0 1px 0 rgba(255,240,215,.1), 0 2px 4px -1px rgba(0,0,0,.7);
 }
@@ -4893,20 +4893,20 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-size: .64rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; text-align: center;
   border: 1px solid #060708; border-radius: 2px;
   background-position: left 5px center, right 5px center, 0 0, 0 0, 0 0, 0 0;
-  background-size: 7px 7px, 7px 7px, 100% 100%, 100% 100%, 220px 220px, 512px 512px;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat;
-  background-blend-mode: normal, normal, normal, normal, overlay, overlay;
+  background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-blend-mode: normal;
 }
 .chat-message.vedmak-message .vedmak-card .outcome.success {
   color: #eef6e4; text-shadow: 0 -1px 0 rgba(0,0,0,.7); background-color: #34492a; border-color: #0b1407;
   background-image: var(--vm-rivet), var(--vm-rivet), linear-gradient(180deg, rgba(225,245,205,.22), rgba(225,245,205,0) 46%, rgba(0,0,0,.32)),
-    linear-gradient(rgba(52,73,42,.62), rgba(52,73,42,.62)), var(--vd-grain), var(--vd-t-brushed);
+    var(--vd-s-ok);
   box-shadow: inset 0 1px 0 rgba(220,245,200,.38), inset 0 -1px 0 rgba(0,0,0,.4), 0 3px 6px -2px rgba(0,0,0,.95);
 }
 .chat-message.vedmak-message .vedmak-card .outcome.failure {
   color: #ffeae3; text-shadow: 0 -1px 0 rgba(50,8,0,.7); background-color: #8f301f; border-color: #2a0c06;
   background-image: var(--vm-rivet), var(--vm-rivet), linear-gradient(180deg, rgba(255,215,195,.24), rgba(255,215,195,0) 46%, rgba(0,0,0,.34)),
-    linear-gradient(rgba(143,48,31,.6), rgba(143,48,31,.6)), var(--vd-grain), var(--vd-t-brushed);
+    var(--vd-s-bad);
   box-shadow: inset 0 1px 0 rgba(255,205,185,.45), inset 0 -1px 0 rgba(0,0,0,.35), 0 3px 6px -2px rgba(0,0,0,.95);
 }
 
@@ -4937,8 +4937,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-family: var(--vd-font-body); font-size: .68rem; font-weight: 600; letter-spacing: .02em; text-transform: none; color: #f6f1e6;
   background-color: #3b3d43;
   background-image: linear-gradient(180deg, rgba(255,250,240,.2), rgba(255,250,240,0) 46%, rgba(0,0,0,.34)),
-    linear-gradient(rgba(59,61,67,.62), rgba(59,61,67,.62)), var(--vd-grain), var(--vd-t-brushed);
-  background-size: 100% 100%, 100% 100%, 220px 220px, 512px 512px; background-blend-mode: normal, normal, overlay, overlay;
+    var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; background-blend-mode: normal;
   border: 1px solid #060708; border-radius: 3px;
   box-shadow: inset 0 1px 0 rgba(255,250,240,.3), inset 0 -1px 0 rgba(0,0,0,.45), 0 1px 0 rgba(255,240,215,.05), 0 4px 8px -3px rgba(0,0,0,.95);
   text-shadow: 0 1px 0 rgba(0,0,0,.95);
@@ -4953,24 +4953,23 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .chat-message.vedmak-message .vedmak-card .card-buttons { gap: 10px; padding: 3px 17px 17px; background: none; flex-wrap: wrap; }
 .chat-message.vedmak-message .vedmak-card .card-section + .card-buttons { padding-top: 3px; background: none; }
 .chat-message.vedmak-message .vedmak-card .card-buttons button.primary {
-  --vm-go: #b8432c;
+  --vm-go: #b8432c; --vm-go-tex: var(--vd-s-go);
   flex: 1 1 auto; height: 40px; margin: 0; padding: 0 22px; white-space: nowrap;
   font-family: var(--vd-font-body); font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #fff6ef;
   background-color: var(--vm-go);
   background-image: var(--vm-rivet), var(--vm-rivet), linear-gradient(180deg, rgba(255,255,255,.26), rgba(255,255,255,0) 46%, rgba(0,0,0,.34)),
-    linear-gradient(color-mix(in srgb, var(--vm-go) 45%, transparent), color-mix(in srgb, var(--vm-go) 45%, transparent)),
-    var(--vd-grain), var(--vd-t-scratch), var(--vd-t-brushed);
-  background-position: left 7px center, right 7px center, 0 0, 0 0, 0 0, 0 0, 0 0;
-  background-size: 7px 7px, 7px 7px, 100% 100%, 100% 100%, 220px 220px, 256px 256px, 512px 512px;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat;
-  background-blend-mode: normal, normal, normal, normal, overlay, overlay, overlay;
+    var(--vm-go-tex);
+  background-position: left 7px center, right 7px center, 0 0, 0 0;
+  background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-blend-mode: normal;
   border: 1px solid #2a0c06; border-radius: 3px;
   box-shadow: inset 0 1px 0 rgba(255,215,195,.55), inset 0 -2px 0 rgba(0,0,0,.32),
     0 0 0 2px #303137, 0 0 0 3px #060708, 0 4px 0 3px rgba(0,0,0,.35), 0 10px 16px -6px rgba(0,0,0,.95);
   text-shadow: 0 -1px 0 rgba(60,10,0,.7);
 }
 .chat-message.vedmak-message .vedmak-card .card-buttons button.primary:hover { filter: brightness(1.1); color: #fff; }
-.chat-message.vedmak-message .vedmak-card.cast .card-buttons button.primary { --vm-go: #6a5a98; border-color: #17102a; text-shadow: 0 -1px 0 rgba(20,10,40,.7); }
+.chat-message.vedmak-message .vedmak-card.cast .card-buttons button.primary { --vm-go: #6a5a98; --vm-go-tex: var(--vd-s-go-arcane); border-color: #17102a; text-shadow: 0 -1px 0 rgba(20,10,40,.7); }
 
 /* Жизненный путь: печать — малый медальон со свитком, броски — строками в колодце */
 .chat-message.vedmak-message .vedmak-card.lifepath-roll .lp-seal {
@@ -5016,16 +5015,16 @@ body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
     background-color: #26211c;
     background-image: linear-gradient(90deg, transparent 2px, rgba(214,206,190,.38) 2px 3px, transparent 3px calc(100% - 3px), rgba(214,206,190,.38) calc(100% - 3px) calc(100% - 2px), transparent calc(100% - 2px)),
       repeating-linear-gradient(180deg, #26211c 0 2px, transparent 2px 5px),
-      linear-gradient(rgba(38,33,28,.4), rgba(38,33,28,.4)), url("../assets/textures/leather.webp");
-    background-size: 100% 100%, 100% 100%, 100% 100%, 300px 300px;
-    background-blend-mode: normal, normal, normal, overlay;
+      url("../assets/textures/baked/strap.webp");
+    background-size: 100% 100%, 100% 100%, 300px 300px;
+    background-blend-mode: normal;
     border-left: 1px solid #060708;
     box-shadow: inset 1px 0 0 rgba(255,240,215,.06), inset 0 0 6px rgba(0,0,0,.7);
   }
   body.system-vedmak ::-webkit-scrollbar-track:horizontal {
     background-image: linear-gradient(180deg, transparent 2px, rgba(214,206,190,.38) 2px 3px, transparent 3px calc(100% - 3px), rgba(214,206,190,.38) calc(100% - 3px) calc(100% - 2px), transparent calc(100% - 2px)),
       repeating-linear-gradient(90deg, #26211c 0 2px, transparent 2px 5px),
-      linear-gradient(rgba(38,33,28,.4), rgba(38,33,28,.4)), url("../assets/textures/leather.webp");
+      url("../assets/textures/baked/strap.webp");
     border-left: 0; border-top: 1px solid #060708;
     box-shadow: inset 0 1px 0 rgba(255,240,215,.06), inset 0 0 6px rgba(0,0,0,.7);
   }
@@ -5061,3 +5060,28 @@ body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
     box-shadow: inset 0 0 0 30px rgba(0,0,0,.08), inset 0 1px 3px rgba(0,0,0,.6), 0 1px 1px rgba(0,0,0,.8);
   }
 }
+
+/* ---------------------------- Оптимизация отрисовки (03.10, PLAN 4.53) ---------------------------- */
+/* Фактуры кожи, стали и зерна запечены с цветом в плитки assets/textures/baked (tools/bake-surfaces.sh): раньше
+   каждая поверхность смешивала 2–4 слоя в режиме overlay при каждой отрисовке, а зерно было SVG с feTurbulence.
+   Настройка клиента «Облегчённая графика» (body.vd-lite) убирает и плитки: остаются цвета, объём и раскладка. */
+body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message, #tooltip, .locked-tooltip) {
+  --vd-grain: linear-gradient(transparent, transparent);
+  --vd-t-leather: linear-gradient(transparent, transparent); --vd-t-plate: linear-gradient(transparent, transparent);
+  --vd-t-brushed: linear-gradient(transparent, transparent); --vd-t-scratch: linear-gradient(transparent, transparent);
+  --vd-t-stains: linear-gradient(transparent, transparent); --vd-t-paper-fiber: linear-gradient(transparent, transparent);
+  --vd-t-paper-crease: linear-gradient(transparent, transparent);
+  --vd-s-window: linear-gradient(transparent, transparent); --vd-s-header: linear-gradient(transparent, transparent);
+  --vd-s-plate: linear-gradient(transparent, transparent); --vd-s-chat: linear-gradient(transparent, transparent);
+  --vd-s-chat-head: linear-gradient(transparent, transparent); --vd-s-btn: linear-gradient(transparent, transparent);
+  --vd-s-ok: linear-gradient(transparent, transparent); --vd-s-bad: linear-gradient(transparent, transparent);
+  --vd-s-go: linear-gradient(transparent, transparent); --vd-s-go-arcane: linear-gradient(transparent, transparent);
+}
+@supports selector(::-webkit-scrollbar) {
+  body.vd-lite ::-webkit-scrollbar-track, body.vd-lite ::-webkit-scrollbar-track:horizontal { background-image: none; }
+}
+/* Облегчённая графика: тени без большого размытия, литые числа без фильтра тени */
+body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message) {
+  --vd-lift: inset 0 1px 0 rgba(255, 240, 215, .1), inset 0 -1px 0 rgba(0, 0, 0, .55), 0 2px 3px rgba(0, 0, 0, .55);
+}
+body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .metal, .blood) { filter: none !important; }

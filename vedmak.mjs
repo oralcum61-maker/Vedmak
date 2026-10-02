@@ -107,6 +107,14 @@ Hooks.once("init", () => {
     onChange: value => applyCursor(!!value)
   });
   applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor"));
+  // Облегчённая графика: без фактур кожи, стали и зерна — для слабой видеокарты, которую делит холст сцены
+  game.settings.register(SYSTEM_ID, "lightGraphics", {
+    name: "Облегчённая графика",
+    hint: "Убирает фактуры кожи, стали и бумаги из окон, листов и чата: остаются цвета, объём и раскладка. Включите, если интерфейс подтормаживает.",
+    scope: "client", config: true, type: Boolean, default: false,
+    onChange: value => document.body.classList.toggle("vd-lite", !!value)
+  });
+  document.body.classList.toggle("vd-lite", !!game.settings.get(SYSTEM_ID, "lightGraphics"));
   // Какие компендиумы уже разложены по папкам: новые паки системы раскладываются при следующем запуске
   game.settings.register(SYSTEM_ID, "packFoldersDone", {
     scope: "world", config: false, type: String, default: ""
