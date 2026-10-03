@@ -12,6 +12,12 @@ import { asGM, registerGMHandler, resolveActor, userOwnsAny } from "./common.mjs
 
 const INSTANT_SECONDS = 15;
 
+/** Цвет зоны (вид — fx/zone-look.mjs): заклинание — по стихии, бомба — пламя, ловушка — сталь. */
+export const ZONE_COLORS = {
+  fire: "#e8742a", air: "#bcd8f0", water: "#5a9ee0", earth: "#c29a5a", mixed: "#a98be8",
+  bomb: "#e8833a", trap: "#b8b2a6"
+};
+
 /**
  * Разбор зоны по тексту дальности: «2-метровый конус», «конус 2 м», «зона радиусом 10 м», «радиус 8 м»,
  * «50 м радиус», «4 м (радиус 2 м)». Мили — не зона на сцене.
@@ -85,8 +91,9 @@ export async function placeZone(area, { name = "Зона", color } = {}) {
   try {
     ui.notifications.info(`${name}: поставьте зону на сцене. Колесо мыши поворачивает, правый клик — отмена.`);
     await canvas.regions.placeRegions([{
-      name, color: color ?? game.user.color, displayMeasurements: true, highlightMode: "coverage",
-      shapes: [shapeData(area)], "flags.core.MeasuredTemplate": true
+      // Вид — свой (fx/zone-look.mjs): без штриховки клеток и пунктирной линейки Foundry
+      name, color: color ?? game.user.color, displayMeasurements: false, highlightMode: "shapes",
+      shapes: [shapeData(area)], "flags.core.MeasuredTemplate": true, "flags.vedmak.look": true
     }], {
       create: false,
       preConfirm: ({ document }) => { placed.push(document.toObject().shapes.at(-1)); }
@@ -108,8 +115,8 @@ function regionData(shape, { name, color, zone }) {
     shapes: [shape],
     levels: canvas.level?.id ? [canvas.level.id] : undefined,
     visibility: CONST.REGION_VISIBILITY?.ALWAYS ?? 2,
-    highlightMode: "coverage",
-    displayMeasurements: true,
+    highlightMode: "shapes",
+    displayMeasurements: false,
     // Права на область v14 берёт только отсюда: без владельца игрок не может ни сдвинуть, ни снять свою зону
     ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE, [game.user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     flags: { core: { MeasuredTemplate: true }, vedmak: { zone } }

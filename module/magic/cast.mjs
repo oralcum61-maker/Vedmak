@@ -10,7 +10,7 @@ import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate, inCombat, roundsAsTime } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
 import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf } from "../combat/zones.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf, ZONE_COLORS } from "../combat/zones.mjs";
 import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
 import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
 
@@ -87,7 +87,8 @@ export async function castSpell(actor, item, opts = {}) {
   // Зона на сцене: конус или круг ставится мышью, цели — все, кто в неё попал; отмена — отмена сотворения
   const area = opts.targets ? null : parseArea(s.range);
   let region = null;
-  const placed = area && zonesAvailable() ? await placeZone(area, { name: item.name }) : null;
+  const zoneColor = ZONE_COLORS[s.element] ?? ZONE_COLORS.mixed;
+  const placed = area && zonesAvailable() ? await placeZone(area, { name: item.name, color: zoneColor }) : null;
   if (placed?.cancelled) return null;
   if (placed?.shape) {
     const duration = await parseZoneDuration(s.duration, { cost: cfg.cost });
@@ -95,7 +96,7 @@ export async function castSpell(actor, item, opts = {}) {
     const auto = spellAutomation(item);
     const lasting = !!(duration?.rounds || duration?.maintain);
     const repeat = lasting && !!(auto.damage || auto.staDamage || auto.statuses?.some(x => x.status));
-    region = await createZone(placed.shape, { name: item.name, actor, itemName: item.name, duration, maintainItemId: item.id,
+    region = await createZone(placed.shape, { name: item.name, color: zoneColor, actor, itemName: item.name, duration, maintainItemId: item.id,
       extra: { itemId: item.id, repeat } });
     targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);
   }

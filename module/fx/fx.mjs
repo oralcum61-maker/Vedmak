@@ -7,6 +7,7 @@ import { SYSTEM_ID } from "../util.mjs";
 import { playSound, preloadSounds } from "./sounds.mjs";
 import { playJB2A, jb2aReady, playSpellFx, preloadCombatFx, playSteps } from "./jb2a.mjs";
 import { attackSteps, hitSteps, blockSteps } from "./weapon-fx.mjs";
+import { registerZoneLook } from "./zone-look.mjs";
 import { spellFxFor } from "./spell-fx.mjs";
 import * as S from "./scene.mjs";
 import { registerVolumeControls, syncVolumeControls } from "./volume.mjs";
@@ -409,6 +410,7 @@ export function registerFxSettings() {
 
 export function registerFx() {
   registerVolumeControls();
+  registerZoneLook();
   Hooks.on("createChatMessage", onChatMessage);
   Hooks.on("preUpdateActor", onPreUpdateActor);
   Hooks.on("updateActor", onUpdateActor);

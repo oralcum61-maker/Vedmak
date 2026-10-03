@@ -14,7 +14,7 @@ import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { postCard, resolveActor, tokenDistance } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens } from "../combat/zones.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS } from "../combat/zones.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
@@ -324,17 +324,17 @@ function areaTargets(radius) {
  * Зона склянки или ловушки на сцене: круг или конус ставится мышью.
  * @returns {Promise<{victims: Actor[]}|null|false>} false — отменили, null — зоны недоступны
  */
-async function zoneVictims(actor, name, u, effect) {
+async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb) {
   const area = parseArea(u.area, { plainIsRadius: true });
   if (!area || !zonesAvailable()) return null;
-  const placed = await placeZone(area, { name });
+  const placed = await placeZone(area, { name, color });
   if (placed?.cancelled) return false;
   if (!placed) return null;
   const shape = placed.shape;
   // Облака без урона (двимерит, «Лунная пыль», «Сон дракона») висят столько раундов, сколько сказано в описании
   const lingering = !(u.damage || u.status);
   const duration = lingering ? (await parseZoneDuration(effect.match(/\d+\s*(?:раунд|ход)\S*/)?.[0] ?? "")) : { instant: true };
-  const region = await createZone(shape, { name, actor, itemName: name, duration });
+  const region = await createZone(shape, { name, color, actor, itemName: name, duration });
   return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape };
 }
 
@@ -385,7 +385,7 @@ registerChatAction("trapTrigger", async message => {
   if (!trap) return;
   const radius = Number(String(trap.use.area).match(/\d+/)?.[0] ?? 0);
   const owner = resolveActor(message.flags.vedmak?.alchemy?.actorUuid) ?? game.user.character;
-  const zone = await zoneVictims(owner, trap.name, trap.use, trap.effect ?? "");
+  const zone = await zoneVictims(owner, trap.name, trap.use, trap.effect ?? "", ZONE_COLORS.trap);
   if (zone === false) return;
   const victims = zone?.victims ?? areaTargets(radius);
   if (!victims.length) return ui.notifications.warn("Выберите цели в зоне ловушки (или одну — центр взрыва).");
