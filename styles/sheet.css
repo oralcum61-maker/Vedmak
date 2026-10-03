@@ -323,7 +323,8 @@
   display: flex; flex-direction: column; gap: .2rem; padding: .45rem .6rem .5rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
 }
 .application.vedmak .armor-loc .ln { display: flex; align-items: baseline; justify-content: space-between; gap: .4rem; }
-.application.vedmak .armor-loc .nm { min-width: 0; font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; color: #d6d0c2; overflow-wrap: anywhere; }
+.application.vedmak .armor-loc .nm { min-width: 0; font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; color: #d6d0c2; overflow-wrap: normal; }
+.application.vedmak .armor-loc .ln { flex-wrap: wrap; column-gap: .3rem; row-gap: 0; }
 .application.vedmak .armor-loc .mult { font-family: var(--vd-font-head); font-size: .82rem; color: #a8a296; }
 .application.vedmak .armor-loc .mult.hot { color: #e0937f; }
 .application.vedmak .armor-loc .sp { display: flex; align-items: center; gap: .5rem; }

@@ -40,6 +40,7 @@ import "./module/magic/effects.mjs";
 import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
+import { registerTokenFlip, flipToken } from "./module/apps/token-flip.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
@@ -218,9 +219,11 @@ Hooks.once("init", () => {
   registerBuffHooks();
   registerRaceHooks();
   CombatHud.registerHooks();
+  registerTokenFlip();
 
   // API для макросов
   game.vedmak = {
+    flipToken,
     performCheck, rollD10, attack, computeDamage, applyDamageToActor, rollStunSave, rollDeathSave,
     manualDamage, restTurn, restDays, controlCheck, castSpell,
     advancement, crafting, alchemy, enhancements,
