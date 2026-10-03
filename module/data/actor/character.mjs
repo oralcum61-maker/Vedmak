@@ -88,6 +88,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     // Древо профессии: Энергия и порог токсичности
     let toxicity = 0;
+    if (prof?.definingSkill?.mechanic) {
+      const b = abilityBonus(prof.definingSkill.mechanic, prof.definingSkill.value);
+      extra.vigor += b.vigor ?? 0;
+      toxicity += b.toxicity ?? 0;
+    }
     for (const branch of prof?.branches ?? []) {
       for (const ab of branch.abilities) {
         const b = abilityBonus(ab.mechanic, ab.value);

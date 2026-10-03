@@ -235,7 +235,9 @@ export const ABILITY_MECHANICS = {
   vigorPer2:     { label: "+1 Энергии за каждые 2 очка" },
   vigorPer1:     { label: "+1 Энергии за очко" },
   vigorDouble:   { label: "+2 Энергии за очко" },
-  toxicityPer1:  { label: "+5% порога токсичности за очко" }
+  toxicityPer1:  { label: "+5% порога токсичности за очко" },
+  // «Том Хаоса»: Божественная сила, Единение с природой — +1 за уровень до 9-го, на 10-м Энергия 16 (2 профессии + 14)
+  vigorPeak16:   { label: "+1 Энергии за очко, на 10-м уровне — до 16" }
 };
 
 export function abilityBonus(mechanic, value) {
@@ -244,6 +246,7 @@ export function abilityBonus(mechanic, value) {
     case "vigorPer1": return { vigor: value };
     case "vigorDouble": return { vigor: value * 2 };
     case "toxicityPer1": return { toxicity: value * 5 };
+    case "vigorPeak16": return { vigor: value >= 10 ? 14 : value };
     default: return {};
   }
 }

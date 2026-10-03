@@ -502,8 +502,12 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (prof) {
       const keys = this.#professionSkillKeys();
       const spent = keys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0) + (s.defining || 0);
+      // Профессия без списка навыков (из модуля, где книги нет — «Крестьянин», «Аристократ»): все очки в один навык
+      // не вложить, так что проверяется только определяющий; остальное ведущий доберёт по книге
+      const listed = prof.system.skills.length || prof.system.skillChoices.length;
       if (keys.some(k => (s.profSkills[k] ?? 0) < 1) || s.defining < 1) out.skills = "В каждый навык профессии — хотя бы 1 очко.";
-      else if (spent !== CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
+      else if (listed && spent !== CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
+      else if (!listed && spent > CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
       const final = this.#finalStats(lp);
       const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, SKILLS[k]?.difficult), 0);
       if (!out.skills && pickupSpent > final.int + final.ref) out.skills = `Освоенные навыки: потрачено ${pickupSpent} из ${final.int + final.ref}.`;
