@@ -31,8 +31,6 @@
       <nav class="vh-switch" aria-label="Разделы худа">
         {{#each tabs}}<a class="{{#if active}}on{{/if}}" data-action="setTab" data-tab="{{id}}">{{label}}{{#if count}} <span class="vh-count">{{count}}</span>{{/if}}</a>{{/each}}
       </nav>
-      <span class="vh-fill"></span>
-      <span class="vh-cap vh-note">Shift — без окна</span>
     </div>
 
     {{#unless collapsed}}
