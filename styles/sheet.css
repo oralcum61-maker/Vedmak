@@ -1080,3 +1080,31 @@
   padding: 6px 8px; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
 }
 .application.vedmak.item .tab fieldset.vd-fieldset .hint { font-size: .72rem; color: #a8a296; }
+
+/* ============================== Оживший интерфейс (PLAN 4.66) ==============================
+   Новая карточка чата въезжает, кольцо медальона прокручивается и встаёт, число проявляется, горячие насечки
+   вспыхивают; в худе колода проявляется при смене вкладки, портрет пульсирует на своём ходу. Анимируются только
+   прозрачность и сдвиг — это делает видеокарта без перерисовки. Выключается настройкой «Оживший интерфейс»
+   и системным «меньше движения» (класс vd-no-anim на body). */
+@keyframes vd-card-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes vd-ring-spin { from { transform: rotate(-240deg); opacity: .2; } 60% { opacity: 1; } to { transform: none; opacity: 1; } }
+@keyframes vd-face-pop { 0% { opacity: 0; transform: scale(.55); } 65% { opacity: 1; transform: scale(1.1); } 100% { transform: none; } }
+@keyframes vd-hot-flash { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+.chat-message.vedmak-message.vd-new { animation: vd-card-in 340ms cubic-bezier(.2, .8, .2, 1) both; }
+.chat-message.vedmak-message.vd-new .card-value .vd-ring { animation: vd-ring-spin 950ms cubic-bezier(.12, .85, .2, 1) both; }
+.chat-message.vedmak-message.vd-new .card-value > b { display: inline-block; animation: vd-face-pop 460ms 380ms cubic-bezier(.2, .8, .2, 1) both; }
+.chat-message.vedmak-message.vd-new .vd-ring i.hot, .chat-message.vedmak-message.vd-new .vd-ring i.low { animation: vd-hot-flash 360ms 950ms ease-in-out 3; }
+
+@keyframes vh-deck-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.vedmak-hud .vh-deck.vh-in { animation: vh-deck-in 200ms ease-out both; }
+@keyframes vh-turn-glow { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+.vedmak-hud .vh-portrait::after {
+  content: ""; position: absolute; inset: -5px; border-radius: 50%; pointer-events: none; opacity: 0;
+  box-shadow: 0 0 0 2px rgba(180, 199, 156, .55), 0 0 16px 3px rgba(180, 199, 156, .5);
+}
+.vedmak-hud .vh.my-turn .vh-portrait::after { animation: vh-turn-glow 2.4s ease-in-out infinite; }
+/* Нажатие продавливает кнопку */
+.vedmak-hud :is(.vh-go, .vh-sbtn):active, .vedmak-dialog.check-dialog .form-footer button:active { transform: translateY(1px); }
+
+body.vd-no-anim .chat-message.vedmak-message.vd-new, body.vd-no-anim .chat-message.vedmak-message.vd-new *,
+body.vd-no-anim .vedmak-hud .vh-deck.vh-in, body.vd-no-anim .vedmak-hud .vh-portrait::after { animation: none !important; }

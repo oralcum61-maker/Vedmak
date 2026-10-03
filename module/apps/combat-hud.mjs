@@ -155,6 +155,11 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Навык из поля поиска: Enter или выбор из подсказок — бросок. */
   _onRender(context, options) {
     super._onRender?.(context, options);
+    // Смена вкладки — колода проявляется; обычные перерисовки (ПЗ, ход) — без анимации, чтобы не мигало
+    if (this.deckIn) {
+      this.deckIn = false;
+      this.element.querySelector(".vh-deck")?.classList.add("vh-in");
+    }
     const input = this.element.querySelector("input.vh-skill");
     if (!input || input.dataset.bound) return;
     input.dataset.bound = "1";
@@ -280,6 +285,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static async #onSetTab(event, target) {
     this.tab = target.dataset.tab;
+    this.deckIn = true;
     if (this.collapsed) await game.settings.set(SYSTEM_ID, "combatHudCollapsed", false);
     this.render();
   }

@@ -75,7 +75,8 @@ export async function drink(actor, item) {
     if (!check?.success) {
       await spendOne(item);
       await applyStatus(actor, "poisoned");
-      return card(actor, item.name, ["Организм не выдержал ведьмачьего эликсира: персонаж отравлен, эффект не действует."], { subtitle: ALCHEMY_KINDS[s.kind] });
+      return card(actor, item.name, ["Организм не выдержал ведьмачьего эликсира: персонаж отравлен, эффект не действует."],
+        { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "drink", color: "green" } } });
     }
   }
 
@@ -190,7 +191,8 @@ export async function drink(actor, item) {
       lines.push("Токсичность в пределах порога — отравление от неё прошло.");
     }
   }
-  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons, rolls });
+  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons, rolls,
+    flags: { fx: { kind: "drink", color: s.kind === "elixir" ? "violet" : s.kind === "decoction" ? "red" : "green" } } });
 }
 
 registerChatAction("toxicitySave", async message => {
@@ -305,7 +307,7 @@ export async function applyPreparation(actor, item) {
     lines.push(`Эффект: ${CONFIG.statusEffects[s.use.status]?.name ?? s.use.status}.`);
   }
   await spendOne(item);
-  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind] });
+  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "apply" } } });
 }
 
 /* ------------------------------ Бросок склянки ------------------------------ */
@@ -333,7 +335,7 @@ async function zoneVictims(actor, name, u, effect) {
   const lingering = !(u.damage || u.status);
   const duration = lingering ? (await parseZoneDuration(effect.match(/\d+\s*(?:раунд|ход)\S*/)?.[0] ?? "")) : { instant: true };
   const region = await createZone(shape, { name, actor, itemName: name, duration });
-  return { victims: zoneTokens(shape, { region }).map(t => t.actor) };
+  return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape };
 }
 
 export async function throwItem(actor, item) {
@@ -363,7 +365,9 @@ export async function throwItem(actor, item) {
     buttons.push({ action: "trapTrigger", label: "Урон по выбранным целям" });
   }
   return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons,
-    flags: { trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect } } });
+    flags: { trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect },
+      fx: { kind: "bomb", zone: zone?.shape ? { x: zone.shape.x, y: zone.shape.y, radius: zone.shape.radius } : null,
+        element: u.damageType === "elemental" ? "fire" : "" } } });
 }
 
 /* -------------------------------- Ловушка -------------------------------- */
@@ -412,7 +416,7 @@ export async function applyOil(actor, item) {
   await weapon.update({ "system.oil": { name: item.name, target: item.system.oilTarget, until } });
   await spendOne(item);
   return card(actor, item.name, [`Нанесено на «${weapon.name}»: +${CRAFTING.oilBonus} урона против: ${(MONSTER_CLASSES[item.system.oilTarget] ?? item.system.oilTarget).toLowerCase()} на ${CRAFTING.oilMinutes} минут.`],
-    { subtitle: ALCHEMY_KINDS.oil });
+    { subtitle: ALCHEMY_KINDS.oil, flags: { fx: { kind: "oil" } } });
 }
 
 /* --------------------------------- Мутаген --------------------------------- */
@@ -454,7 +458,8 @@ export async function applyMutagen(actor, item) {
   } else {
     await item.update({ "system.applied": true });
   }
-  return card(actor, item.name, [s.effect, `Малая мутация: ${s.mutagen.minor}.`], { subtitle: "Мутаген принят" });
+  return card(actor, item.name, [s.effect, `Малая мутация: ${s.mutagen.minor}.`],
+    { subtitle: "Мутаген принят", flags: { fx: { kind: "drink", color: s.mutagen.color || "red" } } });
 }
 
 registerChatAction("mutagenSave", async message => {

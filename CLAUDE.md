@@ -87,6 +87,8 @@
 - `tools/build-packs.mjs` — сборка компендиумов; `tools/check.mjs` — статические проверки;
   `tools/sync-to-foundry.ps1` — выгрузка в Foundry; `tools/release.mjs` — сборка выпуска в `dist/`;
   `tools/pack-overrides.mjs` — правки компендиумов поверх генераторов; `tools/square-icons.py` — значки из игры в квадрат.
+- `module/fx/` — анимации и звуки (`fx.mjs` — хуки, `scene.mjs` — свои эффекты на PIXI, `jb2a.mjs` — Sequencer и JB2A,
+  `sounds.mjs`); звуки синтезирует `tools/make-sounds.py` (numpy, scipy, ffmpeg) в `assets/sounds/` — свои, их можно раздавать.
 
 ## Дизайн
 Лист оформлен в стиле «Гравюра» (PLAN 4.45; до него «тёмная сталь и золото» — 4.44, «кожа и железо» — 4.9, 4.15):

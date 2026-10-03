@@ -41,6 +41,7 @@ import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
 import { registerTokenFlip, flipToken } from "./module/apps/token-flip.mjs";
+import { registerFxSettings, registerFx } from "./module/fx/fx.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
@@ -226,6 +227,8 @@ Hooks.once("init", () => {
   registerRaceHooks();
   CombatHud.registerHooks();
   registerTokenFlip();
+  registerFxSettings();
+  registerFx();
 
   // API для макросов
   game.vedmak = {

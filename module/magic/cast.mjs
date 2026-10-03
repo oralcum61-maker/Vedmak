@@ -100,6 +100,11 @@ export async function castSpell(actor, item, opts = {}) {
     targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);
   }
 
+  // Зона уходит в карточку (config.zone): по ней эффект знает, куда бить конусом или где вспыхнуть кругу
+  if (placed?.shape) {
+    const z = placed.shape;
+    cfg = { ...cfg, zone: { type: z.type, x: z.x, y: z.y, radius: z.radius, rotation: z.rotation ?? 0, angle: z.angle ?? null } };
+  }
   const message = await performCast(actor, item, cfg, targets);
   // Заклинание не сработало — зона не нужна
   const works = !!message?.flags?.vedmak?.cast?.works;
