@@ -1,27 +1,39 @@
-<header class="vd-header monster-header">
-  <img class="portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img">
-  <div class="identity">
-    <div class="name-line">
+{{!-- Шапка чудовища (холст design/11, PLAN 4.60): портрет в стальной рамке, имя, класс и угроза, трубки ПЗ и Вын,
+      медальоны Брони и Награды (латунь) — числа в них правятся прямо на месте. --}}
+<header class="vd-header monster-header vm-head">
+  <span class="vm-portrait"><img class="portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img"></span>
+  <div class="vm-identity">
+    <div class="vm-name-line">
       <input class="name" type="text" name="name" value="{{actor.name}}" placeholder="Название">
-      <div class="tags selects">
-        <select name="system.monsterClass" data-tooltip="Класс">{{selectOptions monsterClasses selected=system.monsterClass}}</select>
-        <select name="system.threat.complexity" data-tooltip="Уровень угрозы: сложность">{{selectOptions threatComplexity selected=system.threat.complexity}}</select>
-        <select name="system.threat.difficulty" data-tooltip="Уровень угрозы: опасность">{{selectOptions threatDifficulty selected=system.threat.difficulty}}</select>
-        {{#if system.derived.dying}}<span class="tag state dying">При смерти</span>
-        {{else if system.derived.wounded}}<span class="tag state wounded">Ниже порога ранения</span>{{/if}}
+      {{#if system.derived.dying}}<span class="vm-plq bad">При смерти</span>
+      {{else if system.derived.wounded}}<span class="vm-plq warn">Ниже порога ранения</span>{{/if}}
+    </div>
+    <div class="vm-selects">
+      <select name="system.monsterClass" data-tooltip="Класс">{{selectOptions monsterClasses selected=system.monsterClass}}</select>
+      <select name="system.threat.complexity" data-tooltip="Уровень угрозы: сложность">{{selectOptions threatComplexity selected=system.threat.complexity}}</select>
+      <select name="system.threat.difficulty" data-tooltip="Уровень угрозы: опасность">{{selectOptions threatDifficulty selected=system.threat.difficulty}}</select>
+    </div>
+    <div class="vm-vitals">
+      {{#each vitals}}
+      <div class="vm-vital {{key}}{{#if state}} {{state}}{{/if}}">
+        <div class="vm-vline">
+          <span class="vd-cap">{{label}}</span>
+          <input type="number" name="{{name}}" value="{{value}}" data-tooltip="{{hint}}" aria-label="{{label}}">
+          <span class="vd-cap">/ {{max}}{{suffix}}</span>
+        </div>
+        <div class="vm-tube" data-tooltip="{{hint}}"><span class="f" style="width: {{pct}}%"></span>{{#if notch}}<b class="wound" style="left: {{notch}}%"></b>{{/if}}<i style="left: 25%"></i><i style="left: 50%"></i><i style="left: 75%"></i></div>
       </div>
+      {{/each}}
     </div>
-    {{> "systems/vedmak/templates/actor/parts/vitals.hbs"}}
   </div>
-
-  <div class="resources">
-    <div class="res armor">
-      <label>Броня</label>
-      <div class="pair"><input type="number" name="system.armor" value="{{system.armor}}" min="0"></div>
-    </div>
-    <div class="res bounty">
-      <label>Награда</label>
-      <div class="pair"><input type="number" name="system.bounty" value="{{system.bounty}}" min="0"><span>кр.</span></div>
-    </div>
+  <div class="vm-res">
+    <label class="vm-res-item" data-tooltip="Броня: поглощает урон по всем частям тела">
+      <span class="vd-medal md">{{vedmakRing}}<span class="vd-medal-face"><input type="number" name="system.armor" value="{{system.armor}}" min="0" aria-label="Броня"></span></span>
+      <span class="vd-cap">Броня</span>
+    </label>
+    <label class="vm-res-item" data-tooltip="Награда за голову, кроны">
+      <span class="vd-medal md brassy">{{vedmakRing}}<span class="vd-medal-face"><input type="number" name="system.bounty" value="{{system.bounty}}" min="0" aria-label="Награда"></span></span>
+      <span class="vd-cap">Награда, кр.</span>
+    </label>
   </div>
 </header>

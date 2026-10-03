@@ -1,41 +1,44 @@
 <section class="tab stats-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
-  <div class="vd-columns">
-    <div class="vd-panel stats-panel">
-      <h3>Параметры</h3>
-      <div class="stat-grid">
-        <div class="stat-head"><span></span><span>База</span><span>Мод.</span><span>Итог</span></div>
+  {{!-- Холст design/11 (PLAN 4.60): параметры — строки с медальоном итога, производные — медальоны, поправки — поля. --}}
+  <div class="vm-columns">
+    <section class="vm-plate vm-stats">
+      <div class="vm-bar"><b>Параметры</b><span class="vm-fill"></span><span class="vd-cap">база · мод. · итог</span></div>
+      <div class="vm-stat-list">
         {{#each stats}}
-        <div class="stat-row{{#if (ne total effective)}} reduced{{/if}}">
-          <a class="stat-name rollable" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)">{{label}}</a>
-          <input type="number" name="system.stats.{{key}}.base" value="{{base}}" min="0">
-          <span class="mod">{{vedmakSigned mod}}</span>
-          <span class="total">{{effective}}</span>
+        <div class="vm-stat{{#if (ne total effective)}} reduced{{/if}}">
+          <a class="vm-stat-name" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)">{{label}}</a>
+          <input type="number" name="system.stats.{{key}}.base" value="{{base}}" min="0" aria-label="База: {{label}}">
+          <span class="vm-mod">{{vedmakSigned mod}}</span>
+          <a class="vm-total" data-action="rollStat" data-stat="{{key}}" data-tooltip="Итог. Бросок">{{> "systems/vedmak/templates/actor/parts/medal.hbs" value=effective cls="vm-m34"}}</a>
         </div>
         {{/each}}
       </div>
-    </div>
+    </section>
 
-    <div class="vd-panel derived-panel">
-      <h3>Производные</h3>
-      <div class="derived-grid">
-        {{#each derived}}
-        <div class="derived" data-tooltip="{{label}}">
-          <span class="abbr">{{abbr}}</span>
-          <span class="value">{{value}}{{#if unit}}<small> {{unit}}</small>{{/if}}</span>
+    <div class="vm-col">
+      <section class="vm-plate">
+        <div class="vm-bar"><b>Производные</b></div>
+        <div class="vm-derived">
+          {{#each derived}}
+          <div class="vm-der" data-tooltip="{{label}}">
+            {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=value cls="vm-m50"}}
+            <span class="vd-cap">{{abbr}}{{#if unit}}, {{unit}}{{/if}}</span>
+          </div>
+          {{/each}}
         </div>
-        {{/each}}
-      </div>
-
-      <h3>Поправки</h3>
-      <div class="bonus-grid">
-        <label>Энергия (база) <input type="number" name="system.vigor" value="{{system.vigor}}" min="0"></label>
-        <label>ПЗ <input type="number" name="system.bonus.hp" value="{{source.system.bonus.hp}}"></label>
-        <label>Вын <input type="number" name="system.bonus.sta" value="{{source.system.bonus.sta}}"></label>
-        <label>Уст <input type="number" name="system.bonus.stun" value="{{source.system.bonus.stun}}"></label>
-        <label>Бег <input type="number" name="system.bonus.run" value="{{source.system.bonus.run}}"></label>
-        <label>Отдых <input type="number" name="system.bonus.rec" value="{{source.system.bonus.rec}}"></label>
-      </div>
-      <p class="hint">В бестиарии ПЗ и Вын даны готовыми числами — подгоните бонусом разницу с формулой.</p>
+      </section>
+      <section class="vm-plate vm-bonus">
+        <h3 class="vm-ghead">Поправки<span class="rule"></span></h3>
+        <div class="vm-fields">
+          <label><span class="vd-cap">Энергия (база)</span><input type="number" name="system.vigor" value="{{system.vigor}}" min="0"></label>
+          <label><span class="vd-cap">ПЗ</span><input type="number" name="system.bonus.hp" value="{{source.system.bonus.hp}}"></label>
+          <label><span class="vd-cap">Вын</span><input type="number" name="system.bonus.sta" value="{{source.system.bonus.sta}}"></label>
+          <label><span class="vd-cap">Уст</span><input type="number" name="system.bonus.stun" value="{{source.system.bonus.stun}}"></label>
+          <label><span class="vd-cap">Бег</span><input type="number" name="system.bonus.run" value="{{source.system.bonus.run}}"></label>
+          <label><span class="vd-cap">Отдых</span><input type="number" name="system.bonus.rec" value="{{source.system.bonus.rec}}"></label>
+        </div>
+        <p class="vm-hint">В бестиарии ПЗ и Вын даны готовыми числами — подгоните бонусом разницу с формулой.</p>
+      </section>
     </div>
   </div>
 

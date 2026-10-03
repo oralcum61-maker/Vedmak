@@ -839,3 +839,111 @@
 @container (max-width: 38rem) {
   .application.vedmak .skills-tab .vp-branches { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ============================== Лист чудовища по холсту design/11 (PLAN 4.60) ==============================
+   Шапка: портрет в стальной рамке, имя литым шрифтом, класс и угроза, трубки ПЗ и Вын, медальоны Брони и Награды.
+   Параметры — строки с медальоном итога, производные — медальоны, поправки — поля в колодцах. */
+.application.vedmak.monster .vd-cap { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.application.vedmak.monster .vm-head {
+  display: flex; align-items: center; gap: 1.1rem; padding: 1rem 1.15rem;
+  background-color: #131417; background-image: radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; border-bottom: 1px solid #060708;
+}
+.application.vedmak.monster .vm-head::after { content: none; }
+.application.vedmak.monster .vm-portrait {
+  flex: none; padding: 5px; border-radius: 3px; background: linear-gradient(180deg, #cfc9bc, #7f7a72 40%, #3a3935);
+  box-shadow: 0 0 0 1px #050607, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.application.vedmak.monster .vm-portrait img.portrait {
+  display: block; width: 104px; height: 104px; margin: 0; object-fit: cover; border: 0; border-radius: 1px; background: #0b0c0e; box-shadow: 0 0 0 1px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-identity { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .55rem; }
+.application.vedmak.monster .vm-name-line { display: flex; align-items: center; gap: .75rem; }
+.application.vedmak.monster .vm-head input.name {
+  flex: 1 1 0; min-width: 0; height: auto; padding: 0; font-family: var(--vd-font-head); font-size: 1.9rem; line-height: 1.05; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid transparent; box-shadow: none; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-head input.name:hover, .application.vedmak.monster .vm-head input.name:focus { border-bottom-color: rgba(226, 221, 208, .2); }
+.application.vedmak.monster .vm-plq {
+  flex: none; display: inline-flex; align-items: center; height: 22px; padding: 0 10px; font-size: .62rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; border: 1px solid #060708; border-radius: 2px;
+}
+.application.vedmak.monster .vm-plq.bad { color: #ffeae3; background-color: #8f301f; background-image: linear-gradient(180deg, rgba(255, 215, 195, .22), rgba(0, 0, 0, .32)), var(--vd-s-bad); border-color: #2a0c06; }
+.application.vedmak.monster .vm-plq.warn { color: #f0d68f; background: #2a2418; border-color: #0e0b05; }
+.application.vedmak.monster .vm-selects { display: flex; flex-wrap: wrap; gap: 6px; }
+.application.vedmak.monster .vm-selects select {
+  width: auto; min-width: 7.5rem; height: 30px; padding: 0 8px; font-size: .78rem; color: #e2ddd0;
+  background-color: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-vitals { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; }
+.application.vedmak.monster .vm-vital { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.application.vedmak.monster .vm-vline { display: flex; align-items: baseline; gap: 6px; }
+.application.vedmak.monster .vm-vline .vd-cap:first-child { flex: 1 1 0; }
+.application.vedmak.monster .vm-vline input {
+  width: 3rem; height: auto; padding: 0; text-align: right; font-family: var(--vd-font-head); font-size: 1.4rem; line-height: 1; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid transparent; box-shadow: none;
+}
+.application.vedmak.monster .vm-vline input:hover, .application.vedmak.monster .vm-vline input:focus { border-bottom-color: rgba(226, 221, 208, .25); }
+.application.vedmak.monster .vm-vital.dying .vm-vline input { color: #e0937f; }
+.application.vedmak.monster .vm-tube { position: relative; height: 12px; border-radius: 6px; background: #0a0b0c; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #050607, 0 1px 0 rgba(255, 240, 215, .07); overflow: hidden; }
+.application.vedmak.monster .vm-tube .f { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px 0 0 6px; }
+.application.vedmak.monster .vm-vital.hp .f { background: linear-gradient(180deg, #f0a08c, #b8432c 55%, #6e2215); }
+.application.vedmak.monster .vm-vital.sta .f { background: linear-gradient(180deg, #d4e4c0, #6f8a52 55%, #34492a); }
+.application.vedmak.monster .vm-vital.tox .f { background: linear-gradient(180deg, #dcd2fb, #6a5a98 55%, #2e2645); }
+.application.vedmak.monster .vm-tube i { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(5, 6, 7, .75); }
+.application.vedmak.monster .vm-tube b.wound { position: absolute; z-index: 1; top: 0; bottom: 0; width: 2px; margin-left: -1px; padding: 0; border: 0; background: #f0d68f; box-shadow: 0 0 3px rgba(240, 214, 143, .8); }
+.application.vedmak.monster .vm-res { flex: none; display: flex; gap: .9rem; }
+.application.vedmak.monster .vm-res-item { display: flex; flex-direction: column; align-items: center; gap: 5px; margin: 0; }
+.application.vedmak.monster .vm-res .vd-medal { --size: 62px; --rim: 9px; }
+.application.vedmak.monster .vm-res .vd-medal-face input {
+  width: 100%; height: 100%; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: 1.45rem; line-height: 1; color: #f1ece0;
+  background: none; border: 0; border-radius: 50%; box-shadow: none; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+}
+.application.vedmak.monster .vm-res .vd-medal.brassy .vd-medal-face input { color: #e8c97a; font-size: 1.25rem; }
+.application.vedmak.monster .vm-res .vd-medal-face input:focus { outline: none; box-shadow: inset 0 0 0 1px rgba(226, 221, 208, .25); }
+
+/* Вкладка параметров */
+.application.vedmak.monster .vm-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-bottom: 1rem; }
+.application.vedmak.monster .vm-col { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.application.vedmak.monster .vm-plate {
+  position: relative; overflow: hidden; background-color: var(--vd-plate);
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak.monster .vm-bar {
+  display: flex; align-items: center; gap: 10px; padding: .6rem .9rem; border-bottom: 1px solid #060708;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header); background-size: 100% 100%, 512px 512px;
+}
+.application.vedmak.monster .vm-bar b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; color: #f1ece0; }
+.application.vedmak.monster .vm-fill { flex: 1 1 0; }
+.application.vedmak.monster .vm-stat-list { display: flex; flex-direction: column; padding: .35rem .9rem .6rem; }
+.application.vedmak.monster .vm-stat { display: flex; align-items: center; gap: .6rem; height: 42px; border-bottom: 1px solid rgba(0, 0, 0, .6); box-shadow: 0 1px 0 rgba(255, 240, 215, .04); }
+.application.vedmak.monster .vm-stat:last-child { border-bottom: 0; box-shadow: none; }
+.application.vedmak.monster .vm-stat-name { flex: 1 1 0; min-width: 0; font-family: var(--vd-font-head); font-size: 1rem; color: #f1ece0; }
+.application.vedmak.monster .vm-stat-name:hover { color: #fff; text-shadow: none; }
+.application.vedmak.monster .vm-stat input {
+  flex: none; width: 40px; height: 26px; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-mod { flex: none; width: 26px; text-align: center; font-size: .75rem; color: #8c867b; }
+.application.vedmak.monster .vm-total { flex: none; display: grid; }
+.application.vedmak.monster .vm-total:hover .vd-medal { box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85), 0 0 0 3px rgba(226, 221, 208, .12); }
+.application.vedmak.monster .vm-stat.reduced .vd-medal-face b { background-image: var(--vd-metal-blood); }
+.application.vedmak.monster .vd-medal.vm-m34 { --size: 34px; --rim: 5px; }
+.application.vedmak.monster .vd-medal.vm-m50 { --size: 50px; --rim: 7px; }
+.application.vedmak.monster .vm-derived { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; padding: .9rem; }
+.application.vedmak.monster .vm-der { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; }
+.application.vedmak.monster .vm-bonus { display: flex; flex-direction: column; gap: .6rem; padding: .9rem; }
+.application.vedmak.monster .vm-ghead {
+  display: flex; align-items: center; gap: 9px; margin: 0; padding: 0; border: 0; font-family: var(--vd-font-body); font-weight: 500; font-size: .62rem;
+  letter-spacing: .24em; text-transform: uppercase; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-ghead::before { content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg); background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
+.application.vedmak.monster .vm-ghead .rule { flex: 1 1 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); }
+.application.vedmak.monster .vm-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+.application.vedmak.monster .vm-fields label { display: flex; flex-direction: column; gap: 5px; min-width: 0; margin: 0; }
+.application.vedmak.monster .vm-fields input {
+  width: 100%; height: 32px; padding: 0 9px; box-sizing: border-box; text-align: center; font-family: var(--vd-font-head); font-size: 1rem; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-hint { margin: 0; font-size: .72rem; line-height: 1.45; color: #a8a296; }
