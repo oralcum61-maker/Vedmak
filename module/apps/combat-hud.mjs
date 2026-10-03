@@ -155,7 +155,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Навык из поля поиска: Enter или выбор из подсказок — бросок. */
   _onRender(context, options) {
     super._onRender?.(context, options);
-    const input = this.element.querySelector("input.vhud-skill");
+    const input = this.element.querySelector("input.vh-skill");
     if (!input || input.dataset.bound) return;
     input.dataset.bound = "1";
     const roll = event => {
@@ -204,7 +204,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
       base: system.skills[src.skill].base + (src.accuracy || 0),
       damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,
-      sub: [SKILLS[src.skill]?.label, src.item?.system.oil ? "масло" : "", src.isRanged ? `дистанция ${src.weapon.range}` : ""].filter(Boolean).join(" · "),
+      sub: [SKILLS[src.skill]?.label, src.item?.system.activeOil ? `масло: ${src.item.system.activeOil.name}` : "", src.isRanged ? `дистанция ${src.weapon.range}` : ""].filter(Boolean).join(" · "),
       isRanged: !!src.isRanged
     }));
     const defenses = ["dodge", "athletics", "brawling", "melee"].map(key => ({ key, label: SKILLS[key].label.split("/")[0], base: system.skills[key].base }));
@@ -251,8 +251,13 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       .map(t => ({ ...t, active: t.id === this.tab, count: counts[t.id] || "" }));
     if (!tabs.some(t => t.active)) { this.tab = "fight"; tabs[0].active = true; }
 
-    const order2 = combat?.turns ?? [];
-    const nextIndex = combat ? (combat.turn + 1) % Math.max(order2.length, 1) : 0;
+    // Кто дальше: как в Foundry — поверженных пропускаем, если так настроено в трекере
+    const turns = combat?.turns ?? [];
+    let next = null;
+    for (let k = 1; combat && k <= turns.length; k++) {
+      const c = turns[(combat.turn + k) % turns.length];
+      if (c && !(combat.settings?.skipDefeated && c.isDefeated)) { next = c; break; }
+    }
     return Object.assign(context, {
       actor, vitals, energy, luck, tabs, tab: this.tab,
       energyMax: vigor, energyLeft: Math.max(0, vigor - used), tox: vitals.find(v => v.key === "tox") ?? null,
@@ -266,7 +271,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       skillOptions: Object.entries(SKILLS).filter(([k]) => system.skills?.[k]).map(([, s]) => s.label),
       effects, statusList,
       collapsed: this.collapsed, isCurrent, isCharacter, inCombat: !!combat,
-      round: combat?.round ?? 0, nextName: combat ? (order2[nextIndex]?.name ?? "—") : "",
+      round: combat?.round ?? 0, nextName: combat ? (next?.name ?? "—") : "",
       canAdvance: !!combat && (isCurrent || game.user.isGM)
     });
   }
@@ -275,9 +280,9 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static #onOpenSheet() { this.actor?.sheet.render(true); }
 
-  static #onSetTab(event, target) {
+  static async #onSetTab(event, target) {
     this.tab = target.dataset.tab;
-    if (this.collapsed) game.settings.set(SYSTEM_ID, "combatHudCollapsed", false);
+    if (this.collapsed) await game.settings.set(SYSTEM_ID, "combatHudCollapsed", false);
     this.render();
   }
 
