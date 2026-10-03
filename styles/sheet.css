@@ -1,0 +1,1191 @@
+/* =============================== Лист по холсту design/10-sheet (PLAN 4.55) ===============================
+   Подключается после vedmak.css (system.json) и перекрывает его: колонка и семь вкладок персонажа одним языком —
+   стальные пластины, утопленные колодцы, кованые медальоны с насечками (как в карточках чата), насечки вместо
+   полос, главные кнопки — эмаль на заклёпках в стальной рамке, прочие — светлая сталь. Фактуры — запечённые
+   плитки --vd-s-* (vedmak.css, токены); облегчённая графика гасит их там же. */
+
+.vedmak, .vedmak-card {
+  --vd-rivet: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px);
+  --vd-steel-ring: radial-gradient(circle at 34% 26%, #fbf7ee 0, #cfc9bc 20%, #7f7a72 52%, #3a3935 80%, #1c1c1e 100%);
+  --vd-well-bg: #0c0d0f;
+  --vd-well-shadow: inset 0 2px 6px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .07);
+}
+
+/* ------------------------------------------------ Медальон ------------------------------------------------ */
+.vedmak .vd-medal {
+  --size: 52px; --rim: 8px;
+  position: relative; flex: none; display: inline-block; width: var(--size); height: var(--size); border-radius: 50%;
+  background: var(--vd-steel-ring); box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85);
+}
+.vedmak .vd-medal::after {
+  content: ""; position: absolute; inset: 3px; border-radius: 50%; pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, .18); border-bottom-color: rgba(0, 0, 0, .35);
+}
+.vedmak .vd-medal-face {
+  position: absolute; z-index: 1; inset: var(--rim); border-radius: 50%; display: grid; place-items: center;
+  background: #0d0e10 radial-gradient(circle at 50% 30%, rgba(255, 245, 225, .09), transparent 62%);
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, .95), inset 0 0 0 1px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 255, 255, .32);
+}
+.vedmak .vd-medal-face b {
+  font-family: var(--vd-font-head); font-weight: 400; font-size: calc(var(--size) * .4); line-height: 1;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .95));
+}
+.vedmak .vd-medal .vd-ring { position: absolute; inset: 0; pointer-events: none; }
+.vedmak .vd-medal .vd-ring i {
+  position: absolute; left: 50%; top: 1px; width: 2px; height: calc(var(--rim) - 1px); margin-left: -1px;
+  transform-origin: 1px calc(var(--size) / 2 - 1px); background: #121315; box-shadow: 1px 0 0 rgba(255, 255, 255, .28);
+}
+.vedmak .vd-ring .n1 { transform: rotate(36deg); } .vedmak .vd-ring .n2 { transform: rotate(72deg); }
+.vedmak .vd-ring .n3 { transform: rotate(108deg); } .vedmak .vd-ring .n4 { transform: rotate(144deg); }
+.vedmak .vd-ring .n5 { transform: rotate(180deg); } .vedmak .vd-ring .n6 { transform: rotate(216deg); }
+.vedmak .vd-ring .n7 { transform: rotate(252deg); } .vedmak .vd-ring .n8 { transform: rotate(288deg); }
+.vedmak .vd-ring .n9 { transform: rotate(324deg); }
+.vedmak .vd-medal.sm { --size: 44px; --rim: 7px; }
+.vedmak .vd-medal.md { --size: 58px; --rim: 9px; }
+.vedmak .vd-medal.lg { --size: 70px; --rim: 10px; }
+.vedmak .vd-medal.xl { --size: 112px; --rim: 14px; }
+.vedmak .vd-medal.brassy { background: radial-gradient(circle at 34% 26%, #fff2c8 0, #e0c27a 22%, #a07a34 54%, #4a3412 82%, #22180a 100%); }
+.vedmak .vd-medal.brassy .vd-medal-face b { background-image: var(--vd-metal-brass); }
+.vedmak .vd-medal.violet { background: radial-gradient(circle at 34% 26%, #ece6ff 0, #b3a6d9 22%, #6a5a98 54%, #2e2645 82%, #17121f 100%); }
+.vedmak .vd-medal.blood .vd-medal-face b { background-image: var(--vd-metal-blood); }
+
+/* Насечки вместо полос: надёжность, прочность */
+.vedmak .vd-notches { display: inline-flex; gap: 2px; flex-wrap: wrap; }
+.vedmak .vd-notches i { width: 5px; height: 9px; border-radius: 1px; background: linear-gradient(180deg, #f2ede2, #8e897e); box-shadow: 0 0 0 1px #050607; }
+.vedmak .vd-notches i.off { background: #0a0b0c; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .9), 0 0 0 1px #050607; }
+
+/* Монеты Удачи — латунь */
+.vedmak .vd-coin {
+  display: inline-block; width: 15px; height: 15px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f8e8b4 0, #c9a352 40%, #6d5020 85%);
+  box-shadow: 0 0 0 1px #2a1d08, 0 1px 2px rgba(0, 0, 0, .8), inset 0 -1px 0 rgba(0, 0, 0, .3);
+}
+.vedmak .vd-coin.off { background: #0a0b0c; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .95), 0 0 0 1px #050607; }
+
+/* ------------------------------------------------ Колонка ------------------------------------------------ */
+.application.vedmak.character .vd-rail { gap: .65rem; padding: .85rem .85rem .75rem; }
+/* Портрет целиком, в простой стальной рамке: без обрезки и без затемнения */
+.application.vedmak .vd-rail .portrait-frame {
+  height: auto; min-height: 0; max-height: none; aspect-ratio: auto; padding: 6px; border: 0; border-radius: 3px; overflow: visible;
+  background: linear-gradient(180deg, #cfc9bc, #7f7a72 40%, #3a3935);
+  box-shadow: 0 0 0 1px #050607, 0 10px 18px -6px rgba(0, 0, 0, .95);
+}
+.application.vedmak .vd-rail .portrait-frame::before, .application.vedmak .vd-rail .portrait-frame::after { content: none; display: none; }
+.application.vedmak .vd-rail .portrait {
+  display: block; width: 100%; height: auto; max-height: 11.5rem; object-fit: contain; background: #0b0c0e;
+  border-radius: 1px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .9);
+}
+.application.vedmak .vd-rail input.name {
+  height: auto; padding: 0 0 .35rem; font-size: 1.7rem; line-height: 1.05; text-align: center; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid #050607; border-radius: 0; box-shadow: 0 1px 0 rgba(255, 240, 215, .07);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak .vd-rail .tags { justify-content: center; gap: .3rem; }
+.application.vedmak .vd-rail .tag {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 .6rem; font-size: .66rem; font-weight: 600; color: #f1ece0;
+  background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .16), rgba(0, 0, 0, .3)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .22), 0 2px 4px -1px rgba(0, 0, 0, .8); text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak .vd-rail .tag.social {
+  color: #eef6e4; background-color: #34492a; background-image: linear-gradient(180deg, rgba(225, 245, 205, .2), rgba(0, 0, 0, .32)), var(--vd-s-ok);
+  border-color: #0b1407;
+}
+.application.vedmak .vd-rail .tag.social.bad {
+  color: #ffeae3; background-color: #8f301f; background-image: linear-gradient(180deg, rgba(255, 215, 195, .22), rgba(0, 0, 0, .32)), var(--vd-s-bad);
+  border-color: #2a0c06;
+}
+
+/* ПЗ, Выносливость, Токсичность — эмалевые трубки с делениями и риской порога */
+.application.vedmak .vd-rail .rail-vitals { gap: .5rem; }
+.application.vedmak .vd-rail .rv-head .cap { flex: 1; font-size: .56rem; letter-spacing: .16em; color: #bab4a8; }
+.application.vedmak .vd-rail .rv-head input {
+  width: 3.2rem; height: auto; padding: 0; text-align: right; font-family: var(--vd-font-head); font-size: 1.7rem; line-height: 1;
+  color: #f1ece0; background: none; border: 0; box-shadow: none;
+}
+.application.vedmak .vd-rail .rv-head .max { font-size: .7rem; color: #a8a296; }
+.application.vedmak .vd-rail .rv .track {
+  position: relative; height: 12px; margin-top: 5px; overflow: visible; border: 0; border-radius: 6px; background: #0a0b0c;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #050607, 0 1px 0 rgba(255, 240, 215, .07);
+}
+.application.vedmak .vd-rail .rv .fill { top: 0; bottom: 0; border-radius: 6px 0 0 6px; overflow: hidden; background: linear-gradient(180deg, #f0a08c, #b8432c 55%, #6e2215); }
+.application.vedmak .vd-rail .rv .fill::after { content: ""; position: absolute; left: 0; right: 0; top: 1px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .28); }
+.application.vedmak .vd-rail .rv.sta .fill { background: linear-gradient(180deg, #d4e4c0, #6f8a52 55%, #34492a); }
+.application.vedmak .vd-rail .rv.tox .fill { background: linear-gradient(180deg, #dcd2fb, #6a5a98 55%, #2e2645); }
+.application.vedmak .vd-rail .rv .tick { background: rgba(5, 6, 7, .75); }
+.application.vedmak .vd-rail .rv .notch {
+  top: -7px; bottom: auto; width: 0; height: 0; margin-left: -5px; background: none; box-shadow: none;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #e2ddd0;
+  filter: drop-shadow(0 1px 0 #050607);
+}
+.application.vedmak .vd-rail .rv.dying .track { box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #b8432c, 0 0 8px rgba(184, 67, 44, .5); }
+
+/* Удача — латунные монеты в колодце */
+.application.vedmak .vd-rail .rail-luck {
+  gap: .5rem; padding: .55rem .65rem; background: var(--vd-well-bg); background-image: none; border: 1px solid #040405; border-radius: 3px;
+  box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .vd-rail .rail-luck .cap { font-size: .56rem; letter-spacing: .16em; color: #bab4a8; }
+.application.vedmak .vd-rail .rail-luck .dots { gap: 4px; }
+.application.vedmak .vd-rail .rail-luck .dot {
+  width: 15px; height: 15px; border: 0; border-radius: 50%; background: #0a0b0c;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .95), 0 0 0 1px #050607;
+}
+.application.vedmak .vd-rail .rail-luck .dot.on {
+  background: radial-gradient(circle at 35% 30%, #f8e8b4 0, #c9a352 40%, #6d5020 85%);
+  box-shadow: 0 0 0 1px #2a1d08, 0 1px 2px rgba(0, 0, 0, .8), inset 0 -1px 0 rgba(0, 0, 0, .3);
+}
+.application.vedmak .vd-rail .rail-luck input {
+  width: 2.2rem; font-family: var(--vd-font-head); font-size: 1.5rem; text-align: center; background: none; border: 0; box-shadow: none; color: #e8c97a;
+}
+
+/* Энергия, Уст, Порог, Бег — малые медальоны */
+.application.vedmak .vd-rail .rail-derived {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 0; background: none; border: 0; box-shadow: none;
+}
+.application.vedmak .vd-rail .dval { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: 0; border: 0; }
+.application.vedmak .vd-rail .dval em {
+  font-style: normal; font-size: .52rem; letter-spacing: .12em; text-transform: uppercase; color: #a8a296; text-align: center; white-space: nowrap;
+}
+.application.vedmak .vd-rail .rail-foot .rail-btn, .application.vedmak .advance-bar .rail-btn {
+  height: 34px; display: grid; place-items: center; font-size: .66rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #f6f1e6;
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+}
+.application.vedmak .vd-rail .rail-foot .rail-btn.active { box-shadow: inset 0 2px 0 #b8432c, inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95); }
+
+/* ------------------------------------------------ «Параметры» ------------------------------------------------ */
+/* Каждый параметр — стоячий жетон: медальон, название, подсказка, база. Тело и Разум — по четыре в ряд */
+.application.vedmak.character .stats-tab .stat-cols { display: flex; flex-direction: column; gap: 1rem; }
+.application.vedmak.character .stats-tab .stat-col {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; padding: 0 .75rem .75rem; overflow: hidden;
+}
+.application.vedmak.character .stats-tab .stat-col > .group-head {
+  grid-column: 1 / -1; margin: 0 -.75rem; padding: .6rem .9rem; border-bottom: 1px solid #060708;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px;
+}
+.application.vedmak.character .stats-tab .stat-col > .group-head .bronze-tag { font-family: var(--vd-font-head); font-size: 1.05rem; letter-spacing: .14em; color: #f1ece0; }
+.application.vedmak.character .stats-tab .stat-row {
+  display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 1rem .6rem .7rem; text-align: center;
+  background: var(--vd-well-bg); background-image: none; border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak.character .stats-tab .stat-row .hit { display: flex; flex-direction: column; align-items: center; gap: .45rem; width: 100%; padding: 0; background: none; border: 0; }
+.application.vedmak.character .stats-tab .stat-row .hit:hover .vd-medal { box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85), 0 0 0 4px rgba(226, 221, 208, .1); }
+.application.vedmak.character .stats-tab .stat-row .name { font-family: var(--vd-font-head); font-size: 1.12rem; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); }
+.application.vedmak.character .stats-tab .stat-row .about { min-height: 2.4em; font-size: .66rem; line-height: 1.35; color: #bab4a8; white-space: normal; }
+.application.vedmak.character .stats-tab .stat-row.tone-down .vd-medal-face b { background-image: var(--vd-metal-blood); }
+.application.vedmak.character .stats-tab .stat-row.tone-up .vd-medal-face b { background-image: var(--vd-metal-green); }
+.application.vedmak.character .stats-tab .stat-row .base {
+  display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; margin: 0; padding: .5rem 0 0;
+  background: none; border: 0; border-top: 1px solid #050607; box-shadow: inset 0 1px 0 rgba(255, 240, 215, .05);
+}
+.application.vedmak.character .stats-tab .stat-row .base .cap, .application.vedmak.character .stats-tab .fate-bar .base .cap { font-size: .54rem; letter-spacing: .16em; color: #a8a296; }
+.application.vedmak.character .stats-tab .stat-row .base input, .application.vedmak.character .stats-tab .fate-bar .base input {
+  width: 2.6rem; height: 1.6rem; text-align: center; font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0;
+}
+.application.vedmak.character .stats-tab .stat-row .improve { margin-top: .2rem; }
+
+/* Производные — четыре графы с точками-заполнителями */
+.application.vedmak.character .stats-tab .derived-lists {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; padding: .75rem;
+  background-color: var(--vd-plate); background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak.character .stats-tab .dlist {
+  padding: .6rem .75rem .7rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak.character .stats-tab .dlist .group-head { margin-bottom: .25rem; }
+.application.vedmak.character .stats-tab .dlist .group-head .glabel { font-family: var(--vd-font-head); font-size: 1rem; letter-spacing: 0; text-transform: none; color: #f1ece0; }
+.application.vedmak.character .stats-tab .dlist .group-head .rule { display: none; }
+.application.vedmak.character .stats-tab .dline { height: 1.55rem; font-size: .76rem; color: #d6d0c2; border: 0; }
+.application.vedmak.character .stats-tab .dline b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.05rem; color: #f1ece0; }
+.application.vedmak.character .stats-tab .dline small { font-size: .62rem; color: #a8a296; }
+
+/* Удача — латунный медальон с монетами */
+.application.vedmak.character .stats-tab .fate-bar {
+  display: flex; align-items: center; gap: 1.1rem; margin-top: 1rem; padding: .75rem 1.1rem;
+}
+.application.vedmak.character .stats-tab .fate-bar .fate-value { display: flex; flex-direction: column; gap: .4rem; }
+.application.vedmak.character .stats-tab .fate-bar .fate-value .t { font-family: var(--vd-font-head); font-size: 1.2rem; color: #f1ece0; }
+.application.vedmak.character .stats-tab .fate-bar .coins { display: flex; gap: 5px; flex-wrap: wrap; }
+.application.vedmak.character .stats-tab .fate-bar .base { display: flex; align-items: center; gap: .5rem; margin-left: auto; background: none; border: 0; }
+
+/* ------------------------------------------------ Общее для вкладок ------------------------------------------------ */
+/* Переключатель подвкладок: колодец, выбранная — выпуклая сталь с киноварной кромкой */
+.application.vedmak nav.pane-switch {
+  display: inline-flex; gap: 2px; padding: 3px; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 4px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak nav.pane-switch > a {
+  display: flex; align-items: center; gap: .5rem; height: 34px; padding: 0 1rem; font-family: var(--vd-font-head); font-size: .95rem;
+  color: #bab4a8; background: none; border: 0; border-radius: 2px; box-shadow: none;
+}
+.application.vedmak nav.pane-switch > a.active {
+  color: #f3eee2; background-color: #2a2c31;
+  background-image: linear-gradient(180deg, rgba(255, 250, 240, .14), rgba(0, 0, 0, .25)), var(--vd-s-btn); background-size: 100% 100%, 512px 512px;
+  box-shadow: inset 0 2px 0 #b8432c, inset 0 -1px 0 rgba(0, 0, 0, .5), 0 2px 4px rgba(0, 0, 0, .7); text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak nav.pane-switch .count {
+  display: grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; font-family: var(--vd-font-body);
+  font-size: .66rem; font-weight: 600; color: #f1ece0; background: #0a0b0c; border: 1px solid #040405; border-radius: 10px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .9);
+}
+/* Светлая сталь — второстепенные кнопки вкладок */
+.application.vedmak :is(.turn-btn, .group-head .add, .skills-head .toggle) {
+  display: inline-flex; align-items: center; gap: .3rem; height: 32px; padding: 0 .85rem; font-size: .7rem; font-weight: 600; color: #f6f1e6;
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95); text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+}
+.application.vedmak :is(.turn-btn, .group-head .add, .skills-head .toggle):hover { background-color: #484a51; color: #fff; }
+.application.vedmak .turn-btn b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; color: #b4c79c; }
+.application.vedmak .skills-head .toggle.active { box-shadow: inset 0 2px 0 #b8432c, inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95); }
+/* Главная кнопка — киноварная эмаль на заклёпках в стальной рамке */
+.application.vedmak .atk-go:not(.quiet) {
+  height: 40px; padding: 0 1.6rem; font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #fff6ef;
+  background-color: #b8432c;
+  background-image: var(--vd-rivet), var(--vd-rivet), linear-gradient(180deg, rgba(255, 255, 255, .26), rgba(255, 255, 255, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-go);
+  background-position: left 7px center, right 7px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat; border: 1px solid #2a0c06; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+  text-shadow: 0 -1px 0 rgba(60, 10, 0, .7);
+}
+.application.vedmak .atk-go:not(.quiet):hover { filter: brightness(1.1); }
+
+/* ------------------------------------------------ «Бой» ------------------------------------------------ */
+.application.vedmak .combat-block.weapons { padding: 0; background: none; border: 0; box-shadow: none; display: flex; flex-direction: column; gap: .6rem; }
+.application.vedmak .atk-row {
+  display: flex; align-items: center; gap: .85rem; padding: .75rem .9rem .75rem .75rem; margin: 0; border: 1px solid #060708; border-radius: 3px;
+  background-color: var(--vd-plate); background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; box-shadow: var(--vd-lift);
+}
+.application.vedmak .atk-row.off { opacity: .7; }
+.application.vedmak .atk-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 56px; height: 56px; background: #0b0c0e; border: 1px solid #040405; border-radius: 2px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.application.vedmak .atk-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.application.vedmak .atk-frame .atk-icon { width: 46px; height: 46px; object-fit: contain; border: 0; background: none; box-shadow: none; }
+.application.vedmak .atk-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .25rem; }
+.application.vedmak .atk-name, .application.vedmak .atk-name a { font-family: var(--vd-font-head); font-size: 1.18rem; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); }
+.application.vedmak .atk-about { font-size: .68rem; line-height: 1.35; color: #bab4a8; }
+.application.vedmak .atk-rel { display: flex; align-items: center; gap: .5rem; margin-top: .3rem; width: auto; background: none; }
+.application.vedmak .atk-rel .cap { font-size: .54rem; letter-spacing: .14em; color: #a8a296; }
+.application.vedmak .atk-base { display: flex; flex-direction: column; align-items: center; gap: .25rem; flex: none; }
+.application.vedmak :is(.atk-base, .atk-dmg) em { font-style: normal; font-size: .54rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.application.vedmak .atk-dmg {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .25rem; flex: none; min-width: 7rem; height: 54px; padding: 0 .6rem;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .atk-dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.2rem; line-height: 1; color: #f1ece0; white-space: nowrap; background: none; filter: none; }
+
+.application.vedmak .combat-cols { gap: 1rem; }
+.application.vedmak .def-grid { gap: .5rem; }
+.application.vedmak .def-row {
+  display: flex; align-items: center; gap: .6rem; padding: .55rem .6rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .def-row .stamp { width: 40px; height: 40px; font-size: 1.35rem; }
+.application.vedmak .def-row .name { font-family: var(--vd-font-head); font-size: .98rem; color: #f1ece0; }
+.application.vedmak .def-row .about { font-size: .64rem; color: #bab4a8; }
+
+/* Испытания — таблички на заклёпках с порогом в утопленной плашке */
+.application.vedmak .save-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; }
+.application.vedmak .save {
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem; height: 52px; padding: 0 6px 0 1rem; border: 1px solid #060708; border-radius: 2px;
+  color: #eef6e4; background-color: #3b3d43;
+  background-image: var(--vd-rivet), var(--vd-rivet), linear-gradient(180deg, rgba(255, 250, 240, .18), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-position: left 5px center, right 5px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95); text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+}
+.application.vedmak .save.bad {
+  color: #ffeae3; border-color: #2a0c06; background-color: #8f301f;
+  background-image: var(--vd-rivet), var(--vd-rivet), linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(255, 215, 195, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-bad);
+}
+.application.vedmak .save.bad.alert { box-shadow: inset 0 1px 0 rgba(255, 215, 195, .4), 0 0 0 2px #e0604a, 0 0 12px rgba(224, 96, 74, .6); }
+.application.vedmak .save .sv { display: flex; flex-direction: column; gap: .2rem; }
+.application.vedmak .save .sv .name { font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: inherit; }
+.application.vedmak .save .sv em { font-style: normal; font-size: .6rem; opacity: .85; }
+.application.vedmak .save .thr {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 46px; height: 38px; border-radius: 2px;
+  background: rgba(0, 0, 0, .45); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .8), 0 1px 0 rgba(255, 240, 215, .1);
+}
+.application.vedmak .save .thr b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.35rem; line-height: 1; color: inherit; }
+.application.vedmak .save .thr .cap { font-size: .46rem; letter-spacing: .14em; color: inherit; opacity: .8; }
+.application.vedmak .turn-row { gap: .35rem; }
+
+/* Доспешный манекен */
+.application.vedmak .armor-doll { display: flex; gap: .6rem; align-items: stretch; }
+.application.vedmak .doll-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .4rem; }
+.application.vedmak .armor-loc {
+  display: flex; flex-direction: column; gap: .2rem; padding: .45rem .6rem .5rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .armor-loc .ln { display: flex; align-items: baseline; justify-content: space-between; gap: .4rem; }
+.application.vedmak .armor-loc .nm { min-width: 0; font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; color: #d6d0c2; overflow-wrap: normal; }
+.application.vedmak .armor-loc .ln { flex-wrap: wrap; column-gap: .3rem; row-gap: 0; }
+.application.vedmak .armor-loc .mult { font-family: var(--vd-font-head); font-size: .82rem; color: #a8a296; }
+.application.vedmak .armor-loc .mult.hot { color: #e0937f; }
+.application.vedmak .armor-loc .sp { display: flex; align-items: center; gap: .5rem; }
+.application.vedmak .armor-loc .sp b {
+  font-family: var(--vd-font-head); font-weight: 400; font-size: 1.4rem; line-height: 1;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.application.vedmak .armor-loc.zero .sp b { background: none; color: #8c867b; }
+.application.vedmak .armor-loc .bar { flex: 1; height: 5px; border-radius: 3px; background: #0a0b0c; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .9), 0 0 0 1px #050607; overflow: hidden; }
+.application.vedmak .armor-loc .bar span { display: block; height: 100%; background: linear-gradient(180deg, #f2ede2, #8e897e); }
+.application.vedmak .doll { position: relative; flex: none; width: 150px; height: 236px; align-self: center; transform: scale(.7); margin: -35px -22px; }
+.application.vedmak .doll img { position: absolute; border: 0; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .8)); }
+.application.vedmak .doll .head { left: 47px; top: 0; width: 56px; height: 56px; }
+.application.vedmak .doll .torso { left: 30px; top: 50px; width: 90px; height: 90px; }
+.application.vedmak .doll .rarm { left: -6px; top: 58px; width: 52px; height: 72px; transform: scaleX(-1); }
+.application.vedmak .doll .larm { left: 104px; top: 58px; width: 52px; height: 72px; }
+.application.vedmak .doll .rleg { left: 22px; top: 140px; width: 56px; height: 92px; transform: scaleX(-1); }
+.application.vedmak .doll .lleg { left: 72px; top: 140px; width: 56px; height: 92px; }
+.application.vedmak .armor-note, .application.vedmak .shield-line {
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+
+/* Что со мной: бирки; эффекты и ранения — колодцы */
+.application.vedmak .state-chip {
+  display: inline-flex; align-items: center; gap: .5rem; height: 34px; padding: 0 .65rem 0 4px; color: #f1ece0; background-color: #2a2c31;
+  background-image: linear-gradient(180deg, rgba(255, 250, 240, .12), rgba(0, 0, 0, .25)); border: 1px solid #060708; border-radius: 17px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .16), 0 3px 6px -3px rgba(0, 0, 0, .9);
+}
+.application.vedmak .state-chip img { width: 26px; height: 26px; border: 0; border-radius: 50%; box-shadow: 0 0 0 1px #050607; }
+.application.vedmak .state-chip .cost { font-family: var(--vd-font-head); color: #e0937f; }
+.application.vedmak .fx-line { padding: .35rem .5rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow); margin-bottom: .3rem; }
+.application.vedmak .fx-line .fx-icon { width: 26px; height: 26px; border: 0; border-radius: 50%; box-shadow: 0 0 0 1px #050607; }
+.application.vedmak .fx-line .fx-name { font-family: var(--vd-font-head); font-size: .95rem; color: #f1ece0; }
+.application.vedmak .fx-line .fx-time { font-family: var(--vd-font-head); color: #c9bdf0; }
+.application.vedmak .wounds .wound { padding: .7rem .85rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow); }
+.application.vedmak .wounds .wound .tag.level {
+  color: #ffeae3; background-color: #8f301f; background-image: linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(0, 0, 0, .3)), var(--vd-s-bad);
+  border: 1px solid #2a0c06; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------ «Социальный бой» ------------------------------------------------ */
+.application.vedmak .combat-block .duel-resolve { display: flex; flex-direction: row; align-items: center; gap: 1.3rem; padding: .4rem .2rem; background: none; border: 0; box-shadow: none; }
+.application.vedmak .duel-resolve .rv-head { display: flex; align-items: baseline; gap: .4rem; }
+.application.vedmak .duel-resolve .rv-head input { width: 3.4rem; font-family: var(--vd-font-head); font-size: 1.7rem; text-align: right; background: none; border: 0; box-shadow: none; color: #f1ece0; }
+.application.vedmak .duel-resolve .duel-foot { display: flex; align-items: center; justify-content: flex-end; gap: .6rem; }
+.application.vedmak .duel-resolve .duel-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .6rem; }
+.application.vedmak .duel-resolve .rv-head .cap { flex: 1; font-size: .6rem; letter-spacing: .16em; color: #bab4a8; }
+.application.vedmak .duel-resolve .track {
+  position: relative; height: 12px; border: 0; border-radius: 6px; background: #0a0b0c; overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #050607, 0 1px 0 rgba(255, 240, 215, .07);
+}
+.application.vedmak .duel-resolve .track .fill { top: 0; bottom: 0; background: linear-gradient(180deg, #c9bdf0, #6a5a98 60%, #4f3d82); }
+.application.vedmak .duel-resolve .track .tick { background: rgba(5, 6, 7, .8); }
+.application.vedmak .duel-resolve.broken .vd-medal-face b { background-image: var(--vd-metal-blood); }
+.application.vedmak .duel-cols { gap: 1rem; }
+.application.vedmak .duel-group { --acc: #8e897e; --acc-lite: #f1ece0; padding: 0 .75rem .75rem; overflow: hidden; display: flex; flex-direction: column; gap: .45rem; }
+.application.vedmak .duel-group.empathic { --acc: #6a5a98; --acc-lite: #d6ccf3; }
+.application.vedmak .duel-group.antagonistic { --acc: #b8432c; --acc-lite: #ffc2b2; }
+.application.vedmak .duel-group.leverage { --acc: #4f6b35; --acc-lite: #c7dbb0; }
+.application.vedmak .duel-group > .group-head {
+  margin: 0 -.75rem .1rem; padding: .7rem .9rem .6rem; border-bottom: 1px solid #060708;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header); background-size: 100% 100%, 512px 512px;
+  box-shadow: inset 0 3px 0 var(--acc), 0 1px 0 rgba(255, 240, 215, .05);
+}
+.application.vedmak .duel-group > .group-head .glabel { font-family: var(--vd-font-head); font-size: 1.05rem; letter-spacing: 0; text-transform: none; color: #f1ece0; }
+.application.vedmak .duel-group .duel-row {
+  display: flex; align-items: center; gap: .6rem; padding: .5rem .6rem; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .duel-row .stamp { width: 36px; height: 36px; font-size: 1.2rem; }
+.application.vedmak .duel-row .who { flex: 1; min-width: 0; }
+.application.vedmak .duel-row .name { font-family: var(--vd-font-head); font-size: .98rem; color: #f1ece0; }
+.application.vedmak .duel-row .about { font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: #bab4a8; }
+.application.vedmak .duel-row .dmg {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; flex: none; min-width: 4rem; height: 40px; padding: 0 .5rem;
+  background: #141518; border: 1px solid #060708; border-radius: 3px; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .08);
+}
+.application.vedmak .duel-row .dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; line-height: 1; color: var(--acc-lite); }
+.application.vedmak .duel-row .dmg.none b { font-size: .82rem; }
+.application.vedmak .duel-row .dmg em { font-style: normal; font-size: .5rem; letter-spacing: .14em; text-transform: uppercase; color: #a8a296; }
+.application.vedmak .combat-block.social .status-now {
+  display: inline-flex; align-items: center; height: 24px; padding: 0 .75rem; font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #eef6e4;
+  background-color: #34492a; background-image: var(--vd-rivet), var(--vd-rivet), linear-gradient(180deg, rgba(225, 245, 205, .22), rgba(0, 0, 0, .32)), var(--vd-s-ok);
+  background-position: left 3px center, right 3px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  border: 1px solid #0b1407; border-radius: 2px;
+}
+.application.vedmak .combat-block.social .status-now.bad {
+  color: #ffeae3; background-color: #8f301f; border-color: #2a0c06;
+  background-image: var(--vd-rivet), var(--vd-rivet), linear-gradient(180deg, rgba(255, 215, 195, .22), rgba(0, 0, 0, .32)), var(--vd-s-bad);
+}
+
+/* ------------------------------------------------ «Навыки» ------------------------------------------------ */
+.application.vedmak .skill-group { padding: 0 .75rem .6rem; overflow: hidden; }
+.application.vedmak .skill-group > .group-head {
+  margin: 0 -.75rem .35rem; padding: .45rem .75rem .45rem .9rem; border-bottom: 1px solid #060708;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header); background-size: 100% 100%, 512px 512px;
+}
+.application.vedmak .skill-group > .group-head .bronze-tag { font-family: var(--vd-font-head); font-size: 1.05rem; letter-spacing: .06em; text-transform: none; color: #f1ece0; }
+.application.vedmak .skill-group .stat-medal { display: inline-flex; }
+.application.vedmak .skill-group .stat-medal .vd-medal { --size: 38px; --rim: 5px; }
+.application.vedmak .skill-group .stat-medal .vd-ring { display: none; }
+.application.vedmak .skill-line { gap: .5rem; min-height: 30px; }
+.application.vedmak .skill-line .prof-mark i { font-size: .62rem; color: #4a4c52; }
+.application.vedmak .skill-line.prof .prof-mark i { color: #e0604a; text-shadow: 0 0 5px rgba(184, 67, 44, .6); }
+.application.vedmak .skill-line .hit .name { font-size: .8rem; color: #bab4a8; }
+.application.vedmak .skill-line.trained .hit .name { color: #f6f1e6; font-weight: 600; }
+.application.vedmak .skill-line .hit .dots-fill { display: none; }
+.application.vedmak .skill-line .hit { flex: 1; min-width: 0; }
+.application.vedmak .skill-line .vd-notches { flex: none; gap: 2px; flex-wrap: nowrap; }
+.application.vedmak .skill-line .vd-notches i { width: 4px; height: 12px; }
+.application.vedmak .skill-line .vd-notches i:not(.off) { background: linear-gradient(180deg, #fdf9ef, #9b958a); box-shadow: 0 0 0 1px #050607, 0 0 4px rgba(255, 250, 235, .25); }
+.application.vedmak .skill-line .lvl { width: 2rem; height: 1.4rem; font-family: var(--vd-font-head); font-size: .9rem; text-align: center; }
+.application.vedmak .skill-line .base {
+  display: grid; place-items: center; flex: none; width: 2.2rem; height: 1.5rem; font-family: var(--vd-font-head); font-size: 1rem; color: #8c867b;
+  background: #141518; border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .06);
+}
+.application.vedmak .skill-line.trained .base {
+  color: #fff6ef; background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .16), rgba(0, 0, 0, .3)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .25), 0 2px 4px -1px rgba(0, 0, 0, .8);
+}
+.application.vedmak .skill-line .vd-notches i { width: 3px; }
+.application.vedmak .skill-line .vd-notches i.off { background: #26282d; box-shadow: inset 0 1px 1px rgba(0, 0, 0, .8), 0 0 0 1px #050607; }
+.application.vedmak .skill-line .hit .name { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.15; }
+.application.vedmak .skill-line { padding: .2rem 0; }
+
+/* ------------------------------------------------ «Снаряжение» ------------------------------------------------ */
+/* «В руках» и «надето» — зелёная эмаль, инструменты предмета — круглая светлая сталь */
+.application.vedmak .item-frame .ribbon:not(.steel) {
+  color: #eef6e4; background-color: #34492a; background-image: linear-gradient(180deg, rgba(225, 245, 205, .22), rgba(0, 0, 0, .32)), var(--vd-s-ok);
+  background-size: 100% 100%, 512px 512px; border-color: #0b1407; text-shadow: 0 -1px 0 rgba(0, 0, 0, .7);
+}
+.application.vedmak .item-tools { gap: 5px; padding: 0; background: none; border: 0; box-shadow: none; }
+.application.vedmak :is(.item-tools, .tile-tools) a {
+  width: 32px; height: 32px; border-radius: 50%; color: #e2ddd0; background-color: #3b3d43;
+  background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(0, 0, 0, .34)), var(--vd-s-btn); background-size: 100% 100%, 512px 512px;
+  border: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .28), 0 3px 6px -2px rgba(0, 0, 0, .9);
+}
+.application.vedmak :is(.item-tools, .tile-tools) a:hover { background-color: #484a51; color: #fff; }
+.application.vedmak .gear-tile .tile-tools a { width: 26px; height: 26px; }
+.application.vedmak .item-stats { border-radius: 3px; box-shadow: var(--vd-well-shadow); }
+.application.vedmak .item-stats .cell > b { color: #f1ece0; }
+.application.vedmak .gear-tile, .application.vedmak .item-head .item-frame { border-radius: 3px; }
+/* Узкий лист: числа и кнопка карточки оружия уходят на вторую строку, имя и надёжность не сжимаются */
+.application.vedmak .atk-row { flex-wrap: wrap; row-gap: .6rem; }
+.application.vedmak .atk-who { flex: 1 1 13rem; min-width: 11rem; }
+.application.vedmak .atk-rel .vd-notches { flex-wrap: nowrap; }
+
+/* ============================== Худ персонажа по холсту design/11 (PLAN 4.58) ==============================
+   Пульт внизу экрана: слева портрет и показатели, в середине вкладки (Бой, Магия, Алхимия, Действия, Состояния),
+   справа раунд и «Конец хода». Высота постоянная — смена вкладки не двигает сцену. */
+#vedmak-combat-hud.vedmak-hud { color: #e2ddd0; font-size: 12px; font-variant-numeric: tabular-nums; }
+.vedmak-hud .vh {
+  position: relative; display: flex; height: 212px; box-sizing: border-box; overflow: hidden;
+  background-color: var(--vd-plate); background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 8px;
+  box-shadow: 0 18px 34px -12px rgba(0, 0, 0, .95), inset 0 1px 0 rgba(255, 240, 215, .1);
+}
+.vedmak-hud .vh.collapsed { height: auto; }
+.vedmak-hud .vh-cap { font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.vedmak-hud .vh button { width: auto; margin: 0; line-height: normal; font-family: var(--vd-font-body); cursor: var(--cursor-pointer, pointer); }
+.vedmak-hud .vh-fold {
+  position: absolute; z-index: 2; right: 8px; top: 6px; width: 24px; height: 24px; padding: 0;
+  display: grid; place-items: center; font-size: 12px; color: #bab4a8; background: none; border: 0; box-shadow: none;
+}
+.vedmak-hud .vh-fold:hover { color: #fff; background: none; }
+
+/* Левая колонка */
+.vedmak-hud .vh-side {
+  flex: none; width: 268px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 10px 14px;
+  background-color: #131417; background-image: radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; border-right: 1px solid #060708;
+}
+.vedmak-hud .vh.collapsed .vh-side { gap: 4px; padding-block: 6px; }
+.vedmak-hud .vh.collapsed .vh-vit:not(.hp), .vedmak-hud .vh.collapsed .vh-pips { display: none; }
+.vedmak-hud .vh-who { display: flex; gap: 11px; align-items: center; min-width: 0; }
+.vedmak-hud .vh-portrait {
+  position: relative; flex: none; width: 58px; height: 58px; border-radius: 50%; cursor: var(--cursor-pointer, pointer);
+  background: var(--vd-steel-ring); box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85);
+}
+.vedmak-hud .vh-portrait img { position: absolute; inset: 5px; width: 48px; height: 48px; border: 0; border-radius: 50%; object-fit: cover; background: #0b0c0e; }
+.vedmak-hud .vh.collapsed .vh-portrait { width: 40px; height: 40px; }
+.vedmak-hud .vh.collapsed .vh-portrait img { inset: 4px; width: 32px; height: 32px; }
+.vedmak-hud .vh.my-turn .vh-portrait { box-shadow: 0 0 0 1px #050607, 0 0 0 3px rgba(180, 199, 156, .55), 0 5px 12px rgba(0, 0, 0, .85); }
+.vedmak-hud .vh-name { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; min-width: 0; }
+.vedmak-hud .vh-name a {
+  max-width: 100%; font-family: var(--vd-font-head); font-size: 23px; line-height: 1; color: #f1ece0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.vedmak-hud .vh-name a:hover { color: #fff; text-shadow: none; }
+.vedmak-hud .vh-mine, .vedmak-hud .vh-wait {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 10px; box-sizing: border-box; font-size: 9.5px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; border: 1px solid #0b1407; border-radius: 2px;
+}
+.vedmak-hud .vh-mine {
+  color: #eef6e4; background-color: #34492a; background-image: linear-gradient(180deg, rgba(225, 245, 205, .2), rgba(0, 0, 0, .32)), var(--vd-s-ok);
+  background-size: 100% 100%, 512px 512px;
+}
+.vedmak-hud .vh-wait { color: #bab4a8; background: #141518; border-color: #060708; }
+.vedmak-hud .vh-vit { display: grid; grid-template-columns: 36px 1fr 52px; align-items: center; gap: 8px; }
+.vedmak-hud .vh-tube { position: relative; height: 10px; border-radius: 5px; background: #0a0b0c; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #050607; overflow: hidden; }
+.vedmak-hud .vh-tube .f { position: absolute; left: 0; top: 0; bottom: 0; }
+.vedmak-hud .vh-tube .f.hp { background: linear-gradient(180deg, #f0a08c, #b8432c 55%, #6e2215); }
+.vedmak-hud .vh-tube .f.sta { background: linear-gradient(180deg, #d4e4c0, #6f8a52 55%, #34492a); }
+.vedmak-hud .vh-tube .f.tox { background: linear-gradient(180deg, #dcd2fb, #6a5a98 55%, #2e2645); }
+.vedmak-hud .vh-tube i { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(5, 6, 7, .75); }
+.vedmak-hud .vh-tube b.wound { position: absolute; z-index: 1; top: 0; bottom: 0; width: 2px; padding: 0; border: 0; margin-left: -1px; background: #f0d68f; box-shadow: 0 0 3px rgba(240, 214, 143, .8); }
+.vedmak-hud .vh-num { text-align: right; white-space: nowrap; }
+.vedmak-hud .vh-num b { font-family: var(--vd-font-head); font-weight: 400; font-size: 17px; color: #f1ece0; }
+.vedmak-hud .vh-num small { font-size: 10px; color: #a8a296; }
+.vedmak-hud .vh-num.bad b { color: #e0937f; }
+.vedmak-hud .vh-pips { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
+.vedmak-hud .vh-pip-row { display: inline-flex; align-items: center; gap: 3px; }
+.vedmak-hud .vh-pip-row .vh-cap { margin-right: 3px; }
+.vedmak-hud .vh-pip-row .vd-coin { width: 13px; height: 13px; }
+.vedmak-hud .vh-slot { display: inline-block; width: 13px; height: 13px; border-radius: 2px; background: #0a0b0c; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .95), 0 0 0 1px #050607; }
+.vedmak-hud .vh-slot.on { background: linear-gradient(180deg, #dcd2fb, #6a5a98); box-shadow: 0 0 0 1px #17121f, 0 0 5px rgba(201, 189, 240, .5); }
+
+/* Середина: вкладки и колода */
+.vedmak-hud .vh-center { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.vedmak-hud .vh-tabsrow { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 7px 40px 6px; border-bottom: 1px solid #060708; box-shadow: 0 1px 0 rgba(255, 240, 215, .05); }
+.vedmak-hud .vh.collapsed .vh-tabsrow { border-bottom: 0; box-shadow: none; margin-block: auto; padding-inline: 14px; }
+.vedmak-hud .vh-switch {
+  display: inline-flex; gap: 2px; padding: 3px; border-radius: 4px;
+  background: var(--vd-well-bg); border: 1px solid #040405; box-shadow: var(--vd-well-shadow);
+}
+.vedmak-hud .vh-switch a {
+  display: flex; align-items: center; gap: 7px; height: 26px; padding: 0 12px; border-radius: 2px;
+  font-family: var(--vd-font-head); font-size: 13.5px; color: #bab4a8; cursor: var(--cursor-pointer, pointer); text-shadow: none;
+}
+.vedmak-hud .vh-switch a:hover { color: #f3eee2; }
+.vedmak-hud .vh-switch a.on {
+  color: #f3eee2; background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .14), rgba(0, 0, 0, .25)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+  box-shadow: inset 0 2px 0 #b8432c, inset 0 -1px 0 rgba(0, 0, 0, .5), 0 2px 4px rgba(0, 0, 0, .7);
+}
+.vedmak-hud .vh.collapsed .vh-switch a.on { box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .5), 0 2px 4px rgba(0, 0, 0, .7); }
+.vedmak-hud .vh-count {
+  display: grid; place-items: center; min-width: 20px; height: 18px; padding: 0 5px; box-sizing: border-box; font-family: var(--vd-font-body);
+  font-size: 10px; font-weight: 600; color: #f1ece0; background: #0a0b0c; border: 1px solid #040405; border-radius: 9px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .9);
+}
+.vedmak-hud .vh-deck { flex: 1 1 0; min-height: 0; display: flex; align-items: center; gap: 12px; padding: 9px 14px 10px; overflow: hidden; }
+.vedmak-hud .vh-deck.vh-rows { flex-direction: column; align-items: stretch; justify-content: center; gap: 8px; }
+.vedmak-hud .vh-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.vedmak-hud .vh-grp { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.vedmak-hud .vh-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.vedmak-hud .vh-well { background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow); }
+.vedmak-hud .vh-empty { font-size: 11.5px; color: #a8a296; }
+
+/* Кнопки: светлая сталь и эмаль на заклёпках */
+.vedmak-hud .vh-sbtn {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; height: 34px; padding: 0 12px; box-sizing: border-box;
+  font-size: 11px; font-weight: 600; color: #f6f1e6; white-space: nowrap; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95);
+}
+.vedmak-hud .vh-sbtn.sm, .vedmak-hud .vh-grid2 .vh-sbtn { height: 30px; padding: 0 10px; font-size: 10.5px; }
+.vedmak-hud .vh-sbtn:hover { background-color: #484a51; color: #fff; }
+.vedmak-hud .vh-sbtn.static { cursor: default; }
+.vedmak-hud .vh-sbtn b { font-family: var(--vd-font-head); font-weight: 400; font-size: 16px; color: #f1ece0; }
+.vedmak-hud .vh-sbtn b.ok { color: #b4c79c; }
+.vedmak-hud .vh-sbtn.bad {
+  color: #ffeae3; background-color: #8f301f; border-color: #2a0c06;
+  background-image: linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(0, 0, 0, .34)), var(--vd-s-bad);
+}
+.vedmak-hud .vh-go {
+  position: relative; flex: none; height: 32px; padding: 0 16px; font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+  color: #fff6ef; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7); border: 1px solid #2a0c06; border-radius: 3px;
+  background-color: #b8432c; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go);
+  background-position: left 6px center, right 6px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.vedmak-hud .vh-go:hover { filter: brightness(1.1); }
+.vedmak-hud .vh-go.violet { background-color: #6a5a98; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go-arcane); border-color: #17102a; text-shadow: 0 -1px 0 rgba(20, 10, 40, .7); }
+.vedmak-hud .vh-go.green { background-color: #4f6b35; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-ok); border-color: #0b1407; text-shadow: 0 -1px 0 rgba(5, 20, 0, .7); }
+.vedmak-hud .vh-go.xs { height: 26px; padding: 0 12px; font-size: 9px; letter-spacing: .14em; }
+.vedmak-hud .vh-go.wide { width: 100%; padding: 0; height: 36px; font-size: 10.5px; }
+
+/* Бой */
+.vedmak-hud .vh-weapons { flex: 1.7 1 0; min-width: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: center; gap: 6px; overflow-y: auto; scrollbar-width: thin; }
+.vedmak-hud .vh-wpn { display: flex; align-items: center; gap: 9px; padding: 6px 8px; }
+.vedmak-hud .vh-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 38px; height: 38px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.vedmak-hud .vh-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.vedmak-hud .vh-frame img { width: 32px; height: 32px; border: 0; object-fit: contain; }
+.vedmak-hud .vh-wtext { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.vedmak-hud .vh-wname, .vedmak-hud .vh-wsub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-wname { font-family: var(--vd-font-head); font-size: 15px; color: #f1ece0; }
+.vedmak-hud .vh-wsub { font-size: 10px; color: #bab4a8; }
+.vedmak-hud .vd-medal.vh-m38 { --size: 38px; --rim: 6px; }
+.vedmak-hud .vd-medal.vh-m52 { --size: 52px; --rim: 8px; }
+.vedmak-hud .vh-dmg { flex: none; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 64px; }
+.vedmak-hud .vh-dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: 15px; color: #f1ece0; white-space: nowrap; }
+
+/* Магия (PLAN 4.68): слева поиск и разделы, в середине плитки в колонки с прокруткой, справа — что держится */
+.vedmak-hud .vh-deck.vh-magic { display: grid; grid-template-columns: 150px minmax(0, 1fr) 180px; align-items: stretch; gap: 10px; padding-block: 8px; }
+.vedmak-hud .vh-deck.vh-magic.no-held { grid-template-columns: 150px minmax(0, 1fr); }
+.vedmak-hud .vh-mgroups { display: flex; flex-direction: column; gap: 5px; min-height: 0; }
+.vedmak-hud input.vh-magic-search {
+  flex: none; width: 100%; height: 26px; padding: 0 8px; box-sizing: border-box; font-size: 11px; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.vedmak-hud .vh-mlist { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; gap: 1px; overflow-y: auto; scrollbar-width: none; }
+.vedmak-hud .vh-mlist::-webkit-scrollbar { display: none; }
+.vedmak-hud .vh-mgroup {
+  flex: none; display: flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; text-align: left;
+  font-family: var(--vd-font-head); font-size: 13px; color: #bab4a8; background: none; border: 0; border-radius: 2px; box-shadow: none;
+}
+.vedmak-hud .vh-mgroup span { flex: 1 1 0; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-mgroup b { font-family: var(--vd-font-body); font-size: 10px; font-weight: 600; color: #8c867b; }
+.vedmak-hud .vh-mgroup i { font-size: 10px; color: #e8c97a; }
+.vedmak-hud .vh-mgroup:hover { color: #f3eee2; background: rgba(255, 245, 225, .04); }
+.vedmak-hud .vh-mgroup.on {
+  color: #f3eee2; background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .14), rgba(0, 0, 0, .25)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; box-shadow: inset 2px 0 0 #6a5a98, 0 2px 4px rgba(0, 0, 0, .7);
+}
+.vedmak-hud .vh-mgroup.on b { color: #c9bdf0; }
+.vedmak-hud .vh-magic.searching .vh-mgroup.on { background: none; box-shadow: none; color: #bab4a8; }
+.vedmak-hud .vh-spells {
+  min-height: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); grid-auto-rows: 32px; align-content: start;
+  gap: 4px; padding: 2px 4px 2px 2px; overflow-y: auto; scrollbar-width: thin;
+}
+.vedmak-hud .vh-spell {
+  position: relative; display: flex; align-items: center; gap: 7px; height: 32px; padding: 0 8px 0 3px; min-width: 0; text-align: left;
+  color: #f1ece0; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.vedmak-hud .vh-spell[hidden] { display: none; }
+.vedmak-hud .vh-spell:hover { background: #1b1a22; box-shadow: inset 0 0 0 1px rgba(201, 189, 240, .35), var(--vd-well-shadow); }
+.vedmak-hud .vh-spell:active { translate: 0 1px; }
+.vedmak-hud .vh-sico {
+  flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; overflow: hidden;
+  background: #0d0e10; box-shadow: 0 0 0 2px var(--el, #6a5a98), 0 0 0 3px #050607;
+}
+.vedmak-hud .vh-sico img { width: 22px; height: 22px; border: 0; object-fit: contain; }
+.vedmak-hud .vh-spell.sign .vh-sico { box-shadow: 0 0 0 2px #a8a296, 0 0 0 3px #050607; }
+.vedmak-hud .vh-spell.el-fire { --el: #d8641f; }
+.vedmak-hud .vh-spell.el-air { --el: #a8c4dc; }
+.vedmak-hud .vh-spell.el-water { --el: #4a86c8; }
+.vedmak-hud .vh-spell.el-earth { --el: #a07a44; }
+.vedmak-hud .vh-sname { flex: 1 1 0; min-width: 0; font-family: var(--vd-font-head); font-size: 13.5px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-scost { flex: none; font-size: 10px; font-weight: 600; color: #c9bdf0; }
+.vedmak-hud .vh-scost::after { content: " вын"; font-weight: 400; color: #8c867b; }
+.vedmak-hud .vh-spell.short { opacity: .5; }
+.vedmak-hud .vh-spell.short .vh-scost { color: #e0937f; }
+.vedmak-hud .vh-sfav { position: absolute; left: 1px; top: 1px; font-size: 8px; color: #e8c97a; text-shadow: 0 0 2px #000; }
+.vedmak-hud .vh-magic-empty { grid-column: 1 / -1; align-self: center; }
+.vedmak-hud .vh-magic .vh-held { min-width: 0; max-width: none; justify-content: flex-start; overflow-y: auto; scrollbar-width: thin; }
+.vedmak-hud .vh-en { font-family: var(--vd-font-head); font-weight: 400; font-size: 13px; letter-spacing: 0; color: #c9bdf0; }
+.vedmak-hud .vh-line { display: flex; align-items: center; gap: 9px; padding: 5px 8px; }
+.vedmak-hud .vh-line img { width: 22px; height: 22px; flex: none; border: 0; }
+.vedmak-hud .vh-line > i { width: 22px; text-align: center; color: #c9bdf0; }
+.vedmak-hud .vh-ltext { flex: 1 1 0; min-width: 0; font-size: 12px; color: #f1ece0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-ltext b { font-family: var(--vd-font-head); font-weight: 400; font-size: 15px; }
+
+/* Алхимия */
+.vedmak-hud .vh-potions { display: flex; gap: 8px; min-width: 0; max-width: 100%; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+.vedmak-hud .vh-potion { flex: none; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 108px; padding: 7px 6px 8px; box-sizing: border-box; }
+.vedmak-hud .vh-pic { position: relative; width: 38px; height: 38px; }
+.vedmak-hud .vh-pic img { width: 38px; height: 38px; border: 0; object-fit: contain; }
+.vedmak-hud .vh-qty {
+  position: absolute; right: -8px; bottom: -4px; display: grid; place-items: center; min-width: 20px; height: 18px; padding: 0 4px; box-sizing: border-box;
+  font-size: 10px; font-weight: 600; color: #f1ece0; background: #141518; border: 1px solid #060708; border-radius: 9px;
+}
+.vedmak-hud .vh-pn { width: 100%; font-family: var(--vd-font-head); font-size: 13px; line-height: 1.1; text-align: center; color: #f1ece0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-tx { max-width: 100%; min-height: 12px; font-size: 9.5px; color: #c9bdf0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Справка рядом с колодой: токсичность, энергия */
+.vedmak-hud .vh-aside { flex: 0 1 260px; min-width: 150px; margin-left: auto; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+.vedmak-hud .vh-aside .vh-tube { height: 12px; }
+.vedmak-hud .vh-aside p { margin: 0; font-size: 11px; line-height: 1.35; color: #bab4a8; }
+.vedmak-hud .vh-aside p b { font-family: var(--vd-font-head); font-weight: 400; font-size: 15px; color: #f1ece0; }
+.vedmak-hud .vh-aside p b.violet { color: #c9bdf0; }
+
+/* Действия */
+.vedmak-hud input.vh-skill {
+  width: 240px; height: 30px; padding: 0 10px; font-size: 12px; color: #e2ddd0; background: #0a0b0c;
+  border: 1px solid #040405; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+
+/* Состояния */
+.vedmak-hud .vh-st {
+  display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 3px; box-sizing: border-box; font-size: 11.5px; color: #f1ece0;
+  background: #2a2c31; border: 1px solid #060708; border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .14);
+}
+.vedmak-hud .vh-st img { width: 22px; height: 22px; border: 0; border-radius: 50%; box-shadow: 0 0 0 1px #050607; background: #0b0c0e; }
+.vedmak-hud .vh-st em { font-style: normal; font-family: var(--vd-font-head); color: #c9bdf0; }
+.vedmak-hud .vh-st.bad { background: #3a1610; border-color: #2a0c06; }
+.vedmak-hud .vh-st.bad em { color: #ffc2b2; }
+.vedmak-hud .vh-sgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.vedmak-hud .vh-sgrid button {
+  height: 24px; padding: 0 4px; font-size: 10.5px; color: #bab4a8; background: #141518; border: 1px solid #060708; border-radius: 3px;
+  display: block; text-align: center; box-shadow: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vedmak-hud .vh-sgrid button:hover { color: #f1ece0; background: #1d1e22; }
+.vedmak-hud .vh-sgrid button.on { color: #ffeae3; background: #5a1a10; border-color: #2a0c06; }
+
+/* Ход */
+.vedmak-hud .vh-turn {
+  flex: none; width: 160px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+  padding: 10px 14px; border-left: 1px solid #060708; box-shadow: inset 1px 0 0 rgba(255, 240, 215, .05);
+}
+.vedmak-hud .vh.collapsed .vh-turn { flex-direction: row; width: auto; padding: 6px 66px 6px 14px; }
+.vedmak-hud .vh.collapsed .vh-turn .vd-medal { --size: 38px; --rim: 6px; }
+.vedmak-hud .vh.collapsed .vh-turn .vh-go.wide { width: auto; padding: 0 16px; }
+.vedmak-hud .vh-next { font-size: 11px; line-height: 1.3; color: #bab4a8; text-align: center; }
+.vedmak-hud .vh-next b { font-family: var(--vd-font-head); font-weight: 400; font-size: 14px; color: #f1ece0; }
+
+/* Узкая нижняя панель (средняя колонка Foundry между боковыми — на экране 1280 это около 770 px): колонки уже,
+   подписи короче. Меряется сама панель, а не окно браузера: ширину съедают боковые панели. */
+#vedmak-combat-hud.vedmak-hud { container-type: inline-size; }
+@container (max-width: 1000px) {
+  .vedmak-hud .vh-side { width: 214px; padding: 8px 10px; }
+  .vedmak-hud .vh-name a { font-size: 19px; }
+  .vedmak-hud .vh-portrait { width: 48px; height: 48px; }
+  .vedmak-hud .vh-portrait img { inset: 4px; width: 40px; height: 40px; }
+  .vedmak-hud .vh-vit { grid-template-columns: 30px 1fr 46px; gap: 6px; }
+  .vedmak-hud .vh-turn { width: 124px; padding: 8px 10px; }
+  .vedmak-hud .vh-tabsrow { padding-inline: 32px; }
+  .vedmak-hud .vh-switch a { padding: 0 8px; font-size: 12.5px; gap: 5px; }
+  .vedmak-hud .vh-deck { padding: 8px 10px; gap: 8px; }
+  .vedmak-hud .vh-dmg { min-width: 0; }
+  .vedmak-hud .vh-wpn { gap: 7px; }
+  .vedmak-hud .vh-go.sm { padding: 0 12px; letter-spacing: .1em; }
+  .vedmak-hud .vh-sgrid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .vedmak-hud .vh-deck.vh-magic { grid-template-columns: 140px minmax(0, 1fr) 170px; }
+  .vedmak-hud .vh-deck.vh-magic.no-held { grid-template-columns: 140px minmax(0, 1fr); }
+  .vedmak-hud .vh-sgrid button { height: 21px; font-size: 10px; }
+}
+@container (max-width: 840px) {
+  .vedmak-hud .vh-side { width: 184px; }
+  .vedmak-hud .vh-pips { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .vedmak-hud .vh-turn { width: 108px; }
+  .vedmak-hud .vh-switch a { padding: 0 6px; font-size: 12px; }
+  .vedmak-hud .vh-switch .vh-count { display: none; }
+  .vedmak-hud .vh-weapons .vh-frame { display: none; }
+  .vedmak-hud .vh-grp:not(.vh-held) { flex: 0 0 168px; }
+  .vedmak-hud .vh-sgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .vedmak-hud .vh-sgrid button { height: 19px; }
+  .vedmak-hud .vh-side { width: 176px; }
+  .vedmak-hud .vh-name a { font-size: 17px; }
+  /* Энергия и токсичность и так видны в левой колонке */
+  .vedmak-hud .vh-aside { display: none; }
+  .vedmak-hud .vh-deck.vh-magic { grid-template-columns: 120px minmax(0, 1fr) 150px; }
+  .vedmak-hud .vh-deck.vh-magic.no-held { grid-template-columns: 136px minmax(0, 1fr); }
+  .vedmak-hud .vh-magic .vh-line { gap: 6px; padding: 4px 6px; }
+  .vedmak-hud .vh-magic .vh-ltext { font-size: 11px; }
+  .vedmak-hud .vh-turn { width: 104px; padding: 8px; }
+  .vedmak-hud .vh-go.wide { font-size: 9.5px; letter-spacing: .08em; white-space: nowrap; }
+  .vedmak-hud .vh-dmg .vh-cap { display: none; }
+  .vedmak-hud .vh-dmg b { font-size: 14px; }
+  .vedmak-hud .vh-wpn { gap: 6px; padding: 5px 6px; }
+  .vedmak-hud .vh-wpn .vh-go.sm { padding: 0 10px; letter-spacing: .06em; }
+  .vedmak-hud .vh-grp:not(.vh-held) { flex: 0 0 156px; }
+  .vedmak-hud .vh-grid2 { gap: 4px; }
+  .vedmak-hud .vh-grid2 .vh-sbtn { padding: 0 7px; gap: 4px; }
+}
+/* Подпись кнопки защиты обрезается, число — никогда */
+.vedmak-hud .vh-sbtn .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/* ============================== Профессия по холсту design/11 (PLAN 4.59) ==============================
+   Шапка на пластине, определяющий навык с насечками и медальоном основы, три ветви — цепь ступеней на стальном
+   стержне; между ступенями застёжка «5 очков» (зелёная — открыта). */
+.application.vedmak .skills-tab .vd-cap { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.application.vedmak .skills-tab .vp-head,
+.application.vedmak .skills-tab .vp-defining,
+.application.vedmak .skills-tab .vp-ab {
+  position: relative; background-color: var(--vd-plate);
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak .skills-tab .vp-head { display: flex; align-items: center; gap: 1rem; padding: .85rem 1.1rem; margin-bottom: .9rem; }
+.application.vedmak .skills-tab .vp-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 64px; height: 64px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.application.vedmak .skills-tab .vp-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.application.vedmak .skills-tab .vp-frame img { width: 54px; height: 54px; border: 0; object-fit: contain; }
+.application.vedmak .skills-tab .vp-who { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.application.vedmak .skills-tab .vp-name { font-family: var(--vd-font-head); font-size: 1.75rem; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); }
+.application.vedmak .skills-tab .vp-name:hover { color: #fff; }
+.application.vedmak .skills-tab .vp-about { font-size: .75rem; color: #bab4a8; }
+.application.vedmak .skills-tab .vp-progress { flex: none; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+
+.application.vedmak .skills-tab .vp-defining { display: flex; flex-direction: column; gap: .6rem; padding: .85rem 1rem; margin-bottom: 1rem; }
+.application.vedmak .skills-tab .vp-ghead {
+  display: flex; align-items: center; gap: 9px; margin: 0; padding: 0; border: 0; font-family: var(--vd-font-body); font-weight: 500; font-size: .62rem;
+  letter-spacing: .24em; text-transform: uppercase; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak .skills-tab .vp-ghead::before { content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg); background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
+.application.vedmak .skills-tab .vp-ghead .rule { flex: 1 1 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); }
+.application.vedmak .skills-tab .vp-def-row { display: flex; align-items: center; gap: .85rem; }
+.application.vedmak .skills-tab .vp-def-who { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .25rem; }
+.application.vedmak .skills-tab .vp-def-name { font-family: var(--vd-font-head); font-size: 1.4rem; line-height: 1.05; color: #f1ece0; }
+.application.vedmak .skills-tab .vp-def-name:hover { color: #fff; text-shadow: none; }
+.application.vedmak .skills-tab .vp-def-row .vd-notches i { width: 5px; height: 14px; }
+.application.vedmak .skills-tab .vp-def-base { flex: none; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.application.vedmak .skills-tab .vp-def-base:hover .vd-medal { box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85), 0 0 0 4px rgba(226, 221, 208, .1); }
+.application.vedmak .skills-tab .vp-effect {
+  margin: 0; padding: .6rem .75rem; font-size: .76rem; line-height: 1.5; color: #d6d0c2;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .skills-tab input.vp-lvl {
+  flex: none; width: 32px; height: 24px; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak .skills-tab input.vp-lvl.lg { width: 40px; height: 30px; font-size: 1.15rem; }
+
+/* Ветви: шапка, цепь на стержне */
+.application.vedmak .skills-tab .vp-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; align-items: start; }
+.application.vedmak .skills-tab .vp-branch { display: flex; flex-direction: column; gap: .6rem; min-width: 0; }
+.application.vedmak .skills-tab .vp-bar {
+  display: flex; align-items: center; padding: .6rem .85rem; border: 1px solid #060708; border-radius: 3px;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header); background-size: 100% 100%, 512px 512px;
+}
+.application.vedmak .skills-tab .vp-bar b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; color: #f1ece0; }
+.application.vedmak .skills-tab .vp-chain { position: relative; display: flex; flex-direction: column; gap: 22px; }
+.application.vedmak .skills-tab .vp-chain::before {
+  content: ""; position: absolute; left: 50%; top: 10px; bottom: 10px; width: 4px; margin-left: -2px;
+  background: linear-gradient(90deg, #3a3935, #a29d92 50%, #3a3935); box-shadow: 0 0 0 1px #050607;
+}
+.application.vedmak .skills-tab .vp-ab { display: flex; flex-direction: column; gap: .4rem; padding: .6rem .7rem .7rem; }
+.application.vedmak .skills-tab .vp-ab.learned { box-shadow: var(--vd-lift), inset 2px 0 0 #b4c79c; }
+.application.vedmak .skills-tab .vp-ab.locked > :not(.vp-gate) { opacity: .55; }
+.application.vedmak .skills-tab .vp-ab-top, .application.vedmak .skills-tab .vp-ab-lvl { display: flex; align-items: center; gap: .5rem; }
+.application.vedmak .skills-tab .vp-ab-who { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .12rem; }
+.application.vedmak .skills-tab .vp-ab-name { font-family: var(--vd-font-head); font-size: 1rem; line-height: 1.1; color: #f1ece0; overflow-wrap: anywhere; }
+.application.vedmak .skills-tab a.vp-ab-name:hover { color: #fff; text-shadow: none; }
+.application.vedmak .skills-tab .vp-ab.locked .vp-ab-name { color: #bab4a8; }
+.application.vedmak .skills-tab .vp-base {
+  flex: none; display: grid; place-items: center; width: 36px; height: 28px; font-family: var(--vd-font-head); font-size: 1.05rem; color: #fff6ef;
+  background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .16), rgba(0, 0, 0, .3)), var(--vd-s-btn); background-size: 100% 100%, 512px 512px;
+  border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .25), 0 2px 4px -1px rgba(0, 0, 0, .8);
+}
+.application.vedmak .skills-tab a.vp-base:hover { background-color: #3b3d43; color: #fff; text-shadow: none; }
+.application.vedmak .skills-tab .vp-base.quiet { color: #8c867b; background: #141518; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .06); }
+.application.vedmak .skills-tab .vp-ab-lvl .vd-notches { flex-wrap: nowrap; }
+.application.vedmak .skills-tab .vp-ab-lvl .vd-notches i { width: 4px; height: 11px; }
+.application.vedmak .skills-tab .vp-fill { flex: 1 1 0; }
+.application.vedmak .skills-tab .vp-ab-lvl a.improve { min-width: 2.2rem; height: 24px; font-size: .7rem; }
+.application.vedmak .skills-tab .vp-lock { display: flex; align-items: center; gap: 5px; font-size: .66rem; color: #e0937f; }
+.application.vedmak .skills-tab .vp-desc {
+  margin: 0; font-size: .69rem; line-height: 1.45; color: #d6d0c2; cursor: var(--cursor-pointer, pointer);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.application.vedmak .skills-tab .vp-desc:focus { -webkit-line-clamp: unset; outline: none; }
+.application.vedmak .skills-tab .vp-gate {
+  position: absolute; left: 50%; bottom: -17px; transform: translateX(-50%); z-index: 2; display: grid; place-items: center;
+  min-width: 44px; height: 14px; padding: 0 6px; font-size: .53rem; font-weight: 600; letter-spacing: .12em; color: #d6d0c2;
+  background: #141518; border: 1px solid #060708; border-radius: 7px; white-space: nowrap;
+}
+.application.vedmak .skills-tab .vp-gate.open { color: #eef6e4; background: #34492a; border-color: #0b1407; }
+.application.vedmak .skills-tab .vp-hint { margin: .9rem 0 0; font-size: .72rem; line-height: 1.45; color: #a8a296; }
+@container (max-width: 38rem) {
+  .application.vedmak .skills-tab .vp-branches { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ============================== Лист чудовища по холсту design/11 (PLAN 4.60) ==============================
+   Шапка: портрет в стальной рамке, имя литым шрифтом, класс и угроза, трубки ПЗ и Вын, медальоны Брони и Награды.
+   Параметры — строки с медальоном итога, производные — медальоны, поправки — поля в колодцах. */
+.application.vedmak.monster .vd-cap { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.application.vedmak.monster .vm-head {
+  display: flex; align-items: center; gap: 1.1rem; padding: 1rem 1.15rem;
+  background-color: #131417; background-image: radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; border-bottom: 1px solid #060708;
+}
+.application.vedmak.monster .vm-head::after { content: none; }
+.application.vedmak.monster .vm-portrait {
+  flex: none; padding: 5px; border-radius: 3px; background: linear-gradient(180deg, #cfc9bc, #7f7a72 40%, #3a3935);
+  box-shadow: 0 0 0 1px #050607, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.application.vedmak.monster .vm-portrait img.portrait {
+  display: block; width: 104px; height: 104px; margin: 0; object-fit: cover; border: 0; border-radius: 1px; background: #0b0c0e; box-shadow: 0 0 0 1px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-identity { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .55rem; }
+.application.vedmak.monster .vm-name-line { display: flex; align-items: center; gap: .75rem; }
+.application.vedmak.monster .vm-head input.name {
+  flex: 1 1 0; min-width: 0; height: auto; padding: 0; font-family: var(--vd-font-head); font-size: 1.9rem; line-height: 1.05; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid transparent; box-shadow: none; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-head input.name:hover, .application.vedmak.monster .vm-head input.name:focus { border-bottom-color: rgba(226, 221, 208, .2); }
+.application.vedmak.monster .vm-plq {
+  flex: none; display: inline-flex; align-items: center; height: 22px; padding: 0 10px; font-size: .62rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; border: 1px solid #060708; border-radius: 2px;
+}
+.application.vedmak.monster .vm-plq.bad { color: #ffeae3; background-color: #8f301f; background-image: linear-gradient(180deg, rgba(255, 215, 195, .22), rgba(0, 0, 0, .32)), var(--vd-s-bad); border-color: #2a0c06; }
+.application.vedmak.monster .vm-plq.warn { color: #f0d68f; background: #2a2418; border-color: #0e0b05; }
+.application.vedmak.monster .vm-selects { display: flex; flex-wrap: wrap; gap: 6px; }
+.application.vedmak.monster .vm-selects select {
+  width: auto; min-width: 7.5rem; height: 30px; padding: 0 8px; font-size: .78rem; color: #e2ddd0;
+  background-color: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-vitals { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; }
+.application.vedmak.monster .vm-vital { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.application.vedmak.monster .vm-vline { display: flex; align-items: baseline; gap: 6px; }
+.application.vedmak.monster .vm-vline .vd-cap:first-child { flex: 1 1 0; }
+.application.vedmak.monster .vm-vline input {
+  width: 3rem; height: auto; padding: 0; text-align: right; font-family: var(--vd-font-head); font-size: 1.4rem; line-height: 1; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid transparent; box-shadow: none;
+}
+.application.vedmak.monster .vm-vline input:hover, .application.vedmak.monster .vm-vline input:focus { border-bottom-color: rgba(226, 221, 208, .25); }
+.application.vedmak.monster .vm-vital.dying .vm-vline input { color: #e0937f; }
+.application.vedmak.monster .vm-tube { position: relative; height: 12px; border-radius: 6px; background: #0a0b0c; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #050607, 0 1px 0 rgba(255, 240, 215, .07); overflow: hidden; }
+.application.vedmak.monster .vm-tube .f { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px 0 0 6px; }
+.application.vedmak.monster .vm-vital.hp .f { background: linear-gradient(180deg, #f0a08c, #b8432c 55%, #6e2215); }
+.application.vedmak.monster .vm-vital.sta .f { background: linear-gradient(180deg, #d4e4c0, #6f8a52 55%, #34492a); }
+.application.vedmak.monster .vm-vital.tox .f { background: linear-gradient(180deg, #dcd2fb, #6a5a98 55%, #2e2645); }
+.application.vedmak.monster .vm-tube i { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(5, 6, 7, .75); }
+.application.vedmak.monster .vm-tube b.wound { position: absolute; z-index: 1; top: 0; bottom: 0; width: 2px; margin-left: -1px; padding: 0; border: 0; background: #f0d68f; box-shadow: 0 0 3px rgba(240, 214, 143, .8); }
+.application.vedmak.monster .vm-res { flex: none; display: flex; gap: .9rem; }
+.application.vedmak.monster .vm-res-item { display: flex; flex-direction: column; align-items: center; gap: 5px; margin: 0; }
+.application.vedmak.monster .vm-res .vd-medal { --size: 62px; --rim: 9px; }
+.application.vedmak.monster .vm-res .vd-medal-face input {
+  width: 100%; height: 100%; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: 1.45rem; line-height: 1; color: #f1ece0;
+  background: none; border: 0; border-radius: 50%; box-shadow: none; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+}
+.application.vedmak.monster .vm-res .vd-medal.brassy .vd-medal-face input { color: #e8c97a; font-size: 1.25rem; }
+.application.vedmak.monster .vm-res .vd-medal-face input:focus { outline: none; box-shadow: inset 0 0 0 1px rgba(226, 221, 208, .25); }
+
+/* Вкладка параметров */
+.application.vedmak.monster .vm-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-bottom: 1rem; }
+.application.vedmak.monster .vm-col { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.application.vedmak.monster .vm-plate {
+  position: relative; overflow: hidden; background-color: var(--vd-plate);
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak.monster .vm-bar {
+  display: flex; align-items: center; gap: 10px; padding: .6rem .9rem; border-bottom: 1px solid #060708;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header); background-size: 100% 100%, 512px 512px;
+}
+.application.vedmak.monster .vm-bar b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; color: #f1ece0; }
+.application.vedmak.monster .vm-fill { flex: 1 1 0; }
+.application.vedmak.monster .vm-stat-list { display: flex; flex-direction: column; padding: .35rem .9rem .6rem; }
+.application.vedmak.monster .vm-stat { display: flex; align-items: center; gap: .6rem; height: 42px; border-bottom: 1px solid rgba(0, 0, 0, .6); box-shadow: 0 1px 0 rgba(255, 240, 215, .04); }
+.application.vedmak.monster .vm-stat:last-child { border-bottom: 0; box-shadow: none; }
+.application.vedmak.monster .vm-stat-name { flex: 1 1 0; min-width: 0; font-family: var(--vd-font-head); font-size: 1rem; color: #f1ece0; }
+.application.vedmak.monster .vm-stat-name:hover { color: #fff; text-shadow: none; }
+.application.vedmak.monster .vm-stat input {
+  flex: none; width: 40px; height: 26px; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-mod { flex: none; width: 26px; text-align: center; font-size: .75rem; color: #8c867b; }
+.application.vedmak.monster .vm-total { flex: none; display: grid; }
+.application.vedmak.monster .vm-total:hover .vd-medal { box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85), 0 0 0 3px rgba(226, 221, 208, .12); }
+.application.vedmak.monster .vm-stat.reduced .vd-medal-face b { background-image: var(--vd-metal-blood); }
+.application.vedmak.monster .vd-medal.vm-m34 { --size: 34px; --rim: 5px; }
+.application.vedmak.monster .vd-medal.vm-m50 { --size: 50px; --rim: 7px; }
+.application.vedmak.monster .vm-derived { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; padding: .9rem; }
+.application.vedmak.monster .vm-der { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; }
+.application.vedmak.monster .vm-bonus { display: flex; flex-direction: column; gap: .6rem; padding: .9rem; }
+.application.vedmak.monster .vm-ghead {
+  display: flex; align-items: center; gap: 9px; margin: 0; padding: 0; border: 0; font-family: var(--vd-font-body); font-weight: 500; font-size: .62rem;
+  letter-spacing: .24em; text-transform: uppercase; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-ghead::before { content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg); background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
+.application.vedmak.monster .vm-ghead .rule { flex: 1 1 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); }
+.application.vedmak.monster .vm-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+.application.vedmak.monster .vm-fields label { display: flex; flex-direction: column; gap: 5px; min-width: 0; margin: 0; }
+.application.vedmak.monster .vm-fields input {
+  width: 100%; height: 32px; padding: 0 9px; box-sizing: border-box; text-align: center; font-family: var(--vd-font-head); font-size: 1rem; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.monster .vm-hint { margin: 0; font-size: .72rem; line-height: 1.45; color: #a8a296; }
+
+/* ============================== Окна проверок по холсту design/11 (PLAN 4.61) ==============================
+   Значок — в стальной рамке, основа — медальон, итог броска — медальон после «d10 +», урон — в утопленном колодце,
+   главная кнопка — эмаль на заклёпках (киноварь — атака, фиалка — сотворение, сталь — прочее). */
+.vedmak-dialog.check-dialog .dlg-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 52px; height: 52px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.vedmak-dialog.check-dialog .dlg-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.vedmak-dialog.check-dialog .dlg-frame img { width: 44px; height: 44px; margin: 0; object-fit: contain; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.vedmak-dialog.check-dialog .dlg-base:has(.vd-medal) {
+  min-width: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: 0; box-shadow: none;
+}
+.vedmak-dialog.check-dialog .dlg-base:has(.vd-medal)::before, .vedmak-dialog.check-dialog .dlg-base:has(.vd-medal)::after { content: none; }
+.vedmak-dialog.check-dialog .dlg-base .vd-medal { --size: 56px; --rim: 8px; }
+.vedmak-dialog.check-dialog .dlg-base .vd-medal-face b { font-size: 22px; }
+.vedmak-dialog.check-dialog .dlg-base:has(.vd-medal) .cap { font-size: .56rem; letter-spacing: .16em; color: #a8a296; }
+
+.vedmak-dialog.check-dialog .dlg-total { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem .5rem; }
+.vedmak-dialog.check-dialog .dlg-total .tot.roll { flex: 1 1 0; flex-direction: row; align-items: center; gap: .9rem; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll { display: flex; align-items: center; gap: 8px; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .dx { font-family: var(--vd-font-head); font-size: 1.25rem; color: #a8a296; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .vd-medal { --size: 60px; --rim: 9px; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .vd-medal-face b { font-size: 24px; color: transparent; overflow: visible; }
+.vedmak-dialog.check-dialog .dlg-total .tot-parts { font-size: .7rem; color: #bab4a8; }
+.vedmak-dialog.check-dialog .dlg-total .tot.dmg {
+  flex: none; align-items: center; gap: 3px; padding: 7px 14px; border-left: 0;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.vedmak-dialog.check-dialog .dlg-total .tot.dmg b { font-size: 1.2rem; max-width: 12rem; }
+.vedmak-dialog.check-dialog .dlg-total .tot.dmg .cap { font-size: .56rem; letter-spacing: .16em; color: #a8a296; }
+.vedmak-dialog.check-dialog .dlg-total .tot-hint:empty { display: none; }
+
+.vedmak-dialog.check-dialog .form-footer { gap: .75rem; padding: .5rem 1rem 1rem; background-color: #131417; background-image: var(--vd-s-header); background-size: 512px 512px; }
+.vedmak-dialog.check-dialog .form-footer button[data-action="cancel"] { flex: 0 0 auto; height: 40px; padding: 0 22px; }
+.vedmak-dialog.check-dialog .form-footer button:not([data-action="cancel"]) {
+  flex: 1 1 0; height: 40px; letter-spacing: .22em; font-size: .72rem; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-btn);
+  background-position: left 7px center, right 7px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat; background-blend-mode: normal;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .35), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.vedmak-dialog.attack-dialog .form-footer button:not([data-action="cancel"]) {
+  color: #fff6ef; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7);
+  background-color: #b8432c; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.vedmak-dialog.cast-dialog .form-footer button:not([data-action="cancel"]) {
+  color: #f7f3ff; text-shadow: 0 -1px 0 rgba(20, 10, 40, .7);
+  background-color: #6a5a98; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go-arcane);
+}
+
+/* ============================== Лист предмета по холсту design/11 (PLAN 4.62) ==============================
+   Шапка: значок в стальной рамке, имя с чертой, табличка типа, подзаголовок и «В чат» светлой сталью. У оружия —
+   строка главных чисел: медальон точности, урон в колодце, надёжность насечками. Разделы — пластины с гравированным
+   заголовком, подписи полей — мелкой капителью над утопленными полями. */
+.application.vedmak.item .vd-cap { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.application.vedmak.item .vi-head {
+  align-items: center; gap: .9rem; padding: 1rem 1rem .9rem;
+  background-color: #131417; background-image: radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; border-bottom: 1px solid #060708;
+}
+.application.vedmak.item .vi-head::after { content: none; }
+.application.vedmak.item .vi-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 72px; height: 72px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.application.vedmak.item .vi-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.application.vedmak.item .vi-frame img.portrait { width: 62px; height: 62px; margin: 0; object-fit: contain; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.application.vedmak.item .vi-head .identity { gap: .45rem; justify-content: center; }
+.application.vedmak.item .vi-head input.name {
+  height: auto; padding: 0 0 4px; font-family: var(--vd-font-head); font-size: 1.6rem; line-height: 1; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid #050607; border-radius: 0; box-shadow: 0 1px 0 rgba(255, 240, 215, .06); text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .vi-head .tags { align-items: center; gap: 6px; flex-wrap: wrap; }
+.application.vedmak.item .vi-head .tag {
+  height: 22px; padding: 0 10px; display: inline-flex; align-items: center; font-family: var(--vd-font-body); font-size: .62rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: #f1ece0; background: #2a2c31; border: 1px solid #060708; border-radius: 2px; box-shadow: none;
+}
+.application.vedmak.item .vi-head .tag.relic { color: #e8c97a; }
+.application.vedmak.item .vi-sub { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.application.vedmak.item .vi-fill { flex: 1 1 0; }
+.application.vedmak.item .vi-head a.vi-post {
+  height: 28px; padding: 0 12px; font-size: .64rem; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95);
+}
+.application.vedmak.item .vi-head a.vi-post:hover { background-color: #484a51; color: #fff; }
+
+/* Главные числа оружия */
+.application.vedmak.item .vi-key { display: flex; align-items: center; gap: .9rem; margin-bottom: .9rem; }
+.application.vedmak.item .vi-acc { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.application.vedmak.item .vd-medal.vi-m54 { --size: 54px; --rim: 8px; }
+.application.vedmak.item .vd-medal.vi-m54 .vd-medal-face b { font-size: 20px; }
+.application.vedmak.item .vi-well { background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow); }
+.application.vedmak.item .vi-dmg { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px; }
+.application.vedmak.item .vi-dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.5rem; line-height: 1.1; color: #f1ece0; }
+.application.vedmak.item .vi-dmg .vd-cap { white-space: normal; text-align: center; }
+.application.vedmak.item .vi-rel { flex: none; display: flex; flex-direction: column; gap: 5px; padding: 9px 12px; max-width: 45%; }
+.application.vedmak.item .vi-rel .vd-notches { flex-wrap: wrap; }
+
+/* Разделы — пластины, подписи — капитель над полями */
+.application.vedmak.item .tab fieldset.vd-fieldset {
+  position: relative; margin: 0 0 .9rem; padding: .85rem .9rem .9rem; min-inline-size: 0;
+  background-color: var(--vd-plate); background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak.item .tab fieldset.vd-fieldset > legend {
+  float: left; width: 100%; display: flex; align-items: center; gap: 9px; margin: 0 0 .7rem; padding: 0;
+  font-family: var(--vd-font-body); font-weight: 500; font-size: .62rem; letter-spacing: .24em; text-transform: uppercase; color: #d6d0c2;
+  background: none; border: 0; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .tab fieldset.vd-fieldset > legend::before { content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg); background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend::after { content: ""; order: 1; flex: 1 1 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend > a { order: 2; display: inline-grid; place-items: center; width: 24px; height: 22px; font-size: .7rem; letter-spacing: 0; color: #f6f1e6;
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(0, 0, 0, .34)); border: 1px solid #060708; border-radius: 3px; }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend > a:hover { background-color: #484a51; text-shadow: none; }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend + * { clear: both; }
+.application.vedmak.item .tab .vd-grid > label:not(.check) {
+  display: flex; flex-direction: column; gap: 5px; min-width: 0;
+  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .tab .vd-grid > label:not(.check) :is(input, select),
+.application.vedmak.item .tab fieldset.vd-fieldset .row-edit :is(input, select) {
+  height: 32px; padding: 0 9px; font-size: .8rem; letter-spacing: 0; text-transform: none; color: #e2ddd0; text-shadow: none;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .tab .vd-grid > label:not(.check) input[type="number"] { font-family: var(--vd-font-head); font-size: 1rem; text-align: center; }
+.application.vedmak.item .tab .vd-grid > label .pair { display: flex; align-items: center; gap: 6px; color: #8c867b; font-size: .8rem; letter-spacing: 0; }
+.application.vedmak.item .tab .vd-grid > label .pair input { flex: 1 1 0; min-width: 0; }
+.application.vedmak.item .tab fieldset.vd-fieldset .field-label { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.application.vedmak.item .tab fieldset.vd-fieldset .row-edit {
+  padding: 6px 8px; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak.item .tab fieldset.vd-fieldset .hint { font-size: .72rem; color: #a8a296; }
+
+/* ============================== Оживший интерфейс (PLAN 4.66) ==============================
+   Новая карточка чата въезжает, кольцо медальона прокручивается и встаёт, число проявляется, горячие насечки
+   вспыхивают; в худе колода проявляется при смене вкладки, портрет пульсирует на своём ходу. Анимируются только
+   прозрачность и сдвиг — это делает видеокарта без перерисовки. Выключается настройкой «Оживший интерфейс»
+   и системным «меньше движения» (класс vd-no-anim на body). */
+@keyframes vd-card-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes vd-ring-spin { from { transform: rotate(-240deg); opacity: .2; } 60% { opacity: 1; } to { transform: none; opacity: 1; } }
+@keyframes vd-face-pop { 0% { opacity: 0; transform: scale(.55); } 65% { opacity: 1; transform: scale(1.1); } 100% { transform: none; } }
+@keyframes vd-hot-flash { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+.chat-message.vedmak-message.vd-new { animation: vd-card-in 340ms cubic-bezier(.2, .8, .2, 1) both; }
+.chat-message.vedmak-message.vd-new .card-value .vd-ring { animation: vd-ring-spin 950ms cubic-bezier(.12, .85, .2, 1) both; }
+.chat-message.vedmak-message.vd-new .card-value > b { display: inline-block; animation: vd-face-pop 460ms 380ms cubic-bezier(.2, .8, .2, 1) both; }
+.chat-message.vedmak-message.vd-new .vd-ring i.hot, .chat-message.vedmak-message.vd-new .vd-ring i.low { animation: vd-hot-flash 360ms 950ms ease-in-out 3; }
+
+@keyframes vh-deck-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.vedmak-hud .vh-deck.vh-in { animation: vh-deck-in 200ms ease-out both; }
+@keyframes vh-turn-glow { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+.vedmak-hud .vh-portrait::after {
+  content: ""; position: absolute; inset: -5px; border-radius: 50%; pointer-events: none; opacity: 0;
+  box-shadow: 0 0 0 2px rgba(180, 199, 156, .55), 0 0 16px 3px rgba(180, 199, 156, .5);
+}
+.vedmak-hud .vh.my-turn .vh-portrait::after { animation: vh-turn-glow 2.4s ease-in-out infinite; }
+/* Нажатие продавливает кнопку */
+.vedmak-hud :is(.vh-go, .vh-sbtn):active, .vedmak-dialog.check-dialog .form-footer button:active { transform: translateY(1px); }
+
+body.vd-no-anim .chat-message.vedmak-message.vd-new, body.vd-no-anim .chat-message.vedmak-message.vd-new *,
+body.vd-no-anim .vedmak-hud .vh-deck.vh-in, body.vd-no-anim .vedmak-hud .vh-portrait::after { animation: none !important; }
+
+/* ============================== Движение в листах (PLAN 4.67) ==============================
+   Окно проявляется, медальон, на который можно нажать, проворачивается под курсором. Вкладка, шкалы и вспышка
+   числа — в fx/sheet-motion.mjs через element.animate (без принудительного пересчёта раскладки, PLAN 4.73). */
+@keyframes vd-win-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: none; } }
+
+.application.vedmak:not(.vedmak-hud) { animation: vd-win-in 220ms cubic-bezier(.2, .8, .2, 1); }
+.vd-lag {
+  position: absolute; top: 0; bottom: 0; pointer-events: none;
+  background: linear-gradient(180deg, #fff4e8, #e8c4b4); opacity: 0;
+}
+
+/* Медальон-кнопка — как ручка: под курсором кольцо проворачивается на одну насечку */
+.vedmak .vd-medal .vd-ring { transition: rotate 380ms cubic-bezier(.2, .8, .2, 1); }
+.vedmak :is(a, button, [data-action]):hover .vd-medal .vd-ring { rotate: 36deg; }
+
+body.vd-no-anim .application.vedmak { animation: none !important; }
+body.vd-no-anim .vd-lag { display: none; }
+body.vd-no-anim .vedmak .vd-medal .vd-ring { transition: none; }
+
+/* Громкость звуков системы (PLAN 4.67): динамик в худе рядом со стрелкой сворачивания, ползунок выпадает под ним;
+   в боковой панели «Звуки» — строка «Ведьмак» в блоке громкости Foundry */
+.vedmak-hud .vh-vol {
+  position: absolute; z-index: 3; right: 34px; top: 6px; width: 24px; height: 24px; padding: 0;
+  display: grid; place-items: center; font-size: 12px; color: #bab4a8; background: none; border: 0; box-shadow: none;
+}
+.vedmak-hud .vh-vol:hover { color: #fff; background: none; }
+.vedmak-hud .vh-volpop {
+  position: absolute; z-index: 4; right: 8px; top: 32px; display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow), 0 8px 16px -6px rgba(0, 0, 0, .9);
+}
+.vedmak-hud .vh-volpop .vd-fx-value { min-width: 34px; text-align: right; font-family: var(--vd-font-head); font-size: 14px; color: #f1ece0; }
+.vedmak-hud .vh.collapsed .vh-volpop { top: auto; bottom: calc(100% + 4px); }
+input.vd-fx-slider { flex: 1 1 auto; width: 120px; min-width: 80px; height: 16px; margin: 0; accent-color: #b8432c; cursor: var(--cursor-pointer, pointer); background: none; border: 0; box-shadow: none; }
+#sidebar .global-volume .vd-fx-volume input.vd-fx-slider { width: auto; }

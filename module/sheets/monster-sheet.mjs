@@ -4,6 +4,7 @@ import { VedmakActorSheet } from "./actor-sheet-base.mjs";
 import { MONSTER_CLASSES, THREAT_COMPLEXITY, THREAT_DIFFICULTY, MATERIAL_WEAKNESS, ABILITY_KINDS } from "../data/actor/monster.mjs";
 import { BODY_TYPES, RESIST_KEYS, SIZE_MODS } from "../config/combat.mjs";
 import { currencyForName, lootCoins } from "../character/money.mjs";
+import { asGM } from "../combat/common.mjs";
 
 /** Списки объектов на форме (name="system.abilities.0.name") — собираются обратно в массивы. */
 const OBJECT_ARRAYS = ["abilities", "loot"];
@@ -24,7 +25,7 @@ function contentLink(uuid, name) {
 
 const ROW_TEMPLATES = {
   abilities: { name: "Новая способность", kind: "ability", description: "" },
-  loot: { name: "", quantity: "1", uuid: "" }
+  loot: { name: "", quantity: "1", uuid: "", taken: false }
 };
 
 export class MonsterSheet extends VedmakActorSheet {
@@ -37,7 +38,8 @@ export class MonsterSheet extends VedmakActorSheet {
       rowDelete: MonsterSheet.#onRowDelete,
       toggleAbilityEdit: MonsterSheet.#onToggleAbilityEdit,
       abilityPost: MonsterSheet.#onAbilityPost,
-      lootCoins: MonsterSheet.#onLootCoins
+      lootCoins: MonsterSheet.#onLootCoins,
+      lootReset: MonsterSheet.#onLootReset
     }
   };
 
@@ -59,21 +61,21 @@ export class MonsterSheet extends VedmakActorSheet {
   static TABS = {
     primary: {
       tabs: [
-        { id: "stats",   label: "Параметры",  icon: "fa-solid fa-dragon" },
-        { id: "combat",  label: "Бой",        icon: "fa-solid fa-swords" },
-        { id: "skills",  label: "Навыки",     icon: "fa-solid fa-list-check" },
-        { id: "gear",    label: "Атаки",      icon: "fa-solid fa-khanda" },
-        { id: "magic",   label: "Магия",      icon: "fa-solid fa-hand-sparkles" },
-        { id: "lore",    label: "Знания",     icon: "fa-solid fa-book-skull" },
-        { id: "effects", label: "Эффекты",    icon: "fa-solid fa-bolt" }
+        { id: "stats",   label: "Параметры" },
+        { id: "combat",  label: "Бой" },
+        { id: "skills",  label: "Навыки" },
+        { id: "gear",    label: "Атаки" },
+        { id: "magic",   label: "Магия" },
+        { id: "lore",    label: "Знания" },
+        { id: "effects", label: "Эффекты" }
       ],
       initial: "stats"
     },
     // Подвкладки «Боя»: обычный бой и словесная дуэль — как у персонажа
     combat: {
       tabs: [
-        { id: "fight",  label: "Бой",             icon: "fa-solid fa-swords" },
-        { id: "social", label: "Социальный бой",  icon: "fa-solid fa-comments" }
+        { id: "fight",  label: "Бой" },
+        { id: "social", label: "Социальный бой" }
       ],
       initial: "fight"
     }
@@ -151,6 +153,11 @@ export class MonsterSheet extends VedmakActorSheet {
         data.system[key] = Object.keys(v).sort((a, b) => a - b).map(k => v[k]);
       }
     }
+    // Отметка «монеты взяты» — не поле формы: без этого правка добычи сбрасывала бы её у всех строк
+    if (Array.isArray(data.system?.loot)) {
+      const old = this.actor.system.loot;
+      data.system.loot.forEach((row, i) => { row.taken = !!old[i]?.taken; });
+    }
     return data;
   }
 
@@ -182,6 +189,14 @@ export class MonsterSheet extends VedmakActorSheet {
   static async #onLootCoins(event, target) {
     const row = this.actor.system.loot[Number(target.closest("[data-index]").dataset.index)];
     if (row) await lootCoins(this.actor, row);
+  }
+
+  /** Ведущий возвращает монеты в добычу: их снова можно взять. */
+  static async #onLootReset(event, target) {
+    if (!game.user.isGM) return;
+    const index = Number(target.closest("[data-index]").dataset.index);
+    const row = this.actor.system.loot[index];
+    if (row) await asGM("lootTaken", { uuid: this.actor.uuid, index, name: row.name, taken: false });
   }
 
   static async #onAbilityPost(event, target) {

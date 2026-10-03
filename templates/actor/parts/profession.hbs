@@ -1,74 +1,85 @@
-{{!-- Профессия: шапка, определяющий навык и три ветви древа. Поля .defining-value и .ability-value
-      слушает лист (character-sheet.mjs) — классы и data-атрибуты менять вместе с ним. --}}
+{{!-- Профессия (холст design/11, PLAN 4.59): шапка на пластине, определяющий навык с насечками и медальоном,
+      три ветви — цепь ступеней на стальном стержне, между ступенями застёжка «5 очков». Поля .defining-value
+      и .ability-value слушает лист (character-sheet.mjs) — классы и data-атрибуты менять вместе с ним. --}}
 {{#if prof}}
-<header class="prof-card" data-item-id="{{prof.id}}">
-  <img src="{{prof.img}}" alt="">
-  <div class="who">
-    <a class="name" data-action="itemEdit" data-tooltip="Открыть профессию">{{prof.name}}</a>
-    <span class="about">
+<header class="vp-head" data-item-id="{{prof.id}}">
+  <span class="vp-frame"><img src="{{prof.img}}" alt=""></span>
+  <div class="vp-who">
+    <a class="vp-name" data-action="itemEdit" data-tooltip="Открыть профессию">{{prof.name}}</a>
+    <span class="vp-about">
       <span data-tooltip="Энергия профессии (с древом, школой и бонусами — {{system.derived.vigor}})">Энергия {{prof.vigor}}</span>
       {{#if prof.magicAbilities}} · магия: {{prof.magicAbilities}}{{/if}}
     </span>
   </div>
-  <div class="prof-progress" data-tooltip="Изучено способностей древа">
-    <b>{{prof.learned}}</b><span class="cap">из {{prof.total}}</span>
+  <div class="vp-progress" data-tooltip="Изучено способностей древа">
+    {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=prof.learned cls="md"}}
+    <span class="vd-cap">из {{prof.total}} способностей</span>
   </div>
 </header>
 
-<div class="defining ability{{#if prof.defining.value}} learned{{/if}}">
-  <span class="cap">ОПРЕДЕЛЯЮЩИЙ НАВЫК</span>
-  <div class="ab-row">
-    <a class="hit rollable" data-action="rollDefining" data-tooltip="Проверка (Shift — без окна)">
-      <span class="name">{{prof.defining.name}}</span>
-      <span class="stat">{{prof.defining.statAbbr}}</span>
-    </a>
-    <input class="defining-value" type="number" value="{{prof.defining.value}}" min="0" {{#unless editable}}disabled{{/unless}}
+<section class="vp-defining">
+  <h3 class="vp-ghead">Определяющий навык<span class="rule"></span></h3>
+  <div class="vp-def-row">
+    <div class="vp-def-who">
+      <a class="vp-def-name" data-action="rollDefining" data-tooltip="Проверка (Shift — без окна)">{{prof.defining.name}}</a>
+      <span class="vd-cap">{{prof.defining.statLabel}} · проверка (Shift — без окна)</span>
+    </div>
+    {{vedmakNotches prof.defining.value 10}}
+    <input class="defining-value vp-lvl lg" type="number" value="{{prof.defining.value}}" min="0" {{#unless editable}}disabled{{/unless}}
            data-tooltip="Вложено" aria-label="Вложено в определяющий навык">
-    <a class="base rollable" data-action="rollDefining" data-tooltip="Основа: параметр + навык">{{prof.defining.base}}</a>
     {{#if advanceMode}}{{#with prof.defining.offer}}
     <a class="improve{{#if error}} disabled{{/if}}" data-action="improveDefining" data-tooltip="{{#if error}}{{error}}{{else}}Повысить до {{to}}{{/if}}"><i class="fa-solid fa-plus"></i>{{#unless error}} <small>{{cost}}</small>{{/unless}}</a>
     {{/with}}{{/if}}
+    <a class="vp-def-base" data-action="rollDefining" data-tooltip="Основа: параметр + навык. Бросок">
+      {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=prof.defining.base cls="md"}}
+      <span class="vd-cap">основа</span>
+    </a>
   </div>
-  <details open><summary>Что даёт</summary><p>{{prof.defining.effect}}</p></details>
-</div>
+  {{#if prof.defining.effect}}<p class="vp-effect">{{prof.defining.effect}}</p>{{/if}}
+</section>
 
-<div class="branches">
+<div class="vp-branches">
   {{#each prof.branches as |branch|}}
-  <section class="branch">
-    <div class="group-head"><span class="bronze-tag">{{branch.name}}</span><span class="rule"></span></div>
-    {{#each branch.abilities as |ab|}}
-    <div class="ability{{#if ab.value}} learned{{/if}}{{#unless ab.unlocked}} locked{{/unless}}">
-      <div class="ab-row">
-        {{#if ab.stat}}
-        <a class="hit rollable" data-action="rollAbility" data-branch="{{branch.index}}" data-index="{{ab.index}}" data-tooltip="Проверка (Shift — без окна)">
-          <span class="name">{{#unless ab.unlocked}}<i class="fa-solid fa-lock"></i> {{/unless}}{{ab.name}}</span>
-          <span class="stat">{{ab.statAbbr}}</span>
-        </a>
-        {{else}}
-        <span class="hit passive" data-tooltip="Пассивная способность">
-          <span class="name">{{#unless ab.unlocked}}<i class="fa-solid fa-lock"></i> {{/unless}}{{ab.name}}</span>
-          <span class="stat">пассив</span>
-        </span>
-        {{/if}}
-        <input class="ability-value" type="number" value="{{ab.value}}" min="0" data-branch="{{branch.index}}" data-index="{{ab.index}}"
-               {{#unless ../../editable}}disabled{{/unless}} data-tooltip="Вложено" aria-label="Вложено: {{ab.name}}">
-        {{#if ab.stat}}
-        <a class="base rollable" data-action="rollAbility" data-branch="{{branch.index}}" data-index="{{ab.index}}" data-tooltip="Основа: параметр + уровень">{{ab.base}}</a>
-        {{else}}
-        <span class="base quiet">{{#if ab.mechanicNote}}{{ab.mechanicNote}}{{else}}—{{/if}}</span>
-        {{/if}}
-        {{#if ../../advanceMode}}{{#with ab.offer}}
-        <a class="improve{{#if error}} disabled{{/if}}" data-action="improveAbility" data-branch="{{branch.index}}" data-index="{{ab.index}}" data-tooltip="{{#if error}}{{error}}{{else}}Повысить до {{to}}{{/if}}"><i class="fa-solid fa-plus"></i>{{#unless error}} <small>{{cost}}</small>{{/unless}}</a>
-        {{/with}}{{/if}}
+  <section class="vp-branch">
+    <div class="vp-bar"><b>{{branch.name}}</b></div>
+    <div class="vp-chain">
+      {{#each branch.abilities as |ab|}}
+      <div class="vp-ab{{#if ab.value}} learned{{/if}}{{#unless ab.unlocked}} locked{{/unless}}">
+        <div class="vp-ab-top">
+          <span class="vp-ab-who">
+            {{#if ab.stat}}
+            <a class="vp-ab-name" data-action="rollAbility" data-branch="{{branch.index}}" data-index="{{ab.index}}" data-tooltip="Проверка (Shift — без окна)">{{ab.name}}</a>
+            <span class="vd-cap">{{ab.statAbbr}}</span>
+            {{else}}
+            <span class="vp-ab-name">{{ab.name}}</span>
+            <span class="vd-cap">пассив{{#if ab.mechanicNote}} · {{ab.mechanicNote}}{{/if}}</span>
+            {{/if}}
+          </span>
+          {{#if ab.stat}}
+          <a class="vp-base" data-action="rollAbility" data-branch="{{branch.index}}" data-index="{{ab.index}}" data-tooltip="Основа: параметр + уровень. Бросок">{{ab.base}}</a>
+          {{else}}
+          <span class="vp-base quiet" data-tooltip="Пассивная способность">—</span>
+          {{/if}}
+        </div>
+        <div class="vp-ab-lvl">
+          {{vedmakNotches ab.value 10}}
+          <span class="vp-fill"></span>
+          {{#if ../../advanceMode}}{{#with ab.offer}}
+          <a class="improve{{#if error}} disabled{{/if}}" data-action="improveAbility" data-branch="{{branch.index}}" data-index="{{ab.index}}" data-tooltip="{{#if error}}{{error}}{{else}}Повысить до {{to}}{{/if}}"><i class="fa-solid fa-plus"></i>{{#unless error}} <small>{{cost}}</small>{{/unless}}</a>
+          {{/with}}{{/if}}
+          <input class="ability-value vp-lvl" type="number" value="{{ab.value}}" min="0" data-branch="{{branch.index}}" data-index="{{ab.index}}"
+                 {{#unless ../../editable}}disabled{{/unless}} data-tooltip="Вложено" aria-label="Вложено: {{ab.name}}">
+        </div>
+        {{#unless ab.unlocked}}<span class="vp-lock"><i class="fa-solid fa-lock"></i> {{ab.lockNote}}</span>{{/unless}}
+        <p class="vp-desc" tabindex="0" data-tooltip="Щёлкните, чтобы раскрыть">{{ab.description}}</p>
+        {{#if ab.gate}}<span class="vp-gate{{#if ab.gateOpen}} open{{/if}}">5 очков</span>{{/if}}
       </div>
-      {{#unless ab.unlocked}}<p class="lock-note">{{ab.lockNote}}</p>{{/unless}}
-      <details{{#if ab.unlocked}} open{{/if}}><summary>Описание</summary><p>{{ab.description}}</p></details>
+      {{/each}}
     </div>
-    {{/each}}
   </section>
   {{/each}}
 </div>
-<p class="hint">Способность открывается, когда в предыдущую (для первой в ветви — в определяющий навык) вложено 5 очков. Стоимость повышения — как у навыка: новый уровень 1 О.У, дальше — текущий уровень (стр. 59–61).</p>
+<p class="vp-hint">Способность открывается, когда в предыдущую (для первой в ветви — в определяющий навык) вложено 5 очков. Стоимость повышения — как у навыка: новый уровень 1 О.У, дальше — текущий уровень (стр. 59–61).</p>
 {{else}}
 <div class="empty-prof">
   <i class="fa-solid fa-sitemap"></i>

@@ -5,8 +5,8 @@ import { STATUS_RESIST_KEY } from "../config/combat.mjs";
 import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny } from "../combat/common.mjs";
 import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
-import { applyBuff, buffLine } from "./buffs.mjs";
-import { isMagicTimed, timeIsUp, zeroShield } from "./timed.mjs";
+import { applyBuff, buffLine, deleteEffectsClamped } from "./buffs.mjs";
+import { isMagicTimed, timeIsUp, zeroShield, zeroShieldIfFree } from "./timed.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
@@ -99,6 +99,8 @@ export async function magicStartOfTurn(actor) {
   const lines = [];
   const toDelete = [];
   const sys = actor.system;
+  // Щит кончился у одного из снимаемых эффектов: обнуляем после снятия и только если другого щита не осталось
+  let shieldEnded = false;
 
   // Поддержание активных заклинаний
   let sta = sys.sta.value;
@@ -113,7 +115,12 @@ export async function magicStartOfTurn(actor) {
       toDelete.push(effect.id);
       ended.add(effect.flags.vedmak.maintain.itemId);
       lines.push(`${effect.name}: не хватает Вын — заклинание прекращено.`);
-      if (effect.flags.vedmak.maintain.shield) await zeroShield(actor);
+      if (effect.flags.vedmak.maintain.shield) shieldEnded = true;
+      // Свои баффы этого заклинания снимаем здесь же, с урезанием ПЗ до конца хода (хук снял бы их позже)
+      for (const e of actor.effects) {
+        const b = e.flags?.vedmak?.spellBuff;
+        if (b?.maintain && b.casterUuid === actor.uuid && b.itemId === effect.flags.vedmak.maintain.itemId) toDelete.push(e.id);
+      }
     }
   }
   if (sta !== sys.sta.value) await actor.update({ "system.sta.value": sta });
@@ -123,7 +130,7 @@ export async function magicStartOfTurn(actor) {
   for (const effect of actor.effects.filter(e => isMagicTimed(e) && timeIsUp(e))) {
     toDelete.push(effect.id);
     lines.push(`${effect.name}: ${effect.flags.vedmak.statusRounds !== undefined ? "прошло" : "действие закончилось"}.`);
-    if (effect.flags.vedmak.timed?.key === "shield") await zeroShield(actor);
+    if (effect.flags.vedmak.timed?.key === "shield") shieldEnded = true;
   }
 
   // Регенерация и щиты с отсчётом раундов
@@ -152,7 +159,7 @@ export async function magicStartOfTurn(actor) {
       if (left <= 0) {
         toDelete.push(effect.id);
         lines.push(`${effect.name}: действие закончилось.`);
-        if (timed.key === "shield") await zeroShield(actor);
+        if (timed.key === "shield") shieldEnded = true;
       } else {
         await effect.update({ "flags.vedmak.timed.rounds": left });
       }
@@ -161,7 +168,8 @@ export async function magicStartOfTurn(actor) {
   if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
 
   // Статусы с длительностью в раундах
-  for (const effect of actor.effects.filter(e => e.flags?.vedmak?.statusRounds > 0 && !toDelete.includes(e.id))) {
+  // (отравление от токсичности — отдельный эффект без срока, его держит порог, alchemy.mjs)
+  for (const effect of actor.effects.filter(e => e.flags?.vedmak?.statusRounds > 0 && !e.flags.vedmak.toxicPoison && !toDelete.includes(e.id))) {
     const left = effect.flags.vedmak.statusRounds - 1;
     if (left <= 0) {
       toDelete.push(effect.id);
@@ -172,7 +180,16 @@ export async function magicStartOfTurn(actor) {
   }
 
   const unique = [...new Set(toDelete)].filter(id => actor.effects.has(id));
-  if (unique.length) await actor.deleteEmbeddedDocuments("ActiveEffect", unique);
+  // ПЗ после баффа с бонусом к максимуму урезаются тут же и с ожиданием: следом начало хода читает ПЗ
+  // для урона за ход (clampHpNow в buffs.mjs). Токсичность проверяем сами — ниже, с записью в отчёт
+  if (unique.length) await deleteEffectsClamped(actor, unique, { vedmakToxicityChecked: true });
+  if (shieldEnded) await zeroShieldIfFree(actor, unique);
+
+  // Снятые выше эликсиры и отвары могли опустить токсичность до порога — отравление от неё проходит (стр. 247)
+  // Лениво: alchemy.mjs при загрузке регистрирует действия чата, а chat.mjs импортирует этот файл — прямой импорт
+  // замыкал цикл, и система не запускалась (ACTIONS ещё не объявлен)
+  const { clearToxicPoison } = await import("../crafting/alchemy.mjs");
+  if (await clearToxicPoison(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
   return lines;
 }
 
@@ -205,7 +222,7 @@ export async function ritualFocus(message) {
   if (!actor?.isOwner) return ui.notifications.warn("Концентрацию проверяет проводящий ритуал.");
   const options = Object.entries(INTERRUPTIONS).map(([k, v]) => `<option value="${k}">${v.label} (СЛ ${v.dc})</option>`).join("");
   const key = await foundry.applications.api.DialogV2.wait({
-    window: { title: "Прерывание ритуала", icon: "fa-solid fa-circle-notch" },
+    window: { title: "Прерывание ритуала" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Что случилось</label><select name="kind">${options}</select></div></div>`,
     buttons: [{ action: "ok", label: "Проверка", default: true, callback: (e, b) => b.form.elements.kind.value },

@@ -13,6 +13,42 @@ const RU_COLLATOR = new Intl.Collator("ru");
 export const compareRu = (a, b) => RU_COLLATOR.compare(a ?? "", b ?? "");
 
 /**
+ * Настройка мира системы с запоминанием до её изменения (PLAN 4.54). `game.settings.get` разбирает и глубоко копирует
+ * значение на каждый вызов, а настройки валют, школ, веса монет и региона читаются на каждого актёра при пересчёте
+ * и на каждую перерисовку листа. Возвращённое значение общее — не менять его. Только для настроек scope: "world":
+ * их изменение приходит хуком документа Setting на всех клиентах; клиентские настройки хранятся иначе.
+ * @param {string} key — ключ без префикса системы
+ * @param {*} [fallback] — до регистрации настроек (значение тогда не запоминается)
+ */
+const SETTING_CACHE = new Map();
+export function worldSetting(key, fallback) {
+  if (SETTING_CACHE.has(key)) return SETTING_CACHE.get(key);
+  let value;
+  try { value = game.settings.get(SYSTEM_ID, key); } catch { return fallback; }
+  SETTING_CACHE.set(key, value);
+  return value;
+}
+/** Забыть запомненное значение настройки (её onChange — vedmak.mjs, init). */
+export const forgetSetting = key => SETTING_CACHE.delete(key);
+const dropSetting = setting => {
+  const key = setting?.key ?? "";
+  if (key.startsWith(`${SYSTEM_ID}.`)) forgetSetting(key.slice(SYSTEM_ID.length + 1));
+};
+for (const hook of ["createSetting", "updateSetting", "deleteSetting"]) Hooks.on(hook, dropSetting);
+
+/**
+ * Запомнить результат, пока не изменился исходный объект: f(source) считается заново, только если source другой.
+ * Пара к worldSetting — значение настройки остаётся тем же объектом, пока её не поменяют.
+ */
+export function memoBySource(f) {
+  let lastSource, lastResult, filled = false;
+  return source => {
+    if (!filled || source !== lastSource) { lastResult = f(source); lastSource = source; filled = true; }
+    return lastResult;
+  };
+}
+
+/**
  * Разложить блоки по двум колонкам примерно равной высоты, не меняя порядка: первая колонка — начало
  * списка, вторая — конец. Заменяет CSS-колонки (`columns`): их браузер уравнивает, перекладывая всё
  * содержимое по нескольку раз, и вкладка навыков открывалась с фризом (PLAN 4.36).
@@ -46,9 +82,12 @@ export function inCombat(actor) {
 /**
  * Срок в раундах, но временем: вне боя раунды отсчитывать некому (свой счётчик `flags.vedmak.timed` убывает
  * в начале хода), а время мира Foundry переводит в срок эффекта сама. Раунд — `CONFIG.time.roundTime` секунд.
+ * `expiry: null` — явно: схема v14 для числового срока подставляет «turnStart», и такой эффект Foundry снимает
+ * по времени мира только у актора вне боя (даже нестартовавшего), а у участника боя — лишь в начале его хода.
+ * При null (`isExpiryEvent`: «срок определяется одной длительностью») эффект истекает на любом сдвиге времени.
  */
 export function roundsAsTime(rounds) {
-  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds" };
+  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds", expiry: null };
 }
 
 /** Словарь {key: label|{label}} → массив опций для selectOptions. */
@@ -70,4 +109,17 @@ export function postCard(actor, title, body, { subtitle = "", icon = "", cls = "
     + `${subtitle ? `<span class="card-sub">${subtitle}</span>` : ""}</div></header>`
     + `<div class="card-body">${body}</div></div>`;
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls, flags });
+}
+
+/** Разметка кольца медальона карточки чата (см. хелпер vedmakRing). dice — число, массив граней d10 или ничего. */
+export function ringHtml(dice) {
+  const arr = Array.isArray(dice) ? dice : (typeof dice === "number" || typeof dice === "string") ? [dice] : [];
+  const lit = {};
+  arr.forEach((raw, i) => {
+    const v = Number(raw);
+    if (!(v >= 1 && v <= 10) || lit[v]) return;
+    lit[v] = v === 10 ? " on hot" : v === 1 && i === 0 ? " on low" : " on";
+  });
+  const notches = Array.from({ length: 10 }, (_, k) => `<i class="n${k}${lit[k || 10] ?? ""}"></i>`).join("");
+  return `<span class="vd-ring" aria-hidden="true">${notches}</span>`;
 }

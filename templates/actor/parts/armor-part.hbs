@@ -1,0 +1,45 @@
+{{!-- Кованый символ части тела (вкладка «Снаряжение», окна атаки и урона). p = {kind: head|torso|arm|leg|die, flip, state: ok|worn|broken|none, tip, value, covered, bare — без числа}.
+      Цвет металла по состоянию задают классы .vd-part.* в styles/vedmak.css (градиенты — #vd-metal-* в tab-gear.hbs). --}}
+<span class="vd-part {{p.state}}" data-tooltip="{{p.tip}}" aria-label="{{p.tip}}">
+  <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><g{{#if p.flip}} transform="translate(24 0) scale(-1 1)"{{/if}}>
+  {{#if (eq p.kind "head")}}
+    <path class="shell" d="M4.5 21.5V9L6.8 4.6L12 2.6L17.2 4.6L19.5 9V21.5H14.6L13.4 19.2H10.6L9.4 21.5Z"/>
+    <path class="ink" d="M12 2.8V19"/>
+    <path class="slit" d="M6.4 10.4H11.1V12.2H6.4ZM12.9 10.4H17.6V12.2H12.9ZM14.5 14.6h1v1.5h-1zM16.4 14.6h1v1.5h-1zM14.5 16.9h1v1.4h-1zM16.4 16.9h1v1.4h-1z"/>
+    <path class="hi" d="M6.2 9.6V20.4"/>
+    <path class="scr" d="M7.4 14.6L10.4 16.4M14 6.4L16.4 8"/>
+    <path class="crk" d="M9.4 3.8L11 7.4L9.2 9.8L10.8 13.6L9.6 17"/>
+  {{else if (eq p.kind "torso")}}
+    <path class="shell" d="M3 7L6.5 3L10 4.6L12 6.2L14 4.6L17.5 3L21 7L18.8 10.2V16.2L16.6 21.5H7.4L5.2 16.2V10.2Z"/>
+    <path class="ink" d="M12 6.4V21.3M5.3 15.6H18.7M3.3 7.2L6.4 9.4M20.7 7.2L17.6 9.4"/>
+    <circle class="rv" cx="8.2" cy="12.2" r=".8"/><circle class="rv" cx="15.8" cy="12.2" r=".8"/><circle class="rv" cx="8.8" cy="18.4" r=".8"/><circle class="rv" cx="15.2" cy="18.4" r=".8"/>
+    <path class="hi" d="M6 10.8V15"/>
+    <path class="scr" d="M7.6 8.6L10.6 10.8M13.4 16.8L16.6 15.4"/>
+    <path class="crk" d="M13.6 6.6L12.8 10L14.6 12.6L13 16.4L14 20.6"/>
+  {{else if (eq p.kind "arm")}}
+    <path class="shell" d="M5 2H15L16.4 8.6H4.6Z"/>
+    <path class="shell" d="M16.4 9.4L20.4 11.2L19.8 15L16.8 14.4Z"/>
+    <path class="shell" d="M4.6 8.6H16.4L17.2 14.2H5.2Z"/>
+    <path class="shell" d="M5.2 14.2H17.2L18.4 16.6L17.6 19.8L15.2 21.8H8.4L6 19.6Z"/>
+    <path class="slit" d="M6.6 14.2L7.6 12.1L8.6 14.2ZM10.4 14.2L11.4 12.1L12.4 14.2ZM14.2 14.2L15.2 12.1L16.2 14.2Z"/>
+    <path class="ink" d="M9.2 14.6V21.4M12.2 14.6V21.8M15 14.6V21.2M5.1 5.2H15.7"/>
+    <circle class="rv" cx="7.2" cy="3.6" r=".8"/><circle class="rv" cx="12.8" cy="3.6" r=".8"/>
+    <path class="hi" d="M5.8 9.6V13.4"/>
+    <path class="scr" d="M7.4 10.2L10.4 12.2M11.6 3.2L14 6.2"/>
+    <path class="crk" d="M10.6 2.4L9.8 6L11.6 9L10.2 13L11.4 17.4"/>
+  {{else if (eq p.kind "die")}}
+    <path class="shell" d="M12 1.5L22.5 10L12 22.5L1.5 10Z"/>
+    <path class="ink" d="M1.5 10L12 14L22.5 10M12 14V22.5M12 1.5L7.4 11.6M12 1.5L16.6 11.6"/>
+    <path class="hi" d="M3.6 10.4L11 13.2"/>
+  {{else}}
+    <path class="shell" d="M7.2 1.6H13.4L14 11.4L13.2 16.4L19.4 18.4L21.4 21.8H7.6L6.6 16.4L6.2 11.4Z"/>
+    <path class="shell" d="M5.4 8L7 5.6H13.8L15.2 8L13.8 10.4H7Z"/>
+    <path class="ink" d="M10.3 10.6V16.4M13.6 17L14.2 21.6M16 17.8L16.6 21.6M18.2 18.6L18.8 21.6M6.8 16.4H13.2"/>
+    <circle class="rv" cx="10.3" cy="8" r=".9"/>
+    <path class="hi" d="M7.4 11.6V15.8"/>
+    <path class="scr" d="M8.2 2.8L11.4 4.4M8 12.6L9.8 14.6"/>
+    <path class="crk" d="M11.6 1.8L10.6 5.4M11.4 10.8L12.6 13.6L11.6 16.2"/>
+  {{/if}}
+  </g></svg>
+  {{#unless p.bare}}<b>{{#if p.covered}}{{p.value}}{{else}}·{{/if}}</b>{{/unless}}
+</span>

@@ -9,6 +9,7 @@ import { RACES, ABILITY_MECHANICS, modTargets } from "../config/character.mjs";
 import { SUBSTANCES } from "../config/crafting.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
+import { animateTab } from "../fx/sheet-motion.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -64,9 +65,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static TABS = {
     primary: {
       tabs: [
-        { id: "details",     label: "Свойства", icon: "fa-solid fa-list" },
-        { id: "description", label: "Описание", icon: "fa-solid fa-book-open" },
-        { id: "effects",     label: "Эффекты",  icon: "fa-solid fa-bolt" }
+        { id: "details",     label: "Свойства" },
+        { id: "description", label: "Описание" },
+        { id: "effects",     label: "Эффекты" }
       ],
       initial: "details"
     }
@@ -89,6 +90,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       editable: this.isEditable,
       config: V,
       typeLabel: game.i18n.localize(`TYPES.Item.${item.type}`),
+      headerSub: item.type === "weapon"
+        ? [V.WEAPON_CATEGORIES[system.category], V.WEAPON_SKILLS[system.skill]].filter(Boolean).join(" · ").toLowerCase()
+        : "",
       enrichedDescription: await TextEditor.enrichHTML(system.description ?? "", {
         secrets: item.isOwner, relativeTo: item
       }),
@@ -142,6 +146,14 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
     if (item.type === "weapon") {
       context.damageTypeOptions = Object.fromEntries(Object.entries(V.DAMAGE_TYPES).map(([k, v]) => [k, v.label]));
+      // Строка главных чисел (холст design/11): точность, урон с типами, надёжность насечками
+      const rel = system.reliability ?? {};
+      context.weaponKey = {
+        accuracy: `${(system.accuracy ?? 0) > 0 ? "+" : ""}${system.accuracy ?? 0}`,
+        damage: system.damage || "—",
+        types: (system.damageTypes ?? []).map(t => V.DAMAGE_TYPES[t]?.label?.toLowerCase()).filter(Boolean).join(", "),
+        relValue: rel.value ?? 0, relMax: rel.max ?? 0
+      };
       // Строки — из исходных данных: эффекты модификаций арбалета добавляются при подготовке и в данные не пишутся
       context.weaponEffects = item._source.system.effects.map((e, i) => ({ ...e, index: i, hasParam: !!V.WEAPON_EFFECTS[e.key]?.param, paramHint: V.WEAPON_EFFECTS[e.key]?.param }));
     }
@@ -199,6 +211,12 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
+  }
+
+  /** Смена вкладки — новая проявляется (PLAN 4.67). */
+  changeTab(tab, group, options = {}) {
+    super.changeTab(tab, group, options);
+    animateTab(this.element, group, tab);
   }
 
   _attachFrameListeners() {

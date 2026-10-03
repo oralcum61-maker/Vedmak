@@ -1,0 +1,184 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "CraftAlchemy.dc.html": {
+      "h": 1340,
+      "title": "Ремесло — верстак и алхимия",
+      "w": 820,
+      "x": 0,
+      "y": 2000
+    },
+    "CraftEnh.dc.html": {
+      "h": 640,
+      "title": "Ремесло — усиления",
+      "w": 820,
+      "x": 2700,
+      "y": 2000
+    },
+    "CraftRecipes.dc.html": {
+      "h": 1140,
+      "title": "Ремесло — чертежи и формулы",
+      "w": 820,
+      "x": 900,
+      "y": 2000
+    },
+    "CraftSigns.dc.html": {
+      "h": 700,
+      "title": "Знаки ремесла",
+      "w": 1040,
+      "x": 2700,
+      "y": 2760
+    },
+    "CraftStock.dc.html": {
+      "h": 960,
+      "is_interactive": true,
+      "title": "Ремесло — компоненты",
+      "w": 820,
+      "x": 1800,
+      "y": 2000
+    },
+    "Cursors.dc.html": {
+      "h": 900,
+      "title": "Курсоры: все взаимодействия",
+      "w": 1040,
+      "x": 2020,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 1561,
+      "title": "Вкладка «Снаряжение»",
+      "w": 843,
+      "x": 0,
+      "y": 106
+    },
+    "Playground.dc.html": {
+      "h": 640,
+      "is_interactive": true,
+      "title": "Проба курсоров",
+      "w": 1040,
+      "x": 900,
+      "y": 880
+    },
+    "States.dc.html": {
+      "h": 760,
+      "title": "Состояния строк и символы",
+      "w": 1040,
+      "x": 900,
+      "y": 0
+    },
+    "MagicWitcher.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "title": "Магия — ведьмак: знаки",
+      "w": 820,
+      "x": 0,
+      "y": 3840
+    },
+    "MagicMage.dc.html": {
+      "h": 1500,
+      "title": "Магия — чародей",
+      "w": 820,
+      "x": 900,
+      "y": 3840
+    },
+    "Diary.dc.html": {
+      "h": 1900,
+      "title": "Дневник",
+      "w": 820,
+      "x": 1800,
+      "y": 3840
+    },
+    "WizRace.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "title": "Мастер создания — раса",
+      "w": 1200,
+      "x": 0,
+      "y": 6120
+    },
+    "WizProfession.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "title": "Мастер создания — профессия",
+      "w": 1200,
+      "x": 1280,
+      "y": 6120
+    },
+    "WizStats.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "title": "Мастер создания — параметры",
+      "w": 1200,
+      "x": 0,
+      "y": 7100
+    },
+    "WizSummary.dc.html": {
+      "h": 860,
+      "title": "Мастер создания — итог",
+      "w": 1200,
+      "x": 1280,
+      "y": 7100
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-01T20:30:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "craft": {
+      "kind": "title1",
+      "maxW": 3740,
+      "text": "Ремесло — мастерская алхимика и кузнеца",
+      "w": 240,
+      "x": 0,
+      "y": 1730
+    },
+    "head": {
+      "kind": "title1",
+      "maxW": 3060,
+      "text": "Снаряжение — оружейная стойка; курсоры — одна кузница",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "magic": {
+      "kind": "title1",
+      "maxW": 2620,
+      "text": "Магия — колесо знаков и книга чар; дневник — летопись",
+      "x": 0,
+      "y": 3570
+    },
+    "wizard": {
+      "kind": "title1",
+      "maxW": 2480,
+      "text": "Мастер создания — тракт из девяти вех",
+      "x": 0,
+      "y": 5850
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "States.dc.html",
+    "Cursors.dc.html",
+    "Playground.dc.html",
+    "CraftAlchemy.dc.html",
+    "CraftRecipes.dc.html",
+    "CraftStock.dc.html",
+    "CraftEnh.dc.html",
+    "CraftSigns.dc.html",
+    "MagicWitcher.dc.html",
+    "MagicMage.dc.html",
+    "Diary.dc.html",
+    "WizRace.dc.html",
+    "WizProfession.dc.html",
+    "WizStats.dc.html",
+    "WizSummary.dc.html"
+  ],
+  "pages": [],
+  "title": "Ведьмак: снаряжение, ремесло, магия, дневник, мастер и курсоры"
+}

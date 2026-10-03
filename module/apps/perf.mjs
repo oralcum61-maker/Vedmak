@@ -49,6 +49,11 @@ export async function profileSheet(sheet = openSheet()) {
     ui.notifications.warn("Откройте лист персонажа или чудовища — замер идёт на нём.");
     return null;
   }
+  // Короткий лист (право «Ограниченный») без вкладок: changeTab упал бы на «No matching tab element»
+  if (sheet.limitedView || !sheet.element.querySelector('.tabs [data-group="primary"]')) {
+    ui.notifications.warn("У этого листа нет вкладок (ограниченный вид): замерять нечего. Откройте полный лист.");
+    return null;
+  }
   ui.notifications.info("Замер листа: несколько секунд лист будет перерисовываться и листать вкладки.");
   const parts = Object.keys(sheet.constructor.PARTS);
   const tabDefs = sheet.constructor.TABS?.primary?.tabs ?? [];
@@ -108,7 +113,6 @@ export async function profileSheet(sheet = openSheet()) {
   sheet.changeTab(startTab, "primary");
 
   out.env = {
-    lite: !!game.settings.get(SYSTEM_ID, "liteGraphics"),
     dpr: window.devicePixelRatio,
     modules: game.modules.filter(m => m.active).length,
     chat: game.messages.size,
@@ -137,7 +141,7 @@ async function postReport(out, ms, labels) {
       <table class="perf-table"><thead><tr><th>Вкладка</th><th>Перерис.</th><th>Показ</th><th>Прокрутка ср./худш.</th><th>Узлов</th></tr></thead>
       <tbody>${rows}</tbody></table>
       <p class="note dim">Миллисекунды, медиана из ${REPEAT}. Кадр прокрутки: 17 — плавно, больше 50 — рывок.</p>
-      <p class="note dim">Облегчённая графика: ${e.lite ? "вкл" : "выкл"} · масштаб ${e.dpr} · модулей ${e.modules} · сообщений в чате ${e.chat}
+      <p class="note dim">масштаб ${e.dpr} · модулей ${e.modules} · сообщений в чате ${e.chat}
         · холст ${e.fps} к/с · Foundry ${e.foundry} · ${foundry.utils.escapeHTML(e.browser)}${e.gpu ? ` · ${foundry.utils.escapeHTML(e.gpu)}` : ""}</p>
     </div></div>`;
   await ChatMessage.create({ content, whisper: [game.user.id], speaker: { alias: "Ведьмак: замер" } });

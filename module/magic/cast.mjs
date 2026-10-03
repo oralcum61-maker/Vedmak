@@ -10,7 +10,7 @@ import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate, inCombat, roundsAsTime } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
 import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf } from "../combat/zones.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf, ZONE_COLORS } from "../combat/zones.mjs";
 import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
 import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
 
@@ -81,10 +81,14 @@ export async function castSpell(actor, item, opts = {}) {
     if (!cfg) return null;
   }
 
+  // Зоны этого же поддерживаемого заклинания от прошлого сотворения: запоминаем до постановки новой
+  const previousZones = maintainedZonesOf(actor, item);
+
   // Зона на сцене: конус или круг ставится мышью, цели — все, кто в неё попал; отмена — отмена сотворения
   const area = opts.targets ? null : parseArea(s.range);
   let region = null;
-  const placed = area && zonesAvailable() ? await placeZone(area, { name: item.name }) : null;
+  const zoneColor = ZONE_COLORS[s.element] ?? ZONE_COLORS.mixed;
+  const placed = area && zonesAvailable() ? await placeZone(area, { name: item.name, color: zoneColor }) : null;
   if (placed?.cancelled) return null;
   if (placed?.shape) {
     const duration = await parseZoneDuration(s.duration, { cost: cfg.cost });
@@ -92,15 +96,32 @@ export async function castSpell(actor, item, opts = {}) {
     const auto = spellAutomation(item);
     const lasting = !!(duration?.rounds || duration?.maintain);
     const repeat = lasting && !!(auto.damage || auto.staDamage || auto.statuses?.some(x => x.status));
-    region = await createZone(placed.shape, { name: item.name, actor, itemName: item.name, duration, maintainItemId: item.id,
+    region = await createZone(placed.shape, { name: item.name, color: zoneColor, actor, itemName: item.name, duration, maintainItemId: item.id,
       extra: { itemId: item.id, repeat } });
     targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);
   }
 
+  // Зона уходит в карточку (config.zone): по ней эффект знает, куда бить конусом или где вспыхнуть кругу
+  if (placed?.shape) {
+    const z = placed.shape;
+    cfg = { ...cfg, zone: { type: z.type, x: z.x, y: z.y, radius: z.radius, rotation: z.rotation ?? 0, angle: z.angle ?? null } };
+  }
   const message = await performCast(actor, item, cfg, targets);
   // Заклинание не сработало — зона не нужна
-  if (region && !message?.flags?.vedmak?.cast?.works) await removeZones([region]);
+  const works = !!message?.flags?.vedmak?.cast?.works;
+  if (region && !works) await removeZones([region]);
+  // Повторное сотворение поддерживаемого заклинания заменяет поддержание (см. performCast), а вместе с ним —
+  // и прежние зоны: иначе повтор зоны бил бы с обеих
+  if (works && previousZones.length) await removeZones(previousZones);
   return message;
+}
+
+/** Зоны поддерживаемого заклинания этого заклинателя на всех сценах (флаг `zone.maintain` — id предмета). */
+function maintainedZonesOf(actor, item) {
+  return game.scenes.contents.flatMap(scene => zonesOf(scene).filter(r => {
+    const z = r.flags.vedmak.zone;
+    return z.maintain === item.id && z.actorUuid === actor.uuid;
+  }));
 }
 
 /** Основа проверки сотворения: Воля + навык магии со всеми постоянными правками. */
@@ -115,7 +136,7 @@ function castBase(actor, skillKey) {
 }
 
 /** Что даёт вложенная Выносливость: урон и шансы статусов. */
-function costNote(a, cost) {
+export function costNote(a, cost) {
   const bits = [];
   const damage = resolveSta(a.damage, cost);
   if (damage) bits.push(`урон ${damage}`);
@@ -164,7 +185,7 @@ async function castDialog(actor, item, cfg, targets) {
   });
 
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `${CONFIG.VEDMAK.MAGIC_KINDS[s.kind]}: ${item.name}`, icon: "fa-solid fa-hand-sparkles" },
+    window: { title: `${CONFIG.VEDMAK.MAGIC_KINDS[s.kind]}: ${item.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "cast-dialog"],
     position: { width: 520 },
     content,
@@ -197,7 +218,7 @@ async function castDialog(actor, item, cfg, targets) {
     } }),
     buttons: [{
       action: "cast", label: s.kind === "ritual" ? "Провести" : s.kind === "hex" ? "Навести" : "Сотворить",
-      icon: "fa-solid fa-hand-sparkles", default: true,
+      default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -210,7 +231,7 @@ async function castDialog(actor, item, cfg, targets) {
           helpers: Math.max(0, Math.min(4, Number(f.helpers?.value) || 0))
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -419,13 +440,13 @@ export async function performCast(actor, item, cfg, targets) {
 
 /** Кнопки защиты в карточке магии; `short` — подпись под иконкой, `label` — подсказка. */
 const DEFENSE_BUTTONS = {
-  dodge:       { icon: "fa-person-running", label: "Уклонение", short: "Уклон" },
-  reposition:  { icon: "fa-arrows-up-down-left-right", label: "Изменение позиции", short: "Позиция" },
-  block:       { icon: "fa-shield-halved", label: "Блокирование щитом", short: "Щит" },
-  resistMagic: { icon: "fa-brain", label: "Сопротивление магии", short: "Магия" },
-  willx3:      { icon: "fa-scale-balanced", label: "Против Воли ×3", short: "Воля ×3" },
-  auto:        { icon: "fa-wand-sparkles", label: "Эффект без защиты", short: "Сразу" },
-  none:        { icon: "fa-bullseye", label: "Без защиты: против СЛ", short: "СЛ" }
+  dodge:       { label: "Уклонение", short: "Уклон" },
+  reposition:  { label: "Изменение позиции", short: "Позиция" },
+  block:       { label: "Блокирование щитом", short: "Щит" },
+  resistMagic: { label: "Сопротивление магии", short: "Магия" },
+  willx3:      { label: "Против Воли ×3", short: "Воля ×3" },
+  auto:        { label: "Эффект без защиты", short: "Сразу" },
+  none:        { label: "Без защиты: против СЛ", short: "СЛ" }
 };
 
 export function spellDefenseButtons(keys) {
@@ -450,7 +471,8 @@ export async function setTimedEffect(actor, { name, img, key, rounds = 0, minute
     name, img, transfer: false,
     flags: { vedmak: { timed: { key, rounds: combat && !minutes ? rounds : 0 }, ...extra } }
   };
-  if (minutes) data.duration = { value: minutes, units: "minutes" };
+  // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+  if (minutes) data.duration = { value: minutes, units: "minutes", expiry: null };
   else if (rounds && !combat) data.duration = roundsAsTime(rounds);
   const [effect] = await actor.createEmbeddedDocuments("ActiveEffect", [data]);
   return effect;
@@ -525,7 +547,10 @@ export async function repeatZonesForTurn(actor, combat) {
     if (!atk || !item) continue;
     const shape = region.shapes?.[0];
     const onScene = canvas?.scene?.id === scene?.id;
-    const targets = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor), showHidden: !actor.hasPlayerOwner }).map(targetInfo) : [];
+    const tokens = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor), showHidden: !actor.hasPlayerOwner }) : [];
+    const targets = tokens.map(targetInfo);
+    // Скрытый токен в зоне: имя и портрет в общей карточке выдали бы его — карточка уходит только ведущим
+    const hiddenIn = tokens.some(t => t.document.hidden);
     const s = item.system;
     const data = { ...atk, targets, notes: ["Защита — против того же результата сотворения."] };
     await postCard({
@@ -539,7 +564,8 @@ export async function repeatZonesForTurn(actor, combat) {
         defenseLabel: s.defenseText || SPELL_DEFENSES[s.defense]?.label,
         cost: atk.spell.cost, paid: atk.spell.paid, works: true, selfLines: []
       },
-      flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } }
+      flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } },
+      messageMode: hiddenIn ? "gm" : undefined
     });
     lines.push(`${item.name}: зона бьёт снова — целей ${targets.length}.`);
   }

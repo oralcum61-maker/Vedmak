@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Сейчас: Параметры и колонка</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0c0e}
+:root{--win:url(/_blob/87e703fea5923b81b14de143b47eb3a6);--plate:url(/_blob/054b0c3932311a5d7eef482af4046b30);--head:url(/_blob/0f260b069fb3883cd17efa2f1df5b34f);--btn:url(/_blob/b1eb324e641d3000965802b767379171);--go:url(/_blob/25a662b5f53f1112ff4004ab4aa96fd0);--gov:url(/_blob/56ea576c0be488a92a804d9cb5669820);--ok:url(/_blob/f447c3e0bd70eae8f56a4dda730e389e);--bad:url(/_blob/744d7204ef4cab34f4dab089284d66df);--rivet:radial-gradient(circle at 40% 35%,#f6f1e6 0,#aaa498 1.1px,#3c3b38 2.2px,#050607 2.8px,transparent 3.2px)}
+button,input,select{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+a{color:#d6d0c2;text-decoration:none}a:hover{color:#fff}
+.root{background-color:#17181b;background-image:radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35)),var(--win);background-size:100% 100%,512px 512px;color:#e2ddd0;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:12px;font-variant-numeric:tabular-nums}
+.plate{position:relative;background-color:#1f2024;background-image:linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24)),var(--plate);background-size:100% 100%,512px 512px;border:1px solid #060708;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background:#0c0d0f;border:1px solid #040405;border-radius:3px;box-shadow:inset 0 2px 6px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.07)}
+.ghead{display:flex;align-items:center;gap:9px;margin:0;font-weight:500;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.ghead::before{content:"";flex-shrink:0;width:6px;height:6px;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607}
+.ghead .rule{flex-grow:1;height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.ghead .hint{font-size:10.5px;letter-spacing:.02em;text-transform:none;color:#a8a296;font-weight:400}
+.cap{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#a8a296;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.switch{display:inline-flex;gap:2px;padding:3px;border-radius:4px}
+.switch a{display:flex;align-items:center;gap:8px;height:34px;padding:0 16px;font-family:Forum,serif;font-size:15px;color:#bab4a8;border-radius:2px}
+.switch a.on{color:#f3eee2;background-color:#2a2c31;background-image:linear-gradient(180deg,rgba(255,250,240,.14),rgba(0,0,0,.25)),var(--btn);background-size:100% 100%,512px 512px;box-shadow:inset 0 2px 0 #b8432c,inset 0 -1px 0 rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.7);text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.count{display:grid;place-items:center;min-width:22px;height:20px;padding:0 5px;box-sizing:border-box;font-family:'IBM Plex Sans',sans-serif;font-size:10.5px;font-weight:600;color:#f1ece0;background:#0a0b0c;border:1px solid #040405;border-radius:10px;box-shadow:inset 0 1px 2px rgba(0,0,0,.9)}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08);overflow:hidden}
+.frame::after{content:"";position:absolute;inset:3px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.medal{position:relative;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 34% 26%,#fbf7ee 0,#cfc9bc 20%,#7f7a72 52%,#3a3935 80%,#1c1c1e 100%);box-shadow:0 0 0 1px #050607,0 5px 12px rgba(0,0,0,.85)}
+.medal::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px solid rgba(255,255,255,.18);border-bottom-color:rgba(0,0,0,.35)}
+.medal .face{position:absolute;border-radius:50%;display:grid;place-items:center;background:#0d0e10 radial-gradient(circle at 50% 30%,rgba(255,245,225,.09),transparent 62%);box-shadow:inset 0 3px 7px rgba(0,0,0,.95),inset 0 0 0 1px rgba(0,0,0,.85),0 1px 0 rgba(255,255,255,.32)}
+.medal .face b{font-family:Forum,serif;font-weight:400;line-height:1}
+.medal.violet{background:radial-gradient(circle at 34% 26%,#ece6ff 0,#b3a6d9 22%,#6a5a98 54%,#2e2645 82%,#17121f 100%)}
+.ring{position:absolute;inset:0}
+.ring i{position:absolute;left:50%;top:1px;width:2px;margin-left:-1px;background:#121315;box-shadow:1px 0 0 rgba(255,255,255,.28)}
+.ring i.on{background:#f2ecff;box-shadow:0 0 0 1px #17121f,0 0 6px rgba(220,205,255,.85)}
+.go{position:relative;flex-shrink:0;height:40px;padding:0 26px;font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#fff6ef;background-color:#b8432c;background-image:var(--rivet),var(--rivet),linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0) 46%,rgba(0,0,0,.34)),var(--go);background-position:left 7px center,right 7px center,0 0,0 0;background-size:7px 7px,7px 7px,100% 100%,512px 512px;background-repeat:no-repeat,no-repeat,no-repeat,repeat;border:1px solid #2a0c06;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,215,195,.55),inset 0 -2px 0 rgba(0,0,0,.32),0 0 0 2px #303137,0 0 0 3px #060708,0 8px 14px -6px rgba(0,0,0,.95);text-shadow:0 -1px 0 rgba(60,10,0,.7)}
+.go:hover{filter:brightness(1.1)}
+.sbtn{height:34px;padding:0 14px;font-size:11px;font-weight:600;color:#f6f1e6;background-color:#3b3d43;background-image:linear-gradient(180deg,rgba(255,250,240,.2),rgba(255,250,240,0) 46%,rgba(0,0,0,.34)),var(--btn);background-size:100% 100%,512px 512px;border:1px solid #060708;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,250,240,.3),inset 0 -1px 0 rgba(0,0,0,.45),0 4px 8px -3px rgba(0,0,0,.95);text-shadow:0 1px 0 rgba(0,0,0,.95)}
+.sbtn:hover{background-color:#484a51;color:#fff}
+.sbtn b{font-family:Forum,serif;font-weight:400;font-size:15px;color:#b4c79c;margin-left:4px}
+.stamp{flex-shrink:0;display:grid;place-items:center;font-family:Forum,serif;font-size:22px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),linear-gradient(180deg,#2d2e33,#17181b);border:1px solid #050607;border-radius:2px;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+</style>
+</helmet>
+<div style="width: 800px; height: 600px; background: #0b0c0e"><img src="/_blob/a019b763c00d8595809046f0615fb289" alt="Сейчас: Параметры и колонка" style="display: block; width: 800px; height: 600px"></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":800,"height":600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

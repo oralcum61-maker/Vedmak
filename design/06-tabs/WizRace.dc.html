@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Мастер создания — раса</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--tb:url(/_blob/b037b57d4e5b684c7960b22211c4d384);--ts:url(/_blob/e91804a6889c91a09ad16182ed1514a8)}
+a{color:#e2ddd0}a:hover{color:#fffaf0}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.rail{background-color:#121316;background-image:var(--tb),radial-gradient(140% 50% at 50% 0%,rgba(255,240,215,.06),transparent 60%);background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.enamel:hover{filter:brightness(1.1)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 2px rgba(0,0,0,.3),inset 0 0 0 3px rgba(240,232,215,.1),inset 0 1px 0 rgba(255,245,225,.2),0 2px 5px rgba(0,0,0,.6)}
+.wp{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 10px 7px 0;text-decoration:none;border-radius:2px}
+.wp:hover{background:rgba(255,245,225,.03)}
+.node{position:relative;z-index:1;flex-shrink:0;width:26px;height:26px;display:grid;place-items:center;margin-top:1px}
+.node i{display:block;width:14px;height:14px;transform:rotate(45deg);box-shadow:0 0 0 1px #050607,0 2px 4px rgba(0,0,0,.8)}
+.line{display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.6);box-shadow:0 1px 0 rgba(255,240,215,.045)}
+.line input{flex-grow:1;min-width:0;height:24px;padding:0 2px;font-family:Forum,serif;font-size:18px;color:#f1ece0;background:transparent;border:0;border-bottom:1px dashed #2a2c31}
+.card{position:relative;display:flex;flex-direction:column;text-align:left;padding:0;overflow:hidden;color:#e2ddd0;background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),0 10px 20px -12px rgba(0,0,0,.95)}
+.card:hover{filter:brightness(1.08)}
+.card.on{box-shadow:inset 0 0 0 1px rgba(241,236,224,.25),0 0 0 2px #b8432c,0 12px 24px -10px rgba(0,0,0,.95)}
+.card .art{position:relative;height:104px;overflow:hidden;background:#0b0c0e}
+.card .art img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;display:block}
+.card .art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(23,24,27,.95));pointer-events:none}
+.seal{position:absolute;right:8px;top:8px;z-index:2;padding:3px 8px;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff3ea;background:#b8432c linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.25));border:1px solid #2a0c06;box-shadow:0 2px 4px rgba(0,0,0,.7)}
+.trait{display:inline-flex;padding:2px 7px;font-size:10.5px;color:#d6d0c2;background:#141518;border:1px solid #060708;border-radius:2px;white-space:nowrap}
+.st{display:flex;flex-direction:column;align-items:center;gap:2px}
+</style>
+</helmet>
+<div style="width: 1200px; height: 860px; box-sizing: border-box; display: flex; flex-direction: column; background: #0b0c0e; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums; border: 1px solid #040405">
+  <header class="rail" style="height: 34px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 12px; border-bottom: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.08)">
+    <span style="font-family: Forum, serif; font-size: 15px; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95); flex-grow: 1">Мастер создания персонажа</span>
+    <span aria-hidden="true" style="color: #8e897e">×</span>
+  </header>
+
+  <div style="flex-grow: 1; min-height: 0; display: flex">
+    <nav class="rail" aria-label="Шаги мастера" style="width: 214px; flex-shrink: 0; box-sizing: border-box; padding: 16px 12px 16px 16px; display: flex; flex-direction: column; border-right: 1px solid #060708; box-shadow: 8px 0 22px -8px rgba(0,0,0,.9); position: relative; z-index: 1">
+      <span class="cap" style="margin-bottom: 10px">Тракт · {{doneCount}} из 9</span>
+      <div style="position: relative; display: flex; flex-direction: column">
+        <span style="position: absolute; left: 12px; top: 14px; bottom: 14px; border-left: 1px solid #050607; box-shadow: 1px 0 0 rgba(255,240,215,.07)"></span>
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="9">
+          <a href="#" class="wp" aria-current="{{s.current}}">
+            <span class="node"><i style="background: {{s.nodeBg}}; box-shadow: {{s.nodeSh}}"></i></span>
+            <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+              <span style="font-family: Forum, serif; font-size: 17px; line-height: 1.15; color: {{s.color}}; text-shadow: 0 1px 0 rgba(0,0,0,.9)">{{s.label}}</span>
+              <span style="font-size: 11px; color: {{s.noteColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.note}}</span>
+            </span>
+          </a>
+        </sc-for>
+      </div>
+    </nav>
+
+    <main class="mat" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column">
+      <div style="flex-grow: 1; min-height: 0; overflow: hidden; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: flex-end; gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span class="cap">Шаг 1 · кем родился</span>
+            <h1 style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 30px; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Раса</h1>
+          </div>
+          <div class="groove" style="flex-grow: 1; margin-bottom: 8px"></div>
+        </div>
+
+        <section class="plate" style="padding: 4px 14px; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 110px; column-gap: 22px">
+          <label class="line" style="border: 0; box-shadow: none"><span class="cap">Имя</span><input value="Мирра из Вызимы" aria-label="Имя"></label>
+          <label class="line" style="border: 0; box-shadow: none"><span class="cap">Пол</span><input value="женский" aria-label="Пол"></label>
+          <label class="line" style="border: 0; box-shadow: none"><span class="cap">Возраст</span><input value="27" aria-label="Возраст"></label>
+        </section>
+
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+          <sc-for list="{{races}}" as="r" hint-placeholder-count="7">
+            <button type="button" class="card {{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}">
+              <div class="art"><img src="{{r.art}}" alt=""></div>
+              <sc-if value="{{r.on}}" hint-placeholder-val="{{false}}"><span class="seal">выбрано</span></sc-if>
+              <div style="padding: 0 11px 11px; margin-top: -26px; position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px">
+                <span style="font-family: Forum, serif; font-size: 23px; line-height: 1; color: #f1ece0; text-shadow: 0 2px 4px rgba(0,0,0,.95)">{{r.name}}</span>
+                <span style="font-size: 11px; line-height: 1.4; color: #a29d92; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 31px">{{r.desc}}</span>
+                <span style="display: flex; flex-wrap: wrap; gap: 3px">
+                  <sc-for list="{{r.traits}}" as="t" hint-placeholder-count="3"><span class="trait">{{t}}</span></sc-for>
+                </span>
+                <span style="font-size: 10.5px; color: {{r.limColor}}">{{r.limits}}</span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+
+        <section class="plate" style="padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span class="gem"></span>
+            <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 13px; letter-spacing: .24em; text-transform: uppercase">{{sel.name}} · особенности</h2>
+            <div class="groove" style="flex-grow: 1"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 18px">
+            <sc-for list="{{sel.full}}" as="t" hint-placeholder-count="3">
+              <span style="font-size: 12px; line-height: 1.4; color: #a29d92"><b style="font-weight: 500; color: #ece7db">{{t.n}}.</b> {{t.e}}</span>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <footer class="rail" style="height: 58px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-top: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.07)">
+        <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #b4c79c"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>Шаг заполнен</span>
+        <span style="flex-grow: 1"></span>
+        <button type="button" class="btn" disabled style="height: 38px; padding: 0 16px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; opacity: .45">Назад</button>
+        <button type="button" class="enamel" style="height: 38px; padding: 0 20px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase">Далее · Происхождение</button>
+      </footer>
+    </main>
+
+    <aside class="rail" aria-label="Герой" style="width: 256px; flex-shrink: 0; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; border-left: 1px solid #060708; box-shadow: -8px 0 22px -8px rgba(0,0,0,.9)">
+      <span class="cap">Герой</span>
+      <div class="well" style="position: relative; height: 196px; overflow: hidden">
+        <img src="{{sel.art}}" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block">
+        <span style="position: absolute; inset: 5px; border: 1px solid rgba(226,221,208,.2); box-shadow: inset 0 0 30px rgba(0,0,0,.7); pointer-events: none"></span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 3px">
+        <span style="font-family: Forum, serif; font-size: 25px; line-height: 1.05; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Мирра из Вызимы</span>
+        <span style="font-size: 12px; color: #a29d92">{{sel.name}} · профессия не выбрана</span>
+        <span style="font-size: 12px; color: #6c685f">женский · 27 лет</span>
+      </div>
+      <div class="well" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 8px">
+        <sc-for list="{{stats}}" as="t" hint-placeholder-count="9">
+          <span class="st" title="{{t.title}}"><span class="stamp" style="width: 38px; height: 32px"><span style="font-family: Forum, serif; font-size: 17px; line-height: 1; color: {{t.color}}">{{t.v}}</span></span><span class="cap" style="font-size: 8.5px; letter-spacing: .1em">{{t.k}}</span></span>
+        </sc-for>
+      </div>
+      <span style="font-size: 11.5px; line-height: 1.45; color: #8e897e">Параметры откроются на пятом шаге; расовые поправки уже учтены ниже.</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 4px">
+        <sc-for list="{{sel.mods}}" as="m" hint-placeholder-count="2"><span class="trait" style="color: #e0c98f">{{m}}</span></sc-for>
+      </div>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":860}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { race: 3 }; }
+  renderVals() {
+    const R = [
+      { name: 'Ведьмак', art: 'e72310c77d20e10413dd5d1be78a8150', desc: 'Мутанты, выращенные из людских детей в ведьмачьих школах. Быстрые, выносливые, с кошачьими глазами и притуплёнными эмоциями.',
+        traits: ['Обострённые чувства', 'Притупление эмоций', 'Стойкость мутанта', 'Молниеносная реакция'], limits: 'только профессия «Ведьмак»', mods: ['+1 Реа', '+1 Лвк', '−4 Эмп'],
+        full: [['Обострённые чувства', 'нет штрафов за слабый свет, +1 к Вниманию, выслеживание по запаху'], ['Притупление эмоций', 'без проверок Храбрости против Запугивания, −4 к Эмп'], ['Стойкость мутанта', 'невосприимчивость к болезням, можно принимать мутагены'], ['Молниеносная реакция', '+1 к Реа и Лвк, могут превышать 10']] },
+      { name: 'Эльф', art: '86b5f3c6da955a77fc8c7e39a8d78b24', desc: 'Старший Народ, живущий долго и помнящий иные времена. Прекрасные мастера и непревзойдённые лучники, связанные с природой.',
+        traits: ['Чувство прекрасного', 'Стрелок', 'Единение с природой'], limits: 'могут быть магами и жрецами', mods: ['+1 Искусство', '+2 Стрельба из лука'],
+        full: [['Чувство прекрасного', '+1 к Искусству'], ['Стрелок', '+2 к Стрельбе из лука; лук выхватывается без действия'], ['Единение с природой', 'звери не нападают без провокации']] },
+      { name: 'Краснолюд', art: '07d7a117b5d5e53f46aab06c971678ba', desc: 'Крепкий горный народ из Махакама: кузнецы, торговцы и воины, привычные к тяжёлой работе и крепкой выпивке.',
+        traits: ['Закалённый', 'Силач', 'Намётанный глаз'], limits: 'не могут быть магами и жрецами', mods: ['+1 Сила', '+25 к весу', '+1 Торговля'],
+        full: [['Закалённый', 'врождённая прочность 2 поверх любой брони'], ['Силач', '+1 к Силе, +25 к переносимому весу'], ['Намётанный глаз', '+1 к Торговле']] },
+      { name: 'Человек', art: 'aa3a01c3702ea266000eb9077289c5fb', desc: 'Преобладающая раса Континента: изобретательная, упрямая и многочисленная.',
+        traits: ['Доверие', 'Изобретательность', 'Упрямство'], limits: 'могут быть магами и жрецами', mods: ['+1 Дедукция', '+1 Харизма среди людей'],
+        full: [['Доверие', '+1 к Харизме, Соблазнению и Убеждению против людей'], ['Изобретательность', '+1 к Дедукции'], ['Упрямство', 'переброс неудачного Сопротивления убеждению или Храбрости, до 3 раз за партию']] },
+      { name: 'Гном', art: '434a77c28089c8e3d8a9e274c135d8eb', desc: 'Лучшие мастера Континента: самые лучшие мечи в мире — гномьи, а ещё алхимия, металлургия и механика.',
+        traits: ['Приятное поведение', 'Внимание к деталям', 'Отслеживание запаха', 'Коротышка'], limits: 'могут быть магами и жрецами', mods: ['+1 Харизма', '+2 к трём ремёслам'],
+        full: [['Приятное поведение', '+1 к Харизме'], ['Внимание к деталям', '+2 к трём навыкам Ремесла на выбор'], ['Отслеживание запаха', '+1 к Вниманию, выслеживание по запаху'], ['Коротышка', '−5 к Силе, рукопашная — как при меньшем Тел']] },
+      { name: 'Вран', art: 'ce92ed3a6b0ad3d8e723396a7c959d03', desc: 'Людоящеры — один из древнейших народов Континента; их города тянулись от Великого моря до Синих гор.',
+        traits: ['Спокойное сердце', 'Клыки и когти', 'Чешуйчатая броня', 'Рептилоид'], limits: 'могут быть магами и жрецами', mods: ['броня 4 ПБ', 'клыки 3d6'],
+        full: [['Спокойное сердце', '+1 к Сопротивлению убеждению'], ['Клыки и когти', 'удары смертельны, клыки 3d6 с отравлением 50%'], ['Чешуйчатая броня', 'естественные 4 ПБ на всём теле'], ['Рептилоид', 'не-враны лечат его хуже']] },
+      { name: 'Боболак', art: '4b8e4739d2ae5b43b0254150c800fbd4', desc: 'Гордый народ с долгой историей героизма: вместо богов боболаки чтут память предков и легендарных героев.',
+        traits: ['Львиное сердце', 'Странная физиология', 'Зубы-бритвы', 'Плохое зрение'], limits: 'могут быть магами и жрецами', mods: ['+1 Храбрость', '−4 Внимание'],
+        full: [['Львиное сердце', '+1 к Храбрости'], ['Странная физиология', 'сразу проверка Стойкости на стабилизацию раны'], ['Зубы-бритвы', 'клыки 2d6, пробивают броню'], ['Плохое зрение', '−4 к Вниманию, кроме слуха']] }
+    ];
+    const cur = this.state.race;
+    const races = R.map((r, i) => ({
+      name: r.name, art: '/_blob/' + r.art, desc: r.desc, traits: r.traits, limits: r.limits,
+      limColor: /не могут|только/.test(r.limits) ? '#e0937f' : '#6c685f',
+      on: i === cur, cls: i === cur ? 'on' : '', pressed: i === cur ? 'true' : 'false', pick: () => this.setState({ race: i })
+    }));
+    const s = R[cur];
+    const sel = { name: s.name, art: '/_blob/' + s.art, mods: s.mods, full: s.full.map(([n, e]) => ({ n, e })) };
+    const STEP = [
+      ['Раса', s.name], ['Происхождение', 'не выбрано'], ['Жизненный путь', 'не брошен'], ['Профессия', 'не выбрана'], ['Параметры', '60 очков'],
+      ['Навыки', '—'], ['Магия', '—'], ['Снаряжение', '—'], ['Итог', '—']
+    ];
+    const steps = STEP.map(([label, note], i) => {
+      const current = i === 0;
+      return {
+        label, note, current: current ? 'step' : 'false',
+        nodeBg: current ? 'linear-gradient(135deg, #ff9a7e, #b8432c)' : '#1c1d21',
+        nodeSh: current ? '0 0 0 1px #2a0c06, 0 0 10px rgba(224,96,74,.6)' : '0 0 0 1px #050607, inset 0 1px 2px rgba(0,0,0,.9)',
+        color: current ? '#f3eee2' : '#8e897e', noteColor: current ? '#e0937f' : '#55585f'
+      };
+    });
+    const stats = ['Инт', 'Реа', 'Лвк', 'Тел', 'Скор', 'Эмп', 'Рем', 'Воля', 'Удача'].map(k => ({ k, v: '·', color: '#55585f', title: k + ': ещё не распределено' }));
+    return { races, sel, steps, stats, doneCount: 1 };
+  }
+}
+</script>
+</body>
+</html>

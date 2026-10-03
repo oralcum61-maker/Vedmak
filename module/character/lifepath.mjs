@@ -170,15 +170,15 @@ function familyStatusEffects(entry, fx) {
   const text = entry.text;
   const m = text.match(/Начальное снаряжение:\s*(.+)$/);
   const gear = m?.[1] ?? "";
-  if (/дворянская грамота/.test(gear)) { fx.items.push("Дворянская грамота"); fx.reputation += 2; }
-  if (/летопись/.test(gear)) { fx.items.push("Летопись"); fx.skills.education = (fx.skills.education ?? 0) + 1; }
+  if (/дворянская грамота/.test(gear)) { fx.items.push("Дворянская грамота (+2 к репутации)"); fx.reputation += 2; }
+  if (/летопись/.test(gear)) { fx.items.push("Летопись (+1 к образованию)"); fx.skills.education = (fx.skills.education ?? 0) + 1; }
   if (/священный символ/.test(gear)) { fx.items.push("Священный символ"); fx.skills.courage = (fx.skills.courage ?? 0) + 1; }
-  if (/личный герб/.test(gear)) { fx.items.push("Личный герб"); fx.reputation += 1; }
+  if (/личный герб/.test(gear)) { fx.items.push("Личный герб (+1 к репутации)"); fx.reputation += 1; }
   if (/2 знакомых/.test(gear)) fx.notes.push("Положение семьи: 2 знакомых");
   if (/чертежа\/формулы/.test(gear)) fx.notes.push("Положение семьи: 3 обычных чертежа или формулы на выбор");
   if (/музыкальный инструмент/.test(gear)) { fx.items.push("Музыкальный инструмент"); fx.notes.push("Положение семьи: 1 друг"); }
   if (/птица или змея/.test(gear)) fx.notes.push("Положение семьи: обученная птица или змея");
-  if (/счастливый талисман/.test(gear)) { fx.items.push("Счастливый талисман"); fx.luck += 1; }
+  if (/счастливый талисман/.test(gear)) { fx.items.push("Счастливый талисман (+1 к удаче)"); fx.luck += 1; }
 }
 
 /* ----------------------------- Обычный путь ----------------------------- */
@@ -655,7 +655,7 @@ export function lifepathCards(sections, {
         if (!byGroup.has(e.group)) byGroup.set(e.group, []);
         byGroup.get(e.group).push(entryView(e, ctx, ""));
       }
-      cards.push({ title: sec.title, icon: "fa-people-group", rows, pending: pendingOf(sec.entries),
+      cards.push({ title: sec.title, rows, pending: pendingOf(sec.entries),
         table: byGroup.size ? { cols: SIBLING_COLS, rows: [...byGroup.entries()].map(([i, cells]) => ({ n: i + 1, cells })) } : null });
       continue;
     }
@@ -670,8 +670,8 @@ export function lifepathCards(sections, {
         const rows = list.filter(e => !e.pending).map(e => entryView(e, ctx, short(e.label)));
         const pending = pendingOf(list);
         cards.push(i === "none"
-          ? { title: sec.title, icon: "fa-hourglass", rows, pending }
-          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", icon: "fa-hourglass-half", cls: "event", rows, pending });
+          ? { title: sec.title, rows, pending }
+          : { title: `${(Number(i) + 1) * 10} лет`, subtitle: "важное событие", cls: "event", rows, pending });
       }
       continue;
     }

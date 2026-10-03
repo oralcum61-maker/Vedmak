@@ -1,92 +1,182 @@
+{{!-- Худ персонажа (холст design/11, PLAN 4.58): показатели слева, вкладки в середине, ход справа. --}}
 {{#if actor}}
-<div class="hud-bar{{#if collapsed}} collapsed{{/if}}{{#if isCurrent}} my-turn{{/if}}">
+<div class="vh{{#if collapsed}} collapsed{{/if}}{{#if isCurrent}} my-turn{{/if}}">
+  <button type="button" class="vh-vol" data-action="toggleVolume" data-tooltip="Громкость звуков" aria-label="Громкость звуков"><i class="vd-fx-icon fa-solid {{volIcon}}"></i></button>
+  {{#if volOpen}}<div class="vh-volpop"><input type="range" class="vd-fx-slider" min="0" max="1" step="0.05" value="{{volume}}" aria-label="Громкость звуков системы"><span class="vd-fx-value">{{volPct}}%</span></div>{{/if}}
+  <button type="button" class="vh-fold" data-action="toggleCollapse" data-tooltip="{{#if collapsed}}Развернуть{{else}}Свернуть{{/if}}" aria-label="{{#if collapsed}}Развернуть худ{{else}}Свернуть худ{{/if}}"><i class="fa-solid fa-chevron-{{#if collapsed}}up{{else}}down{{/if}}"></i></button>
 
-  <div class="hud-head">
-    <img class="portrait" src="{{actor.img}}" alt="" data-action="openSheet" data-tooltip="Открыть лист">
-    <div class="who">
-      <div class="name">{{actor.name}}</div>
-      <div class="meta">
-        Раунд {{round}} · ход: <b>{{turnName}}</b>
-        {{#if encumbrance}} · СД {{encumbrance}}{{/if}}
-        {{#if shield}} · щит {{shield}}{{/if}}
-        {{#if adrenalineRule}} · адреналин {{adrenaline}}{{/if}}
+  <div class="vh-side">
+    <div class="vh-who">
+      <span class="vh-portrait" data-action="openSheet" data-tooltip="Открыть лист"><img src="{{actor.img}}" alt=""></span>
+      <div class="vh-name">
+        <a data-action="openSheet">{{actor.name}}</a>
+        {{#if isCurrent}}<span class="vh-mine">твой ход</span>{{else if inCombat}}<span class="vh-wait">ждёт хода</span>{{else}}<span class="vh-wait">вне боя</span>{{/if}}
       </div>
     </div>
-
-    <div class="hud-vitals">
-      {{#each vitals}}
-      <div class="vital {{key}}{{#if state}} {{state}}{{/if}}">
-        <label>{{label}}</label>
-        <div class="track" data-tooltip="{{hint}}">
-          <span class="fill" style="width: {{pct}}%"></span>
-          {{#if extraPct}}<span class="fill extra" style="left: {{pct}}%; width: {{extraPct}}%"></span>{{/if}}
-          {{#if notch}}<span class="notch" style="left: {{notch}}%"></span>{{/if}}
-        </div>
-        <span class="num">{{value}}<span class="dim">/{{max}}{{suffix}}</span></span>
-      </div>
-      {{/each}}
+    {{#each vitals}}
+    <div class="vh-vit {{key}}" data-tooltip="{{hint}}">
+      <span class="vh-cap">{{label}}</span>
+      <div class="vh-tube"><span class="f {{key}}" style="width: {{pct}}%"></span>{{#if notch}}<b class="wound" style="left: {{notch}}%"></b>{{/if}}<i style="left: 25%"></i><i style="left: 50%"></i><i style="left: 75%"></i></div>
+      <span class="vh-num{{#if bad}} bad{{/if}}"><b>{{value}}</b><small>{{#if suffix}}{{suffix}}{{else}}/{{max}}{{/if}}</small></span>
     </div>
-
-    <div class="hud-statuses">
-      {{#each statuses}}
-      <a class="status" data-action="toggleStatus" data-status="{{id}}" data-tooltip="{{hint}} — снять">
-        <img src="{{img}}" alt=""><span>{{name}}</span>
-      </a>
-      {{/each}}
+    {{/each}}
+    {{#if (or energyMax luck.length)}}
+    <div class="vh-pips">
+      {{#if energy.length}}<span class="vh-pip-row" data-tooltip="Энергия раунда"><span class="vh-cap">энергия</span>{{#each energy}}<i class="vh-slot{{#if on}} on{{/if}}"></i>{{/each}}</span>
+      {{else if energyMax}}<span class="vh-pip-row" data-tooltip="Энергия раунда: осталось из всего"><span class="vh-cap">энергия</span><b class="vh-en">{{energyLeft}}</b><span class="vh-cap">/ {{energyMax}}</span></span>{{/if}}
+      {{#if luck.length}}<span class="vh-pip-row" data-tooltip="Удача"><span class="vh-cap">удача</span>{{#each luck}}<i class="vd-coin{{#unless on}} off{{/unless}}"></i>{{/each}}</span>{{/if}}
     </div>
-
-    <div class="hud-turn">
-      {{#if canAdvance}}<button type="button" class="hud-btn next" data-action="nextTurn" data-tooltip="Передать ход дальше"><i class="fa-solid fa-forward-step"></i> Ход</button>{{/if}}
-      <a class="fold" data-action="toggleCollapse" data-tooltip="{{#if collapsed}}Развернуть{{else}}Свернуть{{/if}}"><i class="fa-solid {{#if collapsed}}fa-chevron-up{{else}}fa-chevron-down{{/if}}"></i></a>
-    </div>
+    {{/if}}
   </div>
 
-  <div class="hud-rows">
-    <div class="hud-row">
-      <span class="tag">Атака</span>
-      {{#each attacks}}
-      <button type="button" class="hud-btn atk" data-action="attack" data-kind="{{kind}}" data-item-id="{{itemId}}"
-              data-tooltip="{{label}}: урон {{damage}}{{#if range}}, дистанция {{range}}{{/if}} (Shift — без окна)">
-        <img src="{{img}}" alt=""> {{label}} <b>{{base}}</b>
-      </button>
-      {{else}}<span class="dim">нет оружия в руках</span>
-      {{/each}}
+  <div class="vh-center">
+    <div class="vh-tabsrow">
+      <nav class="vh-switch" aria-label="Разделы худа">
+        {{#each tabs}}<a class="{{#if active}}on{{/if}}" data-action="setTab" data-tab="{{id}}">{{label}}{{#if count}} <span class="vh-count">{{count}}</span>{{/if}}</a>{{/each}}
+      </nav>
     </div>
 
-    <div class="hud-row">
-      <span class="tag">Защита</span>
-      {{#each defenses}}
-      <button type="button" class="hud-btn def" data-action="rollSkill" data-skill="{{key}}" data-tooltip="Проверка навыка (Shift — без окна)">
-        {{label}} <b>{{base}}</b>
-      </button>
-      {{/each}}
-      <span class="sep"></span>
-      <button type="button" class="hud-btn util" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">Уст <b>&lt; {{stun}}</b></button>
-      {{#if dying}}<button type="button" class="hud-btn danger" data-action="deathSave" data-tooltip="Испытание против смерти"><i class="fa-solid fa-skull"></i> Против смерти</button>{{/if}}
-      <button type="button" class="hud-btn util" data-action="restTurn" data-tooltip="Полный ход отдыха: вернуть Вын"><i class="fa-solid fa-lungs"></i></button>
-      <button type="button" class="hud-btn util" data-action="manualDamage" data-tooltip="Урон без атаки: падение, огонь, ловушка"><i class="fa-solid fa-burst"></i></button>
-    </div>
-
-    {{#if spells.length}}
-    <div class="hud-row">
-      <span class="tag">Магия</span>
-      {{#each spells}}
-      <button type="button" class="hud-btn spell" data-action="castSpell" data-item-id="{{id}}" data-tooltip="{{name}} (Shift — без окна)">
-        <img src="{{img}}" alt=""> {{name}} <b>{{cost}}</b>
-      </button>
-      {{/each}}
+    {{#unless collapsed}}
+    {{#if showFight}}
+    <div class="vh-deck">
+      <div class="vh-weapons">
+        {{#each attacks}}
+        <div class="vh-well vh-wpn">
+          <span class="vh-frame"><img src="{{img}}" alt=""></span>
+          <div class="vh-wtext" data-tooltip="{{label}}{{#if sub}}<br>{{sub}}{{/if}}"><span class="vh-wname">{{label}}</span><span class="vh-wsub">{{sub}}</span></div>
+          {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=base cls="vh-m38"}}
+          <div class="vh-dmg"><b>{{damage}}</b><span class="vh-cap">урон</span></div>
+          <button type="button" class="vh-go sm" data-action="attack" data-kind="{{kind}}" data-item-id="{{itemId}}">{{#if isRanged}}Выстрел{{else}}Атака{{/if}}</button>
+        </div>
+        {{/each}}
+      </div>
+      <div class="vh-grp">
+        <span class="vh-cap">защита</span>
+        <div class="vh-grid2">
+          {{#each defenses}}<button type="button" class="vh-sbtn" data-action="rollSkill" data-skill="{{key}}" data-tooltip="{{label}}"><span class="t">{{label}}</span> <b>{{base}}</b></button>{{/each}}
+        </div>
+        <span class="vh-cap">испытания</span>
+        <div class="vh-grid2">
+          <button type="button" class="vh-sbtn" data-action="stunSave" data-tooltip="Испытание Устойчивости"><span class="t">Уст · порог</span> <b>{{stun}}</b></button>
+          <button type="button" class="vh-sbtn{{#if dying}} bad{{/if}}" data-action="deathSave" data-tooltip="Испытание против смерти"><span class="t">Против смерти</span> <b>{{deathThreshold}}</b></button>
+        </div>
+      </div>
     </div>
     {{/if}}
 
-    {{#if alchemy.length}}
-    <div class="hud-row">
-      <span class="tag">Алхимия</span>
-      {{#each alchemy}}
-      <button type="button" class="hud-btn alch" data-action="useAlchemical" data-item-id="{{id}}" data-tooltip="{{hint}}">
-        <img src="{{img}}" alt=""> {{name}} <b>×{{quantity}}</b>
-      </button>
-      {{/each}}
+    {{#if showMagic}}
+    {{!-- Магия: разделы и поиск слева, плитки в колонки с прокруткой, справа — что держится (PLAN 4.68) --}}
+    <div class="vh-deck vh-magic{{#unless (or maintained.length shield zones.length)}} no-held{{/unless}}">
+      <div class="vh-mgroups">
+        <input type="search" class="vh-magic-search" value="{{magicQuery}}" placeholder="Найти…" aria-label="Найти заклинание" data-tooltip="Поиск по всем разделам; Enter — сотворить первое найденное, Esc — сбросить">
+        <div class="vh-mlist">
+          {{#each magicGroups}}
+          <button type="button" class="vh-mgroup{{#if active}} on{{/if}}" data-action="magicGroup" data-group="{{id}}">
+            {{#if icon}}<i class="{{icon}}"></i> {{/if}}<span>{{label}}</span><b>{{count}}</b>
+          </button>
+          {{/each}}
+        </div>
+      </div>
+      <div class="vh-spells">
+        {{#each allSpells}}
+        <button type="button" class="vh-spell el-{{element}}{{#if sign}} sign{{/if}}{{#if short}} short{{/if}}{{#if fav}} fav{{/if}}"
+                data-action="castSpell" data-item-id="{{id}}" data-search="{{search}}" data-in-group="{{#if inGroup}}1{{else}}0{{/if}}"
+                {{#unless inGroup}}hidden{{/unless}}
+                data-tooltip="{{name}}<br>{{tip}}<br><i>Щелчок — сотворить, Shift — без окна, правый щелчок — {{#if fav}}убрать из избранного{{else}}в избранное{{/if}}</i>">
+          <span class="vh-sico"><img src="{{img}}" alt=""></span>
+          <span class="vh-sname">{{name}}</span>
+          <span class="vh-scost" {{#if short}}data-tooltip="Не хватает Вын"{{/if}}>{{cost}}</span>
+          {{#if fav}}<i class="vh-sfav fa-solid fa-star"></i>{{/if}}
+        </button>
+        {{/each}}
+        <span class="vh-empty vh-magic-empty" hidden>Ничего не нашлось.</span>
+      </div>
+      {{#if (or maintained.length shield zones.length)}}
+      <div class="vh-grp vh-held">
+        <span class="vh-cap">держится</span>
+        {{#if shield}}<div class="vh-well vh-line"><i class="fa-solid fa-shield-halved"></i><span class="vh-ltext">Щит: <b>{{shield}}</b> ПЗ</span></div>{{/if}}
+        {{#each maintained}}
+        <div class="vh-well vh-line"><img src="{{img}}" alt=""><span class="vh-ltext">{{name}}{{#if cost}} · <b>{{cost}}</b> вын/р{{/if}}</span><button type="button" class="vh-sbtn sm" data-action="endMaintained" data-effect-id="{{id}}">Снять</button></div>
+        {{/each}}
+        {{#each zones}}
+        <div class="vh-well vh-line" data-tooltip="Зона «{{name}}» на сцене{{#if left}} · {{left}}{{/if}}"><i class="fa-regular fa-circle-dot"></i><span class="vh-ltext">{{name}}{{#if left}} · {{left}}{{/if}}</span><button type="button" class="vh-sbtn sm" data-action="endZone" data-region-id="{{id}}" data-tooltip="Убрать зону со сцены">Снять</button></div>
+        {{/each}}
+      </div>
+      {{/if}}
     </div>
+    {{/if}}
+
+    {{#if showAlchemy}}
+    <div class="vh-deck">
+      {{#if alchemy.length}}
+      <div class="vh-potions">
+        {{#each alchemy}}
+        <div class="vh-well vh-potion" data-tooltip="{{hint}}">
+          <span class="vh-pic"><img src="{{img}}" alt=""><span class="vh-qty">×{{quantity}}</span></span>
+          <span class="vh-pn">{{name}}</span><span class="vh-tx">{{note}}</span>
+          <button type="button" class="vh-go xs {{go}}" data-action="useAlchemical" data-item-id="{{id}}">{{actionLabel}}</button>
+        </div>
+        {{/each}}
+      </div>
+      {{else}}
+      <span class="vh-empty">Зелий, масел и бомб в сумке нет — их делают на вкладке «Ремесло».</span>
+      {{/if}}
+      {{#if tox}}
+      <div class="vh-aside">
+        <span class="vh-cap">токсичность</span>
+        <div class="vh-tube"><span class="f tox" style="width: {{tox.pct}}%"></span><i style="left: 25%"></i><i style="left: 50%"></i><i style="left: 75%"></i></div>
+        <p><b class="violet">{{tox.value}}%</b> из {{tox.max}}% — выше предела отравление.</p>
+      </div>
+      {{/if}}
+    </div>
+    {{/if}}
+
+    {{#if showActions}}
+    <div class="vh-deck vh-rows">
+      <div class="vh-row">
+        <button type="button" class="vh-sbtn" data-action="restTurn" data-tooltip="Ход отдыха: восстановить Выносливость">Отдых (ход) <b class="ok">+{{rec}}</b></button>
+        <button type="button" class="vh-sbtn" data-action="manualDamage">Урон без атаки</button>
+        <button type="button" class="vh-sbtn" data-action="controlCheck">Управление конём</button>
+        <button type="button" class="vh-sbtn" data-action="ram">Таран</button>
+        {{#if canFlip}}<button type="button" class="vh-sbtn" data-action="flipToken" data-tooltip="Токен в полный рост и обратно (Shift+F)">Перевернуть токен</button>{{/if}}
+        {{#if adrenalineRule}}<span class="vh-sbtn static">Адреналин <b>{{adrenaline}}</b></span>{{/if}}
+      </div>
+      <div class="vh-row">
+        <span class="vh-cap">словесная дуэль</span>
+        {{#each verbal}}<button type="button" class="vh-sbtn sm" data-action="verbal" data-verbal="{{key}}">{{label}} <b>{{base}}</b></button>{{/each}}
+      </div>
+      <div class="vh-row">
+        <span class="vh-cap">навык</span>
+        <input type="search" class="vh-skill" list="vh-skill-list" placeholder="Внимание, Скрытность… и Enter" aria-label="Бросок навыка по имени">
+        <datalist id="vh-skill-list">{{#each skillOptions}}<option value="{{this}}"></option>{{/each}}</datalist>
+        <button type="button" class="vh-sbtn sm" data-action="rollSkill" data-skill="awareness">Внимание</button>
+        <button type="button" class="vh-sbtn sm" data-action="rollSkill" data-skill="stealth">Скрытность</button>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if showStates}}
+    <div class="vh-deck vh-rows">
+      <div class="vh-row">
+        <span class="vh-cap">действует</span>
+        {{#each effects}}<span class="vh-st{{#if bad}} bad{{/if}}"><img src="{{img}}" alt="">{{name}}{{#if left}} <em>{{left}}</em>{{/if}}</span>{{else}}<span class="vh-empty">ничего</span>{{/each}}
+      </div>
+      <div class="vh-sgrid">
+        {{#each statusList}}<button type="button" class="{{#if on}}on{{/if}}" data-action="toggleStatus" data-status="{{id}}" data-tooltip="{{hint}}">{{name}}</button>{{/each}}
+      </div>
+    </div>
+    {{/if}}
+    {{/unless}}
+  </div>
+
+  <div class="vh-turn">
+    {{#if inCombat}}
+    <span class="vh-cap">раунд</span>
+    {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=round cls="vh-m52"}}
+    <span class="vh-next">дальше: <b>{{nextName}}</b></span>
+    {{#if canAdvance}}<button type="button" class="vh-go wide" data-action="nextTurn">Конец хода</button>{{/if}}
+    {{else}}
+    <span class="vh-cap">вне боя</span>
     {{/if}}
   </div>
 </div>

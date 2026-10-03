@@ -5,22 +5,20 @@
   <div class="skills-head">
     <nav class="tabs pane-switch" aria-label="Навыки и профессия">
       <a class="{{skillTabs.list.cssClass}}" data-action="tab" data-group="skills" data-tab="list">
-        <i class="fa-solid fa-list-check"></i><span>Навыки</span><span class="count">{{trainedCount}}</span>
+        <span>Навыки</span><span class="count">{{trainedCount}}</span>
       </a>
       <a class="{{skillTabs.profession.cssClass}}" data-action="tab" data-group="skills" data-tab="profession">
-        <i class="fa-solid fa-sitemap"></i><span>Профессия</span>{{#if prof}}<span class="count">{{prof.learned}}/{{prof.total}}</span>{{/if}}
+        <span>Профессия</span>{{#if prof}}<span class="count">{{prof.learned}}/{{prof.total}}</span>{{/if}}
       </a>
     </nav>
     <span class="grow"></span>
     <a class="toggle trained-toggle{{#if trainedOnly}} active{{/if}}" data-action="toggleTrainedOnly">
-      <i class="fa-solid {{#if trainedOnly}}fa-eye-slash{{else}}fa-eye{{/if}}"></i>
       {{#if trainedOnly}}Показать все{{else}}Только изученные{{/if}}
     </a>
   </div>
 
   {{#if advanceMode}}
   <div class="advance-bar">
-    <i class="fa-solid fa-arrow-up-right-dots"></i>
     <b>Развитие</b>
     <span class="hint-inline">новый уровень навыка — 1 О.У, дальше — текущий уровень</span>
     <span class="grow"></span>
@@ -41,7 +39,6 @@
   <div class="skills-head">
     <span class="grow"></span>
     <a class="toggle trained-toggle{{#if trainedOnly}} active{{/if}}" data-action="toggleTrainedOnly">
-      <i class="fa-solid {{#if trainedOnly}}fa-eye-slash{{else}}fa-eye{{/if}}"></i>
       {{#if trainedOnly}}Показать все{{else}}Только изученные{{/if}}
     </a>
   </div>

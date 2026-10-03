@@ -5,14 +5,14 @@ import { punchSteps } from "../config/stats.mjs";
 import { witcherSchools } from "../config/character.mjs";
 import {
   ATTACK_TYPES, UNARMED_ATTACKS, ATTACK_SITUATIONS, RANGE_BANDS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MOUNTS, WEIGHT_MODS,
-  fumbleText
+  fumbleText, locationGlyph
 } from "../config/combat.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import {
-  currentTargets, actorToken, tokenDistance, resolveActor, postCard, defaultMessageMode, armWoundParts
+  currentTargets, actorToken, tokenDistance, resolveActor, postCard, defaultMessageMode, armWoundParts, isReadyWeapon
 } from "./common.mjs";
 
 const SHIELD_STEPS = { light: 0, medium: 2, heavy: 4 };
@@ -90,7 +90,7 @@ export function describeSource(actor, source) {
       silverDamage: w.silverDamage, effects: w.effects.map(e => ({ ...e })),
       isRanged: w.isRanged, isThrown: w.isThrown, isBow: w.isBow, isCrossbow: w.isCrossbow,
       range: w.rangeMeters(actor.system.stats.body.raw), attackSpeed: w.attackSpeed,
-      nonLethal: !!w.effect("nonLethal"), category: w.category
+      nonLethal: !!w.effect("nonLethal"), category: w.category, hands: w.hands
     }
   };
 }
@@ -108,7 +108,8 @@ function pick(map, keys) {
 /** Все доступные источники атак актора (для листа). */
 export function attackSources(actor) {
   const out = [];
-  const weapons = actor.itemTypes.weapon.slice().sort((a, b) => (b.system.equipped - a.system.equipped) || (a.sort - b.sort));
+  // В бой идёт только то, что в руках (isReadyWeapon): ненадетое оружие персонажа не предлагается
+  const weapons = actor.itemTypes.weapon.filter(w => isReadyWeapon(actor, w)).sort((a, b) => a.sort - b.sort);
   for (const w of weapons) out.push(describeSource(actor, { kind: "weapon", itemId: w.id }));
   for (const s of actor.itemTypes.armor.filter(i => i.system.isShield && i.system.equipped)) {
     out.push(describeSource(actor, { kind: "shield", itemId: s.id }));
@@ -142,6 +143,10 @@ function suggestBand(actor, src, targets) {
 export async function attack(actor, source, opts = {}) {
   const src = describeSource(actor, source);
   if (!src) return null;
+  if ((src.kind === "weapon" || src.kind === "shield") && !(src.kind === "shield" ? src.item?.system.equipped : isReadyWeapon(actor, src.item))) {
+    ui.notifications.warn(`«${src.item?.name ?? src.label}» не в руках — наденьте на вкладке «Снаряжение», тогда можно атаковать.`);
+    return null;
+  }
   const targets = opts.targets ?? currentTargets();
   let cfg = {
     attackType: opts.attackType ?? src.defaultType, aim: opts.aim ?? "", band: opts.band,
@@ -234,8 +239,9 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
   const current = types.find(t => t.selected) ?? types[0];
 
   const locList = (target?.system.derived?.bodyType ?? "humanoid") === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
-  const locations = [{ key: "", label: "Случайно", note: "d10", mod: 0, selected: !cfg.aim }].concat(
-    Object.entries(locList).map(([key, l]) => ({ key, label: l.label, note: String(l.penalty), mod: l.penalty, selected: key === cfg.aim }))
+  const locations = [{ key: "", label: "Случайно", note: "d10", mod: 0, selected: !cfg.aim, glyph: locationGlyph("") }].concat(
+    Object.entries(locList).map(([key, l]) => ({ key, label: l.label, note: String(l.penalty), mod: l.penalty, selected: key === cfg.aim,
+      glyph: locationGlyph(key, l) }))
   );
 
   const skillLabel = SKILLS[src.types[current.key]?.skill ?? src.skill].label;
@@ -264,7 +270,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
   });
 
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Атака: ${src.label}`, icon: "fa-solid fa-khanda" },
+    window: { title: `Атака: ${src.label}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "attack-dialog"],
     position: { width: 560 },
     content,
@@ -277,7 +283,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
       }
     }),
     buttons: [{
-      action: "attack", label: "Атаковать", icon: "fa-solid fa-khanda", default: true,
+      action: "attack", label: "Атаковать", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -292,7 +298,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
           weight: f.weight?.value ?? "light"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;

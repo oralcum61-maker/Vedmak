@@ -20,7 +20,7 @@ import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
 import { performCheck, rollD10 } from "./module/dice/check.mjs";
-import { SYSTEM_ID } from "./module/util.mjs";
+import { SYSTEM_ID, forgetSetting } from "./module/util.mjs";
 import { registerStatusEffects } from "./module/combat/statuses.mjs";
 import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
@@ -40,6 +40,9 @@ import "./module/magic/effects.mjs";
 import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
+import { registerTokenFlip, flipToken } from "./module/apps/token-flip.mjs";
+import { registerFxSettings, registerFx } from "./module/fx/fx.mjs";
+import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
@@ -92,21 +95,35 @@ Hooks.once("init", () => {
   });
   game.settings.register(SYSTEM_ID, "combatHud", {
     name: "Боевой худ",
-    hint: "Полоса внизу экрана, пока идёт бой: показатели, атаки, защиты, знаки и алхимия того, кем вы играете.",
+    hint: "Пульт внизу экрана: показатели, оружие, защиты, магия, алхимия, действия и состояния того, кем вы играете.",
+    scope: "client", config: true, type: Boolean, default: true,
+    onChange: () => CombatHud.refresh()
+  });
+  game.settings.register(SYSTEM_ID, "hudOutOfCombat", {
+    name: "Худ вне боя",
+    hint: "Показывать худ и вне боя, когда выделен ваш токен: зелья, знаки, навыки и состояния под рукой.",
     scope: "client", config: true, type: Boolean, default: true,
     onChange: () => CombatHud.refresh()
   });
   game.settings.register(SYSTEM_ID, "combatHudCollapsed", {
     scope: "client", config: false, type: Boolean, default: false
   });
-  // Фактуры с наложением на цвет — самое дорогое в отрисовке окон (styles/vedmak.css, «Облегчённая графика»)
-  game.settings.register(SYSTEM_ID, "liteGraphics", {
-    name: "Облегчённая графика",
-    hint: "Листы, окна бросков, чат и худ — без фактур кожи, железа и пергамента. Цвета и раскладка те же, а рисуется быстрее: включите, если окна подтормаживают.",
-    scope: "client", config: true, type: Boolean, default: false,
-    onChange: value => document.body.classList.toggle("vedmak-lite", !!value)
+  // Курсоры системы (assets/cursors): в окнах — правилами styles/vedmak.css, на сцене — стилями указателя холста
+  game.settings.register(SYSTEM_ID, "themedCursor", {
+    name: "Курсоры системы",
+    hint: "Свои курсоры на все случаи: стальной клинок, кромка киновари над тем, что нажимается, латная перчатка для перетаскивания, прицел, песочные часы, курсоры размеров. Выключите, чтобы вернуть обычные.",
+    scope: "client", config: true, type: Boolean, default: true,
+    onChange: value => applyCursor(!!value)
   });
-  document.body.classList.toggle("vedmak-lite", !!game.settings.get(SYSTEM_ID, "liteGraphics"));
+  applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor"));
+  // Облегчённая графика: без фактур кожи, стали и зерна — для слабой видеокарты, которую делит холст сцены
+  game.settings.register(SYSTEM_ID, "lightGraphics", {
+    name: "Облегчённая графика",
+    hint: "Убирает фактуры кожи, стали и бумаги из окон, листов и чата: остаются цвета, объём и раскладка. Включите, если интерфейс подтормаживает.",
+    scope: "client", config: true, type: Boolean, default: false,
+    onChange: value => document.body.classList.toggle("vd-lite", !!value)
+  });
+  document.body.classList.toggle("vd-lite", !!game.settings.get(SYSTEM_ID, "lightGraphics"));
   // Какие компендиумы уже разложены по папкам: новые паки системы раскладываются при следующем запуске
   game.settings.register(SYSTEM_ID, "packFoldersDone", {
     scope: "world", config: false, type: String, default: ""
@@ -178,6 +195,13 @@ Hooks.once("init", () => {
     scope: "world", config: true, type: Boolean, default: true,
     onChange: () => game.actors.forEach(a => a.sheet?.rendered && a.sheet.render())
   });
+  // Запомненные значения настроек мира (worldSetting) забываются раньше своих onChange: те пересчитывают актёров,
+  // а хук updateSetting, который тоже сбрасывает запомненное, приходит уже после них
+  for (const [id, cfg] of game.settings.settings) {
+    if (cfg.namespace !== SYSTEM_ID || cfg.scope !== "world") continue;
+    const onChange = cfg.onChange;
+    cfg.onChange = (...args) => { forgetSetting(id.slice(SYSTEM_ID.length + 1)); return onChange?.(...args); };
+  }
 
   // Листы
   const DSC = foundry.applications.apps.DocumentSheetConfig;
@@ -203,9 +227,14 @@ Hooks.once("init", () => {
   registerBuffHooks();
   registerRaceHooks();
   CombatHud.registerHooks();
+  registerTokenFlip();
+  registerFxSettings();
+  registerFx();
+  registerMigrationSettings();
 
   // API для макросов
   game.vedmak = {
+    flipToken,
     performCheck, rollD10, attack, computeDamage, applyDamageToActor, rollStunSave, rollDeathSave,
     manualDamage, restTurn, restDays, controlCheck, castSpell,
     advancement, crafting, alchemy, enhancements,
@@ -219,7 +248,69 @@ Hooks.once("init", () => {
 Hooks.once("ready", () => {
   initSocket();
   sortCompendiaIntoFolders();
+  injectMetalDefs();
+  runMigrations();
 });
+
+/**
+ * Градиенты кованого металла для значков листа (части брони, инструменты, гнёзда): один раз на страницу,
+ * а не в шаблоне вкладки — в скрытой вкладке и при нескольких открытых листах ссылки url(#…) путались.
+ */
+function injectMetalDefs() {
+  if (document.getElementById("vd-metal-ok")) return;
+  const stops = c => c.map(([o, color]) => `<stop offset="${o}" stop-color="${color}"/>`).join("");
+  const grad = (id, c) => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops(c)}</linearGradient>`;
+  document.body.insertAdjacentHTML("beforeend", `<svg class="vd-defs" width="0" height="0" aria-hidden="true"><defs>${
+    grad("vd-metal-ok", [[0, "#f6f2ea"], [.45, "#b3ada2"], [.7, "#74706a"], [1, "#3e3d3a"]])}${
+    grad("vd-metal-worn", [[0, "#b9b4aa"], [.45, "#7d7972"], [.7, "#4f4d49"], [1, "#2c2b29"]])}${
+    grad("vd-metal-broken", [[0, "#f08a72"], [.45, "#c4452f"], [.7, "#7a2414"], [1, "#3a120a"]])}</defs></svg>`);
+}
+
+/* ------------------------------- Курсор ------------------------------- */
+
+/**
+ * Курсоры системы (assets/cursors, 32 × 32): переменная → файл, точка клика, системный запасной.
+ * Первые восемь — переменные самого Foundry v14 (CONFIG.cursors): ими пользуются правила ядра и холст сцены,
+ * «-down» — пока кнопка мыши зажата. Остальные — свои переменные под курсоры, которые ядро задаёт словом
+ * (угол окна, «нельзя», ожидание): их подхватывают правила «Курсоры» в styles/vedmak.css и стили холста ниже.
+ */
+const CURSORS = {
+  default: ["default", 2, 2, "default"], "default-down": ["default-down", 2, 2, "default"],
+  pointer: ["pointer", 11, 2, "pointer"], "pointer-down": ["pointer-down", 11, 2, "pointer"],
+  grab: ["grab", 16, 13, "grab"], "grab-down": ["grabbing", 16, 13, "grabbing"],
+  text: ["text", 16, 16, "text"], "text-down": ["text", 16, 16, "text"],
+  help: ["help", 2, 2, "help"], "not-allowed": ["not-allowed", 2, 2, "not-allowed"],
+  progress: ["progress", 2, 2, "progress"], wait: ["wait", 16, 16, "wait"],
+  crosshair: ["crosshair", 16, 16, "crosshair"], move: ["move", 16, 16, "move"], "zoom-in": ["zoom-in", 13, 13, "zoom-in"],
+  "ew-resize": ["ew-resize", 16, 16, "ew-resize"], "ns-resize": ["ns-resize", 16, 16, "ns-resize"],
+  "nwse-resize": ["nwse-resize", 16, 16, "nwse-resize"], "nesw-resize": ["nesw-resize", 16, 16, "nesw-resize"]
+};
+
+/**
+ * Курсоры системы: класс на body подменяет переменные курсоров Foundry, а холст сцены берёт курсоры
+ * из этих же переменных — так сделано и в ядре для «-down». Прямые картинки в стилях указателя холста
+ * не нужны: с ними курсор при нажатии слетал на системный.
+ */
+function applyCursor(on) {
+  document.body.classList.toggle("vedmak-cursor", on);
+  // Полный путь, а не относительный из CSS: в стиле холста (PIXI ставит его прямо на элемент) url() в переменной
+  // разрешается от адреса страницы, и относительный путь вёл в никуда — над сценой курсор становился системным
+  const url = (file, x, y) => `url("${foundry.utils.getRoute(`systems/vedmak/assets/cursors/${file}.svg`)}") ${x} ${y}`;
+  for (const [key, [file, x, y, fallback]] of Object.entries(CURSORS)) {
+    if (on) document.body.style.setProperty(`--cursor-${key}`, `${url(file, x, y)}, ${fallback}`);
+    else document.body.style.removeProperty(`--cursor-${key}`);
+  }
+  const styles = canvas?.app?.renderer?.events?.cursorStyles;
+  if (!styles) return;
+  // Ядро само заводит стили холста для своих восьми; режимы, которые холст ставит словом (линейка, сдвиг,
+  // «нельзя»), направляем на свои переменные — без них над сценой курсор становился системным
+  for (const key of Object.keys(CURSORS)) {
+    const mode = key === "grab-down" ? "grabbing" : key;
+    if (on) styles[mode] = `var(--cursor-${key})`;
+    else if (!(key in CONFIG.cursors)) delete styles[mode];
+  }
+}
+Hooks.on("canvasReady", () => applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor")));
 
 /**
  * Разложить компендиумы по папкам из манифеста.

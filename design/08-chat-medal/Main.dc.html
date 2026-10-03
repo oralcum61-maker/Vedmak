@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Клеймо: карточки чата</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0c0e}
+:root{--gr:url(/_blob/784969263f7ba820cf0ebd68b558df1b);--tl:url(/_blob/d9ae53c0be87d9174795a18ff9e535e5);--tp:url(/_blob/cb515963b8602c177752e2c2dda56b15);--ts:url(/_blob/41f36a4c2e204bee803c6361419e97ee);--tb:url(/_blob/f8ccc34e85cb53432e4f51665caab079)}
+button{font-family:'IBM Plex Sans',system-ui,sans-serif;cursor:pointer}
+button:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--gr),var(--tl),radial-gradient(130% 70% at 50% 0%,rgba(255,240,215,.04),transparent 55%,rgba(0,0,0,.35));background-size:160px 160px,512px 512px,100% 100%;background-blend-mode:overlay,overlay,normal}
+.msg{position:relative;background-color:#1f2024;background-image:var(--gr),var(--tp),linear-gradient(180deg,rgba(255,245,225,.07),rgba(255,245,225,0) 32%,rgba(0,0,0,.26));background-size:160px 160px,512px 512px,100% 100%;background-blend-mode:overlay,overlay,normal;border:1px solid #060708;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.rv{position:absolute;z-index:2;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f6f1e6 0,#aaa498 38%,#3c3b38 100%);box-shadow:0 1px 1px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.6)}
+.rv.tl{top:10px;left:6px}.rv.tr{top:10px;right:6px}.rv.bl{bottom:6px;left:6px}.rv.br{bottom:6px;right:6px}
+.mhead{display:flex;align-items:center;gap:8px;height:25px;padding:0 17px;background-color:#131417;background-image:var(--gr),var(--tb),linear-gradient(180deg,rgba(255,245,225,.07),rgba(0,0,0,.24));background-size:160px 160px,512px 512px,100% 100%;background-blend-mode:overlay,overlay,normal;border-bottom:1px solid #060708;border-radius:3px 3px 0 0;box-shadow:inset 0 1px 0 rgba(255,240,215,.08),0 1px 0 rgba(255,240,215,.05)}
+.who{flex-grow:1;font-family:Forum,serif;font-size:13.5px;letter-spacing:.03em;color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.when{font-size:10px;color:#8c867b}
+.del{display:grid;place-items:center;width:18px;height:18px;padding:0;color:#8c867b;background:transparent;border:0}
+.chead{display:flex;align-items:center;gap:10px;padding:10px 12px 9px}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;width:42px;height:42px;background-color:#0b0c0e;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08);overflow:hidden}
+.frame::after{content:"";position:absolute;inset:3px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.ident{flex-grow:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.cname{font-family:Forum,serif;font-size:17px;line-height:1.08;color:#f1ece0;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.csub{font-size:10.5px;line-height:1.35;color:#bab4a8}
+.well{flex-shrink:0;width:58px;height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background-color:#0c0d0f;background-image:var(--gr);background-size:160px 160px;background-blend-mode:overlay;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.85),inset 0 0 0 3px #0c0d0f,inset 0 0 0 4px rgba(226,221,208,.11),0 1px 0 rgba(255,240,215,.08)}
+.well b{font-family:Forum,serif;font-weight:400;font-size:30px;line-height:.9}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.blood{background:linear-gradient(180deg,#ffe1d8 0%,#e79a86 44%,#9a4a38 56%,#f3b9aa 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.cap{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#a8a296;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.body{display:flex;flex-direction:column;gap:8px;padding:0 12px 12px}
+.rolls{display:flex;align-items:center;gap:7px;padding:6px 9px;background-color:#0c0d0f;background-image:var(--gr);background-size:160px 160px;background-blend-mode:overlay;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,240,215,.07)}
+.die{position:relative;width:28px;height:30px;flex-shrink:0}
+.die svg{position:absolute;inset:0}
+.die b{position:absolute;left:0;right:0;top:6px;text-align:center;font-family:Forum,serif;font-weight:400;font-size:13.5px;line-height:1}
+.sum{flex-grow:1;text-align:right;font-size:11px;color:#a8a296}
+.sum b{font-family:Forum,serif;font-weight:400;font-size:15px;color:#e2ddd0}
+.mrow{display:flex;align-items:center;gap:10px;padding:3px 0}
+.mrow::before,.mrow::after{content:"";flex-grow:1;height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.06)}
+.mark{display:inline-flex;align-items:center;gap:9px;height:30px;padding:0 16px;border-radius:15px;transform:rotate(-2.5deg);background-color:#0e0f11;background-image:var(--gr),var(--ts);background-size:160px 160px,256px 256px;background-blend-mode:overlay,overlay;border:1px solid #040405;box-shadow:inset 0 2px 5px rgba(0,0,0,.95),inset 0 0 0 3px #0e0f11,inset 0 0 0 4px rgba(226,221,208,.22),0 1px 0 rgba(255,240,215,.1);font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;white-space:nowrap}
+.mark b{font-family:Forum,serif;font-weight:400;font-size:18px;letter-spacing:0;line-height:1}
+.mark .dot{width:3px;height:3px;border-radius:50%;background:#aaa498;box-shadow:0 1px 0 rgba(0,0,0,.9)}
+.mark.bad{background-color:#5a1a10;background-image:var(--gr),radial-gradient(ellipse 80% 70% at 50% 30%,rgba(255,160,130,.22),transparent 70%),linear-gradient(180deg,#8f301f,#4a150c);background-size:160px 160px,100% 100%,100% 100%;background-blend-mode:overlay,normal,normal;border-color:#2a0c06;box-shadow:inset 0 2px 5px rgba(20,0,0,.8),inset 0 0 0 3px #6e2215,inset 0 0 0 4px rgba(255,205,185,.3),0 1px 0 rgba(255,240,215,.1);color:#ffe7df;text-shadow:0 1px 0 rgba(40,6,0,.8)}
+.mark.bad .dot{background:#ffcfc1}
+.mark.sm{height:22px;padding:0 11px;border-radius:11px;font-size:9px;letter-spacing:.2em;transform:rotate(-3deg)}
+.heat{display:flex;align-items:center;gap:8px;padding:5px 9px 5px 6px;font-size:11px;line-height:1.35;color:#ffd39a;background-color:#120f0d;background-image:var(--gr);background-size:160px 160px;background-blend-mode:overlay;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 5px rgba(0,0,0,.8),0 1px 0 rgba(255,240,215,.06)}
+.heat b{font-weight:600;color:#ffe2b8}
+.fold{display:flex;align-items:center;gap:5px;padding:0;font-size:10.5px;color:#a8a296;background:transparent;border:0;text-align:left}
+.note{margin:0;font-size:11.5px;line-height:1.4;color:#d6d0c2}
+.sect{display:flex;flex-direction:column;gap:7px;padding:9px 12px 11px;border-top:1px solid #050607;box-shadow:inset 0 1px 0 rgba(255,240,215,.06);background:rgba(0,0,0,.16)}
+.shead{display:flex;align-items:center;gap:8px;margin:0;font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.shead::before{content:"";flex-shrink:0;width:5px;height:5px;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607}
+.shead::after{content:"";flex-grow:1;height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.target{display:flex;align-items:center;gap:8px;font-family:Forum,serif;font-size:15px;color:#f1ece0;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.defs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.dbtn{height:34px;padding:0;font-size:10.5px;color:#e2ddd0;background-color:#26272c;background-image:var(--gr),linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));background-size:160px 160px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.14),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 6px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.foot{display:flex;padding:0 12px 13px}
+.go{height:36px;width:100%;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 4px 10px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.quiet{height:32px;width:100%;font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#d6d0c2;background-color:#1a1b1f;background-image:var(--gr);background-size:160px 160px;background-blend-mode:overlay;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.08),0 2px 5px -2px rgba(0,0,0,.8)}
+.wound{display:flex;flex-direction:column;gap:5px;padding:9px 10px 10px;background-color:#0c0d0f;background-image:var(--gr);background-size:160px 160px;background-blend-mode:overlay;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,240,215,.07)}
+.wound .wn{font-family:Forum,serif;font-size:17px;line-height:1.1;color:#f1ece0;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.wound p{margin:0;font-size:11.5px;line-height:1.45;color:#d6d0c2}
+.seal{flex-shrink:0;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;color:#e2ddd0;background:#0b0c0e radial-gradient(circle at 50% 40%,rgba(255,245,225,.1),transparent 66%);border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),inset 0 0 0 3px #141518,inset 0 0 0 4px rgba(226,221,208,.15),0 1px 0 rgba(255,240,215,.08)}
+.tray{display:flex;flex-direction:column;padding:2px 9px;background-color:rgba(8,9,10,.46);background-image:var(--gr);background-size:160px 160px;background-blend-mode:overlay;border:1px solid rgba(0,0,0,.72);border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.04),0 1px 0 rgba(255,240,215,.05)}
+.lrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.55);box-shadow:0 1px 0 rgba(255,240,215,.04)}
+.lrow:last-child{border-bottom:0;box-shadow:none}
+.lrow .t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.lab{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#a8a296}
+.res{font-family:Forum,serif;font-size:15px;line-height:1.2;color:#f1ece0;text-shadow:0 1px 0 rgba(0,0,0,.85)}
+</style>
+</helmet>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="a-ok" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f2ea"></stop><stop offset=".5" stop-color="#c9c3b6"></stop><stop offset="1" stop-color="#7d7972"></stop></linearGradient>
+    <linearGradient id="a-max" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe2a6"></stop><stop offset=".45" stop-color="#e09a4a"></stop><stop offset="1" stop-color="#8a3a1c"></stop></linearGradient>
+  </defs>
+</svg>
+<div class="mat" style="width: 320px; min-height: 1600px; box-sizing: border-box; padding: 12px 10px; display: flex; flex-direction: column; gap: 12px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 12px; font-variant-numeric: tabular-nums">
+
+  <article class="msg">
+    <i class="rv tl"></i><i class="rv tr"></i><i class="rv bl"></i><i class="rv br"></i>
+    <header class="mhead"><span class="who">Геральт</span><span class="when">21:12</span><button type="button" class="del" aria-label="Удалить сообщение"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path></svg></button></header>
+    <div class="chead">
+      <div class="ident">
+        <span class="cname">Внимание</span>
+        <span class="csub">Интеллект 7 · Внимание 5</span>
+      </div>
+      <div class="well"><b class="metal">19</b><span class="cap">против 15</span></div>
+    </div>
+    <div class="body">
+      <div class="rolls">
+        <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-ok)" stroke="#050607" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">7</b></span>
+        <span class="sum">основа <b>12</b> + <b>7</b></span>
+      </div>
+      <div class="mrow"><span class="mark"><span class="metal">Успех</span><span class="dot"></span><b class="metal">4</b></span></div>
+      <button type="button" class="fold"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"></path></svg>из чего сложилось</button>
+    </div>
+  </article>
+
+  <article class="msg">
+    <i class="rv tl"></i><i class="rv tr"></i><i class="rv bl"></i><i class="rv br"></i>
+    <header class="mhead"><span class="who">Геральт</span><span class="when">21:14</span><button type="button" class="del" aria-label="Удалить сообщение"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path></svg></button></header>
+    <div class="chead">
+      <div class="frame"><img src="/_blob/aa8ce4b887755a5c7cf4bf4acebb1a14" alt="" style="width: 34px; height: 34px; object-fit: contain"></div>
+      <div class="ident">
+        <span class="cname">Ведьмачий стальной меч</span>
+        <span class="csub">Сильная атака · в Туловище</span>
+      </div>
+      <div class="well"><b class="metal">31</b><span class="cap">атака</span></div>
+    </div>
+    <div class="body">
+      <div class="rolls">
+        <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-max)" stroke="#3a1206" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(58,18,6,.55)" stroke-width=".8"></path></svg><b style="color: #2a0c04">10</b></span>
+        <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-ok)" stroke="#050607" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">4</b></span>
+        <span class="sum">основа <b>17</b> + <b>14</b></span>
+      </div>
+      <div class="heat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffb35c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3 4 4.5 4 8.5a4 4 0 0 1-8 0c0-1.6.8-2.7 1.6-3.6.3 1.3 1 2.1 1.9 2.4C11 8 11 5.5 12 3z"></path><path d="M6 21h12"></path></svg>
+        <span><b>Критический успех:</b> +4 сверх десятки</span>
+      </div>
+      <button type="button" class="fold"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"></path></svg>из чего сложилось</button>
+      <p class="note">Одна атака, урон ×2.</p>
+    </div>
+    <section class="sect">
+      <h4 class="shead">Защищается</h4>
+      <div class="target"><span class="frame" style="width: 28px; height: 28px"><img src="/_blob/d8430fbb63b16169af89bdc99439781a" alt="" style="width: 24px; height: 24px; object-fit: cover"></span>Утопец</div>
+      <div class="defs">
+        <button type="button" class="dbtn">Уклон</button>
+        <button type="button" class="dbtn">Позиция</button>
+        <button type="button" class="dbtn">Блок</button>
+        <button type="button" class="dbtn">Парир.</button>
+        <button type="button" class="dbtn">СЛ</button>
+      </div>
+    </section>
+    <footer class="foot" style="padding-top: 11px"><button type="button" class="quiet">Ещё атака</button></footer>
+  </article>
+
+  <article class="msg">
+    <i class="rv tl"></i><i class="rv tr"></i><i class="rv bl"></i><i class="rv br"></i>
+    <header class="mhead"><span class="who">Утопец</span><span class="when">21:14</span><button type="button" class="del" aria-label="Удалить сообщение"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path></svg></button></header>
+    <div class="chead">
+      <div class="frame"><img src="/_blob/d8430fbb63b16169af89bdc99439781a" alt="" style="width: 40px; height: 40px; object-fit: cover"></div>
+      <div class="ident">
+        <span class="cname">Утопец: Уклонение</span>
+        <span class="csub">против «Ведьмачий стальной меч» · Геральт 31</span>
+      </div>
+      <div class="well"><b class="metal">7</b><span class="cap">защита</span></div>
+    </div>
+    <div class="body">
+      <div class="rolls">
+        <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-ok)" stroke="#050607" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">3</b></span>
+        <span class="sum">основа <b>4</b> + <b>3</b></span>
+      </div>
+      <div class="mrow"><span class="mark bad">Попадание<span class="dot"></span><b>24</b></span></div>
+      <div class="heat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffb35c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3 4 4.5 4 8.5a4 4 0 0 1-8 0c0-1.6.8-2.7 1.6-3.6.3 1.3 1 2.1 1.9 2.4C11 8 11 5.5 12 3z"></path><path d="M6 21h12"></path></svg>
+        <span><b>Критическое ранение:</b> смертельное</span>
+      </div>
+    </div>
+    <footer class="foot"><button type="button" class="go">Урон</button></footer>
+  </article>
+
+  <article class="msg">
+    <i class="rv tl"></i><i class="rv tr"></i><i class="rv bl"></i><i class="rv br"></i>
+    <header class="mhead"><span class="who">Геральт</span><span class="when">21:15</span><button type="button" class="del" aria-label="Удалить сообщение"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path></svg></button></header>
+    <div class="chead">
+      <div class="frame"><img src="/_blob/aa8ce4b887755a5c7cf4bf4acebb1a14" alt="" style="width: 34px; height: 34px; object-fit: contain"></div>
+      <div class="ident">
+        <span class="cname">Урон: Утопец</span>
+        <span class="csub">Ведьмачий стальной меч · Туловище · рубящий</span>
+      </div>
+      <div class="well"><b class="blood">38</b><span class="cap">ПЗ</span></div>
+    </div>
+    <div class="body">
+      <button type="button" class="fold"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"></path></svg>из чего сложилось</button>
+      <div class="wound">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+          <span class="wn">Септический шок</span>
+          <span class="mark bad sm">Смертельное</span>
+        </div>
+        <span class="cap">критическое ранение · бросок 3</span>
+        <p>Вын ×¾, −3 к Инт, Воле, Реа и Лвк. Отравление.</p>
+      </div>
+    </div>
+    <footer class="foot"><button type="button" class="go">Применить</button></footer>
+  </article>
+
+  <article class="msg">
+    <i class="rv tl"></i><i class="rv tr"></i><i class="rv bl"></i><i class="rv br"></i>
+    <header class="mhead"><span class="who">Геральт</span><span class="when">21:30</span><button type="button" class="del" aria-label="Удалить сообщение"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path></svg></button></header>
+    <div class="chead">
+      <span class="seal"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h11a2 2 0 0 0 2-2v-1H10v1a2 2 0 1 1-4 0V5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2h4"></path><path d="M19 17V5a2 2 0 0 0-2-2H4"></path></svg></span>
+      <div class="ident">
+        <span class="cname">Жизненный путь</span>
+        <span class="csub">Геральт</span>
+      </div>
+    </div>
+    <div class="body" style="gap: 7px">
+      <h4 class="shead">Семья</h4>
+      <div class="tray">
+        <div class="lrow">
+          <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-ok)" stroke="#050607" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">4</b></span>
+          <div class="t"><span class="lab">Семья</span><span class="res">Хотя бы кто-то из семьи жив</span></div>
+        </div>
+        <div class="lrow">
+          <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-ok)" stroke="#050607" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">6</b></span>
+          <div class="t"><span class="lab">Родители</span><span class="res">Родители живы</span></div>
+        </div>
+      </div>
+      <h4 class="shead" style="margin-top: 3px">Братья и сёстры</h4>
+      <div class="tray">
+        <div class="lrow">
+          <span class="die"><svg viewBox="0 0 28 30" width="28" height="30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#a-ok)" stroke="#050607" stroke-width="1.2" stroke-linejoin="round"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">9</b></span>
+          <div class="t"><span class="lab">Сколько братьев и сестёр</span><span class="res">Единственный ребёнок</span></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":320,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

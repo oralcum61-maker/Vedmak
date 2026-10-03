@@ -19962,8 +19962,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Разделяющиеся боеприпас",
-    "type": "weapon",
+    "name": "Разделяющиеся боеприпасы",
+    "type": "gear",
     "quantity": 5
    },
    "surcharge": 0,
@@ -21301,8 +21301,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Краснолюдский пробивной боеприпас",
-    "type": "weapon",
+    "name": "Краснолюдские пробивные боеприпасы",
+    "type": "gear",
     "quantity": 5
    },
    "surcharge": 0,
@@ -22197,8 +22197,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Выслеживающий боеприпас",
-    "type": "weapon",
+    "name": "Выслеживающие боеприпасы",
+    "type": "gear",
     "quantity": 5
    },
    "surcharge": 0,
@@ -22278,8 +22278,8 @@
     "fulgur": 0
    },
    "result": {
-    "name": "Взрывной боеприпас",
-    "type": "weapon",
+    "name": "Взрывные боеприпасы",
+    "type": "gear",
     "quantity": 5
    },
    "surcharge": 0,

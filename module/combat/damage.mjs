@@ -3,7 +3,7 @@
 
 import {
   LOCATIONS_HUMANOID, LOCATIONS_MONSTER, CRIT_LEVELS, CRIT_WOUNDS, COVER, EFFECT_STATUS, STATUS_RESIST_KEY,
-  critWoundFor, aimedCritWound
+  critWoundFor, aimedCritWound, locationGlyph
 } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
@@ -19,7 +19,7 @@ const LEGS = ["rightLeg", "leftLeg"];
 const EFFECT_RESIST_KEY = { bleeding: "bleeding", poison: "poison", burning: "fire", freeze: "frost", staggering: null };
 
 /** Урон из карточки защиты. */
-export async function damageFromDefense(message, { skipDialog = false } = {}) {
+export async function damageFromDefense(message, { skipDialog = false, messageMode } = {}) {
   const def = message.flags.vedmak?.defense;
   if (!def?.canDamage) return null;
   const attacker = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
@@ -34,7 +34,7 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
   let cfg = {
     damageType: attack.weapon?.damageTypes?.[0] ?? "bludgeoning",
     location: def.fixedLocation || attack.aim || "",
-    cover: "none", mod: 0, adrenaline: 0, messageMode: defaultMessageMode()
+    cover: "none", mod: 0, adrenaline: 0, messageMode: messageMode ?? defaultMessageMode()
   };
   if (!skipDialog) {
     cfg = await damageDialog(attack, target, cfg, attacker);
@@ -90,8 +90,9 @@ async function damageDialog(attack, target, cfg, attacker) {
       subtitle: `${attack.label} · ${attack.typeLabel} · урон ${formula}${attack.nonLethal ? " (несмертельный)" : ""}`
     },
     damageTypes: types, manyTypes: types.length > 1, singleType: types[0]?.key ?? "bludgeoning",
-    locations: [{ key: "", label: "Броском", note: "d10", selected: !cfg.location }].concat(
-      Object.entries(table).map(([key, l]) => ({ key, label: l.label, note: l.mult === 0.5 ? "×½" : `×${l.mult}`, selected: key === cfg.location }))
+    locations: [{ key: "", label: "Броском", note: "d10", selected: !cfg.location, glyph: locationGlyph("") }].concat(
+      Object.entries(table).map(([key, l]) => ({ key, label: l.label, note: l.mult === 0.5 ? "×½" : `×${l.mult}`, selected: key === cfg.location,
+        glyph: locationGlyph(key, l) }))
     ),
     covers: Object.entries(COVER).map(([key, c]) => ({ key, label: c.label, sp: c.sp, selected: key === cfg.cover })),
     coverNote: COVER[cfg.cover]?.label ?? "",
@@ -100,7 +101,7 @@ async function damageDialog(attack, target, cfg, attacker) {
     ...commonFields()
   });
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Урон: ${target.name}`, icon: "fa-solid fa-droplet" },
+    window: { title: `Урон: ${target.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "damage-dialog"],
     position: { width: 520 },
     content,
@@ -116,7 +117,7 @@ async function damageDialog(attack, target, cfg, attacker) {
       }
     }),
     buttons: [{
-      action: "roll", label: "Бросить урон", icon: "fa-solid fa-dice", default: true,
+      action: "roll", label: "Бросить урон", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -125,7 +126,7 @@ async function damageDialog(attack, target, cfg, attacker) {
           messageMode: f.messageMode?.value || "public"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -502,10 +503,16 @@ export async function wearArmor(actor, wear) {
  * Наложить статус; с длительностью в раундах (число или формула) — отсчёт в начале хода цели.
  */
 export async function applyStatus(actor, status, rounds = "") {
-  await actor.toggleStatusEffect(status, { active: true });
+  // Отравление от токсичности — свой эффект со статусом «отравлен» (alchemy.mjs). Ядро сочло бы статус уже
+  // наложенным и не создало бы второго: яд оружия слился бы с ним и снялся бы вместе с токсичностью
+  const own = e => e.statuses.has(status) && e.statuses.size === 1 && !e.flags?.vedmak?.toxicPoison;
+  if (actor.effects.some(e => e.statuses.has(status)) && !actor.effects.some(own)) {
+    const data = await ActiveEffect.implementation.fromStatusEffect(status);
+    await actor.createEmbeddedDocuments("ActiveEffect", [data.toObject()]);
+  } else await actor.toggleStatusEffect(status, { active: true });
   if (!rounds) return;
   const n = Number.isFinite(Number(rounds)) ? Number(rounds) : (await new Roll(String(rounds)).evaluate()).total;
-  const effect = actor.effects.find(e => e.statuses.has(status) && e.statuses.size === 1);
+  const effect = actor.effects.find(own);
   if (effect && n > 0) await effect.update({ "flags.vedmak.statusRounds": n });
 }
 
@@ -560,9 +567,37 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   }
 });
 
-registerGMHandler("setStatus", async ({ uuid, status, active }) => {
+const actorOfRef = ref => resolveActor(ref?.tokenUuid) ?? resolveActor(ref?.actorUuid);
+
+/**
+ * Может ли отправитель менять статус цели. Ведущий и владелец цели — всегда. Остальным — только по карточке защиты
+ * (messageId), которую можно проверить на стороне ведущего:
+ *  • попадание: статус от приёма атаки (сбить с ног и т.п.) просит владелец атакующего, цель — защитник карточки;
+ *  • успешное парирование: «ошеломлён» на атакующем просит владелец защитника, а атакующий — из настоящей карточки атаки.
+ * Карточку защиты создаёт владелец защитника (или ведущий), поэтому подделать её на чужого защитника нельзя.
+ */
+function canSetStatus(userId, actor, status, active, messageId) {
+  if (userOwnsAny(userId, actor)) return true;
+  const card = game.messages.get(messageId);
+  const def = card?.flags.vedmak?.defense;
+  if (def?.kind !== "defense" || !active) return false;
+  const defender = actorOfRef(def.defender);
+  if (!defender || !userOwnsAny(card.author?.id, defender)) return false;
+  if (def.hit) {
+    return status === def.attack?.hitStatus && defender === actor && userOwnsAny(userId, actorOfRef(def.attack.attacker));
+  }
+  if (def.defense !== "parry" || status !== "staggered" || !userOwnsAny(userId, defender)) return false;
+  const attack = game.messages.get(def.attackMessageId)?.flags.vedmak?.attack;
+  return attack?.kind === "attack" && actorOfRef(attack.attacker) === actor;
+}
+
+registerGMHandler("setStatus", async ({ uuid, status, active, messageId }, userId) => {
   const actor = resolveActor(uuid);
-  if (actor) await actor.toggleStatusEffect(status, { active });
+  if (!actor || !CONFIG.statusEffects.some(s => s.id === status)) return;
+  if (!canSetStatus(userId, actor, status, !!active, messageId)) {
+    return console.warn(`vedmak | отклонена смена статуса от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  await actor.toggleStatusEffect(status, { active: !!active });
 });
 
 /** Кнопка «Применить». */

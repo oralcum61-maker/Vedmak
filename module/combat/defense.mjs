@@ -7,7 +7,8 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import {
-  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat
+  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat,
+  isReadyWeapon
 } from "./common.mjs";
 
 /** Чем можно блокировать или парировать. */
@@ -18,8 +19,8 @@ function defenseItems(actor, attack, defense) {
       out.push({ id: s.id, label: `${s.name} (щит, Ближний бой)`, skill: "melee", shield: true, item: s });
     }
     if (!(defense === "block" && attack.isRanged)) {
-      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged)
-        .sort((a, b) => b.system.equipped - a.system.equipped);
+      // Блокируют и парируют тем, что в руках
+      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged && isReadyWeapon(actor, w));
       for (const w of weapons) out.push({ id: w.id, label: `${w.name} (${SKILLS[w.system.skill]?.label ?? ""})`, skill: w.system.skill, item: w });
     }
   }
@@ -60,9 +61,10 @@ function priorDefense(message, defender) {
  * @param {ChatMessage} message — карточка атаки
  * @param {object} target — {tokenUuid, actorUuid, name} или пусто (выделенный токен)
  * @param {string} defense — ключ DEFENSE_TYPES или "none"
- * @param {object} [opts] — {skipDialog}
+ * @param {object} [opts] — {skipDialog, messageMode}; messageMode — когда карточку создаёт клиент ведущего за НИП:
+ *   режим чата ведущего для неё не годится
  */
-export async function defend(message, target, defense, { skipDialog = false } = {}) {
+export async function defend(message, target, defense, { skipDialog = false, messageMode } = {}) {
   const attack = message.flags.vedmak?.attack;
   if (!attack) return null;
   const info = target?.tokenUuid || target?.actorUuid ? target : fallbackDefender();
@@ -74,7 +76,7 @@ export async function defend(message, target, defense, { skipDialog = false } = 
   if (attack.spell && !attack.spell.works) return ui.notifications.warn("Магия не сработала — защищаться не от чего.");
   // Одна защита цели от одной атаки: повторная — только ведущим и с подтверждением
   if (priorDefense(message, defender) && !(await allowRepeat(`${actor.name} уже защищался от этой атаки.`))) return null;
-  const mode = defaultMessageMode();
+  const mode = messageMode ?? defaultMessageMode();
   if (defense === "none") return defendAgainstDC(message, attack, actor, defender, { skipDialog, messageMode: mode });
   if (defense === "auto") return defendAuto(message, attack, actor, defender, { messageMode: mode });
   if (defense === "willx3") {
@@ -195,7 +197,7 @@ async function defenseDialog(actor, attack, cfg, items) {
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
   });
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Защита: ${actor.name}`, icon: "fa-solid fa-shield-halved" },
+    window: { title: `Защита: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "defense-dialog"],
     position: { width: 520 },
     content,
@@ -204,7 +206,7 @@ async function defenseDialog(actor, attack, cfg, items) {
       mods: form => -(Math.max(1, Number(form.elements.outnumbered?.value) || 1) - 1)
     }),
     buttons: [{
-      action: "defend", label: "Защищаться", icon: "fa-solid fa-shield-halved", default: true,
+      action: "defend", label: "Защищаться", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         const defense = f.defense.value;
@@ -216,7 +218,7 @@ async function defenseDialog(actor, attack, cfg, items) {
           outnumbered: Math.max(1, Number(f.outnumbered.value) || 1)
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -287,10 +289,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
       fixedLocation = Math.random() < 0.5 ? "rightArm" : "leftArm";
       notes.push("Удар принят на руку: урон по подставленной конечности, броня работает.");
     }
-    if (cfg.defense === "parry") {
-      notes.push("Парирование: атака отменена, атакующий ошеломлён.");
-      await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true });
-    }
+    if (cfg.defense === "parry") notes.push("Парирование: атака отменена, атакующий ошеломлён.");
     if (cfg.defense === "reposition") notes.push(`Можно сместиться на ${Math.floor(actor.system.stats.spd.effective / 2)} м.`);
     if (attack.attackType === "charge" && cfg.defense === "block") notes.push("Атака с разбега заблокирована: встречная Сила против Силы, чтобы сбить с ног.");
   }
@@ -303,7 +302,12 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
     fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
   });
-  return postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+  const card = await postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+  // Ошеломление атакующего — после карточки: ведущий проверяет по ней, что парирование было и кто парировал
+  if (!hit && cfg.defense === "parry" && card) {
+    await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true, messageId: card.id });
+  }
+  return card;
 }
 
 /** Карточка защиты в чат и отметка на карточке атаки (погасить кнопки этой цели). */
@@ -347,7 +351,7 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
         <span class="tot-hint">Попадание, если атака больше итоговой СЛ</span>
       </footer></div>`;
     const res = await foundry.applications.api.DialogV2.wait({
-      window: { title: `Без защиты: ${actor.name}`, icon: "fa-solid fa-bullseye" },
+      window: { title: `Без защиты: ${actor.name}` },
       classes: ["vedmak", "vedmak-dialog", "check-dialog"], position: { width: 460 }, content,
       render: (event, dialog) => bindDialog(dialog, {
         extra: form => {
@@ -356,9 +360,9 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
           if (out) out.textContent = String((Number(form.elements.dc.value) || 0) + (Number(size?.dataset.mod) || 0));
         }
       }),
-      buttons: [{ action: "ok", label: "Сравнить", icon: "fa-solid fa-bullseye", default: true,
+      buttons: [{ action: "ok", label: "Сравнить", default: true,
         callback: (e, b) => ({ dc: Number(b.form.elements.dc.value) || 0, size: b.form.elements.size.value }) },
-        { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+        { action: "cancel", label: "Отмена" }],
       rejectClose: false
     });
     if (!res || res === "cancel") return null;

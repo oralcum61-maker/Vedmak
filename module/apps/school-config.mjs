@@ -23,7 +23,7 @@ export class SchoolConfig extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "vedmak-schools",
     tag: "form",
     classes: ["vedmak", "vedmak-dialog", "school-config"],
-    window: { title: "Ведьмачьи школы", icon: "fa-solid fa-shield-cat", resizable: true },
+    window: { title: "Ведьмачьи школы", resizable: true },
     position: { width: 720, height: 760 },
     form: { handler: SchoolConfig.#onSubmit, closeOnSubmit: true },
     actions: {

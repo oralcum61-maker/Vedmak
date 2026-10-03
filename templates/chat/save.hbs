@@ -5,7 +5,7 @@
       {{#if reason}}<span class="card-sub">{{reason}}</span>{{/if}}
     </div>
     {{#unless immune}}
-    <div class="card-value">
+    <div class="card-value">{{vedmakRing die}}
       <b>{{die}}</b>
       <span class="cap">нужно &lt; {{threshold}}</span>
     </div>
@@ -17,7 +17,7 @@
       <div class="outcome success">Невосприимчив</div>
     {{else}}
       <div class="roll-line">
-        <span class="dice"><span class="die d10{{#if (eq die 10)}} max{{/if}}{{#if (eq die 1)}} min{{/if}}">{{die}}</span></span>
+        <span class="dice">{{> "systems/vedmak/templates/chat/parts/die.hbs" v=die}}</span>
         <span class="roll-sum">d10 против порога <b>{{threshold}}</b> · равно — провал</span>
       </div>
       <details class="roll-parts">

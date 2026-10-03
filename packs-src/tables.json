@@ -521,7 +521,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
+     10,
      10
     ],
     "drawn": false,

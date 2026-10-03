@@ -1,4 +1,14 @@
 <section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  {{#with weaponKey}}
+  <div class="vi-key">
+    <div class="vi-acc" data-tooltip="Точность: прибавка к броску атаки">
+      {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=accuracy cls="vi-m54"}}
+      <span class="vd-cap">точность</span>
+    </div>
+    <div class="vi-well vi-dmg"><b>{{damage}}</b><span class="vd-cap">урон{{#if types}} · {{types}}{{/if}}</span></div>
+    {{#if relMax}}<div class="vi-well vi-rel"><span class="vd-cap">надёжность {{relValue}} / {{relMax}}</span>{{vedmakNotches relValue relMax}}</div>{{/if}}
+  </div>
+  {{/with}}
   <fieldset class="vd-fieldset">
     <legend>Оружие</legend>
     {{!-- Точность, урон и надёжность — исходные: модификации арбалета прибавляются при подготовке и в данные не пишутся --}}

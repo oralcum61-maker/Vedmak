@@ -1,2 +1,3 @@
-Forum (Денис Машаров) и PT Serif (ParaType) — лицензия SIL Open Font License 1.1,
-тексты лицензий рядом: OFL-forum.txt, OFL-ptserif.txt. Файлы взяты из репозитория google/fonts.
+Forum (Денис Машаров) и IBM Plex Sans (IBM, Майк Эбберт и Bold Monday) — лицензия SIL Open Font License 1.1,
+тексты лицензий рядом: OFL-forum.txt, OFL-ibmplexsans.txt. Файлы взяты из репозитория google/fonts.
+IBM Plex Sans — вариативный (начертания 100–700, ширина 85–100 %), прямой и курсив.

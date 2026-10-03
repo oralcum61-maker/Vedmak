@@ -183,7 +183,7 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
       classes: ["vedmak", "vedmak-dialog", "check-dialog", "craft-window"], position: { width: 520 }, content,
       render: (event, dialog) => bindDialog(dialog),
       buttons: [{
-        action: "craft", label: "Изготовить", icon: "fa-solid fa-hammer", default: true,
+        action: "craft", label: "Изготовить", default: true,
         callback: (event, button) => {
           const f = button.form.elements;
           return {
@@ -192,7 +192,7 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
             messageMode: game.settings.get("core", "messageMode")
           };
         }
-      }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+      }, { action: "cancel", label: "Отмена" }],
       rejectClose: false
     });
     if (!cfg || cfg === "cancel") return null;
@@ -363,7 +363,7 @@ export async function repair(actor, item) {
   const lines = req.components.map(c => `<li class="${c.ok ? "ok" : "no"}">${c.name}: ${c.have}/${c.need}</li>`).join("");
   const tools = req.tools.map(t => `<li class="${t.ok ? "ok" : "no"}">${t.label}</li>`).join("");
   const ok = await DialogV2.confirm({
-    window: { title: `Починка: ${item.name}`, icon: "fa-solid fa-screwdriver-wrench" },
+    window: { title: `Починка: ${item.name}` },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog craft-dialog"><p>Изготовление, СЛ <b>${dc}</b> (чертёж ${recipe.system.dc} − 5${enhancementCount(item) ? ` + 2 × ${enhancementCount(item)}` : ""}).</p>
       <p>Нужно по 1 единице компонентов:</p><ul class="req">${lines}</ul><ul class="req">${tools}</ul>
@@ -409,7 +409,7 @@ export async function disassemble(actor, item) {
   if (!recipe) return ui.notifications.warn(`Нет чертежа для «${item.name}» — неизвестно, из чего он сделан.`);
   const parts = recipe.system.components.map(c => ({ name: c.name, n: Math.max(1, Math.floor(c.quantity / 2)) }));
   const ok = await DialogV2.confirm({
-    window: { title: `Разборка: ${item.name}`, icon: "fa-solid fa-hammer" },
+    window: { title: `Разборка: ${item.name}` },
     content: `<p>Разобрать «${item.name}»? Получите: ${parts.map(p => `${p.name} ×${p.n}`).join(", ")}.</p>`
   });
   if (!ok) return null;

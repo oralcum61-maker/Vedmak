@@ -1,43 +1,54 @@
 <section class="tab bio-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
-  <div class="vd-panel details">
-    <h3>О персонаже</h3>
-    <div class="details-grid">
-      <label>Возраст <input type="text" name="system.details.age" value="{{system.details.age}}"></label>
-      <label>Пол <input type="text" name="system.details.gender" value="{{system.details.gender}}"></label>
-      <label>Родина <input type="text" name="system.details.homeland" value="{{system.details.homeland}}"></label>
-      <label>Родной язык <input type="text" name="system.details.languageNative" value="{{system.details.languageNative}}"></label>
-      <label>Внешность <input type="text" name="system.details.appearance" value="{{system.details.appearance}}"></label>
-      <label>Характер <input type="text" name="system.details.personality" value="{{system.details.personality}}"></label>
-      <label>Ценности <input type="text" name="system.details.values" value="{{system.details.values}}"></label>
-      <label>Слава <input type="text" name="system.reputation.fame" value="{{system.reputation.fame}}"></label>
-      {{#if isWitcher}}
-      <label>Ведьмачья школа <select name="system.details.school">{{selectOptions schoolOptions selected=system.details.school}}</select></label>
-      {{/if}}
+
+  {{!-- Досье: сведения строками слева (и медальон школы у ведьмака), облик, нрав и ценности — цитатами справа --}}
+  <div class="vd-panel dossier">
+    <div class="group-head"><span class="bronze-tag">Досье</span><span class="rule"></span></div>
+    <div class="dossier-cols">
+      <div class="facts">
+        <label class="line"><span class="cap">Возраст</span><input type="text" name="system.details.age" value="{{system.details.age}}" placeholder="—"></label>
+        <label class="line"><span class="cap">Пол</span><input type="text" name="system.details.gender" value="{{system.details.gender}}" placeholder="—"></label>
+        <label class="line"><span class="cap">Родина</span><input type="text" name="system.details.homeland" value="{{system.details.homeland}}" placeholder="—"></label>
+        <label class="line"><span class="cap">Родной язык</span><input type="text" name="system.details.languageNative" value="{{system.details.languageNative}}" placeholder="—"></label>
+        <label class="line"><span class="cap">Слава</span><input type="text" name="system.reputation.fame" value="{{system.reputation.fame}}" placeholder="—"></label>
+        {{#if isWitcher}}
+        <div class="line school">
+          <span class="cap">Школа</span>
+          <span class="medal"><img src="{{schoolCard.img}}" alt=""></span>
+          <span class="school-body">
+            <select name="system.details.school" aria-label="Ведьмачья школа">{{selectOptions schoolOptions selected=system.details.school}}</select>
+            {{#if schoolHint}}<span class="school-note">{{schoolHint}}</span>{{/if}}
+          </span>
+        </div>
+        {{/if}}
+      </div>
+      <div class="quotes">
+        <label class="quote"><span class="cap">Внешность</span><textarea name="system.details.appearance" rows="2" placeholder="Как выглядит">{{system.details.appearance}}</textarea></label>
+        <label class="quote"><span class="cap">Характер</span><textarea name="system.details.personality" rows="2" placeholder="Каков нравом">{{system.details.personality}}</textarea></label>
+        <label class="quote"><span class="cap">Ценности</span><textarea name="system.details.values" rows="2" placeholder="Что ценит больше всего">{{system.details.values}}</textarea></label>
+      </div>
     </div>
-    {{#if schoolHint}}<p class="hint">{{schoolHint}}</p>{{/if}}
   </div>
 
-  {{!-- Жизненный путь карточками: броски в system.lifepath, общий подшаблон с мастером создания --}}
+  {{!-- Летопись — жизненный путь: броски в system.lifepath, карточки правки — общий подшаблон с мастером создания --}}
   <div class="vd-panel lifepath-panel">
-    <div class="panel-head">
-      <h3>Жизненный путь</h3>
+    <div class="group-head">
+      <span class="bronze-tag">Летопись</span><span class="rule"></span>
       {{#if editable}}
       <div class="panel-tools">
         {{#if lifepath}}
           {{#if lifepath.next}}
-          <a data-action="lifepathSection" data-tooltip="Бросить раздел «{{lifepath.next.cardTitle}}» — каждый бросок в чат"><i class="fa-solid fa-forward-step"></i></a>
-          <a data-action="lifepathRest" data-tooltip="Добросить всё оставшееся — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i></a>
+          <a class="mini" data-action="lifepathSection" data-tooltip="Бросить раздел «{{lifepath.next.cardTitle}}» — каждый бросок в чат"><i class="fa-solid fa-forward-step"></i></a>
+          <a class="mini" data-action="lifepathRest" data-tooltip="Добросить всё оставшееся — одной карточкой в чат"><i class="fa-solid fa-forward-fast"></i></a>
           {{/if}}
           {{#if lifepath.edit}}
-          <label class="lp-age" data-tooltip="Возраст для событий: по одному на каждые полные 10 лет (у ведьмака — десятилетия странствий)">Возраст
+          <label class="lp-age-field" data-tooltip="Возраст для событий: по одному на каждые полные 10 лет (у ведьмака — десятилетия странствий)">Возраст
             <input type="number" data-lp-age value="{{lifepath.age}}" min="0"></label>
-          <a data-action="lifepathRerollAll" data-tooltip="Перебросить весь путь"><i class="fa-solid fa-dice"></i></a>
-          <a data-action="lifepathClear" data-tooltip="Убрать жизненный путь"><i class="fa-solid fa-trash"></i></a>
+          <a class="mini" data-action="lifepathRerollAll" data-tooltip="Перебросить весь путь"><i class="fa-solid fa-dice"></i></a>
+          <a class="mini" data-action="lifepathClear" data-tooltip="Убрать жизненный путь"><i class="fa-solid fa-trash"></i></a>
           {{/if}}
-          <a data-action="lifepathEdit" data-tooltip="{{#if lifepath.edit}}Готово{{else}}Перебросить или выбрать результаты{{/if}}">
-            <i class="fa-solid {{#if lifepath.edit}}fa-check{{else}}fa-pen{{/if}}"></i></a>
+          <button type="button" class="go-btn steel" data-action="lifepathEdit" data-tooltip="{{#if lifepath.edit}}Закончить правку{{else}}Перебросить или выбрать результаты{{/if}}">{{#if lifepath.edit}}Готово{{else}}Править{{/if}}</button>
         {{else}}
-          <a class="roll-btn" data-action="lifepathRoll" data-tooltip="Бросать по таблицам корника, по одному броску — каждый в чат. Раса, происхождение и возраст — с листа"><i class="fa-solid fa-dice"></i> Бросить</a>
+          <button type="button" class="go-btn blood" data-action="lifepathRoll" data-tooltip="Бросать по таблицам корника, по одному броску — каждый в чат. Раса, происхождение и возраст — с листа">Бросить путь</button>
         {{/if}}
       </div>
       {{/if}}
@@ -51,7 +62,7 @@
       {{/if}}
       {{#if lifepath.summary.length}}
       <div class="lp-summary">
-        <span class="lp-cap">Итоги</span>
+        <span class="cap">Итоги пути</span>
         <ul>{{#each lifepath.summary}}<li>{{this}}</li>{{/each}}</ul>
       </div>
       {{/if}}
@@ -63,39 +74,51 @@
 
   {{#if race.system.traits.length}}
   <div class="vd-panel traits-panel">
-    <h3>{{race.name}} <span class="hint-inline">особенности расы</span></h3>
-    <div class="traits">
+    <div class="group-head"><span class="bronze-tag">{{race.name}} · особенности</span><span class="rule"></span></div>
+    <div class="trait-grid">
       {{#each race.system.traits}}
-      <p class="trait-line"><b>{{name}}</b> — {{effect}}</p>
+      <div class="trait"><h4>{{name}}</h4><p>{{effect}}</p></div>
       {{/each}}
     </div>
   </div>
   {{/if}}
 
-  {{!-- Социальный статус переехал во вкладку «Бой» → «Социальный бой» --}}
+  {{!-- Зависимости: дни без дозы засечками, проверка словами (Воля − дни) --}}
   <div class="vd-panel addictions">
-      <h3>Зависимости <a data-action="addictionAdd" data-tooltip="Добавить зависимость"><i class="fa-solid fa-plus"></i></a></h3>
-      {{#each system.addictions as |a|}}
-      <div class="addiction-row" data-index="{{@index}}">
-        <input type="text" name="system.addictions.{{@index}}.name" value="{{a.name}}" placeholder="Объект зависимости">
-        <label data-tooltip="Дней без дозы">Дней <input type="number" name="system.addictions.{{@index}}.days" value="{{a.days}}" min="0"></label>
-        <a data-action="addictionRoll" data-tooltip="Проверка без дозы: d10 меньше Воли − дни"><i class="fa-solid fa-certificate"></i></a>
-        <a data-action="addictionDay" data-tooltip="Прошёл день без дозы"><i class="fa-solid fa-calendar-plus"></i></a>
-        <a data-action="addictionDose" data-tooltip="Доза принята: дни и ломка сбрасываются"><i class="fa-solid fa-prescription-bottle"></i></a>
-        <a data-action="addictionDelete" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+    <div class="group-head"><span class="bronze-tag">Зависимости</span><span class="rule"></span>
+      <a class="add" data-action="addictionAdd" data-tooltip="Добавить зависимость">+ Добавить</a></div>
+    {{#if addictionRows.length}}
+    <div class="addiction-grid">
+      {{#each addictionRows as |a|}}
+      <div class="addiction" data-index="{{a.index}}">
+        <div class="add-head">
+          <input type="text" class="add-name" name="system.addictions.{{a.index}}.name" value="{{a.name}}" placeholder="Объект зависимости" aria-label="Объект зависимости">
+          <span class="tally" data-tooltip="{{a.days}} дн. без дозы">{{#each a.tally}}<i></i>{{/each}}</span>
+          <label class="days" data-tooltip="Дней без дозы"><input type="number" name="system.addictions.{{a.index}}.days" value="{{a.days}}" min="0" aria-label="Дней без дозы"> дн.</label>
+        </div>
+        <span class="dim">{{a.checkText}}</span>
+        <div class="add-tools">
+          <button type="button" class="go-btn steel" data-action="addictionRoll" data-tooltip="Проверка без дозы: d10 меньше Воли − дни">Проверка</button>
+          <button type="button" class="go-btn steel" data-action="addictionDay" data-tooltip="Прошёл день без дозы">+ день</button>
+          <button type="button" class="go-btn steel" data-action="addictionDose" data-tooltip="Доза принята: дни и ломка сбрасываются">Доза</button>
+          <span class="grow"></span>
+          <a class="mini" data-action="addictionDelete" data-tooltip="Убрать"><i class="fa-solid fa-trash"></i></a>
+        </div>
       </div>
-      {{else}}<p class="hint">Зависимостей нет.</p>
       {{/each}}
-      <p class="hint">Доза нужна каждый день. Избавиться — провести 3 недели без доступа к объекту зависимости (стр. 32).</p>
+    </div>
+    {{/if}}
+    <p class="hint">{{#unless addictionRows.length}}Зависимостей нет. {{/unless}}Доза нужна каждый день. Избавиться — провести 3 недели без доступа к объекту зависимости (стр. 32).</p>
   </div>
 
-  <div class="vd-panel editor-panel">
-    <h3>История</h3>
-    {{formInput systemFields.biography value=system.biography enriched=enrichedBiography toggled=true}}
-  </div>
-
-  <div class="vd-panel editor-panel">
-    <h3>Заметки</h3>
-    {{formInput systemFields.notes value=system.notes enriched=enrichedNotes toggled=true}}
+  <div class="notes-row">
+    <div class="vd-panel editor-panel">
+      <div class="group-head"><span class="bronze-tag">История</span><span class="rule"></span></div>
+      {{formInput systemFields.biography value=system.biography enriched=enrichedBiography toggled=true}}
+    </div>
+    <div class="vd-panel editor-panel">
+      <div class="group-head"><span class="bronze-tag">Заметки</span><span class="rule"></span></div>
+      {{formInput systemFields.notes value=system.notes enriched=enrichedNotes toggled=true}}
+    </div>
   </div>
 </section>

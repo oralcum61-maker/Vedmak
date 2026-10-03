@@ -1,5 +1,6 @@
 // Персонаж игрока (корник стр. 20–60).
 
+import { worldSetting } from "../../util.mjs";
 import { int, str, html } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
 import { SOCIAL_TABLE, REGIONS, witcherSchools, abilityBonus, socialLabel } from "../../config/character.mjs";
@@ -87,6 +88,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     // Древо профессии: Энергия и порог токсичности
     let toxicity = 0;
+    if (prof?.definingSkill?.mechanic) {
+      const b = abilityBonus(prof.definingSkill.mechanic, prof.definingSkill.value);
+      extra.vigor += b.vigor ?? 0;
+      toxicity += b.toxicity ?? 0;
+    }
     for (const branch of prof?.branches ?? []) {
       for (const ab of branch.abilities) {
         const b = abilityBonus(ab.mechanic, ab.value);
@@ -128,7 +134,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
   socialStatus(regionKey) {
     let region = regionKey || this.social.region;
     if (!region) {
-      try { region = game.settings.get("vedmak", "region"); } catch { region = "north"; }
+      region = worldSetting("region", "north");
     }
     const row = SOCIAL_TABLE[region] ?? SOCIAL_TABLE.north;
     const status = { region, regionLabel: REGIONS[region]?.label ?? region, level: "equal", feared: !!this.social.feared };

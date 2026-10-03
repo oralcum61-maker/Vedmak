@@ -9,7 +9,7 @@
         {{#each optional}}
         <label class="chip" {{#if hint}}data-tooltip="{{hint}}"{{/if}}>
           <input type="checkbox" name="optional.{{index}}" data-mod="{{value}}" {{checked checked}}>
-          <span>{{label}} <b>{{vedmakSigned value}}</b></span>
+          <span>{{label}} <b class="{{#if (lt value 0)}}neg{{else}}pos{{/if}}">{{vedmakSigned value}}</b></span>
         </label>
         {{/each}}
       </div>

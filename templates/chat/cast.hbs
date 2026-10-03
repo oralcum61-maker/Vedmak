@@ -5,7 +5,7 @@
       <span class="card-name">{{label}}</span>
       <span class="card-sub">{{kindLabel}} · {{levelLabel}}{{#if elementLabel}} · {{elementLabel}}{{/if}}</span>
     </div>
-    <div class="card-value arcane">
+    <div class="card-value arcane">{{vedmakRing roll.dice}}
       <b>{{roll.total}}</b>
       <span class="cap">{{#if dc}}против {{dc}}{{else}}сотворение{{/if}}</span>
     </div>
@@ -42,13 +42,13 @@
     <div class="target-row" data-target-token="{{tokenUuid}}" data-target-actor="{{actorUuid}}">
       <div class="target-name"><img src="{{img}}" alt=""><span class="name">{{name}}</span></div>
       <div class="defense-buttons">
-        {{#each ../defenseButtons}}<button type="button" data-vedmak="defend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+        {{#each ../defenseButtons}}<button type="button" data-vedmak="defend" data-defense="{{key}}" data-tooltip="{{label}}"><span>{{short}}</span></button>{{/each}}
       </div>
     </div>
     {{else}}
     <div class="target-row any">
       <div class="defense-buttons">
-        {{#each defenseButtons}}<button type="button" data-vedmak="defend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+        {{#each defenseButtons}}<button type="button" data-vedmak="defend" data-defense="{{key}}" data-tooltip="{{label}}"><span>{{short}}</span></button>{{/each}}
       </div>
     </div>
     {{/each}}
@@ -57,7 +57,7 @@
 
   {{#if isRitual}}
   <div class="card-buttons">
-    <button type="button" class="quiet" data-vedmak="ritualFocus"><i class="fa-solid fa-circle-notch"></i> Концентрация при прерывании</button>
+    <button type="button" class="quiet" data-vedmak="ritualFocus">Концентрация при прерывании</button>
   </div>
   {{/if}}
 </div>

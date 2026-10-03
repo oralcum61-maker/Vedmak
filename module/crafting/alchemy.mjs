@@ -14,13 +14,15 @@ import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { postCard, resolveActor, tokenDistance } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens } from "../combat/zones.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS } from "../combat/zones.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
 import { alchemyAuto, anyoneCanDrink } from "../config/alchemy-auto.mjs";
 import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
 import { inCombat, roundsAsTime } from "../util.mjs";
+import { timeIsUp } from "../magic/timed.mjs";
+import { deleteEffectsClamped } from "../magic/buffs.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -73,7 +75,8 @@ export async function drink(actor, item) {
     if (!check?.success) {
       await spendOne(item);
       await applyStatus(actor, "poisoned");
-      return card(actor, item.name, ["Организм не выдержал ведьмачьего эликсира: персонаж отравлен, эффект не действует."], { subtitle: ALCHEMY_KINDS[s.kind] });
+      return card(actor, item.name, ["Организм не выдержал ведьмачьего эликсира: персонаж отравлен, эффект не действует."],
+        { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "drink", color: "green" } } });
     }
   }
 
@@ -143,7 +146,8 @@ export async function drink(actor, item) {
       system: { changes },
       flags: { vedmak: { alchemy: { toxicity: s.toxicity, kind: s.kind, itemName: item.name, at: Date.now() }, ...triggers } }
     };
-    if (minutes) effect.duration = { value: minutes, units: "minutes" };
+    // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+    if (minutes) effect.duration = { value: minutes, units: "minutes", expiry: null };
     if (rounds || regen || auto.regen !== undefined) {
       // Вне боя раунды не отсчитываются — срок ставится временем мира; регенерация идёт, если начнётся бой
       const combat = inCombat(actor);
@@ -182,12 +186,13 @@ export async function drink(actor, item) {
     if (t.total > t.max) {
       await applyToxicPoison(actor);
       lines.push("Порог превышен — персонаж отравлен, пока токсичность не спадёт или он не пройдёт Стойкость СЛ 18 (это отменит последний эликсир).");
-      buttons.push({ action: "toxicitySave", label: "Стойкость СЛ 18", icon: "fa-solid fa-shield-virus" });
+      buttons.push({ action: "toxicitySave", label: "Стойкость СЛ 18" });
     } else if (await clearToxicPoison(actor)) {
       lines.push("Токсичность в пределах порога — отравление от неё прошло.");
     }
   }
-  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons, rolls });
+  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons, rolls,
+    flags: { fx: { kind: "drink", color: s.kind === "elixir" ? "violet" : s.kind === "decoction" ? "red" : "green" } } });
 }
 
 registerChatAction("toxicitySave", async message => {
@@ -197,25 +202,57 @@ registerChatAction("toxicitySave", async message => {
   if (!check?.success) return;
   const last = alchemyEffects(actor).at(-1);
   if (last) await last.delete({ vedmakToxicityChecked: true });
-  if (actor.statuses.has("poisoned")) await actor.toggleStatusEffect("poisoned", { active: false });
+  // Снимается отравление от токсичности; яд оружия и прочее — само по себе
+  await dropToxicPoison(actor);
   return card(actor, "Токсичность", [`Отравление прошло${last ? `; эффект «${last.name}» отменён` : ""}.`]);
 });
 
 /* ------------------------- Отравление токсичностью ------------------------- */
 
-/** Эффект-статус «Отравлен», наложенный токсичностью (флаг `toxicPoison`). */
-const toxicPoisonEffect = actor => actor.effects.find(e => e.flags?.vedmak?.toxicPoison && e.statuses.has("poisoned"));
+/** Эффект «Отравлен», наложенный токсичностью (флаг `toxicPoison`). */
+const toxicPoisonEffect = actor => actor.effects.find(e => e.flags?.vedmak?.toxicPoison);
 
 /**
- * Отравить токсичностью. Отравление из другого источника (яд, оружие) не трогаем и не помечаем:
- * снимать его, когда токсичность спадёт, нельзя.
+ * Очередь на актора: проверки токсичности идут из хуков и из начала хода одновременно, и без неё две из них
+ * удаляли один и тот же эффект («does not exist»), а снятие по порогу обгоняло снятие истёкших зелий.
+ * Внутри очереди нельзя вызывать другие функции с очередью — они ждали бы сами себя.
  */
-async function applyToxicPoison(actor) {
-  if (actor.statuses.has("poisoned")) return;
-  await applyStatus(actor, "poisoned");
-  const effect = actor.effects.find(e => e.statuses.has("poisoned") && e.statuses.size === 1);
-  if (effect) await effect.update({ "flags.vedmak.toxicPoison": true });
+const queues = new Map();
+function exclusive(actor, task) {
+  const key = actor.uuid;
+  const run = (queues.get(key) ?? Promise.resolve()).then(task);
+  const tail = run.catch(() => {});
+  queues.set(key, tail);
+  tail.then(() => { if (queues.get(key) === tail) queues.delete(key); });
+  return run;
 }
+
+/**
+ * Отравить токсичностью — отдельным эффектом «Отравление (токсичность)», независимым от яда оружия и прочих
+ * отравлений: статус `poisoned` у актора один, а их эффектов может быть несколько. Такой эффект без срока,
+ * снимает его только порог (clearToxicPoison) или проверка Стойкости; `toggleStatusEffect` вернул бы чужой
+ * эффект того же статуса, и флаг токсичности смешался бы со сроком яда.
+ */
+function applyToxicPoison(actor) {
+  return exclusive(actor, async () => {
+    if (toxicPoisonEffect(actor)) return;
+    const base = (await CONFIG.ActiveEffect.documentClass.fromStatusEffect("poisoned", { parent: actor })).toObject();
+    delete base._id;
+    base.name = "Отравление (токсичность)";
+    base.statuses = ["poisoned"];
+    foundry.utils.setProperty(base, "flags.vedmak.toxicPoison", true);
+    await actor.createEmbeddedDocuments("ActiveEffect", [base]);
+  });
+}
+
+/** Снять отравление от токсичности без проверки порога (Стойкость пройдена). */
+async function dropToxicPoisonNow(actor) {
+  const effect = toxicPoisonEffect(actor);
+  if (!effect || !actor.effects.has(effect.id)) return false;
+  await actor.deleteEmbeddedDocuments("ActiveEffect", [effect.id]);
+  return true;
+}
+const dropToxicPoison = actor => exclusive(actor, () => dropToxicPoisonNow(actor));
 
 /** Токсичность сейчас: по самим эффектам, а не по подготовленным данным — они могут ещё не пересчитаться. */
 function toxicityNow(actor) {
@@ -231,15 +268,14 @@ function toxicityNow(actor) {
  * Отравление от токсичности длится, пока она выше порога (стр. 247): как только спала — снимаем.
  * @returns {Promise<boolean>} снято ли
  */
-export async function clearToxicPoison(actor) {
-  if (actor?.type !== "character") return false;
-  const effect = toxicPoisonEffect(actor);
-  if (!effect) return false;
+async function clearToxicPoisonNow(actor) {
+  if (actor?.type !== "character" || !toxicPoisonEffect(actor)) return false;
   const t = toxicityNow(actor);
   if (t.total > t.max) return false;
-  await effect.delete();
-  return true;
+  return dropToxicPoisonNow(actor);
 }
+export const clearToxicPoison = actor => actor?.type === "character"
+  ? exclusive(actor, () => clearToxicPoisonNow(actor)) : Promise.resolve(false);
 
 // Эликсир или отвар снят (истёк, отменён, удалён руками) или ручная токсичность уменьшена — проверить порог.
 // Проверяет тот, кто внёс изменение; начало хода (expireAlchemy) проверяет само и пишет об этом в чат.
@@ -271,7 +307,7 @@ export async function applyPreparation(actor, item) {
     lines.push(`Эффект: ${CONFIG.statusEffects[s.use.status]?.name ?? s.use.status}.`);
   }
   await spendOne(item);
-  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind] });
+  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "apply" } } });
 }
 
 /* ------------------------------ Бросок склянки ------------------------------ */
@@ -288,18 +324,18 @@ function areaTargets(radius) {
  * Зона склянки или ловушки на сцене: круг или конус ставится мышью.
  * @returns {Promise<{victims: Actor[]}|null|false>} false — отменили, null — зоны недоступны
  */
-async function zoneVictims(actor, name, u, effect) {
+async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb) {
   const area = parseArea(u.area, { plainIsRadius: true });
   if (!area || !zonesAvailable()) return null;
-  const placed = await placeZone(area, { name });
+  const placed = await placeZone(area, { name, color });
   if (placed?.cancelled) return false;
   if (!placed) return null;
   const shape = placed.shape;
   // Облака без урона (двимерит, «Лунная пыль», «Сон дракона») висят столько раундов, сколько сказано в описании
   const lingering = !(u.damage || u.status);
   const duration = lingering ? (await parseZoneDuration(effect.match(/\d+\s*(?:раунд|ход)\S*/)?.[0] ?? "")) : { instant: true };
-  const region = await createZone(shape, { name, actor, itemName: name, duration });
-  return { victims: zoneTokens(shape, { region }).map(t => t.actor) };
+  const region = await createZone(shape, { name, color, actor, itemName: name, duration });
+  return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape };
 }
 
 export async function throwItem(actor, item) {
@@ -326,10 +362,12 @@ export async function throwItem(actor, item) {
     });
   } else if (u.damage || u.status) {
     lines.push("Цели не выбраны: выберите пострадавших (или одну цель — центр зоны) и нажмите кнопку ниже.");
-    buttons.push({ action: "trapTrigger", label: "Урон по выбранным целям", icon: "fa-solid fa-burst" });
+    buttons.push({ action: "trapTrigger", label: "Урон по выбранным целям" });
   }
   return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons,
-    flags: { trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect } } });
+    flags: { trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect },
+      fx: { kind: "bomb", zone: zone?.shape ? { x: zone.shape.x, y: zone.shape.y, radius: zone.shape.radius } : null,
+        element: u.damageType === "elemental" ? "fire" : "" } } });
 }
 
 /* -------------------------------- Ловушка -------------------------------- */
@@ -338,7 +376,7 @@ export async function setTrap(actor, item) {
   const s = item.system;
   await spendOne(item);
   return card(actor, `Ловушка ${item.name}`, [s.effect, `Зона: ${s.use.area}. Заметить растяжку — Внимание против результата Знания ловушек установившего.`],
-    { subtitle: "Установлена", buttons: [{ action: "trapTrigger", label: "Сработала (выбранные цели)", icon: "fa-solid fa-burst" }],
+    { subtitle: "Установлена", buttons: [{ action: "trapTrigger", label: "Сработала (выбранные цели)" }],
       flags: { trap: { name: item.name, use: s.use.toObject?.() ?? foundry.utils.deepClone(s.use), effect: s.effect } } });
 }
 
@@ -347,7 +385,7 @@ registerChatAction("trapTrigger", async message => {
   if (!trap) return;
   const radius = Number(String(trap.use.area).match(/\d+/)?.[0] ?? 0);
   const owner = resolveActor(message.flags.vedmak?.alchemy?.actorUuid) ?? game.user.character;
-  const zone = await zoneVictims(owner, trap.name, trap.use, trap.effect ?? "");
+  const zone = await zoneVictims(owner, trap.name, trap.use, trap.effect ?? "", ZONE_COLORS.trap);
   if (zone === false) return;
   const victims = zone?.victims ?? areaTargets(radius);
   if (!victims.length) return ui.notifications.warn("Выберите цели в зоне ловушки (или одну — центр взрыва).");
@@ -364,11 +402,11 @@ export async function applyOil(actor, item) {
   if (!weapons.length) return ui.notifications.warn("Нет оружия, на которое можно нанести масло.");
   const options = weapons.map(w => `<option value="${w.id}" ${w.system.equipped ? "selected" : ""}>${w.name}${w.system.activeOil ? ` (сейчас: ${w.system.oil.name})` : ""}</option>`).join("");
   const id = await DialogV2.wait({
-    window: { title: item.name, icon: "fa-solid fa-droplet" },
+    window: { title: item.name },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><p>${item.system.effect}</p><div class="form-group"><label>Оружие</label><select name="weapon">${options}</select></div>
       <p class="hint">Нанесение занимает действие. Новое масло заменяет старое.</p></div>`,
-    buttons: [{ action: "ok", label: "Нанести", icon: "fa-solid fa-droplet", default: true, callback: (e, b) => b.form.elements.weapon.value },
+    buttons: [{ action: "ok", label: "Нанести", default: true, callback: (e, b) => b.form.elements.weapon.value },
       { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
@@ -378,7 +416,7 @@ export async function applyOil(actor, item) {
   await weapon.update({ "system.oil": { name: item.name, target: item.system.oilTarget, until } });
   await spendOne(item);
   return card(actor, item.name, [`Нанесено на «${weapon.name}»: +${CRAFTING.oilBonus} урона против: ${(MONSTER_CLASSES[item.system.oilTarget] ?? item.system.oilTarget).toLowerCase()} на ${CRAFTING.oilMinutes} минут.`],
-    { subtitle: ALCHEMY_KINDS.oil });
+    { subtitle: ALCHEMY_KINDS.oil, flags: { fx: { kind: "oil" } } });
 }
 
 /* --------------------------------- Мутаген --------------------------------- */
@@ -389,7 +427,7 @@ export async function applyMutagen(actor, item) {
   const applied = actor.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;
   if (applied >= CRAFTING.mutagenLimit) return ui.notifications.warn(`Уже принято ${applied} мутагена — больше нельзя (стр. 251).`);
   const ok = await DialogV2.confirm({
-    window: { title: item.name, icon: "fa-solid fa-dna" },
+    window: { title: item.name },
     content: `<p>${s.effect}</p><p>Час подготовки и проверка Алхимии со СЛ <b>${s.mutagen.dc}</b>. Эффект постоянный, удалить мутаген нельзя.</p>
       ${isMutant(actor) ? "" : "<p class=\"warn\">Персонаж не мутант: мутаген отравит его (Стойкость или Первая помощь СЛ 18). Маг со способностью «Мутация» может мутировать подопытного.</p>"}`
   });
@@ -408,7 +446,7 @@ export async function applyMutagen(actor, item) {
     await applyStatus(actor, "poisoned");
     await spendOne(item);
     return card(actor, item.name, ["Простые люди и нелюди не могут использовать мутагены: персонаж отравлен (Стойкость или Первая помощь СЛ 18)."],
-      { subtitle: ALCHEMY_KINDS.mutagen, buttons: [{ action: "mutagenSave", label: "Стойкость СЛ 18", icon: "fa-solid fa-shield-virus" }] });
+      { subtitle: ALCHEMY_KINDS.mutagen, buttons: [{ action: "mutagenSave", label: "Стойкость СЛ 18" }] });
   }
   if ((s.quantity ?? 1) > 1) {
     await item.update({ "system.quantity": s.quantity - 1 });
@@ -420,7 +458,8 @@ export async function applyMutagen(actor, item) {
   } else {
     await item.update({ "system.applied": true });
   }
-  return card(actor, item.name, [s.effect, `Малая мутация: ${s.mutagen.minor}.`], { subtitle: "Мутаген принят" });
+  return card(actor, item.name, [s.effect, `Малая мутация: ${s.mutagen.minor}.`],
+    { subtitle: "Мутаген принят", flags: { fx: { kind: "drink", color: s.mutagen.color || "red" } } });
 }
 
 registerChatAction("mutagenSave", async message => {
@@ -445,21 +484,27 @@ export function useAlchemical(actor, item) {
 }
 
 /** Снять истёкшие по времени эффекты алхимии и масла (вызывается в начале хода). */
-export async function expireAlchemy(actor) {
-  const lines = [];
-  const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && e.duration?.expired).map(e => e.id);
-  if (expired.length) {
-    lines.push(...expired.map(id => `${actor.effects.get(id).name}: действие закончилось.`));
-    await actor.deleteEmbeddedDocuments("ActiveEffect", expired, { vedmakToxicityChecked: true });
-  }
-  // Токсичность спала до порога — отравление от неё проходит само (стр. 247)
-  if (await clearToxicPoison(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
-  const now = game.time.worldTime ?? 0;
-  for (const w of actor.itemTypes?.weapon ?? []) {
-    if (w.system.oil.target && w.system.oil.until <= now) {
-      lines.push(`${w.name}: масло «${w.system.oil.name}» выдохлось.`);
-      await w.update({ "system.oil": { name: "", target: "", until: 0 } });
+export function expireAlchemy(actor) {
+  return exclusive(actor, async () => {
+    const lines = [];
+    // v14 помечает `duration.expired` уже после хуков системы (Combat#_onStartTurn идёт раньше обновления реестра),
+    // поэтому срок проверяем так же, как у магии, — по остатку на сейчас, иначе зелье жило бы лишний ход
+    const expired = actor.effects.filter(e => (e.flags?.vedmak?.alchemy || e.flags?.vedmak?.spellBuff) && timeIsUp(e));
+    if (expired.length) {
+      lines.push(...expired.map(e => `${e.name}: действие закончилось.`));
+      // ПЗ после баффа с бонусом урезаются здесь же и с ожиданием (иначе гонка с уроном за ход)
+      await deleteEffectsClamped(actor, expired.map(e => e.id), { vedmakToxicityChecked: true });
     }
-  }
-  return lines;
+    // Токсичность спала до порога — отравление от неё проходит само (стр. 247). Ещё раз — в конце
+    // magicStartOfTurn, после снятия зелий на раунды
+    if (await clearToxicPoisonNow(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
+    const now = game.time.worldTime ?? 0;
+    for (const w of actor.itemTypes?.weapon ?? []) {
+      if (w.system.oil.target && w.system.oil.until <= now) {
+        lines.push(`${w.name}: масло «${w.system.oil.name}» выдохлось.`);
+        await w.update({ "system.oil": { name: "", target: "", until: 0 } });
+      }
+    }
+    return lines;
+  });
 }

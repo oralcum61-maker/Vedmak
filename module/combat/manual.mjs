@@ -2,8 +2,8 @@
 
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, HEALING_DAYS } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
-import { renderTemplate } from "../util.mjs";
-import { postCard, rollFormula, asGM, registerGMHandler, resolveActor } from "./common.mjs";
+import { renderTemplate, ringHtml } from "../util.mjs";
+import { postCard, rollFormula, asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "./common.mjs";
 import { applyDamageToActor } from "./damage.mjs";
 import { STATUS_EFFECTS } from "./statuses.mjs";
 
@@ -32,12 +32,12 @@ export async function manualDamage(actors, preset = {}) {
     ...commonFields()
   });
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: "Урон без атаки", icon: "fa-solid fa-burst" },
+    window: { title: "Урон без атаки" },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "damage-dialog"],
     position: { width: 520 },
     content,
     buttons: [{
-      action: "apply", label: "Нанести", icon: "fa-solid fa-burst", default: true,
+      action: "apply", label: "Нанести", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -47,7 +47,7 @@ export async function manualDamage(actors, preset = {}) {
           statusRounds: f.statusRounds.value.trim(), messageMode: f.messageMode?.value || "public"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!cfg || cfg === "cancel" || (!cfg.formula && !cfg.status)) return null;
@@ -55,17 +55,24 @@ export async function manualDamage(actors, preset = {}) {
   // Один бросок на всех: бомба или ловушка бьёт всех в зоне одинаково
   const { roll, total } = await rollFormula(cfg.formula);
   const results = [];
+  const applies = [];
   for (const actor of actors) {
     const data = await computeManual(actor, { ...cfg, total });
     results.push(data);
-    await asGM("applyManualDamage", { uuid: actor.token?.uuid ?? actor.uuid, data });
+    applies.push({ uuid: actor.token?.uuid ?? actor.uuid, data });
   }
-  return postCard({
+  // Сначала карточка, потом применение: по карточке ведущий проверяет, что игрок вправе бить именно эти цели
+  // (бомбу бросает игрок, а цели — чужие токены). Автор карточки — настоящий отправитель, от сервера Foundry
+  const card = await postCard({
     template: "systems/vedmak/templates/chat/manual-damage.hbs",
     data: { ...cfg, total, results, statusLabel: CONFIG.statusEffects[cfg.status]?.name ?? "" },
-    actor: null, rolls: roll ? [roll] : [], messageMode: cfg.messageMode,
-    flags: { manualDamage: { total } }
+    // «Себе» у игрока спрятало бы карточку и от ведущего, а он по ней проверяет запрос: игроку — «Ведущему»
+    actor: null, rolls: roll ? [roll] : [], messageMode: !game.user.isGM && cfg.messageMode === "self" ? "gm" : cfg.messageMode,
+    flags: { manualDamage: { total, targets: applies.map(a => a.uuid) } }
   });
+  if (!card) return null;
+  for (const a of applies) await asGM("applyManualDamage", { ...a, messageId: card.id });
+  return card;
 }
 
 /** Урон по одной или всем частям тела с бронёй, сопротивлениями и множителями. */
@@ -110,9 +117,36 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
   return { name: actor.name, rows, final, nonLethal, wear, effects, crit: null, stunSave: null };
 }
 
-registerGMHandler("applyManualDamage", async ({ uuid, data }) => {
+/** Применения, которые идут прямо сейчас (по карточке и цели): второй такой же запрос не должен ударить ещё раз. */
+const applyingManual = new Set();
+
+registerGMHandler("applyManualDamage", async ({ uuid, data, messageId }, userId) => {
   const actor = resolveActor(uuid);
-  if (actor) await applyDamageToActor(actor, data);
+  if (!actor || !data || typeof data !== "object") return;
+  let key = null;
+  if (!userOwnsAny(userId, actor)) {
+    // Чужая цель (бомба, ловушка): только по карточке, которую создал сам отправитель, с этой целью в списке,
+    // и один раз на цель
+    const card = game.messages.get(messageId);
+    const flag = card?.flags.vedmak?.manualDamage;
+    key = `${messageId}|${uuid}`;
+    if (!flag?.targets?.includes(uuid) || card.author?.id !== userId
+      || flag.applied?.[doneKey(uuid)] || applyingManual.has(key)) {
+      return console.warn(`vedmak | отклонён урон без атаки от ${game.users.get(userId)?.name ?? userId}`);
+    }
+    applyingManual.add(key);
+    try {
+      await card.update({ [`flags.vedmak.manualDamage.applied.${doneKey(uuid)}`]: true });
+    } catch (err) {
+      applyingManual.delete(key);
+      throw err;
+    }
+  }
+  try {
+    await applyDamageToActor(actor, data);
+  } finally {
+    if (key) applyingManual.delete(key);
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -128,7 +162,7 @@ export async function restTurn(actor) {
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="vedmak-card turn"><header class="card-head"><span class="card-glyph"><i class="fa-solid fa-lungs"></i></span>`
       + `<div class="card-ident"><span class="card-name">Отдых</span><span class="card-sub">полный ход</span></div>`
-      + `<div class="card-value"><b>+${value - sys.sta.value}</b><span class="cap">Вын</span></div></header>`
+      + `<div class="card-value">${ringHtml()}<b>+${value - sys.sta.value}</b><span class="cap">Вын</span></div></header>`
       + `<div class="card-body"><p class="note">${actor.name} переводит дух: Вын ${sys.sta.value} → ${value}.</p></div></div>`
   });
 }
@@ -159,7 +193,7 @@ export async function restDays(actor) {
         <span class="plate-text">Нагрузка: бег, работа, бой</span><b class="plate-value">½ Отдыха</b></label>
     </div></div>`;
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Отдых: ${actor.name}`, icon: "fa-solid fa-bed" },
+    window: { title: `Отдых: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 460 },
     content,
@@ -169,7 +203,7 @@ export async function restDays(actor) {
         if (out) out.textContent = String(Math.max(1, Number(form.elements.days.value) || 1));
       }
     }),
-    buttons: [{ action: "ok", label: "Отдохнуть", icon: "fa-solid fa-bed", default: true,
+    buttons: [{ action: "ok", label: "Отдохнуть", default: true,
       callback: (e, b) => {
         const f = b.form.elements;
         return { days: Math.max(1, Number(f.days.value) || 1), care: f.care.checked, touch: f.touch.checked, exertion: f.exertion.checked };

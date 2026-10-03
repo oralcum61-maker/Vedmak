@@ -13,8 +13,8 @@ const rowFor = (table, n) => table.find(([a, b]) => n >= a && n <= b);
 function controlBase(actor, mountKey) {
   const m = MOUNTS[mountKey] ?? MOUNTS.horse;
   const skill = actor.system.skills[m.skill];
-  const base = actor.system.stats.ref.effective + skill.total + m.mod + (skill.penalty || 0);
-  return Math.max(0, base);
+  // Отрицательная основа допустима: книга (стр. 157) обрезает только вычитание критического провала
+  return actor.system.stats.ref.effective + skill.total + m.mod + (skill.penalty || 0);
 }
 
 /** Проверка управления: Реа + Верховая езда (Мореходство) + модификатор скакуна + 1d10 против СЛ манёвра. */
@@ -37,13 +37,13 @@ export async function controlCheck(actor, { mount = "horse" } = {}) {
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
   });
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Управление: ${actor.name}`, icon: "fa-solid fa-horse" },
+    window: { title: `Управление: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 520 },
     content,
     render: (event, dialog) => bindDialog(dialog),
     buttons: [{
-      action: "roll", label: "Бросить", icon: "fa-solid fa-certificate", default: true,
+      action: "roll", label: "Бросить", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -52,7 +52,7 @@ export async function controlCheck(actor, { mount = "horse" } = {}) {
           noSaddle: f.noSaddle.checked, reins: f.reins.checked, ramDrawn: f.ramDrawn.checked
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!cfg || cfg === "cancel") return null;

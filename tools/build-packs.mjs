@@ -39,13 +39,13 @@ const PACKS = [
   {
     name: "races",
     source: "packs-src/races.json",
-    folders: () => [],
+    folders: doc => (doc.folder ?? []).map(name => ({ name })),
     sort: (a, b) => a.name.localeCompare(b.name, "ru")
   },
   {
     name: "professions",
     source: "packs-src/professions.json",
-    folders: () => [],
+    folders: doc => (doc.folder ?? []).map(name => ({ name })),
     sort: (a, b) => a.name.localeCompare(b.name, "ru")
   },
   // Из компендиума BS & Tobi (_tools/bs_*.py)

@@ -6,7 +6,7 @@
       <span class="card-name">{{defender.name}}: {{label}}</span>
       <span class="card-sub">против «{{attack.label}}» · {{attacker.name}} {{attack.total}}</span>
     </div>
-    {{#if roll}}<div class="card-value"><b>{{total}}</b><span class="cap">ответ</span></div>{{/if}}
+    {{#if roll}}<div class="card-value">{{vedmakRing roll.dice}}<b>{{total}}</b><span class="cap">ответ</span></div>{{/if}}
   </header>
 
   <div class="card-body">
@@ -29,7 +29,7 @@
 
   {{#if loss}}{{#unless applied}}
   <div class="card-buttons">
-    <button type="button" class="primary" data-vedmak="verbalApply"><i class="fa-solid fa-comment-slash"></i> −{{loss.amount}} Решительности: {{loss.name}}</button>
+    <button type="button" class="primary" data-vedmak="verbalApply">−{{loss.amount}} Решительности: {{loss.name}}</button>
   </div>
   {{/unless}}{{/if}}
 </div>

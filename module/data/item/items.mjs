@@ -397,7 +397,9 @@ export class ProfessionData extends foundry.abstract.TypeDataModel {
       key: str(""),
       description: html(),
       definingSkill: new SchemaField({
-        name: str(""), stat: str("int"), value: int(0, { min: 0 }), effect: str("")
+        name: str(""), stat: str("int"), value: int(0, { min: 0 }), effect: str(""),
+        // Как и у способностей древа: Энергия по уровню («Том Альзура»: Провидец, Псионик)
+        mechanic: str("")
       }),
       vigor: int(0, { min: 0 }),
       magicAbilities: str(""),

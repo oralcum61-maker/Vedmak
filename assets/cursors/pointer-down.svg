@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Нажатие: перчатка в тени, палец чуть вжат — без искр и цвета, чтобы не резало глаз. Точка — кончик пальца (11, 2). -->
+  <defs>
+    <linearGradient id="s" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9d3c8"/>
+      <stop offset=".45" stop-color="#9a958b"/>
+      <stop offset=".7" stop-color="#686560"/>
+      <stop offset="1" stop-color="#3a3936"/>
+    </linearGradient>
+    <linearGradient id="c" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5e5b56"/>
+      <stop offset="1" stop-color="#1e1e1c"/>
+    </linearGradient>
+    <g id="hand">
+      <rect x="9" y="2.6" width="4" height="15" rx="2"/>
+      <rect x="13.4" y="10.8" width="3.8" height="7.4" rx="1.9"/>
+      <rect x="17.4" y="11.6" width="3.8" height="6.8" rx="1.9"/>
+      <rect x="21.4" y="13" width="3.2" height="5.6" rx="1.6"/>
+      <rect x="8.6" y="14.8" width="16" height="10.2" rx="3.5"/>
+      <rect x="4.6" y="15.4" width="3.8" height="8.8" rx="1.9" transform="rotate(-24 6.5 19.8)"/>
+      <rect x="9.2" y="23.6" width="14.8" height="5.6" rx="1"/>
+    </g>
+  </defs>
+  <use href="#hand" fill="#050607" stroke="#050607" stroke-width="2.4" stroke-linejoin="round"/>
+  <use href="#hand" fill="url(#s)"/>
+  <rect x="9.2" y="23.6" width="14.8" height="5.6" rx="1" fill="url(#c)"/>
+  <path d="M9.2 7 H12.8 M9.2 10.8 H12.8 M13.6 14 H17 M17.6 14.6 H21 M21.6 15.6 H24.4 M8.8 19.4 H24.4" stroke="#050607" stroke-opacity=".6" stroke-width=".8"/>
+  <path d="M10.1 4.4 V16 M14.4 12.4 V16.6 M18.4 13.2 V16.8 M22.3 14.4 V17" stroke="#ffffff" stroke-opacity=".4" stroke-width=".6" stroke-linecap="round"/>
+  <circle cx="11.8" cy="26.4" r=".8" fill="#cfc8b8"/><circle cx="16.6" cy="26.4" r=".8" fill="#cfc8b8"/><circle cx="21.4" cy="26.4" r=".8" fill="#cfc8b8"/>
+</svg>

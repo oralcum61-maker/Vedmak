@@ -39,8 +39,8 @@ async function pickTargets(title, candidates, { multiple = false, hint = "" } = 
   const content = `<div class="vedmak-roll-dialog">${multiple ? rows : `<div class="form-group"><label>Куда</label><select name="target">${rows}</select></div>`}
     ${hint ? `<p class="hint">${hint}</p>` : ""}</div>`;
   const result = await DialogV2.wait({
-    window: { title, icon: "fa-solid fa-gem" }, classes: ["vedmak", "vedmak-dialog"], content,
-    buttons: [{ action: "ok", label: "Далее", icon: "fa-solid fa-check", default: true,
+    window: { title }, classes: ["vedmak", "vedmak-dialog"], content,
+    buttons: [{ action: "ok", label: "Далее", default: true,
       callback: (e, b) => multiple ? candidates.filter((c, i) => b.form.elements[`t${i}`].checked) : [candidates[Number(b.form.elements.target.value)]] },
       { action: "cancel", label: "Отмена" }],
     rejectClose: false

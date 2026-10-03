@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Проба курсоров</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--tb:url(/_blob/b037b57d4e5b684c7960b22211c4d384)}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.c-default{cursor:url(/_blob/f967e8d7b8c45a182a5c2b7cbe585236) 2 2,default}
+.c-default:active{cursor:url(/_blob/48ec002c17c99c674fc1f0dc2a47008e) 2 2,default}
+.c-pointer{cursor:url(/_blob/70bd1e711e0cb455929ce9f1ba5e4672) 2 2,pointer}
+.c-pointer:active{cursor:url(/_blob/7742c267fc9f9c18a4168bd9aae4ebd1) 2 2,pointer}
+.c-text{cursor:url(/_blob/751f6a2f24c5ea8f2d77fb11dcc3af66) 16 16,text}
+.c-help{cursor:url(/_blob/104ee9a3df251aaf60b278d677f558b8) 2 2,help}
+.c-grab{cursor:url(/_blob/ec95027a01881f1194d0bc19adaa793f) 16 13,grab}
+.c-grab:active{cursor:url(/_blob/abda4275c77969dffb046f359b3c1ee1) 16 13,grabbing}
+.c-na{cursor:url(/_blob/0a2d6bfd3f1199579573c1e772d96343) 2 2,not-allowed}
+.c-progress,.c-progress *{cursor:url(/_blob/345ec8809791776cdbed6e9c2ea14ae0) 2 2,progress}
+.c-wait{cursor:url(/_blob/1aae1fea70d1a753a2148a6781e4c85e) 16 16,wait}
+.c-cross{cursor:url(/_blob/6289eec6b272eaf71324e226febde7d3) 16 16,crosshair}
+.c-move{cursor:url(/_blob/f99865555d584d79c78b0871b6a750a7) 16 16,move}
+.c-zoom{cursor:url(/_blob/4fb3b4621e3363692128e834199ee9ca) 13 13,zoom-in}
+.c-ew{cursor:url(/_blob/3444b68bc5cd1bbc2f1919cb5e21c5c5) 16 16,ew-resize}
+.c-nwse{cursor:url(/_blob/9959c04de3c35d772b9a7ed73c899f3d) 16 16,nwse-resize}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.frame{position:relative;display:grid;place-items:center;background-color:#0b0c0e;border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34}
+.btn:active{box-shadow:inset 0 1px 3px rgba(0,0,0,.9)}
+.btn.on{color:#f3eee2;background-color:#34363c;box-shadow:inset 0 0 0 1px rgba(241,236,224,.22),inset 0 1px 0 rgba(255,245,225,.13)}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.enamel:disabled{filter:grayscale(.8) brightness(.6)}
+.stamp{display:grid;place-items:center;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.stamp:active{box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 4px rgba(240,232,215,.08)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.hint{font-size:10.5px;color:#6c685f;white-space:nowrap}
+.map{background-color:#b9ae96;background-image:linear-gradient(rgba(60,50,35,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(60,50,35,.22) 1px,transparent 1px),radial-gradient(120% 90% at 40% 40%,rgba(255,255,255,.15),rgba(0,0,0,.25));background-size:40px 40px,40px 40px,100% 100%}
+</style>
+</helmet>
+<div class="mat c-default" style="width: 1040px; height: 640px; box-sizing: border-box; padding: 20px; display: flex; gap: 18px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px">
+
+  <section class="plate" style="width: 420px; flex-shrink: 0; display: flex; flex-direction: column; position: relative; padding: 0">
+    <header class="c-move" style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 6px 0 12px; background-color: #131417; background-image: var(--tb), linear-gradient(180deg, rgba(255,245,225,.06), rgba(0,0,0,.25)); background-size: 512px 512px, 100% 100%; background-blend-mode: overlay, normal; border-bottom: 1px solid #060708">
+      <span style="flex-grow: 1; font-family: Forum, serif; font-size: 15px; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Персонаж: Эскель</span>
+      <span class="hint">планка — сдвиг</span>
+      <button type="button" class="btn c-pointer" style="width: 26px; height: 24px; padding: 0" aria-label="Закрыть окно">×</button>
+    </header>
+    <div style="padding: 14px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+      <div style="display: flex; gap: 12px; align-items: flex-start">
+        <div class="frame c-zoom" style="width: 92px; height: 92px; flex-shrink: 0" title="Рассмотреть портрет">
+          <img src="/_blob/fc31faa149752b68bbf6d4496a138821" alt="Портрет" style="width: 80px; height: 80px; object-fit: contain">
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; flex-grow: 1; min-width: 0">
+          <label style="display: flex; flex-direction: column; gap: 4px"><span class="cap">Имя — текст</span>
+            <input class="c-text well" value="Эскель" style="height: 30px; box-sizing: border-box; padding: 0 8px; font-family: Forum, serif; font-size: 18px; color: #f1ece0; background-color: #0a0b0c"></label>
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #a29d92">Порог ранения
+            <span class="c-help" title="Ниже этого здоровья персонаж ранен: −2 ко всем проверкам" style="width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; font-size: 11px; color: #f3eee2; background: #25262b; border: 1px solid #060708">?</span>
+            <span class="hint">подсказка</span>
+          </span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; align-items: center">
+        <button type="button" class="stamp c-pointer" style="width: 54px; height: 54px; padding: 0; font-family: Forum, serif; font-size: 30px; color: #f1ece0" aria-label="Проверка Реакции">10</button>
+        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: #ece7db; font-weight: 500">Реакция</span><span class="hint">клеймо: нажмите и держите</span></span>
+        <span style="flex-grow: 1"></span>
+        <button type="button" class="enamel c-pointer" style="height: 36px; padding: 0 16px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase">Атака</button>
+      </div>
+
+      <div style="display: flex; gap: 12px; align-items: center">
+        <div class="frame c-na" style="width: 54px; height: 54px; flex-shrink: 0"><img src="/_blob/6c28ce171c5882e69ce1faa96090194c" alt="" style="width: 46px; height: 46px; object-fit: contain; filter: grayscale(.5) brightness(.6)"></div>
+        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: #cfc8b8">Охотничий арбалет</span><span class="hint">надёжность 0 — сломан</span></span>
+        <span style="flex-grow: 1"></span>
+        <button type="button" class="enamel c-na" disabled style="height: 36px; padding: 0 14px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase">Выстрел</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span class="cap">Снаряжение — возьмите и тащите</span>
+        <div style="display: flex; gap: 10px">
+          <div class="frame c-grab" style="width: 62px; height: 62px"><img src="/_blob/6e4a02eff5848e16d433de94f946bb45" alt="Фонарь" style="width: 52px; height: 52px; object-fit: contain"></div>
+          <div class="frame c-grab" style="width: 62px; height: 62px"><img src="/_blob/601bc499c558363f39d7f151857a9a5a" alt="Верёвка" style="width: 52px; height: 52px; object-fit: contain"></div>
+          <div class="frame c-grab" style="width: 62px; height: 62px"><img src="/_blob/a629204150ce4ddbfe48fd2f891bcb47" alt="Хлеб" style="width: 52px; height: 52px; object-fit: contain"></div>
+          <div class="frame c-grab" style="width: 62px; height: 62px"><img src="/_blob/5e26f3827cc268103086eecdd55689a3" alt="Кузнечные инструменты" style="width: 52px; height: 52px; object-fit: contain"></div>
+        </div>
+      </div>
+    </div>
+    <span class="c-nwse" title="Растянуть окно" style="position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; background: linear-gradient(135deg, transparent 50%, rgba(226,221,208,.35) 50%, rgba(226,221,208,.35) 58%, transparent 58%, transparent 70%, rgba(226,221,208,.35) 70%, rgba(226,221,208,.35) 78%, transparent 78%)"></span>
+  </section>
+
+  <section style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; gap: 8px; align-items: center">
+      <button type="button" class="btn c-pointer {{selCls}}" onClick="{{toSelect}}" style="height: 32px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">Выбор</button>
+      <button type="button" class="btn c-pointer {{rulerCls}}" onClick="{{toRuler}}" style="height: 32px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">Линейка</button>
+      <span style="flex-grow: 1"></span>
+      <button type="button" class="btn c-pointer {{loadCls}}" onClick="{{toggleLoad}}" style="height: 32px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">Сцена грузится</button>
+      <button type="button" class="btn c-pointer" onClick="{{toggleWait}}" style="height: 32px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">Сохранить мир</button>
+    </div>
+    <div style="flex-grow: 1; display: flex; min-height: 0">
+      <div class="map {{mapCls}}" style="position: relative; flex-grow: 1; border: 1px solid #040405; box-shadow: inset 0 2px 12px rgba(0,0,0,.6)">
+        <div class="frame c-grab" style="position: absolute; left: 120px; top: 120px; width: 76px; height: 76px; border-radius: 50%; background: #2a2c31; box-shadow: 0 0 0 3px #b8432c, 0 6px 12px rgba(0,0,0,.6)" title="Жетон: возьмите и тащите">
+          <img src="/_blob/fc31faa149752b68bbf6d4496a138821" alt="Жетон Эскеля" style="width: 62px; height: 62px; object-fit: contain; border-radius: 50%">
+        </div>
+        <div class="frame c-pointer" style="position: absolute; left: 320px; top: 220px; width: 76px; height: 76px; border-radius: 50%; background: #2a2c31; box-shadow: 0 0 0 3px #3a3c42, 0 6px 12px rgba(0,0,0,.6)" title="Чужой жетон: можно выбрать целью">
+          <img src="/_blob/e569f6757ed801db523ee90880acb3fe" alt="Жетон стражника" style="width: 58px; height: 58px; object-fit: contain; border-radius: 50%">
+        </div>
+        <span style="position: absolute; left: 14px; bottom: 12px; padding: 4px 9px; font-size: 11.5px; color: #1b1c1f; background: rgba(241,236,224,.82); border-radius: 2px">{{mapHint}}</span>
+        <sc-if value="{{waiting}}" hint-placeholder-val="{{false}}">
+          <div class="c-wait" style="position: absolute; inset: 0; display: grid; place-items: center; background: rgba(10,11,12,.55)">
+            <span style="padding: 10px 18px; font-family: Forum, serif; font-size: 18px; color: #f1ece0; background: #1f2024; border: 1px solid #060708; box-shadow: 0 12px 24px rgba(0,0,0,.8)">Мир сохраняется… (нажмите «Сохранить мир» ещё раз)</span>
+          </div>
+        </sc-if>
+      </div>
+      <div class="c-ew" title="Растянуть боковую панель" style="width: 10px; flex-shrink: 0; background: linear-gradient(90deg, #050607, #2a2c31 45%, #050607)"></div>
+      <div class="plate" style="width: 120px; flex-shrink: 0; padding: 10px; display: flex; flex-direction: column; gap: 8px">
+        <span class="cap">Боковая панель</span>
+        <span class="hint" style="white-space: normal">Край слева — ширина</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1040,"height":640}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tool: 'select', loading: false, waiting: false }; }
+  renderVals() {
+    const { tool, loading, waiting } = this.state;
+    const ruler = tool === 'ruler';
+    return {
+      selCls: ruler ? '' : 'on', rulerCls: ruler ? 'on' : '', loadCls: loading ? 'on' : '',
+      mapCls: (ruler ? 'c-cross' : 'c-default') + (loading ? ' c-progress' : ''),
+      mapHint: loading ? 'Сцена грузится — курсор с песочными часами, щёлкать можно'
+        : ruler ? 'Линейка: прицел на сцене' : 'Пустая сцена — обычный; зажмите — искры; жетон — перчатка',
+      waiting,
+      toSelect: () => this.setState({ tool: 'select' }),
+      toRuler: () => this.setState({ tool: 'ruler' }),
+      toggleLoad: () => this.setState({ loading: !loading }),
+      toggleWait: () => this.setState({ waiting: !waiting })
+    };
+  }
+}
+</script>
+</body>
+</html>

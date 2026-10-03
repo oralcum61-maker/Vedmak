@@ -4,7 +4,7 @@
   "name": "Болезни(ХБ)",
   "img": "icons/skills/wounds/blood-cells-disease-green.webp",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d9",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -58,7 +58,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
+     5,
      5
     ],
     "drawn": false,
@@ -86,8 +86,8 @@
     "img": "icons/commodities/biological/pustules-red.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": null
@@ -100,8 +100,8 @@
     "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -114,8 +114,8 @@
     "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": null
@@ -128,8 +128,8 @@
     "img": "icons/creatures/mammals/rodent-rat-diseaed-gray.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -147,7 +147,7 @@
   "name": "Генератор Таверн",
   "img": "icons/consumables/drinks/alcohol-beer-stein-wooden-metal-brown.webp",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d11",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -159,7 +159,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      6
     ],
     "drawn": false,
@@ -187,7 +187,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      6
     ],
     "drawn": false,
@@ -229,7 +229,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      6
     ],
     "drawn": false,
@@ -243,7 +243,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      6
     ],
     "drawn": false,
@@ -257,8 +257,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -271,8 +271,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -285,8 +285,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -299,8 +299,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.hI72n8qVQg77ev8U"
@@ -313,8 +313,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     3,
-     4
+     8,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.Uh01MqsAP1O2argZ"
@@ -327,8 +327,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     4
+     8,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -341,8 +341,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     4
+     8,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -355,8 +355,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     4
+     8,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -369,8 +369,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     4
+     8,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -383,8 +383,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     4
+     8,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -397,8 +397,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.0ApPoehQVRfBTwDA"
@@ -411,8 +411,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -425,8 +425,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -439,8 +439,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -453,8 +453,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -467,8 +467,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.4lv3m0AT5584Ex0H"
@@ -481,8 +481,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -495,8 +495,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -509,8 +509,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -528,7 +528,7 @@
   "name": "Генератор Ведьмачьих Заказов",
   "img": "icons/commodities/claws/claws-bear-brown-white.webp",
   "description": "",
-  "formula": "1d110",
+  "formula": "1d190",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -540,7 +540,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     101,
      110
     ],
     "drawn": false,
@@ -554,7 +554,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     31,
      100
     ],
     "drawn": false,
@@ -568,7 +568,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     31,
      100
     ],
     "drawn": false,
@@ -596,8 +596,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     31,
-     35
+     111,
+     115
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.KyFSraxX1yw7cePM"
@@ -610,8 +610,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     36,
-     45
+     116,
+     125
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.Py1eaPHfXVJvNA6s"
@@ -624,8 +624,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     46,
-     50
+     126,
+     130
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.faEhx9OFhWYrUiUw"
@@ -638,8 +638,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     51,
-     55
+     131,
+     135
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.xj5UHBlQZjMsu5Mi"
@@ -652,8 +652,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     56,
-     65
+     136,
+     145
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.7FfA6yXogtdQ3b2z"
@@ -666,8 +666,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     66,
-     70
+     146,
+     150
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.uwlvXPDMxRwC1EJ5"
@@ -680,8 +680,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     71,
-     75
+     151,
+     155
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.DsM3PqgITcEqqHZ7"
@@ -694,8 +694,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     76,
-     90
+     156,
+     170
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.MmZRVfw0QtTylPNl"
@@ -708,8 +708,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     91,
-     99
+     171,
+     179
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.cvjiHkBNPF3uUv4x"
@@ -722,8 +722,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     100,
-     100
+     180,
+     180
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.4iNJUoQumJ4PqAVp"
@@ -736,8 +736,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     101,
-     110
+     181,
+     190
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.9eZwdao1k9VtAnuY"
@@ -757,7 +757,7 @@
   "name": "Заказ - Вампиры",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Vampires.png",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -811,8 +811,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/vampires/katakan_bartlomiej_gawel.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.cYhVfPrf7BhcQIv4"
@@ -825,8 +825,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/vampires/plumard.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.W3MrE6F7XbRpGtRj"
@@ -846,7 +846,7 @@
   "name": "Заказ - Гибриды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Hybrids.png",
   "description": "",
-  "formula": "1d7",
+  "formula": "1d6",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -858,8 +858,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/harpy.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.FqLRkEG9znxE3vLn"
@@ -872,8 +872,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/kelayno.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.kr2uccII4vNfWaWR"
@@ -886,8 +886,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/imperial_manticore.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.GslRuOclP2KKnt0e"
@@ -900,8 +900,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/griffin.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.0lztc6OysJZqQWiz"
@@ -914,8 +914,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/sirena_grafit_studio.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.ui5KhCcYxAmz8TXe"
@@ -928,8 +928,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/succubus.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.qQFq9ZkzwhYUUivn"
@@ -949,7 +949,7 @@
   "name": "Заказ - Дракониды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Draconids.png",
   "description": "",
-  "formula": "1d5",
+  "formula": "1d4",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -975,8 +975,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/draconids/kurolisk.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.iJOlYiGvYK79AsRH"
@@ -989,8 +989,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/draconids/oslizg.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.nkbvFnCVgqbz6vxY"
@@ -1003,8 +1003,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/draconids/phoenix_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.KvJRSsnzFum6gJfw"
@@ -1024,7 +1024,7 @@
   "name": "Заказ - Духи",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Specters.png",
   "description": "",
-  "formula": "1d13",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1036,8 +1036,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/etheral.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.QofmpjfcOFVIYPo1"
@@ -1050,8 +1050,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/midday_woman.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Aj5rb6pFb1qyjXeT"
@@ -1064,8 +1064,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/ghost.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.JOglCC5SdXDyR80X"
@@ -1078,8 +1078,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/hym_bryan_sola.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.5Pl6TciNfF2qGQ1e"
@@ -1092,8 +1092,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/the_beast_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.nWJSE4WYjJicR31p"
@@ -1106,8 +1106,8 @@
     "img": "icons/svg/mystery-man.svg",
     "weight": 1,
     "range": [
-     14,
-     14
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.xjlJ8IYuehpUGwMM"
@@ -1120,8 +1120,8 @@
     "img": "icons/svg/mystery-man.svg",
     "weight": 1,
     "range": [
-     15,
-     15
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.d6lW7kxDA4sgb11F"
@@ -1134,8 +1134,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/marilwyd.webp",
     "weight": 1,
     "range": [
-     16,
-     16
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.EKO2nijLnwwMtFYK"
@@ -1148,8 +1148,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/marilwyd.webp",
     "weight": 1,
     "range": [
-     17,
-     17
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.A7pPG8uQrcjzNYIU"
@@ -1162,8 +1162,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/pesta.webp",
     "weight": 1,
     "range": [
-     18,
-     18
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.wgekCA5FMcozJVQt"
@@ -1176,8 +1176,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/beasts/rat_aleksandra_wojtas.webp",
     "weight": 1,
     "range": [
-     19,
-     19
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.71DZpTLFM0Bdqyip"
@@ -1190,8 +1190,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/abomination.webp",
     "weight": 1,
     "range": [
-     20,
-     20
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.m4fUQbAJuxR69wv2"
@@ -1211,7 +1211,7 @@
   "name": "Заказ - Духи Стихий",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Elementa.png",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d4",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1223,8 +1223,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/golem.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Wbc6ZuMe9t8821S5"
@@ -1237,8 +1237,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/elemental_ice.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.KFsVkQMZ5g0Pjjtk"
@@ -1251,8 +1251,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/elemental_earth.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.RwLPV6QpvP0bexXJ"
@@ -1265,8 +1265,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/elemental_fire.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.75cDNaNbpSYRq02C"
@@ -1286,7 +1286,7 @@
   "name": "Заказ - Инсектоиды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Insectoids.png",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d9",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1354,8 +1354,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/skolopendromorph.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.9OiusoZ2VlLCF73B"
@@ -1368,8 +1368,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/frightener.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.KbWqYyuRM4Yk450P"
@@ -1382,8 +1382,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/zhagniza_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.n9O4GrErz6U9raf3"
@@ -1396,8 +1396,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_worker.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.UsCoenkDEk0smECH"
@@ -1410,8 +1410,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_drone.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.RQFV60PJz00AEAX0"
@@ -1431,7 +1431,7 @@
   "name": "Заказ - Исключительные",
   "img": "icons/svg/biohazard.svg",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d2",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1457,8 +1457,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/exceptional/pure_dragon.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.WpoCsCHlFqTBkLcK"
@@ -1478,7 +1478,7 @@
   "name": "Заказ - Огры",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Ogroids.png",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d6",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1490,8 +1490,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/naker.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.xw7EaDqKci1fpXi3"
@@ -1504,8 +1504,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/cave_troll.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.ET8sATTgZDOwPRy1"
@@ -1518,8 +1518,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/stuchak.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.vawg0WK5U59Avq2N"
@@ -1532,8 +1532,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/bridge_troll.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.dounLsT4qsuhVFNQ"
@@ -1546,8 +1546,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/cyclops.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.PVRt6DyE5GLzjkSI"
@@ -1560,8 +1560,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/nekker_warrior.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.4WmUzBtnyDPlNI0v"
@@ -1581,7 +1581,7 @@
   "name": "Заказ - Проклятые",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/CursedOnes.png",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d7",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1593,8 +1593,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/vendigo.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.kovRqaUAhgmJmCHU"
@@ -1607,8 +1607,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/volkolak.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.yULjpCE1itVmnE0x"
@@ -1621,8 +1621,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/archespore.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Y0GyTCLFTTfqpATS"
@@ -1635,8 +1635,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/botchling.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Hfb2znJTdyVmGgUS"
@@ -1649,8 +1649,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/kotolak_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.1IiHHfM3beRJsVfi"
@@ -1663,8 +1663,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/archispore_green.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.h5pX4XqphbMNKBzn"
@@ -1677,8 +1677,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/archespore_purple.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.7XCo7PauTdBooKdC"
@@ -1698,7 +1698,7 @@
   "name": "Заказ - Реликты",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Relicts.png",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d4",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1710,8 +1710,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/leshii.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.4ceqE0A56EEGGMme"
@@ -1724,8 +1724,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/probozhek.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.8CaIVg5Q7NTJf9FT"
@@ -1738,8 +1738,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/sharlei.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.pq1vYAYOjhssQXaz"
@@ -1752,8 +1752,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/devil.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.2yWUwccVToevfTTd"
@@ -1773,7 +1773,7 @@
   "name": "Заказ - Трупоеды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Necrophages.png",
   "description": "",
-  "formula": "1d15",
+  "formula": "1d7",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1841,8 +1841,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/necrophagers/the_fog.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.55g2plKApJvnTSoU"
@@ -1855,8 +1855,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/necrophagers/cemetery_woman.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.P8CdedWNSof287ef"
@@ -1869,8 +1869,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/necrophagers/utkovol.webp",
     "weight": 1,
     "range": [
-     15,
-     15
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.gTN4w9rDbstdRung"
@@ -1890,7 +1890,7 @@
   "name": "Необычный заказ",
   "img": "icons/commodities/gems/gem-amber-insect-orange.webp",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d14",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -2084,7 +2084,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
+     5,
      9
     ],
     "drawn": false,
@@ -2112,8 +2112,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -2126,8 +2126,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -2140,8 +2140,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -2154,8 +2154,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.8agTRt5Fn18mmyex"
@@ -2168,8 +2168,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -2182,8 +2182,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.2nPZyx6jaWlSsu2G"
@@ -2196,8 +2196,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -2759,7 +2759,7 @@
   "name": "Где предмет?",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d100",
+  "formula": "1d160",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -2771,7 +2771,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     41,
      100
     ],
     "drawn": false,
@@ -2799,8 +2799,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     41,
-     80
+     101,
+     140
     ],
     "drawn": false,
     "documentUuid": null
@@ -2813,8 +2813,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     81,
-     100
+     141,
+     160
     ],
     "drawn": false,
     "documentUuid": null
@@ -3821,7 +3821,7 @@
   "name": "Необычный заказ - что за цель?",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d100",
+  "formula": "1d170",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -3847,7 +3847,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     21,
      90
     ],
     "drawn": false,
@@ -3861,8 +3861,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     21,
-     40
+     91,
+     110
     ],
     "drawn": false,
     "documentUuid": null
@@ -3875,8 +3875,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     41,
-     60
+     111,
+     130
     ],
     "drawn": false,
     "documentUuid": null
@@ -3889,8 +3889,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     61,
-     80
+     131,
+     150
     ],
     "drawn": false,
     "documentUuid": null
@@ -3903,8 +3903,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     81,
-     90
+     151,
+     160
     ],
     "drawn": false,
     "documentUuid": null
@@ -3917,8 +3917,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     91,
-     99
+     161,
+     169
     ],
     "drawn": false,
     "documentUuid": null
@@ -3931,8 +3931,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     100,
-     100
+     170,
+     170
     ],
     "drawn": false,
     "documentUuid": null
@@ -6943,7 +6943,7 @@
   "name": "Маг - Мастер",
   "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -7032,7 +7032,7 @@
   "name": "Маг - Новичок",
   "img": "icons/magic/control/buff-flight-wings-red.webp",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -7044,8 +7044,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.QAlSdMxFlJZykWcC"
@@ -7058,8 +7058,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.rv5uSmnoIpayehL5"
@@ -7072,8 +7072,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.ZascaJBEL6PLtfdv"
@@ -7086,8 +7086,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.1UpkqubVx4wvUefg"
@@ -7100,8 +7100,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.p34CfaOp7AfD1RGM"
@@ -7121,7 +7121,7 @@
   "name": "Маг - Подмастерье",
   "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -7839,7 +7839,7 @@
   "name": "Новичок - Воздух",
   "img": "icons/svg/d20-grey.svg",
   "description": "<p>A random table created from the contents of the Воздух Folder.</p>",
-  "formula": "1d11",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -8027,7 +8027,7 @@
   "name": "Новичок - Земля",
   "img": "icons/svg/d20-grey.svg",
   "description": "<p>A random table created from the contents of the Земля Folder.</p>",
-  "formula": "1d13",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -8751,7 +8751,7 @@
   "name": "Подмастерье - Воздух",
   "img": "icons/svg/d20-grey.svg",
   "description": "<p>A random table created from the contents of the Воздух Folder.</p>",
-  "formula": "1d7",
+  "formula": "1d8",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -8883,7 +8883,7 @@
   "name": "Подмастерье - Земля",
   "img": "icons/svg/d20-grey.svg",
   "description": "<p>A random table created from the contents of the Земля Folder.</p>",
-  "formula": "1d7",
+  "formula": "1d6",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -9243,8 +9243,8 @@
     "img": "icons/magic/nature/plant-glowing-white-purple.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.magic.Item.BU3igNWIztLPy8h1"
@@ -10795,7 +10795,7 @@
   "name": "Ремесленные материалы",
   "img": "icons/commodities/materials/bowl-powder-yellow.webp",
   "description": "",
-  "formula": "1d16",
+  "formula": "1d14",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -10877,8 +10877,8 @@
     "img": "systems/vedmak/assets/fan/components/t3-oil.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.NdmVYGLmtOaIfgW0"
@@ -10891,8 +10891,8 @@
     "img": "systems/vedmak/assets/fan/components/m-thread.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.1IM8C3fQLL7wCYmc"
@@ -10905,8 +10905,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": null
@@ -10919,8 +10919,8 @@
     "img": "icons/commodities/wood/log-stack-maple-brown.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.jNBv3muE3SsTqUbe"
@@ -10933,8 +10933,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -10947,8 +10947,8 @@
     "img": "systems/vedmak/assets/fan/components/t3-bone-ashes.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.1V9kvsm8lWWNqnDK"
@@ -10961,8 +10961,8 @@
     "img": "systems/vedmak/assets/fan/components/m-linen.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.wOyTMWjKwOpL8e2w"
@@ -10975,8 +10975,8 @@
     "img": "systems/vedmak/assets/fan/components/t3-resin.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.r0oajfN7bcjFTNTW"
@@ -10989,8 +10989,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -11003,8 +11003,8 @@
     "img": "systems/vedmak/assets/fan/components/m-glass.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.oyaI3u2llOi4aizi"
@@ -11017,8 +11017,8 @@
     "img": "systems/vedmak/assets/fan/components/t3-coal.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.ihb4duSb2vCoQ05J"
@@ -11031,8 +11031,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -11045,8 +11045,8 @@
     "img": "systems/vedmak/assets/fan/components/t3-hardened-timber.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.8N9N7t7qBWACfF74"
@@ -11059,8 +11059,8 @@
     "img": "systems/vedmak/assets/fan/components/t3-cotton-raw.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.xqpW8V6d18xtlOB2"
@@ -11073,8 +11073,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     14,
-     14
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -11087,8 +11087,8 @@
     "img": "systems/vedmak/assets/fan/components/m-silk.webp",
     "weight": 1,
     "range": [
-     16,
-     16
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.ThMO8cIaIsOu6iPn"
@@ -11477,7 +11477,7 @@
   "name": "Шкуры и Части животных",
   "img": "icons/commodities/leather/fur-simple-brown.webp",
   "description": "",
-  "formula": "1d12",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -11678,7 +11678,7 @@
   "name": "Драгоценная Пыль",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d11",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -11690,7 +11690,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      6
     ],
     "drawn": false,
@@ -11718,8 +11718,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/dust_amethyst.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.zbn2QLlXBWeAQUUn"
@@ -11732,8 +11732,8 @@
     "img": "systems/vedmak/assets/fan/monster-parts/mp-ruby-dust.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.FwW1Erkrn6fuWNdp"
@@ -11746,8 +11746,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/dust_sapphire.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.F9jQSD6KuWC7K4JX"
@@ -11760,8 +11760,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/dust_amber.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.gqyj1ZkJayQsTKEO"
@@ -11774,8 +11774,8 @@
     "img": "systems/vedmak/assets/fan/monster-parts/mp-emerald-dust.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.VwTyx8ZaJqI4nyCs"
@@ -11796,7 +11796,7 @@
   "name": "Самоцветы",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -11808,7 +11808,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      6
     ],
     "drawn": false,
@@ -11836,8 +11836,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/amethyst.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.nDfTyyoegIv9ZYMH"
@@ -11850,8 +11850,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/ruby.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.4HkYvvdD5qtckTmJ"
@@ -11864,8 +11864,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/sapphire.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.l3zAfoivNxYtRwiw"
@@ -11878,8 +11878,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/amber.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.GAUsXAeBnN95TS10"
@@ -11892,8 +11892,8 @@
     "img": "systems/vedmak/assets/fan/bs/gems/izumrud_plohoi.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.EkTdPliErpWCJcQs"
@@ -11906,8 +11906,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.eJlqDM4NanRI3WJe"
@@ -11920,8 +11920,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.qHOTp7tu1bBkvCap"
@@ -12074,7 +12074,7 @@
   "name": "Случайное Солнце",
   "img": "systems/TheWitcherTRPG/assets/images/sol.png",
   "description": "",
-  "formula": "1d2",
+  "formula": "1d3",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -12086,7 +12086,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -12114,8 +12114,8 @@
     "img": "systems/vedmak/assets/fan/components/s-wolfs-aloe.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.G4C1vweV6VxhLiSE"
@@ -13262,7 +13262,7 @@
   "name": "Вампиры",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Vampires.png",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d6",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -13316,8 +13316,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -13330,8 +13330,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/vampires/plumard.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.W3MrE6F7XbRpGtRj"
@@ -13344,8 +13344,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/vampires/garkain2.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.sc0OeuxBSxiv62jE"
@@ -13358,8 +13358,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/vampires/garkain2.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.sc0OeuxBSxiv62jE"
@@ -13379,7 +13379,7 @@
   "name": "Гибриды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Hybrids.png",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d7",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -13391,8 +13391,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": null
@@ -13405,8 +13405,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/harpy.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.FqLRkEG9znxE3vLn"
@@ -13419,8 +13419,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/griffin.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.0lztc6OysJZqQWiz"
@@ -13433,8 +13433,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/kelayno.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.kr2uccII4vNfWaWR"
@@ -13447,8 +13447,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/imperial_manticore.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.GslRuOclP2KKnt0e"
@@ -13461,8 +13461,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": null
@@ -13475,8 +13475,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/sirena_grafit_studio.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.ui5KhCcYxAmz8TXe"
@@ -13489,8 +13489,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/hybrids/succubus.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.qQFq9ZkzwhYUUivn"
@@ -13503,8 +13503,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.eh9DliVlq7aU2XBp"
@@ -13641,7 +13641,7 @@
   "name": "Дракониды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Draconids.png",
   "description": "",
-  "formula": "1d5",
+  "formula": "1d7",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -13681,8 +13681,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/draconids/kurolisk.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.iJOlYiGvYK79AsRH"
@@ -13709,8 +13709,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/draconids/oslizg.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.nkbvFnCVgqbz6vxY"
@@ -13723,8 +13723,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/draconids/phoenix_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.KvJRSsnzFum6gJfw"
@@ -13744,7 +13744,7 @@
   "name": "Духи",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Specters.png",
   "description": "",
-  "formula": "1d14",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -13756,8 +13756,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": null
@@ -13770,8 +13770,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/etheral.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.QofmpjfcOFVIYPo1"
@@ -13784,8 +13784,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/midday_woman.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Aj5rb6pFb1qyjXeT"
@@ -13798,8 +13798,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/ghost.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.JOglCC5SdXDyR80X"
@@ -13812,8 +13812,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -13826,8 +13826,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/hym_bryan_sola.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.5Pl6TciNfF2qGQ1e"
@@ -13840,8 +13840,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/specters/the_beast_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.nWJSE4WYjJicR31p"
@@ -13854,8 +13854,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     14,
-     14
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": null
@@ -13875,7 +13875,7 @@
   "name": "Духи Стихий",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Elementa.png",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -13887,8 +13887,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/golem.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Wbc6ZuMe9t8821S5"
@@ -13901,8 +13901,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": null
@@ -13915,8 +13915,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/elemental_earth.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.RwLPV6QpvP0bexXJ"
@@ -13929,8 +13929,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/elemental_fire.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.75cDNaNbpSYRq02C"
@@ -13943,8 +13943,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/elemental/elemental_ice.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.KFsVkQMZ5g0Pjjtk"
@@ -14487,7 +14487,7 @@
   "name": "Инсектоиды",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Insectoids.png",
   "description": "",
-  "formula": "1d13",
+  "formula": "1d9",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -14555,8 +14555,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -14569,8 +14569,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -14583,8 +14583,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -14597,8 +14597,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_warrior.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.YiflF2Xe4Yup2Har"
@@ -14611,8 +14611,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_worker.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.UsCoenkDEk0smECH"
@@ -14625,8 +14625,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriag_queen.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.tmLdU6HSlOENRwL6"
@@ -14639,8 +14639,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_drone.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.RQFV60PJz00AEAX0"
@@ -14653,8 +14653,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": null
@@ -14667,8 +14667,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_warrior.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.YiflF2Xe4Yup2Har"
@@ -14681,8 +14681,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_worker.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.UsCoenkDEk0smECH"
@@ -14695,8 +14695,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": null
@@ -14709,8 +14709,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/edriaga_drone.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.RQFV60PJz00AEAX0"
@@ -14723,8 +14723,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -14737,8 +14737,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/skolopendromorph.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.9OiusoZ2VlLCF73B"
@@ -14751,8 +14751,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     12,
-     12
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": null
@@ -14765,8 +14765,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/insectoids/frightener.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.KbWqYyuRM4Yk450P"
@@ -14786,7 +14786,7 @@
   "name": "Исключительные",
   "img": "icons/svg/biohazard.svg",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d2",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -14833,7 +14833,7 @@
   "name": "Огры",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Ogroids.png",
   "description": "",
-  "formula": "1d11",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -14845,8 +14845,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": null
@@ -14859,8 +14859,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/naker.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.xw7EaDqKci1fpXi3"
@@ -14873,8 +14873,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/nekker_warrior.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.4WmUzBtnyDPlNI0v"
@@ -14887,8 +14887,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": null
@@ -14901,8 +14901,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/naker.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.xw7EaDqKci1fpXi3"
@@ -14915,8 +14915,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -14929,8 +14929,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/stuchak.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.vawg0WK5U59Avq2N"
@@ -14943,8 +14943,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/bridge_troll.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.dounLsT4qsuhVFNQ"
@@ -14957,8 +14957,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -14971,8 +14971,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     11,
-     11
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": null
@@ -14985,8 +14985,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/ogroids/cyclops.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.PVRt6DyE5GLzjkSI"
@@ -15006,7 +15006,7 @@
   "name": "Проклятые",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/CursedOnes.png",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -15018,8 +15018,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/vendigo.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.kovRqaUAhgmJmCHU"
@@ -15032,8 +15032,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/volkolak.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.yULjpCE1itVmnE0x"
@@ -15046,8 +15046,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.zr9cLesDWkcJHfms"
@@ -15060,8 +15060,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/botchling.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Hfb2znJTdyVmGgUS"
@@ -15074,8 +15074,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/kotolak_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.1IiHHfM3beRJsVfi"
@@ -15095,7 +15095,7 @@
   "name": "Реликты",
   "img": "systems/TheWitcherTRPG/assets/images/Monsters/Relicts.png",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d4",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -15107,8 +15107,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/devil.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.2yWUwccVToevfTTd"
@@ -15121,8 +15121,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/leshii.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.4ceqE0A56EEGGMme"
@@ -15135,8 +15135,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/probozhek.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.8CaIVg5Q7NTJf9FT"
@@ -15149,8 +15149,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -15163,8 +15163,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/relics/sharlei.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.pq1vYAYOjhssQXaz"
@@ -15699,7 +15699,7 @@
   "name": "Дикая охота",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d10",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -15809,7 +15809,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
+     5,
      7
     ],
     "drawn": false,
@@ -15823,8 +15823,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/wild_hunt/imlerih_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.37nMYe6xX7A30dxu"
@@ -15837,8 +15837,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/wild_hunt/karantir_marek_madej.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.HBsFnwKNGylLr5Fa"
@@ -15851,8 +15851,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/wild_hunt/eredin_breach_glas_lorenzo_mastroianni.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.0ydabPZvDV0woWj7"
@@ -15991,7 +15991,7 @@
   "name": "Нильфгаард",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d10",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16017,7 +16017,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      3
     ],
     "drawn": false,
@@ -16031,8 +16031,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/nilfgaard/vanhemar_chris_rallis.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.nHICIVrz4sMC9mPH"
@@ -16045,8 +16045,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/nilfgaard/ducal_guard_bruno_biazzoto.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.y143WDQBazqHNKKN"
@@ -16059,8 +16059,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/nilfgaard/nilfgaardian_warrior.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.rwPgZyQ3bzS0vkQy"
@@ -16073,8 +16073,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     5
+     7,
+     8
     ],
     "drawn": false,
     "documentUuid": null
@@ -16087,8 +16087,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/nilfgaard/nilfgaardian_archer.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.BRZlIDL3ivuqs6jg"
@@ -16101,8 +16101,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/nilfgaard/menno_coehoorn_nemanja_stankovic.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.UhAVtnMtHzz3jQ41"
@@ -16115,8 +16115,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.DzFDjXNy9KuZQjiZ"
@@ -16137,7 +16137,7 @@
   "name": "Разбойники",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d13",
+  "formula": "1d19",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16191,8 +16191,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/kennet_and_gar_toni_muntean.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.S2LF5EJPGBCwbZNF"
@@ -16205,8 +16205,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/brokvar_the_hunter_grafit_studio.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.ckEfcaN2mOul9U4p"
@@ -16219,8 +16219,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/aedirnian_mauler_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.qCo0jz2aD3T90TNT"
@@ -16233,7 +16233,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
+     7,
      11
     ],
     "drawn": false,
@@ -16247,8 +16247,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/mercenary.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.iGd0QBdshoPGnDZ9"
@@ -16261,8 +16261,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/boholt_toni_muntean.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.BxpdZRsQG0cXSWLM"
@@ -16275,8 +16275,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/cahir_dyffryn_lorenzo_mastroianni.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.ECA5VPR3Mv1Wv9F7"
@@ -16289,8 +16289,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/tinboy_valeriy_vegera.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.WY0nrO6v6qfvxdbB"
@@ -16303,8 +16303,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/dimun_smuggler_grafit_studio.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.3yhpYb0pZd1ZwlDe"
@@ -16317,8 +16317,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/warrior_fem.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.LKINGrb4uvIutuzY"
@@ -16331,8 +16331,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/thugs/bandit.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.3qQ8IbQrTw668exj"
@@ -16345,8 +16345,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     13,
-     13
+     19,
+     19
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.SOe1MZwzFO30nA2h"
@@ -16367,7 +16367,7 @@
   "name": "Редания",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d15",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16393,7 +16393,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      4
     ],
     "drawn": false,
@@ -16407,8 +16407,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/cleric_of_the_flaming_rose_ilker_serdar_yildiz.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.gnLYnsfPsOkowslW"
@@ -16421,8 +16421,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/redanian_warrior.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.j2QxPBWnzreRNppf"
@@ -16435,8 +16435,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/redanian_captain.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.YyPiQRWblejWdEVR"
@@ -16449,8 +16449,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     7
+     9,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -16463,8 +16463,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/kurt_christof_grobelski.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Ek6VMb3CzjzRY0Im"
@@ -16477,8 +16477,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/redanian_archer_bryan_sola.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.uywOEhVCMHFe7TAn"
@@ -16491,8 +16491,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/cleric_of_the_flaming_rose_ilker_serdar_yildiz.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.gnLYnsfPsOkowslW"
@@ -16505,8 +16505,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.NPUZmFAZfGvNewQ8"
@@ -16519,8 +16519,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/redanian_elit_nemanja_stankovic.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.syTROxdvQZp4AsiH"
@@ -16533,8 +16533,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.bvUyA8xmmetulRoD"
@@ -16547,8 +16547,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/redania/nathaniel_pastodi_grafit_studio.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.WGOL83B2xa7q9UKh"
@@ -16569,7 +16569,7 @@
   "name": "Скеллиге",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d4",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16595,7 +16595,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -16609,8 +16609,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/skeliige/yustianna_an_craite_renata_mrowi-ska.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.yigzKdWovMwab1fX"
@@ -16623,8 +16623,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -16637,8 +16637,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/skeliige/vabjorn_s-awomir_maniak.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Qb1oCmgqVEfWMYsL"
@@ -16651,8 +16651,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.sRwykyIj0xlDvMql"
@@ -16673,7 +16673,7 @@
   "name": "Скоя'таэли",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d8",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16699,7 +16699,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      4
     ],
     "drawn": false,
@@ -16713,8 +16713,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/aen_seidhe/angulema_manuel_castanon.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.FrkXAJ68zKQwtoxR"
@@ -16727,8 +16727,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/dwarves/giantslayer.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.enqWyoNk1uSSvnV8"
@@ -16741,8 +16741,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_peaceful/halflings/binsi_blumerhold_karol_bem.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.X8AYRUHdTE0FqW9q"
@@ -16755,8 +16755,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/aen_seidhe/elfskii_lovchii.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.tq2lcsOVT29Lxgup"
@@ -16769,8 +16769,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     6
+     9,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -16783,8 +16783,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/aen_seidhe/telianyn_aep_collen_toni_muntean.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.fdfE1igXw4advr7k"
@@ -16797,8 +16797,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/aen_seidhe/skoyatael.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.znpE9GqPqIghjyKI"
@@ -16811,8 +16811,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.0YCiJl940NC5KpCP"
@@ -16923,7 +16923,7 @@
   "name": "Темерия",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d3",
+  "formula": "1d4",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16935,7 +16935,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -16963,8 +16963,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/temeria/blue_stripe_2.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.odFTsFEj7GxvhSWc"
@@ -16977,8 +16977,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -16991,8 +16991,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/temeria/blue_stripes_commando_anna_podedworna.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.hlSZUgMAIfkr3l8B"
@@ -17307,7 +17307,7 @@
   "name": "Инквизитор армия",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d1",
+  "formula": "1d2",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -17398,7 +17398,7 @@
   "name": "Какая Археспора",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d3",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -17410,7 +17410,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      3
     ],
     "drawn": false,
@@ -17438,8 +17438,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/archespore.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.Y0GyTCLFTTfqpATS"
@@ -17452,8 +17452,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/cursedones/archespore_purple.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.7XCo7PauTdBooKdC"
@@ -17797,7 +17797,7 @@
   "name": "Клад баба с бандой",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d3",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -17851,8 +17851,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     3
+     4,
+     5
     ],
     "drawn": false,
     "documentUuid": null
@@ -17865,8 +17865,8 @@
     "img": "systems/vedmak/assets/fan/bestiary/necrophagers/rotfiend.webp",
     "weight": 1,
     "range": [
-     2,
-     3
+     4,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.bestiary.Actor.9o7tOy0hp5DsqahP"
@@ -18474,7 +18474,7 @@
   "name": "Полностью случайный лут",
   "img": "icons/containers/bags/pack-leather-embossed-brown.webp",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -18764,7 +18764,7 @@
   "name": "Случайная Формула",
   "img": "icons/sundries/documents/document-writing-pink.webp",
   "description": "",
-  "formula": "1d13",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -18942,7 +18942,7 @@
   "name": "Случайный предмет",
   "img": "icons/sundries/gaming/dice-pair-white-green.webp",
   "description": "",
-  "formula": "1d12",
+  "formula": "1d10",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -18968,8 +18968,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.e8vfp5SNiCReOXa9"
@@ -18982,8 +18982,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.wa4c0H22s3mlsxv3"
@@ -18996,8 +18996,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.4AYecdsS7Lk1Q27l"
@@ -19010,8 +19010,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.pqIpoRH2m8lBdefU"
@@ -19024,8 +19024,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.o5IMB1uQaVSG1InL"
@@ -19038,8 +19038,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.qzagy1uhKevTpTWP"
@@ -19052,8 +19052,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.3wp0NndHZX5mlMwj"
@@ -19066,8 +19066,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.f9rtJAHzfvog1kNz"
@@ -19080,8 +19080,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.9VoLryHXoH0ovQE6"
@@ -19101,7 +19101,7 @@
   "name": "Случайный чертеж",
   "img": "icons/sundries/documents/document-symbol-circle-gold-red.webp",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d7",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -19504,7 +19504,7 @@
   "name": "Ёмкости",
   "img": "icons/containers/bags/coinpouch-simple-leather-silver-brown.webp",
   "description": "",
-  "formula": "1d14",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -20270,7 +20270,7 @@
   "name": "Глифовые и рунные слова",
   "img": "icons/commodities/metal/ingot-stamped-spiral.webp",
   "description": "",
-  "formula": "1d16",
+  "formula": "1d15",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -20499,7 +20499,7 @@
   "name": "Еда и питьё",
   "img": "icons/consumables/meat/fish-raw-bowl-wooden-green-purple.webp",
   "description": "",
-  "formula": "1d14",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -20525,8 +20525,8 @@
     "img": "systems/vedmak/assets/fan/gear/f-meat-raw.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Wf4hZYg0o9ObZflc"
@@ -20539,8 +20539,8 @@
     "img": "systems/vedmak/assets/fan/gear/f-cheese.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.WEFaK6egQiVbTCAh"
@@ -20553,8 +20553,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-rabbit.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.dcQ4r1CfeSvBgj8h"
@@ -20567,8 +20567,8 @@
     "img": "systems/vedmak/assets/fan/gear/f-bread.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.9ck2QeqlB1IH9knl"
@@ -20581,8 +20581,8 @@
     "img": "systems/vedmak/assets/fan/gear/f-dumpling.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.AHph6aQeGyXuBSnk"
@@ -20595,8 +20595,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     15,
-     15
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.FG86RJYCQc9nALr7"
@@ -20609,8 +20609,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     16,
-     16
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.PxlPbDEdRSbXlClO"
@@ -20623,8 +20623,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     17,
-     17
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.C7wbak8UQuNcZHyT"
@@ -20637,8 +20637,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-alcohest.webp",
     "weight": 1,
     "range": [
-     18,
-     19
+     10,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.t3f5KpAyZcHMHsGB"
@@ -20651,8 +20651,8 @@
     "img": "systems/vedmak/assets/fan/bs/alcohol/white-gull.webp",
     "weight": 1,
     "range": [
-     20,
-     21
+     12,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.7R7mZg48yje6dygD"
@@ -20672,7 +20672,7 @@
   "name": "Инструменты",
   "img": "icons/tools/hand/lockpicks-steel-grey.webp",
   "description": "",
-  "formula": "1d23",
+  "formula": "1d29",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -20684,8 +20684,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-lockpick.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.AxiunH9i7MO8OYdW"
@@ -20698,8 +20698,8 @@
     "img": "icons/tools/laboratory/alembic-glass-ball-blue.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.YFybvuuxv8iXAWV4"
@@ -20712,8 +20712,8 @@
     "img": "icons/commodities/metal/locking-mechanism-copper.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.3vRlXKqL2qohezVT"
@@ -20726,8 +20726,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-paste.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.qCtnq6E8YelbfCiU"
@@ -20740,8 +20740,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-letter.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Knqb13QCHjImjSfV"
@@ -20754,8 +20754,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-brush.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.RojRGcvHHDrl8e6U"
@@ -20768,8 +20768,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-tools-smith.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.7NcXIupwYDxlHZF6"
@@ -20782,8 +20782,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-scales-trade.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Zwlg98D1qqunSqg2"
@@ -20796,8 +20796,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-book-green.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.1Wu1FZ1M3J1BCA2Y"
@@ -20810,8 +20810,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-whetstone.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.zMkdXH8Ug4h2xN7D"
@@ -20824,8 +20824,8 @@
     "img": "icons/tools/laboratory/burner-steel-grey.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.LhQJ6MnYVRFxReHj"
@@ -20838,8 +20838,8 @@
     "img": "icons/commodities/wood/furniture-stool-brown.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.AuZXQs7wthPLZ9hG"
@@ -20852,8 +20852,8 @@
     "img": "icons/tools/hand/brush-paint-pink.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Z70NJpzHy1Tp77Qj"
@@ -20866,8 +20866,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-mask.webp",
     "weight": 1,
     "range": [
-     15,
-     15
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.l80tXUtNGayOPd0U"
@@ -20880,8 +20880,8 @@
     "img": "icons/tools/fasteners/washer-square-steel-grey.webp",
     "weight": 1,
     "range": [
-     16,
-     16
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.wdhC31IF6oK50enp"
@@ -20894,8 +20894,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-inkwell.webp",
     "weight": 1,
     "range": [
-     17,
-     17
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ZZui4kVwr0K7JcoE"
@@ -20908,8 +20908,8 @@
     "img": "icons/skills/trades/smithing-anvil-brown.webp",
     "weight": 1,
     "range": [
-     19,
-     19
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.2yG1NbmrqYn9U8Uk"
@@ -20922,8 +20922,8 @@
     "img": "systems/vedmak/assets/fan/gear/f-meat-fried.webp",
     "weight": 1,
     "range": [
-     20,
-     20
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.v7SRQ3qtjdvdsOp5"
@@ -20936,8 +20936,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-ring.webp",
     "weight": 1,
     "range": [
-     22,
-     22
+     19,
+     19
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ovneojF7MgxSTOC1"
@@ -20950,8 +20950,8 @@
     "img": "icons/tools/smithing/tongs-steel-grey.webp",
     "weight": 1,
     "range": [
-     23,
-     23
+     20,
+     20
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Xw7jMek0IcCRkTNW"
@@ -20964,8 +20964,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-book-brown.webp",
     "weight": 1,
     "range": [
-     24,
-     24
+     21,
+     21
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Uo4GYe7WA6X2TZtk"
@@ -20978,8 +20978,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-string.webp",
     "weight": 1,
     "range": [
-     25,
-     25
+     22,
+     22
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.384M6dD2uueoIXaf"
@@ -20992,8 +20992,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-mirror.webp",
     "weight": 1,
     "range": [
-     26,
-     26
+     23,
+     23
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.vmJsQ29ZPSvvsiSk"
@@ -21006,8 +21006,8 @@
     "img": "icons/tools/instruments/horn-megaphone-loudspeaker.webp",
     "weight": 1,
     "range": [
-     27,
-     27
+     24,
+     24
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.oMIDRAzLziM7Jdvy"
@@ -21020,8 +21020,8 @@
     "img": "icons/tools/medical/bandages-gauze.webp",
     "weight": 1,
     "range": [
-     28,
-     28
+     25,
+     25
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.1h8jZKCDvx1jdn0B"
@@ -21034,8 +21034,8 @@
     "img": "icons/tools/instruments/flute-simple-wood.webp",
     "weight": 1,
     "range": [
-     29,
-     29
+     26,
+     26
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Dn2qmY8lvO5kZVyj"
@@ -21048,8 +21048,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
     "weight": 1,
     "range": [
-     30,
-     30
+     27,
+     27
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.7nhQ4Zd6cKQvY3dN"
@@ -21062,8 +21062,8 @@
     "img": "icons/commodities/tech/antenna-powered-purple.webp",
     "weight": 1,
     "range": [
-     31,
-     31
+     28,
+     28
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ihxwGjor7bpSap2G"
@@ -21076,8 +21076,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-doll.webp",
     "weight": 1,
     "range": [
-     32,
-     32
+     29,
+     29
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.azNI717j2J5AOtrF"
@@ -21097,7 +21097,7 @@
   "name": "Магические предметы",
   "img": "icons/commodities/gems/gem-faceted-diamond-pink-gold.webp",
   "description": "<p>A random table created from the contents of the Магические предметы Folder.</p>",
-  "formula": "1d30",
+  "formula": "1d24",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -21452,7 +21452,7 @@
   "name": "Обычные предметы",
   "img": "icons/commodities/leather/leather-buckle-steel-tan.webp",
   "description": "",
-  "formula": "1d37",
+  "formula": "1d36",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -21464,8 +21464,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-bottle.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.aHCUnA5Bt00u25nk"
@@ -21478,8 +21478,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-lockpick.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.AxiunH9i7MO8OYdW"
@@ -21492,8 +21492,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.generators.RollTable.C7wbak8UQuNcZHyT"
@@ -21506,8 +21506,8 @@
     "img": "icons/commodities/biological/hand-clawed-brown.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": null
@@ -21520,8 +21520,8 @@
     "img": "icons/sundries/misc/admission-ticket-white.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": null
@@ -21534,8 +21534,8 @@
     "img": "icons/sundries/gaming/dice-runed-brown.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": null
@@ -21548,8 +21548,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-map.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.pKfxlofb2sYUNKsW"
@@ -21562,8 +21562,8 @@
     "img": "icons/sundries/books/book-symbol-link-brown.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": null
@@ -21576,8 +21576,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.O2ZuTHslWL1OKU4I"
@@ -21590,8 +21590,8 @@
     "img": "icons/tools/instruments/harp-gold-glowing.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -21604,8 +21604,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-lute.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.H4IYOAVFeZ27OJob"
@@ -21618,8 +21618,8 @@
     "img": "icons/equipment/neck/amulet-round-engraved-spiral-gold.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -21632,8 +21632,8 @@
     "img": "icons/commodities/stone/ore-chunk-white.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.xM297OFE3zqQUtiL"
@@ -21646,8 +21646,8 @@
     "img": "icons/containers/bags/coinpouch-leather-red.webp",
     "weight": 1,
     "range": [
-     15,
-     15
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -21660,8 +21660,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-soap.webp",
     "weight": 1,
     "range": [
-     16,
-     16
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.s3Apg0dB9OLW1vZW"
@@ -21674,8 +21674,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-shackles2.webp",
     "weight": 1,
     "range": [
-     17,
-     17
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.5IXqSfS6PB3XNb0g"
@@ -21688,8 +21688,8 @@
     "img": "icons/sundries/survival/fire-lighter-brass-lit.webp",
     "weight": 1,
     "range": [
-     18,
-     18
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.LYdOXcMP8ZD8TWo5"
@@ -21702,8 +21702,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-tent.webp",
     "weight": 1,
     "range": [
-     19,
-     19
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.PtnM4RqlPzrsKiAu"
@@ -21716,8 +21716,8 @@
     "img": "systems/vedmak/assets/fan/monster-parts/mp-monster-feather.webp",
     "weight": 1,
     "range": [
-     20,
-     20
+     19,
+     19
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.components.Item.Gl1aZ0BbupZk2N51"
@@ -21730,8 +21730,8 @@
     "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
     "weight": 1,
     "range": [
-     21,
-     21
+     20,
+     20
     ],
     "drawn": false,
     "documentUuid": null
@@ -21744,8 +21744,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-bedroll.webp",
     "weight": 1,
     "range": [
-     22,
-     22
+     21,
+     21
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.3njHAfle17Qs3A5a"
@@ -21758,8 +21758,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-empty-glass.webp",
     "weight": 1,
     "range": [
-     23,
-     23
+     22,
+     22
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ddFaCuXJBLgH66il"
@@ -21772,8 +21772,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
     "weight": 1,
     "range": [
-     24,
-     24
+     23,
+     23
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.juEvlYOhB8doSL6V"
@@ -21786,8 +21786,8 @@
     "img": "icons/tools/instruments/whistle-copper.webp",
     "weight": 1,
     "range": [
-     25,
-     25
+     24,
+     24
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.r66KWEtRQBHXv89s"
@@ -21800,8 +21800,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-medallion-stone.webp",
     "weight": 1,
     "range": [
-     26,
-     26
+     25,
+     25
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.FnkxPyPvNUSkesC7"
@@ -21814,8 +21814,8 @@
     "img": "icons/equipment/finger/ring-band-engraved-scrolls-grey.webp",
     "weight": 1,
     "range": [
-     27,
-     27
+     26,
+     26
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.IIksR114Uk82nUUP"
@@ -21828,8 +21828,8 @@
     "img": "icons/consumables/meat/fillet-fish-pink-silver-gray.webp",
     "weight": 1,
     "range": [
-     28,
-     28
+     27,
+     27
     ],
     "drawn": false,
     "documentUuid": null
@@ -21842,8 +21842,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     29,
-     29
+     28,
+     28
     ],
     "drawn": false,
     "documentUuid": null
@@ -21856,8 +21856,8 @@
     "img": "icons/commodities/gems/gem-cluster-teal.webp",
     "weight": 1,
     "range": [
-     30,
-     30
+     29,
+     29
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.pfI6Lfp0Nmc76OuO"
@@ -21870,8 +21870,8 @@
     "img": "icons/consumables/meat/steak-alien-orange.webp",
     "weight": 1,
     "range": [
-     31,
-     31
+     30,
+     30
     ],
     "drawn": false,
     "documentUuid": null
@@ -21884,8 +21884,8 @@
     "img": "icons/commodities/flowers/clover.webp",
     "weight": 1,
     "range": [
-     32,
-     32
+     31,
+     31
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.WyrPlTJbcdoPxKJU"
@@ -21898,8 +21898,8 @@
     "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
     "weight": 1,
     "range": [
-     33,
-     33
+     32,
+     32
     ],
     "drawn": false,
     "documentUuid": null
@@ -21912,8 +21912,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-lute.webp",
     "weight": 1,
     "range": [
-     34,
-     34
+     33,
+     33
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.H4IYOAVFeZ27OJob"
@@ -21926,8 +21926,8 @@
     "img": "systems/vedmak/assets/fan/gear/f-vodka.webp",
     "weight": 1,
     "range": [
-     35,
-     35
+     34,
+     34
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Iz1px11GWiuoeKP8"
@@ -21940,8 +21940,8 @@
     "img": "icons/sundries/books/book-symbol-fire-gold-orange.webp",
     "weight": 1,
     "range": [
-     36,
-     36
+     35,
+     35
     ],
     "drawn": false,
     "documentUuid": null
@@ -21954,8 +21954,8 @@
     "img": "icons/commodities/leather/fur-pelt-brown.webp",
     "weight": 1,
     "range": [
-     37,
-     37
+     36,
+     36
     ],
     "drawn": false,
     "documentUuid": null
@@ -22181,7 +22181,7 @@
   "name": "Стандартное снаряжение",
   "img": "icons/sundries/survival/rope-wrapped-brown.webp",
   "description": "",
-  "formula": "1d47",
+  "formula": "1d46",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -22277,8 +22277,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-book.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.xAlHV7hPsj2wCfjG"
@@ -22291,8 +22291,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-dice.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.I0qtc8XpZhGiXIzm"
@@ -22305,8 +22305,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.aDU7VsWCiOThFhcn"
@@ -22319,8 +22319,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-lock.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Wacmtwfaz3mQo2Ac"
@@ -22333,8 +22333,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-map.webp",
     "weight": 1,
     "range": [
-     15,
-     15
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.pKfxlofb2sYUNKsW"
@@ -22347,8 +22347,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-shackles.webp",
     "weight": 1,
     "range": [
-     16,
-     16
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.UZnfT1qbNmJOmPhU"
@@ -22361,8 +22361,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
     "weight": 1,
     "range": [
-     19,
-     19
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.O2ZuTHslWL1OKU4I"
@@ -22375,8 +22375,8 @@
     "img": "icons/sundries/survival/stake-rough-simple-brown.webp",
     "weight": 1,
     "range": [
-     20,
-     20
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.4dv5uQYqBsDWx2hz"
@@ -22389,8 +22389,8 @@
     "img": "icons/tools/navigation/compass-plain-blue.webp",
     "weight": 1,
     "range": [
-     21,
-     21
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.9qdumQkfr0eAYi52"
@@ -22403,8 +22403,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-grapple-rope.webp",
     "weight": 1,
     "range": [
-     22,
-     22
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.JLUX0khcm33L7IL6"
@@ -22417,8 +22417,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-pipe.webp",
     "weight": 1,
     "range": [
-     23,
-     23
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ztsCE5lFZwBRjcIZ"
@@ -22431,8 +22431,8 @@
     "img": "icons/commodities/stone/ore-chunk-white.webp",
     "weight": 1,
     "range": [
-     26,
-     26
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.xM297OFE3zqQUtiL"
@@ -22445,8 +22445,8 @@
     "img": "icons/commodities/materials/glass-orb-marble-green.webp",
     "weight": 1,
     "range": [
-     27,
-     27
+     19,
+     19
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.45050R4BF9bfJdrA"
@@ -22459,8 +22459,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-soap.webp",
     "weight": 1,
     "range": [
-     28,
-     28
+     20,
+     20
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.s3Apg0dB9OLW1vZW"
@@ -22473,8 +22473,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-key.webp",
     "weight": 1,
     "range": [
-     29,
-     29
+     21,
+     21
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.dvJIxWbA3r5pO9bQ"
@@ -22487,8 +22487,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-shackles2.webp",
     "weight": 1,
     "range": [
-     30,
-     30
+     22,
+     22
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.5IXqSfS6PB3XNb0g"
@@ -22501,8 +22501,8 @@
     "img": "icons/sundries/survival/fire-lighter-brass-lit.webp",
     "weight": 1,
     "range": [
-     31,
-     31
+     23,
+     23
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.LYdOXcMP8ZD8TWo5"
@@ -22515,8 +22515,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-tent.webp",
     "weight": 1,
     "range": [
-     32,
-     32
+     24,
+     24
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.PtnM4RqlPzrsKiAu"
@@ -22529,8 +22529,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-flask.webp",
     "weight": 1,
     "range": [
-     34,
-     34
+     25,
+     25
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.saXpnC0ZQL2qE9Xe"
@@ -22543,8 +22543,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-vial.webp",
     "weight": 1,
     "range": [
-     35,
-     35
+     26,
+     26
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.3eufOtYEfV7hKWbi"
@@ -22557,8 +22557,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-bedroll.webp",
     "weight": 1,
     "range": [
-     36,
-     36
+     27,
+     27
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.3njHAfle17Qs3A5a"
@@ -22571,8 +22571,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-empty-glass.webp",
     "weight": 1,
     "range": [
-     38,
-     38
+     28,
+     28
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ddFaCuXJBLgH66il"
@@ -22585,8 +22585,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
     "weight": 1,
     "range": [
-     39,
-     39
+     29,
+     29
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.juEvlYOhB8doSL6V"
@@ -22599,8 +22599,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-candle.webp",
     "weight": 1,
     "range": [
-     40,
-     40
+     30,
+     30
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.gZhYClpVC0qSXQcQ"
@@ -22613,8 +22613,8 @@
     "img": "icons/tools/instruments/whistle-copper.webp",
     "weight": 1,
     "range": [
-     41,
-     41
+     31,
+     31
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.r66KWEtRQBHXv89s"
@@ -22627,8 +22627,8 @@
     "img": "icons/consumables/plants/dried-herbs-leaves-brown.webp",
     "weight": 1,
     "range": [
-     42,
-     42
+     32,
+     32
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Hzh5rHkIagQoo6E3"
@@ -22641,8 +22641,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-torch.webp",
     "weight": 1,
     "range": [
-     43,
-     43
+     33,
+     33
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ZJno9101ghZPg6nG"
@@ -22655,8 +22655,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-lantern.webp",
     "weight": 1,
     "range": [
-     45,
-     45
+     34,
+     34
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.zoXivrbB9pCkOR0A"
@@ -22669,8 +22669,8 @@
     "img": "icons/sundries/lights/lantern-bullseye-signal-copper.webp",
     "weight": 1,
     "range": [
-     46,
-     46
+     35,
+     35
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.CS7gsSKRJYzvZ3h8"
@@ -22683,8 +22683,8 @@
     "img": "systems/vedmak/assets/fan/gear/g-coin-pouch.webp",
     "weight": 1,
     "range": [
-     47,
-     47
+     36,
+     36
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.ReqE47dW250wUJV1"
@@ -22697,8 +22697,8 @@
     "img": "icons/equipment/waist/belt-buckle-ring-leather-brown.webp",
     "weight": 1,
     "range": [
-     48,
-     48
+     37,
+     37
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.FD9z739ijEE3WTKR"
@@ -22711,8 +22711,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-medallion-stone.webp",
     "weight": 1,
     "range": [
-     49,
-     49
+     38,
+     38
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.FnkxPyPvNUSkesC7"
@@ -22725,8 +22725,8 @@
     "img": "icons/tools/instruments/horn-flared-wood.webp",
     "weight": 1,
     "range": [
-     50,
-     50
+     39,
+     39
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.Y3u8Xt5JU2Km4JVI"
@@ -22739,8 +22739,8 @@
     "img": "icons/commodities/gems/gem-cluster-teal.webp",
     "weight": 1,
     "range": [
-     51,
-     51
+     40,
+     40
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.pfI6Lfp0Nmc76OuO"
@@ -22753,8 +22753,8 @@
     "img": "icons/consumables/potions/vial-cork-empty.webp",
     "weight": 1,
     "range": [
-     52,
-     52
+     41,
+     41
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.zPoyS7hgSUWvkGJc"
@@ -22767,8 +22767,8 @@
     "img": "icons/commodities/currency/coin-engraved-oval-steel.webp",
     "weight": 1,
     "range": [
-     53,
-     53
+     42,
+     42
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.M1HQs0jlyzvaANZo"
@@ -22781,8 +22781,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-am.webp",
     "weight": 1,
     "range": [
-     54,
-     54
+     43,
+     43
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.dDnQtlDtDVrUwluC"
@@ -22795,8 +22795,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-am.webp",
     "weight": 1,
     "range": [
-     55,
-     55
+     44,
+     44
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.dDnQtlDtDVrUwluC"
@@ -22809,8 +22809,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-ms.webp",
     "weight": 1,
     "range": [
-     56,
-     56
+     45,
+     45
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.J6XdswWzols3cELD"
@@ -22823,8 +22823,8 @@
     "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-ms.webp",
     "weight": 1,
     "range": [
-     57,
-     57
+     46,
+     46
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.gear.Item.J6XdswWzols3cELD"
@@ -22844,7 +22844,7 @@
   "name": "Усиления",
   "img": "icons/commodities/leather/leather-leaf-tan.webp",
   "description": "",
-  "formula": "1d13",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -23031,7 +23031,7 @@
   "name": "Вино",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d6",
+  "formula": "1d16",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -23275,7 +23275,7 @@
   "name": "Крепкий Алкоголь",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d7",
+  "formula": "1d14",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -23491,7 +23491,7 @@
   "name": "Пиво",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d4",
+  "formula": "1d5",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -23581,7 +23581,7 @@
   "name": "Случайная руна",
   "img": "icons/svg/d20-grey.svg",
   "description": "<p>A random table created from the contents of the Руны Folder.</p>",
-  "formula": "1d12",
+  "formula": "1d10",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -23677,8 +23677,8 @@
     "img": "systems/vedmak/assets/fan/enhancements/rune-svarog.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.enhancements.Item.qocdVrP2x553wPkq"
@@ -23691,8 +23691,8 @@
     "img": "systems/vedmak/assets/fan/enhancements/rune-chernobog.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.enhancements.Item.gWbRQ4rxlY6YMUwf"
@@ -23705,8 +23705,8 @@
     "img": "systems/vedmak/assets/fan/enhancements/rune-stribog.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.enhancements.Item.CEYbX7vpg4kswlFs"
@@ -23719,8 +23719,8 @@
     "img": "systems/vedmak/assets/fan/enhancements/rune-triglav.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.enhancements.Item.klj0F7fm9zunTOrv"
@@ -24706,7 +24706,7 @@
   "name": "Формула - Новичок",
   "img": "icons/sundries/documents/document-letter-brown.webp",
   "description": "",
-  "formula": "1d14",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -24718,8 +24718,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.yWWImrMTjMjdnpvk"
@@ -24732,8 +24732,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.cgLZ9xnD5gnXaqrM"
@@ -24746,8 +24746,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.aIpE0VOhio8gedAw"
@@ -24760,8 +24760,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.maDXLgid3aScKV9k"
@@ -24774,8 +24774,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.SgTLZDqDDI3n8E46"
@@ -24788,8 +24788,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.p25IxwceTd0lo5sv"
@@ -24802,8 +24802,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.LDOGa2NmAoU8gQgM"
@@ -24816,8 +24816,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.DR9MQSxZA0XuoVR1"
@@ -24830,8 +24830,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.YwEHQPcmS2efO8Zt"
@@ -24844,8 +24844,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.y9Iv4Uh0pGEnLBzx"
@@ -24858,8 +24858,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.mYVdG5KrDELtGGO0"
@@ -24872,8 +24872,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.tSugkyyaW9dDaZwQ"
@@ -24886,8 +24886,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.berwN4MiHzDWPzpw"
@@ -25045,8 +25045,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.XrfQ9bO703Wzzrjq"
@@ -25059,8 +25059,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.DL1recYEVTiBmSX0"
@@ -25073,8 +25073,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.L5Rgaaa4Pi6VaKRR"
@@ -25087,8 +25087,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.H3lHHnaXCSUz2Y0E"
@@ -25101,8 +25101,8 @@
     "img": "icons/sundries/documents/blueprint-recipe-alchemical.webp",
     "weight": 1,
     "range": [
-     15,
-     15
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.utPTcp9eg7Lr7Z3r"
@@ -25834,7 +25834,7 @@
   "name": "Эликсиры",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d13",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -25888,8 +25888,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     5,
-     5
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.qFFA13v3KzMLm4bm"
@@ -25902,8 +25902,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.y9zjZRlirT6WJZVX"
@@ -25916,8 +25916,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.pRR1ZK6EEOWuo0Vt"
@@ -25930,8 +25930,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.IuQukWNxGfyiObZH"
@@ -25944,8 +25944,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.HwaFYwMaPRBRiCeu"
@@ -25958,8 +25958,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.C3Lc0hmXqpyxaTPo"
@@ -25972,8 +25972,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.oZO7w3Q4yfHqadnd"
@@ -25986,8 +25986,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.Ch0qTHbiL6OX19Mo"
@@ -26000,8 +26000,8 @@
     "img": "icons/sundries/scrolls/scroll-writing-gold.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.bXyiWFIp5nWYBnq3"
@@ -28777,7 +28777,7 @@
   "name": "Оружие - Мастер",
   "img": "icons/sundries/documents/document-tree-brown.webp",
   "description": "",
-  "formula": "1d19",
+  "formula": "1d17",
   "replacement": true,
   "displayRoll": false,
   "results": [
@@ -28789,8 +28789,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     2,
-     2
+     1,
+     1
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.UxvakFwwM1tNPciO"
@@ -28803,8 +28803,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     3,
-     3
+     2,
+     2
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.6byIrQUlPtTJBeLm"
@@ -28817,8 +28817,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     4,
-     4
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.ayaNyLs6Ntr3hSpf"
@@ -28831,8 +28831,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     6,
-     6
+     4,
+     4
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.Gf9wZgorI5Gxa70X"
@@ -28845,8 +28845,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     7,
-     7
+     5,
+     5
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.JZrIreLHnCSmLv5e"
@@ -28859,8 +28859,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     8,
-     8
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.DCUdM16grCvKuD2C"
@@ -28873,8 +28873,8 @@
     "img": "icons/sundries/scrolls/scroll-runed-brown-green.webp",
     "weight": 1,
     "range": [
-     9,
-     9
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.RK0hfgSQjIKxsH35"
@@ -28887,8 +28887,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     10,
-     10
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.D8Qs5QV3px0nsRdc"
@@ -28901,8 +28901,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     11,
-     11
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.w3W9hw88e7fQdgVS"
@@ -28915,8 +28915,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     12,
-     12
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.wr4Db4Y3Cd7omWQL"
@@ -28929,8 +28929,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     13,
-     13
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.uFg22CoEXTvSEbSu"
@@ -28943,8 +28943,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     14,
-     14
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.6QQ4cRptA6yMpWso"
@@ -28957,8 +28957,8 @@
     "img": "icons/sundries/scrolls/scroll-runed-brown-green.webp",
     "weight": 1,
     "range": [
-     15,
-     15
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.RWdaB4RkbQPuxA0o"
@@ -28971,8 +28971,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     16,
-     16
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.enIbTp5s2xswkAJp"
@@ -28985,8 +28985,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     17,
-     17
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.A6tbY9HQnOXPFiTu"
@@ -28999,8 +28999,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     18,
-     18
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.MbHMXIW5JCfe1OKa"
@@ -29013,8 +29013,8 @@
     "img": "icons/sundries/documents/blueprint-axe.webp",
     "weight": 1,
     "range": [
-     19,
-     19
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.recipes.Item.TDBmPoDW8xppoaDF"
@@ -29036,7 +29036,7 @@
   "name": "Оружие - Новичок",
   "img": "icons/sundries/documents/blueprint-axe.webp",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d12",
   "replacement": true,
   "displayRoll": false,
   "results": [
