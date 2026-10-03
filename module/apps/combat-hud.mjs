@@ -18,6 +18,7 @@ import { ALCHEMY_ACTIONS } from "../config/crafting.mjs";
 import { flipToken, canFlip } from "./token-flip.mjs";
 import { animateVitals } from "../fx/sheet-motion.mjs";
 import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
+import { levelLabel } from "../config/magic.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -29,6 +30,9 @@ const TABS = [
 const ALCH_GO = { drink: "violet", apply: "violet", mutagen: "violet", oil: "green", throw: "", trap: "" };
 /** Словесные действия на худе — самые ходовые; остальные — на вкладке «Социальный бой» листа. */
 const VERBAL_QUICK = ["persuade", "seduce", "deceive", "intimidate", "ignore", "changeSubject"];
+/** Разделы магии в худе — порядок и короткие подписи. */
+const MAGIC_ORDER = ["sign", "spell", "invocation", "ritual", "hex", "gift"];
+const MAGIC_GROUP_LABELS = { sign: "Знаки", spell: "Заклинания", invocation: "Инвокации", ritual: "Ритуалы", hex: "Порчи", gift: "Дары" };
 
 export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
@@ -55,7 +59,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       toggleStatus: CombatHud.#onToggleStatus,
       nextTurn: CombatHud.#onNextTurn,
       toggleCollapse: CombatHud.#onToggleCollapse,
-      toggleVolume: CombatHud.#onToggleVolume
+      toggleVolume: CombatHud.#onToggleVolume,
+      magicGroup: CombatHud.#onMagicGroup
     }
   };
 
@@ -155,6 +160,47 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     return element;
   }
 
+  /**
+   * Вкладка магии: поиск по всем разделам сразу (прячет плитки, не перерисовывая худ — фокус остаётся в поле),
+   * Enter — сотворить первое найденное, правый щелчок по плитке — «Избранное».
+   */
+  #bindMagic() {
+    const deck = this.element.querySelector(".vh-magic");
+    if (!deck || deck.dataset.bound) return;
+    deck.dataset.bound = "1";
+    const input = deck.querySelector("input.vh-magic-search");
+    const tiles = [...deck.querySelectorAll(".vh-spell")];
+    const empty = deck.querySelector(".vh-magic-empty");
+    const apply = () => {
+      const q = (this.magicQuery ?? "").trim().toLowerCase();
+      let shown = 0;
+      for (const t of tiles) {
+        // Пусто — свой раздел; набран текст — все разделы
+        const on = q ? t.dataset.search.includes(q) : t.dataset.inGroup === "1";
+        t.hidden = !on;
+        if (on) shown++;
+      }
+      deck.classList.toggle("searching", !!q);
+      if (empty) empty.hidden = shown > 0;
+    };
+    input?.addEventListener("input", () => { this.magicQuery = input.value; apply(); });
+    input?.addEventListener("keydown", event => {
+      if (event.key === "Escape") { input.value = ""; this.magicQuery = ""; apply(); }
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      const first = tiles.find(t => !t.hidden);
+      const item = first && this.actor?.items.get(first.dataset.itemId);
+      if (item) castSpell(this.actor, item, { skipDialog: event.shiftKey });
+    });
+    deck.addEventListener("contextmenu", event => {
+      const tile = event.target.closest(".vh-spell");
+      if (!tile) return;
+      event.preventDefault();
+      this.#toggleFavorite(tile.dataset.itemId);
+    });
+    apply();
+  }
+
   /** Навык из поля поиска: Enter или выбор из подсказок — бросок. */
   _onRender(context, options) {
     super._onRender?.(context, options);
@@ -165,6 +211,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     if (this.actor) animateVitals(this, this.element, this.actor.id);
     bindVolumeSlider(this.element.querySelector(".vh-volpop input"));
+    this.#bindMagic();
     const input = this.element.querySelector("input.vh-skill");
     if (!input || input.dataset.bound) return;
     input.dataset.bound = "1";
@@ -204,7 +251,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     });
     const vigor = d.vigor ?? 0;
     const used = vigor ? vigorUsed(actor).used : 0;
-    const energy = Array.from({ length: Math.min(vigor, 10) }, (_, k) => ({ on: k < Math.max(0, vigor - used) }));
+    // Ячейки — пока их немного; у магов (Энергия 15–25) — числом «осталось из», иначе полоса вылезает из колонки
+    const energy = vigor <= 6 ? Array.from({ length: vigor }, (_, k) => ({ on: k < Math.max(0, vigor - used) })) : [];
     const luck = isCharacter ? Array.from({ length: Math.min(system.luck?.max ?? 0, 12) }, (_, k) => ({ on: k < (system.luck?.value ?? 0) })) : [];
 
     // Бой: чем бить (только то, что в руках — см. isReadyWeapon), защиты, испытания
@@ -218,13 +266,28 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const defenses = ["dodge", "athletics", "brawling", "melee"].map(key => ({ key, label: SKILLS[key].label.split("/")[0], base: system.skills[key].base }));
     const deathThreshold = (d.stun ?? 0) - (system.deathSaves?.penalty ?? 0);
 
-    // Магия: всё, что есть, знаки — первыми; поддерживаемое — с кнопкой «снять»
-    const order = { sign: 0, spell: 1, invocation: 2, ritual: 3, hex: 4, gift: 5 };
-    const spells = actor.itemTypes.spell.slice().sort((a, b) => (order[a.system.kind] ?? 9) - (order[b.system.kind] ?? 9))
-      .map(i => ({
-        id: i.id, name: i.name, img: i.img, sign: i.system.kind === "sign",
-        cost: i.system.variableCost ? "1+ вын" : `${i.system.staCost ?? 0} вын`
-      }));
+    // Магия: разделы по видам, «Избранное» (флаг актора), плитки по алфавиту; поиск — в _onRender, без перерисовки
+    const favIds = new Set(actor.getFlag(SYSTEM_ID, "hudFavorites") ?? []);
+    const sta = system.sta?.value ?? 0;
+    const allSpells = actor.itemTypes.spell.slice().sort((a, b) => a.name.localeCompare(b.name, "ru")).map(i => {
+      const sy = i.system;
+      const need = sy.variableCost ? 1 : sy.staCost ?? 0;
+      return {
+        id: i.id, name: i.name, img: i.img, kind: sy.kind, sign: sy.kind === "sign", element: sy.element || "mixed",
+        fav: favIds.has(i.id), cost: sy.variableCost ? "1+" : String(sy.staCost ?? 0), short: sta < need,
+        search: i.name.toLowerCase(),
+        tip: [CONFIG.VEDMAK.MAGIC_KINDS[sy.kind], levelLabel(sy.kind, sy.level), sy.kind === "spell" || sy.kind === "sign"
+          ? CONFIG.VEDMAK.MAGIC_ELEMENTS[sy.element] : "", sy.range, sy.duration].filter(Boolean).join(" · ")
+      };
+    });
+    const magicGroups = [
+      ...(favIds.size ? [{ id: "fav", label: "Избранное", icon: "fa-solid fa-star" }] : []),
+      ...MAGIC_ORDER.filter(k => allSpells.some(sp => sp.kind === k)).map(k => ({ id: k, label: MAGIC_GROUP_LABELS[k] }))
+    ].map(g => ({ ...g, count: g.id === "fav" ? allSpells.filter(sp => sp.fav).length : allSpells.filter(sp => sp.kind === g.id).length }));
+    if (!magicGroups.some(g => g.id === this.magicGroup)) this.magicGroup = magicGroups[0]?.id ?? "sign";
+    for (const g of magicGroups) g.active = g.id === this.magicGroup;
+    // Рисуются все плитки (поиск идёт по всем разделам), свой раздел помечен
+    for (const sp of allSpells) sp.inGroup = this.magicGroup === "fav" ? sp.fav : sp.kind === this.magicGroup;
     const maintained = maintainedSpells(actor).map(e => ({ id: e.id, name: e.name, img: e.img, cost: e.flags.vedmak.maintain.cost }));
 
     // Алхимия: всё, чем можно воспользоваться сейчас
@@ -253,8 +316,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     }));
     const statusList = STATUS_EFFECTS.map(s => ({ id: s.id, name: s.name, img: s.img, on: actor.statuses.has(s.id), hint: STATUS_HINTS[s.id] ?? s.name }));
 
-    const counts = { magic: spells.length, alchemy: alchemy.length, states: effects.length };
-    const tabs = TABS.filter(t => !(t.id === "magic" && !spells.length && !maintained.length)
+    const counts = { magic: allSpells.length, alchemy: alchemy.length, states: effects.length };
+    const tabs = TABS.filter(t => !(t.id === "magic" && !allSpells.length && !maintained.length)
       && !(t.id === "alchemy" && !alchemy.length && !isCharacter))
       .map(t => ({ ...t, active: t.id === this.tab, count: counts[t.id] || "" }));
     if (!tabs.some(t => t.active)) { this.tab = "fight"; tabs[0].active = true; }
@@ -272,7 +335,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       showFight: this.tab === "fight", showMagic: this.tab === "magic", showAlchemy: this.tab === "alchemy",
       showActions: this.tab === "actions", showStates: this.tab === "states",
       attacks, defenses, stun: d.stun, deathThreshold, dying: d.dying,
-      spells, maintained, shield: system.shield?.value ?? 0,
+      allSpells, magicGroups, magicQuery: this.magicQuery, maintained, shield: system.shield?.value ?? 0,
       alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
       adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && isCharacter; } catch { return false; } })(),
       adrenaline: system.adrenaline?.value ?? 0,
@@ -359,6 +422,29 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onToggleStatus(event, target) { await this.actor?.toggleStatusEffect(target.dataset.status); }
 
   static async #onNextTurn() { await game.combat?.nextTurn(); }
+
+  /** Раздел магии: Избранное, Знаки, Заклинания… */
+  static #onMagicGroup(event, target) {
+    this.magicGroup = target.dataset.group;
+    this.magicQuery = "";
+    this.deckIn = true;
+    this.render();
+  }
+
+  /** Текущий раздел магии и строка поиска — живут, пока открыт клиент. */
+  magicGroup = "";
+  magicQuery = "";
+
+  /** Правый щелчок по плитке заклинания — в «Избранное» или из него (флаг актора, видно всем, кто им играет). */
+  async #toggleFavorite(itemId) {
+    const actor = this.actor;
+    if (!actor?.isOwner || !itemId) return;
+    const fav = new Set(actor.getFlag(SYSTEM_ID, "hudFavorites") ?? []);
+    if (fav.has(itemId)) fav.delete(itemId);
+    else fav.add(itemId);
+    // Удалённые заклинания из списка вычищаются заодно
+    await actor.setFlag(SYSTEM_ID, "hudFavorites", [...fav].filter(id => actor.items.has(id)));
+  }
 
   /** Ползунок громкости под динамиком: открыть или спрятать. */
   static #onToggleVolume() {

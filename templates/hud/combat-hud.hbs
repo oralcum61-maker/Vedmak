@@ -20,9 +20,10 @@
       <span class="vh-num{{#if bad}} bad{{/if}}"><b>{{value}}</b><small>{{#if suffix}}{{suffix}}{{else}}/{{max}}{{/if}}</small></span>
     </div>
     {{/each}}
-    {{#if (or energy.length luck.length)}}
+    {{#if (or energyMax luck.length)}}
     <div class="vh-pips">
-      {{#if energy.length}}<span class="vh-pip-row" data-tooltip="Энергия раунда"><span class="vh-cap">энергия</span>{{#each energy}}<i class="vh-slot{{#if on}} on{{/if}}"></i>{{/each}}</span>{{/if}}
+      {{#if energy.length}}<span class="vh-pip-row" data-tooltip="Энергия раунда"><span class="vh-cap">энергия</span>{{#each energy}}<i class="vh-slot{{#if on}} on{{/if}}"></i>{{/each}}</span>
+      {{else if energyMax}}<span class="vh-pip-row" data-tooltip="Энергия раунда: осталось из всего"><span class="vh-cap">энергия</span><b class="vh-en">{{energyLeft}}</b><span class="vh-cap">/ {{energyMax}}</span></span>{{/if}}
       {{#if luck.length}}<span class="vh-pip-row" data-tooltip="Удача"><span class="vh-cap">удача</span>{{#each luck}}<i class="vd-coin{{#unless on}} off{{/unless}}"></i>{{/each}}</span>{{/if}}
     </div>
     {{/if}}
@@ -64,14 +65,31 @@
     {{/if}}
 
     {{#if showMagic}}
-    <div class="vh-deck">
-      <div class="vh-signs">
-        {{#each spells}}
-        <button type="button" class="vh-sign" data-action="castSpell" data-item-id="{{id}}" data-tooltip="{{name}} — {{cost}}">
-          <span class="vh-sigm{{#unless sign}} violet{{/unless}}"><span><img src="{{img}}" alt=""></span></span>
-          <span class="vh-sn">{{name}}</span><span class="vh-cap">{{cost}}</span>
+    {{!-- Магия: разделы и поиск слева, плитки в колонки с прокруткой, справа — что держится (PLAN 4.68) --}}
+    <div class="vh-deck vh-magic{{#unless (or maintained.length shield)}} no-held{{/unless}}">
+      <div class="vh-mgroups">
+        <input type="search" class="vh-magic-search" value="{{magicQuery}}" placeholder="Найти…" aria-label="Найти заклинание" data-tooltip="Поиск по всем разделам; Enter — сотворить первое найденное, Esc — сбросить">
+        <div class="vh-mlist">
+          {{#each magicGroups}}
+          <button type="button" class="vh-mgroup{{#if active}} on{{/if}}" data-action="magicGroup" data-group="{{id}}">
+            {{#if icon}}<i class="{{icon}}"></i> {{/if}}<span>{{label}}</span><b>{{count}}</b>
+          </button>
+          {{/each}}
+        </div>
+      </div>
+      <div class="vh-spells">
+        {{#each allSpells}}
+        <button type="button" class="vh-spell el-{{element}}{{#if sign}} sign{{/if}}{{#if short}} short{{/if}}{{#if fav}} fav{{/if}}"
+                data-action="castSpell" data-item-id="{{id}}" data-search="{{search}}" data-in-group="{{#if inGroup}}1{{else}}0{{/if}}"
+                {{#unless inGroup}}hidden{{/unless}}
+                data-tooltip="{{name}}<br>{{tip}}<br><i>Щелчок — сотворить, Shift — без окна, правый щелчок — {{#if fav}}убрать из избранного{{else}}в избранное{{/if}}</i>">
+          <span class="vh-sico"><img src="{{img}}" alt=""></span>
+          <span class="vh-sname">{{name}}</span>
+          <span class="vh-scost" {{#if short}}data-tooltip="Не хватает Вын"{{/if}}>{{cost}}</span>
+          {{#if fav}}<i class="vh-sfav fa-solid fa-star"></i>{{/if}}
         </button>
         {{/each}}
+        <span class="vh-empty vh-magic-empty" hidden>Ничего не нашлось.</span>
       </div>
       {{#if (or maintained.length shield)}}
       <div class="vh-grp vh-held">
@@ -82,10 +100,6 @@
         {{/each}}
       </div>
       {{/if}}
-      <div class="vh-aside">
-        {{#if energyMax}}<p>Энергия раунда: <b class="violet">{{energyLeft}}</b> из {{energyMax}}</p>{{/if}}
-        <p>Щелчок — окно сотворения, с Shift — сразу, без окна.</p>
-      </div>
     </div>
     {{/if}}
 
