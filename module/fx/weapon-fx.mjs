@@ -1,11 +1,11 @@
 // Анимации JB2A для атак (PLAN 4.70): своё оружие — свой замах, вид атаки — свой рисунок, тип урона — свой удар.
 // Пути сверены с бесплатной JB2A 0.9.4. Нет JB2A — работают свои эффекты (scene.mjs), этот файл не нужен.
 //
-// Шаг анимации (spec): { file, mode, scale, delay, mirror, opacity, proj, full }
+// Шаг анимации (spec): { file, mode, scale, delay, mirror, opacity, proj, full, fadeIn, fadeOut, scaleIn, scaleInMs, playbackRate }
 //   swing  — от атакующего к цели (оружейные файлы JB2A рассчитаны на соседнюю клетку: если цель дальше, замах идёт
 //            с клетки рядом с ней); proj — снаряд, full — дыхание и порыв: эти всегда от самого атакующего;
 //   target — на цели (когти, укус, удар, кровь), scale — во сколько раз больше токена;
-//   self   — на атакующем (рёв, кольцо огня, топот);
+//   self   — на атакующем (рёв, кольцо огня, топот); kick — на атакующем, развёрнуто к цели (пыль из-под ног);
 //   ground — под целью, ниже токенов (трещина от подсечки или топота).
 
 const W = {
@@ -45,6 +45,16 @@ const W = {
 
 const TRAIL_HEAVY = "jb2a.melee_attack.03.trail.01.orangered";
 const GUST = "jb2a.gust_of_wind.veryfast";
+// Рывок: полоса скорости от бойца к цели (порыв ветра выглядел облачком пара, а не разбегом)
+const DASH = "jb2a.wind_stream.white";
+const DASH_HIT = "jb2a.impact.009.orange";
+/** Разбег: полоса скорости, затем удар (замах оружия или свой шаг) и толчок на цели. */
+const dash = strike => [
+  { file: "jb2a.smoke.puff.side.02.white", mode: "kick", scale: 1.3 },
+  { file: DASH, mode: "swing", full: true, playbackRate: 1.6 },
+  ...(strike ? [{ ...strike, delay: 260 }] : []),
+  { file: DASH_HIT, mode: "target", scale: 1.3, delay: strike ? 420 : 300 }
+];
 const CRACK = "jb2a.impact.ground_crack.orange.02";
 const CHAIN = "jb2a.markers.chain.standard.complete.02.red";
 
@@ -102,8 +112,9 @@ function weaponFile(weapon = {}, sourceKind = "") {
 function naturalFx(name) {
   const n = String(name ?? "").toLowerCase();
   const at = (file, scale = 1.3) => ({ file, mode: "target", scale });
-  if (has(n, "укус", "клык", "зуб")) return { now: [], hit: [at("jb2a.bite.200px.red", 1.2)] };
-  if (has(n, "когт", "лап")) return { now: [], hit: [at("jb2a.claws.200px.red", 1.2)] };
+  // Укус и когти видны в момент атаки (как замах оружия) — и при промахе; при попадании добавятся кровь и удар
+  if (has(n, "укус", "клык", "зуб")) return { now: [at("jb2a.bite.200px.red", 1.4)], hit: [] };
+  if (has(n, "когт", "лап")) return { now: [at("jb2a.claws.200px.red", 1.4)], hit: [] };
   if (has(n, "хвост", "кнут", "хлыст")) return { now: [{ file: W.whip, mode: "swing" }], hit: [at("jb2a.impact.009.orange")] };
   if (has(n, "дыхани", "поток огня", "волна угл")) return { now: [{ file: "jb2a.breath_weapons.fire.cone.orange.01", mode: "swing", full: true }], hit: [] };
   if (has(n, "кольцо огня", "пламенн")) return { now: [{ file: "jb2a.fire_ring.500px.red", mode: "self", scale: 4 }], hit: [] };
@@ -113,18 +124,20 @@ function naturalFx(name) {
   if (has(n, "кислот", "рвот")) return { now: [{ file: "jb2a.breath_weapons.acid.line.green", mode: "swing", full: true }], hit: [] };
   if (has(n, "яд")) return { now: [{ file: "jb2a.breath_weapons.poison.cone.green", mode: "swing", full: true }], hit: [] };
   if (has(n, "пепл")) return { now: [{ file: "jb2a.smoke.plumes.01.grey", mode: "self", scale: 3 }], hit: [] };
-  if (has(n, "паутин")) return { now: [], hit: [at(W.net, 1.6)] };
+  if (has(n, "паутин")) return { now: [{ ...at(W.net, 1.6), fadeIn: 300, scaleIn: 0.5, scaleInMs: 400 }], hit: [] };
   if (has(n, "игл", "шип")) return { now: [{ file: W.needle, mode: "swing", proj: true }], hit: [] };
   if (has(n, "камн", "валун")) return { now: [{ file: W.stone, mode: "swing", proj: true }], hit: [at(CRACK)] };
   if (has(n, "вопль", "вой", "звуков", "психическ")) return { now: [{ file: "jb2a.soundwave.02.blue", mode: "self", scale: 4 }], hit: [] };
   if (has(n, "крыл")) return { now: [{ file: GUST, mode: "swing", full: true }], hit: [] };
   if (has(n, "меч")) return { now: [{ file: W.sword, mode: "swing" }], hit: [] };
   if (has(n, "дубин")) return { now: [{ file: W.greatclub, mode: "swing" }], hit: [] };
-  if (has(n, "корн")) return { now: [], hit: [at("jb2a.entangle.green", 1.5)] };
+  // Корни прорастают: нарастают из земли и проявляются, а не возникают разом
+  if (has(n, "корн")) return { now: [{ ...at("jb2a.entangle.green", 1.5), mode: "ground", fadeIn: 900, scaleIn: 0.15, scaleInMs: 1100, fadeOut: 800 }], hit: [] };
   if (has(n, "взрыв", "перерожд")) return { now: [{ file: "jb2a.explosion.01.orange", mode: "self", scale: 3 }], hit: [] };
   if (has(n, "кулак", "рук")) return { now: [{ file: W.fist, mode: "swing" }], hit: [] };
-  // Рога, копыта, таран, разбег, просто «удар»
-  return { now: [], hit: [at("jb2a.impact.009.orange", 1.4)] };
+  // Рога, копыта, таран, разбег — рывок к цели и толчок; просто «удар» — толчок
+  if (has(n, "разбег", "таран", "рог", "копыт", "бодан")) return { now: dash(null), hit: [] };
+  return { now: [{ ...at(DASH_HIT, 1.4), delay: 120 }], hit: [] };
 }
 
 /** Вид атаки меняет рисунок замаха (стр. 165–167). */
@@ -134,7 +147,7 @@ function styled(base, attackType) {
     case "strong":
       return [swing, { file: TRAIL_HEAVY, mode: "swing", delay: 120 }];
     case "charge":
-      return [{ file: GUST, mode: "swing", full: true }, { ...swing, delay: 280 }];
+      return dash(swing);
     case "pommel":
       return [{ file: W.kick, mode: "swing" }];
     case "trip":
@@ -156,7 +169,7 @@ function unarmedFx(attackType) {
     case "kick": return [{ file: W.kick, mode: "swing" }];
     case "kickStrong": return [{ file: W.flurry, mode: "swing" }];
     case "pushKick": return [{ file: W.kick, mode: "swing" }, { file: GUST, mode: "swing", full: true, delay: 200 }];
-    case "charge": return [{ file: GUST, mode: "swing", full: true }, { file: W.kick, mode: "swing", delay: 280 }];
+    case "charge": return dash({ file: W.kick, mode: "swing" });
     case "grapple":
     case "pin":
     case "choke": return [{ file: CHAIN, mode: "target", scale: 1.2 }];
@@ -173,7 +186,7 @@ function unarmedFx(attackType) {
  */
 export function attackSteps(a) {
   const w = a.weapon ?? {};
-  if (a.source?.kind === "ram") return [{ file: GUST, mode: "swing", full: true }, { file: "jb2a.impact.009.orange", mode: "target", scale: 1.6, delay: 300 }];
+  if (a.source?.kind === "ram") return dash(null).map(st => (st.mode === "target" ? { ...st, scale: 1.8 } : st));
   if (a.source?.kind === "unarmed" || w.unarmed) return unarmedFx(a.attackType);
   if (w.category === "natural") return naturalFx(w.name).now;
   const f = weaponFile(w, a.source?.kind);

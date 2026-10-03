@@ -191,7 +191,8 @@ export function playSteps(steps, { from = null, to = null } = {}) {
       // Чего не хватает (нет цели у замаха, нет бойца у «на себе») — шаг пропускаем
       if (st.mode === "swing" && !(from && to)) continue;
       if ((st.mode === "target" || st.mode === "ground") && !to) continue;
-      if (st.mode === "self" && !from) continue;
+      if ((st.mode === "self" || st.mode === "kick") && !from) continue;
+      if (st.mode === "kick" && !to) continue;
       const e = seq.effect().file(st.file).locally(true);
       if (st.mode === "swing") {
         // Замах рассчитан на соседнюю клетку: если цель дальше (древковое, разбег), он идёт с клетки рядом с ней,
@@ -204,6 +205,9 @@ export function playSteps(steps, { from = null, to = null } = {}) {
         }
         e.atLocation(start).stretchTo(to);
         if (st.mirror) e.mirrorY();
+      } else if (st.mode === "kick") {
+        // Пыль из-под ног: на атакующем, клубится назад, от цели
+        e.atLocation(from).rotateTowards(to).scaleToObject(st.scale ?? 1.2).mirrorX();
       } else if (st.mode === "self") {
         e.atLocation(from).size(st.scale ?? 3, { gridUnits: true });
         if (st.below) e.belowTokens();
@@ -213,6 +217,11 @@ export function playSteps(steps, { from = null, to = null } = {}) {
       }
       if (st.delay) e.delay(st.delay);
       if (st.opacity) e.opacity(st.opacity);
+      // Плавное появление и исчезновение (корни, паутина): без него анимация возникает и пропадает рывком
+      if (st.fadeIn) e.fadeIn(st.fadeIn, { ease: "easeOutCubic" });
+      if (st.fadeOut) e.fadeOut(st.fadeOut, { ease: "easeInCubic" });
+      if (st.scaleIn) e.scaleIn(st.scaleIn, st.scaleInMs ?? 500, { ease: "easeOutCubic" });
+      if (st.playbackRate) e.playbackRate(st.playbackRate);
       n++;
     }
     if (!n) return false;
