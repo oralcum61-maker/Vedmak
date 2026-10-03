@@ -1,17 +1,16 @@
-{{!-- Подвал окна: во что сложится бросок. Контекст — объект total.
+{{!-- Подвал окна: во что сложится бросок (холст design/11: итог — медальон, урон — в колодце). Контекст — объект total.
       «d10 +» и число пишет bindDialog (module/dice/dialog-ui.mjs) в data-total-dx / data-total-roll, строку «основа · правки · Удача» — в data-total-parts. --}}
 <footer class="dlg-total">
   {{#unless noRoll}}
   <div class="tot roll">
-    <span class="cap">БРОСОК</span>
-    <span class="tot-roll"><span class="dx" data-total-dx>d10 +</span><b data-total-roll>{{base}}</b></span>
+    <span class="tot-roll"><span class="dx" data-total-dx>d10 +</span><span class="vd-medal md">{{vedmakRing}}<span class="vd-medal-face"><b data-total-roll>{{base}}</b></span></span></span>
     <span class="tot-parts" data-total-parts>основа {{base}}</span>
   </div>
   {{/unless}}
   {{#if damage}}
   <div class="tot dmg">
-    <span class="cap">УРОН</span>
     <b data-total-damage data-damage="{{damage}}">{{damage}}</b>
+    <span class="cap">УРОН</span>
   </div>
   {{/if}}
   <span class="tot-hint" data-total-hint>{{hint}}</span>

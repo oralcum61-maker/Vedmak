@@ -947,3 +947,55 @@
   background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
 }
 .application.vedmak.monster .vm-hint { margin: 0; font-size: .72rem; line-height: 1.45; color: #a8a296; }
+
+/* ============================== Окна проверок по холсту design/11 (PLAN 4.61) ==============================
+   Значок — в стальной рамке, основа — медальон, итог броска — медальон после «d10 +», урон — в утопленном колодце,
+   главная кнопка — эмаль на заклёпках (киноварь — атака, фиалка — сотворение, сталь — прочее). */
+.vedmak-dialog.check-dialog .dlg-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 52px; height: 52px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.vedmak-dialog.check-dialog .dlg-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.vedmak-dialog.check-dialog .dlg-frame img { width: 44px; height: 44px; margin: 0; object-fit: contain; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.vedmak-dialog.check-dialog .dlg-base:has(.vd-medal) {
+  min-width: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: 0; box-shadow: none;
+}
+.vedmak-dialog.check-dialog .dlg-base:has(.vd-medal)::before, .vedmak-dialog.check-dialog .dlg-base:has(.vd-medal)::after { content: none; }
+.vedmak-dialog.check-dialog .dlg-base .vd-medal { --size: 56px; --rim: 8px; }
+.vedmak-dialog.check-dialog .dlg-base .vd-medal-face b { font-size: 22px; }
+.vedmak-dialog.check-dialog .dlg-base:has(.vd-medal) .cap { font-size: .56rem; letter-spacing: .16em; color: #a8a296; }
+
+.vedmak-dialog.check-dialog .dlg-total { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem .5rem; }
+.vedmak-dialog.check-dialog .dlg-total .tot.roll { flex: 1 1 0; flex-direction: row; align-items: center; gap: .9rem; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll { display: flex; align-items: center; gap: 8px; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .dx { font-family: var(--vd-font-head); font-size: 1.25rem; color: #a8a296; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .vd-medal { --size: 60px; --rim: 9px; }
+.vedmak-dialog.check-dialog .dlg-total .tot-roll .vd-medal-face b { font-size: 24px; color: transparent; overflow: visible; }
+.vedmak-dialog.check-dialog .dlg-total .tot-parts { font-size: .7rem; color: #bab4a8; }
+.vedmak-dialog.check-dialog .dlg-total .tot.dmg {
+  flex: none; align-items: center; gap: 3px; padding: 7px 14px; border-left: 0;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.vedmak-dialog.check-dialog .dlg-total .tot.dmg b { font-size: 1.2rem; max-width: 12rem; }
+.vedmak-dialog.check-dialog .dlg-total .tot.dmg .cap { font-size: .56rem; letter-spacing: .16em; color: #a8a296; }
+.vedmak-dialog.check-dialog .dlg-total .tot-hint:empty { display: none; }
+
+.vedmak-dialog.check-dialog .form-footer { gap: .75rem; padding: .5rem 1rem 1rem; background-color: #131417; background-image: var(--vd-s-header); background-size: 512px 512px; }
+.vedmak-dialog.check-dialog .form-footer button[data-action="cancel"] { flex: 0 0 auto; height: 40px; padding: 0 22px; }
+.vedmak-dialog.check-dialog .form-footer button:not([data-action="cancel"]) {
+  flex: 1 1 0; height: 40px; letter-spacing: .22em; font-size: .72rem; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-btn);
+  background-position: left 7px center, right 7px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat; background-blend-mode: normal;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .35), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.vedmak-dialog.attack-dialog .form-footer button:not([data-action="cancel"]) {
+  color: #fff6ef; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7);
+  background-color: #b8432c; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+}
+.vedmak-dialog.cast-dialog .form-footer button:not([data-action="cancel"]) {
+  color: #f7f3ff; text-shadow: 0 -1px 0 rgba(20, 10, 40, .7);
+  background-color: #6a5a98; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go-arcane);
+}
