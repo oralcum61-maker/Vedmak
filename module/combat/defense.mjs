@@ -7,7 +7,8 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import {
-  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat
+  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat,
+  isReadyWeapon
 } from "./common.mjs";
 
 /** Чем можно блокировать или парировать. */
@@ -18,8 +19,8 @@ function defenseItems(actor, attack, defense) {
       out.push({ id: s.id, label: `${s.name} (щит, Ближний бой)`, skill: "melee", shield: true, item: s });
     }
     if (!(defense === "block" && attack.isRanged)) {
-      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged)
-        .sort((a, b) => b.system.equipped - a.system.equipped);
+      // Блокируют и парируют тем, что в руках
+      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged && isReadyWeapon(actor, w));
       for (const w of weapons) out.push({ id: w.id, label: `${w.name} (${SKILLS[w.system.skill]?.label ?? ""})`, skill: w.system.skill, item: w });
     }
   }

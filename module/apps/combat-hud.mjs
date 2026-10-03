@@ -197,10 +197,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const energy = Array.from({ length: Math.min(vigor, 10) }, (_, k) => ({ on: k < Math.max(0, vigor - used) }));
     const luck = isCharacter ? Array.from({ length: Math.min(system.luck?.max ?? 0, 12) }, (_, k) => ({ on: k < (system.luck?.value ?? 0) })) : [];
 
-    // Бой: чем бить (у персонажа — что в руках), защиты, испытания
-    const sources = attackSources(actor);
-    const equipped = sources.filter(src => src.kind !== "weapon" || src.item?.system.equipped);
-    const attacks = (actor.type === "monster" || equipped.length < 2 ? sources : equipped).map(src => ({
+    // Бой: чем бить (только то, что в руках — см. isReadyWeapon), защиты, испытания
+    const attacks = attackSources(actor).map(src => ({
       kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
       base: system.skills[src.skill].base + (src.accuracy || 0),
       damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,

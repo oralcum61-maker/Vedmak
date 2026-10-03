@@ -53,6 +53,15 @@ export function fallbackDefender() {
 }
 
 /** Участник активного боя для актора. */
+/**
+ * Оружие готово к бою: у персонажа — надетое или естественное (когти, клыки не надевают); у чудовища — любое,
+ * снаряжения оно не носит. Только готовым атакуют, блокируют и парируют, только оно видно на вкладке боя и в худе.
+ */
+export function isReadyWeapon(actor, item) {
+  if (!item || actor?.type === "monster") return true;
+  return !!item.system.equipped || item.system.category === "natural";
+}
+
 export function combatantFor(actor) {
   const combat = game.combat;
   if (!combat?.started || !actor) return null;

@@ -542,9 +542,8 @@
 
 /* Середина: вкладки и колода */
 .vedmak-hud .vh-center { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
-.vedmak-hud .vh-tabsrow { display: flex; align-items: center; gap: 10px; padding: 7px 40px 6px 14px; border-bottom: 1px solid #060708; box-shadow: 0 1px 0 rgba(255, 240, 215, .05); }
-.vedmak-hud .vh.collapsed .vh-tabsrow { border-bottom: 0; box-shadow: none; margin-block: auto; padding-right: 14px; }
-.vedmak-hud .vh-fill { flex: 1 1 0; }
+.vedmak-hud .vh-tabsrow { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 7px 40px 6px; border-bottom: 1px solid #060708; box-shadow: 0 1px 0 rgba(255, 240, 215, .05); }
+.vedmak-hud .vh.collapsed .vh-tabsrow { border-bottom: 0; box-shadow: none; margin-block: auto; padding-inline: 14px; }
 .vedmak-hud .vh-switch {
   display: inline-flex; gap: 2px; padding: 3px; border-radius: 4px;
   background: var(--vd-well-bg); border: 1px solid #040405; box-shadow: var(--vd-well-shadow);
@@ -703,7 +702,7 @@
   .vedmak-hud .vh-portrait img { inset: 4px; width: 40px; height: 40px; }
   .vedmak-hud .vh-vit { grid-template-columns: 30px 1fr 46px; gap: 6px; }
   .vedmak-hud .vh-turn { width: 124px; padding: 8px 10px; }
-  .vedmak-hud .vh-tabsrow { padding-left: 10px; }
+  .vedmak-hud .vh-tabsrow { padding-inline: 32px; }
   .vedmak-hud .vh-switch a { padding: 0 8px; font-size: 12.5px; gap: 5px; }
   .vedmak-hud .vh-deck { padding: 8px 10px; gap: 8px; }
   .vedmak-hud .vh-dmg { min-width: 0; }

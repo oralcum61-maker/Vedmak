@@ -12,7 +12,7 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import {
-  currentTargets, actorToken, tokenDistance, resolveActor, postCard, defaultMessageMode, armWoundParts
+  currentTargets, actorToken, tokenDistance, resolveActor, postCard, defaultMessageMode, armWoundParts, isReadyWeapon
 } from "./common.mjs";
 
 const SHIELD_STEPS = { light: 0, medium: 2, heavy: 4 };
@@ -108,7 +108,8 @@ function pick(map, keys) {
 /** Все доступные источники атак актора (для листа). */
 export function attackSources(actor) {
   const out = [];
-  const weapons = actor.itemTypes.weapon.slice().sort((a, b) => (b.system.equipped - a.system.equipped) || (a.sort - b.sort));
+  // В бой идёт только то, что в руках (isReadyWeapon): ненадетое оружие персонажа не предлагается
+  const weapons = actor.itemTypes.weapon.filter(w => isReadyWeapon(actor, w)).sort((a, b) => a.sort - b.sort);
   for (const w of weapons) out.push(describeSource(actor, { kind: "weapon", itemId: w.id }));
   for (const s of actor.itemTypes.armor.filter(i => i.system.isShield && i.system.equipped)) {
     out.push(describeSource(actor, { kind: "shield", itemId: s.id }));
@@ -142,6 +143,10 @@ function suggestBand(actor, src, targets) {
 export async function attack(actor, source, opts = {}) {
   const src = describeSource(actor, source);
   if (!src) return null;
+  if ((src.kind === "weapon" || src.kind === "shield") && !(src.kind === "shield" ? src.item?.system.equipped : isReadyWeapon(actor, src.item))) {
+    ui.notifications.warn(`«${src.item?.name ?? src.label}» не в руках — наденьте на вкладке «Снаряжение», тогда можно атаковать.`);
+    return null;
+  }
   const targets = opts.targets ?? currentTargets();
   let cfg = {
     attackType: opts.attackType ?? src.defaultType, aim: opts.aim ?? "", band: opts.band,
