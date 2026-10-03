@@ -90,7 +90,7 @@ export function describeSource(actor, source) {
       silverDamage: w.silverDamage, effects: w.effects.map(e => ({ ...e })),
       isRanged: w.isRanged, isThrown: w.isThrown, isBow: w.isBow, isCrossbow: w.isCrossbow,
       range: w.rangeMeters(actor.system.stats.body.raw), attackSpeed: w.attackSpeed,
-      nonLethal: !!w.effect("nonLethal"), category: w.category
+      nonLethal: !!w.effect("nonLethal"), category: w.category, hands: w.hands
     }
   };
 }

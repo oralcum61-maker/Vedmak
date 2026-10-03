@@ -174,3 +174,52 @@ export function preloadCombatFx() {
     .map(pick).filter(Boolean);
   try { Sequencer.Preloader.preload(files, false)?.catch?.(() => {}); } catch { /* старый Sequencer — без предзагрузки */ }
 }
+
+/**
+ * Проиграть шаги анимации атаки (weapon-fx.mjs) от атакующего к цели.
+ * @param {object[]} steps — {file, mode: swing|target|self|ground, scale, delay, mirror, opacity, below}
+ * @param {{from: Token|null, to: Token|null}} ends
+ * @returns {boolean} проиграно ли хоть что-то
+ */
+export function playSteps(steps, { from = null, to = null } = {}) {
+  if (!jb2aReady() || !steps?.length) return false;
+  const seq = new Sequence({ moduleName: "vedmak", softFail: true });
+  let n = 0;
+  try {
+    for (const st of steps) {
+      if (!exists(st.file)) continue;
+      // Чего не хватает (нет цели у замаха, нет бойца у «на себе») — шаг пропускаем
+      if (st.mode === "swing" && !(from && to)) continue;
+      if ((st.mode === "target" || st.mode === "ground") && !to) continue;
+      if (st.mode === "self" && !from) continue;
+      const e = seq.effect().file(st.file).locally(true);
+      if (st.mode === "swing") {
+        // Замах рассчитан на соседнюю клетку: если цель дальше (древковое, разбег), он идёт с клетки рядом с ней,
+        // а не растягивается во весь путь. Снаряды, дыхание и порыв — от самого атакующего
+        let start = from;
+        if (!st.proj && !st.full) {
+          const a = from.center ?? from, b = to.center ?? to, g = canvas?.grid?.size ?? 100;
+          const dist = Math.hypot(b.x - a.x, b.y - a.y);
+          if (dist > g * 1.6) start = { x: b.x - ((b.x - a.x) / dist) * g * 1.1, y: b.y - ((b.y - a.y) / dist) * g * 1.1 };
+        }
+        e.atLocation(start).stretchTo(to);
+        if (st.mirror) e.mirrorY();
+      } else if (st.mode === "self") {
+        e.atLocation(from).size(st.scale ?? 3, { gridUnits: true });
+        if (st.below) e.belowTokens();
+      } else {
+        e.atLocation(to).scaleToObject(st.scale ?? 1.3);
+        if (st.mode === "ground") e.belowTokens();
+      }
+      if (st.delay) e.delay(st.delay);
+      if (st.opacity) e.opacity(st.opacity);
+      n++;
+    }
+    if (!n) return false;
+    seq.play();
+    return true;
+  } catch (err) {
+    console.warn("vedmak | JB2A атака", err);
+    return false;
+  }
+}

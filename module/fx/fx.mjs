@@ -5,7 +5,8 @@
 
 import { SYSTEM_ID } from "../util.mjs";
 import { playSound, preloadSounds } from "./sounds.mjs";
-import { playJB2A, jb2aReady, playSpellFx, preloadCombatFx } from "./jb2a.mjs";
+import { playJB2A, jb2aReady, playSpellFx, preloadCombatFx, playSteps } from "./jb2a.mjs";
+import { attackSteps, hitSteps, blockSteps } from "./weapon-fx.mjs";
 import { spellFxFor } from "./spell-fx.mjs";
 import * as S from "./scene.mjs";
 import { registerVolumeControls, syncVolumeControls } from "./volume.mjs";
@@ -50,6 +51,18 @@ function onAttack(f) {
     if (sceneOn() && from) { S.fizzle(from); S.floatText(from, a.fumbleLabel || "Провал", 0xe0937f); }
     return;
   }
+  // JB2A: своё оружие — свой замах или выстрел, вид атаки — свой рисунок (weapon-fx.mjs); без целей — только «на себе»
+  let jb = false;
+  if (sceneOn() && jb2aReady()) {
+    const steps = attackSteps(a);
+    jb = targets.length ? targets.map(t => playSteps(steps, { from: attacker, to: t })).some(Boolean)
+      : playSteps(steps, { from: attacker });
+  }
+  const w = a.weapon ?? {};
+  if (w.category === "natural") {
+    playSound(naturalSound(w.name));
+    return;
+  }
   if (a.source?.kind === "ram") {
     playSound("swing-heavy");
     return;
@@ -58,11 +71,22 @@ function onAttack(f) {
     const bolt = a.skill === "crossbow";
     const thrown = a.skill === "athletics";
     playSound(bolt ? "crossbow" : thrown ? "swing" : "bow");
-    if (!from) return;
+    if (!from || jb) return;
     for (const t of targets) show(bolt ? "bolt" : thrown ? "thrown" : "arrow", { at: attacker, to: t }, () => S.projectile(from, S.pointOf(t)));
     return;
   }
   playSound(a.attackType === "strong" || a.attackType === "charge" ? "swing-heavy" : "swing");
+}
+
+/** Звук естественной атаки чудовища по её названию: пламя, плевок, бросок камня, рёв или замах. */
+function naturalSound(name = "") {
+  const n = String(name).toLowerCase();
+  if (/дыхани|огн|плам|угл|пепл/.test(n)) return "igni";
+  if (/кислот|яд|рвот|плевок|паутин/.test(n)) return "spell";
+  if (/вопль|вой|звуков|психическ/.test(n)) return "axii";
+  if (/крыл/.test(n)) return "aard";
+  if (/камн|валун|топот|землетряс|в землю|землекруш|таран|разбег/.test(n)) return "swing-heavy";
+  return "swing";
 }
 
 /* ---------------------------------------------------------------- Защита: попал или нет */
@@ -80,6 +104,9 @@ function onDefense(d) {
       const color = ELEMENT_COLORS[spell.element] ?? ELEMENT_COLORS.mixed;
       if (!d.attack.noDamage) playSound(crit ? "hit-crit" : "hit", { volume: 0.8 });
       show("arcaneBurst", { at, scaleToObject: 1.4 }, () => S.impact(to, { color, scale: crit ? 1.4 : 1 }));
+    } else if (sceneOn() && jb2aReady() && playSteps(hitSteps(d), { from: attacker, to: at })) {
+      // JB2A: удар по типу урона (кровь, укол, дробящий), у чудовищ — когти, укус, удар
+      playSound(crit ? "hit-crit" : "hit");
     } else if (d.attack?.isRanged) {
       playSound(crit ? "hit-crit" : "hit");
       show("impact", { at, scaleToObject: 1.3 }, () => S.impact(to, { scale: crit ? 1.4 : 1 }));
@@ -100,7 +127,9 @@ function onDefense(d) {
   const kind = d.defense;
   if (kind === "block" || kind === "parry" || kind === "brawlBlock") {
     playSound(kind === "parry" ? "parry" : "block");
-    show("sparks", { at, scaleToObject: 1 }, () => S.sparks(to, from));
+    if (!(sceneOn() && jb2aReady() && playSteps(blockSteps(kind), { from: attacker, to: at }))) {
+      show("sparks", { at, scaleToObject: 1 }, () => S.sparks(to, from));
+    }
     if (sceneOn() && to) S.floatText(to, kind === "parry" ? "Парирование" : "Блок", 0xe8c97a);
     return;
   }
