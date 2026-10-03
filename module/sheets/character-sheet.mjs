@@ -313,7 +313,7 @@ export class CharacterSheet extends VedmakActorSheet {
       context.prof = {
         id: prof.id, name: prof.name, img: prof.img, vigor: ps.vigor, magicAbilities: ps.magicAbilities,
         defining: {
-          name: ds.name, value: ds.value, effect: ds.effect,
+          name: ds.name, value: ds.value, effect: ds.effect, statLabel: STATS[ds.stat]?.label ?? "",
           statAbbr: STATS[ds.stat]?.abbr ?? "", base: (system.stats[ds.stat]?.effective ?? 0) + ds.value,
           offer: this.advanceMode ? definingOffer(actor) : null
         },
@@ -326,6 +326,8 @@ export class CharacterSheet extends VedmakActorSheet {
             return {
               ...ab, index: ai, unlocked,
               lockNote: `Нужно 5 очков в «${prev}».`,
+              // Застёжка к следующей ступени: открыта, когда вложено 5
+              gate: ai < b.abilities.length - 1, gateOpen: ab.value >= 5,
               statAbbr: STATS[ab.stat]?.abbr ?? "",
               base: ab.stat ? (system.stats[ab.stat]?.effective ?? 0) + ab.value : null,
               mechanicNote: bonus.vigor ? `+${bonus.vigor} Эн.` : bonus.toxicity ? `+${bonus.toxicity}%` : "",

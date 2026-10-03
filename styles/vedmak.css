@@ -887,69 +887,7 @@
 .vedmak .skill-line .base:hover { color: #d4cfc2; border-color: var(--vd-gold); }
 .vedmak .skill-line a.improve { flex: none; min-width: 2.4rem; height: 1.35rem; font-size: .72rem; }
 
-/* Профессия: шапка, определяющий навык и три ветви древа */
-.vedmak .prof-card {
-  display: flex; align-items: center; gap: .6rem; padding: .45rem .55rem;
-  background-color: #1f2024;
-  background-image: none;
-  background-size: auto, 360px 360px;
-  background-blend-mode: normal, overlay;
-  border: 1px solid #0a0b0c; border-left: 2px solid var(--vd-gold);
-}
-.vedmak .prof-card img { width: 46px; height: 46px; flex: none; border: 1px solid var(--vd-line); border-radius: 2px; background: #101012; }
-.vedmak .prof-card .who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .05rem; }
-.vedmak .prof-card .name { font-family: var(--vd-font-body); font-size: 1.25rem; color: var(--vd-silver); }
-.vedmak .prof-card .name:hover { color: var(--vd-gold-lite); }
-.vedmak .prof-card .about { font-size: .74rem; color: var(--vd-text-dim); }
-.vedmak .prof-progress { flex: none; display: flex; flex-direction: column; align-items: center; padding: .2rem .5rem; background: #101012; border: 1px solid var(--vd-line); }
-.vedmak .prof-progress b { font-family: var(--vd-font-body); font-weight: 400; font-size: 1.4rem; line-height: 1; color: var(--vd-gold-lite); }
-.vedmak .prof-progress .cap { font-size: .6rem; letter-spacing: .06em; color: var(--vd-text-dim); }
-
-.vedmak .skills-tab .ability {
-  display: flex; flex-direction: column; gap: .15rem; padding: .3rem .4rem;
-  background: #181a1d; border: 1px solid #0a0b0c; border-left: 2px solid var(--vd-line); border-radius: 2px;
-}
-.vedmak .skills-tab .ability.learned { border-left-color: var(--vd-gold); background: #1f2024; }
-.vedmak .skills-tab .ability.locked { opacity: .55; }
-.vedmak .skills-tab .ability .cap { font-family: var(--vd-font-body); font-size: .6rem; letter-spacing: .14em; color: var(--vd-gold); }
-.vedmak .skills-tab .ab-row { display: flex; align-items: center; gap: .35rem; }
-.vedmak .skills-tab .ab-row .hit { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: .35rem; color: inherit; }
-.vedmak .skills-tab .ab-row .name {
-  font-family: var(--vd-font-body); font-size: .9rem; color: var(--vd-text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.vedmak .skills-tab .ability.learned .ab-row .name { color: var(--vd-gold-lite); }
-.vedmak .skills-tab .ab-row a.hit:hover .name { color: var(--vd-silver); }
-.vedmak .skills-tab .ab-row .name i { font-size: .7rem; color: var(--vd-steel); }
-.vedmak .skills-tab .ab-row .stat { flex: none; font-size: .64rem; letter-spacing: .04em; color: var(--vd-steel); }
-.vedmak .skills-tab .ab-row input {
-  flex: none; width: 2.1rem; height: 1.35rem; padding: 0; text-align: center;
-  font-family: var(--vd-font-body); font-size: .88rem; color: var(--vd-text);
-  background: var(--vd-input); border: 1px solid var(--vd-line);
-}
-.vedmak .skills-tab .ab-row .base {
-  flex: none; min-width: 2rem; height: 1.45rem; padding: 0 .2rem; display: grid; place-items: center;
-  font-family: var(--vd-font-body); font-size: 1rem; line-height: 1; color: var(--vd-silver);
-  background: #101012; border: 1px solid var(--vd-line);
-}
-.vedmak .skills-tab .ab-row a.base:hover { color: #d4cfc2; border-color: var(--vd-gold); }
-.vedmak .skills-tab .ab-row .base.quiet { font-family: var(--vd-font-body); font-size: .66rem; color: var(--vd-text-dim); }
-.vedmak .skills-tab .ab-row a.improve { flex: none; min-width: 2.4rem; height: 1.35rem; font-size: .72rem; }
-.vedmak .skills-tab .ability details summary { width: fit-content; font-size: .7rem; color: var(--vd-steel); cursor: var(--cursor-pointer); }
-.vedmak .skills-tab .ability details summary:hover { color: var(--vd-gold-lite); }
-.vedmak .skills-tab .ability details p { margin: .15rem 0 0; font-size: .78rem; line-height: 1.4; color: var(--vd-text); }
-.vedmak .skills-tab .ability .lock-note { margin: 0; font-size: .68rem; color: #d9822b; }
-.vedmak .skills-tab .defining { padding: .4rem .5rem; border-left-width: 3px; }
-.vedmak .skills-tab .defining .ab-row .name { font-size: 1.05rem; }
-
-.vedmak .branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
-.vedmak .branch { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
-/* Стрелка между ступенями ветви: способность открывается предыдущей */
-.vedmak .branch .ability + .ability { position: relative; }
-.vedmak .branch .ability + .ability::before {
-  content: ""; position: absolute; left: 50%; top: calc(-.3rem - 1px); width: 2px; height: .3rem;
-  margin-left: -1px; background: var(--vd-line);
-}
+/* Профессия — в styles/sheet.css (холст design/11, PLAN 4.59); здесь только пустая вкладка */
 .vedmak .empty-prof {
   display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: 1.5rem 1rem;
   text-align: center; color: var(--vd-text-dim);
@@ -957,11 +895,8 @@
 .vedmak .empty-prof i { font-size: 1.8rem; color: var(--vd-steel); }
 .vedmak .empty-prof p { margin: 0; max-width: 28rem; }
 
-/* Узкий лист: ветви древа — в одну колонку */
+/* Узкий лист меряется по вкладке навыков (правила профессии — в sheet.css) */
 .vedmak .skills-tab { container-type: inline-size; }
-@container (max-width: 38rem) {
-  .vedmak .branches { grid-template-columns: minmax(0, 1fr); }
-}
 
 /* ------------------------------- Таблицы ------------------------------ */
 

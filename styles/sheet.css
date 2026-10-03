@@ -742,3 +742,100 @@
 }
 /* Подпись кнопки защиты обрезается, число — никогда */
 .vedmak-hud .vh-sbtn .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/* ============================== Профессия по холсту design/11 (PLAN 4.59) ==============================
+   Шапка на пластине, определяющий навык с насечками и медальоном основы, три ветви — цепь ступеней на стальном
+   стержне; между ступенями застёжка «5 очков» (зелёная — открыта). */
+.application.vedmak .skills-tab .vd-cap { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.application.vedmak .skills-tab .vp-head,
+.application.vedmak .skills-tab .vp-defining,
+.application.vedmak .skills-tab .vp-ab {
+  position: relative; background-color: var(--vd-plate);
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak .skills-tab .vp-head { display: flex; align-items: center; gap: 1rem; padding: .85rem 1.1rem; margin-bottom: .9rem; }
+.application.vedmak .skills-tab .vp-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 64px; height: 64px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.application.vedmak .skills-tab .vp-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.application.vedmak .skills-tab .vp-frame img { width: 54px; height: 54px; border: 0; object-fit: contain; }
+.application.vedmak .skills-tab .vp-who { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.application.vedmak .skills-tab .vp-name { font-family: var(--vd-font-head); font-size: 1.75rem; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); }
+.application.vedmak .skills-tab .vp-name:hover { color: #fff; }
+.application.vedmak .skills-tab .vp-about { font-size: .75rem; color: #bab4a8; }
+.application.vedmak .skills-tab .vp-progress { flex: none; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+
+.application.vedmak .skills-tab .vp-defining { display: flex; flex-direction: column; gap: .6rem; padding: .85rem 1rem; margin-bottom: 1rem; }
+.application.vedmak .skills-tab .vp-ghead {
+  display: flex; align-items: center; gap: 9px; margin: 0; padding: 0; border: 0; font-family: var(--vd-font-body); font-weight: 500; font-size: .62rem;
+  letter-spacing: .24em; text-transform: uppercase; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak .skills-tab .vp-ghead::before { content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg); background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
+.application.vedmak .skills-tab .vp-ghead .rule { flex: 1 1 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); }
+.application.vedmak .skills-tab .vp-def-row { display: flex; align-items: center; gap: .85rem; }
+.application.vedmak .skills-tab .vp-def-who { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .25rem; }
+.application.vedmak .skills-tab .vp-def-name { font-family: var(--vd-font-head); font-size: 1.4rem; line-height: 1.05; color: #f1ece0; }
+.application.vedmak .skills-tab .vp-def-name:hover { color: #fff; text-shadow: none; }
+.application.vedmak .skills-tab .vp-def-row .vd-notches i { width: 5px; height: 14px; }
+.application.vedmak .skills-tab .vp-def-base { flex: none; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.application.vedmak .skills-tab .vp-def-base:hover .vd-medal { box-shadow: 0 0 0 1px #050607, 0 5px 12px rgba(0, 0, 0, .85), 0 0 0 4px rgba(226, 221, 208, .1); }
+.application.vedmak .skills-tab .vp-effect {
+  margin: 0; padding: .6rem .75rem; font-size: .76rem; line-height: 1.5; color: #d6d0c2;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak .skills-tab input.vp-lvl {
+  flex: none; width: 32px; height: 24px; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: .95rem; color: #e2ddd0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak .skills-tab input.vp-lvl.lg { width: 40px; height: 30px; font-size: 1.15rem; }
+
+/* Ветви: шапка, цепь на стержне */
+.application.vedmak .skills-tab .vp-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; align-items: start; }
+.application.vedmak .skills-tab .vp-branch { display: flex; flex-direction: column; gap: .6rem; min-width: 0; }
+.application.vedmak .skills-tab .vp-bar {
+  display: flex; align-items: center; padding: .6rem .85rem; border: 1px solid #060708; border-radius: 3px;
+  background-color: #131417; background-image: linear-gradient(180deg, rgba(255, 245, 225, .07), rgba(0, 0, 0, .25)), var(--vd-s-header); background-size: 100% 100%, 512px 512px;
+}
+.application.vedmak .skills-tab .vp-bar b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; color: #f1ece0; }
+.application.vedmak .skills-tab .vp-chain { position: relative; display: flex; flex-direction: column; gap: 22px; }
+.application.vedmak .skills-tab .vp-chain::before {
+  content: ""; position: absolute; left: 50%; top: 10px; bottom: 10px; width: 4px; margin-left: -2px;
+  background: linear-gradient(90deg, #3a3935, #a29d92 50%, #3a3935); box-shadow: 0 0 0 1px #050607;
+}
+.application.vedmak .skills-tab .vp-ab { display: flex; flex-direction: column; gap: .4rem; padding: .6rem .7rem .7rem; }
+.application.vedmak .skills-tab .vp-ab.learned { box-shadow: var(--vd-lift), inset 2px 0 0 #b4c79c; }
+.application.vedmak .skills-tab .vp-ab.locked > :not(.vp-gate) { opacity: .55; }
+.application.vedmak .skills-tab .vp-ab-top, .application.vedmak .skills-tab .vp-ab-lvl { display: flex; align-items: center; gap: .5rem; }
+.application.vedmak .skills-tab .vp-ab-who { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: .12rem; }
+.application.vedmak .skills-tab .vp-ab-name { font-family: var(--vd-font-head); font-size: 1rem; line-height: 1.1; color: #f1ece0; overflow-wrap: anywhere; }
+.application.vedmak .skills-tab a.vp-ab-name:hover { color: #fff; text-shadow: none; }
+.application.vedmak .skills-tab .vp-ab.locked .vp-ab-name { color: #bab4a8; }
+.application.vedmak .skills-tab .vp-base {
+  flex: none; display: grid; place-items: center; width: 36px; height: 28px; font-family: var(--vd-font-head); font-size: 1.05rem; color: #fff6ef;
+  background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .16), rgba(0, 0, 0, .3)), var(--vd-s-btn); background-size: 100% 100%, 512px 512px;
+  border: 1px solid #060708; border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .25), 0 2px 4px -1px rgba(0, 0, 0, .8);
+}
+.application.vedmak .skills-tab a.vp-base:hover { background-color: #3b3d43; color: #fff; text-shadow: none; }
+.application.vedmak .skills-tab .vp-base.quiet { color: #8c867b; background: #141518; box-shadow: inset 0 1px 0 rgba(255, 250, 240, .06); }
+.application.vedmak .skills-tab .vp-ab-lvl .vd-notches { flex-wrap: nowrap; }
+.application.vedmak .skills-tab .vp-ab-lvl .vd-notches i { width: 4px; height: 11px; }
+.application.vedmak .skills-tab .vp-fill { flex: 1 1 0; }
+.application.vedmak .skills-tab .vp-ab-lvl a.improve { min-width: 2.2rem; height: 24px; font-size: .7rem; }
+.application.vedmak .skills-tab .vp-lock { display: flex; align-items: center; gap: 5px; font-size: .66rem; color: #e0937f; }
+.application.vedmak .skills-tab .vp-desc {
+  margin: 0; font-size: .69rem; line-height: 1.45; color: #d6d0c2; cursor: var(--cursor-pointer, pointer);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.application.vedmak .skills-tab .vp-desc:focus { -webkit-line-clamp: unset; outline: none; }
+.application.vedmak .skills-tab .vp-gate {
+  position: absolute; left: 50%; bottom: -17px; transform: translateX(-50%); z-index: 2; display: grid; place-items: center;
+  min-width: 44px; height: 14px; padding: 0 6px; font-size: .53rem; font-weight: 600; letter-spacing: .12em; color: #d6d0c2;
+  background: #141518; border: 1px solid #060708; border-radius: 7px; white-space: nowrap;
+}
+.application.vedmak .skills-tab .vp-gate.open { color: #eef6e4; background: #34492a; border-color: #0b1407; }
+.application.vedmak .skills-tab .vp-hint { margin: .9rem 0 0; font-size: .72rem; line-height: 1.45; color: #a8a296; }
+@container (max-width: 38rem) {
+  .application.vedmak .skills-tab .vp-branches { grid-template-columns: minmax(0, 1fr); }
+}
