@@ -19,6 +19,7 @@ import { flipToken, canFlip } from "./token-flip.mjs";
 import { animateVitals } from "../fx/sheet-motion.mjs";
 import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
 import { levelLabel } from "../config/magic.mjs";
+import { removeZones } from "../combat/zones.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -60,7 +61,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       nextTurn: CombatHud.#onNextTurn,
       toggleCollapse: CombatHud.#onToggleCollapse,
       toggleVolume: CombatHud.#onToggleVolume,
-      magicGroup: CombatHud.#onMagicGroup
+      magicGroup: CombatHud.#onMagicGroup,
+      endZone: CombatHud.#onEndZone
     }
   };
 
@@ -138,7 +140,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   static registerHooks() {
     const refresh = () => CombatHud.schedule();
     for (const hook of ["ready", "createCombat", "deleteCombat", "updateCombat", "createCombatant",
-      "deleteCombatant", "updateCombatant", "controlToken"]) Hooks.on(hook, refresh);
+      "deleteCombatant", "updateCombatant", "controlToken", "createRegion", "deleteRegion"]) Hooks.on(hook, refresh);
     for (const hook of ["updateActor", "createItem", "updateItem", "deleteItem",
       "createActiveEffect", "updateActiveEffect", "deleteActiveEffect"]) Hooks.on(hook, doc => CombatHud.refreshFor(doc));
   }
@@ -289,6 +291,12 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     // Рисуются все плитки (поиск идёт по всем разделам), свой раздел помечен
     for (const sp of allSpells) sp.inGroup = this.magicGroup === "fav" ? sp.fav : sp.kind === this.magicGroup;
     const maintained = maintainedSpells(actor).map(e => ({ id: e.id, name: e.name, img: e.img, cost: e.flags.vedmak.maintain.cost }));
+    // Зоны этого персонажа на открытой сцене — каждую можно снять
+    const zones = (canvas?.scene?.regions ?? []).filter(r => r.flags?.vedmak?.zone?.actorUuid === actor.uuid).map(r => {
+      const z = r.flags.vedmak.zone;
+      const left = z.until && game.combat?.started ? Math.max(0, z.until - game.combat.round) : null;
+      return { id: r.id, name: r.name, left: left !== null ? `${left} р.` : z.maintain ? "поддерживается" : "" };
+    });
 
     // Алхимия: всё, чем можно воспользоваться сейчас
     const alchemy = (actor.itemTypes.alchemical ?? [])
@@ -335,7 +343,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       showFight: this.tab === "fight", showMagic: this.tab === "magic", showAlchemy: this.tab === "alchemy",
       showActions: this.tab === "actions", showStates: this.tab === "states",
       attacks, defenses, stun: d.stun, deathThreshold, dying: d.dying,
-      allSpells, magicGroups, magicQuery: this.magicQuery, maintained, shield: system.shield?.value ?? 0,
+      allSpells, magicGroups, magicQuery: this.magicQuery, maintained, zones, shield: system.shield?.value ?? 0,
       alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
       adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && isCharacter; } catch { return false; } })(),
       adrenaline: system.adrenaline?.value ?? 0,
@@ -422,6 +430,12 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onToggleStatus(event, target) { await this.actor?.toggleStatusEffect(target.dataset.status); }
 
   static async #onNextTurn() { await game.combat?.nextTurn(); }
+
+  /** Снять свою зону (у игрока — через ведущего, если область не его). */
+  static async #onEndZone(event, target) {
+    const region = canvas.scene?.regions.get(target.dataset.regionId);
+    if (region) await removeZones([region]);
+  }
 
   /** Раздел магии: Избранное, Знаки, Заклинания… */
   static #onMagicGroup(event, target) {

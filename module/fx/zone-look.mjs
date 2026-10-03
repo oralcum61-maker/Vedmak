@@ -3,6 +3,8 @@
 // по дуге. Цвет — из цвета зоны (стихия, бомба, ловушка). Трогаются только зоны системы (флаг vedmak.look или
 // vedmak.zone): остальные области ведущего Foundry рисует как всегда.
 
+import { removeZones } from "../combat/zones.mjs";
+
 const TAU = Math.PI * 2;
 
 /** Зона системы — при постановке (предпросмотр) и уже на сцене. */
@@ -140,6 +142,78 @@ function formatUnits(px, units) {
   return `${Math.round(v * 10) / 10} ${units}`;
 }
 
+/* ---------------------------------------------------------------- Кнопка «убрать» на зоне */
+
+// Кнопки живут в своём слое над сценой: области на неактивном слое не принимают щелчков, а убрать зону
+// нужно, не переключаясь на инструменты областей
+let badgeLayer = null;
+const badges = new Map();
+
+function badgeRoot() {
+  if (!canvas?.ready || !canvas.interface) return null;
+  if (badgeLayer && !badgeLayer.destroyed && badgeLayer.parent) return badgeLayer;
+  badgeLayer = new PIXI.Container();
+  badgeLayer.eventMode = "static";
+  badgeLayer.zIndex = 950;
+  canvas.interface.addChild(badgeLayer);
+  canvas.interface.sortableChildren = true;
+  return badgeLayer;
+}
+
+/** Убрать зону может ведущий и тот, кому принадлежит её заклинатель или бросивший. */
+function canRemove(region) {
+  if (game.user.isGM) return true;
+  const uuid = region.document.flags?.vedmak?.zone?.actorUuid;
+  return !!(uuid && fromUuidSync(uuid)?.isOwner);
+}
+
+function dropBadge(id) {
+  const b = badges.get(id);
+  if (b && !b.destroyed) b.destroy({ children: true });
+  badges.delete(id);
+}
+
+/** Точка кнопки: у круга — справа сверху на кольце, у конуса — у края дуги. */
+function badgePoint(shape) {
+  if (shape.type === "cone") {
+    const a = (shape.rotation ?? 0) * Math.PI / 180 - ((shape.angle ?? 53.13) * Math.PI / 180) / 2;
+    return { x: shape.x + Math.cos(a) * shape.radius, y: shape.y + Math.sin(a) * shape.radius };
+  }
+  const a = -Math.PI / 4;
+  return { x: shape.x + Math.cos(a) * shape.radius, y: shape.y + Math.sin(a) * shape.radius };
+}
+
+function placeBadge(region, shape, color) {
+  const doc = region.document;
+  if (region.isPreview || !doc.flags?.vedmak?.zone || !canRemove(region)) return dropBadge(doc.id);
+  const root = badgeRoot();
+  if (!root) return;
+  let b = badges.get(doc.id);
+  if (!b || b.destroyed) {
+    const k = canvas.dimensions.uiScale ?? 1, r = 13 * k;
+    b = new PIXI.Graphics();
+    b.beginFill(0x111215, 0.92).lineStyle(2 * k, color, 0.95).drawCircle(0, 0, r).endFill();
+    b.lineStyle(2.6 * k, 0xf1ece0, 1);
+    b.moveTo(-r * 0.4, -r * 0.4).lineTo(r * 0.4, r * 0.4).moveTo(r * 0.4, -r * 0.4).lineTo(-r * 0.4, r * 0.4);
+    b.eventMode = "static";
+    b.cursor = "pointer";
+    b.hitArea = new PIXI.Circle(0, 0, r * 1.3);
+    b.alpha = 0.7;
+    b.on("pointerover", () => { b.alpha = 1; b.scale.set(1.15); });
+    b.on("pointerout", () => { b.alpha = 0.7; b.scale.set(1); });
+    b.on("pointerdown", event => {
+      event.stopPropagation();
+      const live = canvas.scene?.regions.get(doc.id);
+      if (live) removeZones([live]).then(() => ui.notifications.info(`Зона «${live.name}» убрана.`));
+    });
+    root.addChild(b);
+    badges.set(doc.id, b);
+  }
+  const p = badgePoint(shape);
+  b.position.set(p.x, p.y);
+  b.visible = region.visible;
+}
+
 function decorate(region) {
   if (!isOurs(region) || region.destroyed) return;
   hideDefault(region);
@@ -152,6 +226,7 @@ function decorate(region) {
   const units = canvas.scene?.grid?.units || "м";
   if (shape.type === "circle") drawCircle(look, shape, color, units);
   else drawCone(look, shape, color, units);
+  placeBadge(region, shape, color);
   // Фигуры области — в координатах сцены; сама область может быть сдвинута (перетаскивание предпросмотра)
   look.position.set(-region.position.x, -region.position.y);
   region.addChild(look);
@@ -174,5 +249,7 @@ export function registerZoneLook() {
   Hooks.on("refreshRegion", region => {
     try { decorate(region); } catch (err) { console.warn("vedmak | вид зоны", err); }
   });
+  Hooks.on("deleteRegion", doc => dropBadge(doc.id));
+  Hooks.on("canvasTearDown", () => { badges.clear(); badgeLayer = null; });
   Hooks.on("canvasReady", spin);
 }

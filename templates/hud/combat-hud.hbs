@@ -66,7 +66,7 @@
 
     {{#if showMagic}}
     {{!-- Магия: разделы и поиск слева, плитки в колонки с прокруткой, справа — что держится (PLAN 4.68) --}}
-    <div class="vh-deck vh-magic{{#unless (or maintained.length shield)}} no-held{{/unless}}">
+    <div class="vh-deck vh-magic{{#unless (or maintained.length shield zones.length)}} no-held{{/unless}}">
       <div class="vh-mgroups">
         <input type="search" class="vh-magic-search" value="{{magicQuery}}" placeholder="Найти…" aria-label="Найти заклинание" data-tooltip="Поиск по всем разделам; Enter — сотворить первое найденное, Esc — сбросить">
         <div class="vh-mlist">
@@ -91,12 +91,15 @@
         {{/each}}
         <span class="vh-empty vh-magic-empty" hidden>Ничего не нашлось.</span>
       </div>
-      {{#if (or maintained.length shield)}}
+      {{#if (or maintained.length shield zones.length)}}
       <div class="vh-grp vh-held">
         <span class="vh-cap">держится</span>
         {{#if shield}}<div class="vh-well vh-line"><i class="fa-solid fa-shield-halved"></i><span class="vh-ltext">Щит: <b>{{shield}}</b> ПЗ</span></div>{{/if}}
         {{#each maintained}}
         <div class="vh-well vh-line"><img src="{{img}}" alt=""><span class="vh-ltext">{{name}}{{#if cost}} · <b>{{cost}}</b> вын/р{{/if}}</span><button type="button" class="vh-sbtn sm" data-action="endMaintained" data-effect-id="{{id}}">Снять</button></div>
+        {{/each}}
+        {{#each zones}}
+        <div class="vh-well vh-line" data-tooltip="Зона «{{name}}» на сцене{{#if left}} · {{left}}{{/if}}"><i class="fa-regular fa-circle-dot"></i><span class="vh-ltext">{{name}}{{#if left}} · {{left}}{{/if}}</span><button type="button" class="vh-sbtn sm" data-action="endZone" data-region-id="{{id}}" data-tooltip="Убрать зону со сцены">Снять</button></div>
         {{/each}}
       </div>
       {{/if}}

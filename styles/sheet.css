@@ -768,8 +768,10 @@
   .vedmak-hud .vh-name a { font-size: 17px; }
   /* Энергия и токсичность и так видны в левой колонке */
   .vedmak-hud .vh-aside { display: none; }
-  .vedmak-hud .vh-deck.vh-magic { grid-template-columns: 136px minmax(0, 1fr); }
-  .vedmak-hud .vh-magic .vh-held { display: none; }
+  .vedmak-hud .vh-deck.vh-magic { grid-template-columns: 120px minmax(0, 1fr) 150px; }
+  .vedmak-hud .vh-deck.vh-magic.no-held { grid-template-columns: 136px minmax(0, 1fr); }
+  .vedmak-hud .vh-magic .vh-line { gap: 6px; padding: 4px 6px; }
+  .vedmak-hud .vh-magic .vh-ltext { font-size: 11px; }
   .vedmak-hud .vh-turn { width: 104px; padding: 8px; }
   .vedmak-hud .vh-go.wide { font-size: 9.5px; letter-spacing: .08em; white-space: nowrap; }
   .vedmak-hud .vh-dmg .vh-cap { display: none; }
