@@ -1,5 +1,5 @@
 {{!-- Обычный бой: чем бью, чем отвечаю, что со мной. Общий для персонажа и чудовища. --}}
-  <section class="combat-block">
+  <section class="combat-block weapons">
     <div class="group-head">
       <span class="bronze-tag">ЧЕМ БЬЮ</span>
       <span class="rule"></span>
@@ -8,7 +8,7 @@
 
     {{#each attacks as |a|}}
     <div class="atk-row{{#if a.equipped}} ready{{else}} off{{/if}}" data-item-id="{{a.itemId}}">
-      <img src="{{a.img}}" class="atk-icon" alt="">
+      <span class="atk-frame"><img src="{{a.img}}" class="atk-icon" alt=""></span>
       <span class="atk-who">
         <span class="atk-name">
           {{#if a.itemId}}<a data-action="itemEdit">{{a.label}}</a>{{else}}{{a.label}}{{/if}}
@@ -23,18 +23,15 @@
           {{#if a.range}} · дистанция {{a.range}} м{{/if}}
           {{#if a.traits}} · {{a.traits}}{{/if}}
         </span>
+        {{#if a.reliability}}
+        <span class="atk-rel" data-tooltip="Надёжность: падает при блоке и на критическом провале">
+          {{vedmakNotches a.reliability.value a.reliability.max}}
+          <span class="cap">надёжность {{a.reliability.value}} / {{a.reliability.max}}</span>
+        </span>
+        {{/if}}
       </span>
-      {{#if a.reliability}}
-      <span class="atk-rel" data-tooltip="Надёжность: падает при блоке и на критическом провале">
-        <span class="track"><span class="fill" style="width: {{a.relPct}}%"></span></span>
-        <span class="cap">{{a.reliability.value}} / {{a.reliability.max}}</span>
-      </span>
-      {{/if}}
-      <span class="atk-num">
-        <b>{{a.base}}</b>
-        <em>ОСНОВА</em>
-      </span>
-      <span class="atk-num wide">
+      <span class="atk-base">{{> "systems/vedmak/templates/actor/parts/medal.hbs" value=a.base cls="md"}}<em>основа</em></span>
+      <span class="atk-dmg">
         <b>{{a.damage}}</b>
         <em>{{a.damageLabel}}</em>
       </span>
@@ -77,13 +74,13 @@
 
       <div class="save-grid">
         <a class="save rollable" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">
-          <span class="name">Испытание Уст</span>
-          <b>&lt; {{system.derived.stun}}</b>
+          <span class="sv"><span class="name">Испытание Уст</span><em>успех на d10 {{vedmakSaveRange system.derived.stun}}</em></span>
+          <span class="thr"><b>{{system.derived.stun}}</b><span class="cap">порог</span></span>
         </a>
         <a class="save bad rollable{{#if system.derived.dying}} alert{{/if}}" data-action="deathSave"
            data-tooltip="d10 меньше Уст − накопленный штраф (Удача поднимает порог)">
-          <span class="name">Против смерти</span>
-          <b>&lt; {{system.derived.stun}}{{#if system.deathSaves.penalty}} −{{system.deathSaves.penalty}}{{/if}}</b>
+          <span class="sv"><span class="name">Против смерти</span><em>успех на d10 {{vedmakSaveRange (vedmakSub system.derived.stun system.deathSaves.penalty)}}</em></span>
+          <span class="thr"><b>{{vedmakSub system.derived.stun system.deathSaves.penalty}}</b><span class="cap">порог</span></span>
         </a>
       </div>
       {{#if system.deathSaves.penalty}}
@@ -117,6 +114,34 @@
         {{#if system.derived.encumbrance}}<span class="bad-inline">скованность −{{system.derived.encumbrance}}</span>{{/if}}
       </div>
 
+      {{#if armorDoll}}
+      <div class="armor-doll">
+        <div class="doll-col">
+          {{#each armorDoll.left}}
+          <div class="armor-loc{{#unless sp}} zero{{/unless}}"{{#if layerNames}} data-tooltip="{{layerNames}}"{{/if}}>
+            <span class="ln"><span class="nm">{{label}}</span><span class="mult{{#if (gt mult 1)}} hot{{/if}}">{{multLabel}}</span></span>
+            <span class="sp"><b>{{sp}}</b><span class="bar"><span style="width: {{pct}}%"></span></span></span>
+          </div>
+          {{/each}}
+        </div>
+        <div class="doll" aria-label="Доспех по частям тела">
+          <img class="head" src="systems/vedmak/assets/glyphs/part-head-{{armorDoll.head}}.svg" alt="">
+          <img class="torso" src="systems/vedmak/assets/glyphs/part-torso-{{armorDoll.torso}}.svg" alt="">
+          <img class="rarm" src="systems/vedmak/assets/glyphs/part-arm-{{armorDoll.rightArm}}.svg" alt="">
+          <img class="larm" src="systems/vedmak/assets/glyphs/part-arm-{{armorDoll.leftArm}}.svg" alt="">
+          <img class="rleg" src="systems/vedmak/assets/glyphs/part-leg-{{armorDoll.rightLeg}}.svg" alt="">
+          <img class="lleg" src="systems/vedmak/assets/glyphs/part-leg-{{armorDoll.leftLeg}}.svg" alt="">
+        </div>
+        <div class="doll-col">
+          {{#each armorDoll.right}}
+          <div class="armor-loc{{#unless sp}} zero{{/unless}}"{{#if layerNames}} data-tooltip="{{layerNames}}"{{/if}}>
+            <span class="ln"><span class="nm">{{label}}</span><span class="mult{{#if (gt mult 1)}} hot{{/if}}">{{multLabel}}</span></span>
+            <span class="sp"><b>{{sp}}</b><span class="bar"><span style="width: {{pct}}%"></span></span></span>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+      {{else}}
       <div class="armor-list">
         {{#each armorLocations}}
         <div class="armor-line"{{#if layerNames}} data-tooltip="{{layerNames}}"{{/if}}>
@@ -127,6 +152,7 @@
         </div>
         {{/each}}
       </div>
+      {{/if}}
 
       {{#if armorLayers}}
       <div class="armor-note">

@@ -638,7 +638,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.defenses = ["dodge", "athletics", "brawling", "melee"].map(key => ({
       key, label: SKILLS[key].label, base: system.skills[key].base, about: DEFENSE_ABOUT[key] ?? ""
     }));
-    const armorLocs = Object.values(system.derived.armor ?? {});
+    const armorLocs = Object.entries(system.derived.armor ?? {}).map(([key, loc]) => ({ key, ...loc }));
     // Шкала общая для всех частей: сразу видно, где в защите дыра
     const spScale = Math.max(10, ...armorLocs.map(l => l.sp || 0));
     context.armorLocations = armorLocs.map(loc => ({
@@ -648,6 +648,16 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       layerNames: loc.layers.map(l => `${l.name} ${l.value}/${l.max}`).join(", "),
       resistLabels: loc.resist.map(k => CONFIG.VEDMAK.DAMAGE_TYPES[k]?.label ?? k).join(", ")
     }));
+    // Доспешный манекен (гуманоид): части тела значками, слева — правая сторона тела, справа — левая и туловище
+    const byKey = Object.fromEntries(context.armorLocations.map(l => [l.key, l]));
+    if (["head", "torso", "rightArm", "leftArm", "rightLeg", "leftLeg"].every(k => byKey[k])) {
+      const state = k => (byKey[k].sp > 0 ? "ok" : "dim");
+      context.armorDoll = {
+        left: [byKey.head, byKey.rightArm, byKey.rightLeg], right: [byKey.torso, byKey.leftArm, byKey.leftLeg],
+        head: state("head"), torso: state("torso"), rightArm: state("rightArm"), leftArm: state("leftArm"),
+        rightLeg: state("rightLeg"), leftLeg: state("leftLeg")
+      };
+    }
     context.armorLayers = [...new Set(armorLocs.flatMap(l => l.layers.map(x => x.name)))].join(" · ");
     context.armorResists = [...new Set(armorLocs.flatMap(l => l.resist))]
       .map(k => CONFIG.VEDMAK.DAMAGE_TYPES[k]?.label ?? k).join(", ");

@@ -14,6 +14,23 @@ export function registerHelpers() {
       (десятка — калёная, единица первой кости — киноварь). Без костей — простое кольцо. */
   H.registerHelper("vedmakRing", dice => new H.SafeString(ringHtml(dice)));
 
+  /** Насечки вместо полосы (надёжность, прочность): value светлых из max, не больше limit штук. */
+  H.registerHelper("vedmakNotches", (value, max, options) => {
+    const m = Math.max(0, Math.min(Number(max) || 0, 30));
+    const v = Math.max(0, Math.min(Number(value) || 0, m));
+    return new H.SafeString(`<span class="vd-notches" aria-hidden="true">${"<i></i>".repeat(v)}${'<i class="off"></i>'.repeat(m - v)}</span>`);
+  });
+
+  /** Порог испытания d10 «меньше порога»: какие грани проходят — «1–7», «никакие», «все». */
+  H.registerHelper("vedmakSaveRange", threshold => {
+    const t = Number(threshold) || 0;
+    if (t <= 1) return "не пройти";
+    if (t > 10) return "любой бросок";
+    return t === 2 ? "только 1" : `1–${t - 1}`;
+  });
+
+  H.registerHelper("vedmakSub", (a, b) => (Number(a) || 0) - (Number(b) || 0));
+
   /** Подпись из справочника CONFIG.VEDMAK[group][key] (строка или {label}). */
   H.registerHelper("vedmakLabel", (group, key) => {
     const v = CONFIG.VEDMAK[group]?.[key];
@@ -100,6 +117,7 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/effect/header.hbs",
   "systems/vedmak/templates/effect/details.hbs",
   "systems/vedmak/templates/effect/duration.hbs",
+  "systems/vedmak/templates/actor/parts/medal.hbs",
   // Части листов, окон и предметов — тоже заранее (PLAN 4.54): иначе каждый шаблон скачивается и компилируется
   // при первом открытии своего окна или вкладки, и первый клик подвисает
   "systems/vedmak/templates/actor/character-rail.hbs",

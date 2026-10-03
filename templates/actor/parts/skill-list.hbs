@@ -9,7 +9,7 @@
     <div class="group-head">
       <span class="bronze-tag">{{group.label}}</span>
       <span class="rule"></span>
-      <span class="stat-stamp" data-tooltip="{{group.label}}: значение параметра">{{group.value}}</span>
+      <span class="stat-medal" data-tooltip="{{group.label}}: значение параметра">{{> "systems/vedmak/templates/actor/parts/medal.hbs" value=group.value cls="sm"}}</span>
     </div>
     <div class="skill-rows">
     {{#each group.skills as |skill|}}
@@ -22,6 +22,7 @@
         <span class="name">{{skill.label}}{{#if skill.difficult}}<i class="fa-solid fa-asterisk difficult" data-tooltip="Сложный навык"></i>{{/if}}</span>
         <span class="dots-fill"></span>
       </a>
+      {{vedmakNotches skill.value 10}}
       <input class="lvl" type="number" name="system.skills.{{skill.key}}.value" value="{{skill.value}}" min="0"
              data-tooltip="Вложено в навык" aria-label="Вложено в навык: {{skill.label}}">
       <a class="base rollable" data-action="rollSkill" data-skill="{{skill.key}}"

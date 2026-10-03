@@ -4,10 +4,12 @@
   <div class="group-head">
     <span class="bronze-tag">СЛОВЕСНАЯ ДУЭЛЬ</span>
     <span class="rule"></span>
-    <span class="hint-inline" data-tooltip="Атака с выбранной целью (T) — у цели в чате кнопки ответа: Игнорировать, Смена темы, Контраргумент, Прекращение">Цель — T · Shift — без окна</span>
+    <span class="hint-inline" data-tooltip="Атака с выбранной целью (T) — у цели в чате кнопки ответа: Игнорировать, Смена темы, Контраргумент, Прекращение">Shift — без окна</span>
   </div>
 
   <div class="duel-resolve{{#if verbal.resolve.broken}} broken{{/if}}">
+    {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=verbal.resolve.value cls="xl violet"}}
+    <div class="duel-main">
     <div class="rv-head">
       <span class="cap">РЕШИТЕЛЬНОСТЬ</span>
       {{!-- Без name: форма не пишет флаг при каждом сохранении (иначе «нет флага — максимум» ломается),
@@ -24,10 +26,11 @@
     </div>
     <div class="duel-foot">
       {{#if verbal.resolve.broken}}<span class="bad-inline">Решительность исчерпана — вы проиграли дуэль и делаете то, чего хотел противник.</span>
-      {{else}}<span class="hint-inline">{{#if verbal.mods}}Штрафы в дуэли: {{verbal.mods}}{{else}}Каждая сторона сначала называет цель спора.{{/if}}</span>{{/if}}
+      {{else}}<span class="hint-inline">{{#if verbal.mods}}Штрафы в дуэли: {{verbal.mods}}{{/if}}</span>{{/if}}
       <button type="button" class="turn-btn" data-action="duelReset" data-tooltip="Решительность снова полная">
         Новая дуэль
       </button>
+    </div>
     </div>
   </div>
 </section>
@@ -35,29 +38,24 @@
 <div class="duel-cols">
   {{#each verbal.groups as |g|}}
   <section class="combat-block duel-group {{g.key}}">
-    <div class="group-head">
+    <div class="group-head" data-tooltip="{{g.about}}{{#if g.note}} {{g.note}}{{/if}}">
       <span class="glabel">{{g.label}}</span>
-      <span class="rule"></span>
     </div>
-    <p class="hint">{{g.about}}</p>
     {{#each g.actions as |a|}}
     <a class="duel-row rollable" data-action="verbalAction" data-verbal="{{a.key}}"
        data-tooltip="{{#if a.effect}}{{a.effect}}{{else}}Проверка: {{a.skillLabel}}{{/if}}">
       <span class="stamp"><b>{{a.base}}</b></span>
       <span class="who">
         <span class="name">{{a.label}}</span>
-        <span class="about">{{a.skillLabel}}{{#if a.effect}} · {{a.effect}}{{/if}}</span>
+        <span class="about">{{a.skillLabel}}</span>
       </span>
-      {{#if a.damageLabel}}<span class="dmg"><b>{{a.damageLabel}}</b><em>урон</em></span>{{/if}}
+      {{#if a.damageLabel}}<span class="dmg"><b>{{a.damageLabel}}</b><em>урон</em></span>{{else}}<span class="dmg none"><b>ход</b><em>без урона</em></span>{{/if}}
     </a>
     {{/each}}
-    {{#if g.note}}<p class="hint">{{g.note}}</p>{{/if}}
   </section>
   {{/each}}
 </div>
 
-<p class="hint">Урон нанесённому противнику и доведение его до порога ранения меняют дуэль: −3 и −10 к эмпатическим атакам,
-  +3 и +10 к Запугиванию. Прочие модификаторы — на усмотрение ведущего: малый 1, средний 3, большой 5.</p>
 
 {{!-- Социальный статус перенесён из «Дневника»: он действует на те же социальные проверки (у чудовищ его нет) --}}
 {{#if isCharacter}}{{> "systems/vedmak/templates/actor/parts/social-status.hbs"}}{{/if}}

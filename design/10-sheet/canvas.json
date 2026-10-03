@@ -1,0 +1,165 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-02T23:20:00Z"
+  },
+  "title": "Ведьмак: бой, социальный бой и навыки",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 800,
+      "h": 1240,
+      "title": "Бой",
+      "is_interactive": true
+    },
+    "Social.dc.html": {
+      "x": 880,
+      "y": 0,
+      "w": 800,
+      "h": 1060,
+      "title": "Социальный бой",
+      "is_interactive": true
+    },
+    "Skills.dc.html": {
+      "x": 1760,
+      "y": 0,
+      "w": 800,
+      "h": 1080,
+      "title": "Навыки",
+      "is_interactive": true
+    },
+    "NowCombat.dc.html": {
+      "x": 0,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Бой"
+    },
+    "NowSocial.dc.html": {
+      "x": 880,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Социальный бой"
+    },
+    "NowSkills.dc.html": {
+      "x": 1760,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Навыки"
+    },
+    "Rail.dc.html": {
+      "x": -1210,
+      "y": 0,
+      "w": 250,
+      "h": 900,
+      "title": "Боковая колонка"
+    },
+    "Stats.dc.html": {
+      "x": -880,
+      "y": 0,
+      "w": 800,
+      "h": 900,
+      "title": "Параметры"
+    },
+    "NowStats.dc.html": {
+      "x": -880,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Параметры и колонка"
+    },
+    "Gear.dc.html": {
+      "x": 2640,
+      "y": 0,
+      "w": 800,
+      "h": 1260,
+      "title": "Снаряжение"
+    },
+    "NowGear.dc.html": {
+      "x": 2640,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Снаряжение"
+    },
+    "Craft.dc.html": {
+      "x": 3520,
+      "y": 0,
+      "w": 800,
+      "h": 1240,
+      "title": "Ремесло (Ремесло-тест)"
+    },
+    "NowCraft.dc.html": {
+      "x": 3520,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Ремесло"
+    },
+    "Magic.dc.html": {
+      "x": 4400,
+      "y": 0,
+      "w": 800,
+      "h": 1120,
+      "title": "Магия"
+    },
+    "NowMagic.dc.html": {
+      "x": 4400,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Магия"
+    },
+    "Bio.dc.html": {
+      "x": 5280,
+      "y": 0,
+      "w": 800,
+      "h": 1040,
+      "title": "Дневник"
+    },
+    "NowBio.dc.html": {
+      "x": 5280,
+      "y": 1450,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Дневник"
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Social.dc.html",
+    "Skills.dc.html",
+    "NowCombat.dc.html",
+    "NowSocial.dc.html",
+    "NowSkills.dc.html",
+    "Rail.dc.html",
+    "Stats.dc.html",
+    "NowStats.dc.html",
+    "Gear.dc.html",
+    "NowGear.dc.html",
+    "Craft.dc.html",
+    "NowCraft.dc.html",
+    "Magic.dc.html",
+    "NowMagic.dc.html",
+    "Bio.dc.html",
+    "NowBio.dc.html"
+  ],
+  "notes": {
+    "head": {
+      "x": -1210,
+      "y": -300,
+      "text": "Весь лист персонажа в новом виде: колонка и семь вкладок",
+      "kind": "title1",
+      "maxW": 7290
+    }
+  },
+  "designSystems": []
+}

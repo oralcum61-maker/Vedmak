@@ -121,6 +121,7 @@
 | `design/07-dialogs` | [Окна проверок и карточки чата](https://claude.ai/artifact/5TmpWK5jDLiXMc6DMLgjPP) | 4.47 |
 | `design/08-chat-medal` | [Карточки чата в духе листа: «Медальон»](https://claude.ai/artifact/6r5nKNduXpwfgnZBvmViKZ) | 4.51 |
 | `design/09-scrollbar` | [Ползунок прокрутки: «Ремень»](https://claude.ai/artifact/H62zqvKRcHe4G9DhjyZn7X) | 4.52 |
+| `design/10-sheet` | [Лист: колонка и вкладки одним языком](https://claude.ai/artifact/CEYi5Yk5nGp34vzELs25a8) | 4.55 |
 
 В каждой папке `canvas.json` хранит раскладку холста и заметки «что было — что стало».
 Файлы `*.dc.html` — артборды в формате холста: сами по себе они не открываются, им нужен `support.js` холста.

@@ -59,8 +59,8 @@
   <div class="rail-derived">
     {{#each railDerived}}
     <span class="dval" data-tooltip="{{hint}}">
-      <span class="v"><b>{{value}}</b>{{#if unit}}<small>{{unit}}</small>{{/if}}</span>
-      <em>{{label}}</em>
+      {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=value cls="sm"}}
+      <em>{{label}}{{#if unit}}, {{unit}}{{/if}}</em>
     </span>
     {{/each}}
   </div>

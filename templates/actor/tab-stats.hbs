@@ -18,11 +18,9 @@
       {{#each stats}}
       <div class="stat-row{{#if tone}} tone-{{tone}}{{/if}}">
         <a class="hit rollable" data-action="rollStat" data-stat="{{key}}" data-tooltip="Проверка параметра (Shift — без окна)">
-          <span class="stamp"><b>{{effective}}</b></span>
-          <span class="who">
-            <span class="name">{{label}}</span>
-            <span class="about" data-tooltip="{{about}}">{{about}}</span>
-          </span>
+          {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=effective cls="lg"}}
+          <span class="name">{{label}}</span>
+          <span class="about">{{about}}</span>
         </a>
         {{#if @root.advanceMode}}
           {{#with offer}}
@@ -61,11 +59,10 @@
 
   {{!-- Удача не бросается как параметр — её тратят, поэтому она стоит отдельной строкой --}}
   <div class="fate-bar">
-    <span class="cap">СУДЬБА</span>
+    {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=luckStat.effective cls="md brassy"}}
     <span class="fate-value">
-      <span class="t">Удача</span>
-      <b>{{luckStat.effective}}</b>
-      <span class="hint-inline">из {{system.luck.max}} — тратится на любой бросок</span>
+      <span class="t">Удача <span class="cap">судьба · из {{system.luck.max}} · тратится на любой бросок</span></span>
+      <span class="coins">{{#each luckDots}}<i class="vd-coin{{#unless on}} off{{/unless}}"></i>{{/each}}</span>
     </span>
     <span class="grow"></span>
     <label class="base" data-tooltip="Вложенные очки">

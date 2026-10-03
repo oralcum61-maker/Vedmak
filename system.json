@@ -27,7 +27,8 @@
     "vedmak.mjs"
   ],
   "styles": [
-    "styles/vedmak.css"
+    "styles/vedmak.css",
+    "styles/sheet.css"
   ],
   "languages": [
     {
