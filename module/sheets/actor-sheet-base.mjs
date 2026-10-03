@@ -19,6 +19,7 @@ import { profileSheet } from "../apps/perf.mjs";
 import { verbalAction, verbalContext, resetDuel, setDuelResolve } from "../combat/verbal.mjs";
 import { detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
+import { animateTab, animateVitals } from "../fx/sheet-motion.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -438,6 +439,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       this.#staleParts.delete(tab);
       this.render({ parts: [tab] });
     }
+    animateTab(this.element, group, tab);
   }
 
   /**
@@ -738,6 +740,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       }
     }
     this.#syncTabs();
+    // Шкалы ПЗ/Вын/Токсичности доезжают от прежнего значения к новому (PLAN 4.67)
+    animateVitals(this, this.element, this.actor.id);
     // Решительность в дуэли — не поле формы: форма писала бы текущий максимум во флаг при каждом сохранении,
     // и после смены Воли или Инт Решительность не была бы полной («нет флага — максимум», verbal.mjs)
     this._listen("input.duel-resolve-value", "change", async (event, input) => {

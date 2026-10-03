@@ -42,6 +42,7 @@ import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
 import { registerTokenFlip, flipToken } from "./module/apps/token-flip.mjs";
 import { registerFxSettings, registerFx } from "./module/fx/fx.mjs";
+import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
@@ -229,6 +230,7 @@ Hooks.once("init", () => {
   registerTokenFlip();
   registerFxSettings();
   registerFx();
+  registerMigrationSettings();
 
   // API для макросов
   game.vedmak = {
@@ -247,6 +249,7 @@ Hooks.once("ready", () => {
   initSocket();
   sortCompendiaIntoFolders();
   injectMetalDefs();
+  runMigrations();
 });
 
 /**

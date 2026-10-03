@@ -686,7 +686,7 @@
   flex: none; width: 160px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
   padding: 10px 14px; border-left: 1px solid #060708; box-shadow: inset 1px 0 0 rgba(255, 240, 215, .05);
 }
-.vedmak-hud .vh.collapsed .vh-turn { flex-direction: row; width: auto; padding: 6px 40px 6px 14px; }
+.vedmak-hud .vh.collapsed .vh-turn { flex-direction: row; width: auto; padding: 6px 66px 6px 14px; }
 .vedmak-hud .vh.collapsed .vh-turn .vd-medal { --size: 38px; --rim: 6px; }
 .vedmak-hud .vh.collapsed .vh-turn .vh-go.wide { width: auto; padding: 0 16px; }
 .vedmak-hud .vh-next { font-size: 11px; line-height: 1.3; color: #bab4a8; text-align: center; }
@@ -1108,3 +1108,47 @@
 
 body.vd-no-anim .chat-message.vedmak-message.vd-new, body.vd-no-anim .chat-message.vedmak-message.vd-new *,
 body.vd-no-anim .vedmak-hud .vh-deck.vh-in, body.vd-no-anim .vedmak-hud .vh-portrait::after { animation: none !important; }
+
+/* ============================== Движение в листах (PLAN 4.67) ==============================
+   Окно проявляется, новая вкладка выезжает, шкала доезжает до нового значения (потерянное на миг подсвечено),
+   число вспыхивает, медальон, на который можно нажать, проворачивается под курсором. Анимируются прозрачность,
+   сдвиг и поворот (свойства translate, rotate, scale) — без перерисовки и без спора с transform окна. */
+@keyframes vd-win-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: none; } }
+@keyframes vd-tab-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: none; } }
+@keyframes vd-bump-good { from { scale: 1.3; color: #cfe8b0; text-shadow: 0 0 10px rgba(180, 199, 156, .9); } }
+@keyframes vd-bump-bad { from { scale: 1.3; color: #ffb09a; text-shadow: 0 0 10px rgba(224, 96, 74, .9); } }
+@keyframes vd-lag-out { 0% { opacity: .85; } 100% { opacity: 0; } }
+
+.application.vedmak:not(.vedmak-hud) { animation: vd-win-in 220ms cubic-bezier(.2, .8, .2, 1); }
+.application.vedmak .tab.vd-tab-in { animation: vd-tab-in 240ms cubic-bezier(.2, .8, .2, 1); }
+.vd-bump-good { animation: vd-bump-good 650ms cubic-bezier(.2, .8, .2, 1); }
+.vd-bump-bad { animation: vd-bump-bad 650ms cubic-bezier(.2, .8, .2, 1); }
+.vd-lag {
+  position: absolute; top: 0; bottom: 0; pointer-events: none;
+  background: linear-gradient(180deg, #fff4e8, #e8c4b4); animation: vd-lag-out 700ms 180ms ease-in forwards;
+}
+
+/* Медальон-кнопка — как ручка: под курсором кольцо проворачивается на одну насечку */
+.vedmak .vd-medal .vd-ring { transition: rotate 380ms cubic-bezier(.2, .8, .2, 1); }
+.vedmak :is(a, button, [data-action]):hover .vd-medal .vd-ring { rotate: 36deg; }
+
+body.vd-no-anim .application.vedmak, body.vd-no-anim .application.vedmak .tab.vd-tab-in,
+body.vd-no-anim .vd-bump-good, body.vd-no-anim .vd-bump-bad { animation: none !important; }
+body.vd-no-anim .vd-lag { display: none; }
+body.vd-no-anim .vedmak .vd-medal .vd-ring { transition: none; }
+
+/* Громкость звуков системы (PLAN 4.67): динамик в худе рядом со стрелкой сворачивания, ползунок выпадает под ним;
+   в боковой панели «Звуки» — строка «Ведьмак» в блоке громкости Foundry */
+.vedmak-hud .vh-vol {
+  position: absolute; z-index: 3; right: 34px; top: 6px; width: 24px; height: 24px; padding: 0;
+  display: grid; place-items: center; font-size: 12px; color: #bab4a8; background: none; border: 0; box-shadow: none;
+}
+.vedmak-hud .vh-vol:hover { color: #fff; background: none; }
+.vedmak-hud .vh-volpop {
+  position: absolute; z-index: 4; right: 8px; top: 32px; display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow), 0 8px 16px -6px rgba(0, 0, 0, .9);
+}
+.vedmak-hud .vh-volpop .vd-fx-value { min-width: 34px; text-align: right; font-family: var(--vd-font-head); font-size: 14px; color: #f1ece0; }
+.vedmak-hud .vh.collapsed .vh-volpop { top: auto; bottom: calc(100% + 4px); }
+input.vd-fx-slider { flex: 1 1 auto; width: 120px; min-width: 80px; height: 16px; margin: 0; accent-color: #b8432c; cursor: var(--cursor-pointer, pointer); background: none; border: 0; box-shadow: none; }
+#sidebar .global-volume .vd-fx-volume input.vd-fx-slider { width: auto; }

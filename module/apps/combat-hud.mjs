@@ -16,6 +16,8 @@ import { endMaintained } from "../magic/effects.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { ALCHEMY_ACTIONS } from "../config/crafting.mjs";
 import { flipToken, canFlip } from "./token-flip.mjs";
+import { animateVitals } from "../fx/sheet-motion.mjs";
+import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -52,7 +54,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       deathSave: CombatHud.#onDeathSave,
       toggleStatus: CombatHud.#onToggleStatus,
       nextTurn: CombatHud.#onNextTurn,
-      toggleCollapse: CombatHud.#onToggleCollapse
+      toggleCollapse: CombatHud.#onToggleCollapse,
+      toggleVolume: CombatHud.#onToggleVolume
     }
   };
 
@@ -160,6 +163,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       this.deckIn = false;
       this.element.querySelector(".vh-deck")?.classList.add("vh-in");
     }
+    if (this.actor) animateVitals(this, this.element, this.actor.id);
+    bindVolumeSlider(this.element.querySelector(".vh-volpop input"));
     const input = this.element.querySelector("input.vh-skill");
     if (!input || input.dataset.bound) return;
     input.dataset.bound = "1";
@@ -275,7 +280,12 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       effects, statusList,
       collapsed: this.collapsed, isCurrent, isCharacter, inCombat: !!combat,
       round: combat?.round ?? 0, nextName: combat ? (next?.name ?? "—") : "",
-      canAdvance: !!combat && (isCurrent || game.user.isGM)
+      canAdvance: !!combat && (isCurrent || game.user.isGM),
+      ...(() => {
+        let volume = 0.7;
+        try { volume = Number(game.settings.get(SYSTEM_ID, "fxVolume")); } catch { /* до регистрации */ }
+        return { volume, volPct: Math.round(volume * 100), volIcon: volumeIcon(volume), volOpen: this.volOpen };
+      })()
     });
   }
 
@@ -349,6 +359,15 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onToggleStatus(event, target) { await this.actor?.toggleStatusEffect(target.dataset.status); }
 
   static async #onNextTurn() { await game.combat?.nextTurn(); }
+
+  /** Ползунок громкости под динамиком: открыть или спрятать. */
+  static #onToggleVolume() {
+    this.volOpen = !this.volOpen;
+    this.render();
+  }
+
+  /** Ползунок громкости открыт. */
+  volOpen = false;
 
   static async #onToggleCollapse() {
     await game.settings.set(SYSTEM_ID, "combatHudCollapsed", !this.collapsed);

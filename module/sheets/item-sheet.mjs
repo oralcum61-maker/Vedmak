@@ -9,6 +9,7 @@ import { RACES, ABILITY_MECHANICS, modTargets } from "../config/character.mjs";
 import { SUBSTANCES } from "../config/crafting.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
+import { animateTab } from "../fx/sheet-motion.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -210,6 +211,12 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
+  }
+
+  /** Смена вкладки — новая проявляется (PLAN 4.67). */
+  changeTab(tab, group, options = {}) {
+    super.changeTab(tab, group, options);
+    animateTab(this.element, group, tab);
   }
 
   _attachFrameListeners() {

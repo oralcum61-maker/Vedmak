@@ -1,6 +1,8 @@
 {{!-- Худ персонажа (холст design/11, PLAN 4.58): показатели слева, вкладки в середине, ход справа. --}}
 {{#if actor}}
 <div class="vh{{#if collapsed}} collapsed{{/if}}{{#if isCurrent}} my-turn{{/if}}">
+  <button type="button" class="vh-vol" data-action="toggleVolume" data-tooltip="Громкость звуков" aria-label="Громкость звуков"><i class="vd-fx-icon fa-solid {{volIcon}}"></i></button>
+  {{#if volOpen}}<div class="vh-volpop"><input type="range" class="vd-fx-slider" min="0" max="1" step="0.05" value="{{volume}}" aria-label="Громкость звуков системы"><span class="vd-fx-value">{{volPct}}%</span></div>{{/if}}
   <button type="button" class="vh-fold" data-action="toggleCollapse" data-tooltip="{{#if collapsed}}Развернуть{{else}}Свернуть{{/if}}" aria-label="{{#if collapsed}}Развернуть худ{{else}}Свернуть худ{{/if}}"><i class="fa-solid fa-chevron-{{#if collapsed}}up{{else}}down{{/if}}"></i></button>
 
   <div class="vh-side">

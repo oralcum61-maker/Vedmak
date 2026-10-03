@@ -101,7 +101,34 @@ export const OVERRIDES = [
   { op: "set", pack: "armor", name: "Реданские поножи", set: { img: "icons/equipment/leg/pants-tasset-leather-steel-red.webp" } },
   { op: "set", pack: "armor", name: "Шинные поножи", set: {
     "system.description": p("Поножи из продольных стальных полос-шин, нашитых на кожаную или стёганую основу. Прикрывают голени и бёдра, не сковывая шага.")
-  } }
+  } },
+
+  /* ------------------------- Бестиарий: Энергия НИП (03.10) ------------------------- */
+  // В исходном компендиуме BS & Tobi Энергия у магов и ведьмаков лежит в derivedStats.vigor.value, а max пуст —
+  // генератор брал max и ставил 0: знаки и заклинания шли с перегрузкой. Генератор исправлен (bs_bestiary.py),
+  // правки ниже — для уже собранного packs-src; после пересборки генератором они пропускаются как внесённые.
+  { op: "set", pack: "bestiary", name: "Адепт из Бан-Арда", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Волка", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Грифона", set: { "system.vigor": 9 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Змеи", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Кота", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Мантикоры", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Медведя", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Имлерих", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Карантир", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Мастер Пиромант", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Навигатор дикой охоты", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Волка", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Грифона", set: { "system.vigor": 9 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Змеи", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Кота", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Мантикоры", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Медведя", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Некромант", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Нитраль", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Ученица из аретузы", set: { "system.vigor": 10 } },
+  { op: "set", pack: "bestiary", name: "Чародей", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Эредин Бреакк Глас", set: { "system.vigor": 25 } },
 ];
 
 /* -------------------------------------------------------------------------- */

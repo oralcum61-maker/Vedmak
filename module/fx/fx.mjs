@@ -7,6 +7,7 @@ import { SYSTEM_ID } from "../util.mjs";
 import { playSound, preloadSounds } from "./sounds.mjs";
 import { playJB2A, jb2aReady } from "./jb2a.mjs";
 import * as S from "./scene.mjs";
+import { registerVolumeControls, syncVolumeControls } from "./volume.mjs";
 
 const ELEMENT_COLORS = { fire: 0xff7a2a, air: 0xdcecff, water: 0x6ab0ff, earth: 0xc29a5a, mixed: 0xc9bdf0 };
 /** Цвет пузырьков зелья: мутагены — по своему цвету, эликсиры — фиалка, отвары — киноварь. */
@@ -342,8 +343,9 @@ export function registerFxSettings() {
   });
   game.settings.register(SYSTEM_ID, "fxVolume", {
     scope: "client", config: true,
-    name: "Громкость звуков", hint: "Доля громкости звуков системы (умножается на громкость интерфейса Foundry).",
-    type: Number, default: 0.7, range: { min: 0, max: 1, step: 0.05 }
+    name: "Громкость звуков", hint: "Доля громкости звуков системы (умножается на громкость интерфейса Foundry). Тот же ползунок — строкой «Ведьмак» на вкладке «Звуки» боковой панели и за динамиком в худе.",
+    type: Number, default: 0.7, range: { min: 0, max: 1, step: 0.05 },
+    onChange: v => syncVolumeControls(Number(v))
   });
   game.settings.register(SYSTEM_ID, "fxScene", {
     scope: "client", config: true,
@@ -363,6 +365,7 @@ export function registerFxSettings() {
 }
 
 export function registerFx() {
+  registerVolumeControls();
   Hooks.on("createChatMessage", onChatMessage);
   Hooks.on("preUpdateActor", onPreUpdateActor);
   Hooks.on("updateActor", onUpdateActor);
