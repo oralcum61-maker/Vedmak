@@ -999,3 +999,88 @@
   color: #f7f3ff; text-shadow: 0 -1px 0 rgba(20, 10, 40, .7);
   background-color: #6a5a98; background-image: var(--vd-rivet), var(--vd-rivet), var(--vd-gloss), var(--vd-s-go-arcane);
 }
+
+/* ============================== Лист предмета по холсту design/11 (PLAN 4.62) ==============================
+   Шапка: значок в стальной рамке, имя с чертой, табличка типа, подзаголовок и «В чат» светлой сталью. У оружия —
+   строка главных чисел: медальон точности, урон в колодце, надёжность насечками. Разделы — пластины с гравированным
+   заголовком, подписи полей — мелкой капителью над утопленными полями. */
+.application.vedmak.item .vd-cap { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9); white-space: nowrap; }
+.application.vedmak.item .vi-head {
+  align-items: center; gap: .9rem; padding: 1rem 1rem .9rem;
+  background-color: #131417; background-image: radial-gradient(120% 140% at 30% 0%, rgba(255, 240, 215, .06), transparent 60%), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px; border-bottom: 1px solid #060708;
+}
+.application.vedmak.item .vi-head::after { content: none; }
+.application.vedmak.item .vi-frame {
+  position: relative; flex: none; display: grid; place-items: center; width: 72px; height: 72px; overflow: hidden;
+  background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
+}
+.application.vedmak.item .vi-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.application.vedmak.item .vi-frame img.portrait { width: 62px; height: 62px; margin: 0; object-fit: contain; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.application.vedmak.item .vi-head .identity { gap: .45rem; justify-content: center; }
+.application.vedmak.item .vi-head input.name {
+  height: auto; padding: 0 0 4px; font-family: var(--vd-font-head); font-size: 1.6rem; line-height: 1; color: #f1ece0;
+  background: none; border: 0; border-bottom: 1px solid #050607; border-radius: 0; box-shadow: 0 1px 0 rgba(255, 240, 215, .06); text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .vi-head .tags { align-items: center; gap: 6px; flex-wrap: wrap; }
+.application.vedmak.item .vi-head .tag {
+  height: 22px; padding: 0 10px; display: inline-flex; align-items: center; font-family: var(--vd-font-body); font-size: .62rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: #f1ece0; background: #2a2c31; border: 1px solid #060708; border-radius: 2px; box-shadow: none;
+}
+.application.vedmak.item .vi-head .tag.relic { color: #e8c97a; }
+.application.vedmak.item .vi-sub { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.application.vedmak.item .vi-fill { flex: 1 1 0; }
+.application.vedmak.item .vi-head a.vi-post {
+  height: 28px; padding: 0 12px; font-size: .64rem; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95);
+}
+.application.vedmak.item .vi-head a.vi-post:hover { background-color: #484a51; color: #fff; }
+
+/* Главные числа оружия */
+.application.vedmak.item .vi-key { display: flex; align-items: center; gap: .9rem; margin-bottom: .9rem; }
+.application.vedmak.item .vi-acc { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.application.vedmak.item .vd-medal.vi-m54 { --size: 54px; --rim: 8px; }
+.application.vedmak.item .vd-medal.vi-m54 .vd-medal-face b { font-size: 20px; }
+.application.vedmak.item .vi-well { background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow); }
+.application.vedmak.item .vi-dmg { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px; }
+.application.vedmak.item .vi-dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: 1.5rem; line-height: 1.1; color: #f1ece0; }
+.application.vedmak.item .vi-dmg .vd-cap { white-space: normal; text-align: center; }
+.application.vedmak.item .vi-rel { flex: none; display: flex; flex-direction: column; gap: 5px; padding: 9px 12px; max-width: 45%; }
+.application.vedmak.item .vi-rel .vd-notches { flex-wrap: wrap; }
+
+/* Разделы — пластины, подписи — капитель над полями */
+.application.vedmak.item .tab fieldset.vd-fieldset {
+  position: relative; margin: 0 0 .9rem; padding: .85rem .9rem .9rem; min-inline-size: 0;
+  background-color: var(--vd-plate); background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px; box-shadow: var(--vd-lift);
+}
+.application.vedmak.item .tab fieldset.vd-fieldset > legend {
+  float: left; width: 100%; display: flex; align-items: center; gap: 9px; margin: 0 0 .7rem; padding: 0;
+  font-family: var(--vd-font-body); font-weight: 500; font-size: .62rem; letter-spacing: .24em; text-transform: uppercase; color: #d6d0c2;
+  background: none; border: 0; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .tab fieldset.vd-fieldset > legend::before { content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg); background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607; }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend::after { content: ""; order: 1; flex: 1 1 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend > a { order: 2; display: inline-grid; place-items: center; width: 24px; height: 22px; font-size: .7rem; letter-spacing: 0; color: #f6f1e6;
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(0, 0, 0, .34)); border: 1px solid #060708; border-radius: 3px; }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend > a:hover { background-color: #484a51; text-shadow: none; }
+.application.vedmak.item .tab fieldset.vd-fieldset > legend + * { clear: both; }
+.application.vedmak.item .tab .vd-grid > label:not(.check) {
+  display: flex; flex-direction: column; gap: 5px; min-width: 0;
+  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .tab .vd-grid > label:not(.check) :is(input, select),
+.application.vedmak.item .tab fieldset.vd-fieldset .row-edit :is(input, select) {
+  height: 32px; padding: 0 9px; font-size: .8rem; letter-spacing: 0; text-transform: none; color: #e2ddd0; text-shadow: none;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.application.vedmak.item .tab .vd-grid > label:not(.check) input[type="number"] { font-family: var(--vd-font-head); font-size: 1rem; text-align: center; }
+.application.vedmak.item .tab .vd-grid > label .pair { display: flex; align-items: center; gap: 6px; color: #8c867b; font-size: .8rem; letter-spacing: 0; }
+.application.vedmak.item .tab .vd-grid > label .pair input { flex: 1 1 0; min-width: 0; }
+.application.vedmak.item .tab fieldset.vd-fieldset .field-label { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.application.vedmak.item .tab fieldset.vd-fieldset .row-edit {
+  padding: 6px 8px; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.application.vedmak.item .tab fieldset.vd-fieldset .hint { font-size: .72rem; color: #a8a296; }

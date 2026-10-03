@@ -1,12 +1,15 @@
-<header class="vd-header item-header">
-  <img class="portrait" src="{{item.img}}" alt="{{item.name}}" data-action="editImage" data-edit="img">
+{{!-- Шапка предмета (холст design/11, PLAN 4.62): значок в стальной рамке, имя, табличка типа, подзаголовок, «В чат». --}}
+<header class="vd-header item-header vi-head">
+  <span class="vi-frame"><img class="portrait" src="{{item.img}}" alt="{{item.name}}" data-action="editImage" data-edit="img"></span>
   <div class="identity">
     <input class="name" type="text" name="name" value="{{item.name}}" placeholder="Название">
     <div class="tags">
-      <span class="tag">{{typeLabel}}</span>
+      <span class="tag vi-plq">{{typeLabel}}</span>
       {{#if (eq item.type "spell")}}<span class="tag">{{vedmakLabel "MAGIC_KINDS" system.kind}}</span>{{/if}}
       {{#if system.relic}}<span class="tag relic">Реликвия</span>{{/if}}
-      <a class="tag post" data-action="post" data-tooltip="Показать в чате">В чат</a>
+      {{#if headerSub}}<span class="vi-sub">{{headerSub}}</span>{{/if}}
+      <span class="vi-fill"></span>
+      <a class="tag post vi-post" data-action="post" data-tooltip="Показать в чате">В чат</a>
     </div>
   </div>
 </header>

@@ -89,6 +89,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       editable: this.isEditable,
       config: V,
       typeLabel: game.i18n.localize(`TYPES.Item.${item.type}`),
+      headerSub: item.type === "weapon"
+        ? [V.WEAPON_CATEGORIES[system.category], V.WEAPON_SKILLS[system.skill]].filter(Boolean).join(" · ").toLowerCase()
+        : "",
       enrichedDescription: await TextEditor.enrichHTML(system.description ?? "", {
         secrets: item.isOwner, relativeTo: item
       }),
@@ -142,6 +145,14 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
     if (item.type === "weapon") {
       context.damageTypeOptions = Object.fromEntries(Object.entries(V.DAMAGE_TYPES).map(([k, v]) => [k, v.label]));
+      // Строка главных чисел (холст design/11): точность, урон с типами, надёжность насечками
+      const rel = system.reliability ?? {};
+      context.weaponKey = {
+        accuracy: `${(system.accuracy ?? 0) > 0 ? "+" : ""}${system.accuracy ?? 0}`,
+        damage: system.damage || "—",
+        types: (system.damageTypes ?? []).map(t => V.DAMAGE_TYPES[t]?.label?.toLowerCase()).filter(Boolean).join(", "),
+        relValue: rel.value ?? 0, relMax: rel.max ?? 0
+      };
       // Строки — из исходных данных: эффекты модификаций арбалета добавляются при подготовке и в данные не пишутся
       context.weaponEffects = item._source.system.effects.map((e, i) => ({ ...e, index: i, hasParam: !!V.WEAPON_EFFECTS[e.key]?.param, paramHint: V.WEAPON_EFFECTS[e.key]?.param }));
     }
