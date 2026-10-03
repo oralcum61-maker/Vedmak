@@ -5,7 +5,8 @@
 
 import { SYSTEM_ID } from "../util.mjs";
 import { playSound, preloadSounds } from "./sounds.mjs";
-import { playJB2A, jb2aReady } from "./jb2a.mjs";
+import { playJB2A, jb2aReady, playSpellFx, preloadCombatFx } from "./jb2a.mjs";
+import { spellFxFor } from "./spell-fx.mjs";
 import * as S from "./scene.mjs";
 import { registerVolumeControls, syncVolumeControls } from "./volume.mjs";
 
@@ -58,7 +59,7 @@ function onAttack(f) {
     const thrown = a.skill === "athletics";
     playSound(bolt ? "crossbow" : thrown ? "swing" : "bow");
     if (!from) return;
-    for (const t of targets) show(bolt ? "bolt" : "arrow", { at: attacker, to: t }, () => S.projectile(from, S.pointOf(t)));
+    for (const t of targets) show(bolt ? "bolt" : thrown ? "thrown" : "arrow", { at: attacker, to: t }, () => S.projectile(from, S.pointOf(t)));
     return;
   }
   playSound(a.attackType === "strong" || a.attackType === "charge" ? "swing-heavy" : "swing");
@@ -85,7 +86,12 @@ function onDefense(d) {
     } else {
       playSound(crit ? "hit-crit" : "hit");
       const heavy = d.attack?.attackType === "strong" || d.attack?.attackType === "charge";
-      show(heavy || crit ? "slashHeavy" : "slash", { at, rotateTowards: attacker ?? undefined, scaleToObject: 1.6 },
+      // Чем ударили: кулак, когти, укус — свои анимации JB2A; клинок и прочее — след удара
+      const w = d.attack?.weapon ?? {};
+      const name = String(w.name ?? "").toLowerCase();
+      const kind = w.unarmed ? "unarmed" : w.category === "natural" ? (name.includes("укус") || name.includes("клык") ? "bite" : "claws")
+        : heavy || crit ? "slashHeavy" : "slash";
+      show(kind, { at, rotateTowards: attacker ?? undefined, scaleToObject: kind === "slash" || kind === "slashHeavy" ? 1.6 : 1.2 },
         () => S.slash(to, from, { heavy: heavy || crit }));
     }
     if (crit && sceneOn() && to) S.floatText(to, d.critLabel || "Критическое!", 0xff9a7a);
@@ -143,6 +149,14 @@ function onCast(f) {
   const element = a.spell?.element;
   const color = ELEMENT_COLORS[element] ?? ELEMENT_COLORS.mixed;
   const toward = target ?? (origin ? { x: origin.x + Math.cos(dir) * length * s, y: origin.y + Math.sin(dir) * length * s } : null);
+
+  // Своя анимация JB2A под это заклинание (spell-fx.mjs), если модули стоят; иначе — свои эффекты ниже
+  const recipe = sceneOn() ? spellFxFor(a.label) : null;
+  if (recipe && playSpellFx(recipe, { caster, targets, zone, origin, dir, length })) {
+    const fallback = sign ?? (element === "fire" ? "igni" : element === "air" ? "aard" : "spell");
+    playSound(recipe.sound ?? fallback, { volume: recipe.sound ? 1 : 0.8 });
+    return;
+  }
 
   switch (sign) {
     case "aard":
@@ -372,6 +386,8 @@ export function registerFx() {
   Hooks.on("createActiveEffect", onCreateEffect);
   Hooks.on("updateCombat", onUpdateCombat);
   Hooks.on("renderChatMessageHTML", onRenderMessage);
+  // База JB2A в Sequencer появляется к его собственному событию готовности — тогда и подгружаем анимации боя
+  Hooks.once("sequencerReady", preloadCombatFx);
   Hooks.once("ready", () => {
     applyUiMotion();
     preloadSounds();

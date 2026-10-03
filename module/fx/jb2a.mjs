@@ -1,30 +1,34 @@
 // Анимации JB2A через Sequencer (PLAN 4.66) — если оба модуля включены и настройка не выключена.
-// Пути в базе у бесплатной и платной JB2A различаются, поэтому на каждый эффект — список кандидатов:
-// берётся первый, что есть в базе Sequencer. Нет ни одного — вызывающий рисует свой эффект.
+// На каждый эффект — список путей (сверены с базой бесплатной JB2A 0.9.4): берётся первый, что есть в базе
+// Sequencer. Нет ни одного — вызывающий рисует свой эффект. Заклинания — своими рецептами (spell-fx.mjs).
 // Каждый клиент проигрывает у себя (.locally()): хуки срабатывают у всех, рассылка дала бы дубли.
 
 import { SYSTEM_ID } from "../util.mjs";
 
 const CANDIDATES = {
-  slash: ["jb2a.melee_generic.slash.01.orange", "jb2a.melee_generic.slash", "jb2a.melee_attack.01.trail", "jb2a.sword.melee.01.white"],
-  slashHeavy: ["jb2a.melee_generic.slashing.two_handed.orange", "jb2a.greatsword.melee.standard.white", "jb2a.melee_generic.slash.01.orange"],
-  arrow: ["jb2a.arrow.physical.white.01", "jb2a.arrow.physical", "jb2a.arrow"],
-  bolt: ["jb2a.bolt.physical.white", "jb2a.bolt.physical", "jb2a.arrow.physical.white.01"],
-  impact: ["jb2a.impact.004.orange", "jb2a.impact.002.orange", "jb2a.impact.001.orange", "jb2a.impact"],
-  blood: ["jb2a.liquid.splash_side.red", "jb2a.liquid.splash.red", "jb2a.liquid.splash"],
-  sparks: ["jb2a.impact.007.orange", "jb2a.impact.003.orange", "jb2a.impact.004.yellow"],
-  death: ["jb2a.toll_the_dead.red.skull_smoke", "jb2a.toll_the_dead.green.skull_smoke", "jb2a.toll_the_dead"],
-  aard: ["jb2a.gust_of_wind.veryfast", "jb2a.gust_of_wind.default", "jb2a.breath_weapons.cold.cone.blue"],
-  igni: ["jb2a.burning_hands.01.orange", "jb2a.breath_weapons.fire.cone.orange.01", "jb2a.fire_jet.orange"],
-  quen: ["jb2a.shield.01.complete.01.orange", "jb2a.shield.01.complete.01", "jb2a.shield"],
-  axii: ["jb2a.dizzy_stars.400px.purple", "jb2a.dizzy_stars", "jb2a.markers.light_orb.loop.purple"],
-  yrden: ["jb2a.magic_signs.circle.02.abjuration.complete.dark_purple", "jb2a.magic_signs.circle.02.abjuration", "jb2a.magic_signs.circle"],
-  arcane: ["jb2a.magic_missile.purple", "jb2a.magic_missile", "jb2a.energy_strands.range.standard.purple"],
-  arcaneBurst: ["jb2a.impact.010.purple", "jb2a.impact.010", "jb2a.misty_step.01.purple"],
-  fire: ["jb2a.fire_bolt.orange", "jb2a.fire_bolt", "jb2a.scorching_ray.01.orange"],
-  explosion: ["jb2a.explosion.01.orange", "jb2a.explosion.02.orange", "jb2a.fireball.explosion.orange", "jb2a.explosion"],
-  drink: ["jb2a.healing_generic.200px.green", "jb2a.healing_generic.loop.greenorange", "jb2a.healing_generic"],
-  glint: ["jb2a.static_electricity.01.blue", "jb2a.sparkles.01.yellow", "jb2a.twinkling_stars.points07.white"]
+  slash: ["jb2a.melee_generic.slash.01.orange", "jb2a.melee_attack.01.trail.01.orangered", "jb2a.sword.melee.01.white"],
+  slashHeavy: ["jb2a.melee_attack.03.trail.01.orangered", "jb2a.greatsword.melee.standard.white", "jb2a.melee_generic.slash.01.orange"],
+  unarmed: ["jb2a.unarmed_strike.physical.01.blue", "jb2a.melee_generic.creature_attack.fist.001.red"],
+  claws: ["jb2a.claws.200px.red", "jb2a.melee_generic.creature_attack.claw.001.red"],
+  bite: ["jb2a.bite.200px.red", "jb2a.claws.200px.red"],
+  arrow: ["jb2a.arrow.physical.white.01", "jb2a.arrow.physical.blue"],
+  bolt: ["jb2a.bolt.physical.orange", "jb2a.arrow.physical.white.01"],
+  thrown: ["jb2a.dagger.throw.01.white", "jb2a.arrow.physical.white.01"],
+  impact: ["jb2a.impact.005.orange", "jb2a.impact.008.orange", "jb2a.impact.010.orange"],
+  blood: ["jb2a.liquid.splash_side02.red", "jb2a.liquid.splash02.red"],
+  sparks: ["jb2a.impact.007.yellow", "jb2a.impact.006.yellow"],
+  death: ["jb2a.toll_the_dead.green.skull_smoke"],
+  aard: ["jb2a.gust_of_wind.veryfast", "jb2a.gust_of_wind.default"],
+  igni: ["jb2a.burning_hands.01.orange", "jb2a.breath_weapons.fire.cone.orange.01"],
+  quen: ["jb2a.markers.shield_rampart.complete.01.orange", "jb2a.shield.01.complete.01.blue"],
+  axii: ["jb2a.dizzy_stars.400px.blueorange", "jb2a.markers.stun.purple.01"],
+  yrden: ["jb2a.magic_signs.circle.02.illusion.complete.purple"],
+  arcane: ["jb2a.magic_missile.purple", "jb2a.energy_strands.range.standard.purple.01"],
+  arcaneBurst: ["jb2a.particle_burst.01.circle.bluepurple", "jb2a.impact.011.blue"],
+  fire: ["jb2a.fire_bolt.orange", "jb2a.scorching_ray.01.orange"],
+  explosion: ["jb2a.explosion.01.orange", "jb2a.fireball.explosion.orange"],
+  drink: ["jb2a.healing_generic.200px.green", "jb2a.healing_generic.burst.greenorange"],
+  glint: ["jb2a.glint.yellow.many", "jb2a.twinkling_stars.points07.white"]
 };
 
 /** Sequencer и JB2A включены, и настройка разрешает. */
@@ -41,7 +45,8 @@ function pick(kind) {
   const key = (CANDIDATES[kind] ?? []).find(k => {
     try { return Sequencer.Database.entryExists(k); } catch { return false; }
   }) ?? null;
-  cache.set(kind, key);
+  // Найденное запоминаем; «не нашлось» — нет: база JB2A могла ещё не загрузиться (Sequencer наполняет её позже ready)
+  if (key) cache.set(kind, key);
   return key;
 }
 
@@ -70,4 +75,102 @@ export function playJB2A(kind, o = {}) {
     console.warn("vedmak | JB2A", kind, err);
     return false;
   }
+}
+
+const exists = key => {
+  try { return !!key && Sequencer.Database.entryExists(key); } catch { return false; }
+};
+const gridSize = () => canvas?.grid?.size ?? 100;
+
+/**
+ * Проиграть рецепт заклинания (spell-fx.mjs).
+ * @param {object} r — рецепт
+ * @param {{caster: Token|null, targets: Token[], zone: object|null, origin: object|null, dir: number, length: number}} ctx —
+ *   origin — начало конуса (точка зоны или заклинатель), dir — направление (рад), length — длина в клетках
+ * @returns {boolean} проиграно ли
+ */
+export function playSpellFx(r, { caster, targets = [], zone = null, origin = null, dir = 0, length = 4 }) {
+  if (!jb2aReady() || !r || !exists(r.file)) return false;
+  const s = gridSize();
+  const seq = new Sequence({ moduleName: "vedmak", softFail: true });
+  const fx = file => seq.effect().file(file).locally(true);
+  const pointAhead = (from, cells) => from ? { x: from.x + Math.cos(dir) * cells * s, y: from.y + Math.sin(dir) * cells * s } : null;
+  const centerOf = t => t?.center ?? t;
+  try {
+    if (r.cast && caster && exists(r.cast)) fx(r.cast).atLocation(caster).scaleToObject(1.6).waitUntilFinished(-700);
+    switch (r.mode) {
+      case "bolt": {
+        const from = caster ?? origin;
+        const ends = targets.length ? targets : [pointAhead(centerOf(from), length)].filter(Boolean);
+        if (!from || !ends.length) return false;
+        ends.forEach((t, i) => {
+          const e = fx(r.file).atLocation(from).stretchTo(t);
+          if (i === ends.length - 1 && r.impact) e.waitUntilFinished(-500);
+        });
+        if (r.impact && exists(r.impact)) {
+          for (const t of ends) {
+            const e = fx(r.impact).atLocation(t);
+            if (t.document) e.scaleToObject(r.impactScale ?? 1.4);
+            else e.size(r.impactScale ?? 1.4, { gridUnits: true });
+          }
+        }
+        break;
+      }
+      case "cone": {
+        const from = origin ?? centerOf(caster);
+        const end = targets.length && !zone ? centerOf(targets[0]) : pointAhead(from, length);
+        if (!from || !end) return false;
+        fx(r.file).atLocation(from).stretchTo(end);
+        break;
+      }
+      case "area":
+      case "ground": {
+        const center = zone && zone.type !== "cone" ? { x: zone.x, y: zone.y }
+          : r.atCaster || r.mode === "ground" ? centerOf(caster) : centerOf(targets[0] ?? caster);
+        if (!center) return false;
+        // Поперечник: по зоне (пиксели → клетки), иначе size рецепта — в метрах, а клетка сцены — dimensions.distance метров
+        const size = zone?.radius && zone.type !== "cone" ? (zone.radius * 2) / s
+          : (r.size ?? 3) / (canvas.dimensions?.distance || 1);
+        const e = fx(r.file).atLocation(center).size(size, { gridUnits: true });
+        if (r.below || r.mode === "ground") e.belowTokens();
+        if (r.impact && exists(r.impact)) fx(r.impact).atLocation(center).size(Math.max(1.5, size / 2), { gridUnits: true }).delay(400);
+        break;
+      }
+      case "self": {
+        if (!caster) return false;
+        fx(r.file).atLocation(caster).scaleToObject(r.scale ?? 1.6);
+        break;
+      }
+      case "target": {
+        const list = targets.length ? targets : caster ? [caster] : [];
+        if (!list.length) return false;
+        // Нить к цели и знак на ней: знак — с небольшой задержкой, а не после всей нити (она длинная)
+        const linked = r.link && caster && exists(r.link) ? list.filter(t => t !== caster) : [];
+        for (const t of linked) fx(r.link).atLocation(caster).stretchTo(t);
+        for (const t of list) {
+          const e = fx(r.file).atLocation(t).scaleToObject(r.scale ?? 1.4);
+          if (linked.length) e.delay(450);
+        }
+        break;
+      }
+      default:
+        return false;
+    }
+    seq.play();
+    return true;
+  } catch (err) {
+    console.warn("vedmak | JB2A заклинание", r.file, err);
+    return false;
+  }
+}
+
+/**
+ * Подгрузить заранее анимации боя (по первой из списка на каждый вид): иначе первый удар за сессию
+ * ждёт загрузки файла и запаздывает на секунду. Заклинания грузятся по требованию — их сотни.
+ */
+export function preloadCombatFx() {
+  if (!jb2aReady() || !globalThis.Sequencer?.Preloader) return;
+  const files = ["slash", "slashHeavy", "unarmed", "claws", "bite", "arrow", "bolt", "impact", "blood", "sparks", "death"]
+    .map(pick).filter(Boolean);
+  try { Sequencer.Preloader.preload(files, false)?.catch?.(() => {}); } catch { /* старый Sequencer — без предзагрузки */ }
 }
