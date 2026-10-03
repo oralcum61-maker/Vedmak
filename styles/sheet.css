@@ -466,3 +466,7 @@
 .application.vedmak .item-stats { border-radius: 3px; box-shadow: var(--vd-well-shadow); }
 .application.vedmak .item-stats .cell > b { color: #f1ece0; }
 .application.vedmak .gear-tile, .application.vedmak .item-head .item-frame { border-radius: 3px; }
+/* Узкий лист: числа и кнопка карточки оружия уходят на вторую строку, имя и надёжность не сжимаются */
+.application.vedmak .atk-row { flex-wrap: wrap; row-gap: .6rem; }
+.application.vedmak .atk-who { flex: 1 1 13rem; min-width: 11rem; }
+.application.vedmak .atk-rel .vd-notches { flex-wrap: nowrap; }
