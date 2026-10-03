@@ -93,7 +93,13 @@ Hooks.once("init", () => {
   });
   game.settings.register(SYSTEM_ID, "combatHud", {
     name: "Боевой худ",
-    hint: "Полоса внизу экрана, пока идёт бой: показатели, атаки, защиты, знаки и алхимия того, кем вы играете.",
+    hint: "Пульт внизу экрана: показатели, оружие, защиты, магия, алхимия, действия и состояния того, кем вы играете.",
+    scope: "client", config: true, type: Boolean, default: true,
+    onChange: () => CombatHud.refresh()
+  });
+  game.settings.register(SYSTEM_ID, "hudOutOfCombat", {
+    name: "Худ вне боя",
+    hint: "Показывать худ и вне боя, когда выделен ваш токен: зелья, знаки, навыки и состояния под рукой.",
     scope: "client", config: true, type: Boolean, default: true,
     onChange: () => CombatHud.refresh()
   });

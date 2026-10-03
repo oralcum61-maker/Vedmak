@@ -2073,7 +2073,7 @@
 
 
 /* ---------------------------- Боевой худ ---------------------------- */
-
+/* Сам пульт — в styles/sheet.css (холст design/11, PLAN 4.58); здесь только место в нижней панели. */
 #vedmak-combat-hud {
   pointer-events: all;
   max-width: 1180px;
@@ -2081,93 +2081,6 @@
   margin: 0 auto .35rem;
   font-family: var(--vd-font-body);
 }
-.vedmak-hud .hud-bar {
-  display: flex;
-  flex-direction: column;
-  gap: .3rem;
-  padding: .35rem .55rem .45rem;
-  color: var(--vd-text);
-  /* Худ — стальная полоса поверх стола: холоднее листа, но той же выделки */
-  background-color: #1a1c20;
-  background-image: none;
-  background-size: auto, 340px 340px;
-  background-blend-mode: normal, overlay;
-  border: 1px solid var(--vd-line);
-  border-top: 2px solid var(--vd-blood);
-  border-radius: 5px;
-  box-shadow: none;
-}
-.vedmak-hud .hud-bar.my-turn { border-top-color: var(--vd-gold); }
-.vedmak-hud .hud-bar.collapsed .hud-rows { display: none; }
-
-.vedmak-hud .hud-head { display: flex; align-items: center; gap: .6rem; }
-.vedmak-hud .portrait {
-  width: 44px; height: 44px; flex: none; object-fit: cover; cursor: var(--cursor-pointer);
-  border: 1px solid var(--vd-steel); border-radius: 3px; background: #000;
-}
-.vedmak-hud .hud-bar.my-turn .portrait { border-color: var(--vd-gold); }
-.vedmak-hud .who { min-width: 8rem; max-width: 14rem; }
-.vedmak-hud .who .name, .vedmak-hud .who .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vedmak-hud .who .name { font-family: var(--vd-font-body); font-size: 1.25rem; color: var(--vd-silver); line-height: 1.1; }
-.vedmak-hud .who .meta { font-size: .72rem; color: var(--vd-text-dim); }
-.vedmak-hud .who .meta b { color: var(--vd-text); font-weight: normal; }
-
-.vedmak-hud .hud-vitals { display: flex; flex-direction: column; gap: .18rem; flex: 1 1 18rem; max-width: 30rem; }
-.vedmak-hud .vital { display: grid; grid-template-columns: 2.4rem 1fr 4.6rem; align-items: center; gap: .4rem; }
-.vedmak-hud .vital label { font-size: .66rem; text-transform: uppercase; letter-spacing: .06em; color: var(--vd-text-dim); }
-.vedmak-hud .vital .track {
-  position: relative; height: .55rem; background: #080809;
-  border: 1px solid var(--vd-line); border-radius: 2px; overflow: hidden;
-}
-.vedmak-hud .vital .fill { position: absolute; top: 0; bottom: 0; left: 0; background: linear-gradient(180deg, #b3402f, #5e1b14); }
-.vedmak-hud .vital.sta .fill { background: linear-gradient(180deg, #93a055, #4d5527); }
-.vedmak-hud .vital.tox .fill { background: linear-gradient(180deg, #8f6aa8, #4a3358); }
-.vedmak-hud .vital.tox .fill.extra { background: repeating-linear-gradient(45deg, #ab88bf 0 3px, #6a4a80 3px 6px); }
-.vedmak-hud .vital .notch { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--vd-gold); }
-.vedmak-hud .vital .num { font-size: .8rem; font-weight: bold; color: var(--vd-silver); text-align: right; }
-.vedmak-hud .vital .num .dim { font-weight: normal; color: var(--vd-text-dim); font-size: .72rem; }
-.vedmak-hud .vital.wounded .track { border-color: #7a5d25; }
-.vedmak-hud .vital.dying .track { border-color: var(--vd-blood-lite); }
-
-.vedmak-hud .hud-statuses { display: flex; flex-wrap: wrap; gap: .2rem; max-width: 16rem; }
-.vedmak-hud .hud-statuses .status {
-  display: inline-flex; align-items: center; gap: .2rem; font-size: .7rem; color: #f0a8a0;
-  padding: 0 .3rem; border: 1px solid #6e2626; border-radius: 3px; background: rgba(155, 44, 44, .3);
-}
-.vedmak-hud .hud-statuses .status img { width: 14px; height: 14px; border: none; filter: none; }
-.vedmak-hud .hud-statuses .status:hover { border-color: var(--vd-blood-lite); color: #fff; }
-
-.vedmak-hud .hud-turn { margin-left: auto; display: flex; align-items: center; gap: .35rem; }
-.vedmak-hud .hud-turn .fold { color: var(--vd-text-dim); padding: 0 .2rem; }
-.vedmak-hud .hud-turn .fold:hover { color: var(--vd-gold); }
-
-.vedmak-hud .hud-rows { display: flex; flex-direction: column; gap: .25rem; }
-.vedmak-hud .hud-row { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; }
-.vedmak-hud .hud-row .tag {
-  width: 4.4rem; flex: none; font-size: .68rem; text-transform: uppercase;
-  letter-spacing: .06em; color: var(--vd-text-dim);
-}
-.vedmak-hud .hud-row .sep { width: .5rem; }
-.vedmak-hud .hud-row .dim { color: var(--vd-text-dim); font-size: .8rem; }
-
-.vedmak-hud .hud-btn {
-  display: inline-flex; align-items: center; gap: .28rem;
-  width: auto; height: 1.65rem; line-height: 1; margin: 0; padding: 0 .45rem;
-  font-size: .78rem; font-family: var(--vd-font-body); white-space: nowrap;
-  color: var(--vd-text); background: #1a1c1f; border: 1px solid var(--vd-line); border-radius: 3px; cursor: var(--cursor-pointer);
-}
-.vedmak-hud .hud-btn img { width: 17px; height: 17px; border-radius: 2px; }
-.vedmak-hud .hud-btn b { color: var(--vd-gold); font-size: .85rem; }
-.vedmak-hud .hud-btn:hover { background: #25272b; border-color: var(--vd-steel); box-shadow: none; }
-.vedmak-hud .hud-btn.atk { border-color: #6b2b2b; }
-.vedmak-hud .hud-btn.atk:hover { background: var(--vd-blood); color: #fff; }
-.vedmak-hud .hud-btn.def { border-color: #3d4a5c; }
-.vedmak-hud .hud-btn.def b { color: var(--vd-silver); }
-.vedmak-hud .hud-btn.spell { border-color: #383b42; }
-.vedmak-hud .hud-btn.alch { border-color: #3f4249; }
-.vedmak-hud .hud-btn.danger { border-color: var(--vd-blood-lite); color: #f0a8a0; }
-.vedmak-hud .hud-btn.next { border-color: #50545d; color: var(--vd-gold); }
-.vedmak-hud .hud-btn.next:hover { background: var(--vd-gold); color: #1a1a1a; }
 
 /* ------------------------- Окно активного эффекта ------------------------- */
 

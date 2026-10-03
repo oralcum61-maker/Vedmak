@@ -1,20 +1,32 @@
-// Боевой худ: полоса внизу экрана с показателями, атаками, защитами и быстрыми действиями.
-// Показывается, пока идёт бой; игроку — его персонаж, мастеру — выделенный токен или тот, чей ход.
+// Худ персонажа (PLAN 4.58, холст design/11): пульт внизу экрана. Слева — портрет и показатели (ПЗ, Вын, Токсичность,
+// Энергия раунда, Удача), в центре — вкладки «Бой», «Магия», «Алхимия», «Действия», «Состояния», справа — раунд,
+// кто дальше и «Конец хода». В бою: игроку — его персонаж, мастеру — выделенный токен или тот, чей ход. Вне боя —
+// актор выделенного своего токена (настройка клиента «Худ вне боя»): зелья и знаки нужны не только в бою.
 
 import { SYSTEM_ID } from "../util.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
 import { attackSources } from "../combat/attack.mjs";
 import { manualDamage, restTurn } from "../combat/manual.mjs";
-import { castSpell } from "../magic/cast.mjs";
+import { controlCheck } from "../combat/mounted.mjs";
+import { MOUNTS } from "../config/combat.mjs";
+import { verbalAction, VERBAL_GROUPS } from "../combat/verbal.mjs";
+import { castSpell, vigorUsed, maintainedSpells } from "../magic/cast.mjs";
+import { endMaintained } from "../magic/effects.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { ALCHEMY_ACTIONS } from "../config/crafting.mjs";
+import { flipToken, canFlip } from "./token-flip.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-/** Сколько кнопок показывать в строке, прежде чем прятать остальное под прокрутку. */
-const SPELL_LIMIT = 10;
-const ALCHEMY_LIMIT = 8;
+const TABS = [
+  { id: "fight", label: "Бой" }, { id: "magic", label: "Магия" }, { id: "alchemy", label: "Алхимия" },
+  { id: "actions", label: "Действия" }, { id: "states", label: "Состояния" }
+];
+/** Цвет кнопки алхимии по действию: выпить и применить — фиолет, масло — зелень, бросок и ловушка — киноварь. */
+const ALCH_GO = { drink: "violet", apply: "violet", mutagen: "violet", oil: "green", throw: "", trap: "" };
+/** Словесные действия на худе — самые ходовые; остальные — на вкладке «Социальный бой» листа. */
+const VERBAL_QUICK = ["persuade", "seduce", "deceive", "intimidate", "ignore", "changeSubject"];
 
 export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
@@ -24,12 +36,18 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     window: { frame: false, positioned: false },
     actions: {
       openSheet: CombatHud.#onOpenSheet,
+      setTab: CombatHud.#onSetTab,
       attack: CombatHud.#onAttack,
       rollSkill: CombatHud.#onRollSkill,
       castSpell: CombatHud.#onCastSpell,
+      endMaintained: CombatHud.#onEndMaintained,
       useAlchemical: CombatHud.#onUseAlchemical,
       restTurn: CombatHud.#onRestTurn,
       manualDamage: CombatHud.#onManualDamage,
+      controlCheck: CombatHud.#onControlCheck,
+      ram: CombatHud.#onRam,
+      flipToken: CombatHud.#onFlipToken,
+      verbal: CombatHud.#onVerbal,
       stunSave: CombatHud.#onStunSave,
       deathSave: CombatHud.#onDeathSave,
       toggleStatus: CombatHud.#onToggleStatus,
@@ -48,11 +66,18 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     return CombatHud.#instance ??= new CombatHud();
   }
 
+  /** Вкладка худа — одна на клиента, переживает перерисовки. */
+  tab = "fight";
+
   /** Актор, чьи кнопки показывать. */
   static actorFor() {
-    if (!game.combat?.started) return null;
-    const current = game.combat.combatant?.actor ?? null;
     const controlled = canvas?.tokens?.controlled?.[0]?.actor ?? null;
+    if (!game.combat?.started) {
+      let outside = true;
+      try { outside = game.settings.get(SYSTEM_ID, "hudOutOfCombat"); } catch { /* до регистрации */ }
+      return outside && controlled?.isOwner ? controlled : null;
+    }
+    const current = game.combat.combatant?.actor ?? null;
     if (game.user.isGM) return controlled ?? current;
     // Игроку нужен свой лист и на чужом ходу — он защищается
     if (controlled?.isOwner) return controlled;
@@ -60,7 +85,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     return current?.isOwner ? current : null;
   }
 
-  /** Показать, спрятать или перерисовать худ по текущему состоянию боя. */
+  /** Показать, спрятать или перерисовать худ по текущему состоянию. */
   static refresh() {
     if (!game.ready) return;
     let enabled = true;
@@ -70,7 +95,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!actor) {
       // Элемент живёт не в body, а в нижней панели: убираем его сами, чтобы полоса не осталась висеть
       const el = document.getElementById(CombatHud.DEFAULT_OPTIONS.id);
-      if (hud.rendered) hud.close().finally(() => el?.remove());
+      // Без анимации: закрытие с ней ждёт кадров, а в фоновой вкладке их нет — полоса оставалась висеть
+      if (hud.rendered) hud.close({ animate: false }).finally(() => el?.remove());
       else el?.remove();
       return;
     }
@@ -85,7 +111,6 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     let actor = doc;
     while (actor && actor.documentName !== "Actor") actor = actor.parent;
     if (!CombatHud.#instance?.rendered) return;
-    // Предмет или эффект вне актора (в мире, в компендиуме) худ не показывает
     if (!actor) return;
     if (CombatHud.#instance.actor && actor.id !== CombatHud.#instance.actor.id) return;
     CombatHud.schedule();
@@ -93,11 +118,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static #timer = null;
 
-  /**
-   * Перерисовать одним разом после пачки изменений. Один удар — это обновление ПЗ, эффект состояния
-   * и смена хода; раньше худ перестраивался на каждое из них. Заодно хуки боя срабатывают до того,
-   * как game.combat обновится, — к моменту перерисовки состояние уже новое.
-   */
+  /** Перерисовать одним разом после пачки изменений (удар — это ПЗ, эффект состояния и смена хода). */
   static schedule(delay = 50) {
     clearTimeout(CombatHud.#timer);
     CombatHud.#timer = setTimeout(() => {
@@ -131,82 +152,133 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     return element;
   }
 
+  /** Навык из поля поиска: Enter или выбор из подсказок — бросок. */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    const input = this.element.querySelector("input.vhud-skill");
+    if (!input || input.dataset.bound) return;
+    input.dataset.bound = "1";
+    const roll = event => {
+      const label = input.value.trim().toLowerCase();
+      if (!label || !this.actor) return;
+      const key = Object.entries(SKILLS).find(([, s]) => s.label.toLowerCase() === label)?.[0]
+        ?? Object.entries(SKILLS).find(([, s]) => s.label.toLowerCase().startsWith(label))?.[0];
+      if (!key || !this.actor.system.skills?.[key]) return ui.notifications.warn(`Навык «${input.value}» не найден.`);
+      input.value = "";
+      this.actor.rollSkill(key, { skipDialog: event.shiftKey });
+    };
+    input.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); roll(event); } });
+    input.addEventListener("change", roll);
+  }
+
   async _prepareContext(options) {
     const actor = this.actor = CombatHud.actorFor();
     const context = await super._prepareContext(options);
     if (!actor) return context;
     const system = actor.system;
     const d = system.derived;
-    const combat = game.combat;
+    const combat = game.combat?.started ? game.combat : null;
     const isCurrent = combat?.combatant?.actor?.id === actor.id;
     const pct = (v, m) => (m > 0 ? Math.max(0, Math.min(100, Math.round((v / m) * 100))) : 0);
+    const isCharacter = actor.type === "character";
 
     const vitals = [
-      { key: "hp", label: "ПЗ", value: system.hp.value, max: system.hp.max, pct: pct(system.hp.value, system.hp.max),
-        notch: pct(d.woundThreshold, system.hp.max), state: d.dying ? "dying" : d.wounded ? "wounded" : "",
-        hint: `Порог ранения ${d.woundThreshold}` },
-      { key: "sta", label: "Вын", value: system.sta.value, max: system.sta.max, pct: pct(system.sta.value, system.sta.max),
+      { key: "hp", label: "пз", value: system.hp.value, max: system.hp.max, pct: pct(system.hp.value, system.hp.max),
+        notch: pct(d.woundThreshold, system.hp.max), bad: system.hp.value <= 0, hint: `Порог ранения ${d.woundThreshold}` },
+      { key: "sta", label: "вын", value: system.sta.value, max: system.sta.max, pct: pct(system.sta.value, system.sta.max),
         hint: `Отдых восстанавливает ${d.rec}` }
     ];
     if (system.toxicity) vitals.push({
-      key: "tox", label: "Токс", value: system.toxicity.total, max: system.toxicity.max, suffix: "%",
-      pct: pct(system.toxicity.value, system.toxicity.max), extraPct: pct(system.toxicity.active, system.toxicity.max),
-      state: system.toxicity.over ? "over" : "", hint: `Токсичность ${system.toxicity.total}% из ${system.toxicity.max}%`
+      key: "tox", label: "токс", value: system.toxicity.total, max: system.toxicity.max, suffix: "%",
+      pct: pct(system.toxicity.total, system.toxicity.max), hint: `Токсичность ${system.toxicity.total}% из ${system.toxicity.max}%`
     });
+    const vigor = d.vigor ?? 0;
+    const used = vigor ? vigorUsed(actor).used : 0;
+    const energy = Array.from({ length: Math.min(vigor, 10) }, (_, k) => ({ on: k < Math.max(0, vigor - used) }));
+    const luck = isCharacter ? Array.from({ length: Math.min(system.luck?.max ?? 0, 12) }, (_, k) => ({ on: k < (system.luck?.value ?? 0) })) : [];
 
-    // Персонаж бьёт тем, что в руках; у чудовища когти и клыки никто «не экипирует»
+    // Бой: чем бить (у персонажа — что в руках), защиты, испытания
     const sources = attackSources(actor);
     const equipped = sources.filter(src => src.kind !== "weapon" || src.item?.system.equipped);
-    const attacks = (actor.type === "monster" || equipped.length < 2 ? sources : equipped)
-      .map(src => ({
-        kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
-        base: system.skills[src.skill].base + (src.accuracy || 0),
-        damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,
-        range: src.isRanged ? src.weapon.range : ""
-      }));
-
-    const defenses = ["dodge", "athletics", "brawling", "melee"].map(key => ({
-      key, label: SKILLS[key].label, base: system.skills[key].base
+    const attacks = (actor.type === "monster" || equipped.length < 2 ? sources : equipped).map(src => ({
+      kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
+      base: system.skills[src.skill].base + (src.accuracy || 0),
+      damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,
+      sub: [SKILLS[src.skill]?.label, src.item?.system.oil ? "масло" : "", src.isRanged ? `дистанция ${src.weapon.range}` : ""].filter(Boolean).join(" · "),
+      isRanged: !!src.isRanged
     }));
+    const defenses = ["dodge", "athletics", "brawling", "melee"].map(key => ({ key, label: SKILLS[key].label.split("/")[0], base: system.skills[key].base }));
+    const deathThreshold = (d.stun ?? 0) - (system.deathSaves?.penalty ?? 0);
 
-    const spells = actor.itemTypes.spell.slice(0, SPELL_LIMIT).map(i => ({
-      id: i.id, name: i.name, img: i.img, kind: i.system.kind,
-      cost: i.system.variableCost ? "1+" : i.system.staCost
-    }));
-
-    const alchemy = (actor.itemTypes.alchemical ?? [])
-      .filter(i => i.system.quantity > 0 && i.system.use?.action && !i.system.applied
-        && ["drink", "apply", "throw", "trap"].includes(i.system.use.action))
-      .slice(0, ALCHEMY_LIMIT)
+    // Магия: всё, что есть, знаки — первыми; поддерживаемое — с кнопкой «снять»
+    const order = { sign: 0, spell: 1, invocation: 2, ritual: 3, hex: 4, gift: 5 };
+    const spells = actor.itemTypes.spell.slice().sort((a, b) => (order[a.system.kind] ?? 9) - (order[b.system.kind] ?? 9))
       .map(i => ({
-        id: i.id, name: i.name, img: i.img, quantity: i.system.quantity,
-        hint: `${ALCHEMY_ACTIONS[i.system.use.action] ?? ""}${i.system.toxicity ? ` · ${i.system.toxicity}%` : ""}${i.system.effect ? ` — ${i.system.effect}` : ""}`
+        id: i.id, name: i.name, img: i.img, sign: i.system.kind === "sign",
+        cost: i.system.variableCost ? "1+ вын" : `${i.system.staCost ?? 0} вын`
       }));
+    const maintained = maintainedSpells(actor).map(e => ({ id: e.id, name: e.name, img: e.img, cost: e.flags.vedmak.maintain.cost }));
 
-    const statuses = STATUS_EFFECTS.filter(s => actor.statuses.has(s.id))
-      .map(s => ({ id: s.id, name: s.name, img: s.img, hint: STATUS_HINTS[s.id] ?? s.name }));
+    // Алхимия: всё, чем можно воспользоваться сейчас
+    const alchemy = (actor.itemTypes.alchemical ?? [])
+      .filter(i => i.system.quantity > 0 && i.system.use?.action && !(i.system.isMutagen && i.system.applied) && !i.system.applied)
+      .map(i => {
+        const action = i.system.use.action;
+        return {
+          id: i.id, name: i.name, img: i.img, quantity: i.system.quantity,
+          note: [i.system.toxicity ? `токс. ${i.system.toxicity}%` : "", i.system.duration].filter(Boolean).join(" · "),
+          actionLabel: ALCHEMY_ACTIONS[action] ?? "Применить", go: ALCH_GO[action] ?? "violet",
+          hint: i.system.effect ?? ""
+        };
+      });
 
+    // Действия: словесная дуэль — ходовые атаки и защиты
+    const verbal = VERBAL_GROUPS.flatMap(g => g.actions).filter(a => VERBAL_QUICK.includes(a.key))
+      .map(a => ({ key: a.key, label: a.label, base: system.skills?.[a.skill]?.base ?? 0 }));
+    const token = actor.token ?? canvas?.tokens?.controlled?.find(t => t.actor?.id === actor.id)?.document ?? null;
+
+    // Состояния: что действует (эффекты со сроком и состояния) и сетка всех состояний
+    const effects = actor.appliedEffects.filter(e => e.isTemporary || e.statuses.size).map(e => ({
+      name: e.name, img: e.img,
+      left: e.flags?.vedmak?.timed?.rounds ? `${e.flags.vedmak.timed.rounds} р.` : (e.isTemporary ? e.duration.label : ""),
+      bad: [...e.statuses].some(s => ["bleeding", "poisoned", "burning", "dying", "staggered", "stunned"].includes(s))
+    }));
+    const statusList = STATUS_EFFECTS.map(s => ({ id: s.id, name: s.name, img: s.img, on: actor.statuses.has(s.id), hint: STATUS_HINTS[s.id] ?? s.name }));
+
+    const counts = { magic: spells.length, alchemy: alchemy.length, states: effects.length };
+    const tabs = TABS.filter(t => !(t.id === "magic" && !spells.length && !maintained.length)
+      && !(t.id === "alchemy" && !alchemy.length && !isCharacter))
+      .map(t => ({ ...t, active: t.id === this.tab, count: counts[t.id] || "" }));
+    if (!tabs.some(t => t.active)) { this.tab = "fight"; tabs[0].active = true; }
+
+    const order2 = combat?.turns ?? [];
+    const nextIndex = combat ? (combat.turn + 1) % Math.max(order2.length, 1) : 0;
     return Object.assign(context, {
-      actor, system, vitals, attacks, defenses, spells, alchemy, statuses,
-      collapsed: this.collapsed,
-      isCurrent,
-      isCharacter: actor.type === "character",
-      round: combat?.round ?? 0,
-      turnName: combat?.combatant?.name ?? "—",
-      canAdvance: isCurrent || game.user.isGM,
-      stun: d.stun,
-      encumbrance: d.encumbrance,
-      shield: system.shield?.value ?? 0,
+      actor, vitals, energy, luck, tabs, tab: this.tab,
+      energyMax: vigor, energyLeft: Math.max(0, vigor - used), tox: vitals.find(v => v.key === "tox") ?? null,
+      showFight: this.tab === "fight", showMagic: this.tab === "magic", showAlchemy: this.tab === "alchemy",
+      showActions: this.tab === "actions", showStates: this.tab === "states",
+      attacks, defenses, stun: d.stun, deathThreshold, dying: d.dying,
+      spells, maintained, shield: system.shield?.value ?? 0,
+      alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
+      adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && isCharacter; } catch { return false; } })(),
       adrenaline: system.adrenaline?.value ?? 0,
-      adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && actor.type === "character"; } catch { return false; } })(),
-      dying: d.dying
+      skillOptions: Object.entries(SKILLS).filter(([k]) => system.skills?.[k]).map(([, s]) => s.label),
+      effects, statusList,
+      collapsed: this.collapsed, isCurrent, isCharacter, inCombat: !!combat,
+      round: combat?.round ?? 0, nextName: combat ? (order2[nextIndex]?.name ?? "—") : "",
+      canAdvance: !!combat && (isCurrent || game.user.isGM)
     });
   }
 
   /* ------------------------------ Действия ------------------------------ */
 
-  static #onOpenSheet() {
-    this.actor?.sheet.render(true);
+  static #onOpenSheet() { this.actor?.sheet.render(true); }
+
+  static #onSetTab(event, target) {
+    this.tab = target.dataset.tab;
+    if (this.collapsed) game.settings.set(SYSTEM_ID, "combatHudCollapsed", false);
+    this.render();
   }
 
   static async #onAttack(event, target) {
@@ -222,34 +294,52 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     if (item) await castSpell(this.actor, item, { skipDialog: event.shiftKey });
   }
 
+  static async #onEndMaintained(event, target) {
+    if (this.actor) await endMaintained(this.actor, target.dataset.effectId);
+  }
+
   static async #onUseAlchemical(event, target) {
     const item = this.actor?.items.get(target.dataset.itemId);
     if (item) await useAlchemical(this.actor, item);
   }
 
-  static async #onRestTurn() {
-    if (this.actor) await restTurn(this.actor);
+  static async #onRestTurn() { if (this.actor) await restTurn(this.actor); }
+
+  static async #onManualDamage() { if (this.actor) await manualDamage([this.actor]); }
+
+  static async #onControlCheck() { if (this.actor) await controlCheck(this.actor); }
+
+  /** Таран: выбрать скакуна или транспорт, затем обычное окно атаки (как на листе). */
+  static async #onRam() {
+    if (!this.actor) return;
+    const options = Object.entries(MOUNTS).map(([k, m]) => `<option value="${k}">${m.label} (${m.ram})</option>`).join("");
+    const key = await foundry.applications.api.DialogV2.wait({
+      window: { title: "Таран" }, classes: ["vedmak", "vedmak-dialog"],
+      content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Чем таранить</label><select name="mount">${options}</select></div></div>`,
+      buttons: [{ action: "ok", label: "Далее", default: true, callback: (e, b) => b.form.elements.mount.value },
+        { action: "cancel", label: "Отмена" }],
+      rejectClose: false
+    });
+    if (!key || key === "cancel") return;
+    await this.actor.attack({ kind: "ram", key }, { chargeMeters: 10 });
   }
 
-  static async #onManualDamage() {
-    if (this.actor) await manualDamage([this.actor]);
+  static async #onFlipToken() {
+    const token = this.actor?.token ?? canvas.tokens.controlled.find(t => t.actor?.id === this.actor?.id)?.document;
+    if (token) await flipToken(token);
   }
 
-  static async #onStunSave() {
-    await this.actor?.rollStunSave();
+  static async #onVerbal(event, target) {
+    if (this.actor) await verbalAction(this.actor, target.dataset.verbal, { skipDialog: event.shiftKey });
   }
 
-  static async #onDeathSave() {
-    await this.actor?.rollDeathSave();
-  }
+  static async #onStunSave() { await this.actor?.rollStunSave(); }
 
-  static async #onToggleStatus(event, target) {
-    await this.actor?.toggleStatusEffect(target.dataset.status);
-  }
+  static async #onDeathSave() { await this.actor?.rollDeathSave(); }
 
-  static async #onNextTurn() {
-    await game.combat?.nextTurn();
-  }
+  static async #onToggleStatus(event, target) { await this.actor?.toggleStatusEffect(target.dataset.status); }
+
+  static async #onNextTurn() { await game.combat?.nextTurn(); }
 
   static async #onToggleCollapse() {
     await game.settings.set(SYSTEM_ID, "combatHudCollapsed", !this.collapsed);
