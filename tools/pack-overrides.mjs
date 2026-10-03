@@ -11,6 +11,7 @@
 //            в инвентаре существ бестиария
 //   remove — {pack, name}: удалить документ и чертёж, который его делает
 //   copy   — {pack, from, name, set}: новый документ по образцу (id — из имени, как у build-packs)
+//   each   — {pack, set}: одно и то же поле всем документам пакета
 
 const W = "systems/vedmak/assets/fan/weapons/";
 const A = "systems/vedmak/assets/fan/armor/";
@@ -129,6 +130,10 @@ export const OVERRIDES = [
   { op: "set", pack: "bestiary", name: "Ученица из аретузы", set: { "system.vigor": 10 } },
   { op: "set", pack: "bestiary", name: "Чародей", set: { "system.vigor": 25 } },
   { op: "set", pack: "bestiary", name: "Эредин Бреакк Глас", set: { "system.vigor": 25 } },
+
+  /* ------------------------- Бестиарий: токены можно вращать (03.10) ------------------------- */
+  // Генератор ставил всем существам «запретить вращение» — жетоны сверху тогда не повернуть; исправлен и он
+  { op: "each", pack: "bestiary", set: { "prototypeToken.lockRotation": false } },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -188,6 +193,9 @@ export function applyOverrides(packs) {
           setPath(target, key, structuredClone(value));
         }
       }
+      applied++;
+    } else if (o.op === "each") {
+      for (const doc of packs[o.pack] ?? []) for (const [key, value] of Object.entries(o.set)) setPath(doc, key, structuredClone(value));
       applied++;
     } else if (o.op === "remove") {
       const i = docs.findIndex(d => d.name === o.name);

@@ -337,6 +337,23 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _replaceHTML(result, content, options) {
     if (options.vedmakResetParts) content.replaceChildren();
     super._replaceHTML(result, content, options);
+    // Ненарисованным вкладкам — пустое место в своём порядке: когда их откроют, Foundry заменит его на месте,
+    // а не допишет вкладку в конец окна
+    if (this.#limited) return;
+    let prev = null;
+    for (const id of Object.keys(this.constructor.PARTS)) {
+      let el = content.querySelector(`:scope > [data-application-part="${id}"]`);
+      if (!el && this.#staleParts.has(id)) {
+        el = document.createElement("section");
+        el.className = "tab";
+        el.dataset.group = "primary";
+        el.dataset.tab = id;
+        el.dataset.applicationPart = id;
+        if (prev) prev.after(el);
+        else content.prepend(el);
+      }
+      if (el) prev = el;
+    }
   }
 
   static #onShowPortrait() {
@@ -405,7 +422,9 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       // параметры окна, до super: тогда и автоподбор размера не вернётся, и после смены размер правильный.
       Object.assign(this.options.position, this.#viewPosition(limited));
     }
-    const lazy = !firstRender && !modeChanged && !options.parts;
+    // Первое открытие — тоже только открытая вкладка: остальные дорисует changeTab (PLAN 4.73). Раньше лист при
+    // открытии строил все семь-девять вкладок разом — одна задача на 180–280 мс
+    const lazy = !modeChanged && !options.parts;
     super._configureRenderOptions(options);
     // Заголовок окна Foundry обновляет, только когда у документа сменилось имя; у короткого листа заголовок —
     // имя с токена, у полного — с видом актора, так что при смене вида обновляем его принудительно
@@ -420,7 +439,9 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       return;
     }
     const tabIds = new Set(this.constructor.TABS?.primary?.tabs?.map(t => t.id) ?? []);
-    const active = this.tabGroups.primary;
+    // До первой отрисовки tabGroups ещё пуст — открытой будет начальная вкладка
+    const primary = this.constructor.TABS?.primary;
+    const active = this.tabGroups.primary ?? primary?.initial ?? primary?.tabs?.[0]?.id;
     if (!active) return;
     options.parts = parts.filter(p => {
       if (!tabIds.has(p) || p === active) {
@@ -437,7 +458,9 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     super.changeTab(tab, group, options);
     if (group === "primary" && this.#staleParts.has(tab)) {
       this.#staleParts.delete(tab);
-      this.render({ parts: [tab] });
+      // Вкладка рисуется впервые — проявить уже нарисованную, а не пустое место под неё
+      this.render({ parts: [tab] }).then(() => animateTab(this.element, group, tab));
+      return;
     }
     animateTab(this.element, group, tab);
   }

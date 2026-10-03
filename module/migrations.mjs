@@ -24,7 +24,25 @@ async function bestiaryVigor() {
   }
 }
 
-const MIGRATIONS = [{ key: "bestiaryVigor", run: bestiaryVigor }];
+/**
+ * Токены существ из бестиария можно вращать: генератор запрещал вращение. Снимается у прототипов НИП из
+ * бестиария в мире и у их токенов на всех сценах; токены, где запрет ставил ведущий у своих актёров, не трогаются.
+ */
+async function bestiaryRotation() {
+  const fromBestiary = a => (a?._stats?.compendiumSource ?? a?.flags?.core?.sourceId ?? "").startsWith("Compendium.vedmak.bestiary.");
+  const actors = game.actors.filter(a => fromBestiary(a) && a.prototypeToken?.lockRotation)
+    .map(a => ({ _id: a.id, "prototypeToken.lockRotation": false }));
+  if (actors.length) await Actor.updateDocuments(actors);
+  let tokens = 0;
+  for (const scene of game.scenes) {
+    const updates = scene.tokens.filter(t => t.lockRotation && fromBestiary(t.actor ?? game.actors.get(t.actorId)))
+      .map(t => ({ _id: t.id, lockRotation: false }));
+    if (updates.length) { await scene.updateEmbeddedDocuments("Token", updates); tokens += updates.length; }
+  }
+  if (actors.length || tokens) ui.notifications.info(`Ведьмак: токены существ из бестиария можно вращать (${actors.length} НИП, ${tokens} токенов на сценах).`);
+}
+
+const MIGRATIONS = [{ key: "bestiaryVigor", run: bestiaryVigor }, { key: "bestiaryRotation", run: bestiaryRotation }];
 
 export function registerMigrationSettings() {
   game.settings.register(SYSTEM_ID, "migrationsDone", { scope: "world", config: false, type: Array, default: [] });

@@ -1156,30 +1156,21 @@ body.vd-no-anim .chat-message.vedmak-message.vd-new, body.vd-no-anim .chat-messa
 body.vd-no-anim .vedmak-hud .vh-deck.vh-in, body.vd-no-anim .vedmak-hud .vh-portrait::after { animation: none !important; }
 
 /* ============================== Движение в листах (PLAN 4.67) ==============================
-   Окно проявляется, новая вкладка выезжает, шкала доезжает до нового значения (потерянное на миг подсвечено),
-   число вспыхивает, медальон, на который можно нажать, проворачивается под курсором. Анимируются прозрачность,
-   сдвиг и поворот (свойства translate, rotate, scale) — без перерисовки и без спора с transform окна. */
+   Окно проявляется, медальон, на который можно нажать, проворачивается под курсором. Вкладка, шкалы и вспышка
+   числа — в fx/sheet-motion.mjs через element.animate (без принудительного пересчёта раскладки, PLAN 4.73). */
 @keyframes vd-win-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: none; } }
-@keyframes vd-tab-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: none; } }
-@keyframes vd-bump-good { from { scale: 1.3; color: #cfe8b0; text-shadow: 0 0 10px rgba(180, 199, 156, .9); } }
-@keyframes vd-bump-bad { from { scale: 1.3; color: #ffb09a; text-shadow: 0 0 10px rgba(224, 96, 74, .9); } }
-@keyframes vd-lag-out { 0% { opacity: .85; } 100% { opacity: 0; } }
 
 .application.vedmak:not(.vedmak-hud) { animation: vd-win-in 220ms cubic-bezier(.2, .8, .2, 1); }
-.application.vedmak .tab.vd-tab-in { animation: vd-tab-in 240ms cubic-bezier(.2, .8, .2, 1); }
-.vd-bump-good { animation: vd-bump-good 650ms cubic-bezier(.2, .8, .2, 1); }
-.vd-bump-bad { animation: vd-bump-bad 650ms cubic-bezier(.2, .8, .2, 1); }
 .vd-lag {
   position: absolute; top: 0; bottom: 0; pointer-events: none;
-  background: linear-gradient(180deg, #fff4e8, #e8c4b4); animation: vd-lag-out 700ms 180ms ease-in forwards;
+  background: linear-gradient(180deg, #fff4e8, #e8c4b4); opacity: 0;
 }
 
 /* Медальон-кнопка — как ручка: под курсором кольцо проворачивается на одну насечку */
 .vedmak .vd-medal .vd-ring { transition: rotate 380ms cubic-bezier(.2, .8, .2, 1); }
 .vedmak :is(a, button, [data-action]):hover .vd-medal .vd-ring { rotate: 36deg; }
 
-body.vd-no-anim .application.vedmak, body.vd-no-anim .application.vedmak .tab.vd-tab-in,
-body.vd-no-anim .vd-bump-good, body.vd-no-anim .vd-bump-bad { animation: none !important; }
+body.vd-no-anim .application.vedmak { animation: none !important; }
 body.vd-no-anim .vd-lag { display: none; }
 body.vd-no-anim .vedmak .vd-medal .vd-ring { transition: none; }
 

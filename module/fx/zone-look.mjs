@@ -217,10 +217,24 @@ function placeBadge(region, shape, color) {
 function decorate(region) {
   if (!isOurs(region) || region.destroyed) return;
   hideDefault(region);
-  region._vdLook?.destroy({ children: true });
   const shape = region.document.shapes?.[0];
-  if (!shape || !["circle", "cone"].includes(shape.type) || !shape.radius) return;
+  if (!shape || !["circle", "cone"].includes(shape.type) || !shape.radius) {
+    region._vdLook?.destroy({ children: true });
+    region._vdLook = null;
+    return;
+  }
+  // refreshRegion приходит часто (наведение, выбор, каждый сдвиг мыши при постановке); рисунок и подпись
+  // (новая текстура на каждый PIXI.Text) пересоздаются только при смене формы или цвета, иначе — лишь сдвиг
+  const sig = `${shape.type}|${shape.x}|${shape.y}|${shape.radius}|${shape.rotation ?? 0}|${shape.angle ?? 0}|${region.document.color}`;
+  const old = region._vdLook;
+  if (old && !old.destroyed && old._sig === sig && old.parent === region) {
+    old.position.set(-region.position.x, -region.position.y);
+    placeBadge(region, shape, colorOf(region));
+    return;
+  }
+  old?.destroy({ children: true });
   const look = region._vdLook = new PIXI.Container();
+  look._sig = sig;
   look.eventMode = "none";
   const color = colorOf(region);
   const units = canvas.scene?.grid?.units || "м";
