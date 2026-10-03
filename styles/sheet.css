@@ -211,7 +211,6 @@
 }
 .application.vedmak.character .stats-tab .fate-bar .fate-value { display: flex; flex-direction: column; gap: .4rem; }
 .application.vedmak.character .stats-tab .fate-bar .fate-value .t { font-family: var(--vd-font-head); font-size: 1.2rem; color: #f1ece0; }
-.application.vedmak.character .stats-tab .fate-bar .fate-value .t .cap { margin-left: .5rem; font-family: var(--vd-font-body); font-size: .56rem; letter-spacing: .14em; color: #a8a296; }
 .application.vedmak.character .stats-tab .fate-bar .coins { display: flex; gap: 5px; flex-wrap: wrap; }
 .application.vedmak.character .stats-tab .fate-bar .base { display: flex; align-items: center; gap: .5rem; margin-left: auto; background: none; border: 0; }
 
