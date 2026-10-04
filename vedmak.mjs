@@ -29,6 +29,7 @@ import { registerZoneHooks } from "./module/combat/zones.mjs";
 import { registerAlchemyHooks } from "./module/crafting/alchemy-triggers.mjs";
 import { registerBuffHooks } from "./module/magic/buffs.mjs";
 import { registerRaceHooks } from "./module/character/race.mjs";
+import { registerTrueFormHooks } from "./module/character/true-form.mjs";
 import { initSocket } from "./module/combat/common.mjs";
 import { attack } from "./module/combat/attack.mjs";
 import { computeDamage, applyDamageToActor } from "./module/combat/damage.mjs";
@@ -226,6 +227,7 @@ Hooks.once("init", () => {
   registerAlchemyHooks();
   registerBuffHooks();
   registerRaceHooks();
+  registerTrueFormHooks();
   CombatHud.registerHooks();
   registerTokenFlip();
   registerFxSettings();

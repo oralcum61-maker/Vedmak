@@ -105,10 +105,13 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     }
     extra.vigor += school.vigor ?? 0;
 
+    // Истинная форма высшего вампира: органическая броня естественным слоем, надетая не учитывается
+    const trueForm = this.parent.effects.find(e => e.active && e.flags?.vedmak?.trueForm)?.flags.vedmak.trueForm;
     prepareCommonDerived(this, {
       baseVigor: prof?.vigor ?? 0, bodyType: "humanoid", innateArmor, extra, caps, floors, evMod: school.ev ?? 0,
-      meleeBodyMod
+      meleeBodyMod, naturalArmor: trueForm?.armor ?? 0, wornOff: !!trueForm
     });
+    this.derived.trueForm = !!trueForm;
     this.luck.max = this.stats.luck.total;
     this.blood.max = race?.resource === "blood" ? this.hp.max : 0;
     this.blood.enabled = race?.resource === "blood";

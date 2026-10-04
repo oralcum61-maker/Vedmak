@@ -59,6 +59,15 @@ export async function castSpell(actor, item, opts = {}) {
   let targets = opts.targets ?? currentTargets();
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
 
+  // Вампирская магия — только своей роли (роль у высшего вампира одна)
+  if (s.isVampire && actor.type === "character") {
+    const role = actor.system.race?.system.role;
+    if (!role) { ui.notifications.warn(`${actor.name}: сначала выберите роль высшего вампира (вкладка «Навыки»).`); return null; }
+    if (s.branch !== role) {
+      ui.notifications.warn(`«${item.name}» — магия роли «${CONFIG.VEDMAK.MAGIC_BRANCHES[s.branch]}», а у ${actor.name} — «${CONFIG.VEDMAK.MAGIC_BRANCHES[role]}».`);
+      return null;
+    }
+  }
   if (!s.isVampire && !d.vigor && actor.type === "character") {
     ui.notifications.warn(`${actor.name}: Энергия 0 — магия недоступна (стр. 123).`);
     return null;

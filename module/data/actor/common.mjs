@@ -99,9 +99,10 @@ export function collectCritMods(actor) {
  * У чудовищ естественная броня (`natural`) действует на все части тела как ещё один слой.
  * Врождённая прочность (`innate`, «Закалённый» краснолюдов) просто прибавляется и не разрушается (стр. 23).
  */
-export function computeArmor(actor, { natural = 0, innate = 0, bodyType = "humanoid" } = {}) {
+export function computeArmor(actor, { natural = 0, innate = 0, bodyType = "humanoid", wornOff = false } = {}) {
   const locations = bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
-  const armors = (actor?.itemTypes?.armor ?? []).filter(i => i.system.equipped);
+  // wornOff — надетое не учитывается (Истинная форма высшего вампира: только органическая броня)
+  const armors = wornOff ? [] : (actor?.itemTypes?.armor ?? []).filter(i => i.system.equipped);
   const pieces = armors.filter(i => !i.system.isShield);
   const shields = armors.filter(i => i.system.isShield);
   const slotFor = CONFIG.VEDMAK?.ARMOR_SLOT_FOR ?? {};
@@ -167,10 +168,10 @@ export function carriedWeight(actor) {
  * @param {number} [opts.meleeBodyMod] — поправка Тел для урона в рукопашной и захвата (гномы −3)
  */
 export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, innateArmor = 0, bodyType = "humanoid",
-  extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0 } = {}) {
+  extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0, wornOff = false } = {}) {
   const actor = system.parent;
   const crit = collectCritMods(actor);
-  const armor = computeArmor(actor, { natural: naturalArmor, innate: innateArmor + (system.fx?.sp ?? 0), bodyType });
+  const armor = computeArmor(actor, { natural: naturalArmor, innate: innateArmor + (system.fx?.sp ?? 0), bodyType, wornOff });
   const ev = Math.max(0, armor.encumbrance + (armor.encumbrance ? evMod : 0));
   const d = system.derived ??= {};
   const bonus = key => (system.bonus[key] ?? 0) + (extra[key] ?? 0) + (system.fx?.[key] ?? 0);

@@ -59,6 +59,8 @@ export function fallbackDefender() {
  */
 export function isReadyWeapon(actor, item) {
   if (!item || actor?.type === "monster") return true;
+  // В Истинной форме вместо обычных укуса и когтей расы — оружие формы
+  if (actor?.system?.derived?.trueForm && actor.system.race?.system.grants?.includes(item.name)) return false;
   return !!item.system.equipped || item.system.category === "natural";
 }
 

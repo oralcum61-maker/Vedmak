@@ -2,6 +2,7 @@
 // навыков. Значения хранятся в предмете расы на персонаже — как очки древа в предмете профессии.
 
 import { STATS } from "../config/stats.mjs";
+import { trueFormState, formTier } from "./true-form.mjs";
 
 const KIND_LABELS = {
   base: "база роли",
@@ -57,6 +58,9 @@ export function racePowersContext(actor) {
       baseHint: p.stat ? `Основа: ${STATS[p.stat]?.label} + уровень` : "Основа: уровень",
       unlock: step ? { ...step, short: blood < step.cost } : null,
       stages: p.kind === "stages" ? p.stageCosts.map((cost, i) => ({ label: STAGE_LABELS[i] ?? i + 1, cost, open: i < p.value })) : null,
+      // Превращение: управление Истинной формой
+      form: p.key === "trueForm" ? { ...trueFormState(actor), learned: p.value > 0, isGM: game.user.isGM,
+        tier: formTier(p.value), enough: blood >= 30, canExtend: blood >= 10 } : null,
       meta: [p.dc ? `СЛ ${p.dc}` : "", p.cost ? `трата: ${p.cost}` : "", p.range, p.duration,
         p.defense ? `защита: ${p.defense}` : "", p.page ? `стр. ${p.page}` : ""].filter(Boolean).join(" · ")
     };
@@ -78,11 +82,9 @@ export function racePowersContext(actor) {
     beastFull: (system.beast?.value ?? 0) >= 10,
     role: rs.role,
     roles: rs.roles.map(r => ({ key: r.key, name: r.name, selected: r.key === rs.role })),
-    roles2: rs.roles.filter(r => r.key !== rs.role).map(r => ({ key: r.key, name: r.name, selected: r.key === rs.role2 })),
     // Роль не меняется в процессе игры — выбрать один раз; ведущий может исправить
     roleEditable: actor.isOwner && (!rs.role || isGM),
-    secondOpen: roleFull(rs.role),
-    role2Editable: actor.isOwner && (roleFull(rs.role) || isGM) && (!rs.role2 || isGM),
+    roleDone: roleFull(rs.role),
     groups
   };
 }

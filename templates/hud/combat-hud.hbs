@@ -138,6 +138,7 @@
         <button type="button" class="vh-sbtn" data-action="manualDamage">Урон без атаки</button>
         <button type="button" class="vh-sbtn" data-action="controlCheck">Управление конём</button>
         <button type="button" class="vh-sbtn" data-action="ram">Таран</button>
+        {{#if trueForm}}<button type="button" class="vh-sbtn{{#if trueForm.bad}} bad{{/if}}" data-action="trueForm" data-form="{{trueForm.action}}" data-tooltip="{{trueForm.hint}}"{{#if trueForm.off}} disabled{{/if}}>{{trueForm.label}}</button>{{/if}}
         {{#if canFlip}}<button type="button" class="vh-sbtn" data-action="flipToken" data-tooltip="Токен в полный рост и обратно (Shift+F)">Перевернуть токен</button>{{/if}}
         {{#if adrenalineRule}}<span class="vh-sbtn static">Адреналин <b>{{adrenaline}}</b></span>{{/if}}
       </div>

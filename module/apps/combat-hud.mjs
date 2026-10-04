@@ -16,6 +16,7 @@ import { endMaintained } from "../magic/effects.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { ALCHEMY_ACTIONS } from "../config/crafting.mjs";
 import { flipToken, canFlip } from "./token-flip.mjs";
+import { transform, extendForm, endForm, regainControl, trueFormState } from "../character/true-form.mjs";
 import { animateVitals } from "../fx/sheet-motion.mjs";
 import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
 import { levelLabel } from "../config/magic.mjs";
@@ -50,6 +51,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       endMaintained: CombatHud.#onEndMaintained,
       useAlchemical: CombatHud.#onUseAlchemical,
       restTurn: CombatHud.#onRestTurn,
+      trueForm: CombatHud.#onTrueForm,
       manualDamage: CombatHud.#onManualDamage,
       controlCheck: CombatHud.#onControlCheck,
       ram: CombatHud.#onRam,
@@ -348,6 +350,14 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       attacks, defenses, stun: d.stun, deathThreshold, dying: d.dying,
       allSpells, magicGroups, magicQuery: this.magicQuery, maintained, zones, shield: system.shield?.value ?? 0,
       alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
+      // Высший вампир: Истинная форма одной кнопкой (превратиться / вернуть разум / выйти)
+      trueForm: actor.system.race?.system.power?.("trueForm") ? (() => {
+        const st = trueFormState(actor);
+        if (!st.active) return { action: "go", label: "Истинная форма", hint: st.cooldown ? `Откат: ещё ${st.cooldown}` : st.blocked
+          ? "Провал — до следующей сцены" : "Превращение: уровень + d10 против СЛ 16, 30 ОК", off: !!st.cooldown || st.blocked };
+        if (st.frenzy) return { action: "regain", label: `Вернуть разум ${st.streak}/3`, hint: "Сопротивление Зверю СЛ 20, 3 успеха подряд", bad: true };
+        return { action: "end", label: `Выйти из формы${st.rounds ? ` · ${st.rounds} р.` : ""}`, hint: "Shift — продлить на 1d6 раундов за 10 ОК" };
+      })() : null,
       adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && isCharacter; } catch { return false; } })(),
       adrenaline: system.adrenaline?.value ?? 0,
       skillOptions: Object.entries(SKILLS).filter(([k]) => system.skills?.[k]).map(([, s]) => s.label),
@@ -394,6 +404,16 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onUseAlchemical(event, target) {
     const item = this.actor?.items.get(target.dataset.itemId);
     if (item) await useAlchemical(this.actor, item);
+  }
+
+  /** Истинная форма: превратиться, вернуть разум при срыве или выйти (Shift — продлить). */
+  static async #onTrueForm(event, target) {
+    const actor = this.actor;
+    if (!actor) return;
+    const what = target.dataset.form;
+    if (what === "go") return transform(actor, { skipDialog: event.shiftKey });
+    if (what === "regain") return regainControl(actor);
+    return event.shiftKey ? extendForm(actor) : endForm(actor);
   }
 
   static async #onRestTurn() { if (this.actor) await restTurn(this.actor); }

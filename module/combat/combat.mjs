@@ -4,6 +4,7 @@ import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER } from "../config/combat.mjs";
 import { postCard, defaultMessageMode, proxyMessageMode } from "./common.mjs";
 import { wearArmor } from "./damage.mjs";
 import { magicStartOfTurn } from "../magic/effects.mjs";
+import { trueFormStartOfTurn } from "../character/true-form.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
 import { expireZonesForTurn } from "./zones.mjs";
 import { repeatZonesForTurn } from "../magic/cast.mjs";
@@ -57,6 +58,7 @@ export async function startOfTurn(actor, combat, context) {
 
   // Эликсиры и масла, истёкшие по времени; магия: поддержание, регенерация, щиты, статусы с длительностью
   lines.push(...await expireAlchemy(actor));
+  lines.push(...await trueFormStartOfTurn(actor));
   lines.push(...await magicStartOfTurn(actor));
   lines.push(...await expireZonesForTurn(actor, combat));
   lines.push(...await repeatZonesForTurn(actor, combat));

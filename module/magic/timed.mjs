@@ -11,7 +11,8 @@ const startNow = () => ({ time: game.time.worldTime, combat: null, combatant: nu
 export function isMagicTimed(effect) {
   const f = effect.flags?.vedmak ?? {};
   const key = String(f.timed?.key ?? "");
-  return key === "shield" || key.startsWith("regen:") || f.statusRounds !== undefined;
+  // Истинная форма высшего вампира (character/true-form.mjs) живёт по тем же срокам
+  return key === "shield" || key === "trueForm" || key.startsWith("regen:") || f.statusRounds !== undefined;
 }
 
 /** Эффект-метка щита (Квен, «Активный щит») или поддержание щита. */

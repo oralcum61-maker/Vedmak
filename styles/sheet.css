@@ -919,6 +919,21 @@
 }
 .application.vedmak .skills-tab .vv-stage.open { color: #ffe9e4; background: #4a1416; }
 .application.vedmak .skills-tab .vv-branches .vp-ab-lvl a.improve { min-width: 2.6rem; }
+.application.vedmak .skills-tab .vv-form {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; padding: .4rem .5rem;
+  background: #0d0e10; border: 1px solid #040405; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .8);
+}
+.application.vedmak .skills-tab .vv-form.active { background: #1f0c0d; border-color: #3a1214; }
+.application.vedmak .skills-tab .vv-form.frenzy { box-shadow: inset 0 0 0 1px #8c1410, 0 0 10px rgba(220, 40, 40, .35); }
+.application.vedmak .skills-tab .vv-form-state { flex: 1 1 8rem; font-size: .7rem; color: #e2ddd0; }
+.application.vedmak .skills-tab .vv-form-btns { display: flex; flex-wrap: wrap; gap: .3rem; }
+.application.vedmak .skills-tab .vv-btn {
+  padding: 3px 8px; font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: #f1ece0;
+  background: linear-gradient(180deg, #34363c, #1c1d21); border: 1px solid #060708; border-radius: 2px;
+}
+.application.vedmak .skills-tab .vv-btn.blood { background: linear-gradient(180deg, #a3262b, #5c0f12); }
+.application.vedmak .skills-tab .vv-btn:hover { filter: brightness(1.2); text-shadow: none; }
+.application.vedmak .skills-tab .vv-btn.disabled { opacity: .45; pointer-events: none; }
 
 .application.vedmak dl.race-powers { margin: .4rem 0 0; font-size: .78rem; line-height: 1.45; }
 .application.vedmak dl.race-powers dt { margin-top: .5rem; font-weight: 600; }

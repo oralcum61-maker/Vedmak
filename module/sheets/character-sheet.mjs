@@ -11,6 +11,7 @@ import {
 import { CharacterWizard } from "../character/wizard.mjs";
 import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
 import { racePowersContext, setPowerValue, powerStep } from "../character/race-powers.mjs";
+import { transform, extendForm, endForm, regainControl } from "../character/true-form.mjs";
 import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, crossbowModLimit } from "../config/crafting.mjs";
 import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
@@ -78,6 +79,11 @@ export class CharacterSheet extends VedmakActorSheet {
       rollPower: CharacterSheet.#onRollPower,
       unlockPower: CharacterSheet.#onUnlockPower,
       setBeast: CharacterSheet.#onSetBeast,
+      tfTransform: CharacterSheet.#onTfTransform,
+      tfExtend: CharacterSheet.#onTfExtend,
+      tfEnd: CharacterSheet.#onTfEnd,
+      tfRegain: CharacterSheet.#onTfRegain,
+      tfReset: CharacterSheet.#onTfReset,
       toggleAdvance: CharacterSheet.#onToggleAdvance,
       improveSkill: CharacterSheet.#onImproveSkill,
       improveStat: CharacterSheet.#onImproveStat,
@@ -594,8 +600,11 @@ export class CharacterSheet extends VedmakActorSheet {
     const fromElsewhere = item.parent?.uuid !== actor.uuid;
     // Вампирская магия не изучается за О.У: её даёт роль высшего вампира
     if (fromElsewhere && item.type === "spell" && item.system.kind === "vampire") {
+      const role = actor.system.race?.system.role;
       if (!actor.system.race?.system.roles?.some(r => r.key === item.system.branch)) {
         ui.notifications.warn(`«${item.name}» — вампирская магия; у расы персонажа нет такой роли.`);
+      } else if (role && role !== item.system.branch) {
+        ui.notifications.warn(`«${item.name}» — магия чужой роли: сотворить её персонаж не сможет.`);
       }
       return super._onDropItem(event, item);
     }
@@ -781,6 +790,20 @@ export class CharacterSheet extends VedmakActorSheet {
     await setPowerValue(race, p.key, p.value + 1);
     await postCard(actor, step.label, `<p><b>${foundry.utils.escapeHTML(p.name)}</b>: ${p.value} → ${p.value + 1}.</p><p>Потрачено ${step.cost} ОК.</p>`,
       { icon: "fa-solid fa-droplet", cls: "advancement" });
+  }
+
+  /* Истинная форма высшего вампира */
+  static async #onTfTransform(event, target) {
+    if (target.classList.contains("disabled")) return;
+    await transform(this.actor, { skipDialog: event.shiftKey });
+  }
+  static async #onTfExtend(event, target) {
+    if (!target.classList.contains("disabled")) await extendForm(this.actor);
+  }
+  static async #onTfEnd() { await endForm(this.actor); }
+  static async #onTfRegain() { await regainControl(this.actor); }
+  static async #onTfReset() {
+    if (game.user.isGM) await this.actor.unsetFlag("vedmak", "trueFormReady");
   }
 
   /** Шкала Зверя: щелчок по делению ставит значение, по верхнему закрашенному — убирает его. */
