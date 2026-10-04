@@ -6,6 +6,7 @@ import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
+import { witcherSchools } from "../config/character.mjs";
 import {
   resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat,
   isReadyWeapon
@@ -248,7 +249,11 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   const sum = stat.effective + skill.total + skill.penalty;
   if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
   if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
-  if (type.mod) parts.push({ label: type.label, value: type.mod });
+  // Школа Мантикоры и своя школа с «Парированием щитом»: щитом парирует без штрафа
+  const school = actor.type === "character" ? witcherSchools()[actor.system.details?.school] : null;
+  if (type.mod && cfg.defense === "parry" && item?.shield && school?.waive?.includes("shieldParry")) {
+    parts.push({ label: `${type.label} щитом: ${school.label} — без штрафа`, value: 0, always: true });
+  } else if (type.mod) parts.push({ label: type.label, value: type.mod });
   if (cfg.defense === "parry" && attack.weapon?.isThrown) parts.push({ label: "Парирование метательного", value: -5 });
   if (cfg.outnumbered > 1) parts.push({ label: `Противников в ближнем бою: ${cfg.outnumbered}`, value: -(cfg.outnumbered - 1) });
   for (const key of cfg.situations) parts.push({ label: DEFENSE_SITUATIONS[key].label, value: DEFENSE_SITUATIONS[key].mod });

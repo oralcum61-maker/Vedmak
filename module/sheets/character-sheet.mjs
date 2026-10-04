@@ -79,6 +79,7 @@ export class CharacterSheet extends VedmakActorSheet {
       rollPower: CharacterSheet.#onRollPower,
       unlockPower: CharacterSheet.#onUnlockPower,
       setBeast: CharacterSheet.#onSetBeast,
+      swapBranch: CharacterSheet.#onSwapBranch,
       tfTransform: CharacterSheet.#onTfTransform,
       tfExtend: CharacterSheet.#onTfExtend,
       tfEnd: CharacterSheet.#onTfEnd,
@@ -348,6 +349,11 @@ export class CharacterSheet extends VedmakActorSheet {
           })
         }))
       };
+      context.prof.altBranches = (ps.altBranches ?? []).map((a, ai) => ({
+        ...a, index: ai,
+        abilities: a.abilities.map(x => ({ ...x, statAbbr: STATS[x.stat]?.abbr ?? "" })),
+        targets: ps.branches.map((b, bi) => ({ index: bi, name: b.name }))
+      }));
       const abilities = context.prof.branches.flatMap(b => b.abilities);
       context.prof.learned = abilities.filter(ab => ab.value > 0).length;
       context.prof.total = abilities.length;
@@ -790,6 +796,26 @@ export class CharacterSheet extends VedmakActorSheet {
     await setPowerValue(race, p.key, p.value + 1);
     await postCard(actor, step.label, `<p><b>${foundry.utils.escapeHTML(p.name)}</b>: ${p.value} → ${p.value + 1}.</p><p>Потрачено ${step.cost} ОК.</p>`,
       { icon: "fa-solid fa-droplet", cls: "advancement" });
+  }
+
+  /** Взять дополнительную ветвь вместо основной: ветви меняются местами вместе с вложенными очками. */
+  static async #onSwapBranch(event, target) {
+    const prof = this.actor.system.profession;
+    if (!prof) return;
+    const ai = Number(target.dataset.alt), bi = Number(target.dataset.branch);
+    const data = prof.system.toObject();
+    const alt = data.altBranches[ai], old = data.branches[bi];
+    if (!alt || !old) return;
+    if (old.abilities.some(a => a.value > 0)) {
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window: { title: "Сменить ветвь" },
+        content: `<p>В ветви «${foundry.utils.escapeHTML(old.name)}» уже вложены очки. Ветвь уйдёт в «Другие ветви» вместе с ними — её можно вернуть. Сменить на «${foundry.utils.escapeHTML(alt.name)}»?</p>`
+      });
+      if (!ok) return;
+    }
+    data.branches[bi] = { name: alt.name, extra: alt.extra ?? "", abilities: alt.abilities };
+    data.altBranches[ai] = { name: old.name, source: old.extra ? alt.source : (prof.system.source?.book || ""), extra: old.extra ?? "", abilities: old.abilities };
+    await prof.update({ "system.branches": data.branches, "system.altBranches": data.altBranches });
   }
 
   /* Истинная форма высшего вампира */

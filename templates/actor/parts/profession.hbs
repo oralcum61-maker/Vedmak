@@ -79,6 +79,27 @@
   </section>
   {{/each}}
 </div>
+{{#if prof.altBranches.length}}
+<section class="vp-alt">
+  <h3 class="vp-ghead">Другие ветви<span class="rule"></span></h3>
+  <p class="vp-hint">Любую из этих ветвей можно взять вместо одной из трёх: прежняя ветвь вместе с вложенными очками уйдёт сюда же, её можно вернуть.</p>
+  {{#each prof.altBranches as |alt|}}
+  <div class="vp-alt-card">
+    <div class="vp-alt-head">
+      <b>{{alt.name}}</b>{{#if alt.source}}<span class="vd-cap">{{alt.source}}</span>{{/if}}
+      <span class="grow"></span>
+      {{#if @root.editable}}{{#each alt.targets as |t|}}
+      <a class="vv-btn" data-action="swapBranch" data-alt="{{alt.index}}" data-branch="{{t.index}}" data-tooltip="Взять «{{alt.name}}» вместо «{{t.name}}»">вместо «{{t.name}}»</a>
+      {{/each}}{{/if}}
+    </div>
+    <ul class="vp-alt-abs">
+      {{#each alt.abilities}}<li><b>{{name}}</b>{{#if statAbbr}} <span class="vd-cap">{{statAbbr}}</span>{{/if}} — <span class="vp-alt-desc">{{description}}</span></li>{{/each}}
+    </ul>
+    {{#if alt.extra}}<details class="vp-alt-extra"><summary>Таблицы и пояснения</summary>{{{alt.extra}}}</details>{{/if}}
+  </div>
+  {{/each}}
+</section>
+{{/if}}
 <p class="vp-hint">Способность открывается, когда в предыдущую (для первой в ветви — в определяющий навык) вложено 5 очков. Стоимость повышения — как у навыка: новый уровень 1 О.У, дальше — текущий уровень (стр. 59–61).</p>
 {{else}}
 <div class="empty-prof">

@@ -15079,6 +15079,8 @@
   "type": "spell",
   "img": "icons/consumables/food/bowl-stew-brown.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Низкой опасности"
   ],
@@ -15141,6 +15143,8 @@
   "type": "spell",
   "img": "icons/commodities/currency/coin-embossed-cobra-gold.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Низкой опасности"
   ],
@@ -15203,6 +15207,8 @@
   "type": "spell",
   "img": "icons/tools/instruments/bell-silver.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Средней опасности"
   ],
@@ -15265,6 +15271,8 @@
   "type": "spell",
   "img": "icons/magic/unholy/hand-light-pink.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Низкой опасности"
   ],
@@ -15327,6 +15335,8 @@
   "type": "spell",
   "img": "icons/magic/control/debuff-energy-hold-green.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Средней опасности"
   ],
@@ -15389,6 +15399,8 @@
   "type": "spell",
   "img": "icons/tools/smithing/crucible-steel.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Высокой опасности"
   ],
@@ -15451,6 +15463,8 @@
   "type": "spell",
   "img": "icons/magic/control/debuff-chains-red.webp",
   "folder": [
+   "Фанатская магия",
+   "Много профессий (Leo's Homebrew)",
    "Порчи",
    "Высокой опасности"
   ],

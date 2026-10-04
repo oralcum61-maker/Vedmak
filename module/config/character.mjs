@@ -140,11 +140,14 @@ export const WITCHER_SCHOOLS = {
   griffin: { label: "Школа Грифона", hint: "+2 к Энергии.", vigor: 2 },
   cat:     { label: "Школа Кота",    hint: "Невосприимчивость ко всем немагическим попыткам обольщения." },
   viper:   { label: "Школа Змеи",    hint: "Нет штрафа за парное оружие.", waive: ["dual"] },
-  bear:    { label: "Школа Медведя", hint: "−2 к скованности движений (СД).", ev: -2 }
+  bear:    { label: "Школа Медведя", hint: "−2 к скованности движений (СД).", ev: -2 },
+  // «Школа Мантикоры» (фанатская): «Мастер щита»
+  manticore: { label: "Школа Мантикоры", waive: ["shieldParry"],
+    hint: "Мастер щита: выхватить и убрать щит — без действия, нет штрафа при парировании щитом, рука со щитом свободна для знаков, бомб и эликсиров." }
 };
 
 /** Виды атаки со штрафом, который школа может снимать. */
-export const SCHOOL_WAIVABLE = { strong: "Сильная атака", charge: "Атака с разбега", dual: "Парное оружие" };
+export const SCHOOL_WAIVABLE = { strong: "Сильная атака", charge: "Атака с разбега", dual: "Парное оружие", shieldParry: "Парирование щитом" };
 
 /** Все школы: корника и свои (настройка мира «Ведьмачьи школы», module/apps/school-config.mjs). */
 export const witcherSchools = () => mergeSchools(worldSetting("witcherSchools", null));

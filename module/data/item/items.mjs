@@ -426,6 +426,13 @@ export class ProfessionData extends foundry.abstract.TypeDataModel {
       allowedRaces: new ArrayField(new StringField()),
       branches: new ArrayField(new SchemaField({
         name: str(""),
+        // Таблицы и пояснения ветви, взятой из дополнительных («Доп. навыки для профессий»)
+        extra: str(""),
+        abilities: new ArrayField(abilityField())
+      })),
+      // Дополнительные ветви из книг: игрок может взять любую вместо одной из трёх (лист, вкладка «Профессия»)
+      altBranches: new ArrayField(new SchemaField({
+        name: str(""), source: str(""), extra: str(""),
         abilities: new ArrayField(abilityField())
       })),
       source: source()
