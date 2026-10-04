@@ -25,7 +25,9 @@ export const STATUS_EFFECTS = [
   { id: "immobilized",  name: "Обездвижен",          img: "systems/vedmak/assets/fan/status/st-immobilized.webp" },
   { id: "activeDodge",  name: "Активное уклонение",  img: "systems/vedmak/assets/fan/status/st-activeDodge.webp" },
   { id: "invisible",    name: "Невидимость",         img: "systems/vedmak/assets/fan/status/st-invisible.webp" },
-  { id: "withdrawal",   name: "Ломка",               img: "systems/vedmak/assets/fan/status/st-withdrawal.webp" }
+  { id: "withdrawal",   name: "Ломка",               img: "systems/vedmak/assets/fan/status/st-withdrawal.webp" },
+  // Ужас Истинной формы высшего вампира, «Парализующий ужас» Монарха
+  { id: "frightened",   name: "Страх",               img: "icons/svg/terror.svg" }
 ];
 
 /** Описания статусов для подсказок и листа. */
@@ -47,7 +49,8 @@ export const STATUS_HINTS = {
   grappled: "Не может отойти, −2 к физическим действиям. Освобождение — Уклонение против Борьбы.",
   immobilized: "Не может двигаться и действовать. Атаки по нему +4.",
   activeDodge: "Полный ход: атакующие в ближнем бою −2, доп. защиты без затрат Вын.",
-  withdrawal: "Зависимость без дозы: −5 ко всем действиям, не связанным с получением объекта зависимости (стр. 32)."
+  withdrawal: "Зависимость без дозы: −5 ко всем действиям, не связанным с получением объекта зависимости (стр. 32).",
+  frightened: "Напуган: не может добровольно приблизиться к источнику страха, −3 к атакам против него; атаковать его в ближнем бою — только после проверки Храбрости."
 };
 
 export function registerStatusEffects() {

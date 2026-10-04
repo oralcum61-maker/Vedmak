@@ -7,6 +7,8 @@
 import { performCheck } from "../dice/check.mjs";
 import { postCard, inCombat, roundsAsTime } from "../util.mjs";
 import { itemsForLabel } from "./wizard.mjs";
+import { asGM, registerGMHandler, userOwnsAny, resolveActor } from "../combat/common.mjs";
+import { applyStatus } from "../combat/damage.mjs";
 
 const FLAG = "trueForm";
 const SYS = "vedmak";
@@ -197,9 +199,45 @@ export async function transform(actor, { forced = false, skipDialog = false } = 
     ...lines.map(l => `<p>${l}</p>`),
     !forced && beast >= 10 ? "<p><b>Шкала Зверя заполнена — звериный срыв:</b> вернуть разум — 3 успешные проверки Сопротивления Зверю подряд со СЛ 20.</p>" : ""
   ].join("");
-  await postCard(actor, forced ? "Звериный срыв: Истинная форма" : "Истинная форма", body, { icon: "fa-solid fa-skull", rolls: [dur] });
+  // Ужас: выбранные цели (враги, видящие превращение) проверяют Храбрость
+  const fear = await fearChecks(actor, fearDc);
+  await postCard(actor, forced ? "Звериный срыв: Истинная форма" : "Истинная форма", body + fear.html,
+    { icon: "fa-solid fa-skull", rolls: [dur, ...fear.rolls] });
   return true;
 }
+
+/**
+ * Ужас Истинной формы: каждая выбранная цель — Воля + Храбрость + d10 против СЛ ужаса; провал — «Страх» на 1d6 раундов.
+ * Состояние ставит ведущий (цели обычно чужие).
+ */
+async function fearChecks(actor, dc) {
+  const targets = [...(game.user.targets ?? [])].map(t => t.actor).filter(a => a && a !== actor);
+  if (!targets.length) return { html: '<p class="hint">Выберите цели перед превращением — их проверка ужаса бросится сама.</p>', rolls: [] };
+  const rows = [], rolls = [], scared = [];
+  for (const t of targets) {
+    const base = (t.system.stats?.will?.effective ?? 0) + (t.system.skills?.courage?.total ?? 0);
+    const r = await new Roll("1d10").evaluate();
+    rolls.push(r);
+    const total = base + r.total;
+    const ok = total > dc;
+    if (!ok) {
+      const rounds = (await new Roll("1d6").evaluate()).total;
+      scared.push({ uuid: t.uuid, rounds });
+      rows.push(`<li>${foundry.utils.escapeHTML(t.name)}: ${total} — <b>страх</b> на ${rounds} р.</li>`);
+    } else rows.push(`<li>${foundry.utils.escapeHTML(t.name)}: ${total} — устоял</li>`);
+  }
+  if (scared.length) await asGM("trueFormFear", { vampireUuid: actor.uuid, targets: scared });
+  return { html: `<p><b>Проверка ужаса</b> (Воля + Храбрость + d10 против ${dc}):</p><ul>${rows.join("")}</ul>`, rolls };
+}
+
+registerGMHandler("trueFormFear", async ({ vampireUuid, targets }, userId) => {
+  const vampire = resolveActor(vampireUuid);
+  if (!vampire || !trueFormEffect(vampire) || !userOwnsAny(userId, vampire)) return;
+  for (const { uuid, rounds } of targets ?? []) {
+    const t = resolveActor(uuid);
+    if (t) await applyStatus(t, "frightened", Math.max(1, Math.min(6, Number(rounds) || 1)));
+  }
+});
 
 /** Продлить форму на 1d6 раундов за 10 ОК. */
 export async function extendForm(actor) {

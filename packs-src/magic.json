@@ -15932,8 +15932,13 @@
     "ignoreArmor": true,
     "canCrit": false,
     "staDamage": "",
-    "statuses": [],
-    "statusRounds": "",
+    "statuses": [
+     {
+      "status": "frightened",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "1d6",
     "statusesByCost": {},
     "regen": {
      "hp": 0,

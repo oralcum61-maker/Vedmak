@@ -292,6 +292,16 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     };
   }
 
+  // Высасывание крови: при уроне укусом цель теряет ещё 2d6 (броня не снижает), вампир получает столько же
+  let drain = 0;
+  if (attack.drain?.ok && final > 0 && !attack.nonLethal) {
+    const r = await new Roll("2d6").evaluate();
+    rolls.push(r);
+    drain = r.total;
+    final += drain;
+    notes.push(`Высасывание крови: +${drain} урона; вампиру +${drain} ${attack.drain.mode === "hp" ? "ПЗ" : "ОК"}.`);
+  }
+
   // Эффекты оружия: шанс в % (стр. 72, 161)
   const effects = [];
   for (const [key, status] of Object.entries(EFFECT_STATUS)) {
@@ -351,6 +361,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     sp: armor.sp, effectiveSp: sp, ap, improvedAP, afterArmor, penetrated,
     resistReasons: reasons, susceptible, immune, typeMult,
     final, nonLethal: !!attack.nonLethal, crit, effects, stunSave, ablate, notes, staLoss, spell: !!spell,
+    drain, drainMode: attack.drain?.mode ?? "",
     blockable: spell ? spell.defense === "dodgeBlock" : true,
     rolls
   };
@@ -550,6 +561,18 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
     // Алхимия: отвары грифона и виверны, «Молния», убийства
     const dealt = dmg.nonLethal ? 0 : Math.max(0, hpBefore - actor.system.hp.value);
     report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell }));
+    // Высасывание крови: вампир восполняет ОК (до максимума ПЗ) или ПЗ
+    if (dmg.drain > 0 && attacker?.system.blood?.enabled) {
+      if (dmg.drainMode === "hp") {
+        const hp = Math.min(attacker.system.hp.max, attacker.system.hp.value + dmg.drain);
+        await attacker.update({ "system.hp.value": hp });
+        report.lines.push(`${attacker.name}: высасывание крови +${dmg.drain} ПЗ (${hp}/${attacker.system.hp.max}).`);
+      } else {
+        const blood = Math.min(attacker.system.blood.max, attacker.system.blood.value + dmg.drain);
+        await attacker.update({ "system.blood.value": blood });
+        report.lines.push(`${attacker.name}: высасывание крови +${dmg.drain} ОК (${blood}/${attacker.system.blood.max}).`);
+      }
+    }
     // Адреналин: каждый нанесённый крит — кость d6 («Лес Марибора» — две), не больше Тел атакующего
     if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {
       if (attacker?.type === "character") {

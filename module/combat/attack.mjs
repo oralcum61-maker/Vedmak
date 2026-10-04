@@ -11,6 +11,16 @@ import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
+import { inTrueForm } from "../character/true-form.mjs";
+
+/**
+ * Высасывание крови («Высший вампир. Вторая редакция», стр. 9): укус вампира с запасом Очков Крови.
+ * @returns {{trueForm: boolean}|null}
+ */
+function drainOption(actor, src) {
+  if (!actor?.system.blood?.enabled || !/укус/i.test(src.item?.name ?? "")) return null;
+  return { trueForm: inTrueForm(actor) };
+}
 import {
   currentTargets, actorToken, tokenDistance, resolveActor, postCard, defaultMessageMode, armWoundParts, isReadyWeapon
 } from "./common.mjs";
@@ -265,6 +275,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
     weights: Object.entries(WEIGHT_MODS).map(([key, w]) => ({ key, label: w.label, selected: key === cfg.weight })),
     staCost: actor.type === "character",
     isMonster: actor.type === "monster",
+    drain: drainOption(actor, src),
     total: { base: current.base, damage: current.damage },
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0, mod: cfg.mod, damage: current.damage, damageMod: cfg.damageMod })
   });
@@ -293,6 +304,7 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
           band: f.band?.value ?? "",
           situations: Object.keys(ATTACK_SITUATIONS).filter(k => f[`sit.${k}`]?.checked),
           extraAction: !!f.extraAction?.checked,
+          drain: f.drain?.checked ? (f.drainMode?.value || "blood") : "",
           chargeMeters: Number(f.chargeMeters?.value) || 0,
           gallop: !!f.gallop?.checked,
           weight: f.weight?.value ?? "light"
@@ -378,6 +390,16 @@ export async function rollAttack(actor, src, targets, cfg) {
   }
   if (cfg.mod) parts.push({ label: "Модификатор", value: cfg.mod });
 
+  // Высасывание крови: заявка до укуса, d10 — срывается только на критическом провале (1); в Истинной форме — без проверки
+  let drain = null;
+  if (cfg.drain && drainOption(actor, src)) {
+    const free = inTrueForm(actor);
+    const r = free ? null : await new Roll("1d10").evaluate();
+    drain = { mode: cfg.drain, ok: free || r.total > 1, roll: r?.total ?? null };
+    notes.push(free ? "Высасывание крови (Истинная форма, без проверки): при уроне +2d6."
+      : drain.ok ? `Высасывание крови: d10 = ${r.total} — при уроне укусом +2d6.` : "Высасывание крови: d10 = 1 — сорвалось.");
+  }
+
   const roll = await performCheck({ actor, title: src.label, parts, luck: cfg.luck, toChat: false });
 
   // Урон и эффекты вида атаки
@@ -420,7 +442,7 @@ export async function rollAttack(actor, src, targets, cfg) {
     aim: cfg.aim, aimLabel,
     band: cfg.band ?? "", bandLabel: src.isRanged ? RANGE_BANDS[cfg.band]?.label ?? "" : "",
     isRanged: src.isRanged,
-    damageFormula, damageMult, damageMod, chargeFormula, nonLethal, noDamage,
+    damageFormula, damageMult, damageMod, chargeFormula, nonLethal, noDamage, drain,
     fixedLocation: typeCfg.location ?? "",
     chargeDice, weightMult, mounted: !!src.mounted || chargeDice > 0,
     hitText: typeCfg.hit ?? "", hitStatus: typeCfg.status ?? "", stunSaveMod: typeCfg.stunSave ?? null,

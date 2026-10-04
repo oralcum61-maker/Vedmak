@@ -56,7 +56,6 @@
   {{#each groups as |group|}}
   <section class="vp-branch">
     <div class="vp-bar"><b>{{group.name}}</b></div>
-    {{#if group.description}}<p class="vp-hint vv-role-desc">{{group.description}}</p>{{/if}}
     <div class="vp-chain">
       {{#each group.powers as |p|}}
       <div class="vp-ab{{#if p.learned}} learned{{/if}}{{#if p.locked}} locked{{/if}}">

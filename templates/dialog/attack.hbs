@@ -85,6 +85,15 @@
     </label>
     {{/if}}
 
+    {{#if drain}}
+    <label class="plate cost">
+      <input type="checkbox" name="drain">
+      <span class="plate-text">Высасывание крови{{#unless drain.trueForm}} <span class="dim">(d10, срыв на 1)</span>{{/unless}}</span>
+      <select name="drainMode" aria-label="Что получает вампир"><option value="blood">+ОК</option><option value="hp">+ПЗ</option></select>
+      <b class="plate-value">+2d6</b>
+    </label>
+    {{/if}}
+
     {{> "systems/vedmak/templates/dialog/parts/mods.hbs"}}
     {{> "systems/vedmak/templates/dialog/parts/visibility.hbs"}}
   </div>
