@@ -307,6 +307,14 @@ export const SPELL_FX = {
   "Стеклянные кости": hex("jb2a.markers.shield_cracked.purple.02"),
   "Бесконечная потребность": hex("jb2a.markers.drop.red.03"),
   "Порча забвения": hex("jb2a.markers.stun.purple.03"),
+  // «Много профессий» (Leo's Homebrew)
+  "Порча обжорства": hex("jb2a.markers.poison.dark_green.02"),
+  "Кровоточащий кошель": hex("jb2a.markers.drop.red.02"),
+  "Болтливый язык лжеца": hex("jb2a.markers.mute.dark_red.01"),
+  "Горе барда": hex("jb2a.markers.horror.purple.01"),
+  "Дрожь бастарда": hex("jb2a.markers.fear.dark_purple.02"),
+  "Проклятие кузнеца": hex("jb2a.markers.shield_cracked.purple.01"),
+  "Порча почёта": hex("jb2a.markers.skull.dark_orange.02"),
 
   /* ------------------------------ Магические дары ------------------------------ */
   "Успокоить животное": target("jb2a.markers.heart.pink.03", 1.1),

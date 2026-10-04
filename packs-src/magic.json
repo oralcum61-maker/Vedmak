@@ -15075,6 +15075,440 @@
   }
  },
  {
+  "name": "Порча обжорства",
+  "type": "spell",
+  "img": "icons/consumables/food/bowl-stew-brown.webp",
+  "folder": [
+   "Порчи",
+   "Низкой опасности"
+  ],
+  "system": {
+   "description": "<p>Порча обжорства вызывает у жертвы неослабевающий голод. Всякий раз, когда в сцене присутствует еда, жертва должна пройти проверку Сопротивления убеждению против не указываемой СЛ, установленной ГМом, или бросить все дела и кинуться есть. Если жертва съедает больше, чем может за один присест, её начинает тошнить до конца сцены. Если порчу не снять, в конечном итоге жертва набирает огромный вес.</p><h3>Условия снятия</h3><p>Жертва отказывается от пищи на 3 дня, а на третью ночь должна самостоятельно сходить на охоту, приготовить еду на костре, разожжённом с использованием 1 единицы Дымной пыли, и поделиться приготовленным по крайней мере с двумя другими людьми.</p>",
+   "kind": "hex",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 4,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "other",
+   "defenseText": "Сопротивление убеждению",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "низкая",
+   "removal": "Жертва отказывается от пищи на 3 дня, а на третью ночь должна самостоятельно сходить на охоту, приготовить еду на костре, разожжённом с использованием 1 единицы Дымной пыли, и поделиться приготовленным по крайней мере с двумя другими людьми.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "zIJW4erfuAF9fGeO",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Кровоточащий кошель",
+  "type": "spell",
+  "img": "icons/commodities/currency/coin-embossed-cobra-gold.webp",
+  "folder": [
+   "Порчи",
+   "Низкой опасности"
+  ],
+  "system": {
+   "description": "<p>Кровоточащий кошель вынуждает жертву страдать при виде высоких цен и платы за обслуживание, спорить со всеми для получения прибыли от торговли и постоянно опасаться карманников и воров. Независимо от того, насколько осторожна жертва в управлении своими средствами, она нередко обнаруживает, что в наличии у неё гораздо меньше монет, чем рассчитывалось, и совсем не понятно, куда могли деться остальные сбережения.</p><h3>Условия снятия</h3><p>Жертва отдаёт одну из своих самых дорогих вещей нуждающемуся незнакомцу. После этого жертва должна бросить монету через правое плечо, правой рукой, в колодец или фонтан, стоя к нему спиной.</p>",
+   "kind": "hex",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 4,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "низкая",
+   "removal": "Жертва отдаёт одну из своих самых дорогих вещей нуждающемуся незнакомцу. После этого жертва должна бросить монету через правое плечо, правой рукой, в колодец или фонтан, стоя к нему спиной.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "aMT066e8T4amCGcN",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Горе барда",
+  "type": "spell",
+  "img": "icons/tools/instruments/bell-silver.webp",
+  "folder": [
+   "Порчи",
+   "Средней опасности"
+  ],
+  "system": {
+   "description": "<p>Горе барда превращает даже самого харизматичного оратора, исполнителя или артиста в унылого, бездарного, выгоревшего человека. Всякий раз, когда жертва проверяет свои художественные, креативные или социальные навыки, её провалы расцениваются как критические провалы, а критические провалы — как катастрофа. Неудачи не только оскорбляют и шокируют саму жертву, но и подрывают репутацию всех, кто знаком с ней.</p><h3>Условия снятия</h3><p>Жертва должна смешать по 1 единице Пепла, Дымной пыли и Масла в однородную массу и нанести её на лицо, смотря на себя в зеркало. Как только смесь высыхает, проклятье спадает с отслаиваемой массой, после чего зеркало следует разбить.</p>",
+   "kind": "hex",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 8,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "средняя",
+   "removal": "Жертва должна смешать по 1 единице Пепла, Дымной пыли и Масла в однородную массу и нанести её на лицо, смотря на себя в зеркало. Как только смесь высыхает, проклятье спадает с отслаиваемой массой, после чего зеркало следует разбить.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "FnnaAy7XjcUxje9k",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Болтливый язык лжеца",
+  "type": "spell",
+  "img": "icons/magic/unholy/hand-light-pink.webp",
+  "folder": [
+   "Порчи",
+   "Низкой опасности"
+  ],
+  "system": {
+   "description": "<p>Жертва должна держать себя в руках, когда пытается не выдать тайну, оставить при себе собственное мнение или скрыть правду от кого-то. Всякий раз, когда жертва испытывает стресс, нерешительность или стоит перед выбором говорить правду или солгать, она должна пройти проверку Сопротивления убеждению против не указываемой СЛ, установленной ГМом. Провал вынуждает жертву полностью выдать всё, что у неё на уме, независимо от того, раскрывает ли она глубокий секрет или болезненную правду. Какой бы ни была тема, жертва ничего не умалчивает и не скрывает, говоря совершенно искренне.</p><h3>Условия снятия</h3><p>Жертве нужны 1 Жемчужина, Свеча и повязка. Положив жемчужину под язык, жертва надевает повязку на глаза и держит зажжённую свечу обеими руками. Затем поворачивается лицом на север, восток, юг и запад, каждый раз говоря ложь, за которой затем следует правда.</p>",
+   "kind": "hex",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 4,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "other",
+   "defenseText": "Сопротивление убеждению",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "низкая",
+   "removal": "Жертве нужны 1 Жемчужина, Свеча и повязка. Положив жемчужину под язык, жертва надевает повязку на глаза и держит зажжённую свечу обеими руками. Затем поворачивается лицом на север, восток, юг и запад, каждый раз говоря ложь, за которой затем следует правда.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "IirmvrGpJ5kThvcq",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Дрожь бастарда",
+  "type": "spell",
+  "img": "icons/magic/control/debuff-energy-hold-green.webp",
+  "folder": [
+   "Порчи",
+   "Средней опасности"
+  ],
+  "system": {
+   "description": "<p>Всякий раз, когда жертва пытается выполнить что-то, требующее высокого уровня точности, движения и манипуляций руками, она получает штраф 1d6 на проверки соответствующих навыков. Кроме того, даже в случае успеха имеется 30%-ный шанс, что действие всё равно будет провалено. Если жертва испытывает сильный стресс или страх, пока не успокоится, она будет получать штраф 1d6 на все действия, выполненные руками.</p><h3>Условия снятия</h3><p>Жертва готовит пасту из 1 единицы Аконита, Ласточкиной травы и Ячменя, растирая её по рукам при свете полумесяца. После жертва должна тщательно отмыть руки с помощью 1 единицы Царской водки.</p>",
+   "kind": "hex",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 8,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "средняя",
+   "removal": "Жертва готовит пасту из 1 единицы Аконита, Ласточкиной травы и Ячменя, растирая её по рукам при свете полумесяца. После жертва должна тщательно отмыть руки с помощью 1 единицы Царской водки.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "kkJxri9aLPypMQUv",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Проклятие кузнеца",
+  "type": "spell",
+  "img": "icons/tools/smithing/crucible-steel.webp",
+  "folder": [
+   "Порчи",
+   "Высокой опасности"
+  ],
+  "system": {
+   "description": "<p>Жертва Проклятия кузнеца не может прикасаться к предметам, сделанным из металла. При соприкосновении кожа жертвы начинает пузыриться, шипеть и гноиться. Всего через несколько секунд жертва загорается и горит до тех пор, пока не умрёт или огонь не будет потушен.</p><h3>Условия снятия</h3><p>Жертва должна выковать безупречный девятидюймовый гвоздь из 1 единицы Железа, совершив проверку Изготовления со СЛ 15. Затем не успевший остыть гвоздь вбивается в порог жилища жертвы при полной луне.</p>",
+   "kind": "hex",
+   "level": "master",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 12,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "высокая",
+   "removal": "Жертва должна выковать безупречный девятидюймовый гвоздь из 1 единицы Железа, совершив проверку Изготовления со СЛ 15. Затем не успевший остыть гвоздь вбивается в порог жилища жертвы при полной луне.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "VqRbvxQU5Hqx7APD",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Порча почёта",
+  "type": "spell",
+  "img": "icons/magic/control/debuff-chains-red.webp",
+  "folder": [
+   "Порчи",
+   "Высокой опасности"
+  ],
+  "system": {
+   "description": "<p>Неестественная слабость накатывает на жертву. По прошествии нескольких часов жертва начинает ощущать симптомы старения, её кожа начинает обвисать, мышцы болеть, а волосы редеть и седеть. Если порча действует в течение как минимум суток, Реа, Лвк, Тел и Скор жертвы снижаются до показателя 6 (влияет на СД). Любые полученные ранения всегда оцениваются на одну ступень выше, а дополнительное действие теперь стоит 6 Выносливости, вместо 3.</p><h3>Условия снятия</h3><p>Жертва должна носить ожерелье, сделанное из уха Кладбищенской бабы, и вымыть свои волосы желтком Яйца грифона и свежим снегом.</p>",
+   "kind": "hex",
+   "level": "master",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 12,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "",
+   "duration": "",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "высокая",
+   "removal": "Жертва должна носить ожерелье, сделанное из уха Кладбищенской бабы, и вымыть свои волосы желтком Яйца грифона и свежим снегом.",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Много профессий (Leo's Homebrew)",
+    "page": "24"
+   }
+  },
+  "_id": "3FjFXt6qoYwLJopu",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
   "name": "Мелкие твари",
   "type": "spell",
   "img": "icons/creatures/abilities/wing-batlike-red-pink.webp",
