@@ -63,14 +63,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Обольститель",
@@ -376,14 +369,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Стрелок",
@@ -528,13 +514,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Проповедник",
@@ -679,13 +659,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Политик",
@@ -830,14 +804,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Хирург",
@@ -982,14 +949,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Вор",
@@ -1134,14 +1094,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Оружейник",
@@ -1293,14 +1246,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Посредник",
@@ -1461,13 +1407,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Избранный",
@@ -1614,14 +1554,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Учёный",
@@ -1767,14 +1700,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Человек",
@@ -1921,14 +1847,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Следопыт",
@@ -2088,14 +2007,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Дикарь",
@@ -2241,13 +2153,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Лекарь",
@@ -2394,13 +2300,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Культист",
@@ -2547,13 +2447,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Призыватель",
@@ -2715,13 +2609,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Избранный",
@@ -2868,14 +2756,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Пьяница",
@@ -3022,14 +2903,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Спутница",
@@ -3184,14 +3058,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Снайпер",
@@ -3336,14 +3203,7 @@
    "gearFixed": [
     "Эсбода"
    ],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Стиль Девяти Мечей Солнца",
@@ -3490,13 +3350,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Начинающий",
@@ -3662,14 +3516,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Следопыт",
@@ -3814,9 +3661,7 @@
    "gearFixed": [
     "Эльфийский мессер"
    ],
-   "allowedRaces": [
-    "elf"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Путь воды",
@@ -3972,14 +3817,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Гора",
@@ -4126,14 +3964,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Солдат",
@@ -4289,14 +4120,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Ремесленник",
@@ -4452,13 +4276,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Носитель воды",
@@ -4605,14 +4423,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Охотница",
@@ -4780,14 +4591,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Ремесленник",
@@ -4934,13 +4738,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Проповедник",
@@ -5123,13 +4921,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Пылающий",
@@ -5295,9 +5087,7 @@
    "gearFixed": [
     "Артефакт Марида"
    ],
-   "allowedRaces": [
-    "marid"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Пацифист",
@@ -5448,9 +5238,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "goldenDragon"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Зверь",
@@ -5597,14 +5385,7 @@
    "gearFixed": [
     "Двимеритовые кандалы"
    ],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Эксплуататор",
@@ -5750,14 +5531,7 @@
     "Боевой конь (седло)",
     "Рыцарский меч"
    ],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Дамский угодник",
@@ -5904,14 +5678,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Человек",
@@ -6058,14 +5825,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Следопыт",
@@ -6212,14 +5972,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Собиратель",
@@ -6366,13 +6119,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Оракул",
@@ -6519,13 +6266,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Телепат",
@@ -6672,13 +6413,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Призыватель",
@@ -6825,13 +6560,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Командир",
@@ -6978,13 +6707,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Культист",
@@ -7131,13 +6854,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Инициированный",
@@ -7299,14 +7016,7 @@
     ]
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "human",
-    "elf",
-    "dwarf",
-    "gnome",
-    "vran",
-    "bobolak"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Автор",
@@ -7431,45 +7141,7 @@
     "options": []
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "bobolak",
-    "bobolakVes",
-    "domovoi",
-    "doppler",
-    "dryad",
-    "dwarf",
-    "elf",
-    "gnome",
-    "gnomeVes",
-    "goblin",
-    "godling",
-    "goldenDragon",
-    "goldenDragonVes",
-    "halfelf",
-    "hamadryad",
-    "highVampire",
-    "human",
-    "knocker",
-    "kobold",
-    "leimoniad",
-    "leprechaun",
-    "marid",
-    "naiad",
-    "nereid",
-    "ogre",
-    "oread",
-    "rockTroll",
-    "seafolk",
-    "seawitch",
-    "succubus",
-    "sylvan",
-    "troll",
-    "unicorn",
-    "vampireVes",
-    "vodyanoy",
-    "vran",
-    "vranVes"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Фермер",
@@ -7594,45 +7266,7 @@
     "options": []
    },
    "gearFixed": [],
-   "allowedRaces": [
-    "bobolak",
-    "bobolakVes",
-    "domovoi",
-    "doppler",
-    "dryad",
-    "dwarf",
-    "elf",
-    "gnome",
-    "gnomeVes",
-    "goblin",
-    "godling",
-    "goldenDragon",
-    "goldenDragonVes",
-    "halfelf",
-    "hamadryad",
-    "highVampire",
-    "human",
-    "knocker",
-    "kobold",
-    "leimoniad",
-    "leprechaun",
-    "marid",
-    "naiad",
-    "nereid",
-    "ogre",
-    "oread",
-    "rockTroll",
-    "seafolk",
-    "seawitch",
-    "succubus",
-    "sylvan",
-    "troll",
-    "unicorn",
-    "vampireVes",
-    "vodyanoy",
-    "vran",
-    "vranVes"
-   ],
+   "allowedRaces": [],
    "branches": [
     {
      "name": "Дилетант",
