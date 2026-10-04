@@ -84,7 +84,9 @@ export function racePowersContext(actor) {
     roles: rs.roles.map(r => ({ key: r.key, name: r.name, selected: r.key === rs.role })),
     // Роль не меняется в процессе игры — выбрать один раз; ведущий может исправить
     roleEditable: actor.isOwner && (!rs.role || isGM),
-    roleDone: roleFull(rs.role),
+    roles2: rs.roles.filter(r => r.key !== rs.role).map(r => ({ key: r.key, name: r.name, selected: r.key === rs.role2 })),
+    secondOpen: roleFull(rs.role),
+    role2Editable: actor.isOwner && (roleFull(rs.role) || isGM) && (!rs.role2 || isGM),
     groups
   };
 }

@@ -460,10 +460,11 @@ export class RaceData extends foundry.abstract.TypeDataModel {
       canUseMagic: new BooleanField({ initial: true }),
       // Свой ресурс расы: "blood" — Очки Крови высшего вампира (максимум — максимум ПЗ) и Шкала Зверя
       resource: str(""),
-      // Роли — ветки расовых навыков (Монарх, Заклинатель крови, Повелитель Теней); у вампира одна роль на всю жизнь:
-      // после прокачки её древа другая не даётся
+      // Роли — ветки расовых навыков (Монарх, Заклинатель крови, Повелитель Теней); основная и вторая — после
+      // полной прокачки древа основной (стр. 11)
       roles: new ArrayField(new SchemaField({ key: str(""), name: str(""), base: str(""), description: str("") })),
       role: str(""),
+      role2: str(""),
       // Расовые навыки: база роли, ступени древа (открываются за ОК), навыки за опыт, уровни, стадии
       powers: new ArrayField(new SchemaField({
         key: str(""), name: str(""), group: str("core"), kind: str("tree"), stat: str(""),
@@ -479,8 +480,8 @@ export class RaceData extends foundry.abstract.TypeDataModel {
 
   power(key) { return this.powers.find(p => p.key === key) ?? null; }
 
-  /** Роль персонажа (одна) — списком, как её ждут лист и мастер. */
-  get activeRoles() { return this.role ? [this.role] : []; }
+  /** Роли персонажа: основная и (после полной прокачки основной) вторая. */
+  get activeRoles() { return [this.role, this.role2].filter(Boolean); }
 
   /** Базовый навык роли — проверка её заклинаний. */
   roleBase(role) { return this.power(this.roles.find(r => r.key === role)?.base ?? ""); }

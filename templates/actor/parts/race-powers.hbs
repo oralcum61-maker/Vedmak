@@ -33,13 +33,21 @@
   <h3 class="vp-ghead">Роль<span class="rule"></span></h3>
   <div class="vv-role-row">
     <label class="vv-role">
-      <span class="vd-cap">одна на всю жизнь — сменить нельзя</span>
+      <span class="vd-cap">основная (сменить нельзя)</span>
       <select data-race-role="role" {{#unless roleEditable}}disabled{{/unless}} aria-label="Роль высшего вампира">
         <option value="">— выбрать —</option>
         {{#each roles}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
       </select>
     </label>
-    {{#if roleDone}}<p class="vp-hint">Древо роли прокачано полностью; другой роли и её древа у высшего вампира не бывает.</p>{{/if}}
+    {{#if role}}
+    <label class="vv-role">
+      <span class="vd-cap">{{#if secondOpen}}вторая (основная прокачана){{else}}вторая — после полной прокачки основной{{/if}}</span>
+      <select data-race-role="role2" {{#unless role2Editable}}disabled{{/unless}} aria-label="Вторая роль">
+        <option value="">—</option>
+        {{#each roles2}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+      </select>
+    </label>
+    {{/if}}
     {{#unless role}}<p class="vp-hint">Роль определяет ветку расовых навыков и вампирскую магию (бросок d10: Монарх 1–3, Заклинатель крови 4–7, Повелитель Теней 8–10).</p>{{/unless}}
   </div>
 </section>

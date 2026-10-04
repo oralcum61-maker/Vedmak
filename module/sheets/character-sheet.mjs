@@ -600,11 +600,11 @@ export class CharacterSheet extends VedmakActorSheet {
     const fromElsewhere = item.parent?.uuid !== actor.uuid;
     // Вампирская магия не изучается за О.У: её даёт роль высшего вампира
     if (fromElsewhere && item.type === "spell" && item.system.kind === "vampire") {
-      const role = actor.system.race?.system.role;
+      const roles = actor.system.race?.system.activeRoles ?? [];
       if (!actor.system.race?.system.roles?.some(r => r.key === item.system.branch)) {
         ui.notifications.warn(`«${item.name}» — вампирская магия; у расы персонажа нет такой роли.`);
-      } else if (role && role !== item.system.branch) {
-        ui.notifications.warn(`«${item.name}» — магия чужой роли: сотворить её персонаж не сможет.`);
+      } else if (roles.length && !roles.includes(item.system.branch)) {
+        ui.notifications.warn(`«${item.name}» — магия роли, которой у персонажа нет: сотворить её он не сможет.`);
       }
       return super._onDropItem(event, item);
     }
