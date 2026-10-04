@@ -15073,5 +15073,1667 @@
     "layer": "bs"
    }
   }
+ },
+ {
+  "name": "Мелкие твари",
+  "type": "spell",
+  "img": "icons/creatures/abilities/wing-batlike-red-pink.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>ВВ призывает 2d10 воронов или летучих мышей с округи. Вне боя они могут быть разведчиками вампира; в бою на это тратится действие. Твари действуют в ход вампира и используют параметры птиц: атака 1d6/2 по 1 существу, 1 ПЗ на существо, уклонение в базе 9.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "30 м",
+   "duration": "мгновенная",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "16"
+   }
+  },
+  "_id": "IVfcmNjDs0zOBrcZ",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Живое облако",
+  "type": "spell",
+  "img": "icons/creatures/abilities/wing-batlike-purple-blue.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Вызванные мелкие твари образуют плотное облако диаметром 2 м. Любое враждебное существо в зоне получает по 1d6 колющего урона во все части тела; даже если атака не проходит сквозь броню, она наносит 1 пункт разрушающего урона.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "10 м, облако радиус 1 м",
+   "duration": "2d6 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "1d6",
+    "damageType": "piercing",
+    "location": "all",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "16"
+   }
+  },
+  "_id": "EVHkdwV479BZEqni",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Довление",
+  "type": "spell",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Монарх направляет на цель короткий импульс ментального удара: у жертвы темнеет в глазах, сбивается дыхание, дрожат руки. При провале проверки цель дезориентирована до конца раунда, получает 2d6 урона в голову (без умножения и критов) и −2 к следующему броску атаки или защиты. Если цель уже под страхом или навыками Монарха, урон 3d6.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "8 м",
+   "duration": "мгновенная",
+   "defense": "other",
+   "defenseText": "Воля + 1d10",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "2d6",
+    "damageType": "elemental",
+    "location": "head",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "disoriented",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "1",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "16"
+   }
+  },
+  "_id": "IGvpYj5AXOmUUHpU",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Неприкосновенность",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Монарх окружает себя аурой превосходства: пока заклинание действует, первая атака по нему в каждом раунде получает −3. Если атакующий уже проваливал проверку Воли против Монарха в этой сцене — −5.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "на себя",
+   "duration": "1d6 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "16"
+   }
+  },
+  "_id": "UyBtMoyLuM70UBs4",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Аура повиновения",
+  "type": "spell",
+  "img": "icons/magic/control/control-influence-crown-gold.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Монарх создаёт вокруг себя поле ментального давления. Все враги в радиусе проходят проверку сопротивления; при провале — один из эффектов: −3 к инициативе в начале боя; −3 к атакам против Монарха; −3 к броскам сопротивления навыкам Монарха; потеря 1 из 2 действий в первый раунд ауры. Низшие вампиры при провале ещё и не могут выбрать Монарха целью атаки, пока аура действует.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "радиус 6 м от ВВ",
+   "duration": "2d6 раундов",
+   "defense": "other",
+   "defenseText": "Воля + 1d10",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "16"
+   }
+  },
+  "_id": "f6aqm49iOoMapy2Y",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Щит превосходства",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-hex-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Монарх укрепляет волю до почти физической брони: +5 к защите от ментальных воздействий; +3 к защите от магии страха, иллюзий, очарования или контроля; +3 к физической защите против первой атаки в каждом раунде. Враг, промахнувшийся по Монарху с 2 м, проходит проверку Сопротивления магии или убеждению, при провале — −2 к следующему действию.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "на себя",
+   "duration": "2d6 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "17"
+   }
+  },
+  "_id": "RNqe9V1ZciWMCTOk",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Парализующий ужас",
+  "type": "spell",
+  "img": "icons/magic/control/fear-fright-monster-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Монарх обращает свою власть в чистый ужас: цель видит перед собой высшего хищника. При провале проверки — 6d6 ментального урона и ужас до конца заклинания: цель не может добровольно приблизиться к Монарху, −5 к атакам против него, −3 к проверкам Воли против его навыков и должна пройти проверку Воли, чтобы не отступить в свой ход. Ослабленный высший вампир при провале получает урон и штрафы, но не впадает в полный ужас.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "12 м",
+   "duration": "1d6 раундов",
+   "defense": "other",
+   "defenseText": "Воля + 1d10",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "6d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": true,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "17"
+   }
+  },
+  "_id": "H80bZWZUp3EcbUyZ",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Полная тишина",
+  "type": "spell",
+  "img": "icons/magic/control/fear-fright-shadow-monster-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Монарх",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>ВВ создаёт область абсолютного подавления; все враги в радиусе проходят проверку Воли. При провале — 3d6 ментального урона и один эффект на выбор Монарха: не может атаковать Монарха; не может применять против него активные способности; −5 ко всем действиям против союзников Монарха; теряет основное действие в первый раунд; не может двигаться в сторону Монарха; −5 к сопротивлению следующему навыку Монарха. Низшие вампиры при провале покорны до конца сцены и выполняют простые приказы, даже ведущие к гибели. Разумное существо, успешно сопротивлявшееся, всё равно получает −2 к первому действию против Монарха.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "monarch",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "радиус 8 м от ВВ",
+   "duration": "1d6 раундов",
+   "defense": "other",
+   "defenseText": "Воля + 1d10",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "3d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": true,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "17"
+   }
+  },
+  "_id": "WOKt65tQmUapBUOx",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Кипящая кровь",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-beam-blood-red-purple.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Враг в пределах дистанции приходит в ярость против цели, которую вы указали до броска, и пытается напасть на неё, пока действует заклинание, даже если она ему дружественна.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "8 м",
+   "duration": "10 раундов",
+   "defense": "resistMagic",
+   "defenseText": "Сопротивление магии / Тело",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "22"
+   }
+  },
+  "_id": "9KROAa70GQDwib1s",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Кровавый шип",
+  "type": "spell",
+  "img": "icons/magic/unholy/projectile-helix-blood-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Заклинатель вытягивает собственную кровь в тонкий алый шип и метает его в цель: 3d6 урона. Если дополнительно потратить 2 ПЗ — урон +1d6. Попадание по уже раненой цели восстанавливает Заклинателю 1 ОК.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "12 м",
+   "duration": "мгновенная",
+   "defense": "resistReposition",
+   "defenseText": "Сопротивление магии / смена позиции",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "3d6",
+    "damageType": "piercing",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "22"
+   }
+  },
+  "_id": "d3qgsIf8qbs1IizJ",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Иссушение",
+  "type": "spell",
+  "img": "icons/magic/unholy/orb-hands-pink.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Вампир поглощает 5 ПЗ в раунд из свежего трупа. Расстояние до тела не должно превышать 2 м, иначе связь обрывается.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "2 м",
+   "duration": "10 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "22"
+   }
+  },
+  "_id": "aNxwkgiykP8F0Bjh",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Рваная жила",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-beam-blood-small-red-gray.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Заклинатель дёргает кровь в теле цели, раскрывая старую рану или создавая новый внутренний разрыв. При провале защиты — 2d6 урона и кровотечение 50%. Если цель уже кровоточит, кровотечение забирает дополнительно 2 ПЗ в раунд.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "10 м",
+   "duration": "мгновенная",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "2d6",
+    "damageType": "piercing",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "bleeding",
+      "chance": "50"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "22"
+   }
+  },
+  "_id": "i3IOWS7aU3GmfcoE",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Струп",
+  "type": "spell",
+  "img": "icons/magic/unholy/orb-contained-pink.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Заклинатель заставляет кровь свернуться, стянуть рану и временно закрыть повреждение: цель восстанавливает 2d6 ПЗ или избавляется от кровотечения. Применяя на себя, Заклинатель может вместо лечения восстановить 1d6 ОК, но получает 2 ПЗ урона, не снижаемого бронёй.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "касание / на себя",
+   "duration": "мгновенная",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "22"
+   }
+  },
+  "_id": "g28qHY8aJorbApJ8",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Кровосток",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-beam-blood-large-red-purple.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Вампир частично вытягивает кровь из тела цели: 4d6 урона, не блокируемого щитами и бронёй. Крайнее обескровливание (ПЗ меньше 10) изнуряет цель — её текущая Вын снижается на 4d6. Если цель под Алой печатью, Заклинатель восстанавливает 1d6 ОК.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "10 м",
+   "duration": "мгновенная",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "4d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": true,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "23"
+   }
+  },
+  "_id": "8R8hZeUxTwPvKlnr",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Парализующее кровотечение",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-beam-blood-red-gray.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>После действия с уроном оружием вампир заклинанием усиливает кровотечение врага до 100%, даёт ему −5 к броску защиты и парализует, пока цель не пройдёт проверку Сопротивления магии СЛ 20.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "10 м",
+   "duration": "мгновенная",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "bleeding",
+      "chance": "100"
+     },
+     {
+      "status": "immobilized",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "23"
+   }
+  },
+  "_id": "hvp7Bm9bm1imgRHi",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Кровавый щит",
+  "type": "spell",
+  "img": "icons/magic/unholy/barrier-shield-glowing-pink.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Заклинатель создаёт вокруг себя или цели пузырь крови. Пока заклинание действует: +5 к броне против физического урона; +3 к сопротивлению кровотечению, ядам и болезням; один раз за действие заклинания можно полностью проигнорировать эффект кровотечения.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "10 м",
+   "duration": "2d6 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "23"
+   }
+  },
+  "_id": "u3PMi1rpClm7bWmH",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Казнь",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Властью над кровью Заклинатель взрывает внутренние органы жертв. По одной цели: при провале защиты — 8d6 урона, игнорирующего броню, и кровотечение 100%; если цель под Алой печатью — урон +2d6, а Заклинатель восстанавливает 2d6 ОК; при успешной защите — половина урона без кровотечения. По нескольким целям радиус сокращается до 7 м вокруг Заклинателя: каждая при провале защиты получает 5d6 урона вопреки броне и сопротивлению и кровотечение 75% (каждая проверяет отдельно). Бескровные существа невосприимчивы.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "20 м",
+   "duration": "мгновенная",
+   "defense": "resistReposition",
+   "defenseText": "Сопротивление магии / смена позиции",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "8d6",
+    "damageType": "piercing",
+    "location": "",
+    "ignoreArmor": true,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "bleeding",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "23"
+   }
+  },
+  "_id": "SPtMeIEKaNgyIUqI",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Раб крови",
+  "type": "spell",
+  "img": "icons/magic/unholy/hand-marked-pink.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Заклинатель порабощает цель, как марионетку, заставляя её сражаться вместе с группой в течение одного раунда. Цель всё понимает, но не может сопротивляться; её боевые характеристики сохраняются. Если цель под Алой печатью, после рассеивания она получает 2d6 урона, а Заклинатель восстанавливает 2d6 ПЗ или ОК. Бескровные существа невосприимчивы.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "12 м",
+   "duration": "мгновенная",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "24"
+   }
+  },
+  "_id": "83aklDqYTmHAi9sK",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Кровавая печать смерти",
+  "type": "spell",
+  "img": "icons/magic/death/skull-humanoid-white-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Заклинатель крови",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Вампир магией останавливает кровоток и сердце цели. Цель проходит проверку Сопротивления магии, иначе оказывается при смерти, как после обычного урона, вне зависимости от своих ПЗ. Если цели помогут — Первая помощь или Лечащее прикосновение СЛ 16, — сердце запускается и ПЗ сразу восстанавливаются до прежних.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "bloodMage",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "6 м",
+   "duration": "1d6 раундов",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "24"
+   }
+  },
+  "_id": "zTHLxbbmCWtJA6Va",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Теневой рывок",
+  "type": "spell",
+  "img": "icons/magic/unholy/beam-impact-purple.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Стоит 5 Вын. Вампир резко смещается через тень, дым, туман или слепую зону противника — будто дёрнулся слишком быстро для глаза — на расстояние до 6 м, если на пути нет непреодолимой преграды. Если перемещение заканчивается в тени, за укрытием или вне прямого взгляда врага, +2 к следующей атаке до конца хода. Выходя так из ближнего боя, первый противник, от которого он отступает, не может совершить ответную атаку, если не пройдёт Внимание против Воли из Тени.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 5,
+   "resource": "sta",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "на себя",
+   "duration": "мгновенная",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "28"
+   }
+  },
+  "_id": "xLhQ1ldeV4rqZIRD",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Мираж",
+  "type": "spell",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Контуры Повелителя Теней плывут перед глазами противника: при проваленном Внимании цель получает −3 к следующей атаке по вампиру.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "8 м",
+   "duration": "мгновенная",
+   "defense": "other",
+   "defenseText": "Внимание",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "28"
+   }
+  },
+  "_id": "1nX3Gg4aKbZfMUDI",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Обман",
+  "type": "spell",
+  "img": "icons/magic/unholy/hand-weapon-glow-black-green.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Вампир накладывает Обман на клинок или себя перед атакой: +2 к урону выбранным оружием; +2 к первой атаке из скрытности или после морока; можно игнорировать штрафы за плохую видимость для самого Повелителя Теней. Если цель под Мороком хищника, первый успешный удар этим оружием наносит ещё +1d6 урона.</p>",
+   "kind": "vampire",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 5,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "оружие / на себя",
+   "duration": "мгновенная",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "28"
+   }
+  },
+  "_id": "ynxXSNAUNZosY0eF",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Клинок из-за плеча",
+  "type": "spell",
+  "img": "icons/magic/death/weapon-sword-skull-purple.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Вампир направляет оружие так, будто удар идёт из мёртвой зоны восприятия цели — сбоку, из-за спины, снизу из темноты или из-за укрытия. Атака оружием на дистанции до 10 м Волей из Тени вместо навыка владения оружием: при попадании — обычный урон оружия +2d6. Цель, проваливавшая Внимание против Воли из Тени, получает −3 к защите от этой атаки. Под Мороком хищника дополнительный урон 3d6.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "10 м",
+   "duration": "мгновенная",
+   "defense": "dodgeBlock",
+   "defenseText": "Обычная защита от атаки / Внимание",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "29"
+   }
+  },
+  "_id": "rrXpqUfxWPx5FPjU",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Завеса охотника",
+  "type": "spell",
+  "img": "icons/magic/unholy/hands-cloud-light-pink.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Повелитель Теней окутывает себя зыбкой тенью: движения дробятся, контуры расплываются. Пока заклинание действует: +3 к Уклонению; +3 к Скрытности; +2 к защите от дальних атак; один раз за действие заклинания успешная атака по нему становится промахом, если атакующий не пройдёт Внимание против Воли из Тени. В ярком свете бонусы меньше на 1.</p>",
+   "kind": "vampire",
+   "level": "journeyman",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 10,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "на себя",
+   "duration": "мгновенная",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "29"
+   }
+  },
+  "_id": "Vi85jmf7DdkBESiA",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Невидимый враг",
+  "type": "spell",
+  "img": "icons/magic/unholy/silhouette-robe-evil-glow.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Повелитель Теней исчезает из обычного восприятия: обнаружить его буквально невозможно, но он может атаковать. Пока заклинание действует: +8 к Скрытности; +5 к защите от дальних атак; враги не могут выбрать его целью атаки или заклинания, пока не пройдут Внимание против его Скрытности с этим бонусом; первая атака из Полного исчезновения — +4 к попаданию и +3d6 урона. После первой успешной атаки эффект не исчезает, но бонус к Скрытности падает до +4, а к атаке — +1d6 до конца заклинания. Заклинание прекращается досрочно в ярком солнечном свете, в зоне раскрытия невидимости или от критического урона.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "на себя",
+   "duration": "1d6 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "29"
+   }
+  },
+  "_id": "1k82vSmFTZR8pEWB",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Ночь шипов",
+  "type": "spell",
+  "img": "icons/magic/unholy/projectiles-blood-salvo-red.webp",
+  "folder": [
+   "Вампирская магия",
+   "Повелитель Теней",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Повелитель Теней силой воли заставляет тени стать оружием. Все враги в радиусе проходят проверку защиты; при провале каждая получает от теневого шипа 6d6 урона, проникающего сквозь броню. Цель в темноте, тумане, дыму, пелене или под мороком получает −3 к защите. После применения Повелитель Теней может сразу переместиться на 4 м в тень, за укрытие или в область плохой видимости без ответных атак.</p>",
+   "kind": "vampire",
+   "level": "master",
+   "element": "mixed",
+   "branch": "shadowLord",
+   "god": "",
+   "staCost": 20,
+   "resource": "blood",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "радиус 8 м от вампира",
+   "duration": "мгновенная",
+   "defense": "dodgeBlock",
+   "defenseText": "Обычная защита от атаки / Внимание",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "6d6",
+    "damageType": "piercing",
+    "location": "",
+    "ignoreArmor": true,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "30"
+   }
+  },
+  "_id": "xy8DuzE6wwLiECWD",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
  }
 ]

@@ -322,7 +322,37 @@ export const SPELL_FX = {
   "Геокинез": self(CRACK, 1.8),
   "Пирокинез": self("jb2a.flames.02.orange", 1.4, { sound: "igni" }),
   "Видение ауры": self("jb2a.detect_magic.circle.blue", 3),
-  "Заточка оружия": self("jb2a.glint.yellow.few", 1.4, { sound: "oil" })
+  "Заточка оружия": self("jb2a.glint.yellow.few", 1.4, { sound: "oil" }),
+
+  /* ------------------------------ Вампирская магия («Высший вампир. Вторая редакция») ------------------------------ */
+  // Монарх: летучие мыши, страх и давление — лиловые знаки ужаса
+  "Мелкие твари": self("jb2a.bats.complete.01.red", 2.4),
+  "Живое облако": area("jb2a.bats.loop.01.red", 2),
+  "Довление": target("jb2a.markers.stun.purple.02", 1.1, { link: STRANDS, sound: "axii" }),
+  "Неприкосновенность": self("jb2a.on_token_buff.001.001.purplered", 1.6, { sound: "quen" }),
+  "Аура повиновения": area("jb2a.template_circle.symbol.normal.fear.dark_purple", 6, { atCaster: true, sound: "axii" }),
+  "Щит превосходства": self("jb2a.shield_themed.above.eldritch_web.01.dark_purple", 1.7, { sound: "quen" }),
+  "Парализующий ужас": target("jb2a.markers.horror.purple.02", 1.3, { link: STRANDS, sound: "axii" }),
+  "Полная тишина": area("jb2a.template_circle.symbol.normal.horror.purple", 8, { atCaster: true, sound: "axii" }),
+  // Заклинатель крови: брызги, капли, алые цепи и круг
+  "Кровавый шип": bolt("jb2a.lasershot.red", "jb2a.liquid.splash02.red"),
+  "Иссушение": target("jb2a.markers.drop.red.03", 1.2, { link: STRANDS }),
+  "Рваная жила": target("jb2a.liquid.splash_side02.red", 1.3),
+  "Струп": target("jb2a.markers.drop.red.01", 1.1),
+  "Кровосток": target("jb2a.liquid.splash02.red", 1.6, { link: STRANDS }),
+  "Парализующее кровотечение": target("jb2a.markers.chain.standard.complete.02.red", 1.3),
+  "Кровавый щит": target("jb2a.magic_signs.circle.02.evocation.complete.dark_red", 1.6, { sound: "quen" }),
+  "Казнь": target("jb2a.liquid.splash02.red", 2.2, { sound: "spell" }),
+  "Раб крови": target("jb2a.markers.chain.standard.complete.02.red", 1.4, { link: STRANDS, sound: "axii" }),
+  "Кровавая печать смерти": target("jb2a.condition.curse.01.012.red", 1.4, { link: STRANDS }),
+  // Повелитель Теней: дым, тьма, летучие клинки
+  "Теневой рывок": self("jb2a.smoke.puff.centered.grey", 1.5),
+  "Мираж": target("jb2a.smoke.puff.ring.01.white", 1.3),
+  "Обман": self("jb2a.markers.simple.001.complete.001.red", 1.2),
+  "Клинок из-за плеча": target("jb2a.cloud_of_daggers.daggers.red", 1.2),
+  "Завеса охотника": self("jb2a.darkness.black", 1.6),
+  "Невидимый враг": self("jb2a.darkness.black", 2),
+  "Ночь шипов": area("jb2a.arms_of_hadar.dark_purple", 8, { atCaster: true })
 };
 
 /** Рецепт анимации заклинания по имени предмета (имена — как в компендиуме «Магия»). */

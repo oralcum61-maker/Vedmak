@@ -10,11 +10,12 @@ import {
 } from "../character/advancement.mjs";
 import { CharacterWizard } from "../character/wizard.mjs";
 import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
+import { racePowersContext, setPowerValue, powerStep } from "../character/race-powers.mjs";
 import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, crossbowModLimit } from "../config/crafting.mjs";
 import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
-import { signed, compareRu, worldSetting } from "../util.mjs";
+import { signed, compareRu, worldSetting, postCard } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
@@ -74,6 +75,9 @@ export class CharacterSheet extends VedmakActorSheet {
     actions: {
       rollDefining: CharacterSheet.#onRollDefining,
       rollAbility: CharacterSheet.#onRollAbility,
+      rollPower: CharacterSheet.#onRollPower,
+      unlockPower: CharacterSheet.#onUnlockPower,
+      setBeast: CharacterSheet.#onSetBeast,
       toggleAdvance: CharacterSheet.#onToggleAdvance,
       improveSkill: CharacterSheet.#onImproveSkill,
       improveStat: CharacterSheet.#onImproveStat,
@@ -151,7 +155,9 @@ export class CharacterSheet extends VedmakActorSheet {
     skills: {
       tabs: [
         { id: "list",       label: "Навыки" },
-        { id: "profession", label: "Профессия" }
+        { id: "profession", label: "Профессия" },
+        // Расовые навыки (высший вампир) — подвкладка видна, только если они есть у расы
+        { id: "race",       label: "Раса" }
       ],
       initial: "list"
     },
@@ -340,6 +346,9 @@ export class CharacterSheet extends VedmakActorSheet {
       context.prof.learned = abilities.filter(ab => ab.value > 0).length;
       context.prof.total = abilities.length;
     }
+
+    // Расовые навыки (высший вампир)
+    context.vamp = racePowersContext(actor);
     return context;
   }
 
@@ -550,6 +559,15 @@ export class CharacterSheet extends VedmakActorSheet {
       const prof = this.actor.system.profession;
       if (prof) setAbilityValue(prof, Number(input.dataset.branch), Number(input.dataset.index), input.value);
     });
+    // Расовые навыки: уровни и роль хранятся в предмете расы
+    this._listen("input.power-value", "change", (event, input) => {
+      event.stopPropagation();
+      setPowerValue(this.actor.system.race, input.dataset.key, Number(input.value) || 0);
+    });
+    this._listen("select[data-race-role]", "change", (event, select) => {
+      event.stopPropagation();
+      this.actor.system.race?.update({ [`system.${select.dataset.raceRole}`]: select.value });
+    });
     this._listen("input.defining-value", "change", (event, input) => {
       event.stopPropagation();
       this.actor.system.profession?.update({ "system.definingSkill.value": Math.max(0, Number(input.value) || 0) });
@@ -574,6 +592,13 @@ export class CharacterSheet extends VedmakActorSheet {
     if (!this.actor.isOwner) return null;
     const actor = this.actor;
     const fromElsewhere = item.parent?.uuid !== actor.uuid;
+    // Вампирская магия не изучается за О.У: её даёт роль высшего вампира
+    if (fromElsewhere && item.type === "spell" && item.system.kind === "vampire") {
+      if (!actor.system.race?.system.roles?.some(r => r.key === item.system.branch)) {
+        ui.notifications.warn(`«${item.name}» — вампирская магия; у расы персонажа нет такой роли.`);
+      }
+      return super._onDropItem(event, item);
+    }
     if (fromElsewhere && item.type === "spell") {
       const choice = await learnSpellDialog(actor, item);
       if (!choice) return null;
@@ -737,6 +762,32 @@ export class CharacterSheet extends VedmakActorSheet {
 
   static async #onRollDefining(event) {
     await this.actor.rollDefining({ skipDialog: event.shiftKey });
+  }
+
+  static async #onRollPower(event, target) {
+    await this.actor.rollRacePower(target.dataset.key, { skipDialog: event.shiftKey });
+  }
+
+  /** Открыть ступень древа, стадию или следующий уровень расового навыка за Очки Крови. */
+  static async #onUnlockPower(event, target) {
+    const actor = this.actor;
+    const race = actor.system.race;
+    const p = race?.system.power(target.dataset.key);
+    const step = p && powerStep(race.system, p);
+    if (!step) return;
+    const blood = actor.system.blood.value;
+    if (blood < step.cost) return ui.notifications.warn(`Не хватает Очков Крови: нужно ${step.cost}, есть ${blood}.`);
+    await actor.update({ "system.blood.value": blood - step.cost });
+    await setPowerValue(race, p.key, p.value + 1);
+    await postCard(actor, step.label, `<p><b>${foundry.utils.escapeHTML(p.name)}</b>: ${p.value} → ${p.value + 1}.</p><p>Потрачено ${step.cost} ОК.</p>`,
+      { icon: "fa-solid fa-droplet", cls: "advancement" });
+  }
+
+  /** Шкала Зверя: щелчок по делению ставит значение, по верхнему закрашенному — убирает его. */
+  static async #onSetBeast(event, target) {
+    const n = Number(target.dataset.value) || 0;
+    const now = this.actor.system.beast.value;
+    await this.actor.update({ "system.beast.value": n === now ? n - 1 : n });
   }
 
   static async #onRollAbility(event, target) {

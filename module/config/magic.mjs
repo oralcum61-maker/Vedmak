@@ -3,7 +3,9 @@
 export const MAGIC_BRANCHES = {
   druid: "Друид", preacher: "Проповедник", archPriest: "Верховный жрец",
   // «Том Хаоса», стр. 126–149: запретные школы, которым учатся вне академий
-  necromancy: "Некромантия", goetia: "Гоэтия"
+  necromancy: "Некромантия", goetia: "Гоэтия",
+  // Роли высшего вампира — ветки вампирской магии
+  monarch: "Монарх", bloodMage: "Заклинатель крови", shadowLord: "Повелитель Теней"
 };
 
 export const HEX_DANGER = { novice: "Низкая", journeyman: "Средняя", master: "Высокая" };
@@ -22,6 +24,7 @@ export const SPELL_DEFENSES = {
   dodge:       { label: "Уклонение", defenses: ["dodge", "reposition", "none"] },
   dodgeBlock:  { label: "Уклонение или блокирование", defenses: ["dodge", "reposition", "block", "none"] },
   resistMagic: { label: "Сопротивление магии", defenses: ["resistMagic", "none"] },
+  resistReposition: { label: "Сопротивление магии или смена позиции", defenses: ["resistMagic", "reposition", "none"] },
   willx3:      { label: "Воля существа ×3", defenses: ["willx3"] },
   casting:     { label: "Сотворение заклинаний", defenses: ["auto"] },
   other:       { label: "Особая (ведущий)", defenses: ["auto", "none"] }

@@ -323,6 +323,8 @@ export class SpellData extends foundry.abstract.TypeDataModel {
       branch: str(""),
       god: str(""),
       staCost: int(1, { min: 0 }),
+      // Чем платят: "" — Выносливость (и Энергия), "blood" — Очки Крови (при нехватке — Вын), "sta" — только Вын
+      resource: str(""),
       variableCost: new BooleanField({ initial: false }),
       maxCost: int(0, { min: 0 }),
       maintainCost: int(0, { min: 0 }),
@@ -360,6 +362,8 @@ export class SpellData extends foundry.abstract.TypeDataModel {
   }
 
   get isRitual() { return this.kind === "ritual"; }
+  /** Вампирская магия высшего вампира: проверка — базовый навык роли, оплата — Очки Крови. */
+  get isVampire() { return this.kind === "vampire"; }
   get isHex() { return this.kind === "hex"; }
   get skill() { return CONFIG.VEDMAK.MAGIC_SKILL[this.kind] ?? "spellCasting"; }
   get targeting() { return CONFIG.VEDMAK.targetingFor(this.range); }
@@ -454,7 +458,36 @@ export class RaceData extends foundry.abstract.TypeDataModel {
       // Что раса даёт предметом: естественное оружие врана и боболака (названия из компендиума)
       grants: new ArrayField(new StringField()),
       canUseMagic: new BooleanField({ initial: true }),
+      // Свой ресурс расы: "blood" — Очки Крови высшего вампира (максимум — максимум ПЗ) и Шкала Зверя
+      resource: str(""),
+      // Роли — ветки расовых навыков (Монарх, Заклинатель крови, Повелитель Теней); выбранная и вторая
+      roles: new ArrayField(new SchemaField({ key: str(""), name: str(""), base: str(""), description: str("") })),
+      role: str(""),
+      role2: str(""),
+      // Расовые навыки: база роли, ступени древа (открываются за ОК), навыки за опыт, уровни, стадии
+      powers: new ArrayField(new SchemaField({
+        key: str(""), name: str(""), group: str("core"), kind: str("tree"), stat: str(""),
+        roll: new BooleanField({ initial: false }), dc: int(0), max: int(10, { min: 1 }),
+        unlockCost: int(0, { min: 0 }), levelCost: int(0, { min: 0 }),
+        stageCosts: new ArrayField(int(0)),
+        requires: str(""), cost: str(""), range: str(""), duration: str(""), defense: str(""), page: str(""),
+        description: str(""), value: int(0, { min: 0 })
+      })),
       source: source()
     };
+  }
+
+  power(key) { return this.powers.find(p => p.key === key) ?? null; }
+
+  /** Роли персонажа: основная и (после полной прокачки основной) вторая. */
+  get activeRoles() { return [this.role, this.role2].filter(Boolean); }
+
+  /** Базовый навык роли — проверка её заклинаний. */
+  roleBase(role) { return this.power(this.roles.find(r => r.key === role)?.base ?? ""); }
+
+  /** Открыта ли ступень: предыдущая (`requires`) изучена. */
+  isUnlockable(power) {
+    if (!power.requires) return true;
+    return (this.power(power.requires)?.value ?? 0) > 0;
   }
 }

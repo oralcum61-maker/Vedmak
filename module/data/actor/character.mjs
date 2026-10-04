@@ -17,6 +17,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       luck: new SchemaField({ value: int(0) }),
       toxicity: new SchemaField({ value: int(0, { min: 0 }) }),
       adrenaline: new SchemaField({ value: int(0, { min: 0 }) }),
+      // Высший вампир: Очки Крови (максимум — максимум ПЗ) и Шкала Зверя (0–10)
+      blood: new SchemaField({ value: int(0, { min: 0 }) }),
+      beast: new SchemaField({ value: int(0, { min: 0, max: 10 }) }),
       reputation: new SchemaField({ value: int(0), fame: str("") }),
       improvementPoints: new SchemaField({ value: int(0), total: int(0) }),
       // Кошелёк по валютам (config/money.mjs): крона — основная, остальные меняются по курсу
@@ -107,6 +110,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       meleeBodyMod
     });
     this.luck.max = this.stats.luck.total;
+    this.blood.max = race?.resource === "blood" ? this.hp.max : 0;
+    this.blood.enabled = race?.resource === "blood";
     this.toxicity.max = 100 + toxicity;
     // Токсичность: ручное значение + действующие эликсиры и отвары (стр. 247)
     let active = 0;

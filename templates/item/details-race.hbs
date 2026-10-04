@@ -35,6 +35,16 @@
     <p class="hint">Параметры и навыки прибавляются к модификатору и могут превышать предел 10; «Не выше/Не ниже» ограничивают итоговый параметр; естественная броня прибавляется к любой броне.</p>
   </fieldset>
 
+  {{#if system.powers.length}}
+  <fieldset class="vd-fieldset">
+    <legend>Расовые навыки</legend>
+    <p class="hint">Роли: {{#each system.roles}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}. Роль, уровни навыков, Очки Крови и Шкала Зверя — на листе персонажа: вкладка «Навыки» → «{{item.name}}».</p>
+    <dl class="race-powers">
+      {{#each system.powers}}<dt>{{name}}</dt><dd>{{description}}</dd>{{/each}}
+    </dl>
+  </fieldset>
+  {{/if}}
+
   <fieldset class="vd-fieldset">
     <legend>Источник</legend>
     <div class="vd-grid g2">

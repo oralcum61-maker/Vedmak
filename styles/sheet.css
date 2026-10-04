@@ -882,6 +882,48 @@
   .application.vedmak .skills-tab .vp-branches { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* ============================== Высший вампир: расовые навыки (PLAN 4.76) ==============================
+   Подвкладка «Навыков»: шапка расы с Очками Крови, Шкала Зверя из десяти делений, роль, ветки как древо профессии. */
+.application.vedmak .skills-tab .vv-blood { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: .3rem; min-width: 9rem; }
+.application.vedmak .skills-tab .vv-blood-row { display: flex; align-items: baseline; gap: .35rem; }
+.application.vedmak .skills-tab .vv-blood input {
+  width: 3.4rem; height: 30px; padding: 0; text-align: center; font-family: var(--vd-font-head); font-size: 1.3rem; color: #ffe9e4;
+  background: #1a0b0c; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0, 0, 0, .9);
+}
+.application.vedmak .skills-tab .vv-max { font-family: var(--vd-font-head); font-size: 1rem; color: #bab4a8; }
+.application.vedmak .skills-tab .vv-bar { display: block; width: 100%; height: 6px; background: #0b0c0e; border: 1px solid #040405; border-radius: 3px; overflow: hidden; }
+.application.vedmak .skills-tab .vv-bar > span { display: block; height: 100%; background: linear-gradient(90deg, #5c0f12, #b0262b); }
+
+.application.vedmak .skills-tab .vv-beast,
+.application.vedmak .skills-tab .vv-roles { display: flex; flex-direction: column; gap: .55rem; margin-bottom: 1rem; }
+.application.vedmak .skills-tab .vv-beast-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; }
+.application.vedmak .skills-tab .vv-beast-row .vd-cap { white-space: normal; letter-spacing: .08em; line-height: 1.5; flex: 1 1 16rem; }
+.application.vedmak .skills-tab .vv-pips { display: flex; gap: 4px; }
+.application.vedmak .skills-tab .vv-pip {
+  width: 16px; height: 22px; background: #121316; border: 1px solid #050607; border-radius: 2px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .9);
+}
+.application.vedmak .skills-tab .vv-pip:hover { background: #2a1416; }
+.application.vedmak .skills-tab .vv-pip.on { background: linear-gradient(180deg, #c3343a, #6a1215); box-shadow: inset 0 1px 0 rgba(255, 220, 210, .25); }
+.application.vedmak .skills-tab .vv-pip.on:nth-child(n+8) { background: linear-gradient(180deg, #ff4a40, #8c1410); }
+.application.vedmak .skills-tab .vv-beast.full .vv-pips { box-shadow: 0 0 0 1px #050607, 0 0 12px rgba(220, 40, 40, .55); border-radius: 3px; }
+.application.vedmak .skills-tab .vv-role-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; }
+.application.vedmak .skills-tab .vv-role { display: flex; flex-direction: column; gap: .25rem; }
+.application.vedmak .skills-tab .vv-role select { min-width: 13rem; }
+.application.vedmak .skills-tab .vv-role-row .vp-hint { margin: 0; flex: 1 1 14rem; }
+.application.vedmak .skills-tab .vv-role-desc { margin: 0; }
+.application.vedmak .skills-tab .vv-meta { white-space: normal; letter-spacing: .06em; line-height: 1.45; }
+.application.vedmak .skills-tab .vv-stages { display: flex; flex-wrap: wrap; gap: 4px; }
+.application.vedmak .skills-tab .vv-stage {
+  padding: 1px 6px; font-size: .62rem; color: #a8a296; background: #141518; border: 1px solid #060708; border-radius: 7px;
+}
+.application.vedmak .skills-tab .vv-stage.open { color: #ffe9e4; background: #4a1416; }
+.application.vedmak .skills-tab .vv-branches .vp-ab-lvl a.improve { min-width: 2.6rem; }
+
+.application.vedmak dl.race-powers { margin: .4rem 0 0; font-size: .78rem; line-height: 1.45; }
+.application.vedmak dl.race-powers dt { margin-top: .5rem; font-weight: 600; }
+.application.vedmak dl.race-powers dd { margin: .15rem 0 0; }
+
 /* ============================== Лист чудовища по холсту design/11 (PLAN 4.60) ==============================
    Шапка: портрет в стальной рамке, имя литым шрифтом, класс и угроза, трубки ПЗ и Вын, медальоны Брони и Награды.
    Параметры — строки с медальоном итога, производные — медальоны, поправки — поля в колодцах. */

@@ -59,12 +59,13 @@ export async function castSpell(actor, item, opts = {}) {
   let targets = opts.targets ?? currentTargets();
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
 
-  if (!d.vigor && actor.type === "character") {
+  if (!s.isVampire && !d.vigor && actor.type === "character") {
     ui.notifications.warn(`${actor.name}: Энергия 0 — магия недоступна (стр. 123).`);
     return null;
   }
 
   let cfg = {
+    payWith: opts.payWith ?? vampirePay(actor, s),
     cost: opts.cost ?? (s.variableCost ? Math.min(s.maxCost || 7, Math.max(1, d.vigor)) : s.staCost),
     useFocus: d.focus > 0,
     placeOfPower: false,
@@ -124,6 +125,22 @@ function maintainedZonesOf(actor, item) {
   }));
 }
 
+/**
+ * Вампирская магия («Высший вампир. Вторая редакция»): проверка — базовый навык роли заклинания
+ * (уровень + d10, без параметра), у чудовища без расы — 0.
+ */
+export function vampireBase(actor, s) {
+  const power = actor.system.race?.system.roleBase?.(s.branch);
+  return { name: power?.name ?? (CONFIG.VEDMAK.MAGIC_BRANCHES[s.branch] ?? "Навык роли"), value: power?.value ?? 0 };
+}
+
+/** Чем платить вампирское заклинание по умолчанию: ОК, если хватает, иначе Выносливостью. */
+function vampirePay(actor, s) {
+  if (!s.isVampire) return "";
+  if (s.resource === "sta") return "sta";
+  return (actor.system.blood?.value ?? 0) >= s.staCost ? "blood" : "sta";
+}
+
 /** Основа проверки сотворения: Воля + навык магии со всеми постоянными правками. */
 function castBase(actor, skillKey) {
   const skill = actor.system.skills[skillKey];
@@ -155,7 +172,8 @@ async function castDialog(actor, item, cfg, targets) {
   const { used } = vigorUsed(actor);
   const maintained = maintainedSpells(actor);
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
-  const base = castBase(actor, skillKey);
+  const vb = s.isVampire ? vampireBase(actor, s) : null;
+  const base = vb ? vb.value : castBase(actor, skillKey);
   const maxCost = s.maxCost || 7;
   const auto = spellAutomation(item);
   const costDots = s.variableCost && maxCost <= 12
@@ -169,13 +187,17 @@ async function castDialog(actor, item, cfg, targets) {
   const content = await renderTemplate("systems/vedmak/templates/dialog/cast.hbs", {
     item, s, cfg, targets,
     head: {
-      title: item.name, img: item.img, base, baseHint: `Воля + ${SKILLS[skillKey].label}`,
-      subtitle: [CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel(s.kind, s.level),
+      title: item.name, img: item.img, base, baseHint: vb ? `${vb.name} (уровень навыка роли)` : `Воля + ${SKILLS[skillKey].label}`,
+      subtitle: [CONFIG.VEDMAK.MAGIC_KINDS[s.kind], vb ? CONFIG.VEDMAK.MAGIC_BRANCHES[s.branch] : "", levelLabel(s.kind, s.level),
         s.kind === "spell" || s.kind === "sign" ? CONFIG.VEDMAK.MAGIC_ELEMENTS[s.element] : "",
         s.god, s.range, s.duration].filter(Boolean).join(" · ")
     },
     kindLabel: CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel: levelLabel(s.kind, s.level),
-    isRitual: s.kind === "ritual", isHex: s.kind === "hex",
+    isRitual: s.kind === "ritual", isHex: s.kind === "hex", noPlaces: s.kind === "hex" || !!vb,
+    vampire: vb ? {
+      cost: s.staCost, staOnly: s.resource === "sta", payBlood: cfg.payWith === "blood", paySta: cfg.payWith === "sta",
+      blood: actor.system.blood?.value ?? 0, bloodMax: actor.system.blood?.max ?? 0
+    } : null,
     maxCost, costDots, costNote: costNote(auto, cfg.cost),
     vigor: d.vigor, used, focus: d.focus, focusItem: d.focusItem,
     sta: actor.system.sta.value,
@@ -223,6 +245,7 @@ async function castDialog(actor, item, cfg, targets) {
         const f = button.form.elements;
         return {
           ...readCommon(f, actor.system.luck?.value ?? 0),
+          payWith: s.isVampire ? (s.resource === "sta" ? "sta" : f.payWith?.value || cfg.payWith) : "",
           cost: s.variableCost ? Math.max(1, Math.min(s.maxCost || 99, Number(f.cost.value) || 1)) : s.staCost,
           useFocus: !!f.useFocus?.checked,
           placeOfPower: !!f.placeOfPower?.checked,
@@ -250,33 +273,47 @@ export async function performCast(actor, item, cfg, targets) {
   const notes = [];
   const selfLines = [];
 
-  // Затраты и перегрузка
+  // Затраты и перегрузка. Вампирская магия — Очками Крови или Выносливостью, без Энергии и фокуса
+  const vamp = s.isVampire;
   const cost = cfg.cost;
-  const focus = cfg.useFocus ? d.focus : 0;
+  const focus = cfg.useFocus && !vamp ? d.focus : 0;
   const paid = focus ? Math.max(1, cost - focus) : cost;
   const vigor = Math.max(0, d.vigor + (cfg.placeOfPower ? 5 : 0) - (cfg.dimeritium || 0));
   const { used } = vigorUsed(actor);
-  const overload = Math.max(0, used + paid - vigor);
-  if (actor.system.sta.value < paid) {
+  const overload = vamp ? 0 : Math.max(0, used + paid - vigor);
+  const payBlood = vamp && cfg.payWith === "blood" && s.resource !== "sta";
+  if (payBlood && (actor.system.blood?.value ?? 0) < paid) {
+    ui.notifications.warn(`${actor.name}: не хватает Очков Крови (${actor.system.blood?.value ?? 0} из ${paid}).`);
+    return null;
+  }
+  if (!payBlood && actor.system.sta.value < paid) {
     ui.notifications.warn(`${actor.name}: не хватает Вын (${actor.system.sta.value} из ${paid}).`);
     return null;
   }
-  const staAfter = actor.system.sta.value - paid;
-  const update = { "system.sta.value": staAfter };
+  const staAfter = payBlood ? actor.system.sta.value : actor.system.sta.value - paid;
+  const update = payBlood ? { "system.blood.value": actor.system.blood.value - paid } : { "system.sta.value": staAfter };
   if (overload) update["system.hp.value"] = actor.system.hp.value - overload * 5;
   await actor.update(update);
-  await addVigorUsed(actor, paid);
+  if (!vamp) await addVigorUsed(actor, paid);
+  if (vamp) notes.push(payBlood ? `Оплачено: ${paid} ОК.` : `Оплачено: ${paid} Вын.`);
   if (focus) notes.push(`Фокус «${d.focusItem}»: −${focus} к затратам.`);
   if (overload) selfLines.push(`Перегрузка на ${overload}: −${overload * 5} ПЗ.`);
 
-  // Проверка: Воля + навык магии
-  const parts = [
-    { label: will.label, value: will.effective, always: true },
-    { label: SKILLS[skillKey].label, value: skill.total, always: true }
-  ];
-  const sum = will.effective + skill.total + skill.penalty;
-  if (skill.penalty) parts.push({ label: "Ранения и скованность", value: skill.penalty });
-  if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  // Проверка: Воля + навык магии; вампирская — уровень базового навыка роли
+  const parts = [];
+  if (vamp) {
+    const vb = vampireBase(actor, s);
+    parts.push({ label: vb.name, value: vb.value, always: true });
+    if (d?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: d.actionMod });
+  } else {
+    parts.push(
+      { label: will.label, value: will.effective, always: true },
+      { label: SKILLS[skillKey].label, value: skill.total, always: true }
+    );
+    const sum = will.effective + skill.total + skill.penalty;
+    if (skill.penalty) parts.push({ label: "Ранения и скованность", value: skill.penalty });
+    if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  }
   if (cfg.placeOfPower) parts.push({ label: "Место силы", value: 2 });
   parts.push(...statusRollMods(actor, "skill", { skill: skillKey }));
   if (cfg.mod) parts.push({ label: "Модификатор", value: cfg.mod });
@@ -293,7 +330,10 @@ export async function performCast(actor, item, cfg, targets) {
   let fumble = null;
   const element = s.kind === "invocation" ? "mixed" : (s.element || "mixed");
   if (roll.fumble) {
-    if (s.kind === "ritual") {
+    if (vamp) {
+      works = false;
+      fumble = { text: "Критический провал: заклинание не срабатывает.", damage: 0 };
+    } else if (s.kind === "ritual") {
       works = false;
       fumble = { text: `Критический провал ритуала: ${paid} урона (1 за каждое очко Вын).`, damage: paid };
     } else if (s.kind === "hex") {
@@ -313,7 +353,7 @@ export async function performCast(actor, item, cfg, targets) {
     await actor.update({ "system.hp.value": actor.system.hp.value - hpLoss });
     selfLines.push(`Провал: −${hpLoss} ПЗ.`);
   }
-  if ((fumble?.elemental || overload) && s.kind !== "ritual" && s.kind !== "hex") {
+  if ((fumble?.elemental || overload) && s.kind !== "ritual" && s.kind !== "hex" && !vamp) {
     const eff = ELEMENTAL_FUMBLE[element] ?? ELEMENTAL_FUMBLE.mixed;
     selfLines.push(`Стихийный эффект (${eff.label.toLowerCase()}): ${eff.text}`);
     if (eff.status) await actor.toggleStatusEffect(eff.status, { active: true });
@@ -427,7 +467,7 @@ export async function performCast(actor, item, cfg, targets) {
     elementLabel: s.kind === "spell" || s.kind === "sign" ? CONFIG.VEDMAK.MAGIC_ELEMENTS[s.element] : "",
     range: s.range, duration: s.duration,
     defenseLabel: s.kind === "ritual" ? "" : s.defenseText || SPELL_DEFENSES[s.defense]?.label,
-    cost, paid, overload, fumble, selfLines, works, dc,
+    cost, paid, overload, fumble, selfLines, works, dc, payLabel: payBlood ? "ОК" : "Вын",
     isRitual: s.kind === "ritual", description: s.description,
     ingredients: s.kind === "ritual" ? s.ingredients : ""
   };

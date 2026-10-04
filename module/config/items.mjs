@@ -90,7 +90,9 @@ export const MAGIC_KINDS = {
   sign:       "Ведьмачий знак",
   gift:       "Магический дар",
   ritual:     "Ритуал",
-  hex:        "Порча"
+  hex:        "Порча",
+  // «Высший вампир. Вторая редакция»: магия ролей, платится Очками Крови
+  vampire:    "Вампирская магия"
 };
 
 export const MAGIC_LEVELS = {
@@ -106,6 +108,7 @@ export const MAGIC_DEFENSES = {
   dodge: "Уклонение",
   dodgeBlock: "Уклонение или блокирование",
   resistMagic: "Сопротивление магии",
+  resistReposition: "Сопротивление магии или смена позиции",
   willx3: "Воля существа ×3",
   casting: "Сотворение заклинаний",
   other: "Особая"

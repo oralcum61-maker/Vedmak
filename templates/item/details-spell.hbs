@@ -18,7 +18,10 @@
       {{#if system.variableCost}}
       <label>Максимум Вын <input type="number" name="system.maxCost" value="{{system.maxCost}}" min="0"></label>
       {{else}}
-      <label>Затраты Вын <input type="number" name="system.staCost" value="{{system.staCost}}" min="0"></label>
+      <label>{{#if isVampire}}Затраты{{else}}Затраты Вын{{/if}} <input type="number" name="system.staCost" value="{{system.staCost}}" min="0"></label>
+      {{/if}}
+      {{#if isVampire}}
+      <label>Оплата <select name="system.resource">{{selectOptions resourceOptions selected=system.resource}}</select></label>
       {{/if}}
       <label>Поддержание <input type="number" name="system.maintainCost" value="{{system.maintainCost}}" min="0"></label>
       <label>Поддержание от вложенной <select name="system.maintainMode">{{selectOptions maintainModes selected=system.maintainMode}}</select></label>
@@ -28,7 +31,7 @@
       <label>Длительность <input type="text" name="system.duration" value="{{system.duration}}"></label>
       <label>Защита <select name="system.defense">{{selectOptions config.MAGIC_DEFENSES selected=system.defense}}</select></label>
     </div>
-    <p class="hint">Цель: {{targetingLabel}}. Проверка: Воля + {{skillLabel}}.</p>
+    <p class="hint">Цель: {{targetingLabel}}. Проверка: {{checkLabel}}.{{#if system.defenseText}} Защита по книге: {{system.defenseText}}.{{/if}}</p>
   </fieldset>
 
   {{#if (eq system.kind "ritual")}}

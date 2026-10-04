@@ -8025,5 +8025,254 @@
     "layer": "bs"
    }
   }
+ },
+ {
+  "name": "Укус высшего вампира",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Раса «Высший вампир», основная атака: 6d6, колющий, борьба, кровопускание 100%, пробивание брони. Перед атакой можно заявить Высасывание крови (+2d6 урона, столько же ПЗ или ОК вампиру).</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "8"
+   },
+   "category": "natural",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "to3l2My1QDGX1LBs",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Когти высшего вампира",
+  "type": "weapon",
+  "img": "icons/creatures/claws/claw-hooked-barbed.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Раса «Высший вампир», дополнительная атака: 5d6+3, колюще-режущий, ближний бой, кровопускание 75%.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "8"
+   },
+   "category": "natural",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "5d6+3",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "tCmWmWHu2gTgnhwO",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Укус (Истинная форма)",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/mouth-teeth-rows-red.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Высший вампир в Истинной форме: 8d6, кровопускание 100%, улучшенное пробитие брони, высасывание крови без дополнительной проверки.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "31"
+   },
+   "category": "natural",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "8d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    },
+    {
+     "key": "improvedAP",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "uJhp3CNasgyIFnGd",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Когти (Истинная форма)",
+  "type": "weapon",
+  "img": "icons/creatures/claws/claw-talons-yellow-red.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Высший вампир в Истинной форме: 6d6+3, кровопускание 75%, пробитие брони. С 7-го уровня Превращения когти бьют двух целей одним действием.</p>",
+   "quantity": 1,
+   "weight": 0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Вторая редакция",
+    "page": "31"
+   },
+   "category": "natural",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "6d6+3",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "DcTDeteJpgrHwXim",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
  }
 ]

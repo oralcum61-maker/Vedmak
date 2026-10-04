@@ -89,6 +89,24 @@ export class VedmakActor extends Actor {
     return this.#check({ title: ab.name, subtitle: `${prof.system.branches[branch].name} · ${prof.name}`, parts, ...opts });
   }
 
+  /**
+   * Проверка расового навыка (высший вампир): уровень + d10, у навыка за опыт — ещё параметр
+   * («Сопротивление Жажде крови»: Воля + уровень — это и Сопротивление Зверю).
+   */
+  async rollRacePower(key, opts = {}) {
+    const race = this.system.race;
+    const power = race?.system.power(key);
+    if (!power) return null;
+    if (!power.roll) return ui.notifications.info(`«${power.name}» — без проверки.`);
+    const parts = [];
+    if (power.stat) parts.push({ label: STATS[power.stat]?.label ?? power.stat, value: this.system.stats[power.stat]?.effective ?? 0, always: true });
+    parts.push({ label: power.name, value: power.value, always: true });
+    if (this.system.derived?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: this.system.derived.actionMod });
+    parts.push(...statusRollMods(this, "skill"));
+    const group = race.system.roles.find(r => r.key === power.group)?.name ?? race.name;
+    return this.#check({ title: power.name, subtitle: `${group} · расовый навык`, parts, dc: power.dc || null, ...opts });
+  }
+
   /** Узнают ли персонажа: d10 не больше репутации (стр. 60). */
   async rollReputation() {
     const rep = this.system.reputation?.value ?? 0;

@@ -11,6 +11,22 @@ import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 import { animateTab } from "../fx/sheet-motion.mjs";
 
+/**
+ * Ключи рас для выпадающих списков: корник (RACES) и все расы компендиумов (дополнения, фанатские книги).
+ * Без них лист расы из книги сбрасывал бы её ключ, а лист профессии терял бы такие расы из «Разрешённых рас».
+ */
+let raceKeyCache = null;
+async function raceKeyLabels() {
+  if (raceKeyCache) return raceKeyCache;
+  const out = Object.fromEntries(Object.entries(RACES).map(([k, v]) => [k, v.label]));
+  for (const pack of game.packs.filter(p => p.documentName === "Item")) {
+    const index = await pack.getIndex({ fields: ["system.key"] });
+    for (const e of index) if (e.type === "race" && e.system?.key && !(e.system.key in out)) out[e.system.key] = e.name;
+  }
+  for (const i of game.items) if (i.type === "race" && i.system.key && !(i.system.key in out)) out[i.system.key] = i.name;
+  return raceKeyCache = out;
+}
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
@@ -102,7 +118,11 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
 
     if (item.type === "race" || item.type === "profession") {
-      context.raceKeyOptions = { "": "—", ...Object.fromEntries(Object.entries(RACES).map(([k, v]) => [k, v.label])) };
+      context.raceKeyOptions = { "": "—", ...await raceKeyLabels() };
+      // Свой ключ, которого нет ни в корнике, ни в компендиумах, тоже остаётся в списке
+      for (const k of [system.key, ...(system.allowedRaces ?? [])]) {
+        if (k && !(k in context.raceKeyOptions)) context.raceKeyOptions[k] = item.type === "race" ? item.name : k;
+      }
     }
     if (["race", "weapon", "armor", "alchemical"].includes(item.type)) {
       context.modTargets = modTargets(STATS, SKILLS);
@@ -180,7 +200,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       context.levelOptions = Object.fromEntries(levels.map(l => [l, levelLabel(kind, l)]));
       context.showElement = kind === "spell" || kind === "sign";
       // ветвь есть у инвокаций и у запретных школ «Тома Хаоса» — они бывают и заклинанием, и ритуалом
-      context.showBranch = kind === "invocation" || ["necromancy", "goetia"].includes(system.branch);
+      context.showBranch = kind === "invocation" || kind === "vampire" || ["necromancy", "goetia"].includes(system.branch);
+      context.isVampire = kind === "vampire";
+      context.resourceOptions = { blood: "Очки Крови (при нехватке — Вын)", sta: "Только Выносливость" };
       context.showGod = system.level === "archPriest" || !!system.god;
       // у магического дара своя сложность сотворения («Том Хаоса», стр. 74)
       context.showCastDc = kind === "gift";
@@ -191,6 +213,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       context.statusRows = system.automation.statuses.map((row, index) => ({ ...row, index }));
       context.targetingLabel = { self: "на себя", area: "зона", direct: "прямое воздействие" }[targetingFor(system.range)];
       context.skillLabel = SKILLS[MAGIC_SKILL[kind] ?? "spellCasting"].label;
+      context.checkLabel = kind === "vampire"
+        ? `уровень базового навыка роли «${CONFIG.VEDMAK.MAGIC_BRANCHES[system.branch] ?? "—"}» + d10`
+        : `Воля + ${context.skillLabel}`;
       context.byCost = Object.entries(system.automation.statusesByCost ?? {})
         .map(([cost, status]) => `${cost} Вын — ${CONFIG.statusEffects[status]?.name ?? status}`).join(", ");
     }

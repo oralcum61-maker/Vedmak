@@ -32,8 +32,8 @@ const ALCH_GO = { drink: "violet", apply: "violet", mutagen: "violet", oil: "gre
 /** Словесные действия на худе — самые ходовые; остальные — на вкладке «Социальный бой» листа. */
 const VERBAL_QUICK = ["persuade", "seduce", "deceive", "intimidate", "ignore", "changeSubject"];
 /** Разделы магии в худе — порядок и короткие подписи. */
-const MAGIC_ORDER = ["sign", "spell", "invocation", "ritual", "hex", "gift"];
-const MAGIC_GROUP_LABELS = { sign: "Знаки", spell: "Заклинания", invocation: "Инвокации", ritual: "Ритуалы", hex: "Порчи", gift: "Дары" };
+const MAGIC_ORDER = ["sign", "spell", "invocation", "ritual", "hex", "gift", "vampire"];
+const MAGIC_GROUP_LABELS = { sign: "Знаки", spell: "Заклинания", invocation: "Инвокации", ritual: "Ритуалы", hex: "Порчи", gift: "Дары", vampire: "Вампирская" };
 
 export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
@@ -271,14 +271,17 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     // Магия: разделы по видам, «Избранное» (флаг актора), плитки по алфавиту; поиск — в _onRender, без перерисовки
     const favIds = new Set(actor.getFlag(SYSTEM_ID, "hudFavorites") ?? []);
     const sta = system.sta?.value ?? 0;
+    const blood = system.blood?.value ?? 0;
     const allSpells = actor.itemTypes.spell.slice().sort((a, b) => a.name.localeCompare(b.name, "ru")).map(i => {
       const sy = i.system;
       const need = sy.variableCost ? 1 : sy.staCost ?? 0;
+      // Вампирская магия платится ОК, при нехватке — Выносливостью
+      const short = sy.kind === "vampire" ? (sy.resource === "sta" ? sta < need : blood < need && sta < need) : sta < need;
       return {
         id: i.id, name: i.name, img: i.img, kind: sy.kind, sign: sy.kind === "sign", element: sy.element || "mixed",
-        fav: favIds.has(i.id), cost: sy.variableCost ? "1+" : String(sy.staCost ?? 0), short: sta < need,
+        fav: favIds.has(i.id), cost: sy.variableCost ? "1+" : String(sy.staCost ?? 0), short,
         search: i.name.toLowerCase(),
-        tip: [CONFIG.VEDMAK.MAGIC_KINDS[sy.kind], levelLabel(sy.kind, sy.level), sy.kind === "spell" || sy.kind === "sign"
+        tip: [CONFIG.VEDMAK.MAGIC_KINDS[sy.kind], sy.kind === "vampire" ? `${CONFIG.VEDMAK.MAGIC_BRANCHES[sy.branch]}, ${sy.staCost} ${sy.resource === "sta" ? "Вын" : "ОК"}` : "", levelLabel(sy.kind, sy.level), sy.kind === "spell" || sy.kind === "sign"
           ? CONFIG.VEDMAK.MAGIC_ELEMENTS[sy.element] : "", sy.range, sy.duration].filter(Boolean).join(" · ")
       };
     });

@@ -10,6 +10,11 @@
       <a class="{{skillTabs.profession.cssClass}}" data-action="tab" data-group="skills" data-tab="profession">
         <span>Профессия</span>{{#if prof}}<span class="count">{{prof.learned}}/{{prof.total}}</span>{{/if}}
       </a>
+      {{#if vamp}}
+      <a class="{{skillTabs.race.cssClass}}" data-action="tab" data-group="skills" data-tab="race">
+        <span>{{vamp.name}}</span><span class="count">{{vamp.blood.value}} ОК</span>
+      </a>
+      {{/if}}
     </nav>
     <span class="grow"></span>
     <a class="toggle trained-toggle{{#if trainedOnly}} active{{/if}}" data-action="toggleTrainedOnly">
@@ -33,6 +38,11 @@
   <div class="tab pane {{skillTabs.profession.cssClass}}" data-group="skills" data-tab="profession">
     {{> "systems/vedmak/templates/actor/parts/profession.hbs"}}
   </div>
+  {{#if vamp}}
+  <div class="tab pane {{skillTabs.race.cssClass}}" data-group="skills" data-tab="race">
+    {{> "systems/vedmak/templates/actor/parts/race-powers.hbs"}}
+  </div>
+  {{/if}}
 
   {{else}}
 
