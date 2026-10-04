@@ -1,4 +1,5 @@
-// Жизненный путь (корник стр. 25–36) и жизненный путь ведьмака (стр. 238–245).
+// Жизненный путь (корник стр. 25–36), жизненный путь ведьмака (стр. 238–245) и высшего вампира
+// («Высший вампир. Вторая редакция», стр. 2–11).
 //
 // Все броски хранятся в плоском словаре `rolls` (путь → число). Функция `buildLifepath` по нему
 // строит разделы с результатами и собирает механические последствия (кроны, навыки, предметы…).
@@ -7,9 +8,15 @@
 // недостающем броске и сообщает, какой бросок следующий: так путь бросается по одному броску,
 // и каждый уходит в чат (`rollLifepathStep`).
 
-import { LIFEPATH_TABLES as T } from "../config/lifepath-tables.mjs";
+import { LIFEPATH_TABLES } from "../config/lifepath-tables.mjs";
+import { VAMPIRE_TABLES, VAMPIRE_ROLE_BY_ROW, VAMPIRE_EVENTS_BY_AGE } from "../config/lifepath-vampire.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { renderTemplate } from "../util.mjs";
+
+const T = { ...LIFEPATH_TABLES, ...VAMPIRE_TABLES };
+
+/** Раса, у которой свой жизненный путь вместо семьи и десятилетий корника. */
+export const VAMPIRE_RACE = "highVampire";
 
 /** Бросок кости с `sides` гранями. */
 export function rollDie(sides = 10) {
@@ -101,7 +108,8 @@ class Builder {
       items: [],           // названия предметов
       addictions: [],
       notes: [],
-      school: ""
+      school: "",
+      vampireRole: ""      // роль высшего вампира, выпавшая в жизненном пути
     };
   }
 
@@ -459,6 +467,80 @@ function witcherWound(v, fx) {
   }
 }
 
+/* --------------------------- Путь высшего вампира --------------------------- */
+
+/** Механика строк таблиц вампира: навыки, параметры, репутация, предметы, заметки. */
+function vampireEffects(table, v, fx, entry) {
+  const skill = (k, n) => (fx.skills[k] = (fx.skills[k] ?? 0) + n);
+  if (table === "vClan") {
+    if (v <= 2) for (const k of ["perception", "charisma", "deceit", "persuasion", "seduction"]) skill(k, 1);
+    else if (v <= 4) { skill("sailing", 3); fx.notes.push("Клан Аммурун: нет штрафов при сражении под водой"); }
+    else fx.notes.push("Клан Тдет: шанс отравления вдвое меньше");
+    return;
+  }
+  if (table === "vEvent") {
+    switch (v) {
+      case 1: fx.statMods.emp = (fx.statMods.emp ?? 0) + 1; break;
+      case 2: skill("seduction", 2); break;
+      case 3: fx.notes.push("Заклятый враг — другой вампир: при встрече +1 к Воле"); break;
+      case 4: fx.notes.push("Сразился с ведьмаком: шанс отравления «Чёрной кровью» вдвое меньше"); break;
+      case 5: skill("monsterLore", 2); fx.notes.push("В логове — одно дикое среднее или три диких простых чудовища"); break;
+      case 6: fx.notes.push("Был «убит»: регенерация вдвое быстрее, если ПЗ ниже нуля"); break;
+      case 7: fx.notes.push("Ушёл в запой: −3 к репутации среди высших вампиров"); break;
+      case 9: skill("persuasion", 1); skill("charisma", 1); fx.notes.push("Основал секту"); break;
+      case 10: fx.reputation += 5; fx.notes.push("Рыцарь в окрестностях своего логова"); break;
+    }
+    return;
+  }
+  if (table === "vHobby") {
+    switch (v) {
+      case 1: fx.notes.push("Торговля: 150 крон в неделю"); break;
+      case 2: skill("alchemy", 2); fx.notes.push("Алхимическая лаборатория и 5 формул на выбор"); break;
+      case 3: skill("fineArts", 2); fx.notes.push("Своя мастерская"); break;
+      case 4: skill("deduction", 2); fx.notes.push("Два близких друга в местной страже"); break;
+      case 5: fx.notes.push("«Ферма»: 5 домашних людей для сбора ОК"); break;
+      case 6: skill("gambling", 2); fx.notes.push("Много должников в округе"); break;
+      case 7: skill("sailing", 2); fx.notes.push("Корабль с командой"); break;
+      case 8: skill("riding", 2); fx.items.push("Лошадь", "Скаковое седло"); break;
+      case 9: fx.notes.push("Виноградник: 400 крон в месяц"); break;
+      case 10: fx.hpBonus += 10; fx.staBonus += 10; break;
+    }
+    return;
+  }
+  if (table === "vBlood") fx.notes.push(`Особенность питья крови: ${entry.title}`);
+}
+
+function buildVampire(b) {
+  const fx = b.effects;
+  const origin = b.section("Клан и юность");
+  const clan = b.table(origin, "vClan", "vClan", { sides: 6 });
+  vampireEffects("vClan", clan.value, fx, clan);
+  const age = b.table(origin, "vAge", "vAge");
+  b.table(origin, "vYouth", "vYouth");
+
+  const ev = b.section("События жизни");
+  const count = VAMPIRE_EVENTS_BY_AGE[age.row?.min] ?? 1;
+  for (let i = 0; i < count; i++) {
+    const e = b.table(ev, `vEvent.${i}`, "vEvent", { label: `${i + 1}-е событие` });
+    if (e.value === 8) {
+      const fame = b.plain(ev, `vEvent.${i}.fame`, "Добрая или дурная слава", v => (v % 2 === 0 ? "Добрая слава: +3 к репутации" : "Дурная слава: −3 к репутации"),
+        { options: EVEN_OPTIONS("добрая слава, +3", "дурная слава, −3") });
+      fx.reputation += fame.value % 2 === 0 ? 3 : -3;
+    } else vampireEffects("vEvent", e.value, fx, e);
+  }
+
+  const life = b.section("Увлечение, кровь и роль");
+  const hobby = b.table(life, "vHobby", "vHobby");
+  vampireEffects("vHobby", hobby.value, fx, hobby);
+  const blood = b.table(life, "vBlood", "vBlood");
+  vampireEffects("vBlood", blood.value, fx, blood);
+  const role = b.table(life, "vRole", "vRole");
+  fx.vampireRole = VAMPIRE_ROLE_BY_ROW[role.row?.min] ?? "";
+
+  const ch = b.section("Характер");
+  T.vChar.cols.forEach((l, c) => b.table(ch, `vChar.${c}`, "vChar", { col: c, label: l }));
+}
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -469,6 +551,8 @@ function cardOf(next) {
   const decade = next.path.match(/^event\.(\d+)/)?.[1];
   if (decade !== undefined) return { card: `event.${decade}`, cardTitle: `${(Number(decade) + 1) * 10} лет` };
   // Братьев и сестёр бывает до восьми, по четыре броска: раздел — каждый отдельно
+  const vev = next.path.match(/^vEvent\.(\d+)/)?.[1];
+  if (vev !== undefined) return { card: `vEvent.${vev}`, cardTitle: `${Number(vev) + 1}-е событие` };
   const sib = next.path.match(/^sibling\.(\d+)/)?.[1];
   if (sib !== undefined) return { card: `sibling.${sib}`, cardTitle: `${Number(sib) + 1}-й брат или сестра` };
   // «Десятилетие 1 (29–39 лет)» → «Десятилетие 1»
@@ -487,6 +571,7 @@ export function buildLifepath(rolls, opts) {
   const b = new Builder(rolls, { step: !!opts.step });
   try {
     if (opts.witcher) buildWitcher(b, opts);
+    else if (opts.race === VAMPIRE_RACE) buildVampire(b, opts);
     else buildRegular(b, opts);
   } catch (err) {
     if (err !== PENDING) throw err;
@@ -518,6 +603,9 @@ export function dependents(path) {
   if (path === "siblingsCount") return ["sibling"];
   if (path === "wAge" || path === "wTraining") return ["wTrials"];
   if (path === "wStart") return ["decade"];
+  // Возраст вампира решает, сколько событий; восьмое событие — ещё бросок славы
+  if (path === "vAge") return ["vEvent"];
+  if (/^vEvent\.\d+$/.test(path)) return [`${path}.fame`];
   // Броски-соседи, а не вложенные пути: «жив ли» решает, бросать ли «когда умер» и «как», поворот охоты —
   // бросать ли, какой он, подробности неудачи — бросать ли месяцы (у «Изуродован» их нет)
   const near = path.match(/^(decade\.\d+\.(?:enemy|ally))\.alive$/);
@@ -675,9 +763,11 @@ export function lifepathCards(sections, {
       }
       continue;
     }
-    const grid = sec.title === "Личный стиль" || sec.title === "Ценности";
+    const grid = sec.title === "Личный стиль" || sec.title === "Ценности" || sec.title === "Характер";
     const icon = { "Семья": "fa-house-chimney", "Личный стиль": "fa-shirt", "Ценности": "fa-scale-balanced",
-      "Школа и испытания": "fa-flask", "Жизнь ведьмака": "fa-road" }[sec.title] ?? (sec.risk ? "fa-hourglass-half" : "fa-scroll");
+      "Школа и испытания": "fa-flask", "Жизнь ведьмака": "fa-road",
+      "Клан и юность": "fa-chess-rook", "События жизни": "fa-hourglass-half", "Увлечение, кровь и роль": "fa-droplet",
+      "Характер": "fa-masks-theater" }[sec.title] ?? (sec.risk ? "fa-hourglass-half" : "fa-scroll");
     cards.push({
       title: sec.title, icon, grid, cls: sec.risk ? "event" : grid ? "grid" : "",
       subtitle: sec.risk ? WITCHER_RISK[sec.risk]?.label ?? "" : "",
@@ -791,6 +881,27 @@ export function lifepathStory(sections, { nextAction = null, sectionAction = nul
       const facts = rows.filter(e => !featuredPaths.includes(e.path)).map(inlineFact);
       const title = { "Семья": "Происхождение", "Школа и испытания": "Школа и испытания", "Жизнь ведьмака": "Жизнь ведьмака" }[sec.title];
       if (featured.length || facts.length) blocks.push({ kind: "facts", title, featured, facts });
+      continue;
+    }
+    // Высший вампир: клан и юность, увлечение и роль — фактами; события — хроникой; характер — нравом
+    if (sec.title === "Клан и юность" || sec.title === "Увлечение, кровь и роль") {
+      const featuredPaths = sec.title === "Клан и юность" ? ["vClan", "vAge"] : ["vRole"];
+      const featured = done.filter(e => featuredPaths.includes(e.path)).map(e => fact(e));
+      const facts = done.filter(e => !featuredPaths.includes(e.path)).map(inlineFact);
+      if (featured.length || facts.length) blocks.push({ kind: "facts", title: sec.title === "Клан и юность" ? "Происхождение" : "Увлечение и роль", featured, facts });
+      continue;
+    }
+    if (sec.title === "События жизни") {
+      done.filter(e => /^vEvent\.\d+$/.test(e.path)).forEach((e, i) => {
+        const f = fact(e, "");
+        const fame = done.find(x => x.path === `${e.path}.fame`);
+        chronicle.push({ age: `${i + 1}`, unit: "событие",
+          facets: [{ title: "", head: f.head, meta: [], notes: [f.body, fame?.text].filter(Boolean) }] });
+      });
+      continue;
+    }
+    if (sec.title === "Характер") {
+      traits.push({ title: "Нрав", items: done.map(e => ({ k: e.label, v: e.title || e.text })) });
       continue;
     }
     if (sec.title === "Братья и сёстры") {

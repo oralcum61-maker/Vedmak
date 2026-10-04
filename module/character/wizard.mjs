@@ -10,7 +10,7 @@ import {
 import { levelLabel } from "../config/magic.mjs";
 import {
   buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath,
-  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, VAMPIRE_RACE
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 import { compareRu } from "../util.mjs";
@@ -154,6 +154,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   get profession() { return this.data?.professions.find(p => p.uuid === this.wiz.professionUuid) ?? null; }
   get raceKey() { return this.race?.system.key ?? ""; }
   get isWitcher() { return this.raceKey === "witcher"; }
+  /** Высший вампир: свой жизненный путь («Высший вампир. Вторая редакция»). */
+  get isVampire() { return this.raceKey === VAMPIRE_RACE; }
 
   /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса. */
   get #lifepathOpts() {
@@ -293,7 +295,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       state: s, stepIndex, isFirst: stepIndex === 0, isLast: stepIndex === STEPS.length - 1,
       steps, doneCount: steps.filter(x => x.done).length, step: { ...STEPS[stepIndex], n: stepIndex + 1 }, nextLabel: nextStep?.label ?? "",
       stepId: s.step, problem: validation[s.step], [`is_${s.step}`]: true,
-      race, profession: prof, isWitcher: this.isWitcher,
+      race, profession: prof, isWitcher: this.isWitcher, isVampire: this.isVampire,
       hero: this.#hero(lp, stepIndex)
     });
 
@@ -545,6 +547,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const [k, v] of Object.entries(fx.skills)) lines.push(`+${v} к навыку «${SKILLS[k].label}»`);
     for (const [k, v] of Object.entries(fx.skillMods)) lines.push(`${v} к навыку «${SKILLS[k].label}»`);
     if (fx.school) lines.push(witcherSchools()[fx.school]?.label ?? fx.school);
+    if (fx.vampireRole) lines.push(`роль: ${this.race?.system.roles?.find(r => r.key === fx.vampireRole)?.name ?? fx.vampireRole}`);
     if (fx.addictions.length) lines.push(`зависимость (${fx.addictions.length})`);
     for (const i of fx.items) lines.push(`предмет: ${i}`);
     for (const n of fx.notes) lines.push(n);
@@ -1066,8 +1069,12 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   if (oldEffects.length) await actor.deleteEmbeddedDocuments("ActiveEffect", oldEffects);
 
   // Жизненный путь в биографию
-  const style = lp.sections.find(x => x.title === "Личный стиль")?.entries ?? [];
-  const values = lp.sections.find(x => x.title === "Ценности")?.entries ?? [];
+  // У высшего вампира вместо стиля и ценностей — «Характер»: черта характера и что он ценит, ненавидит, как пьёт кровь
+  const vampChar = lp.sections.find(x => x.title === "Характер")?.entries ?? [];
+  const style = lp.sections.find(x => x.title === "Личный стиль")?.entries
+    ?? (vampChar.length ? [{ text: "" }, vampChar[0]] : []);
+  const values = lp.sections.find(x => x.title === "Ценности")?.entries
+    ?? vampChar.slice(1).map(e => ({ text: `${e.label.toLowerCase()}: ${e.text}` }));
   const styleText = i => style[i]?.text ?? "";
   // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
   const lifepath = s.lifepath && lp.sections.length
@@ -1112,7 +1119,12 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
 
   // Раса, профессия, магия, снаряжение
   const items = [];
-  if (race) items.push(race.toObject());
+  if (race) {
+    const r = race.toObject();
+    // Роль высшего вампира выпала в жизненном пути — сразу на расу (на листе её потом не сменить)
+    if (fx.vampireRole && r.system.roles?.some(x => x.key === fx.vampireRole)) r.system.role = fx.vampireRole;
+    items.push(r);
+  }
   if (profession) {
     const p = profession.toObject();
     p.system.definingSkill.value = s.defining + fx.definingBonus;
