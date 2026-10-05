@@ -320,7 +320,7 @@ export const SPELL_FX = {
   "Успокоить животное": target("jb2a.markers.heart.pink.03", 1.1),
   "Аура страха": self("jb2a.markers.fear.dark_purple.03", 1.4, { sound: "axii" }),
   "Сильные ноги": self("jb2a.wind_stream.white", 1.4),
-  "Зелёный росток": area("jb2a.plant_growth.03.round.2x2.complete.greenyellow", 2, { below: true }),
+  "Зелёный Палец": area("jb2a.plant_growth.03.round.2x2.complete.greenyellow", 2, { below: true }),
   "Крошечная иллюзия": self("jb2a.magic_signs.rune.illusion.complete.purple", 1.2),
   "Пигмент": self("jb2a.particles.swirl.greenyellow.02.01", 1.4),
   "Аэрокинез": self("jb2a.wind_lines.01.02.white", 1.8, { sound: "aard" }),
