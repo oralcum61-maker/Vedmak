@@ -288,6 +288,16 @@ async function checkPacks() {
   };
   const schemaIssues = new Map(); // суть → { count, examples }
   let docs = 0;
+  // Внутри компендиума Foundry показывает не больше трёх уровней папок (maxFolderDepth = FOLDER_MAX_DEPTH − 1):
+  // запись в папке глубже просто не видна
+  const deep = new Map();
+  for (const [pack, list] of Object.entries(packs)) {
+    for (const d of list) if (Array.isArray(d.folder) && d.folder.length > 3) {
+      const key = `${pack}: ${d.folder.slice(0, 2).join(" / ")}`;
+      deep.set(key, (deep.get(key) ?? 0) + 1);
+    }
+  }
+  for (const [key, n] of deep) err(S, `${key}: записи глубже трёх уровней папок (${n}) — Foundry их не покажет`);
   for (const [pack, list] of Object.entries(packs)) {
     for (const d of list) {
       for (const [doc, where] of [[d, `${pack}: ${d.name}`], ...(d.items ?? []).map(i => [i, `${pack}: ${d.name} → ${i.name}`])]) {
