@@ -55,7 +55,8 @@
           "description",
           "commonKnowledge",
           "witcherKnowledge",
-          "notes"
+          "notes",
+          "playerNotes"
         ]
       }
     },

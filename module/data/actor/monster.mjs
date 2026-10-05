@@ -86,6 +86,8 @@ export class MonsterData extends foundry.abstract.TypeDataModel {
       commonKnowledge: html(),
       witcherKnowledge: html(),
       notes: html(),
+      // Что ведущий открыл игрокам: видно и наблюдателю, и на коротком листе («Ограниченный»)
+      playerNotes: html(),
       source: source()
     };
   }

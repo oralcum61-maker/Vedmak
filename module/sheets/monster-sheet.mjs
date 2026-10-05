@@ -93,6 +93,8 @@ export class MonsterSheet extends VedmakActorSheet {
       context.limitedFacts = [["Рост", system.info.height], ["Вес", system.info.weight]]
         .filter(([, value]) => value).map(([label, value]) => ({ label, value }));
       context.limitedHint = "Что известно о таком существе, ведущий расскажет после проверки знаний.";
+      // Заметки для игроков — то, что ведущий уже открыл
+      if (system.playerNotes) context.limitedNotes = await this.enrich(system.playerNotes);
       return context;
     }
     // Две группы вкладок (с 4.42 — ещё подвкладки «Боя»): Foundry сам готовит вкладки, только когда группа одна
@@ -132,9 +134,10 @@ export class MonsterSheet extends VedmakActorSheet {
       context.abilityRows = rows;
     }
     if (partId === "lore") {
-      const [description, common, witcher, notes] = await Promise.all([system.description, system.commonKnowledge,
-        system.witcherKnowledge, system.notes].map(html => this.enrich(html)));
-      Object.assign(context, { enrichedDescription: description, enrichedCommon: common, enrichedWitcher: witcher, enrichedNotes: notes });
+      const [description, common, witcher, notes, playerNotes] = await Promise.all([system.description, system.commonKnowledge,
+        system.witcherKnowledge, this.actor.isOwner ? system.notes : "", system.playerNotes].map(html => this.enrich(html)));
+      Object.assign(context, { enrichedDescription: description, enrichedCommon: common, enrichedWitcher: witcher, enrichedNotes: notes,
+        enrichedPlayerNotes: playerNotes });
       // Добыча: ссылка на предмет компендиума тянется мышью на лист героя. Ссылку строим сами —
       // без обогащения HTML на каждую строку
       context.loot = system.loot.map((l, index) => ({

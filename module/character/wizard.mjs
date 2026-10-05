@@ -1237,7 +1237,9 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   await actor.update({
     "system.hp.value": actor.system.hp.max,
     "system.sta.value": actor.system.sta.max,
-    "system.luck.value": actor.system.luck.max
+    "system.luck.value": actor.system.luck.max,
+    // Высший вампир начинает с полными Очками Крови (решение автора, 05.10)
+    ...(actor.system.blood?.enabled ? { "system.blood.value": actor.system.blood.max } : {})
   });
 
   // «Внимание к деталям» гнома: три навыка Ремесла на выбор

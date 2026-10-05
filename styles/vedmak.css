@@ -2265,6 +2265,9 @@
 .vedmak .vd-limited .facts dt { color: var(--vd-text-dim); }
 .vedmak .vd-limited .facts dd { margin: 0; }
 .vedmak .vd-limited .appearance { margin: 0; white-space: pre-line; line-height: 1.4; }
+.vedmak .vd-limited .player-notes { line-height: 1.4; max-height: 14rem; overflow-y: auto; }
+.vedmak .vd-limited .player-notes > :first-child { margin-top: 0; }
+.vedmak .vd-limited .player-notes > :last-child { margin-bottom: 0; }
 
 /* ------------------------- Подсказки и курсор ------------------------- */
 

@@ -64,17 +64,26 @@
   </div>
 
   <div class="vd-panel editor-panel">
-    <h3>Народные поверья <label class="inline">СЛ Образования <input type="number" name="system.knowledge.commonDC" value="{{system.knowledge.commonDC}}"></label></h3>
+    <h3>Народные поверья{{#if owner}} <label class="inline">СЛ Образования <input type="number" name="system.knowledge.commonDC" value="{{system.knowledge.commonDC}}"></label>{{/if}}</h3>
     {{formInput systemFields.commonKnowledge value=system.commonKnowledge enriched=enrichedCommon toggled=true}}
   </div>
 
   <div class="vd-panel editor-panel">
-    <h3>Ведьмачьи знания <label class="inline">СЛ Монстрологии <input type="number" name="system.knowledge.witcherDC" value="{{system.knowledge.witcherDC}}"></label></h3>
+    <h3>Ведьмачьи знания{{#if owner}} <label class="inline">СЛ Монстрологии <input type="number" name="system.knowledge.witcherDC" value="{{system.knowledge.witcherDC}}"></label>{{/if}}</h3>
     {{formInput systemFields.witcherKnowledge value=system.witcherKnowledge enriched=enrichedWitcher toggled=true}}
   </div>
 
   <div class="vd-panel editor-panel">
+    <h3>Заметки для игроков</h3>
+    {{#if owner}}<p class="hint">Их видят все, кому виден лист, — и на коротком листе («Ограниченный»).</p>{{/if}}
+    {{formInput systemFields.playerNotes value=system.playerNotes enriched=enrichedPlayerNotes toggled=true}}
+  </div>
+
+  {{!-- Заметки ведущего и СЛ знаний — только владельцу (ведущему): наблюдатель-игрок их не видит --}}
+  {{#if owner}}
+  <div class="vd-panel editor-panel">
     <h3>Заметки ведущего</h3>
     {{formInput systemFields.notes value=system.notes enriched=enrichedNotes toggled=true}}
   </div>
+  {{/if}}
 </section>
