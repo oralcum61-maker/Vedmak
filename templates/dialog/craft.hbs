@@ -44,11 +44,11 @@
 
     {{#if abilities.length}}
     <div class="dlg-group craft-abilities">
-      <span class="dlg-label">СПОСОБНОСТИ <span class="dim">· отдельная проверка Рем + способность после удачного изготовления</span></span>
+      <span class="dlg-label">СПОСОБНОСТИ <span class="dim">· проверка Рем + способность после успеха</span></span>
       {{#each abilities}}
       <label class="plate">
         <input type="checkbox" name="ab.{{key}}" {{#if mod}}data-mod="{{mod}}"{{/if}}>
-        <span class="plate-text"><b>{{label}}</b> — {{text}}</span>
+        <span class="plate-text"><b>{{label}}</b><small>{{text}}</small></span>
         <b class="plate-value">{{value}}</b>
       </label>
       {{#if targets}}

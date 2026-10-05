@@ -61,6 +61,8 @@ export const WEAPON_EFFECTS = {
   burning:         { label: "Горение", param: "%" },
   freeze:          { label: "Замораживание", param: "%" },
   staggering:      { label: "Ошеломление", param: "%" },
+  // Шанс дезориентировать сразу, без испытания (хвост золотого дракона, руна Триглава «Офира и Зеррикании»)
+  disorient:       { label: "Дезориентация", param: "%" },
   charge:          { label: "Разбег" },
   bladeCatcher:    { label: "Ловящий лезвия" },
   calculatedReload: { label: "Расчётная перезарядка" },

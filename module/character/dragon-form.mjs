@@ -27,7 +27,7 @@ function formWeapons(level) {
     { name: "Когти (Драконья форма)", img: "icons/creatures/claws/claw-talons-glowing-orange.webp", damage: `${clawDice}d6`,
       types: ["slashing"], effects: [{ key: "bleeding", value: `${25 + (lv(6) ? 15 : 0)}%` }], speed: 2, text: "Когти дракона: две атаки за действие." },
     { name: "Хвост (Драконья форма)", img: "icons/creatures/abilities/tail-strike-bone-orange.webp", damage: "6d6",
-      types: ["bludgeoning"], effects: [], speed: 1, text: "Удар хвостом: дезориентирует с вероятностью 40% (бросок ведущего)." }
+      types: ["bludgeoning"], effects: [{ key: "disorient", value: "40%" }], speed: 1, text: "Удар хвостом: дезориентирует с вероятностью 40%." }
   ];
 }
 

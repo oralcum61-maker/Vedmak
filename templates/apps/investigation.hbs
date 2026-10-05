@@ -1,107 +1,138 @@
+{{!-- Расследования («Журнал ведьмака», стр. 145–151; PLAN 4.92, облик — 4.98): слева папка дел, справа дело —
+      цель и медальон оставшейся Сложности, улики карточками, Фокус участников, подсказка и помеха. --}}
 <section class="investigation">
-  {{!-- Список тайн: ведущий видит все (скрытые — приглушённо), игрок — открытые --}}
   <aside class="inv-list">
+    <span class="cap">Дела</span>
     {{#each list}}
     <a class="inv-item{{#if selected}} active{{/if}}{{#if hidden}} hidden{{/if}}{{#if solved}} solved{{/if}}" data-action="select" data-id="{{id}}">
       <span class="goal">{{goal}}</span>
-      <span class="meter"><span class="fill" style="width: {{pct}}%"></span></span>
+      <span class="inv-item-foot">
+        <span class="meter" data-tooltip="Раскрыто на {{pct}}%"><span class="fill" style="width: {{pct}}%"></span></span>
+        {{#if solved}}<i class="fa-solid fa-check" data-tooltip="Раскрыта"></i>{{else if hidden}}<i class="fa-solid fa-eye-slash" data-tooltip="Игроки не видят"></i>{{/if}}
+      </span>
     </a>
     {{else}}
-    <p class="hint">{{#if gm}}Тайн пока нет.{{else}}Ведущий ещё не открыл ни одной тайны.{{/if}}</p>
+    <p class="hint">{{#if gm}}Дел пока нет.{{else}}Ведущий ещё не открыл ни одного дела.{{/if}}</p>
     {{/each}}
-    {{#if gm}}<button type="button" class="go-btn" data-action="addMystery"><i class="fa-solid fa-plus"></i> Новая тайна</button>{{/if}}
+    {{#if gm}}<button type="button" class="inv-add" data-action="addMystery"><i class="fa-solid fa-plus"></i> Новая тайна</button>{{/if}}
   </aside>
 
   <div class="inv-body">
     {{#if mystery}}
-    <div class="vd-panel inv-head">
-      {{#if gm}}
-      <input type="text" class="goal-input" data-field="goal" value="{{mystery.goal}}" placeholder="Цель: кто убил бургомистра?">
-      <div class="inv-row">
-        <label>Сложность <select data-field="difficulty">{{selectOptions difficulties selected=mystery.difficulty}}</select></label>
-        <label class="check"><input type="checkbox" data-field="visible" {{checked mystery.visible}}> Видна игрокам</label>
-        <label class="check"><input type="checkbox" data-field="solved" {{checked mystery.solved}}> Раскрыта</label>
-        <a class="mini danger" data-action="deleteMystery" data-tooltip="Удалить тайну"><i class="fa-solid fa-trash"></i></a>
-      </div>
-      {{else}}
-      <h2 class="goal">{{mystery.goal}}</h2>
-      <div class="inv-row"><span class="cap">{{mystery.difficultyLabel}}</span>{{#if mystery.solved}}<span class="ok-inline">Тайна раскрыта</span>{{/if}}</div>
-      {{/if}}
-      <div class="complexity">
-        <span class="cap">Сложность</span>
-        <span class="bar"><span class="fill" style="width: {{mystery.complexityPct}}%"></span></span>
+    <header class="inv-head">
+      <div class="inv-head-main">
         {{#if gm}}
-        <input type="number" data-field="complexity.value" data-number value="{{mystery.complexity.value}}" min="0">
-        <span class="max">/ <input type="number" data-field="complexity.max" data-number value="{{mystery.complexity.max}}" min="1"></span>
+        <input type="text" class="goal-input" data-field="goal" value="{{mystery.goal}}" placeholder="Цель: кто убил бургомистра?" aria-label="Цель расследования">
         {{else}}
-        <b>{{mystery.complexity.value}}</b><span class="max">/ {{mystery.complexity.max}}</span>
+        <h2 class="goal">{{mystery.goal}}</h2>
+        {{/if}}
+        <div class="inv-meta">
+          {{#if gm}}
+          <select class="inv-select" data-field="difficulty" aria-label="Сложность тайны">{{selectOptions difficulties selected=mystery.difficulty}}</select>
+          <label class="inv-toggle" data-tooltip="Видна игрокам"><input type="checkbox" data-field="visible" {{checked mystery.visible}}><span><i class="fa-solid fa-eye"></i> Игрокам</span></label>
+          <label class="inv-toggle ok" data-tooltip="Тайна раскрыта"><input type="checkbox" data-field="solved" {{checked mystery.solved}}><span><i class="fa-solid fa-check"></i> Раскрыта</span></label>
+          <a class="inv-icon danger" data-action="deleteMystery" data-tooltip="Удалить тайну" aria-label="Удалить тайну"><i class="fa-solid fa-trash"></i></a>
+          {{else}}
+          <span class="inv-tag">{{mystery.difficultyLabel}}</span>
+          {{#if mystery.solved}}<span class="inv-stamp ok">Тайна раскрыта</span>{{/if}}
+          {{/if}}
+        </div>
+        {{#if gm}}
+        <label class="inv-deadline"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
+          <input type="text" data-field="deadline" value="{{mystery.deadline}}" placeholder="Срок — «тикающие часы»: до суда три дня" aria-label="Срок"></label>
+        {{else if mystery.deadline}}
+        <p class="inv-deadline"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> {{mystery.deadline}}</p>
         {{/if}}
       </div>
-      {{#if gm}}
-      <label class="line">Срок <input type="text" data-field="deadline" value="{{mystery.deadline}}" placeholder="«Тикающие часы»: до суда — три дня"></label>
-      {{else if mystery.deadline}}<p class="deadline"><i class="fa-solid fa-hourglass-half"></i> {{mystery.deadline}}</p>{{/if}}
-    </div>
+      <div class="inv-complexity" data-tooltip="Сложность: сколько ещё осталось разгадать">
+        {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=mystery.complexity.value cls="lg blood"}}
+        <span class="cap">Сложность</span>
+        {{#if gm}}
+        <span class="inv-cx-edit">
+          <input type="number" data-field="complexity.value" data-number value="{{mystery.complexity.value}}" min="0" aria-label="Осталось Сложности">
+          <span class="dim">из</span>
+          <input type="number" data-field="complexity.max" data-number value="{{mystery.complexity.max}}" min="1" aria-label="Сложность всего">
+        </span>
+        {{else}}
+        <span class="dim">из {{mystery.complexity.max}}</span>
+        {{/if}}
+      </div>
+    </header>
+    <div class="inv-progress" aria-hidden="true"><span class="fill" style="width: {{mystery.complexityPct}}%"></span></div>
 
-    <div class="vd-panel inv-clues">
+    <section class="inv-sec">
       <div class="group-head"><span class="bronze-tag">Улики</span><span class="rule"></span>
-        <span class="count">{{mystery.found}} / {{mystery.clues.length}}</span>
-        {{#if gm}}<a class="mini" data-action="addClue" data-tooltip="Добавить улику"><i class="fa-solid fa-plus"></i></a>{{/if}}
+        <span class="count">{{mystery.found}} из {{mystery.clues.length}}</span>
+        {{#if gm}}<a class="inv-icon" data-action="addClue" data-tooltip="Добавить улику" aria-label="Добавить улику"><i class="fa-solid fa-plus"></i></a>{{/if}}
       </div>
       {{#each mystery.clues}}
-      <div class="clue{{#if found}} found{{/if}}{{#if damaged}} damaged{{/if}}{{#unless ../gm}} player{{/unless}}" data-clue-id="{{id}}">
+      <article class="clue{{#if found}} found{{/if}}{{#if damaged}} damaged{{/if}}{{#unless ../gm}} player{{/unless}}" data-clue-id="{{id}}">
+        <div class="clue-top">
+          {{#if ../gm}}
+          <input type="text" class="name" data-clue="{{id}}" data-field="name" value="{{name}}" aria-label="Название улики">
+          {{else}}
+          <span class="name">{{name}}</span>
+          {{/if}}
+          {{#if found}}<span class="inv-stamp ok">Разгадана</span>{{else if damaged}}<span class="inv-stamp bad">Повреждена · −5</span>{{/if}}
+          {{#unless ../gm}}{{#unless found}}{{#if canCheck}}<button type="button" class="go-btn" data-action="check">Проверить</button>{{/if}}{{/unless}}{{/unless}}
+        </div>
         {{#if ../gm}}
-        <input type="text" class="name" data-clue="{{id}}" data-field="name" value="{{name}}">
-        <select data-clue="{{id}}" data-field="type">{{selectOptions ../clueTypes selected=type}}</select>
-        <label>СЛ <input type="number" data-clue="{{id}}" data-field="dc" data-number value="{{dc}}" min="1"></label>
-        <select data-clue="{{id}}" data-field="obf" data-number>{{selectOptions ../obfuscations selected=obf}}</select>
-        <label class="check" data-tooltip="Видна игрокам"><input type="checkbox" data-clue="{{id}}" data-field="revealed" {{checked revealed}}> <i class="fa-solid fa-eye"></i></label>
-        <label class="check" data-tooltip="Разгадана"><input type="checkbox" data-clue="{{id}}" data-field="found" {{checked found}}> <i class="fa-solid fa-check"></i></label>
-        <a class="mini danger" data-action="deleteClue" data-tooltip="Удалить улику"><i class="fa-solid fa-xmark"></i></a>
-        <span class="clue-hint">{{example}} · {{skillsLabel}}{{#if damaged}} · повреждена (−5){{/if}}</span>
+        <div class="clue-ctl">
+          <select class="inv-select" data-clue="{{id}}" data-field="type" aria-label="Вид улики">{{selectOptions ../clueTypes selected=type}}</select>
+          <label class="inv-num"><span class="cap">СЛ</span><input type="number" data-clue="{{id}}" data-field="dc" data-number value="{{dc}}" min="1"></label>
+          <select class="inv-select" data-clue="{{id}}" data-field="obf" data-number aria-label="Запутанность">{{selectOptions ../obfuscations selected=obf}}</select>
+          <span class="clue-flags">
+            <label class="inv-toggle icon" data-tooltip="Видна игрокам"><input type="checkbox" data-clue="{{id}}" data-field="revealed" {{checked revealed}}><span><i class="fa-solid fa-eye"></i></span></label>
+            <label class="inv-toggle icon ok" data-tooltip="Разгадана"><input type="checkbox" data-clue="{{id}}" data-field="found" {{checked found}}><span><i class="fa-solid fa-check"></i></span></label>
+            <a class="inv-icon danger" data-action="deleteClue" data-tooltip="Удалить улику" aria-label="Удалить улику"><i class="fa-solid fa-xmark"></i></a>
+          </span>
+        </div>
+        <p class="clue-hint">{{example}} <span class="dim">· {{skillsLabel}}</span></p>
         {{else}}
-        <span class="name">{{name}}</span>
-        <span class="type">{{typeLabel}}</span>
-        <span class="clue-hint">{{skillsLabel}}{{#if damaged}} · повреждена (−5){{/if}}</span>
+        <p class="clue-hint"><span class="type">{{typeLabel}}</span> <span class="dim">· {{skillsLabel}}</span></p>
         {{/if}}
-        {{#if found}}<span class="state ok-inline">Разгадана</span>
-        {{else if canCheck}}<button type="button" class="go-btn" data-action="check">Проверить</button>{{/if}}
-      </div>
+      </article>
       {{else}}
       <p class="hint">{{#if gm}}Добавьте улики: место, тело, свидетели, следы.{{else}}Ведущий ещё не открыл улик.{{/if}}</p>
       {{/each}}
-    </div>
+    </section>
 
-    <div class="vd-panel inv-people">
+    <section class="inv-sec inv-people">
       <div class="group-head"><span class="bronze-tag">Фокус</span><span class="rule"></span>
-        {{#if gm}}<a class="mini" data-action="addPlayers" data-tooltip="Добавить персонажей игроков и выделенные токены персонажей"><i class="fa-solid fa-user-plus"></i></a>{{/if}}
+        {{#if gm}}<a class="inv-icon" data-action="addPlayers" data-tooltip="Добавить персонажей игроков и выделенные токены персонажей" aria-label="Добавить участников"><i class="fa-solid fa-user-plus"></i></a>{{/if}}
       </div>
       {{#each mystery.participants}}
       <div class="person{{#if empty}} empty{{/if}}" data-uuid="{{uuid}}">
-        <img src="{{img}}" alt="">
-        <span class="name">{{name}}</span>
+        <span class="person-pic"><img src="{{img}}" alt=""></span>
+        <span class="name">{{name}}{{#if empty}} <em>· Фокус исчерпан</em>{{/if}}</span>
         <span class="bar"><span class="fill" style="width: {{pct}}%"></span></span>
-        {{#if ../gm}}<input type="number" class="focus-input" value="{{value}}" min="0" max="{{max}}">{{else}}<b>{{value}}</b>{{/if}}<span class="max">/ {{max}}</span>
-        {{#if owner}}<a class="mini" data-action="sleep" data-tooltip="Сон (6+ часов): Фокус + Воля, +1 при Дедукции 5+, +2 при 8+"><i class="fa-solid fa-bed"></i></a>{{/if}}
-        {{#if ../gm}}<a class="mini danger" data-action="removeParticipant" data-tooltip="Убрать из расследования"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+        <span class="person-val">{{#if ../gm}}<input type="number" class="focus-input" value="{{value}}" min="0" max="{{max}}" aria-label="Фокус">{{else}}<b>{{value}}</b>{{/if}}<span class="dim">/ {{max}}</span></span>
+        <span class="person-act">
+          {{#if owner}}<a class="inv-icon" data-action="sleep" data-tooltip="Сон (6+ часов): Фокус + Воля, +1 при Дедукции 5+, +2 при 8+" aria-label="Сон"><i class="fa-solid fa-bed"></i></a>{{/if}}
+          {{#if ../gm}}<a class="inv-icon danger" data-action="removeParticipant" data-tooltip="Убрать из расследования" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+        </span>
       </div>
       {{else}}
       <p class="hint">{{#if gm}}Добавьте участников — помехи бьют по их Фокусу.{{else}}Участников добавляет ведущий.{{/if}}</p>
       {{/each}}
       <p class="hint">Фокус = (Воля + Инт) / 2 × 3. Провал проверки улики и помехи отнимают Фокус; при 0 улики не проверить до сна.</p>
-    </div>
+    </section>
 
-    <div class="inv-actions">
-      {{#if actorName}}<span class="hint">Проверяет: {{actorName}}</span>{{/if}}
-      <button type="button" class="go-btn" data-action="hint" data-tooltip="Дедукция СЛ 15: при успехе ведущий даёт подсказку; Фокус −1d6 в любом случае">Подсказка</button>
-      {{#if gm}}<button type="button" class="go-btn" data-action="obstacle" data-tooltip="{{mystery.obstaclesHint}}">Помеха</button>{{/if}}
-    </div>
+    <footer class="inv-actions">
+      {{#if actorName}}<span class="hint">Проверяет: <b>{{actorName}}</b></span>{{/if}}
+      <button type="button" class="go-btn steel" data-action="hint" data-tooltip="Дедукция СЛ 15: при успехе ведущий даёт подсказку; Фокус −1d6 в любом случае">Подсказка</button>
+      {{#if gm}}<button type="button" class="go-btn blood" data-action="obstacle" data-tooltip="{{mystery.obstaclesHint}}">Помеха</button>{{/if}}
+    </footer>
     {{#if gm}}
-    <label class="notes">Заметки ведущего (разгадка, кто есть кто)
+    <label class="inv-notes"><span class="cap">Заметки ведущего — разгадка, кто есть кто</span>
       <textarea data-field="notes" rows="3">{{mystery.notes}}</textarea>
     </label>
     {{/if}}
     {{else}}
-    <p class="hint">Выберите тайну слева.</p>
+    <div class="inv-empty">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <p>{{#if gm}}Заведите первое дело кнопкой «Новая тайна» слева.{{else}}Выберите дело слева.{{/if}}</p>
+    </div>
     {{/if}}
   </div>
 </section>

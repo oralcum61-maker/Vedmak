@@ -12,6 +12,7 @@ import {
 } from "./common.mjs";
 import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 import { markDead } from "./saves.mjs";
+import { implantStatusBonus } from "../config/crafting.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
 
@@ -170,6 +171,8 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const critLocBonus = attackerActor?.system.fx?.critLocation ?? 0;
   const elementalBonus = attackerActor?.system.fx?.statusChance ?? 0;
   const ELEMENTAL = ["burning", "frozen", "prone"];
+  // Вживлённые руны «Офира и Зеррикании» (стр. 86): +5/10/15 % к шансу эффекта атак оружием, даже если у оружия его нет
+  const runeBonus = !spell && attackerActor ? implantStatusBonus(attackerActor.items) : {};
 
   // Часть тела
   let locRoll = null;
@@ -326,7 +329,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   // Эффекты оружия: шанс в % (стр. 72, 161)
   const effects = [];
   for (const [key, status] of Object.entries(EFFECT_STATUS)) {
-    let chance = effChance(key);
+    let chance = Math.min(100, effChance(key) + (runeBonus[key] ?? 0));
     if (!chance) continue;
     if (ELEMENTAL.includes(status)) chance = Math.min(100, chance + elementalBonus);
     const needsWound = key === "bleeding" || key === "poison";
@@ -336,6 +339,16 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     rolls.push(r);
     const success = !immuneTo && r.total <= chance && (!needsWound || final > 0);
     effects.push({ key, status, label: CONFIG.statusEffects[status]?.name ?? key, chance, roll: r.total, success, immune: !!immuneTo });
+  }
+
+  // Шанс дезориентировать сразу (хвост дракона, руна Триглава) — в отличие от «Дезориентирующего» без испытания
+  const disorient = Math.min(100, effChance("disorient") + (runeBonus.disorient ?? 0));
+  if (disorient) {
+    const immuneTo = tsys.immunities?.includes?.(STATUS_RESIST_KEY.disoriented);
+    const r = await new Roll("1d100").evaluate();
+    rolls.push(r);
+    effects.push({ key: "disorient", status: "disoriented", label: CONFIG.statusEffects.disoriented?.name ?? "Дезориентация",
+      chance: disorient, roll: r.total, success: !immuneTo && r.total <= disorient, immune: !!immuneTo });
   }
 
   // Статусы магии: шанс уже посчитан при сотворении (с учётом вложенной Вын)

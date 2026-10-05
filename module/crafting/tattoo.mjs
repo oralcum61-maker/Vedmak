@@ -4,10 +4,15 @@
 // каждая рука и нога по 3. Книга не называет навык нанесения — берём Искусство.
 
 import { TATTOO_LOCATIONS, TATTOO_TIERS } from "../config/items.mjs";
-import { postCard } from "../util.mjs";
+import { postCard, renderTemplate } from "../util.mjs";
 
 const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 const TATTOO_SKILL = "fineArts";
+// Кованые значки частей тела в окне (assets/glyphs/part-*.svg): спина — тем же торсом, левые конечности — зеркально
+const PLACE_GLYPHS = {
+  head: { glyph: "head" }, torso: { glyph: "torso" }, back: { glyph: "torso", flip: true },
+  rightArm: { glyph: "arm" }, leftArm: { glyph: "arm", flip: true }, rightLeg: { glyph: "leg" }, leftLeg: { glyph: "leg", flip: true }
+};
 
 /** Сколько татуировок уже на каждом месте тела. */
 export function tattooSlots(actor) {
@@ -28,21 +33,29 @@ export async function applyTattoo(actor, item) {
   const free = Object.entries(TATTOO_LOCATIONS).filter(([k, l]) => used[k] < l.max);
   if (!free.length) return ui.notifications.warn(`${actor.name}: места для татуировок не осталось.`);
   // Наносит сам персонаж или другой, которым владеет пользователь («Вы также можете набить татуировку друзьям»)
-  const artists = [actor, ...game.actors.filter(a => a.type === "character" && a.isOwner && a !== actor)];
+  // У ведущего «свои» — все персонажи: сам персонаж и пятеро лучших в Искусстве, чтобы окно не разрасталось
+  const artBase = a => a.system.skills?.[TATTOO_SKILL]?.base ?? 0;
+  const artists = [actor, ...game.actors.filter(a => a.type === "character" && a.isOwner && a !== actor)
+    .sort((a, b) => artBase(b) - artBase(a)).slice(0, 5)];
   const dc = (t.dc || 12) + (t.tries || 0);
-  const content = `<div class="vedmak-roll-dialog">
-    <p><b>${esc(item.name)}</b> — ${esc(TATTOO_TIERS[t.tier] ?? "")}. Подвиг: ${esc(t.achievement)}.</p>
-    <div class="form-group"><label>Место</label><select name="location">${free.map(([k, l]) =>
-      `<option value="${k}">${esc(l.label)} (${used[k]} / ${l.max})</option>`).join("")}</select></div>
-    <div class="form-group"><label>Кто наносит</label><select name="artist">${artists.map(a =>
-      `<option value="${a.id}">${esc(a.name)}</option>`).join("")}</select></div>
-    <p class="hint">Искусство против СЛ ${dc}${t.tries ? ` (книжная ${t.dc} + ${t.tries} за прежние неудачи)` : ""}. Нужны набор для татуировки и чернила;
-      при провале чернила потрачены, следующая попытка — СЛ +1.</p>
-  </div>`;
+  // Окно (PLAN 4.98): место — кованой частью тела с занятыми местами, мастер — жетоном с основой Искусства
+  const firstFree = free[0]?.[0];
+  const content = await renderTemplate("systems/vedmak/templates/dialog/tattoo.hbs", {
+    img: item.img, name: item.name, tier: TATTOO_TIERS[t.tier] ?? "", achievement: t.achievement, dc, tries: t.tries || 0,
+    effect: item.system.effect,
+    places: Object.entries(TATTOO_LOCATIONS).map(([key, l]) => ({
+      key, label: l.label, used: used[key], max: l.max, full: used[key] >= l.max, selected: key === firstFree, ...PLACE_GLYPHS[key]
+    })),
+    artists: artists.map((a, n) => ({ id: a.id, name: a.name, base: a.system.skills?.[TATTOO_SKILL]?.base ?? 0, selected: n === 0 }))
+  });
   const choice = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Татуировка: ${item.name}` }, classes: ["vedmak", "vedmak-dialog"], content,
+    window: { title: `Татуировка: ${item.name}`, icon: "fa-solid fa-pen-nib" },
+    classes: ["vedmak", "vedmak-dialog", "check-dialog", "tattoo-window"], position: { width: 520 }, content,
     buttons: [{ action: "ok", label: "Нанести", default: true,
-      callback: (e, b) => ({ location: b.form.elements.location.value, artist: b.form.elements.artist.value }) },
+      callback: (e, b) => ({
+        location: b.form.querySelector('[name="location"]:checked')?.value ?? firstFree,
+        artist: b.form.querySelector('[name="artist"]:checked')?.value ?? actor.id
+      }) },
       { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });

@@ -1,0 +1,74 @@
+{{!-- Вживление руны или глифа («Офир и Зеррикания», стр. 84–86; module/crafting/implant.mjs): что вживить — плиткой,
+      размер камня, маг. СЛ, эффект и мутацию выбранного пересчитывает окно (data-implant-*). --}}
+<div class="vedmak-roll-dialog implant-dialog" data-rune-dc="{{runeDc}}" data-glyph-dc="{{glyphDc}}" data-witcher="{{#if witcher}}1{{/if}}">
+  <header class="dlg-head">
+    <span class="dlg-frame"><img src="{{subject.img}}" alt=""></span>
+    <div class="dlg-ident">
+      <span class="dlg-title">Вживление: {{subject.name}}</span>
+      <span class="dlg-sub">Целый день работы, маг тратит всю Вын · вживлено {{count}} из {{limit}}</span>
+    </div>
+    <div class="dlg-base" data-implant-dc>
+      {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=runeDc cls="md violet"}}
+      <span class="cap">СЛ</span><span class="cap dim" data-implant-dc-cap>Тел и Воля</span>
+    </div>
+  </header>
+
+  <div class="dlg-body">
+    <div class="dlg-group">
+      <span class="dlg-label">РУНА</span>
+      <div class="imp-grid">
+        {{#each runes}}
+        <label class="imp-opt" data-tooltip="{{label}}">
+          <input type="radio" name="what" value="rune.{{key}}" data-kind="rune" data-fx-small="{{fx.small}}" data-fx-normal="{{fx.normal}}" data-fx-large="{{fx.large}}" data-minor="{{minor}}" {{checked selected}}>
+          <span><img src="{{img}}" alt=""><span class="imp-name">{{label}}</span></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+    <div class="dlg-group">
+      <span class="dlg-label">ГЛИФ ЗНАКА <span class="dim">· даёт заклинание «Вживлённый глиф»</span></span>
+      <div class="imp-grid">
+        {{#each glyphs}}
+        <label class="imp-opt glyph" data-tooltip="{{label}}">
+          <input type="radio" name="what" value="glyph.{{key}}" data-kind="glyph" data-fx-small="{{fx}}" data-fx-normal="{{fx}}" data-fx-large="{{fx}}" data-minor="{{minor}}">
+          <span><img src="{{img}}" alt=""><span class="imp-name">{{label}}</span></span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="imp-preview">
+      <span class="cap">ДАСТ</span>
+      <b data-implant-fx></b>
+      <span class="imp-minor" data-implant-minor></span>
+    </div>
+
+    <div class="dlg-group" data-implant-tiers>
+      <span class="dlg-label">РУННЫЙ КАМЕНЬ <span class="dim">· крупнее — сильнее и сложнее</span></span>
+      <div class="opt-row">
+        {{#each tiers}}
+        <label class="chip"><input type="radio" name="tier" value="{{key}}" {{checked selected}}><span>{{label}}{{#if dc}} <b>СЛ +{{dc}}</b>{{/if}}</span></label>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="dlg-group">
+      <span class="dlg-label">МАГ <span class="dim">· Воля + Сотворение заклинаний</span></span>
+      <div class="opt-row">
+        {{#each mages}}
+        <label class="chip"><input type="radio" name="mage" value="{{id}}" {{checked selected}}><span>{{name}} <b>{{base}}</b></span></label>
+        {{/each}}
+      </div>
+    </div>
+
+    <label class="plate" data-implant-spend>
+      <input type="checkbox" name="spend" checked>
+      <span class="plate-text">Израсходовать рунный камень из сумки, если он есть</span>
+      <b class="plate-value">«Руна «…»»</b>
+    </label>
+  </div>
+
+  <footer class="dlg-total">
+    <span class="tot-hint" data-implant-hint>Провал — вживлено, но с второй мутацией</span>
+  </footer>
+</div>

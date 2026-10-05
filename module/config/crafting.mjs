@@ -116,22 +116,24 @@ export const IMPLANT_TIERS = { small: { label: "Малый", dc: 0 }, normal: { 
 const RUNE_IMG = n => `systems/vedmak/assets/fan/enhancements/rune-${n}.webp`;
 const tiers = (target, a, b, c) => ({ small: [{ target, value: a }], normal: [{ target, value: b }], large: [{ target, value: c }] });
 const chance = label => ({ small: `${label} +5 %`, normal: `${label} +10 %`, large: `${label} +15 %` });
+/** Прибавка к шансу эффекта по размеру камня (руны состояний). */
+export const IMPLANT_CHANCE = { small: 5, normal: 10, large: 15 };
 export const IMPLANT_RUNES = {
   chernobog: { label: "Чернобог", img: RUNE_IMG("chernobog"), mods: tiers("bonus.meleeDamage", 1, 2, 3), bonus: "к урону в ближнем бою",
     minor: "Мышцы деформированы, вены светятся ярко-красным" },
   perun: { label: "Перун", img: RUNE_IMG("perun"), mods: tiers("stats.spd", 1, 2, 3), bonus: "к Скор", minor: "Постоянная трупная худоба" },
   veles: { label: "Велес", img: RUNE_IMG("veles"), mods: tiers("bonus.vigor", 1, 2, 3), bonus: "к Энергии",
     minor: "Хаос оставил чёрную дорожку по венам" },
-  dazhbog: { label: "Даждьбог", img: RUNE_IMG("dazhbog"), text: chance("Горение"), minor: "Тело не остывает ниже 45 °C" },
-  stribog: { label: "Стрибог", img: RUNE_IMG("stribog"), text: chance("Ошеломление"),
+  dazhbog: { label: "Даждьбог", img: RUNE_IMG("dazhbog"), text: chance("Горение"), effect: "burning", minor: "Тело не остывает ниже 45 °C" },
+  stribog: { label: "Стрибог", img: RUNE_IMG("stribog"), text: chance("Ошеломление"), effect: "staggering",
     minor: "Тело обрастает густыми волосами, кожа на руках и ногах толстеет, как у слона" },
-  zorya: { label: "Зоря", img: RUNE_IMG("zoria"), text: chance("Замораживание"), minor: "Тело не согревается выше 18 °C" },
-  devana: { label: "Девана", img: RUNE_IMG("devana"), text: chance("Кровотечение"),
+  zorya: { label: "Зоря", img: RUNE_IMG("zoria"), text: chance("Замораживание"), effect: "freeze", minor: "Тело не согревается выше 18 °C" },
+  devana: { label: "Девана", img: RUNE_IMG("devana"), text: chance("Кровотечение"), effect: "bleeding",
     minor: "Руки твёрдые, как камень; сильная тяга к сырому мясу" },
-  marena: { label: "Марена", img: RUNE_IMG("morana"), text: chance("Отравление"), minor: "Вены и кровь зеленеют" },
+  marena: { label: "Марена", img: RUNE_IMG("morana"), text: chance("Отравление"), effect: "poison", minor: "Вены и кровь зеленеют" },
   svarog: { label: "Сварог", img: RUNE_IMG("svarog"), accuracy: { small: 1, normal: 2, large: 3 }, bonus: "к Точности (броски атаки)",
     minor: "Орлиные глаза с белым третьим веком" },
-  triglav: { label: "Триглав", img: RUNE_IMG("triglav"), text: chance("Дезориентирующее"), minor: "Череп странно деформирован" },
+  triglav: { label: "Триглав", img: RUNE_IMG("triglav"), text: chance("Дезориентирующее"), effect: "disorient", minor: "Череп странно деформирован" },
   pirog: { label: "Пирог", img: "icons/magic/symbols/runes-carved-stone-yellow.webp", mods: tiers("bonus.enc", 5, 10, 15), bonus: "к переносимому весу",
     minor: "Огромные плечи выгибают спину, как у огра" },
   tvorog: { label: "Творог", img: "icons/magic/symbols/runes-carved-stone-green.webp", mods: tiers("armor", 1, 2, 3), bonus: "ПБ крепости тела (естественная броня)",
@@ -151,6 +153,22 @@ export const IMPLANT_GLYPHS = {
     minor: "Постоянная обильная испарина: −2 к Эмп", mods: [{ target: "stats.emp", value: -2 }] }
 };
 export const IMPLANT_LIMIT = 2;
+
+/**
+ * Прибавки вживлённых рун к шансам эффектов атак носителя: {burning: 10, …} (ключи — как у эффектов оружия,
+ * `disorient` — дезориентация Триглава). Вторая мутация провала (`extra`) прибавок не даёт.
+ */
+export function implantStatusBonus(items) {
+  const out = {};
+  for (const i of items ?? []) {
+    const imp = i.flags?.vedmak?.implant;
+    if (!imp || imp.extra || imp.kind !== "rune") continue;
+    const rune = IMPLANT_RUNES[imp.key];
+    if (!rune?.effect) continue;
+    out[rune.effect] = (out[rune.effect] ?? 0) + (IMPLANT_CHANCE[imp.tier] ?? 0);
+  }
+  return out;
+}
 
 /** Металлические компоненты — для них нужна кузница (стр. 127). */
 export const METAL_COMPONENTS = ["Сталь", "Железо", "Тёмная сталь", "Тёмное железо", "Махакамская сталь", "Двимерит",
