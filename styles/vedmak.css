@@ -4938,3 +4938,57 @@ body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message) {
   --vd-lift: inset 0 1px 0 rgba(255, 240, 215, .1), inset 0 -1px 0 rgba(0, 0, 0, .55), 0 2px 3px rgba(0, 0, 0, .55);
 }
 body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .metal, .blood) { filter: none !important; }
+
+/* ============================ Расследования ============================
+   Окно «Расследования» («Журнал ведьмака», стр. 145–151, module/apps/investigation-app.mjs): список тайн слева,
+   тайна справа — Сложность шкалой-колодцем, улики строками-пластинами, Фокус участников. */
+.vedmak.investigation-app .window-content { padding: 0; }
+.vedmak .investigation { display: grid; grid-template-columns: 14rem 1fr; height: 100%; min-height: 0; }
+.vedmak .investigation .inv-list { display: flex; flex-direction: column; gap: .3rem; padding: .6rem; overflow-y: auto;
+  border-right: 1px solid rgba(0, 0, 0, .5); box-shadow: inset -1px 0 0 rgba(255, 240, 215, .05); }
+.vedmak .investigation .inv-item { display: flex; flex-direction: column; gap: .25rem; padding: .45rem .55rem; border-radius: 4px;
+  background: var(--vd-plate, #1f2024); box-shadow: var(--vd-lift-sm); cursor: pointer; }
+.vedmak .investigation .inv-item.active { outline: 1px solid var(--vd-silver, #f1ece0); }
+.vedmak .investigation .inv-item.hidden { opacity: .6; }
+.vedmak .investigation .inv-item.solved .goal { text-decoration: line-through; }
+.vedmak .investigation .inv-item .goal { font-family: var(--vd-font-head); font-size: .95rem; line-height: 1.2; }
+.vedmak .investigation :is(.meter, .bar) { position: relative; display: block; height: .45rem; border-radius: 3px;
+  background: rgba(0, 0, 0, .45); box-shadow: var(--vd-sink-sm); overflow: hidden; }
+.vedmak .investigation :is(.meter, .bar) .fill { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #6f7f8c, #c9d2d8); }
+.vedmak .investigation .inv-body { display: flex; flex-direction: column; gap: .6rem; padding: .6rem .8rem; overflow-y: auto; min-height: 0; }
+.vedmak .investigation .inv-head .goal-input { width: 100%; font-family: var(--vd-font-head); font-size: 1.25rem; }
+.vedmak .investigation .inv-head h2.goal { margin: 0; border: 0; font-family: var(--vd-font-head); font-size: 1.35rem; }
+.vedmak .investigation .inv-row { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; margin: .4rem 0; font-size: .82rem; }
+.vedmak .investigation .complexity { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: .5rem; margin: .4rem 0; }
+.vedmak .investigation .complexity .bar { height: .7rem; }
+.vedmak .investigation .complexity .bar .fill { background: linear-gradient(90deg, #7a2a1e, #b8432c); }
+.vedmak .investigation .complexity input { width: 4rem; text-align: center; }
+.vedmak .investigation .complexity b { font-family: var(--vd-font-head); font-size: 1.2rem; }
+.vedmak .investigation .max { color: var(--vd-text-dim); font-size: .82rem; }
+.vedmak .investigation .deadline { margin: .2rem 0 0; color: #d9b06a; font-size: .85rem; }
+.vedmak .investigation .group-head .count { color: var(--vd-text-dim); font-size: .8rem; margin-left: .3rem; }
+.vedmak .investigation .clue { display: grid; grid-template-columns: 1fr auto auto auto auto auto auto; align-items: center; gap: .3rem .5rem;
+  padding: .4rem .5rem; margin-top: .35rem; border-radius: 4px; background: rgba(0, 0, 0, .18); box-shadow: var(--vd-sink-sm); }
+.vedmak .investigation .clue.player { grid-template-columns: 1fr auto auto; }
+.vedmak .investigation .clue .name { font-weight: 600; min-width: 0; }
+.vedmak .investigation .clue .type { color: var(--vd-text-dim); font-size: .82rem; }
+.vedmak .investigation .clue .clue-hint { grid-column: 1 / -1; color: var(--vd-text-dim); font-size: .75rem; }
+.vedmak .investigation .clue input[type=number] { width: 3.4rem; }
+.vedmak .investigation .clue.found { opacity: .75; }
+.vedmak .investigation .clue.damaged .clue-hint { color: #d98a6a; }
+.vedmak .investigation .person { display: grid; grid-template-columns: 1.8rem 9rem 1fr auto auto auto auto; align-items: center; gap: .5rem; margin-top: .35rem; }
+.vedmak .investigation .person img { width: 1.8rem; height: 1.8rem; border-radius: 50%; object-fit: cover; border: 0; }
+.vedmak .investigation .person .bar .fill { background: linear-gradient(90deg, #4e3f78, #8f7cc8); }
+.vedmak .investigation .person.empty .name { color: #d98a6a; }
+.vedmak .investigation .person input { width: 3.4rem; text-align: center; }
+.vedmak .investigation .inv-actions { display: flex; align-items: center; gap: .6rem; justify-content: flex-end; }
+.vedmak .investigation .inv-actions .hint { margin-right: auto; }
+.vedmak .investigation .notes { display: flex; flex-direction: column; gap: .25rem; font-size: .8rem; color: var(--vd-text-dim); }
+.vedmak .investigation .mini.danger:hover { color: #e0604a; }
+.vedmak .bio-tab .focus-line { display: flex; align-items: center; gap: .5rem; }
+.vedmak .bio-tab .focus-line .focus-val b { font-family: var(--vd-font-head); font-size: 1.05rem; }
+#sidebar .directory-header .vd-investigation { flex: 1 0 100%; }
+/* Улика у ведущего: название — своей строкой во всю ширину, настройки — второй строкой */
+.vedmak .investigation .clue:not(.player) { grid-template-columns: auto auto auto auto auto auto 1fr; }
+.vedmak .investigation .clue:not(.player) > input.name { grid-column: 1 / -1; width: 100%; }
+.vedmak .investigation .clue:not(.player) .state, .vedmak .investigation .clue:not(.player) .go-btn { justify-self: end; }

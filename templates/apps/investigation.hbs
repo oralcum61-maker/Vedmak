@@ -1,0 +1,107 @@
+<section class="investigation">
+  {{!-- Список тайн: ведущий видит все (скрытые — приглушённо), игрок — открытые --}}
+  <aside class="inv-list">
+    {{#each list}}
+    <a class="inv-item{{#if selected}} active{{/if}}{{#if hidden}} hidden{{/if}}{{#if solved}} solved{{/if}}" data-action="select" data-id="{{id}}">
+      <span class="goal">{{goal}}</span>
+      <span class="meter"><span class="fill" style="width: {{pct}}%"></span></span>
+    </a>
+    {{else}}
+    <p class="hint">{{#if gm}}Тайн пока нет.{{else}}Ведущий ещё не открыл ни одной тайны.{{/if}}</p>
+    {{/each}}
+    {{#if gm}}<button type="button" class="go-btn" data-action="addMystery"><i class="fa-solid fa-plus"></i> Новая тайна</button>{{/if}}
+  </aside>
+
+  <div class="inv-body">
+    {{#if mystery}}
+    <div class="vd-panel inv-head">
+      {{#if gm}}
+      <input type="text" class="goal-input" data-field="goal" value="{{mystery.goal}}" placeholder="Цель: кто убил бургомистра?">
+      <div class="inv-row">
+        <label>Сложность <select data-field="difficulty">{{selectOptions difficulties selected=mystery.difficulty}}</select></label>
+        <label class="check"><input type="checkbox" data-field="visible" {{checked mystery.visible}}> Видна игрокам</label>
+        <label class="check"><input type="checkbox" data-field="solved" {{checked mystery.solved}}> Раскрыта</label>
+        <a class="mini danger" data-action="deleteMystery" data-tooltip="Удалить тайну"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      {{else}}
+      <h2 class="goal">{{mystery.goal}}</h2>
+      <div class="inv-row"><span class="cap">{{mystery.difficultyLabel}}</span>{{#if mystery.solved}}<span class="ok-inline">Тайна раскрыта</span>{{/if}}</div>
+      {{/if}}
+      <div class="complexity">
+        <span class="cap">Сложность</span>
+        <span class="bar"><span class="fill" style="width: {{mystery.complexityPct}}%"></span></span>
+        {{#if gm}}
+        <input type="number" data-field="complexity.value" data-number value="{{mystery.complexity.value}}" min="0">
+        <span class="max">/ <input type="number" data-field="complexity.max" data-number value="{{mystery.complexity.max}}" min="1"></span>
+        {{else}}
+        <b>{{mystery.complexity.value}}</b><span class="max">/ {{mystery.complexity.max}}</span>
+        {{/if}}
+      </div>
+      {{#if gm}}
+      <label class="line">Срок <input type="text" data-field="deadline" value="{{mystery.deadline}}" placeholder="«Тикающие часы»: до суда — три дня"></label>
+      {{else if mystery.deadline}}<p class="deadline"><i class="fa-solid fa-hourglass-half"></i> {{mystery.deadline}}</p>{{/if}}
+    </div>
+
+    <div class="vd-panel inv-clues">
+      <div class="group-head"><span class="bronze-tag">Улики</span><span class="rule"></span>
+        <span class="count">{{mystery.found}} / {{mystery.clues.length}}</span>
+        {{#if gm}}<a class="mini" data-action="addClue" data-tooltip="Добавить улику"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </div>
+      {{#each mystery.clues}}
+      <div class="clue{{#if found}} found{{/if}}{{#if damaged}} damaged{{/if}}{{#unless ../gm}} player{{/unless}}" data-clue-id="{{id}}">
+        {{#if ../gm}}
+        <input type="text" class="name" data-clue="{{id}}" data-field="name" value="{{name}}">
+        <select data-clue="{{id}}" data-field="type">{{selectOptions ../clueTypes selected=type}}</select>
+        <label>СЛ <input type="number" data-clue="{{id}}" data-field="dc" data-number value="{{dc}}" min="1"></label>
+        <select data-clue="{{id}}" data-field="obf" data-number>{{selectOptions ../obfuscations selected=obf}}</select>
+        <label class="check" data-tooltip="Видна игрокам"><input type="checkbox" data-clue="{{id}}" data-field="revealed" {{checked revealed}}> <i class="fa-solid fa-eye"></i></label>
+        <label class="check" data-tooltip="Разгадана"><input type="checkbox" data-clue="{{id}}" data-field="found" {{checked found}}> <i class="fa-solid fa-check"></i></label>
+        <a class="mini danger" data-action="deleteClue" data-tooltip="Удалить улику"><i class="fa-solid fa-xmark"></i></a>
+        <span class="clue-hint">{{example}} · {{skillsLabel}}{{#if damaged}} · повреждена (−5){{/if}}</span>
+        {{else}}
+        <span class="name">{{name}}</span>
+        <span class="type">{{typeLabel}}</span>
+        <span class="clue-hint">{{skillsLabel}}{{#if damaged}} · повреждена (−5){{/if}}</span>
+        {{/if}}
+        {{#if found}}<span class="state ok-inline">Разгадана</span>
+        {{else if canCheck}}<button type="button" class="go-btn" data-action="check">Проверить</button>{{/if}}
+      </div>
+      {{else}}
+      <p class="hint">{{#if gm}}Добавьте улики: место, тело, свидетели, следы.{{else}}Ведущий ещё не открыл улик.{{/if}}</p>
+      {{/each}}
+    </div>
+
+    <div class="vd-panel inv-people">
+      <div class="group-head"><span class="bronze-tag">Фокус</span><span class="rule"></span>
+        {{#if gm}}<a class="mini" data-action="addPlayers" data-tooltip="Добавить персонажей игроков и выделенные токены персонажей"><i class="fa-solid fa-user-plus"></i></a>{{/if}}
+      </div>
+      {{#each mystery.participants}}
+      <div class="person{{#if empty}} empty{{/if}}" data-uuid="{{uuid}}">
+        <img src="{{img}}" alt="">
+        <span class="name">{{name}}</span>
+        <span class="bar"><span class="fill" style="width: {{pct}}%"></span></span>
+        {{#if ../gm}}<input type="number" class="focus-input" value="{{value}}" min="0" max="{{max}}">{{else}}<b>{{value}}</b>{{/if}}<span class="max">/ {{max}}</span>
+        {{#if owner}}<a class="mini" data-action="sleep" data-tooltip="Сон (6+ часов): Фокус + Воля, +1 при Дедукции 5+, +2 при 8+"><i class="fa-solid fa-bed"></i></a>{{/if}}
+        {{#if ../gm}}<a class="mini danger" data-action="removeParticipant" data-tooltip="Убрать из расследования"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+      </div>
+      {{else}}
+      <p class="hint">{{#if gm}}Добавьте участников — помехи бьют по их Фокусу.{{else}}Участников добавляет ведущий.{{/if}}</p>
+      {{/each}}
+      <p class="hint">Фокус = (Воля + Инт) / 2 × 3. Провал проверки улики и помехи отнимают Фокус; при 0 улики не проверить до сна.</p>
+    </div>
+
+    <div class="inv-actions">
+      {{#if actorName}}<span class="hint">Проверяет: {{actorName}}</span>{{/if}}
+      <button type="button" class="go-btn" data-action="hint" data-tooltip="Дедукция СЛ 15: при успехе ведущий даёт подсказку; Фокус −1d6 в любом случае">Подсказка</button>
+      {{#if gm}}<button type="button" class="go-btn" data-action="obstacle" data-tooltip="{{mystery.obstaclesHint}}">Помеха</button>{{/if}}
+    </div>
+    {{#if gm}}
+    <label class="notes">Заметки ведущего (разгадка, кто есть кто)
+      <textarea data-field="notes" rows="3">{{mystery.notes}}</textarea>
+    </label>
+    {{/if}}
+    {{else}}
+    <p class="hint">Выберите тайну слева.</p>
+    {{/if}}
+  </div>
+</section>

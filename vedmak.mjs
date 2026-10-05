@@ -48,6 +48,8 @@ import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
+import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
+import * as investigation from "./module/investigation/investigation.mjs";
 
 Hooks.once("init", () => {
   console.log(`${SYSTEM_ID} | Инициализация системы «Ведьмак: НРИ»`);
@@ -190,6 +192,16 @@ Hooks.once("init", () => {
     hint: "Конусы и круги ставятся мышью (колесо — поворот, правый клик — отмена), цели — все, кто в зоне. Мгновенная зона исчезает к следующему ходу заклинателя, на N раундов — через N раундов, активная — с концом поддержания.",
     scope: "world", config: true, type: Boolean, default: true
   });
+  // Расследование («Журнал ведьмака», стр. 145–151): тайны в настройке мира, окно — кнопкой во вкладке журналов
+  game.settings.register(SYSTEM_ID, "investigation", {
+    name: "Расследование",
+    hint: "Правило «Журнала ведьмака»: тайны со Сложностью, улики с Запутанностью, Фокус персонажей, помехи. Окно «Расследования» — кнопкой во вкладке журналов и в «Дневнике» персонажа.",
+    scope: "world", config: true, type: Boolean, default: true,
+    onChange: () => { ui.journal?.render(); game.actors.forEach(a => a.sheet?.rendered && a.sheet.render()); }
+  });
+  game.settings.register(SYSTEM_ID, "mysteries", {
+    scope: "world", config: false, type: Object, default: { list: [] }, onChange: () => InvestigationApp.refresh()
+  });
   game.settings.register(SYSTEM_ID, "verbalDuel", {
     name: "Словесная дуэль",
     hint: "Подвкладка «Социальный бой» у персонажей и чудовищ: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
@@ -233,6 +245,7 @@ Hooks.once("init", () => {
   registerFxSettings();
   registerFx();
   registerMigrationSettings();
+  registerInvestigationUi();
 
   // API для макросов
   game.vedmak = {
@@ -243,6 +256,7 @@ Hooks.once("init", () => {
     openWizard: actor => new CharacterWizard({ actor }).render(true),
     profileSheet,
     hud: CombatHud,
+    investigation: { ...investigation, open: () => InvestigationApp.open() },
     config: CONFIG.VEDMAK
   };
 });

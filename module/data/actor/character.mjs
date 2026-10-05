@@ -21,6 +21,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       blood: new SchemaField({ value: int(0, { min: 0 }) }),
       beast: new SchemaField({ value: int(0, { min: 0, max: 10 }) }),
       reputation: new SchemaField({ value: int(0), fame: str("") }),
+      // Фокус расследования («Журнал ведьмака», стр. 146): хранится потеря — новый персонаж с полным Фокусом
+      focus: new SchemaField({ lost: int(0, { min: 0 }) }),
       improvementPoints: new SchemaField({ value: int(0), total: int(0) }),
       // Кошелёк по валютам (config/money.mjs): крона — основная, остальные меняются по курсу
       // Жизненный путь: JSON с бросками (character/lifepath.mjs → readLifepath); показывается в «Дневнике»
@@ -127,6 +129,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     this.toxicity.over = this.toxicity.total > this.toxicity.max;
     this.derived.innateArmor = innateArmor;
     this.derived.social = this.socialStatus();
+    // Фокус = (Воля + Инт) / 2 × 3 — та же основа, что у Решительности (× 5)
+    this.focus.max = this.derived.resolve / 5 * 3;
+    this.focus.value = Math.max(0, this.focus.max - this.focus.lost);
   }
 
   /** Группы для таблицы статуса: раса и (для магов) «маги». */

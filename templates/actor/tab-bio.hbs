@@ -10,6 +10,13 @@
         <label class="line"><span class="cap">Родина</span><input type="text" name="system.details.homeland" value="{{system.details.homeland}}" placeholder="—"></label>
         <label class="line"><span class="cap">Родной язык</span><input type="text" name="system.details.languageNative" value="{{system.details.languageNative}}" placeholder="—"></label>
         <label class="line"><span class="cap">Слава</span><input type="text" name="system.reputation.fame" value="{{system.reputation.fame}}" placeholder="—"></label>
+        {{#if investigation}}
+        <div class="line focus-line" data-tooltip="Фокус расследования = (Воля + Инт) / 2 × 3. Провалы проверок улик и помехи отнимают его, сон восстанавливает.">
+          <span class="cap">Фокус</span>
+          <span class="focus-val"><b>{{system.focus.value}}</b> / {{system.focus.max}}</span>
+          <a class="mini" data-action="investigation" data-tooltip="Расследования"><i class="fa-solid fa-magnifying-glass"></i></a>
+        </div>
+        {{/if}}
         {{#if isWitcher}}
         <div class="line school">
           <span class="cap">Школа</span>

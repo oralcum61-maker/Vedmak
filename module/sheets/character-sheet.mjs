@@ -18,6 +18,7 @@ import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
 import { signed, compareRu, worldSetting, postCard } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
+import { InvestigationApp } from "../apps/investigation-app.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
@@ -112,6 +113,7 @@ export class CharacterSheet extends VedmakActorSheet {
       lifepathReroll: CharacterSheet.#onLifepathReroll,
       lifepathRerollAll: CharacterSheet.#onLifepathRerollAll,
       lifepathRoll: CharacterSheet.#onLifepathRoll,
+      investigation: () => InvestigationApp.open(),
       lifepathStep: CharacterSheet.#onLifepathStep,
       lifepathSection: CharacterSheet.#onLifepathSection,
       lifepathRest: CharacterSheet.#onLifepathRest,
@@ -292,6 +294,8 @@ export class CharacterSheet extends VedmakActorSheet {
     context.regionOptions = { "": `Из настроек мира (${REGIONS[worldRegion]?.label ?? worldRegion})`,
       ...Object.fromEntries(Object.entries(REGIONS).map(([k, v]) => [k, v.label])) };
     context.isWitcher = system.raceKey === "witcher" || system.professionKey === "witcher" || !!system.details.school;
+    // Расследование — необязательное правило «Журнала ведьмака»: Фокус и окно тайн
+    context.investigation = worldSetting("investigation", true);
     // Школы корника и свои (настройка «Ведьмачьи школы»); под выбором — описание и механика словами
     const schools = witcherSchools();
     context.schoolOptions = Object.fromEntries(Object.entries(schools).map(([k, v]) => [k, v.label]));
