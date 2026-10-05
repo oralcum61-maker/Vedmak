@@ -4,7 +4,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-standard.webp",
   "system": {
-   "description": "",
+   "description": "<p>Если есть стрелковое оружие, нужны и боеприпасы. Стандартные боеприпасы — стрелы да болты. Вторые обычно меньше первых, но и у тех, и у других есть оперение и острый металлический наконечник.</p>",
    "quantity": 10,
    "weight": 0.05,
    "cost": 1.0,
@@ -30,7 +30,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-blunt.webp",
   "system": {
-   "description": "",
+   "description": "<p>Стрелы и болты с затупленным наконечником — штучки любопытные. Сам я такими никогда не пользовался. Да и не сражался толком с теми, кого широкий наконечник не возьмёт. У таких боеприпасов здоровенный деревянный наконечник, похожий на кулак. Говорят, даже если таким в полнатяга стрелять, можно издалека вырубить противника. С широким наконечником Боеприпасы с широким наконечником — одни из лучших. Они во многом похожи на стандартные стрелы и болты, только наконечник у них широкий, плоский и заострённый по краям. Форма и размер разными бывают: есть листья, ромбики, в форме буквы V, но все они всаживаются куда глубже обычных стрел, оставляя кровоточащие раны.</p>",
    "quantity": 10,
    "weight": 0.01,
    "cost": 0.5,
@@ -56,7 +56,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-broad.webp",
   "system": {
-   "description": "",
+   "description": "<p>Боеприпасы с широким наконечником — одни из лучших. Они во многом похожи на стандартные стрелы и болты, только наконечник у них широкий, плоский и заострённый по краям. Форма и размер разными бывают: есть листья, ромбики, в форме буквы V, но все они всаживаются куда глубже обычных стрел, оставляя кровоточащие раны.</p>",
    "quantity": 10,
    "weight": 0.01,
    "cost": 1.0,
@@ -82,7 +82,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-armor.webp",
   "system": {
-   "description": "",
+   "description": "<p>Боеприпасы с затупленным или широким наконечником хороши, если у твоего противника брони нет. Проблема в том, что большинству ума хватает хотя бы самую плохонькую броньку-то надеть, так что приходится изрядно постараться, чтобы их достать. Вот для таких ситуаций и нужны бронебойные наконечники — длинные, узкие, закалённые в огне. Прекрасно пробивают как кожу, так и сталь.</p>",
    "quantity": 10,
    "weight": 0.01,
    "cost": 1.5,
@@ -108,7 +108,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-precision.webp",
   "system": {
-   "description": "",
+   "description": "<p>Скоя’таэли пару лет назад приобрели их у человеческих торговцев и стали активно использовать. Наконечник по форме напоминает винт, из-за чего снаряд буквально ввинчивается в плоть, и вытащить его становится тяжеловато.</p>",
    "quantity": 10,
    "weight": 0.01,
    "cost": 5.0,
@@ -134,7 +134,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-pierce.webp",
   "system": {
-   "description": "",
+   "description": "<p>По слухам, мы стали пользоваться такими стрелами и болтами, чтобы ломать камни в копях, но ныне краснолюдским наёмникам эти наконечники служат для того, чтобы пробивать латные доспехи.</p>",
    "quantity": 10,
    "weight": 0.01,
    "cost": 5.0,
@@ -160,7 +160,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/am-explosive.webp",
   "system": {
-   "description": "",
+   "description": "<p>К взрывному боеприпасу прикреплён небольшой сосуд с крайне активными химикатами. При столкновении с целью сосуд разбивается и его содержимое взрывается, нанося 4d6 урона по всем частям тела всем, кто находится в пределах 2 м.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 108,
@@ -238,7 +238,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-paste.webp",
   "system": {
-   "description": "",
+   "description": "<p>Позволяют создавать алхимические составы</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 80,
@@ -264,7 +264,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
   "system": {
-   "description": "",
+   "description": "<p>Фокусирующее (3)</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 500,
@@ -291,7 +291,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-ring.webp",
   "system": {
-   "description": "",
+   "description": "<p>Фокусирующее (1)</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 250,
@@ -370,7 +370,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-mask.webp",
   "system": {
-   "description": "",
+   "description": "<p>+2 к Маскировке</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 58,
@@ -422,7 +422,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-string.webp",
   "system": {
-   "description": "",
+   "description": "<p>+2 к Выживанию в дикой природе при ловле рыбы</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 27,
@@ -474,7 +474,7 @@
   "type": "gear",
   "img": "icons/tools/hand/brush-paint-pink.webp",
   "system": {
-   "description": "",
+   "description": "<p>+2 к Соблазнению и Харизме</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 35,
@@ -500,7 +500,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-scales-trade.webp",
   "system": {
-   "description": "",
+   "description": "<p>+2 к Торговле при оценке товара</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 60,
@@ -552,7 +552,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-mirror.webp",
   "system": {
-   "description": "",
+   "description": "<p>Позволяет общаться при помощи ритуала; Телекоммуникация</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 1000,
@@ -604,7 +604,7 @@
   "type": "gear",
   "img": "icons/skills/trades/smithing-anvil-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Для создания металлического оружия и брони требуются горн и другое кузнечное оборудование. Если поблизости нет обычной кузницы, подойдёт походная.</p>",
    "quantity": 1,
    "weight": 5,
    "cost": 111,
@@ -656,7 +656,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-rope.webp",
   "system": {
-   "description": "",
+   "description": "<p>Всегда с собой таскай верёвку. Я не раз в ямы проваливался, да и на скалы карабкаться приходилось. Ситуаций, где нужна верёвка, предостаточно.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 20,
@@ -682,7 +682,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-dice.webp",
   "system": {
-   "description": "",
+   "description": "<p>Стандартная доска для покера на костях, ещё и с ёмкостью для бросков. И с десятью костями в комплекте.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 25,
@@ -708,7 +708,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-bedroll.webp",
   "system": {
-   "description": "",
+   "description": "<p>Мне часто приходилось спать на земле, и походная постель в таких ситуациях — вещь незаменимая. А ведь как всё просто: подстилка да одеялко.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 16,
@@ -734,7 +734,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-candle.webp",
   "system": {
-   "description": "",
+   "description": "<p>Простенькие свечки из воска, чтобы на пару часов отогнать тьму. (Повышают уровень освещённости на 1 в пределах 2 м. Сильный ветер задувает свечу.)</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 5,
@@ -760,7 +760,7 @@
   "type": "gear",
   "img": "icons/commodities/stone/ore-chunk-white.webp",
   "system": {
-   "description": "",
+   "description": "<p>Мелком можно помечать путь в каком-нибудь лабиринте или в лесу — жирную белую линию трудно не заметить.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 2,
@@ -786,7 +786,7 @@
   "type": "gear",
   "img": "icons/sundries/survival/fire-lighter-brass-lit.webp",
   "system": {
-   "description": "",
+   "description": "<p>Кусок кремня и колечко из стали. Ударишь ими друг о друга, и вот тебе целый сноп искр, от которого огонёк-то и загорится.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 6,
@@ -812,7 +812,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-grapple-rope.webp",
   "system": {
-   "description": "",
+   "description": "<p>Простой крюк, только с четырьмя хвостами да с кольцом на конце, к которому крепят верёвку. Помогает в лазании (+2 к Лазанию).</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 13,
@@ -838,7 +838,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
   "system": {
-   "description": "",
+   "description": "<p>Понятия не имею, как гвинт так быстро набрал популярность. В этой стратегической игре есть здоровенные колоды карт, основанные на пяти реальных силах: Королевства Севера, Нильфгаард, скоятаэли, чудовища и Скеллиге.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 5,
@@ -864,7 +864,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
   "system": {
-   "description": "",
+   "description": "<p>Небольшое зеркало. И для прихорашивания сойдёт, и для того, чтобы себе за спину глянуть.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 27,
@@ -890,7 +890,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-medallion-stone.webp",
   "system": {
-   "description": "",
+   "description": "<p>Символы бывают разные, но все они сделаны из дерева и украшены знаком одной из религий.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 14,
@@ -916,7 +916,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-flask.webp",
   "system": {
-   "description": "",
+   "description": "<p>Если надо следить за временем, бери песочные часы. Песок из одной чаши в другую за час пересыпается.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 38,
@@ -942,7 +942,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-vial.webp",
   "system": {
-   "description": "",
+   "description": "<p>Точный отсчёт времени для таких занятий, как алхимия или закаливание клинков, требует песочных часов поменьше.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 18,
@@ -968,7 +968,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-lute.webp",
   "system": {
-   "description": "",
+   "description": "<p>Музыкальные инструменты всевозможных размеров и форм: лютни, флейты, лиры, арфы, волынки и тому подобное.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 38,
@@ -994,7 +994,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-book.webp",
   "system": {
-   "description": "",
+   "description": "<p>Простенькая книжка с пустыми страницами в кожаной обложке. Я в свой гроссбух записываю, какие товары у меня есть и что я продал.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 8,
@@ -1020,7 +1020,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-lantern.webp",
   "system": {
-   "description": "",
+   "description": "<p>Всего-то свечка в металлической клетке, освещающая всё вокруг (повышает уровень освещённости на 2 в радиусе 3 метров).</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 33,
@@ -1046,7 +1046,7 @@
   "type": "gear",
   "img": "icons/sundries/lights/lantern-bullseye-signal-copper.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такими по большей части пользуются стражники и преступники. Небольшое окошко, откуда идёт свет, можно прикрыть с помощью рычажка (повышает уровень освещённости на 3 в 5-метровом конусе).</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 39,
@@ -1072,7 +1072,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-coin-pouch.webp",
   "system": {
-   "description": "",
+   "description": "<p>Я не говорю, что стоит жульничать. Но уж если приходится, то тебе нужны шулерские кости (+3 к Азартным играм; проверка Внимания со СЛ 16, чтобы заметить).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 12,
@@ -1098,7 +1098,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-lock.webp",
   "system": {
-   "description": "",
+   "description": "<p>Простейший замок. Позволяет запереть всё, у чего есть две петли. У меня на каждом сундуке такой висит (проверка Взлома замков со СЛ 15).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 34,
@@ -1124,7 +1124,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-key.webp",
   "system": {
-   "description": "",
+   "description": "<p>Взломать его крайне тяжело. Такие стоят в банках и прочих местах, где важна надёжность (проверка Взлома замков со СЛ 18).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 68,
@@ -1150,7 +1150,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-shackles2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Если нужно кого-то удержать, стоит воспользоваться наручниками, сковывающими запястья. Главное ключ не потерять.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 30,
@@ -1176,7 +1176,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-map.webp",
   "system": {
-   "description": "",
+   "description": "<p>Лучшие карты, какие у нас есть, изображают территорию от Драконьих гор до Нильфгаарда и от Скеллиге до Кората. Они неплохие, но в зависимости от региона, где их нарисовали, рисунок может несколько различаться (+3 к навигации).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 18,
@@ -1202,7 +1202,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
   "system": {
-   "description": "",
+   "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 22,
@@ -1228,7 +1228,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-pipe.webp",
   "system": {
-   "description": "",
+   "description": "<p>Простейшая курительная трубка. Забиваешь её табаком, поджигаешь и куришь себе.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 19,
@@ -1254,7 +1254,7 @@
   "type": "gear",
   "img": "icons/sundries/survival/stake-rough-simple-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Стальные стержни с плоским навершием с одной стороны и остриём с другой. Их используют для закрепления верёвок, но при необходимости ими можно и пырнуть кого-нибудь (оружие ближнего боя, ld.6урона).</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 10,
@@ -1280,7 +1280,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-am.webp",
   "system": {
-   "description": "",
+   "description": "<p>Одна из реалий войны. Идёт мужик на фронт целёхонький, а по возвращении у него одной-двух конечностей не хватает. Мир жесток. Но ногу можно заменить деревяшкой, а руку — крюком.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 50,
@@ -1306,7 +1306,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-ms.webp",
   "system": {
-   "description": "",
+   "description": "<p>Потеряв конечность, некоторые действуют иначе. Достаточно найти хорошего плотника, и вот у тебя уже деревянная нога со стопой или рука с пальцами, пусть и неподвижными. До настоящей конечности таким протезам далеко, но уж лучше так, чем с крюком ходить.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 100,
@@ -1332,7 +1332,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-shackles.webp",
   "system": {
-   "description": "",
+   "description": "<p>Очень похожи на наручники, только закрепляются на запястьях и лодыжках. Выбраться из них очень тяжело (Скор ограничена до 3).</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 50,
@@ -1358,7 +1358,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-soap.webp",
   "system": {
-   "description": "",
+   "description": "<p>По большей части найти его можно в крупных городах. И отмыться поможет, и пахнуть после него приятно будешь.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 4,
@@ -1384,7 +1384,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-tarp.webp",
   "system": {
-   "description": "",
+   "description": "<p>Огромный кусок брезента, под которым можно самому от дождя укрыться или же накрыть от него что-нибудь ещё.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 10,
@@ -1410,7 +1410,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-tent.webp",
   "system": {
-   "description": "",
+   "description": "<p>Всегда полезно иметь при себе палатку во время путешествий. В ней и от дождя укроешься, и от ветра... а порой и от чудищ.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 19,
@@ -1436,7 +1436,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-cage.webp",
   "system": {
-   "description": "",
+   "description": "<p>В эту палатку спокойно влезает восемь человек. Но она приспособлена больше для торговцев — внутри можно разложить товар и торговать.</p>",
    "quantity": 1,
    "weight": 8,
    "cost": 36,
@@ -1462,7 +1462,7 @@
   "type": "gear",
   "img": "icons/consumables/plants/dried-herbs-leaves-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Слыхал я, что выращивать его тяжко, но оно того стоит. Многих знаю, кто его курит.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 4,
@@ -1488,7 +1488,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-torch.webp",
   "system": {
-   "description": "",
+   "description": "<p>Лучше взять фонарь, но на крайний случай сойдёт и факел. Неплохо освещает дорогу, а если что, можно им помахаться, как дубинкой (повышает уровень освещённости на 1 в радиусе 5 метров).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 1,
@@ -1514,7 +1514,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-bottle.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ближе к линии фронта не такто часто попадаются источники питьевой воды. Не станешь же ты всю дорогу эль хлестать. Так что мой тебе совет: держи под боком бурдюк с водой.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 8,
@@ -1540,7 +1540,7 @@
   "type": "gear",
   "img": "icons/containers/ammunition/bullets-belt.webp",
   "system": {
-   "description": "",
+   "description": "<p>Это такая перевязь через плечо, на которой полно кармашков и крючков. В них можно распихать 25 кг маленьких предметов или приторочить более крупные предметы.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 19,
@@ -1566,7 +1566,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-basket.webp",
   "system": {
-   "description": "",
+   "description": "<p>Больше подходит для сбора цветов, ягод и других даров природы. Но может вместо них вместить 15 кг небольших предметов.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 10,
@@ -1592,7 +1592,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-belt-pouch.webp",
   "system": {
-   "description": "",
+   "description": "<p>Просто небольшая сумка, которую крепят к поясу. В ней поместится 5 кг маленьких предметов.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 7,
@@ -1618,7 +1618,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-sack.webp",
   "system": {
-   "description": "",
+   "description": "<p>Самый обыкновенный большой холщовый мешок, в который поместится 20 кг маленьких предметов.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 3,
@@ -1670,7 +1670,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-pocket.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такой небольшой кармашек, вшиваемый с изнанки одежды, вмещает 5 кг маленьких предметов (проверка Внимания со СЛ 16 для обнаружения).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 11,
@@ -1696,7 +1696,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-quiver.webp",
   "system": {
-   "description": "",
+   "description": "<p>Хорошее вместилище для лука и колчана со стрелами —ужявно удобней, чем постоянно этот чёртов лук в руках таскать.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 24,
@@ -1722,7 +1722,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-kit-weapon-jm.webp",
   "system": {
-   "description": "",
+   "description": "<p>Это как наручные ножны, только на бедре. Совет: всегда проверяй, нет ли под юбкой оружия. Наверняка там наткнёшься на ножны (проверка Внимания со СЛ 18 для обнаружения).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 11,
@@ -1748,7 +1748,7 @@
   "type": "gear",
   "img": "icons/weapons/swords/shortsword-sheathed-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такими любят пользоваться наёмники и убийцы. Небольшие ножны для лёгких клинков, прикрепляемые ко внутренней стороне руки (проверка Внимания со СЛ 15 для обнаружения).</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 13,
@@ -1774,7 +1774,7 @@
   "type": "gear",
   "img": "icons/containers/chest/chest-wooden-tied-white.webp",
   "system": {
-   "description": "",
+   "description": "<p>Если нужно запрятать парочку предметов, то сойдёт и такой деревянный сундук. В него можно впихнуть 30 кг небольших вещей.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 18,
@@ -1800,7 +1800,7 @@
   "type": "gear",
   "img": "icons/containers/chest/chest-elm-steel-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такие сундуки большие и крепкие, что уже отпугивает большинство воришек. Вмещают в себя 50 кг крупных предметов.</p>",
    "quantity": 1,
    "weight": 10,
    "cost": 30,
@@ -1826,7 +1826,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/f-bread.webp",
   "system": {
-   "description": "",
+   "description": "<p>Приправленная баранина, жареные корешки или эль с хлебушком — ничего особенного.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 10,
@@ -1852,7 +1852,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-dinner.webp",
   "system": {
-   "description": "",
+   "description": "<p>В городе можно отобедать вкусными супами с клёцками, жареным мясцом или маринованными овощами.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 30,
@@ -1878,7 +1878,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/f-dumpling.webp",
   "system": {
-   "description": "",
+   "description": "<p>Настоящее чудо. Столько еды, что помереть можно, если попытаться всё это съесть. Подобное изобилие разве что на помпезных приёмах увидеть можно.</p>",
    "quantity": 1,
    "weight": 5,
    "cost": 100,
@@ -1904,7 +1904,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/f-meat-raw.webp",
   "system": {
-   "description": "",
+   "description": "<p>В богатых домах мясо раскладывают по тарелочкам в зависимости от того, какая это животинка приготовлена. Но для нас мясо — это просто мясо. Курятина, свинина, рыба, волчатина — всё одно.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 8,
@@ -1930,7 +1930,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-rabbit.webp",
   "system": {
-   "description": "",
+   "description": "<p>Всякие вкусности вроде орехов в меду, сахарных волоконец, засахаренных ягод и прочего. На каждом углу не продаются, но стоят того, чтобы за ними в соседний посёлок съездить.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 5,
@@ -1956,7 +1956,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/f-cheese.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ничего особенного ждать не стоит, но всем ведь нужно регулярно питаться, правда? Несколько кусочков чёрствой лепёшки, пара сухофруктов, а если повезёт, то можно найти немного солонинки или вяленого мясца.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 5,
@@ -1982,7 +1982,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-alcohest.webp",
   "system": {
-   "description": "",
+   "description": "<p>Есть спиртные напитки, а есть чистый спирт. Алкагест — по сути, чистый спирт для алхимии. Краснолюда с одного глотка вынесет напрочь, а уж если выжрать целую бутылку, то траванёшься точно.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 8,
@@ -2008,7 +2008,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-beer.webp",
   "system": {
-   "description": "",
+   "description": "<p>Бывает разное: темерское ржаное, реданский лагер, маг-тургский стаут... Хорошая выпивка для простого работяги.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 5,
@@ -2034,7 +2034,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/f-vodka.webp",
   "system": {
-   "description": "",
+   "description": "<p>Крепкая выпивка. На севере чаще встречается краснолюдская настойка, на юге — нильфгаардская лимонная, обе очень забористые.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 10,
@@ -2060,7 +2060,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/f-wine.webp",
   "system": {
-   "description": "",
+   "description": "<p>Как мне рассказывали, вино — это настоящий вид искусства. В плане разнообразия получше пива будет, алкоголя в нём больше, но и цена соответствующая.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 8,
@@ -2086,7 +2086,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-shirt.webp",
   "system": {
-   "description": "",
+   "description": "<p>Рубаха, штаны да сапоги. Или платье, если надо. При необходимости ещё и плащ.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 10,
@@ -2112,7 +2112,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-suit-skellige.webp",
   "system": {
-   "description": "",
+   "description": "<p>Когда забираешься высоко в горы, приодеться стоит потеплее — в меха, шерстяной плащ и тому подобное (+5 к проверкам Стойкости в холодных погодных условиях).</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 45,
@@ -2138,7 +2138,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/t3-suit-nilf.webp",
   "system": {
-   "description": "",
+   "description": "<p>Лучший наряд — это модный наряд. На приёмах не будешь выбиваться из толпы. Проблема одна: мода через пару месяцев изменится, и придётся покупать новую одёжку.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 70,
@@ -2190,7 +2190,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-clothes-dark.webp",
   "system": {
-   "description": "",
+   "description": "<p>Невзрачных цветов, с капюшоном, под которым можно спрятать лицо. Если тебе надо куда-то вломиться, лучше одежды не придумать (ночью +1 к Скрытности).</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 50,
@@ -2459,7 +2459,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-saddle1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Нет штрафов к Верховой езде</p>",
    "quantity": 1,
    "weight": 5,
    "cost": 100,
@@ -2486,7 +2486,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-saddle4.webp",
   "system": {
-   "description": "",
+   "description": "<p>+1 к проверкам управления для атаки; Встроенные ножны для оружия</p>",
    "quantity": 1,
    "weight": 6,
    "cost": 325,
@@ -2513,7 +2513,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-saddle3.webp",
   "system": {
-   "description": "",
+   "description": "<p>+ 1 к проверкам управления для Верховой езды; +1 Скор</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 200,
@@ -2540,7 +2540,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-blinders.webp",
   "system": {
-   "description": "",
+   "description": "<p>+1 к успокоению скакуна</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 100,
@@ -2594,7 +2594,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/gear/g-saddlebags.webp",
   "system": {
-   "description": "",
+   "description": "<p>В каждое из двух отделений влезает 25 кг предметов небольшого или среднего размера</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 100,
@@ -2648,7 +2648,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/components/t3-leather-hard.webp",
   "system": {
-   "description": "",
+   "description": "<p>Прочность 10</p>",
    "quantity": 1,
    "weight": 10,
    "cost": 550,
@@ -2675,7 +2675,7 @@
   "type": "gear",
   "img": "systems/vedmak/assets/fan/components/t3-steel-plates.webp",
   "system": {
-   "description": "",
+   "description": "<p>Прочность 15; -1 к проверкам управления для Верховой езды</p>",
    "quantity": 1,
    "weight": 25,
    "cost": 1050,

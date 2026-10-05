@@ -25,8 +25,12 @@ description: Пересобрать компендиумы системы — п
    разночтения перевода, по которым те ищут наши предметы. А `bs_bestiary.py` и `bs_tables.py` — **после**
    `fix_icons.py`: они копируют значки предметов в инвентарь существ и строки таблиц, и до правки значков
    скопировали бы старые. Порядок: `gen_*` → `dlc_*` (последним из них — `dlc_extra_characters.py`: профессии и расы из `data/extra/*.json`,
-   PLAN 4.75) → `gen_services` → `bs_items` → `fix_icons` →
+   PLAN 4.75) → `gen_services` → `bs_items` → `fix_icons` → `fill_descriptions` →
    `bs_bestiary` → `bs_tables` → `bs_rules` → `restructure_folders` → `square-icons`.
+
+   `fill_descriptions.py` заполняет пустые описания предметов текстом книг (абзац Родольфа в корнике, графа
+   «Эффект», «Фургончик Родольфа», дополнения) — до `bs_bestiary`, чтобы копии у существ получили тексты;
+   `--report` показывает найденное без записи (PLAN 4.91).
 
    Новые заклинания книг в `data/extra/*.json` без значка получают его скриптом `python pick_spell_icons.py --extra`
    до `dlc_extra_characters.py` (иначе у всех запасной `orb-glowing-purple`; проставленные значки он не трогает, PLAN 4.85).
