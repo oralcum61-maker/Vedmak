@@ -8,7 +8,7 @@
         <span class="cap">Мутагены · {{craft.mutagenCount}} из {{craft.mutagenLimit}}</span>
         <span class="sockets">
           {{#each craft.sockets as |m|}}
-          {{#if m.empty}}<span class="socket empty" data-tooltip="Свободное гнездо мутагена"><i></i></span>
+          {{#if m.empty}}{{#if @root.editable}}<a class="socket empty implant" data-action="implant" data-tooltip="Свободное гнездо мутагена. Нажмите — вживить руну или глиф («Офир и Зеррикания», стр. 84)"><i></i></a>{{else}}<span class="socket empty" data-tooltip="Свободное гнездо мутагена"><i></i></span>{{/if}}
           {{else}}<span class="socket {{m.color}}" data-item-id="{{m.id}}" data-tooltip="{{m.name}}: {{m.effect}}"><img src="{{m.img}}" alt="{{m.name}}"></span>{{/if}}
           {{/each}}
         </span>

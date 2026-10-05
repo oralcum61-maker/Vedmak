@@ -21307,6 +21307,901 @@
   }
  },
  {
+  "name": "Поток пламени",
+  "type": "spell",
+  "img": "icons/magic/fire/blast-jet-stream-embers-yellow.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Дракон испускает длинный поток пламени, который с вероятностью 35% воспламеняет всё, к чему прикоснётся. Существа, попавшие под поток, получают 3d6 урона. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "novice",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 10,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "25 м",
+   "duration": "1 раунд",
+   "defense": "dodgeBlock",
+   "defenseText": "Уклонение/Изворотливость или щит",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "3d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "35"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "120"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "HH8ocQ3LChI41Y92"
+ },
+ {
+  "name": "Огненные шары",
+  "type": "spell",
+  "img": "icons/magic/fire/projectile-fireball-smoke-large-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Новичок"
+  ],
+  "system": {
+   "description": "<p>Дракон изрыгает большой огненный шар. Цель получает 4d6 урона с вероятностью воспламенения 15%. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "novice",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 10,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "15 м",
+   "duration": "1 раунд",
+   "defense": "dodgeBlock",
+   "defenseText": "Уклонение/Изворотливость или блокирование",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "4d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "15"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "120"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "U2zqoImYZMGKM6xU"
+ },
+ {
+  "name": "Огненное копьё",
+  "type": "spell",
+  "img": "icons/magic/fire/blast-jet-stream-embers-red.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Дракон плюёт огнём, словно копьём, создавая конус пламени, который с вероятностью 50% воспламеняет всё, к чему прикасается, и наносит 4d6 урона. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "journeyman",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 15,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "30-метровый конус",
+   "duration": "1 раунд",
+   "defense": "dodgeBlock",
+   "defenseText": "Уклонение/Изворотливость или щит",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "4d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "50"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "120"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "wN3ArbQTZxoX9ZwX"
+ },
+ {
+  "name": "Множественный поток",
+  "type": "spell",
+  "img": "icons/magic/fire/projectile-beams-salvo-red.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Дракон испускает 3 потока пламени, которые с вероятностью 35% воспламеняют цель и наносят 3d6 урона каждый. Каждая атака, даже по одной и той же цели, направлена в разные стороны, конусом под углом в 35° перед собой. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "journeyman",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 20,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "50 м",
+   "duration": "1 раунд",
+   "defense": "dodgeBlock",
+   "defenseText": "Уклонение/Изворотливость или щит",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "3d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "35"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "120"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "qejDFkBwyXtiayEJ"
+ },
+ {
+  "name": "Липкая слюна",
+  "type": "spell",
+  "img": "icons/magic/fire/flame-burning-embers-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Подмастерье"
+  ],
+  "system": {
+   "description": "<p>Дракон выплёвывает небольшой ком липкой лавы. Если цели не удаётся уклониться, она застревает в этой субстанции и подвергается эффекту горения. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "journeyman",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 20,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "50 м",
+   "duration": "1 раунд",
+   "defense": "dodgeBlock",
+   "defenseText": "Уклонение/Изворотливость или щит",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "120"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "8yf8m2ZR7CGaaZWl"
+ },
+ {
+  "name": "Разрушитель стен",
+  "type": "spell",
+  "img": "icons/magic/fire/explosion-fireball-large-red-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Происходит мощный взрыв, способный разрушить любую стену за считанные мгновения… это грозное заклинание пронзает самые прочные доспехи и перемалывает камень в труху. Если вы находитесь в зоне поражения, помолитесь на последок! Заклинание наносит 3d6 урона по всем частям тела, игнорируя броню, и имеет 15% шанс воспламенить цель. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "master",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 30,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "150 м",
+   "duration": "5 раундов",
+   "defense": "other",
+   "defenseText": "Магический барьер",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "3d6",
+    "damageType": "elemental",
+    "location": "all",
+    "ignoreArmor": true,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "15"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "121"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "49R1Mrb5etRmJXou"
+ },
+ {
+  "name": "Ад на земле",
+  "type": "spell",
+  "img": "icons/magic/fire/explosion-mushroom-nuke-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Огромная струя пламени обрушивается на ваших противников, словно глобальный катаклизм. Вряд ли удастся выбраться из-под неё живым, если только не укрыться под магическим барьером. В противном случае все существа и конструкции (деревянные и металлические), попавшие в радиус действия заклинания, получают 8d6 разрушающего урона и воспламеняются (100%). Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "master",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 30,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "зона радиусом 200 м",
+   "duration": "5 раундов",
+   "defense": "other",
+   "defenseText": "Магический щит",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "8d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "121"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "Lj8hFbEAPsftstuj"
+ },
+ {
+  "name": "Взрывающиеся огненные шары",
+  "type": "spell",
+  "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Драконья магия",
+   "Мастер"
+  ],
+  "system": {
+   "description": "<p>Дракон выпускает 4 взрывающихся огненных шара, каждый диаметром 2 метра. Цели получают 10d6 урона и сбиваются с ног (100%). Все существа в радиусе 10 метров от взрыва также сбиваются с ног, если не проходят проверку защиты, а все, кто находится в радиусе 5 метров, в дополнение получают 5d6 урона. Драконья магия действует только в Драконьей форме (стр. 120).</p>",
+   "kind": "spell",
+   "level": "master",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 25,
+   "resource": "",
+   "variableCost": false,
+   "maxCost": 0,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "100 м",
+   "duration": "1 раунд",
+   "defense": "dodgeBlock",
+   "defenseText": "Уклонение/Изворотливость или блокирование",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "10d6",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "prone",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "121"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "dragonMagic": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "skCUHdEwqmNuufqh"
+ },
+ {
+  "name": "Вживлённый глиф: Аард",
+  "type": "spell",
+  "img": "icons/magic/air/wind-vortex-swirl-blue.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Вживлённые глифы"
+  ],
+  "system": {
+   "description": "<p>Глиф Аард создаёт небольшую телекинетическую ударную волну, которая отбрасывает врагов и с вероятностью 10% ошеломляет их. Эта вероятность увеличивается на 10% за каждый дополнительный уровень Энергии. Может толкать хрупкие конструкции. Чаще всего вживляется в руки, ноги, лоб, туловище. Вживлённый глиф: носитель управляет магией стихий без фокусирующих предметов; сила — по уровню Энергии (Энергию даёт только руна Велес). У существ, не владеющих Хаосом, каждое использование влияет на здоровье — по решению ведущего (стр. 84).</p>",
+   "kind": "sign",
+   "level": "novice",
+   "element": "air",
+   "branch": "",
+   "god": "",
+   "staCost": 0,
+   "resource": "",
+   "variableCost": true,
+   "maxCost": 7,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "2-метровый конус",
+   "duration": "мгновенный",
+   "defense": "dodge",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "staggered",
+      "chance": "10 * @sta"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "85"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "implantGlyph": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "AkV8NW0BF7ayGEfe"
+ },
+ {
+  "name": "Вживлённый глиф: Квен",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Вживлённые глифы"
+  ],
+  "system": {
+   "description": "<p>Глиф Квен создаёт небольшое силовое поле с 5 ПЗ за каждый уровень Энергии. Не действует на уже имеющийся урон от отравления, болезней или удушения от нехватки кислорода. Можно применять против любых заклинаний, которые поддаются блокированию, но против остальных заклинаний он бессилен. Чаще всего вживляется в голову, туловище. Вживлённый глиф: носитель управляет магией стихий без фокусирующих предметов; сила — по уровню Энергии (Энергию даёт только руна Велес). У существ, не владеющих Хаосом, каждое использование влияет на здоровье — по решению ведущего (стр. 84).</p>",
+   "kind": "sign",
+   "level": "novice",
+   "element": "earth",
+   "branch": "",
+   "god": "",
+   "staCost": 0,
+   "resource": "",
+   "variableCost": true,
+   "maxCost": 7,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "на себя",
+   "duration": "пока не истрачен",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 5,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "85"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "implantGlyph": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "ZFPegBoXUPKWbwRB"
+ },
+ {
+  "name": "Вживлённый глиф: Игни",
+  "type": "spell",
+  "img": "icons/magic/fire/flame-burning-hand-white.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Вживлённые глифы"
+  ],
+  "system": {
+   "description": "<p>Глиф испускает волну огня и искр, которая наносит 1d6 урона за каждый уровень Энергии и с вероятностью 50% поджигает всё, во что попадёт. Чаще всего вживляется в руки, язык. Вживлённый глиф: носитель управляет магией стихий без фокусирующих предметов; сила — по уровню Энергии (Энергию даёт только руна Велес). У существ, не владеющих Хаосом, каждое использование влияет на здоровье — по решению ведущего (стр. 84).</p>",
+   "kind": "sign",
+   "level": "novice",
+   "element": "fire",
+   "branch": "",
+   "god": "",
+   "staCost": 0,
+   "resource": "",
+   "variableCost": true,
+   "maxCost": 7,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "2-метровый конус",
+   "duration": "мгновенный",
+   "defense": "dodgeBlock",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "(@sta)d6",
+    "damageType": "elemental",
+    "location": "torso",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "burning",
+      "chance": "50"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "85"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "implantGlyph": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "JyfwlOQu7A02xE0d"
+ },
+ {
+  "name": "Вживлённый глиф: Ирден",
+  "type": "spell",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Вживлённые глифы"
+  ],
+  "system": {
+   "description": "<p>Носитель глифа может создать на твёрдой поверхности подобие магического круга знака Ирден (не полный круг!) диаметром 50 см. Любой вошедший в этот круг получает штраф к Скор и Реа (равный уровню Энергии носителя) до тех пор, пока не покинет круг. Любое бесплотное существо, вошедшее в круг, становится материальным. СЛ сотворения: камень 14; известняк 16; металл 18; древесина 20; драгоценный камень 22; бумага и текстиль 24. Длительность 5 раундов. Чаще всего вживляется в ноги, руки. Вживлённый глиф: носитель управляет магией стихий без фокусирующих предметов; сила — по уровню Энергии (Энергию даёт только руна Велес). У существ, не владеющих Хаосом, каждое использование влияет на здоровье — по решению ведущего (стр. 84).</p>",
+   "kind": "sign",
+   "level": "novice",
+   "element": "mixed",
+   "branch": "",
+   "god": "",
+   "staCost": 0,
+   "resource": "",
+   "variableCost": true,
+   "maxCost": 7,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "круг диаметром 50 см",
+   "duration": "5 раундов",
+   "defense": "none",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "85"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "implantGlyph": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "aUbOVUWYfkLfOv7Y"
+ },
+ {
+  "name": "Вживлённый глиф: Аксий",
+  "type": "spell",
+  "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+  "folder": [
+   "Фанатская магия",
+   "Офир и Зеррикания",
+   "Вживлённые глифы"
+  ],
+  "system": {
+   "description": "<p>Аксий дезориентирует цель, пока та не совершит успешное испытание Устойчивости со штрафом −1. За каждый уровень Энергии СЛ испытания Устойчивости увеличивается на +1. Чаще всего вживляется в пальцы, глаз (носитель слепнет на один глаз), лоб. Вживлённый глиф: носитель управляет магией стихий без фокусирующих предметов; сила — по уровню Энергии (Энергию даёт только руна Велес). У существ, не владеющих Хаосом, каждое использование влияет на здоровье — по решению ведущего (стр. 84).</p>",
+   "kind": "sign",
+   "level": "novice",
+   "element": "water",
+   "branch": "",
+   "god": "",
+   "staCost": 0,
+   "resource": "",
+   "variableCost": true,
+   "maxCost": 7,
+   "maintainCost": 0,
+   "maintainMode": "",
+   "effect": "",
+   "range": "8 м",
+   "duration": "пока цель не придёт в себя",
+   "defense": "resistMagic",
+   "defenseText": "",
+   "preparation": "",
+   "dc": 0,
+   "dcText": "",
+   "ingredients": "",
+   "altIngredients": "",
+   "danger": "",
+   "removal": "",
+   "automation": {
+    "damage": "",
+    "damageType": "elemental",
+    "location": "",
+    "ignoreArmor": false,
+    "canCrit": false,
+    "staDamage": "",
+    "statuses": [
+     {
+      "status": "disoriented",
+      "chance": "100"
+     }
+    ],
+    "statusRounds": "",
+    "statusesByCost": {},
+    "regen": {
+     "hp": 0,
+     "rounds": ""
+    },
+    "shieldPerSta": 0,
+    "shieldRounds": 0
+   },
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "85"
+   }
+  },
+  "flags": {
+   "vedmak": {
+    "implantGlyph": true,
+    "extraLayer": true
+   }
+  },
+  "_id": "Enc2W6klg0MbwHij"
+ },
+ {
   "name": "Кислотное дыхание",
   "type": "spell",
   "img": "icons/magic/control/debuff-chains-ropes-purple.webp",

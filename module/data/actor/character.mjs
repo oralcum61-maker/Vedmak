@@ -77,6 +77,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       if (!s?.mods?.length) continue;
       if (["weapon", "armor"].includes(item.type) && s.equipped) itemMods.push(...s.mods);
       else if (item.type === "alchemical" && s.isMutagen && s.applied) itemMods.push(...s.mods);
+      // Нанесённая татуировка «Офира и Зеррикании» действует постоянно
+      else if (item.type === "gear" && s.tattoo?.applied) itemMods.push(...s.mods);
     }
     this.derived ??= {};
     this.derived.mutagens = this.parent.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;

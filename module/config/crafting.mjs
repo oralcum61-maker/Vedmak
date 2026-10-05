@@ -107,6 +107,51 @@ export const CRAFTING = {
   mutagenSaveDc: 18
 };
 
+/**
+ * Вживление рун и глифов в тело («Офир и Зеррикания», стр. 84–86). Камень бывает малым, обычным и большим:
+ * чем крупнее, тем сильнее эффект и выше СЛ (+1 обычный, +2 большой). `mods` — поправки по размеру камня
+ * (как у мутагенов), `text` — эффект, который система не считает сама (шансы состояний), `minor` — малая мутация.
+ */
+export const IMPLANT_TIERS = { small: { label: "Малый", dc: 0 }, normal: { label: "Обычный", dc: 1 }, large: { label: "Большой", dc: 2 } };
+const RUNE_IMG = n => `systems/vedmak/assets/fan/enhancements/rune-${n}.webp`;
+const tiers = (target, a, b, c) => ({ small: [{ target, value: a }], normal: [{ target, value: b }], large: [{ target, value: c }] });
+const chance = label => ({ small: `${label} +5 %`, normal: `${label} +10 %`, large: `${label} +15 %` });
+export const IMPLANT_RUNES = {
+  chernobog: { label: "Чернобог", img: RUNE_IMG("chernobog"), mods: tiers("bonus.meleeDamage", 1, 2, 3), bonus: "к урону в ближнем бою",
+    minor: "Мышцы деформированы, вены светятся ярко-красным" },
+  perun: { label: "Перун", img: RUNE_IMG("perun"), mods: tiers("stats.spd", 1, 2, 3), bonus: "к Скор", minor: "Постоянная трупная худоба" },
+  veles: { label: "Велес", img: RUNE_IMG("veles"), mods: tiers("bonus.vigor", 1, 2, 3), bonus: "к Энергии",
+    minor: "Хаос оставил чёрную дорожку по венам" },
+  dazhbog: { label: "Даждьбог", img: RUNE_IMG("dazhbog"), text: chance("Горение"), minor: "Тело не остывает ниже 45 °C" },
+  stribog: { label: "Стрибог", img: RUNE_IMG("stribog"), text: chance("Ошеломление"),
+    minor: "Тело обрастает густыми волосами, кожа на руках и ногах толстеет, как у слона" },
+  zorya: { label: "Зоря", img: RUNE_IMG("zoria"), text: chance("Замораживание"), minor: "Тело не согревается выше 18 °C" },
+  devana: { label: "Девана", img: RUNE_IMG("devana"), text: chance("Кровотечение"),
+    minor: "Руки твёрдые, как камень; сильная тяга к сырому мясу" },
+  marena: { label: "Марена", img: RUNE_IMG("morana"), text: chance("Отравление"), minor: "Вены и кровь зеленеют" },
+  svarog: { label: "Сварог", img: RUNE_IMG("svarog"), accuracy: { small: 1, normal: 2, large: 3 }, bonus: "к Точности (броски атаки)",
+    minor: "Орлиные глаза с белым третьим веком" },
+  triglav: { label: "Триглав", img: RUNE_IMG("triglav"), text: chance("Дезориентирующее"), minor: "Череп странно деформирован" },
+  pirog: { label: "Пирог", img: "icons/magic/symbols/runes-carved-stone-yellow.webp", mods: tiers("bonus.enc", 5, 10, 15), bonus: "к переносимому весу",
+    minor: "Огромные плечи выгибают спину, как у огра" },
+  tvorog: { label: "Творог", img: "icons/magic/symbols/runes-carved-stone-green.webp", mods: tiers("armor", 1, 2, 3), bonus: "ПБ крепости тела (естественная броня)",
+    minor: "Кожа сверкает, как бриллианты, при дневном свете" }
+};
+/** Глифы знаков: носитель получает заклинание «Вживлённый глиф: …» из компендиума магии. */
+export const IMPLANT_GLYPHS = {
+  aard: { label: "Аард", spell: "Вживлённый глиф: Аард", img: "icons/magic/air/wind-vortex-swirl-blue.webp",
+    minor: "Очень громкое чихание со странным эхом, которое трудно скрыть" },
+  quen: { label: "Квен", spell: "Вживлённый глиф: Квен", img: "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
+    minor: "Слабое свечение в темноте выдаёт колдовство" },
+  igni: { label: "Игни", spell: "Вживлённый глиф: Игни", img: "icons/magic/fire/flame-burning-hand-white.webp",
+    minor: "Легко воспламеняется: шанс поджечь носителя на +10 %" },
+  yrden: { label: "Ирден", spell: "Вживлённый глиф: Ирден", img: "icons/magic/symbols/runes-star-pentagon-orange.webp",
+    minor: "Кожа покрывается пурпурными родимыми пятнами" },
+  axii: { label: "Аксий", spell: "Вживлённый глиф: Аксий", img: "icons/magic/perception/eye-tendrils-web-purple.webp",
+    minor: "Постоянная обильная испарина: −2 к Эмп", mods: [{ target: "stats.emp", value: -2 }] }
+};
+export const IMPLANT_LIMIT = 2;
+
 /** Металлические компоненты — для них нужна кузница (стр. 127). */
 export const METAL_COMPONENTS = ["Сталь", "Железо", "Тёмная сталь", "Тёмное железо", "Махакамская сталь", "Двимерит",
   "Махакамский двимерит", "Метеорит", "Серебро", "Третогорская сталь", "Золото"];

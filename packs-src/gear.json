@@ -11879,5 +11879,2661 @@
     "layer": "bs"
    }
   }
+ },
+ {
+  "name": "Татуировка «Пустая темница»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Продайте снаряжение на 5000 крон одним комплектом.</p><p><b>Эффект:</b> −1 к СЛ Торговли.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "−1 к СЛ Торговли. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Продайте снаряжение на 5000 крон одним комплектом",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "cn0OLWQCW29fgTRk",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Лекарь»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Успешно окажите Первую помощь 100 раз.</p><p><b>Эффект:</b> −1 к СЛ Первой помощи.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "−1 к СЛ Первой помощи. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Успешно окажите Первую помощь 100 раз",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "xEdqyOLkrS7bUby0",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Полная корзина»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Потратьте 5000 крон у ремесленника за одну покупку.</p><p><b>Эффект:</b> −10% к цене товаров.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "−10% к цене товаров. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Потратьте 5000 крон у ремесленника за одну покупку",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Efq5HBITPy90yeUp",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Случайный предатель»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Непреднамеренно навредите 5 союзникам критическими провалами.</p><p><b>Эффект:</b> +1 к урону в ближнем бою.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к урону в ближнем бою. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "bonus.meleeDamage",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Непреднамеренно навредите 5 союзникам критическими провалами",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "PfUl3VUtxYYpHAZb",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Всадник»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Проездите 365 дней на одном и том же скакуне.</p><p><b>Эффект:</b> +1 Скор, когда находитесь на скакуне.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 Скор, когда находитесь на скакуне. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Проездите 365 дней на одном и том же скакуне",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "vMAaleyXkfjMHv8w",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Ремесленник»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Создайте 100 различных предметов.</p><p><b>Эффект:</b> −1 к СЛ Изготовления.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "−1 к СЛ Изготовления. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Создайте 100 различных предметов",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "p9gQw9ySMMwsdEa1",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Сапер»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Обнаружьте 5 ловушек и обезвредьте их.</p><p><b>Эффект:</b> +1 к Знанию ловушек.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Знанию ловушек. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.trapcraft",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Обнаружьте 5 ловушек и обезвредьте их",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "mkieOIaUZQOj8obd",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Завсегдатай»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Заплатите за услуги проституток 1000 раз.</p><p><b>Эффект:</b> +1 к Эмп при проверках, связанных с вашей профессией.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Эмп при проверках, связанных с вашей профессией. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Заплатите за услуги проституток 1000 раз",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "yGVnh8yIgEmwCXK0",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Авантюрист»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Исследуйте руины эльфов, низушков, гномов и вранов.</p><p><b>Эффект:</b> +1 к расшифровке любого письменного языка.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к расшифровке любого письменного языка. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Исследуйте руины эльфов, низушков, гномов и вранов",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "eTow3SNANOcFZXme",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Нищета»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-rough-white-teal.webp",
+  "folder": [
+   "Татуировки",
+   "Очень простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Пожертвуйте всё своё снаряжение (минимум на 10 000 крон) на благотворительность.</p><p><b>Эффект:</b> Признание легче получить, делая пожертвования.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "Признание легче получить, делая пожертвования. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryEasy",
+    "achievement": "Пожертвуйте всё своё снаряжение (минимум на 10 000 крон) на благотворительность",
+    "size": 0.5,
+    "dc": 12,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "iBCyt6XSC7ClciaE",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Самаритянин»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Раздайте милостыню 100 раз.</p><p><b>Эффект:</b> +1 к Харизме при общении с бедняками.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Харизме при общении с бедняками. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Раздайте милостыню 100 раз",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "LuUlGaWaBrdZSJP8",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Преступник»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Совершите 100 ограблений.</p><p><b>Эффект:</b> +1 к Ориентированию в городе.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Ориентированию в городе. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.streetwise",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Совершите 100 ограблений",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "AWbVZlzSyjujXJf4",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Расизм»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Примите активное участие в межвидовом конфликте и принесите 100 жертв.</p><p><b>Эффект:</b> +1 и −1 к Репутации в отношениях с затронутыми группами населения.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 и −1 к Репутации в отношениях с затронутыми группами населения. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Примите активное участие в межвидовом конфликте и принесите 100 жертв",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "F8K1PRBKjW5YteIY",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Барбак»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Съешьте по представителю каждого гуманоидного вида.</p><p><b>Эффект:</b> +1 к Устойчивости, когда долго обходитесь без еды.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Устойчивости, когда долго обходитесь без еды. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Съешьте по представителю каждого гуманоидного вида",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "P8vYlH50H9TwoHp3",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Солдат»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Переживите 3 великих сражения.</p><p><b>Эффект:</b> +1 к Храбрости.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Храбрости. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.courage",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Переживите 3 великих сражения",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "H4dguEk9QTvLnPjD",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Путешественник»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Побывайте в столице каждой страны.</p><p><b>Эффект:</b> +1 к Образованию.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Образованию. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.education",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Побывайте в столице каждой страны",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "yMVLx1iLXa0LKDAN",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Герой»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Помогите 10 маленьким деревням справиться с невзгодами.</p><p><b>Эффект:</b> +1 к Маскировке.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Маскировке. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.disguise",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Помогите 10 маленьким деревням справиться с невзгодами",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "a2OBU8YGr5cUsUA3",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Оглушитель»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Ошеломите 100 человек.</p><p><b>Эффект:</b> +1 к ошеломлению противников.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к ошеломлению противников. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Ошеломите 100 человек",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "RNJAcIWtRms4UVa0",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Скиммер»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Обыщите 100 домов разных незнакомцев.</p><p><b>Эффект:</b> +1 к Скрытности, находясь в помещении.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Скрытности, находясь в помещении. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Обыщите 100 домов разных незнакомцев",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "rBMKrbJYcruVWUCs",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Детектив»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-green.webp",
+  "folder": [
+   "Татуировки",
+   "Простые"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Самостоятельно решите 10 криминальных головоломок.</p><p><b>Эффект:</b> +1 к Дедукции во время допросов.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "79"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Дедукции во время допросов. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "easy",
+    "achievement": "Самостоятельно решите 10 криминальных головоломок",
+    "size": 1,
+    "dc": 14,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "YSKtiioEXUhvcEIL",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Подонок»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вы открыто работаете на преступную группировку.</p><p><b>Эффект:</b> +1 или −2 к Репутации в зависимости от численности населения.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 или −2 к Репутации в зависимости от численности населения. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Вы открыто работаете на преступную группировку",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "BSw6JsWNsvNAHHjy",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Рикошет»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Уклонитесь или отразите 5 стрел подряд.</p><p><b>Эффект:</b> +1 к отражению стрел.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к отражению стрел. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Уклонитесь или отразите 5 стрел подряд",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "WT20riI81n7Q8Kce",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Наемный меч»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вы согласились на 100 сомнительных контрактов.</p><p><b>Эффект:</b> Сумма награды увеличивается на +10%.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "Сумма награды увеличивается на +10%. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Вы согласились на 100 сомнительных контрактов",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "YGEIR9Jnuz3PnpOG",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Полиглот»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вы знаете минимум 4 или 5 языков (включая экзотические).</p><p><b>Эффект:</b> +2 к Решительности в словесных дуэлях.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Решительности в словесных дуэлях. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Вы знаете минимум 4 или 5 языков (включая экзотические)",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "61083pOcU7IQMJy0",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Мутант»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вам удалось усвоить мутаген.</p><p><b>Эффект:</b> −1 к СЛ для освоения следующего мутагена.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "−1 к СЛ для освоения следующего мутагена. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Вам удалось усвоить мутаген",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "wMuaGNt5nb6JXCGR",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Националист»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вы открыто выступаете за какую-то страну.</p><p><b>Эффект:</b> +1 или −2 к Репутации в зависимости от численности населения.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 или −2 к Репутации в зависимости от численности населения. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Вы открыто выступаете за какую-то страну",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "mUXSMebs9C61n6ds",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Тень»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Проникните в бандитский или военный лагерь и уйдите незамеченным.</p><p><b>Эффект:</b> +1 к Скрытности.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Скрытности. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.stealth",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Проникните в бандитский или военный лагерь и уйдите незамеченным",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "5AFsnG2GGKCvU8eX",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Наркотик»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Создайте 1000 единиц фисштеха.</p><p><b>Эффект:</b> +1 к сопротивлению эффектам наркотиков.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к сопротивлению эффектам наркотиков. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Создайте 1000 единиц фисштеха",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "FgWQbR2FBRMH2hiW",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Удачливый..?»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Выиграйте 100 раз в азартных играх... без обмана.</p><p><b>Эффект:</b> Сумма выигрыша в азартных играх увеличивается на +10%.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "Сумма выигрыша в азартных играх увеличивается на +10%. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Выиграйте 100 раз в азартных играх... без обмана",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "UhzQNgPxgfE71fpt",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Инвестор»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "folder": [
+   "Татуировки",
+   "Средние"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Купите поместье (но не дворянское) и максимально обустройте его.</p><p><b>Эффект:</b> +2 к Торговле с продавцами товаров или мебели.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Торговле с продавцами товаров или мебели. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "medium",
+    "achievement": "Купите поместье (но не дворянское) и максимально обустройте его",
+    "size": 1.5,
+    "dc": 16,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Jd5AMr51TEMKbSkE",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Исполнитель»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Развлеките великого монарха своим актёрским мастерством.</p><p><b>Эффект:</b> +25% к доходу от выступлений.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+25% к доходу от выступлений. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Развлеките великого монарха своим актёрским мастерством",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "3SzgJhcc5XHmagXE",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Командир»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> 5 раз приведите небольшую группу НИП к победе.</p><p><b>Эффект:</b> +1 к Лидерству.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Лидерству. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.leadership",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "5 раз приведите небольшую группу НИП к победе",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "pnvOKrQ2pRazMkCO",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Нейтрал»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Всегда придерживайтесь нейтралитета в течение 3 кампаний подряд.</p><p><b>Эффект:</b> Если ваша Репутация была «Ненависть», она становится «Терпимость».</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "Если ваша Репутация была «Ненависть», она становится «Терпимость». Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Всегда придерживайтесь нейтралитета в течение 3 кампаний подряд",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "TXlLQMORcUCT0Gj7",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Экзорцист»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Упокойте 10 духов.</p><p><b>Эффект:</b> +1 к Харизме при общении с духами.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Харизме при общении с духами. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Упокойте 10 духов",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "qFwdQB1aeKFrxJVT",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Железный желудок»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Съешьте мясо 15 различных чудовищ... и переживите последствия.</p><p><b>Эффект:</b> +1 к сопротивлению эффектам ядов и отравления.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к сопротивлению эффектам ядов и отравления. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Съешьте мясо 15 различных чудовищ... и переживите последствия",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Wh9VZeXuUi4ZclzI",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «В яблочко»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Убейте чудовище из осадного орудия с расстояния более 800 м.</p><p><b>Эффект:</b> +1 к Силе.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Силе. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.physique",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Убейте чудовище из осадного орудия с расстояния более 800 м",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "QpQfOYSp9IgPb8so",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Друг зверей»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Оседлайте массивное существо на 5 минут и затем отпустите его.</p><p><b>Эффект:</b> +1 к Выживанию в дикой природе для дрессировки животных.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Выживанию в дикой природе для дрессировки животных. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Оседлайте массивное существо на 5 минут и затем отпустите его",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "DfstreSP48JZOqpI",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Огнестойкий»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Выдержите 2 минуты под воздействием огня.</p><p><b>Эффект:</b> Шанс возгорания уменьшается на 10%.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "Шанс возгорания уменьшается на 10%. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Выдержите 2 минуты под воздействием огня",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "B56j18PBKejv38Lg",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Милосердный»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Переубедите 5 убийц, преследующих вас.</p><p><b>Эффект:</b> +1 к Убеждению.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Убеждению. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.persuasion",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Переубедите 5 убийц, преследующих вас",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Bo22dR9X88H9hjJJ",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Выживший»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+  "folder": [
+   "Татуировки",
+   "Сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Выживите в бою 1 против 5.</p><p><b>Эффект:</b> +1 к Вниманию.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "80"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Вниманию. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.awareness",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "hard",
+    "achievement": "Выживите в бою 1 против 5",
+    "size": 2,
+    "dc": 18,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "9n2rvDYVU22BNt38",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Мститель»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Выследите и уничтожьте Чёрного Дракона.</p><p><b>Эффект:</b> +2 к Торговле, когда договариваетесь о награде.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Торговле, когда договариваетесь о награде. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Выследите и уничтожьте Чёрного Дракона",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "bnZIEdkBITnYeCTV",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Зазывала»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Обманите опытного торговца.</p><p><b>Эффект:</b> +1 к Обману.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Обману. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.deceit",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Обманите опытного торговца",
+    "size": 2,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "pJpf98HLdidMXnnA",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Живой щит»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Пожертвуйте собой, чтобы группа спаслась... и спаситесь сами!.</p><p><b>Эффект:</b> +2 к Удаче.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Удаче. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "stats.luck",
+     "value": 2
+    }
+   ],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Пожертвуйте собой, чтобы группа спаслась... и спаситесь сами!",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Vbi9hr7gwXOd7Kl7",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Стратег»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вы привели армию к победе благодаря своей превосходной стратегии.</p><p><b>Эффект:</b> +1 к Тактике и Лидерству, +1 к Репутации в этом бою.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Тактике и Лидерству, +1 к Репутации в этом бою. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.tactics",
+     "value": 1
+    },
+    {
+     "target": "skills.leadership",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Вы привели армию к победе благодаря своей превосходной стратегии",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "L15xJ2O7lMfIohdD",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Тренер»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Потренируйте своих друзей 50 раз.</p><p><b>Эффект:</b> +1 к Передаче знаний.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Передаче знаний. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.teaching",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Потренируйте своих друзей 50 раз",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "amXvIzMRID5mk1Uo",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Честный»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Говорите только правду в 5 разных странах, несмотря ни на что.</p><p><b>Эффект:</b> +1 к Харизме, Обману и Убеждению.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Харизме, Обману и Убеждению. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.charisma",
+     "value": 1
+    },
+    {
+     "target": "skills.deceit",
+     "value": 1
+    },
+    {
+     "target": "skills.persuasion",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Говорите только правду в 5 разных странах, несмотря ни на что",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "JNeXkCKu1KFcIsbn",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Арсен Люпен»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Украдите драгоценность у гостя в разгар банкета.</p><p><b>Эффект:</b> +1 к Ориентированию в городе и Скрытности.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Ориентированию в городе и Скрытности. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.streetwise",
+     "value": 1
+    },
+    {
+     "target": "skills.stealth",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Украдите драгоценность у гостя в разгар банкета",
+    "size": 1,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Oz9GKWkqmelMunEY",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Перо»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Переживите падение с 20 м.</p><p><b>Эффект:</b> Вы отменяете 1d6 урона при падении.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "Вы отменяете 1d6 урона при падении. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Переживите падение с 20 м",
+    "size": 2,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Awb6JbbZ4FwRf757",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Сильнее, чем хаос»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Выпейте ведьмачий эликсир (если вы не ведьмак)... и выживите.</p><p><b>Эффект:</b> +2 к проверкам на получение мутации или вживление руны.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к проверкам на получение мутации или вживление руны. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Выпейте ведьмачий эликсир (если вы не ведьмак)... и выживите",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "FXazipTnC4Z9YNQF",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Устойчивость»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-black-pink.webp",
+  "folder": [
+   "Татуировки",
+   "Очень сложные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Сопротивляйтесь соблазнению суккуба.</p><p><b>Эффект:</b> +1 к сопротивлению немагическим чарам.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к сопротивлению немагическим чарам. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "veryHard",
+    "achievement": "Сопротивляйтесь соблазнению суккуба",
+    "size": 3,
+    "dc": 20,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "kVNnANeeLuPt5x0c",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Одиночка»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Пройдите через Корат в одиночку.</p><p><b>Эффект:</b> +2 к Устойчивости.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Устойчивости. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "bonus.stun",
+     "value": 2
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Пройдите через Корат в одиночку",
+    "size": 4,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "7ZpcZGV3vvrxwZ1J",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Посланник»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Станьте героем нации.</p><p><b>Эффект:</b> Признание нации.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "Признание нации. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Станьте героем нации",
+    "size": 2,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "DzV0E7NLB7jPtkOj",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Справедливый»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Станьте слугой Золотого Дракона.</p><p><b>Эффект:</b> +1 к Воле.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Воле. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "stats.will",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Станьте слугой Золотого Дракона",
+    "size": 4,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "cPIZ01bemlssVJUf",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Смерть... Жизнь?»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Вы умерли... и вернулись с того света.</p><p><b>Эффект:</b> +1 к Тел.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Тел. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "stats.body",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Вы умерли... и вернулись с того света",
+    "size": 4,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "cXlXAj1srMLAKmhV",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Дипломат»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Пожмите руки всем монархам.</p><p><b>Эффект:</b> +2 к Убеждению.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Убеждению. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.persuasion",
+     "value": 2
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Пожмите руки всем монархам",
+    "size": 2,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "ytwXj431MOdi0FDm",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Пацифист»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Не убивайте гуманоидов... в течение 10 лет.</p><p><b>Эффект:</b> +2 к Харизме.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Харизме. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.charisma",
+     "value": 2
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Не убивайте гуманоидов... в течение 10 лет",
+    "size": 2,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "KGr8DReIZwkxGXK0",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Благословенный Герой»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Послужите воле божества.</p><p><b>Эффект:</b> Признание культа.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "Признание культа. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Послужите воле божества",
+    "size": 3,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "Zm0JUe3MMhgoLm39",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Кающийся»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Самостоятельно избавьтесь от проклятия.</p><p><b>Эффект:</b> +1 к Эмп.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1 к Эмп. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "stats.emp",
+     "value": 1
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Самостоятельно избавьтесь от проклятия",
+    "size": 1,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "o0Z0iui4qjzHmgps",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Ловец»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Победите Огра в одиночку... голыми руками.</p><p><b>Эффект:</b> +1d6 к урону от атаки рукой.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+1d6 к урону от атаки рукой. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Победите Огра в одиночку... голыми руками",
+    "size": 2,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "cwv1x9qKa6g7uDEG",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Татуировка «Умный как Дьявол»",
+  "type": "gear",
+  "img": "icons/magic/symbols/rune-sigil-horned-blue.webp",
+  "folder": [
+   "Татуировки",
+   "Легендарные"
+  ],
+  "system": {
+   "description": "<p><b>Подвиг:</b> Заключите сделку с таким существом, как Господин Зеркало или Ифрит, и выберитесь из этого договора живым и свободным.</p><p><b>Эффект:</b> +2 к Сопротивлению магии.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "81"
+   },
+   "category": "tattoo",
+   "effect": "+2 к Сопротивлению магии. Каждая татуировка — трофей: +1 к Репутации (стр. 78).",
+   "focus": 0,
+   "tool": "",
+   "mods": [
+    {
+     "target": "skills.resistMagic",
+     "value": 2
+    }
+   ],
+   "tattoo": {
+    "tier": "legendary",
+    "achievement": "Заключите сделку с таким существом, как Господин Зеркало или Ифрит, и выберитесь из этого договора живым и свободным",
+    "size": 4,
+    "dc": 22,
+    "location": "",
+    "applied": false,
+    "tries": 0
+   }
+  },
+  "_id": "nNQ09eZXNJV9aHeu",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
  }
 ]

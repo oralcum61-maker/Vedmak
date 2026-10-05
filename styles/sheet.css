@@ -934,6 +934,10 @@
 .application.vedmak .skills-tab .vv-btn.blood { background: linear-gradient(180deg, #a3262b, #5c0f12); }
 .application.vedmak .skills-tab .vv-btn:hover { filter: brightness(1.2); text-shadow: none; }
 .application.vedmak .skills-tab .vv-btn.disabled { opacity: .45; pointer-events: none; }
+/* Драконья форма Золотого дракона (parts/dragon-form.hbs): над древом, переключатель — как у Истинной формы */
+.application.vedmak .skills-tab .dragon-form { margin-bottom: .6rem; padding: .5rem .8rem .65rem; }
+.application.vedmak .skills-tab .dragon-form .hint { margin: .3rem 0 .45rem; font-size: .72rem; line-height: 1.4; color: #a8a296; }
+.application.vedmak .skills-tab .dragon-form .vv-form.active { background: #2a1a0c; border-color: #4a2e12; }
 /* Дополнительные ветви профессии */
 .application.vedmak .skills-tab .vp-alt { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.1rem; }
 .application.vedmak .skills-tab .vp-alt-card {

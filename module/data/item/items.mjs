@@ -206,7 +206,14 @@ export class GearData extends foundry.abstract.TypeDataModel {
       // Фокусирующий предмет (амулет): −N к затратам Вын на магию, минимум 1 (стр. 92, 167)
       focus: int(0, { min: 0 }),
       // Набор инструментов: алхимика, ремесленника, кузница… (стр. 92)
-      tool: str("")
+      tool: str(""),
+      // Поправки, пока предмет действует (у татуировки — нанесена): как у реликвий
+      mods: modsField(),
+      // Татуировка «Офира и Зеррикании» (стр. 78–81): ступень, подвиг, размер, СЛ нанесения, место на теле
+      tattoo: new SchemaField({
+        tier: str(""), achievement: str(""), size: new foundry.data.fields.NumberField({ initial: 0, min: 0 }),
+        dc: int(0, { min: 0 }), location: str(""), applied: new BooleanField({ initial: false }), tries: int(0, { min: 0 })
+      })
     };
   }
 }

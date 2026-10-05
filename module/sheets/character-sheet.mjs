@@ -19,6 +19,9 @@ import { attachEnhancement } from "../crafting/enhancements.mjs";
 import { signed, compareRu, worldSetting, postCard } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import { InvestigationApp } from "../apps/investigation-app.mjs";
+import { applyTattoo } from "../crafting/tattoo.mjs";
+import { implantDialog } from "../crafting/implant.mjs";
+import { dragonFormContext, transformDragon, revertDragon } from "../character/dragon-form.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
@@ -114,6 +117,10 @@ export class CharacterSheet extends VedmakActorSheet {
       lifepathRerollAll: CharacterSheet.#onLifepathRerollAll,
       lifepathRoll: CharacterSheet.#onLifepathRoll,
       investigation: () => InvestigationApp.open(),
+      applyTattoo: CharacterSheet.#onApplyTattoo,
+      implant: function () { return implantDialog(this.actor); },
+      dragonTransform: function () { return transformDragon(this.actor); },
+      dragonRevert: function () { return revertDragon(this.actor); },
       lifepathStep: CharacterSheet.#onLifepathStep,
       lifepathSection: CharacterSheet.#onLifepathSection,
       lifepathRest: CharacterSheet.#onLifepathRest,
@@ -365,6 +372,8 @@ export class CharacterSheet extends VedmakActorSheet {
 
     // Расовые навыки (высший вампир)
     context.vamp = racePowersContext(actor);
+    // Золотой дракон («Офир и Зеррикания»): Драконья форма над древом профессии
+    context.dragon = dragonFormContext(actor);
     return context;
   }
 
@@ -754,6 +763,12 @@ export class CharacterSheet extends VedmakActorSheet {
    * Начать жизненный путь персонажу без него: по расе, происхождению и возрасту с листа.
    * Первый бросок — сразу, остальные — кнопкой «Бросить» по одному.
    */
+  /** Нанести татуировку «Офира и Зеррикании» (плитка снаряжения). */
+  static async #onApplyTattoo(event, target) {
+    const item = this.actor.items.get(target.closest("[data-item-id]")?.dataset.itemId);
+    if (item) await applyTattoo(this.actor, item);
+  }
+
   static async #onLifepathRoll() {
     const actor = this.actor;
     const witcher = actor.system.raceKey === "witcher" || actor.system.professionKey === "witcher";

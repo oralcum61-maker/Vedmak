@@ -49,6 +49,7 @@ import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
+import { registerImplantHooks, implantDialog } from "./module/crafting/implant.mjs";
 import * as investigation from "./module/investigation/investigation.mjs";
 
 Hooks.once("init", () => {
@@ -246,13 +247,14 @@ Hooks.once("init", () => {
   registerFx();
   registerMigrationSettings();
   registerInvestigationUi();
+  registerImplantHooks();
 
   // API для макросов
   game.vedmak = {
     flipToken,
     performCheck, rollD10, attack, computeDamage, applyDamageToActor, rollStunSave, rollDeathSave,
     manualDamage, restTurn, restDays, controlCheck, castSpell,
-    advancement, crafting, alchemy, enhancements,
+    advancement, crafting, alchemy, enhancements, implant: implantDialog,
     openWizard: actor => new CharacterWizard({ actor }).render(true),
     profileSheet,
     hud: CombatHud,

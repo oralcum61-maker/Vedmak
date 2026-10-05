@@ -118,5 +118,21 @@ export const GEAR_CATEGORIES = {
   general: "Стандартное снаряжение", container: "Ёмкости", food: "Еда и питьё",
   clothing: "Одежда", tools: "Наборы инструментов", mount: "Упряжь и транспорт",
   alchemical: "Алхимические составы", component: "Компоненты", valuable: "Ценности",
-  service: "Услуги", lodging: "Проживание", ammo: "Боеприпасы", other: "Прочее"
+  service: "Услуги", lodging: "Проживание", ammo: "Боеприпасы", tattoo: "Татуировки", other: "Прочее"
+};
+
+/** Места татуировок и сколько их помещается («Офир и Зеррикания», стр. 78): руки и ноги — на каждой. */
+export const TATTOO_LOCATIONS = {
+  head:     { label: "Голова", max: 2 },
+  torso:    { label: "Корпус", max: 4 },
+  back:     { label: "Спина", max: 4 },
+  rightArm: { label: "Правая рука", max: 3 },
+  leftArm:  { label: "Левая рука", max: 3 },
+  rightLeg: { label: "Правая нога", max: 3 },
+  leftLeg:  { label: "Левая нога", max: 3 }
+};
+
+/** Ступени татуировок (стр. 79–81): цвет таблицы книги — трудность подвига. */
+export const TATTOO_TIERS = {
+  veryEasy: "Очень простая", easy: "Простая", medium: "Средняя", hard: "Сложная", veryHard: "Очень сложная", legendary: "Легендарная"
 };

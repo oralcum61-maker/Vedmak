@@ -67,6 +67,12 @@ export async function castSpell(actor, item, opts = {}) {
   let targets = opts.targets ?? currentTargets();
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
 
+  // Драконья магия «Офира и Зеррикании» (стр. 120): творится только в Драконьей форме
+  if (item.flags?.vedmak?.dragonMagic && !actor.effects.some(e => e.active && e.flags?.vedmak?.dragonForm)) {
+    ui.notifications.warn(`«${item.name}» — драконья магия: она творится только в Драконьей форме.`);
+    return null;
+  }
+
   // Квен и другие знаки со щитом: «нельзя сотворить снова, пока действует предыдущий» (стр. 114–115)
   if (s.kind === "sign" && spellAutomation(item).shieldPerSta && actor.effects.some(e => e.flags?.vedmak?.timed?.key === "shield" && e.name === `Щит: ${item.name}`)) {
     ui.notifications.warn(`${item.name} ещё действует — снова сотворить нельзя, пока не кончится прежний.`);

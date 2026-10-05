@@ -101,6 +101,7 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/actor/parts/effects.hbs",
   "systems/vedmak/templates/actor/parts/profession.hbs",
   "systems/vedmak/templates/actor/parts/race-powers.hbs",
+  "systems/vedmak/templates/actor/parts/dragon-form.hbs",
   "systems/vedmak/templates/actor/parts/skill-list.hbs",
   "systems/vedmak/templates/actor/parts/combat-fight.hbs",
   "systems/vedmak/templates/actor/parts/combat-social.hbs",

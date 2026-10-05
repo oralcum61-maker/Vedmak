@@ -567,6 +567,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       total: Math.round((item.system.weight ?? 0) * (item.system.quantity ?? 1) * 10) / 10
     });
     const known = new Set(Object.keys(CATS));
+    // Места татуировок — подписью ленты на нанесённой («Офир и Зеррикания»)
+    context.tattooPlaces = Object.fromEntries(Object.entries(CONFIG.VEDMAK.TATTOO_LOCATIONS ?? {}).map(([k, l]) => [k, l.label]));
     context.gearGroups = Object.entries(CATS).map(([key, label]) => ({
       key, label, items: context.items.gear.filter(i => (i.system.category || "general") === key).map(line)
     })).concat([{ key: "unknown", label: "Прочее",

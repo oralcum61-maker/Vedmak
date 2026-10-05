@@ -36,6 +36,7 @@
     {{> "systems/vedmak/templates/actor/parts/skill-list.hbs"}}
   </div>
   <div class="tab pane {{skillTabs.profession.cssClass}}" data-group="skills" data-tab="profession">
+    {{#if dragon}}{{> "systems/vedmak/templates/actor/parts/dragon-form.hbs"}}{{/if}}
     {{> "systems/vedmak/templates/actor/parts/profession.hbs"}}
   </div>
   {{#if vamp}}
