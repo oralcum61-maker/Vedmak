@@ -1,5 +1,6 @@
-// Жизненный путь (корник стр. 25–36), жизненный путь ведьмака (стр. 238–245) и высшего вампира
-// («Высший вампир. Вторая редакция», стр. 2–11).
+// Жизненный путь (корник стр. 25–36), жизненный путь ведьмака (стр. 238–245), высшего вампира
+// («Высший вампир. Вторая редакция», стр. 2–11), а также пути из книг: на чужой земле («Офир и Зеррикания»,
+// стр. 38–46) и мага («Том Хаоса», стр. 18–32).
 //
 // Все броски хранятся в плоском словаре `rolls` (путь → число). Функция `buildLifepath` по нему
 // строит разделы с результатами и собирает механические последствия (кроны, навыки, предметы…).
@@ -11,20 +12,22 @@
 import { LIFEPATH_TABLES } from "../config/lifepath-tables.mjs";
 import { VAMPIRE_TABLES, VAMPIRE_ROLE_BY_ROW, VAMPIRE_EVENTS_BY_AGE } from "../config/lifepath-vampire.mjs";
 import { OFIR_TABLES } from "../config/lifepath-ofir.mjs";
+import { TOME_TABLES } from "../config/lifepath-tome.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { renderTemplate } from "../util.mjs";
 
-const T = { ...LIFEPATH_TABLES, ...VAMPIRE_TABLES, ...OFIR_TABLES };
+const T = { ...LIFEPATH_TABLES, ...VAMPIRE_TABLES, ...OFIR_TABLES, ...TOME_TABLES };
 
 /** Раса, у которой свой жизненный путь вместо семьи и десятилетий корника. */
 export const VAMPIRE_RACE = "highVampire";
 
 /**
- * Дополнительные жизненные пути из книг (вместо обычного пути корника): «Офир и Зеррикания» — на чужой земле.
- * («Том Хаоса» — путь мага — добавляется отдельным этапом.) Ключ хранится в сохранённом жизненном пути (`kind`).
+ * Дополнительные жизненные пути из книг (вместо обычного пути корника): «Офир и Зеррикания» — на чужой земле,
+ * «Том Хаоса» — путь мага. Ключ хранится в сохранённом жизненном пути (`kind`).
  */
 export const LIFEPATH_KINDS = {
-  ofir:      { label: "На чужой земле (Офир и Зеррикания)" }
+  ofir:      { label: "На чужой земле (Офир и Зеррикания)" },
+  tomeMage:  { label: "Путь мага (Том Хаоса)" }
 };
 
 /** Бросок кости с `sides` гранями. */
@@ -71,7 +74,12 @@ const SUB = {
   "wEvents.7": [[1, 3, "Убит чудовищем"], [4, 6, "Его казнили"], [7, 8, "Жертва убийцы"], [9, 10, "Его отравили"]],
   "parentWho": [[1, 4, "Отец"], [5, 8, "Мать"], [9, 10, "Оба родителя"]],
   "eventKind": [[1, 4, "Удача или неудача"], [5, 7, "Союзники и враги"], [8, 10, "Любовь"]],
-  "allyWhere": [[1, 3, "Королевства Севера"], [4, 6, "Империя Нильфгаард"], [7, 9, "Земли Старших Народов"], [10, 10, "За пределами"]]
+  "allyWhere": [[1, 3, "Королевства Севера"], [4, 6, "Империя Нильфгаард"], [7, 9, "Земли Старших Народов"], [10, 10, "За пределами"]],
+  // Путь мага («Том Хаоса»): подброски из текста строк
+  "mgAccuse": [[1, 2, "Кража"], [3, 3, "Измена"], [4, 4, "Трусость"], [5, 5, "Изнасилование"], [6, 6, "Убийство"], [7, 7, "Мошенничество"], [8, 8, "Запретная магия"], [9, 9, "Уклонение от уплаты налогов"], [10, 10, "Неэтичные действия"]],
+  "mgLove": [[1, 6, "Роман длился несколько месяцев"], [7, 8, "Роман длился несколько лет"], [9, 10, "Роман продолжается до сих пор"]],
+  "mgTrophy": [[1, 4, "Эльфский дорожный посох"], [5, 8, "Гномий посох"], [9, 10, "Хрустальный череп"]],
+  "mgPortal": [[1, 3, "Старая поляна в Дол Блатанна"], [4, 5, "Горы Тир Тохаир"], [6, 8, "Болото в северном Каэдвене"], [9, 10, "Глубоко под Новиградом"]]
 };
 
 function subLookup(key, value) {
@@ -150,7 +158,7 @@ class Builder {
   table(section, path, tableKey, { label, col = 0, sides = 10, mod = 0 } = {}) {
     label ??= T[tableKey].label;
     const raw = this.roll(path, sides, { label, section });
-    const value = Math.max(1, Math.min(10, raw + mod));
+    const value = Math.max(1, Math.min(T[tableKey].rows.at(-1).max, raw + mod));
     const row = lookup(tableKey, value);
     const cell = cellOf(row, col);
     const entry = {
@@ -251,39 +259,41 @@ function buildRegular(b, { age = 25, region = "north", race = "human" }) {
 
 /** Важные события взрослой жизни: по одному за каждые полные 10 лет (стр. 31). */
 function lifeEvents(b, { age = 25 }) {
-  const fx = b.effects;
   const ev = b.section("Важные события");
   const decades = Math.floor((Number(age) || 0) / 10);
-  for (let i = 0; i < decades; i++) {
-    const base = `event.${i}`;
-    const kind = b.sub(ev, `${base}.kind`, "eventKind", `${(i + 1) * 10} лет: событие`);
-    if (kind.value <= 4) {
-      const luck = b.plain(ev, `${base}.luck`, "Удача или неудача", v => (v % 2 === 0 ? "Удача" : "Неудача"),
-        { options: EVEN_OPTIONS("удача", "неудача") });
-      if (luck.value % 2 === 0) fortune(b, ev, base, fx);
-      else misfortune(b, ev, base, fx);
-    } else if (kind.value <= 7) {
-      const who = b.plain(ev, `${base}.side`, "Союзник или враг", v => (v % 2 === 0 ? "Союзник" : "Враг"),
-        { options: EVEN_OPTIONS("союзник", "враг") });
-      if (who.value % 2 === 0) {
-        ["Пол", "Кто", "Как познакомились"].forEach((l, c) => b.table(ev, `${base}.ally.${c}`, "allies", { col: c, label: `Союзник: ${l.toLowerCase()}` }));
-        b.table(ev, `${base}.ally.close`, "closeness", { label: "Насколько близки" });
-        b.sub(ev, `${base}.ally.where`, "allyWhere", "Где союзник");
-      } else {
-        ["Пол", "Кто", "Причина"].forEach((l, c) => b.table(ev, `${base}.enemy.${c}`, "enemies", { col: c, label: `Враг: ${l.toLowerCase()}` }));
-        b.plain(ev, `${base}.enemy.victim`, "Кто пострадал", v => (v % 2 === 0 ? "Пострадавшая сторона — вы" : "Пострадавшая сторона — враг"),
-          { options: EVEN_OPTIONS("вы", "враг") });
-        // Столбец 0 таблицы enemyPower — номера строк из вёрстки книги, а не значения: сила врага — столбец 2
-        b.table(ev, `${base}.enemy.far`, "enemyPower", { col: 1, label: "Насколько далеко зашло" });
-        b.table(ev, `${base}.enemy.kind`, "enemyPower", { col: 2, label: "В чём сила" });
-      }
-    } else {
-      const love = b.sub(ev, `${base}.love`, "love", "Любовь");
-      if (love.value >= 2 && love.value <= 4) b.table(ev, `${base}.tragedy`, "tragedy");
-      else if (love.value >= 5 && love.value <= 6) b.table(ev, `${base}.problem`, "problematic");
-    }
-  }
+  for (let i = 0; i < decades; i++) lifeEvent(b, ev, `event.${i}`, `${(i + 1) * 10} лет: событие`);
   if (!decades) ev.entries.push({ label: "Событий нет", text: "Персонажу меньше 10 лет — важных событий не было.", static: true });
+}
+
+/** Одно важное событие (стр. 31): удача или неудача, союзник или враг, любовь. Броски — под путём `base`. */
+function lifeEvent(b, ev, base, label) {
+  const fx = b.effects;
+  const kind = b.sub(ev, `${base}.kind`, "eventKind", label);
+  if (kind.value <= 4) {
+    const luck = b.plain(ev, `${base}.luck`, "Удача или неудача", v => (v % 2 === 0 ? "Удача" : "Неудача"),
+      { options: EVEN_OPTIONS("удача", "неудача") });
+    if (luck.value % 2 === 0) fortune(b, ev, base, fx);
+    else misfortune(b, ev, base, fx);
+  } else if (kind.value <= 7) {
+    const who = b.plain(ev, `${base}.side`, "Союзник или враг", v => (v % 2 === 0 ? "Союзник" : "Враг"),
+      { options: EVEN_OPTIONS("союзник", "враг") });
+    if (who.value % 2 === 0) {
+      ["Пол", "Кто", "Как познакомились"].forEach((l, c) => b.table(ev, `${base}.ally.${c}`, "allies", { col: c, label: `Союзник: ${l.toLowerCase()}` }));
+      b.table(ev, `${base}.ally.close`, "closeness", { label: "Насколько близки" });
+      b.sub(ev, `${base}.ally.where`, "allyWhere", "Где союзник");
+    } else {
+      ["Пол", "Кто", "Причина"].forEach((l, c) => b.table(ev, `${base}.enemy.${c}`, "enemies", { col: c, label: `Враг: ${l.toLowerCase()}` }));
+      b.plain(ev, `${base}.enemy.victim`, "Кто пострадал", v => (v % 2 === 0 ? "Пострадавшая сторона — вы" : "Пострадавшая сторона — враг"),
+        { options: EVEN_OPTIONS("вы", "враг") });
+      // Столбец 0 таблицы enemyPower — номера строк из вёрстки книги, а не значения: сила врага — столбец 2
+      b.table(ev, `${base}.enemy.far`, "enemyPower", { col: 1, label: "Насколько далеко зашло" });
+      b.table(ev, `${base}.enemy.kind`, "enemyPower", { col: 2, label: "В чём сила" });
+    }
+  } else {
+    const love = b.sub(ev, `${base}.love`, "love", "Любовь");
+    if (love.value >= 2 && love.value <= 4) b.table(ev, `${base}.tragedy`, "tragedy");
+    else if (love.value >= 5 && love.value <= 6) b.table(ev, `${base}.problem`, "problematic");
+  }
 }
 
 function siblingsCount(v, race, region) {
@@ -590,6 +600,7 @@ export function buildLifepath(rolls, opts) {
     if (opts.witcher) buildWitcher(b, opts);
     else if (opts.race === VAMPIRE_RACE) buildVampire(b, opts);
     else if (opts.kind === "ofir") buildOfir(b, opts);
+    else if (opts.kind === "tomeMage") buildMage(b, opts);
     else buildRegular(b, opts);
   } catch (err) {
     if (err !== PENDING) throw err;
@@ -628,6 +639,14 @@ export function dependents(path) {
   if (path === "ofir.family") return ["ofir.parents", "ofir.parent", "ofir.parentsFate", "ofir.familyFate"];
   if (path === "ofir.parents") return ["ofir.parent", "ofir.parentsFate"];
   if (path === "ofir.sibCount") return ["ofir.sib"];
+  // Путь мага: место рождения — колонка реакции и школа по умолчанию, школа — колонка академии и ученичества
+  const MAGE_SCHOOL_DEPS = ["mage.acad", "mage.appr", "mage.mentor", "mage.teach", "mage.moment", "mage.mentorEnd"];
+  if (path === "mage.birth") return ["mage.reaction", "mage.school", ...MAGE_SCHOOL_DEPS];
+  if (path === "mage.school") return MAGE_SCHOOL_DEPS;
+  if (path === "mage.appr") return ["mage.mentor", "mage.teach", "mage.moment", "mage.mentorEnd"];
+  // Декада академии: её подброски (союзник, обида, знание, кроны, событие) и ученичество, которое она могла дать
+  if (/^mage\.acad\.\d+$/.test(path)) return [`${path}.ally`, `${path}.grudge`, `${path}.knowledge`, `${path}.d6`, `${path}.ev`,
+    `${path}.skill`, "mage.appr", "mage.mentor", "mage.teach", "mage.moment", "mage.mentorEnd"];
   // Возраст вампира решает, сколько событий; восьмое событие — ещё бросок славы
   if (path === "vAge") return ["vEvent"];
   if (/^vEvent\.\d+$/.test(path)) return [`${path}.fame`];
@@ -638,16 +657,17 @@ export function dependents(path) {
   if (/^decade\.\d+\.hunt\.twist$/.test(path)) return [`${path}What`];
   const sub = path.match(/^(event\.\d+\.misfortune)\.sub$/);
   if (sub) return [`${sub[1]}.months`];
-  const m = path.match(/^(event\.\d+|decade\.\d+)\.(kind|luck|side|love|danger|dangerKind|outcome|event|benefit|fortune|misfortune)$/);
+  const m = path.match(/^(event\.\d+|decade\.\d+|mage\.acad\.\d+\.ev)\.(kind|luck|side|love|danger|dangerKind|outcome|event|benefit|fortune|misfortune|trouble|knowledge)$/);
   if (m) {
     const [, base, what] = m;
     const children = {
       kind: ["luck", "side", "love", "fortune", "misfortune", "ally", "enemy", "tragedy", "problem"],
       luck: ["fortune", "misfortune"], side: ["ally", "enemy"], love: ["tragedy", "problem"],
-      danger: ["dangerKind", "event", "wound", "enemy"], dangerKind: ["event", "wound", "enemy"],
-      outcome: ["benefit", "ally", "hunt"], event: [], benefit: [], fortune: [], misfortune: []
+      danger: ["dangerKind", "event", "wound", "enemy", "trouble"], dangerKind: ["event", "wound", "enemy"],
+      outcome: ["benefit", "ally", "hunt", "knowledge"], event: [], benefit: [], fortune: [], misfortune: [], trouble: [], knowledge: []
     }[what] ?? [];
-    return [...children.map(c => `${base}.${c}`), `${path}.sub`, `${path}.d10`, `${path}.beast`, `${path}.skill`, `${path}.months`];
+    return [...children.map(c => `${base}.${c}`), `${path}.sub`, `${path}.d10`, `${path}.d6`, `${path}.beast`, `${path}.skill`, `${path}.months`,
+      `${path}.grudge`, `${path}.portal`];
   }
   return [];
 }
@@ -755,6 +775,288 @@ function buildOfir(b, { age = 25 }) {
   styleAndValues(b);
 }
 
+/* ------------------------------- Путь мага ------------------------------- */
+/* «Том Хаоса», стр. 18–32: детство, школа магии и ученичество — по таблицам книги, затем жизнь мага:
+   за каждое десятилетие после 20 лет — поведение, бросок опасности (d100) и событие. Стиль и ценности —
+   из основного пути. */
+
+/** Поведение мага за десятилетие (стр. 25): рейтинг опасности, колонка таблиц и исходы d10. */
+export const MAGE_BEHAVIOR = {
+  careful:     { label: "Осторожность (20%)", danger: 20, col: 0,
+    outcome: [[1, 1, "benefit"], [2, 2, "ally"], [3, 3, "knowledge"], [4, 10, "nothing"]] },
+  politics:    { label: "Политиканство (50%)", danger: 50, col: 1,
+    outcome: [[1, 2, "benefit"], [3, 7, "ally"], [8, 8, "knowledge"], [9, 10, "nothing"]] },
+  experiments: { label: "Эксперименты (70%)", danger: 70, col: 2,
+    outcome: [[1, 3, "benefit"], [4, 4, "ally"], [5, 10, "knowledge"]] },
+  research:    { label: "Магические исследования (50%)", danger: 50, col: 3,
+    outcome: [[1, 5, "benefit"], [6, 7, "ally"], [8, 8, "knowledge"], [9, 10, "nothing"]] }
+};
+const MAGE_OUTCOMES = { benefit: "Выгода", ally: "Союзник", knowledge: "Знание", nothing: "Ничего особенного" };
+
+/** Поведение десятилетия: справочник ведьмака или мага — по ключу. */
+function riskOf(key) {
+  return MAGE_BEHAVIOR[key] ?? WITCHER_RISK[key] ?? null;
+}
+
+/** Колонка «Как люди реагировали» по месту рождения: Север (и Скеллиге), Старшие земли, Нильфгаард. */
+const mageRegionCol = birth => (birth === 11 ? 1 : birth >= 6 ? 2 : 0);
+const MAGE_SCHOOLS = ["Аретуза", "Бан Ард", "Гвейсон Хайль", "Малая академия"];
+
+/** Школа по месту рождения и полу (стр. 20) — только подсказка, игрок может выбрать другую. */
+function mageDefaultSchool(birth, gender = "") {
+  if (birth === 11) return 4;
+  if (birth >= 6) return 3;
+  return /^ж|жен/i.test(String(gender).trim()) ? 1 : 2;
+}
+
+/** Обида (стр. 28): профессия, причина, обострение, сила — четыре броска под путём `base`. */
+function mageGrudge(b, sec, base, label = "Обида") {
+  T.mgGrudge.cols.forEach((l, c) => b.table(sec, `${base}.${c}`, "mgGrudge", { col: c, label: `${label}: ${l.toLowerCase()}` }));
+}
+
+/** Союзник (стр. 30): профессия, как встретились, близость, значимость. */
+function mageAlly(b, sec, base, label = "Союзник") {
+  T.mgAllies.cols.forEach((l, c) => b.table(sec, `${base}.${c}`, "mgAllies", { col: c, label: `${label}: ${l.toLowerCase()}` }));
+}
+
+/** Знание (стр. 31). Повтор «Магического биолога», «Энциклопедии Арканы» книга велит перебросить — помечаем. */
+function mageKnowledge(b, sec, path, seen) {
+  const fx = b.effects;
+  const skill = (k, n) => (fx.skills[k] = (fx.skills[k] ?? 0) + n);
+  const e = b.table(sec, path, "mgKnowledge", { label: "Знание" });
+  const v = e.row?.min;
+  if ([3, 6].includes(v) && seen.has(`knowledge.${v}`)) {
+    e.detail = "Это знание уже есть — по книге этот результат перебрасывается.";
+    return e;
+  }
+  seen.add(`knowledge.${v}`);
+  switch (v) {
+    case 1: fx.definingBonus += 1; skill("hexWeaving", 1); fx.notes.push("Сведущий в порче: +1 к Магическому познанию (вписано в определяющий навык)"); break;
+    case 2: fx.notes.push("Заученные формулы: 1 заклинание новичка и 1 подмастерья сверх обычного"); break;
+    case 3: fx.notes.push("Магический биолог: ритуал «Наполнение трофея» («Том Хаоса», стр. 102)"); break;
+    case 4: fx.notes.push("Зерриканская алхимия: формула зерриканского огня"); break;
+    case 5: fx.notes.push("Знаки и предзнаменования: видение будущего события — решает Мастер"); break;
+    case 6: fx.definingBonus += 2; fx.notes.push("Энциклопедия Арканы: +2 к Магическому познанию (вписано в определяющий навык)"); break;
+    case 7: fx.notes.push("Исследования лей-линий: +2 к попыткам черпать силу лей-линии, заклинание «Обнаружение лей-линий»"); break;
+    case 8: fx.notes.push("Помощник учителя: обучая магов заклинаниям, вдвое меньше проверок обучения"); break;
+    case 9: skill("alchemy", 1); fx.notes.push("Ученик алхимика: 2 алхимические формулы новичка"); break;
+    case 10: fx.notes.push("Эксперт по предсказаниям: ритуал Гидромантии, Пиромантии, Тиромантии или Онейромантии"); break;
+  }
+  return e;
+}
+
+/**
+ * Жизнь в академии (стр. 21–22): одна из двух декад обучения, колонка своей школы.
+ * @returns {boolean} сделали ли вас учеником
+ */
+function mageAcademy(b, sec, base, col, n, seen) {
+  const fx = b.effects;
+  const skill = (k, v) => (fx.skills[k] = (fx.skills[k] ?? 0) + v);
+  const e = b.table(sec, base, "mgAcademy", { col, label: `Жизнь в академии: ${n}-я декада` });
+  const v = e.row?.min;
+  const note = text => fx.notes.push(text);
+  // [строка][школа]: Аретуза, Бан Ард, Гвейсон Хайль, Малая академия
+  switch (`${v}.${col}`) {
+    case "1.0": case "1.1": case "1.2": case "1.3": fx.vigorBonus -= 1; break;
+    case "2.0": case "8.2": mageAlly(b, sec, `${base}.ally`, "Союзник-маг"); break;
+    case "2.1": case "2.2": e.detail = "Вас сделали учеником."; return true;
+    case "2.3": note("Тёмная магия: вы носите Люцифуг демона — он всегда знает, где вы"); break;
+    case "3.0": case "6.1": case "6.2": mageGrudge(b, sec, `${base}.grudge`, "Враг"); break;
+    case "3.1": case "5.2": note("Свиток заклинания подмастерья — какого, решает Мастер"); break;
+    case "3.2": note("Формула бомбы — какой, решает Мастер"); break;
+    case "3.3": note("Цель ведьмака: вас ищет ведьмак школы Кота"); break;
+    case "4.0": case "9.3": note("Заклинание новичка сверх обычного"); break;
+    case "4.1": mageKnowledge(b, sec, `${base}.knowledge`, seen); break;
+    case "4.2": note("Законник: +2 к репутации у властей Нильфгаарда"); break;
+    case "4.3": skill("firstAid", 2); break;
+    case "5.0": note("Впечатлили сановника: +2 к репутации при дворе одного королевства"); break;
+    case "5.1": case "8.3": skill("monsterLore", 1); break;
+    case "5.3": skill("wilderness", 2); break;
+    case "6.0": note("Ритуальные компоненты на 100 крон"); break;
+    case "6.3": note("Помогали местным: в своей области — социальное положение «Равенство»"); break;
+    case "7.0": note("Материал для шантажа учителя: одна услуга на усмотрение Мастера"); break;
+    case "7.1": {
+      const n6 = b.roll(`${base}.d6`, 6, { label: "Сколько крон (1d6 × 100)", section: sec, owner: e });
+      e.detail = `Получено ${n6 * 100} крон (1d6 = ${n6}).`;
+      fx.crowns += n6 * 100;
+      break;
+    }
+    case "7.2": fx.skillChoices.push({ path: `${base}.skill`, label: "Охота на мага-отступника: +1 к боевому навыку или новый боевой навык +2", combat: true }); break;
+    case "7.3": case "8.1": case "10.0": note("Проклятие (корник, стр. 230) — выбирается с Мастером"); break;
+    case "8.0": note("Подсказки о реликвии — какой, решает Мастер"); break;
+    case "9.0":
+      lifeEvent(b, sec, `${base}.ev`, "Событие в открытом мире");
+      e.detail = "Вас сделали учеником.";
+      return true;
+    case "9.1": note("Тайное общество: +2 к репутации у выпускников Бан Арда"); break;
+    case "9.2": skill("charisma", 1); skill("etiquette", 1); break;
+    case "10.1": skill("langElder", 2); break;
+    case "10.2": skill("disguise", 1); note("Шпионская выучка: маскировка без набора для маскировки без штрафа"); break;
+    case "10.3": note("Свой фокус: амулет — предмет фокусировки (2)"); break;
+  }
+  return false;
+}
+
+/** Опасность десятилетия (стр. 26–27): колонка поведения. */
+function mageDanger(b, sec, base, col, seen) {
+  const fx = b.effects;
+  const skillMod = (k, n) => (fx.skillMods[k] = (fx.skillMods[k] ?? 0) + n);
+  const e = b.table(sec, base, "mgDanger", { col, label: "Что пошло не так" });
+  const v = e.row?.min;
+  const note = text => fx.notes.push(text);
+  switch (`${v}.${col}`) {
+    case "1.0": {
+      const n = b.roll(`${base}.d10`, 10, { label: "Сколько долга (1d10 × 100 крон)", section: sec, owner: e });
+      e.detail = `Долг: ${n * 100} крон (1d10 = ${n}).`;
+      note(e.detail);
+      break;
+    }
+    case "1.1": case "5.1": case "9.1": mageGrudge(b, sec, `${base}.grudge`, "Враг"); break;
+    case "1.2": fx.hpBonus -= 2; break;
+    case "1.3": note("Магическая блокировка: −2 к Сотворению заклинаний одной стихии (накопительно)"); break;
+    case "2.0": fx.addictions.push(""); break;
+    case "2.1": { const sub = b.sub(sec, `${base}.sub`, "mgAccuse", "В чём обвинили"); note(`Ложное обвинение: ${sub.text.toLowerCase()}`); break; }
+    case "2.2": note("Встреча с демоном: вы носите Люцифуг — демон всегда знает, где вы"); break;
+    case "2.3": note("Фобия чудовища: −2 к Храбрости против него, при первой встрече — Храбрость СЛ 15"); break;
+    case "3.0": case "4.2": fx.staBonus -= 2; break;
+    case "3.1": note("Предательство: друг стал врагом"); break;
+    case "3.2": note("Признаны опасным: в одном королевстве вас разыскивают власти"); break;
+    case "3.3": note("Перегрузка с Места силы: каждое Место силы — испытание Вын, как при втором заборе"); break;
+    case "4.0": note("Разгневанные горожане: в одном крупном городе вас считают угрозой"); break;
+    case "4.1": note("Друг или любовник убит"); break;
+    case "4.3": note("Вас преследует голем могущественного мага"); break;
+    case "5.0": {
+      const sub = b.sub(sec, `${base}.sub`, "misfortune.8", "Подробности");
+      if (sub.value <= 4) fx.feared = true;
+      else if (sub.value <= 8) sub.detail = `${b.roll(`${base}.months`, 10, { label: "Сколько месяцев", section: sec, owner: sub })} мес.`;
+      break;
+    }
+    case "5.2": fx.feared = true; break;
+    case "5.3": note("Громкая телепатия: цель слежки замечает вас Вниманием СЛ 15"); break;
+    case "6.0": e.detail = `В тюрьме ${b.roll(`${base}.d10`, 10, { label: "Сколько месяцев в тюрьме", section: sec, owner: e })} мес.`; break;
+    case "6.1": note("Социальная оплошность: маги относятся к вам как к «Терпимому»"); break;
+    case "6.2": note("Магическая аллергия: зелья и эликсиры вызывают тошноту на время действия"); break;
+    case "6.3": skillMod("etiquette", -2); break;
+    case "7.0": note("Наставник скончался"); break;
+    case "7.1": {
+      const n = b.roll(`${base}.d6`, 6, { label: "Сколько охотников за головами (1d6 + 5)", section: sec, owner: e });
+      e.detail = `Вас ищут ${n + 5} охотников за головами (1d6 = ${n}).`;
+      note(e.detail);
+      break;
+    }
+    case "7.2": note("Опьянение: выпив зелье или эликсир — Тел против СЛ (Тел + 1d10), иначе опьянение"); break;
+    case "7.3": note("Экстремальная уязвимость: −3 к Стойкости против двимерита"); break;
+    case "8.0": note("Выпадение волос: волосы больше не растут"); break;
+    case "8.1": note("Враг государства: в одной стране — «Ненависть»"); break;
+    case "8.2": fx.addictions.push("Эликсиры"); break;
+    case "8.3": note("Телепортационная болезнь: после портала Стойкость СЛ 12, иначе тошнота на 10 минут"); break;
+    case "9.0": note("Артрит: −1 к Сотворению заклинаний с движением рук"); break;
+    case "9.2": note("Потеряли вкус, обоняние или осязание: −2 к проверкам по этому чувству"); break;
+    case "9.3": note("Вас разыскивают охотники на колдуний (или на магов)"); break;
+    case "10.0": note("Порча (корник, стр. 105 и 120) — ещё не снята, выбирается с Мастером"); break;
+    case "10.1": note("На службе у дворянина: 100 крон в месяц, по зову — немедленно"); break;
+    case "10.2": note("Малая мутация мутагена на выбор: облик и социальное положение"); break;
+    case "10.3": note("Проклятие (корник, стр. 230) — выбирается с Мастером"); break;
+  }
+  return e;
+}
+
+/** Выгода десятилетия (стр. 29). */
+function mageBenefit(b, sec, base, seen) {
+  const fx = b.effects;
+  const e = b.table(sec, base, "mgBenefit", { label: "Выгода" });
+  const v = e.row?.min;
+  if (v === 10 && seen.has("benefit.10")) {
+    e.detail = "Это преимущество уже есть — по книге этот результат перебрасывается.";
+    return e;
+  }
+  seen.add(`benefit.${v}`);
+  switch (v) {
+    case 1: fx.notes.push("Союзник-маг: ваш ученик"); break;
+    case 2: fx.notes.push("Своё сообщество: в той области к вам относятся как к Равным"); break;
+    case 3: fx.notes.push("Вам должны 600 крон — можно взыскать в любой момент"); break;
+    case 4: fx.notes.push("Фамильяр: обученное животное (кошка, собака, птица или змея)"); break;
+    case 5: b.sub(sec, `${base}.sub`, "mgLove", "Сколько длился роман"); break;
+    case 6: { const sub = b.sub(sec, `${base}.sub`, "mgTrophy", "Трофей"); fx.items.push(sub.text); break; }
+    case 7: {
+      const act = b.plain(sec, `${base}.portal`, "Портал активен?", x => (x % 2 === 0 ? "Портал всё ещё активен" : "Портал не действует"),
+        { options: EVEN_OPTIONS("активен", "не действует") });
+      if (act.value % 2 === 0) {
+        const dest = b.sub(sec, `${base}.sub`, "mgPortal", "Куда ведёт портал");
+        fx.notes.push(`Активный эльфийский портал: ${dest.text.toLowerCase()}`);
+      } else fx.notes.push("Заброшенный эльфийский портал");
+      break;
+    }
+    case 8: fx.skills.resistMagic = (fx.skills.resistMagic ?? 0) + 1; break;
+    case 9: fx.notes.push("Место силы: 5 единиц Пятой сущности"); break;
+    case 10: fx.notes.push("Колдовство в доспехах: −1 к общему СД доспехов для заклинаний"); break;
+  }
+  return e;
+}
+
+function buildMage(b, { age = 25, gender = "" }) {
+  const fx = b.effects;
+  const seen = new Set();
+
+  // Детство: где родились, семья, как открылся дар и как на него отреагировали
+  const kid = b.section("Детство");
+  const birth = b.table(kid, "mage.birth", "mgBirth", { label: "Где вы родились" });
+  const regionCol = mageRegionCol(birth.value);
+  T.mgFamily.cols.forEach((l, c) => b.table(kid, `mage.family.${c}`, "mgFamily", { col: c, label: l }));
+  const disc = b.table(kid, "mage.discovery", "mgDiscovery", { label: "Как открылся дар" });
+  // «Вычтите N из вашего следующего броска» — следующий бросок — реакция на магию (1d6); ниже 1 — первая строка
+  const dv = disc.row?.min;
+  const mod = dv === 1 || dv === 10 ? -3 : dv === 2 || dv === 9 ? -2 : 0;
+  const react = b.table(kid, "mage.reaction", "mgReaction", { col: regionCol, sides: 6, mod, label: "Как люди реагировали на вашу магию" });
+  if (mod) react.detail = `Бросок ${react.value} − ${Math.abs(mod)} = ${react.shown}`;
+
+  // Школа — без броска: по месту рождения и полу, игрок может выбрать другую («Вдали от дома», стр. 20)
+  const sch = b.section("Школа магии");
+  if (!("mage.school" in b.rolls)) b.rolls["mage.school"] = mageDefaultSchool(birth.value, gender);
+  const school = b.table(sch, "mage.school", "mgSchool", { sides: 4, label: "Школа" });
+  const col = Math.max(0, Math.min(3, (school.row?.min ?? 4) - 1));
+  const perk = cellOf(T.mgPerk.rows[col]);
+  sch.entries.push({ label: "Дар школы", title: perk.title, text: perk.text, static: true });
+  fx.notes.push(`${perk.title}: ${perk.text}`);
+  // Обучение — около 20 лет, две декады
+  let apprentice = false;
+  for (let n = 0; n < 2; n++) apprentice = mageAcademy(b, sch, `mage.acad.${n}`, col, n + 1, seen) || apprentice;
+
+  const ap = b.section("Ученичество");
+  if (apprentice) ap.entries.push({ label: "Вы были учеником?", text: "Да — вас сделали учеником в академии.", static: true });
+  else apprentice = b.table(ap, "mage.appr", "mgApprentice", { col, sides: 6, label: "Вы были учеником?" }).text === "Да";
+  if (apprentice) {
+    T.mgMentor.cols.forEach((l, c) => b.table(ap, `mage.mentor.${c}`, "mgMentor", { col: c, label: `Наставник: ${l.toLowerCase()}` }));
+    b.table(ap, "mage.teach", "mgTeach", { sides: 6, label: "Стиль преподавания" });
+    b.table(ap, "mage.moment", "mgMoment", { label: "Самый запоминающийся момент" });
+    b.table(ap, "mage.mentorEnd", "mgMentorEnd", { label: "Как вы расстались" });
+    fx.notes.push("Привязь к наставнику: в 10 м друг от друга оба мага творят известное обоим («Том Хаоса», стр. 23)");
+  }
+
+  // Жизнь мага: за каждое десятилетие после 20 лет — поведение, опасность (d100) и событие
+  const decades = Math.max(0, Math.floor(((Number(age) || 0) - 20) / 10));
+  for (let i = 0; i < decades; i++) {
+    const base = `decade.${i}`;
+    const sec = b.section(`Десятилетие ${i + 1} (${20 + i * 10}–${30 + i * 10} лет)`);
+    sec.decade = i;
+    const key = MAGE_BEHAVIOR[b.rolls[`${base}.risk`]] ? b.rolls[`${base}.risk`] : "careful";
+    const beh = MAGE_BEHAVIOR[key];
+    sec.risk = key;
+    const danger = b.plain(sec, `${base}.danger`, "Опасность (d100)",
+      v => (v <= beh.danger ? `Что-то пошло не так (${v} ≤ ${beh.danger}%)` : `Обошлось (${v} > ${beh.danger}%)`), { sides: 100 });
+    if (danger.value <= beh.danger) mageDanger(b, sec, `${base}.trouble`, beh.col, seen);
+    const outcomeOf = v => beh.outcome.find(([a, c]) => v >= a && v <= c)?.[2] ?? "nothing";
+    const outcomeRoll = b.plain(sec, `${base}.outcome`, "Что пошло правильно", v => MAGE_OUTCOMES[outcomeOf(v)]);
+    const outcome = outcomeOf(outcomeRoll.value);
+    if (outcome === "benefit") mageBenefit(b, sec, `${base}.benefit`, seen);
+    else if (outcome === "ally") mageAlly(b, sec, `${base}.ally`);
+    else if (outcome === "knowledge") mageKnowledge(b, sec, `${base}.knowledge`, seen);
+  }
+  if (!decades) b.section("Жизнь мага").entries.push({ label: "Десятилетия", text: "Магу меньше 30 лет — он только окончил обучение.", static: true });
+
+  styleAndValues(b);
+}
+
 /* ------------------------------------------------------------------------- */
 /*  Хранение в персонаже, переброс и показ карточками — общее для мастера      */
 /*  создания и «Дневника»                                                     */
@@ -775,13 +1077,13 @@ export function readLifepath(json) {
   }
 }
 
-export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human", kind = "" }) {
-  return JSON.stringify({ rolls, witcher, age, region, race, kind });
+export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human", kind = "", gender = "" }) {
+  return JSON.stringify({ rolls, witcher, age, region, race, kind, gender });
 }
 
 /** Параметры сборки из сохранённого жизненного пути. */
 export function savedOpts(data) {
-  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race, kind: data.kind || "" };
+  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race, kind: data.kind || "", gender: data.gender || "" };
 }
 
 /** Собрать сохранённый жизненный путь пошагово: недостающие броски не делаются, `next` — следующий. */
@@ -888,14 +1190,15 @@ export function lifepathCards(sections, {
     const icon = { "Семья": "fa-house-chimney", "Личный стиль": "fa-shirt", "Ценности": "fa-scale-balanced",
       "Школа и испытания": "fa-flask", "Жизнь ведьмака": "fa-road",
       "Клан и юность": "fa-chess-rook", "События жизни": "fa-hourglass-half", "Увлечение, кровь и роль": "fa-droplet",
-      "Характер": "fa-masks-theater" }[sec.title] ?? (sec.risk ? "fa-hourglass-half" : "fa-scroll");
+      "Характер": "fa-masks-theater", "Чужие края": "fa-sun", "Детство": "fa-child", "Школа магии": "fa-hat-wizard",
+      "Ученичество": "fa-user-graduate", "Жизнь мага": "fa-hourglass-half" }[sec.title] ?? (sec.risk ? "fa-hourglass-half" : "fa-scroll");
     cards.push({
       title: sec.title, icon, grid, cls: sec.risk ? "event" : grid ? "grid" : "",
-      subtitle: sec.risk ? WITCHER_RISK[sec.risk]?.label ?? "" : "",
+      subtitle: sec.risk ? riskOf(sec.risk)?.label ?? "" : "",
       decade: sec.decade ?? null,
       // Поведение ведьмака выбирают в правке и пока десятилетие бросается: от него шанс опасности
       riskOptions: sec.risk && (editable || (nextAction && sec.entries.some(e => e.pending)))
-        ? Object.entries(WITCHER_RISK).map(([k, v]) => ({ key: k, label: v.label, selected: k === sec.risk })) : null,
+        ? Object.entries(MAGE_BEHAVIOR[sec.risk] ? MAGE_BEHAVIOR : WITCHER_RISK).map(([k, v]) => ({ key: k, label: v.label, selected: k === sec.risk })) : null,
       rows: done.map(e => entryView(e, ctx)),
       pending: pendingOf(sec.entries)
     });
@@ -913,7 +1216,20 @@ const STRUCTURAL = /\.(kind|luck|side|danger|dangerKind|outcome)$/;
 /** Что за запись в событии десятилетия — по пути броска после «event.N.» / «decade.N.». */
 const FACETS = {
   fortune: "Удача", misfortune: "Неудача", love: "Любовь", tragedy: "Любовь", problem: "Любовь",
-  ally: "Союзник", enemy: "Враг", event: "Беда", wound: "Рана", benefit: "Выгода", hunt: "Охота"
+  ally: "Союзник", enemy: "Враг", event: "Беда", wound: "Рана", benefit: "Выгода", hunt: "Охота",
+  trouble: "Беда", knowledge: "Знание"
+};
+
+/** Разделы летописи «фактами»: заголовок блока и главные строки (крупно). */
+const FACT_SECTIONS = {
+  "Семья": { title: "Происхождение", featured: ["familyStatus", "friend", "ofir.status", "ofir.friend"] },
+  "Чужие края": { title: "Чужие края", featured: ["ofir.region"] },
+  "Школа и испытания": { title: "Школа и испытания", featured: ["wSchool"] },
+  "Жизнь ведьмака": { title: "Жизнь ведьмака", featured: ["wSituation"] },
+  "Детство": { title: "Детство", featured: ["mage.birth", "mage.discovery"] },
+  "Школа магии": { title: "Школа магии", featured: ["mage.school"] },
+  "Ученичество": { title: "Ученичество", featured: [] },
+  "Жизнь мага": { title: "Жизнь мага", featured: [] }
 };
 
 const LONG = 70;
@@ -994,14 +1310,14 @@ export function lifepathStory(sections, { nextAction = null, sectionAction = nul
     const done = sec.entries.filter(e => !e.pending);
     const has = path => done.some(e => e.path === path);
 
-    if (sec.title === "Семья" || sec.title === "Школа и испытания" || sec.title === "Жизнь ведьмака") {
+    const factSec = FACT_SECTIONS[sec.title];
+    if (factSec) {
       // Развилка «с семьёй что-то случилось» не нужна, если следом сказано, что именно
-      const rows = done.filter(e => !(e.path === "family" && has("familyFate")) && !(e.path === "parents" && has("parentsFate")));
-      const featuredPaths = { "Семья": ["familyStatus", "friend"], "Школа и испытания": ["wSchool"], "Жизнь ведьмака": ["wSituation"] }[sec.title];
-      const featured = rows.filter(e => featuredPaths.includes(e.path)).map(e => fact(e));
-      const facts = rows.filter(e => !featuredPaths.includes(e.path)).map(inlineFact);
-      const title = { "Семья": "Происхождение", "Школа и испытания": "Школа и испытания", "Жизнь ведьмака": "Жизнь ведьмака" }[sec.title];
-      if (featured.length || facts.length) blocks.push({ kind: "facts", title, featured, facts });
+      const rows = done.filter(e => !(e.path === "family" && has("familyFate")) && !(e.path === "parents" && has("parentsFate"))
+        && !(e.path === "ofir.family" && has("ofir.familyFate")) && !(e.path === "ofir.parents" && has("ofir.parentsFate")));
+      const featured = rows.filter(e => factSec.featured.includes(e.path)).map(e => fact(e));
+      const facts = rows.filter(e => !factSec.featured.includes(e.path)).map(inlineFact);
+      if (featured.length || facts.length) blocks.push({ kind: "facts", title: factSec.title, featured, facts });
       continue;
     }
     // Высший вампир: клан и юность, увлечение и роль — фактами; события — хроникой; характер — нравом
@@ -1063,7 +1379,7 @@ export function lifepathStory(sections, { nextAction = null, sectionAction = nul
       const rolledOutcome = done.some(e => /\.outcome$/.test(e.path));
       if (!facets.length && rolledOutcome) facets = [{ title: "", head: "Спокойное десятилетие", meta: [], notes: [], quiet: true }];
       if (!facets.length) continue;
-      const risk = WITCHER_RISK[sec.risk]?.label ?? "";
+      const risk = riskOf(sec.risk)?.label ?? "";
       const era = { from: years?.[1], to: years?.[2], unit: "лет", hint: `Поведение: ${risk}`,
         sub: sec.risk === "normal" ? "" : risk, quiet: facets.length === 1 && facets[0].quiet, risk: sec.risk, facets };
       // Спокойные десятилетия подряд с тем же поведением — одной записью: «23–53»

@@ -757,7 +757,10 @@ export class CharacterSheet extends VedmakActorSheet {
       rolls: {}, witcher,
       age: Number.parseInt(actor.system.details.age) || (witcher ? 80 : 25),
       region: lifepathRegion(actor.system),
-      race: actor.system.raceKey || "human"
+      race: actor.system.raceKey || "human",
+      // Магу — путь мага «Тома Хаоса» (стр. 18): книга предлагает его вместо обычного
+      kind: actor.system.professionKey === "mage" ? "tomeMage" : "",
+      gender: actor.system.details.gender ?? ""
     };
     await this.#stepLifepath(data);
   }

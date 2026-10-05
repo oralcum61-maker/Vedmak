@@ -160,7 +160,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса и выбранный путь из книг. */
   get #lifepathOpts() {
     const s = this.wiz;
-    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey, kind: s.lifepathKind || "" };
+    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey, kind: s.lifepathKind || "", gender: s.gender };
   }
 
   /**
@@ -1083,7 +1083,7 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   const styleText = i => style[i]?.text ?? "";
   // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
   const lifepath = s.lifepath && lp.sections.length
-    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "", kind: s.lifepathKind || "" })
+    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "", kind: s.lifepathKind || "", gender: s.gender })
     : "";
 
   const update = {
