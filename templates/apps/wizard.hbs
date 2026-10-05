@@ -105,6 +105,13 @@
     <div class="vd-panel lifepath-toolbar">
       <label class="check"><input type="checkbox" data-field="lifepath" {{checked state.lifepath}}> Использовать жизненный путь</label>
       {{#if state.lifepath}}
+        {{#unless (or isWitcher isVampire)}}
+        <label class="kind-field">Путь
+          <select data-field="lifepathKind">
+            {{#each lifepathKinds}}<option value="{{key}}" {{#if (eq ../state.lifepathKind key)}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+        </label>
+        {{/unless}}
         <label class="age-field">Возраст <input type="number" data-field="age" value="{{state.age}}" min="0"></label>
         <span class="grow"></span>
         {{#if lifepathNext}}

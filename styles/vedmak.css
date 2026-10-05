@@ -4020,6 +4020,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak-wizard .lifepath-toolbar label.check { display: flex; align-items: center; gap: .4rem; font-family: var(--vd-font-head); font-size: 1rem; color: #f1ece0; }
 .vedmak-wizard .lifepath-toolbar .age-field { display: flex; align-items: center; gap: .3rem; font-size: .78rem; color: var(--vd-text-dim); }
 .vedmak-wizard .lifepath-toolbar .age-field input { width: 3.6rem; height: 1.7rem; }
+.vedmak-wizard .lifepath-toolbar .kind-field { display: flex; align-items: center; gap: .3rem; font-size: .78rem; color: var(--vd-text-dim); }
+.vedmak-wizard .lifepath-toolbar .kind-field select { height: 1.7rem; }
 .vedmak-wizard .lifepath-toolbar .hint { flex-basis: 100%; margin: 0; }
 
 /* Итог */

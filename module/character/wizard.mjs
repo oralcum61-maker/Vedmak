@@ -10,7 +10,7 @@ import {
 import { levelLabel } from "../config/magic.mjs";
 import {
   buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath,
-  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, VAMPIRE_RACE
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, VAMPIRE_RACE, LIFEPATH_KINDS
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 import { compareRu } from "../util.mjs";
@@ -73,7 +73,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       step: "race",
       name: actor.name, gender: d.gender ?? "", age: Number.parseInt(d.age) || 25,
       raceUuid: "", origin: "", homeland: "", homelandRoll: null, vassalRoll: null, language: "",
-      lifepath: true, rolls: {},
+      lifepath: true, rolls: {}, lifepathKind: "",
       // Возраст 80 выставила раса «ведьмак», а не игрок: при смене расы вернём прежний (ageAuto — признак, ageBefore — прежний)
       ageAuto: false, ageBefore: null,
       professionUuid: "", skillChoices: {},
@@ -157,10 +157,10 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Высший вампир: свой жизненный путь («Высший вампир. Вторая редакция»). */
   get isVampire() { return this.raceKey === VAMPIRE_RACE; }
 
-  /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса. */
+  /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса и выбранный путь из книг. */
   get #lifepathOpts() {
     const s = this.wiz;
-    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey };
+    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey, kind: s.lifepathKind || "" };
   }
 
   /**
@@ -296,6 +296,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       steps, doneCount: steps.filter(x => x.done).length, step: { ...STEPS[stepIndex], n: stepIndex + 1 }, nextLabel: nextStep?.label ?? "",
       stepId: s.step, problem: validation[s.step], [`is_${s.step}`]: true,
       race, profession: prof, isWitcher: this.isWitcher, isVampire: this.isVampire,
+      // Дополнительные пути из книг — выбором на шаге жизненного пути (ведьмак и вампир пути не выбирают)
+      lifepathKinds: [{ key: "", label: "Обычный путь (корник)" }, ...Object.entries(LIFEPATH_KINDS).map(([key, k]) => ({ key, label: k.label }))],
       hero: this.#hero(lp, stepIndex)
     });
 
@@ -689,6 +691,9 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     } else if (field === "lifepath" || field === "statMode" || field === "level" || field === "name" || field === "gender" || field === "language") {
       s[field] = value;
       if (field === "language") this.#pruneChoices();
+    } else if (field === "lifepathKind") {
+      // Путь из книги: броски прежнего пути не подходят — начинаем заново
+      if (s.lifepathKind !== value) { s.lifepathKind = value; s.rolls = {}; }
     }
   }
 
@@ -1078,7 +1083,7 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   const styleText = i => style[i]?.text ?? "";
   // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
   const lifepath = s.lifepath && lp.sections.length
-    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "" })
+    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "", kind: s.lifepathKind || "" })
     : "";
 
   const update = {

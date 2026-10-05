@@ -10,13 +10,22 @@
 
 import { LIFEPATH_TABLES } from "../config/lifepath-tables.mjs";
 import { VAMPIRE_TABLES, VAMPIRE_ROLE_BY_ROW, VAMPIRE_EVENTS_BY_AGE } from "../config/lifepath-vampire.mjs";
+import { OFIR_TABLES } from "../config/lifepath-ofir.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { renderTemplate } from "../util.mjs";
 
-const T = { ...LIFEPATH_TABLES, ...VAMPIRE_TABLES };
+const T = { ...LIFEPATH_TABLES, ...VAMPIRE_TABLES, ...OFIR_TABLES };
 
 /** Раса, у которой свой жизненный путь вместо семьи и десятилетий корника. */
 export const VAMPIRE_RACE = "highVampire";
+
+/**
+ * Дополнительные жизненные пути из книг (вместо обычного пути корника): «Офир и Зеррикания» — на чужой земле.
+ * («Том Хаоса» — путь мага — добавляется отдельным этапом.) Ключ хранится в сохранённом жизненном пути (`kind`).
+ */
+export const LIFEPATH_KINDS = {
+  ofir:      { label: "На чужой земле (Офир и Зеррикания)" }
+};
 
 /** Бросок кости с `sides` гранями. */
 export function rollDie(sides = 10) {
@@ -234,7 +243,15 @@ function buildRegular(b, { age = 25, region = "north", race = "human" }) {
     });
   }
 
-  // Важные события — за каждые полные 10 лет
+  // Важные события — за каждые полные 10 лет (общие для обычного пути и пути на чужой земле)
+  lifeEvents(b, { age });
+
+  styleAndValues(b);
+}
+
+/** Важные события взрослой жизни: по одному за каждые полные 10 лет (стр. 31). */
+function lifeEvents(b, { age = 25 }) {
+  const fx = b.effects;
   const ev = b.section("Важные события");
   const decades = Math.floor((Number(age) || 0) / 10);
   for (let i = 0; i < decades; i++) {
@@ -267,8 +284,6 @@ function buildRegular(b, { age = 25, region = "north", race = "human" }) {
     }
   }
   if (!decades) ev.entries.push({ label: "Событий нет", text: "Персонажу меньше 10 лет — важных событий не было.", static: true });
-
-  styleAndValues(b);
 }
 
 function siblingsCount(v, race, region) {
@@ -555,6 +570,8 @@ function cardOf(next) {
   if (vev !== undefined) return { card: `vEvent.${vev}`, cardTitle: `${Number(vev) + 1}-е событие` };
   const sib = next.path.match(/^sibling\.(\d+)/)?.[1];
   if (sib !== undefined) return { card: `sibling.${sib}`, cardTitle: `${Number(sib) + 1}-й брат или сестра` };
+  const osib = next.path.match(/^ofir\.sib\.(\d+)/)?.[1];
+  if (osib !== undefined) return { card: `ofir.sib.${osib}`, cardTitle: `${Number(osib) + 1}-й брат или сестра` };
   // «Десятилетие 1 (29–39 лет)» → «Десятилетие 1»
   return { card: next.section, cardTitle: next.section.replace(/\s*\(.*\)$/, "") };
 }
@@ -572,6 +589,7 @@ export function buildLifepath(rolls, opts) {
   try {
     if (opts.witcher) buildWitcher(b, opts);
     else if (opts.race === VAMPIRE_RACE) buildVampire(b, opts);
+    else if (opts.kind === "ofir") buildOfir(b, opts);
     else buildRegular(b, opts);
   } catch (err) {
     if (err !== PENDING) throw err;
@@ -603,6 +621,13 @@ export function dependents(path) {
   if (path === "siblingsCount") return ["sibling"];
   if (path === "wAge" || path === "wTraining") return ["wTrials"];
   if (path === "wStart") return ["decade"];
+  // Путь на чужой земле: регион выбирает колонку всех таблиц, число братьев и сестёр — их броски
+  if (path === "ofir.region") return ["ofir.home", "ofir.region2", "ofir.family", "ofir.parents", "ofir.familyFate",
+    "ofir.parent", "ofir.parentsFate", "ofir.status", "ofir.friend", "ofir.sibCount", "ofir.sib"];
+  if (path === "ofir.home") return ["ofir.region2"];
+  if (path === "ofir.family") return ["ofir.parents", "ofir.parent", "ofir.parentsFate", "ofir.familyFate"];
+  if (path === "ofir.parents") return ["ofir.parent", "ofir.parentsFate"];
+  if (path === "ofir.sibCount") return ["ofir.sib"];
   // Возраст вампира решает, сколько событий; восьмое событие — ещё бросок славы
   if (path === "vAge") return ["vEvent"];
   if (/^vEvent\.\d+$/.test(path)) return [`${path}.fame`];
@@ -634,6 +659,102 @@ export function choiceSkillOptions(choice) {
     .map(([key, s]) => ({ value: key, label: s.label }));
 }
 
+/* ------------------------- Путь на чужой земле ------------------------- */
+/* «Офир и Зеррикания», стр. 38–46: детство — по таблицам книги, взрослая жизнь (события,
+   стиль и ценности) — из основного пути. */
+
+/** +1 к навыку по строке «Региона места рождения»: колонка Офир или Зеррикания. */
+const OFIR_REGION_SKILLS = [
+  ["wilderness", "riding", "firstAid", "endurance", "trapcraft", "courage", "intimidation", "sailing", "awareness", "resistMagic"],
+  ["wilderness", "awareness", "endurance", "courage", "sailing", "riding", "trapcraft", "firstAid", "intimidation", "resistMagic"]
+];
+
+/** Механика строк «Положения семьи»: снаряжение, репутация, Удача, навыки. */
+function ofirStatusEffects(col, v, fx) {
+  const skill = (k, n) => (fx.skills[k] = (fx.skills[k] ?? 0) + n);
+  const items = [];
+  if (col === 0) {
+    switch (v) {
+      case 1: items.push("Дворянская грамота"); fx.reputation += 2; break;
+      case 2: items.push("Летопись"); skill("education", 1); break;
+      case 3: items.push("Личный герб"); fx.reputation += 1; break;
+      case 4: fx.notes.push("Положение семьи: 2 знакомых"); break;
+      case 5: fx.notes.push("Положение семьи: 3 обычных чертежа или формулы на выбор"); break;
+      case 6: items.push("Музыкальный инструмент"); fx.notes.push("Положение семьи: 1 друг"); break;
+      case 7: items.push("Счастливый талисман"); fx.luck += 1; break;
+      case 8: items.push("Обычные формулы"); skill("alchemy", 1); break;
+      case 9: items.push("Бандитская метка"); skill("streetwise", 1); break;
+      case 10: items.push("Сбор трав"); skill("wilderness", 1); break;
+    }
+  } else {
+    switch (v) {
+      case 1: items.push("Дворянский герб"); fx.reputation += 2; break;
+      case 2: items.push("Короткий лук"); break;
+      case 3: items.push("Седло"); break;
+      case 4: fx.notes.push("Положение семьи: 3 обычных чертежа или формулы на выбор"); break;
+      case 5: items.push("Старинные схемы"); skill("crafting", 1); break;
+      case 6: fx.notes.push("Положение семьи: 2 знакомых"); break;
+      case 7: items.push("Счастливый талисман"); fx.luck += 1; break;
+      case 8: items.push("Сбор трав"); skill("wilderness", 1); break;
+      case 9: items.push("Обычные формулы"); skill("firstAid", 1); break;
+      case 10: items.push("Дрессированная птица или змея"); break;
+    }
+  }
+  fx.items.push(...items);
+}
+
+function buildOfir(b, { age = 25 }) {
+  const fx = b.effects;
+  // Офир или Зеррикания — бросок или выбор («выберите свою судьбу, или определите её броском костей»)
+  const reg = b.plain(b.section("Чужие края"), "ofir.region", "Офир или Зеррикания",
+    v => (v % 2 === 0 ? "Офир" : "Зеррикания"), { options: EVEN_OPTIONS("Офир", "Зеррикания") });
+  const col = reg.value % 2 === 0 ? 0 : 1;
+
+  const fam = b.section("Семья");
+  const home = b.table(fam, "ofir.home", "ofHome", { col, label: "Родина" });
+  if (home.value <= 3) fx.skills[col === 0 ? "crafting" : "alchemy"] = (fx.skills[col === 0 ? "crafting" : "alchemy"] ?? 0) + 1;
+  if (home.value >= 4) {
+    const region = b.table(fam, "ofir.region2", "ofRegion", { col, label: "Регион места рождения" });
+    const sk = OFIR_REGION_SKILLS[col][Math.max(0, Math.min(9, region.value - 1))];
+    if (sk) fx.skills[sk] = (fx.skills[sk] ?? 0) + 1;
+  }
+
+  const family = b.plain(fam, "ofir.family", "Семья", v => (v % 2 === 0 ? "Хотя бы кто-то из семьи жив" : "С семьёй что-то случилось"),
+    { options: EVEN_OPTIONS("хотя бы кто-то жив", "с семьёй что-то случилось") });
+  let parentsDead;
+  if (family.value % 2 === 1) {
+    b.table(fam, "ofir.familyFate", "ofFamilyFate", { col });
+    parentsDead = true;
+  } else {
+    const parents = b.plain(fam, "ofir.parents", "Родители", v => (v % 2 === 0 ? "Родители живы" : "С родителями что-то случилось"),
+      { options: EVEN_OPTIONS("родители живы", "с родителями что-то случилось") });
+    parentsDead = parents.value % 2 === 1;
+  }
+  if (parentsDead) {
+    b.table(fam, "ofir.parent", "ofParent", { label: "Кого из родителей это касается" });
+    b.table(fam, "ofir.parentsFate", "ofParentsFate", { col });
+  }
+  const status = b.table(fam, "ofir.status", "ofStatus", { col });
+  ofirStatusEffects(col, status.value, fx);
+
+  const friend = b.table(fam, "ofir.friend", "ofFriend", { col, label: "Друг, оказавший влияние" });
+  const gift = friend.text.match(/Снаряжение:\s*(.+)$/)?.[1];
+  if (gift) fx.items.push(gift.charAt(0).toUpperCase() + gift.slice(1));
+
+  // Братья и сёстры: в ячейке таблицы — число (Офир 1–5, Зеррикания 1–8) или «Единственный ребёнок»
+  const sib = b.section("Братья и сёстры");
+  const countEntry = b.table(sib, "ofir.sibCount", "ofSibCount", { col, label: "Сколько братьев и сестёр" });
+  const count = /^\d+$/.test(countEntry.text) ? Number(countEntry.text) : 0;
+  for (let i = 0; i < count; i++) {
+    ["Пол", "Возраст", "Отношение", "Черта"].forEach((label, c) => {
+      b.table(sib, `ofir.sib.${i}.${c}`, "ofSib", { col: c, label: `${i + 1}-й: ${label.toLowerCase()}` }).group = i;
+    });
+  }
+
+  lifeEvents(b, { age });
+  styleAndValues(b);
+}
+
 /* ------------------------------------------------------------------------- */
 /*  Хранение в персонаже, переброс и показ карточками — общее для мастера      */
 /*  создания и «Дневника»                                                     */
@@ -654,13 +775,13 @@ export function readLifepath(json) {
   }
 }
 
-export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human" }) {
-  return JSON.stringify({ rolls, witcher, age, region, race });
+export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human", kind = "" }) {
+  return JSON.stringify({ rolls, witcher, age, region, race, kind });
 }
 
 /** Параметры сборки из сохранённого жизненного пути. */
 export function savedOpts(data) {
-  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race };
+  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race, kind: data.kind || "" };
 }
 
 /** Собрать сохранённый жизненный путь пошагово: недостающие броски не делаются, `next` — следующий. */
