@@ -12,6 +12,12 @@ import {
   isReadyWeapon
 } from "./common.mjs";
 
+/** Снимает ли школа ведьмака штраф парирования щитом («Мастер щита» Мантикоры, своя школа с этим waive). */
+function shieldParryWaived(actor) {
+  if (actor.type !== "character") return false;
+  return !!witcherSchools()[actor.system.details?.school]?.waive?.includes("shieldParry");
+}
+
 /** Сломан ли щит или оружие: надёжность кончилась — блок пишет «сломан, больше не защищает». */
 const isBroken = i => { const r = i.system.reliability; return r?.max > 0 && r.value <= 0; };
 
@@ -153,7 +159,8 @@ export function bestDefense(actor, attack) {
       item = check.items[0] ?? null;
       if (!item) continue;
     }
-    const value = defenseBase(actor, key, item) + (type.mod ?? 0) - (key === "parry" && attack.weapon?.isThrown ? 5 : 0);
+    const mod = key === "parry" && item?.shield && shieldParryWaived(actor) ? 0 : type.mod ?? 0;
+    const value = defenseBase(actor, key, item) + mod - (key === "parry" && attack.weapon?.isThrown ? 5 : 0);
     if (value > best.value) best = { key, value };
   }
   return best.key;
@@ -180,9 +187,15 @@ async function defenseDialog(actor, attack, cfg, items) {
   if (gear.length && !gear.some(g => g.selected)) gear[0].selected = true;
   const pickedItem = () => byId.get(gear.find(g => g.selected)?.id) ?? null;
 
+  // Итог окна — как у броска (defend): парирование метательного ещё −5, щитом у школы с «Парированием щитом» — без −3
+  const typeMod = (key, t) => {
+    if (key !== "parry") return t.mod ?? 0;
+    const it = pickedItem();
+    return (it?.shield && shieldParryWaived(actor) ? 0 : t.mod ?? 0) + (attack.weapon?.isThrown ? -5 : 0);
+  };
   const types = allowed.map(([key, t]) => ({
-    key, ...t, mod: t.mod ?? 0, selected: key === cfg.defense,
-    note: [t.mod ? `${t.mod}` : "", SKILLS[defenseSkillKey(t, pickedItem())]?.label ?? ""].filter(Boolean).join(" · ")
+    key, ...t, mod: typeMod(key, t), selected: key === cfg.defense,
+    note: [typeMod(key, t) ? `${typeMod(key, t)}` : "", SKILLS[defenseSkillKey(t, pickedItem())]?.label ?? ""].filter(Boolean).join(" · ")
   }));
   const base = defenseBase(actor, cfg.defense, pickedItem());
 
@@ -256,7 +269,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
   // Школа Мантикоры и своя школа с «Парированием щитом»: щитом парирует без штрафа
   const school = actor.type === "character" ? witcherSchools()[actor.system.details?.school] : null;
-  if (type.mod && cfg.defense === "parry" && item?.shield && school?.waive?.includes("shieldParry")) {
+  if (type.mod && cfg.defense === "parry" && item?.shield && shieldParryWaived(actor)) {
     parts.push({ label: `${type.label} щитом: ${school.label} — без штрафа`, value: 0, always: true });
   } else if (type.mod) parts.push({ label: type.label, value: type.mod });
   if (cfg.defense === "parry" && attack.weapon?.isThrown) parts.push({ label: "Парирование метательного", value: -5 });

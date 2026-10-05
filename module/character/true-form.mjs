@@ -232,10 +232,18 @@ async function fearChecks(actor, dc) {
 
 registerGMHandler("trueFormFear", async ({ vampireUuid, targets }, userId) => {
   const vampire = resolveActor(vampireUuid);
-  if (!vampire || !trueFormEffect(vampire) || !userOwnsAny(userId, vampire)) return;
-  for (const { uuid, rounds } of targets ?? []) {
+  const form = vampire && trueFormEffect(vampire);
+  if (!form || !userOwnsAny(userId, vampire)) return;
+  // Ужас — один раз на превращение: повторный запрос (из консоли) больше никого не пугает
+  if (form.getFlag(SYS, "fearApplied")) return console.warn(`vedmak | повторный ужас Истинной формы от ${game.users.get(userId)?.name ?? userId}`);
+  await form.setFlag(SYS, "fearApplied", true);
+  for (const { uuid, rounds } of (targets ?? []).slice(0, 30)) {
     const t = resolveActor(uuid);
-    if (t) await applyStatus(t, "frightened", Math.max(1, Math.min(6, Number(rounds) || 1)));
+    if (!t) continue;
+    await applyStatus(t, "frightened", Math.max(1, Math.min(6, Number(rounds) || 1)));
+    // Источник страха — для −3 к атакам против него (attack.mjs)
+    const fear = t.effects.find(e => e.statuses?.has("frightened"));
+    if (fear) await fear.setFlag(SYS, "fearSource", vampire.uuid);
   }
 });
 

@@ -41,7 +41,23 @@ export async function controlCheck(actor, { mount = "horse" } = {}) {
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 520 },
     content,
-    render: (event, dialog) => bindDialog(dialog),
+    render: (event, dialog) => {
+      bindDialog(dialog);
+      // «Без седла» — не для транспорта, «Таран упряжкой» — только упряжке: как в броске (rollControl), иначе
+      // итог окна расходился бы с броском
+      const form = dialog.element.querySelector("form") ?? dialog.element;
+      const sync = () => {
+        const m = MOUNTS[form.querySelector("input[name=mount]:checked")?.value] ?? {};
+        for (const [name, off] of [["noSaddle", !!m.vehicle], ["ramDrawn", !m.drawn]]) {
+          const box = form.querySelector(`input[name=${name}]`);
+          if (!box) continue;
+          box.disabled = off;
+          if (off && box.checked) { box.checked = false; box.dispatchEvent(new Event("change", { bubbles: true })); }
+        }
+      };
+      form.addEventListener("change", event => { if (event.target.name === "mount") sync(); });
+      sync();
+    },
     buttons: [{
       action: "roll", label: "Бросить", default: true,
       callback: (event, button) => {

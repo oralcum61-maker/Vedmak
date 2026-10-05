@@ -7695,7 +7695,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7759,7 +7759,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7823,7 +7823,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7838,7 +7838,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.meleeDamage",
+     "value": 3
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "red",
@@ -7881,7 +7886,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7896,7 +7901,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.intimidation",
+     "value": 1
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "red",
@@ -7940,7 +7950,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7955,7 +7965,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 10
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -7999,7 +8014,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8058,7 +8073,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8073,7 +8088,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.vigor",
+     "value": 2
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "red",
@@ -8116,7 +8136,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8131,7 +8151,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 10
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -8175,7 +8200,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8190,7 +8215,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 5
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -8234,7 +8264,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8249,7 +8279,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "stats.body",
+     "value": 1
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -8292,7 +8327,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8351,7 +8386,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8410,7 +8445,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8425,7 +8460,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.persuasion",
+     "value": 1
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "blue",

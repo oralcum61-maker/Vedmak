@@ -48,6 +48,59 @@ async function pickTargets(title, candidates, { multiple = false, hint = "" } = 
   return result && result !== "cancel" && result.length ? result : null;
 }
 
+/**
+ * Что усиление делает с оружием — по его данным: эффект оружия (зазубривание — кровотечение), «Серебряное (2d6)»,
+ * «+N к надёжности», «+N к точности». Прежде такие наборы шли веткой брони и тратились впустую.
+ */
+function weaponEnhancementPlan(s) {
+  const text = `${s.effect ?? ""} ${s.description ?? ""}`;
+  return {
+    effect: s.weaponEffect?.key ? { key: s.weaponEffect.key, value: s.weaponEffect.value ?? "" } : null,
+    silver: text.match(/Серебрян\S*\s*\(([^)]+)\)/i)?.[1]?.trim() ?? "",
+    reliability: Number(text.match(/\+\s*(\d+)\s*к\s*надёжности/i)?.[1] ?? 0),
+    accuracy: Number(text.match(/\+\s*(\d+)\s*к\s*точности/i)?.[1] ?? 0)
+  };
+}
+
+/** Усиление оружия: проверка Изготовления, правка оружия, набор расходуется. */
+async function attachWeaponEnhancement(actor, item) {
+  const plan = weaponEnhancementPlan(item.system);
+  if (!plan.effect && !plan.silver && !plan.reliability && !plan.accuracy) {
+    return ui.notifications.warn(`«${item.name}»: непонятно, что усиление делает с оружием — правьте оружие вручную.`);
+  }
+  const weapons = actor.itemTypes.weapon.filter(w => w.system.category !== "natural");
+  const chosen = await pickTargets(`${item.name}: на какое оружие`, weapons.map(w => ({
+    item: w, label: `${w.name}${w.system.equipped ? "" : " (не в руках)"}`
+  })), { hint: `Изготовление СЛ ${CRAFTING.attachDc}, полный ход, нужны инструменты ремесленника. Изменение постоянное.` });
+  if (!chosen) return null;
+  const weapon = chosen[0].item;
+  const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление оружия: ${item.name}`);
+  if (!check.success) return null;
+
+  const src = weapon.system.toObject();
+  const update = {};
+  const lines = [];
+  if (plan.effect) {
+    const effects = foundry.utils.deepClone(src.effects ?? []);
+    const same = effects.find(e => e.key === plan.effect.key);
+    const pct = v => parseInt(String(v).replace(/[^\d]/g, ""), 10) || 0;
+    if (same) same.value = `${pct(same.value) + pct(plan.effect.value)}%`;
+    else effects.push({ ...plan.effect });
+    update["system.effects"] = effects;
+    lines.push(`Эффект «${CONFIG.VEDMAK.WEAPON_EFFECTS?.[plan.effect.key]?.label ?? plan.effect.key}»: ${same ? same.value : plan.effect.value}.`);
+  }
+  if (plan.silver) { update["system.silverDamage"] = plan.silver; lines.push(`Серебро: ${plan.silver}.`); }
+  if (plan.reliability) {
+    update["system.reliability.max"] = (src.reliability?.max ?? 0) + plan.reliability;
+    update["system.reliability.value"] = (src.reliability?.value ?? 0) + plan.reliability;
+    lines.push(`Надёжность +${plan.reliability}.`);
+  }
+  if (plan.accuracy) { update["system.accuracy"] = (src.accuracy ?? 0) + plan.accuracy; lines.push(`Точность +${plan.accuracy}.`); }
+  await weapon.update(update);
+  await spendOne(item);
+  return postCard(actor, `${item.name} → ${weapon.name}`, lines.map(l => `<p>${l}</p>`).join(""), { icon: "fa-solid fa-hammer" });
+}
+
 /** Прикрепить усиление, руну или глиф из инвентаря. */
 export async function attachEnhancement(actor, item) {
   const s = item.system;
@@ -55,6 +108,7 @@ export async function attachEnhancement(actor, item) {
   if (s.kind === "glyph") return attachGlyph(actor, item);
   if (s.kind === "crossbow") return attachCrossbowMod(actor, item);
   if (s.kind === "runeword" || s.kind === "glyphword") return attachEnchantment(actor, item);
+  if (s.kind === "weapon") return attachWeaponEnhancement(actor, item);
 
   const armors = actor.itemTypes.armor.filter(a => !a.system.isShield && a.system.covers.length);
   const candidates = armors.map(a => ({

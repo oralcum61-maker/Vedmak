@@ -137,6 +137,8 @@ export async function createZone(shape, { name, color, actor, itemName = "", dur
     instant: !!duration?.instant,
     combatId: combat?.id ?? null,
     until: duration?.rounds && combat ? combat.round + duration.rounds : null,
+    // Вне боя раунды не считаются — срок временем мира (раунд — 3 с), иначе зона висела бы, пока не снимут вручную
+    expiresAt: duration?.rounds && !combat ? game.time.worldTime + duration.rounds * (CONFIG.time.roundTime || 3) : null,
     rounds: duration?.rounds ?? null,
     maintain: duration?.maintain ? maintainItemId : null
   };
@@ -238,6 +240,7 @@ function cleanRegionData(raw, scene, userId) {
         instant: !!z.instant,
         combatId: typeof z.combatId === "string" ? z.combatId : null,
         until: finite(z.until, { min: 0, max: 1e6 }) ? z.until : null,
+        expiresAt: finite(z.expiresAt, { min: 0, max: 1e12 }) ? z.expiresAt : null,
         rounds: finite(z.rounds, { min: 0, max: 1e6 }) ? z.rounds : null,
         maintain: typeof z.maintain === "string" ? z.maintain : null,
         ...(typeof z.itemId === "string" ? { itemId: z.itemId } : {}),
@@ -376,5 +379,12 @@ export function registerZoneHooks() {
   Hooks.on("deleteCombat", combat => {
     if (!game.users.activeGM?.isSelf) return;
     expireCombatZones(combat).catch(err => console.error("vedmak | зоны", err));
+  });
+  // Зоны со сроком во времени мира (поставлены вне боя): время мира идёт и раундами боя
+  Hooks.on("updateWorldTime", worldTime => {
+    if (!game.users.activeGM?.isSelf) return;
+    const expired = game.scenes.contents.flatMap(s => zonesOf(s))
+      .filter(r => { const at = r.flags.vedmak.zone.expiresAt; return at !== null && at !== undefined && worldTime >= at; });
+    if (expired.length) removeZones(expired).catch(err => console.error("vedmak | зоны", err));
   });
 }

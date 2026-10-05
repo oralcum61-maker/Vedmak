@@ -6185,6 +6185,38 @@
   }
  },
  {
+  "_id": "M9X0b2NDv9Cd1HcQ",
+  "name": "Кожаные конские доспехи",
+  "type": "gear",
+  "img": "systems/vedmak/assets/fan/bs/misc/horse-saddle--9.webp",
+  "system": {
+   "description": "<p>ПБ: 10 для скакуна.</p><p>Броня скакуна: ПБ 10.</p>",
+   "quantity": 1,
+   "weight": 10.0,
+   "cost": 550.0,
+   "availability": "common",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "category": "mount",
+   "effect": "Броня скакуна: ПБ 10",
+   "focus": 0,
+   "tool": ""
+  },
+  "folder": [
+   "Скакуны и транспорт",
+   "Животные и повозки"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
   "_id": "7pK9RH8EmGPGkT4v",
   "name": "Охотничий трофей",
   "type": "gear",
@@ -8272,37 +8304,6 @@
   },
   "folder": [
    "Еда и питьё"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "ihxwGjor7bpSap2G",
-  "name": "Потестаквизитор",
-  "type": "gear",
-  "img": "icons/commodities/tech/antenna-powered-purple.webp",
-  "system": {
-   "description": "<p>Портативное устройство, способное обнаруживать магические возмущения в пределах 20 м. Потестаквизитор издает гул, который перерастает в визг по мере того, как пользователь приближается к помехе. Потестаквизитор может обнаруживать присутствие темной магии, включая порчи, проклятия, проклятые предметы и демонов, а также призраков, димеритий, настоящих драконов и котов.</p>",
-   "quantity": 1,
-   "weight": 1.0,
-   "cost": 1000.0,
-   "availability": "rare",
-   "concealment": "small",
-   "equipped": false,
-   "source": {
-    "book": "Профессиональные инструменты",
-    "page": ""
-   },
-   "category": "tools",
-   "effect": "",
-   "focus": 0,
-   "tool": ""
-  },
-  "folder": [
-   "Инструменты"
   ],
   "flags": {
    "vedmak": {
@@ -11746,6 +11747,38 @@
   "folder": [
    "Ценности и диковины",
    "Магический рынок"
+  ],
+  "flags": {
+   "vedmak": {
+    "layer": "bs"
+   }
+  }
+ },
+ {
+  "_id": "BAgBFxUnH1sHfPqb",
+  "name": "Кольчужные конские доспехи",
+  "type": "gear",
+  "img": "systems/vedmak/assets/fan/bs/misc/horse-saddle--16.webp",
+  "system": {
+   "description": "<p>ПБ: 15 для скакуна.\n-1 к проверкам управлени.</p><p>Броня скакуна: ПБ 15.</p>",
+   "quantity": 1,
+   "weight": 25.0,
+   "cost": 1050.0,
+   "availability": "rare",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Компендиум BS & Tobi",
+    "page": ""
+   },
+   "category": "mount",
+   "effect": "Броня скакуна: ПБ 15",
+   "focus": 0,
+   "tool": ""
+  },
+  "folder": [
+   "Скакуны и транспорт",
+   "Животные и повозки"
   ],
   "flags": {
    "vedmak": {

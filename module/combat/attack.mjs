@@ -234,6 +234,12 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
   const autoSituations = new Set(cfg.situations);
   if (target?.statuses.has("immobilized")) autoSituations.add("immobilized");
   if (!src.isRanged && target?.statuses.has("activeDodge")) autoSituations.add("activeDodge");
+  // Напуганный атакует источник страха с −3; источник неизвестен (наложен вручную) — тоже отмечаем, снять можно
+  const fear = actor.effects.find(e => e.active && e.statuses?.has("frightened"));
+  if (fear && target) {
+    const source = fear.getFlag("vedmak", "fearSource");
+    if (!source || source === target.uuid) autoSituations.add("frightened");
+  }
 
   const school = schoolOf(actor);
   const types = Object.entries(src.types).map(([key, t]) => {

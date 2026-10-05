@@ -574,13 +574,13 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   // Запрос игрока: он атакующий или владелец цели (как у кнопки), а карточку урона создал владелец
   // атакующего — иначе карточку с любым уроном по любой цели можно подделать из консоли
   if (!game.users.get(userId)?.isGM
-    && (!userOwnsAny(userId, attacker, actor) || !userOwnsAny(message.author?.id, attacker))) {
+    && (!userOwnsAny(userId, attacker, actor) || !userOwnsAny(message.author?.id, attacker) || !damageChainValid(message, dmg, attacker, actor))) {
     return console.warn(`vedmak | отклонён запрос урона от ${game.users.get(userId)?.name ?? userId}`);
   }
   applyingMessages.add(messageId);
   try {
     const hpBefore = actor.system.hp.value;
-    const report = await applyDamageToActor(actor, dmg);
+    const report = await serialByActor(actor, () => applyDamageToActor(actor, dmg));
     // Алхимия: отвары грифона и виверны, «Молния», убийства
     const dealt = dmg.nonLethal ? 0 : Math.max(0, hpBefore - actor.system.hp.value);
     report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell }));
@@ -614,6 +614,35 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
 });
 
 const actorOfRef = ref => resolveActor(ref?.tokenUuid) ?? resolveActor(ref?.actorUuid);
+
+/**
+ * Карточку урона игрок создаёт сам, поэтому ведущий сверяет её цепочку: защита — настоящая карточка, её создал владелец
+ * защитника (или ведущий), в ней те же атакующий и цель и разрешён урон, а по этой защите ещё не применяли другой урон.
+ * Так нельзя ударить того, кто не защищался от этой атаки, и нельзя применить урон дважды разными карточками.
+ */
+function damageChainValid(message, dmg, attacker, target) {
+  const defMsg = game.messages.get(dmg.defenseMessageId);
+  const def = defMsg?.flags.vedmak?.defense;
+  if (!def?.canDamage) return false;
+  if (actorOfRef(def.defender) !== target || actorOfRef(def.attack?.attacker) !== attacker) return false;
+  if (!(defMsg.author?.isGM || userOwnsAny(defMsg.author?.id, target))) return false;
+  return !game.messages.some(m => m.id !== message.id && m.flags.vedmak?.damage?.defenseMessageId === defMsg.id
+    && m.flags.vedmak.damage.applied);
+}
+
+/**
+ * Применения урона к одному актору — по очереди: каждое читает ПЗ в начале, а пишет после ответа сервера, и два
+ * одновременных (автоприменение, быстрая атака по одной цели) иначе теряли одно обновление.
+ */
+const actorQueues = new Map();
+export function serialByActor(actor, fn) {
+  const key = actor.uuid;
+  const run = (actorQueues.get(key) ?? Promise.resolve()).then(fn, fn);
+  const tail = run.catch(() => {});
+  actorQueues.set(key, tail);
+  tail.then(() => { if (actorQueues.get(key) === tail) actorQueues.delete(key); });
+  return run;
+}
 
 /**
  * Может ли отправитель менять статус цели. Ведущий и владелец цели — всегда. Остальным — только по карточке защиты

@@ -401,7 +401,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -752,7 +752,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -860,7 +860,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -2441,7 +2441,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -3030,7 +3030,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гибриды"
@@ -3779,7 +3779,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -4128,7 +4128,7 @@
    },
    "bounty": 7000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -4396,7 +4396,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -4745,7 +4745,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -4930,26 +4930,26 @@
     "_id": "ggAZ8A9yrnAuJYzv"
    },
    {
-    "name": "Зачарованный амулет",
+    "name": "Зачарование амулета",
     "type": "spell",
-    "img": "icons/equipment/neck/collar-rounded-red.webp",
+    "img": "icons/magic/symbols/rune-sigil-green.webp",
     "system": {
-     "description": "<p>Инкрустируя обычный амулет драгоценными камнями с выгравированными магическими символами, вы создаете зачарованный амулет, хранящий знания о наложении определенных заклинаний. При создании волшебного амулета персонаж должен тратить требуемое количество Вын на каждое произнесение заклинания. Если заклинание имеет активную длительность, заклинатель также должен потратить достаточно Вын, чтобы поддерживать его в течение 4 раундов. При создании амулета заклинатель не может использовать магическую фокусировку. Каждое заклинание, которое будет вложенно в амулет, должно быть произнесено быстро, без каких-либо промежуточных действий, иначе процесс Изготовления завершится неудачно.</p>",
+     "description": "<p>Инкрустируя обычный амулет драгоценными камнями с выгравированными магическими символами, вы создаете зачарованный амулет, хранящий знания о наложении определенных заклинаний. При создании волшебного амулета персонаж должен тратить требуемое количество Вын на каждое произнесение заклинания. Если заклинание имеет активную длительность, заклинатель также должен потратить достаточно Вын, чтобы поддерживать его в течение 4 раундов. При создании амулета заклинатель не может использовать магическую фокусировку. Каждое заклинание, которое будет вложенно в амулет, должно быть произнесено быстро, без каких-либо промежуточных действий, иначе процесс Изготовления завершится неудачно.</p><h3>Ингредиенты</h3><p>Простой амулет (x1), Совершенный самоцвет (1 за каждое Заклинание/Инвокацию), Пятая эссенция (x2), Инструменты Рунописца</p>",
      "kind": "ritual",
      "level": "master",
      "element": "mixed",
      "branch": "",
      "god": "",
      "staCost": 0,
-     "variableCost": false,
+     "variableCost": true,
      "maxCost": 0,
      "maintainCost": 0,
      "maintainMode": "",
-     "effect": "Инкрустируя обычный амулет драгоценными камнями с выгравированными магическими символами, вы создаете зачарованный амулет, хранящий знания о наложении определенных заклинаний. При создании волшебного амулета персонаж должен тратить требуемое количество Вын на каждое произнесение заклинания. Если заклинание имеет активную длительность, заклинатель также должен потратить достаточно Вын, чтобы поддерживать его в течение 4 раундов. При создании амулета заклинатель не может использовать магическую фокусировку. Каждое заклинание, которое будет вложенно в амулет, должно быть произнесено быстро, без каких-либо промежуточных действий, иначе процесс Изготовления завершится неудачно.",
+     "effect": "",
      "range": "",
-     "duration": "Постоянное",
+     "duration": "постоянное",
      "defense": "none",
-     "defenseText": "",
+     "defenseText": "нет",
      "preparation": "15 раундов",
      "dc": 18,
      "dcText": "",
@@ -4976,15 +4976,15 @@
      },
      "source": {
       "book": "Том Хаоса",
-      "page": ""
+      "page": "104"
      }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.k3WKJGszsHFMj4sa"
+      "sourceId": "Compendium.vedmak.magic.Item.CYiGaDvfT6mmBSdx"
      }
     },
-    "_id": "9eY2DZNonHA7TE5B"
+    "_id": "QnX8hgmVvYiC3BkI"
    },
    {
     "name": "Звериная порча",
@@ -5445,11 +5445,11 @@
     "_id": "UYPNS207BoUbpXGl"
    },
    {
-    "name": "Наполнить трофей",
+    "name": "Наполнение трофея",
     "type": "spell",
-    "img": "icons/commodities/gems/pearl-swirl-blue.webp",
+    "img": "icons/magic/death/skull-cattle-totem-glow-red.webp",
     "system": {
-     "description": "<p>При правильной подготовке и таксидермизации останков монстра этот ритуал позволяет вам использовать чу физиологию монстра для направления магических эффектов. После выполнения этого ритуала один незачарованный трофей, которым вы владеете, становится постоянным магическим трофеем, который дает преимущества, любому, кто носит трофей и помог убить монстра.</p>",
+     "description": "<p>При правильной подготовке и таксидермизации останков монстра этот ритуал позволяет вам использовать чу физиологию монстра для направления магических эффектов. После выполнения этого ритуала один незачарованный трофей, которым вы владеете, становится постоянным магическим трофеем, который дает преимущества, перечисленные на стр. 124, любому, кто носит трофей и помог убить монстра.</p><h3>Ингредиенты</h3><p>Трофей монстра, Пятая эссенция (x1), Дымная пыль(x1), Дубильные травы (x10), Огров воск (x1), Эфирная смазка (x2)</p>",
      "kind": "ritual",
      "level": "novice",
      "element": "mixed",
@@ -5460,11 +5460,11 @@
      "maxCost": 0,
      "maintainCost": 0,
      "maintainMode": "",
-     "effect": "При правильной подготовке и таксидермизации останков монстра этот ритуал позволяет вам использовать чу физиологию монстра для направления магических эффектов. После выполнения этого ритуала один незачарованный трофей, которым вы владеете, становится постоянным магическим трофеем, который дает преимущества, любому, кто носит трофей и помог убить монстра.",
+     "effect": "",
      "range": "",
-     "duration": "мгновенная",
+     "duration": "мгновенное",
      "defense": "none",
-     "defenseText": "",
+     "defenseText": "нет",
      "preparation": "10 раундов",
      "dc": 12,
      "dcText": "",
@@ -5491,15 +5491,15 @@
      },
      "source": {
       "book": "Том Хаоса",
-      "page": ""
+      "page": "102"
      }
     },
     "flags": {
      "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.agbE6nwaxPQ3TPAB"
+      "sourceId": "Compendium.vedmak.magic.Item.rzF932dVfIuiqR2Q"
      }
     },
-    "_id": "eJ1SY5LkhBNifPTV"
+    "_id": "40bgQyQyAP7ZWPFL"
    },
    {
     "name": "Сейриф Хайль",
@@ -7465,7 +7465,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -8107,7 +8107,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Вампиры"
@@ -8666,7 +8666,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -9143,7 +9143,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -9652,7 +9652,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -10069,7 +10069,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -10533,7 +10533,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -11492,7 +11492,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -11843,7 +11843,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -11911,7 +11911,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -12547,7 +12547,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Реликты"
@@ -12894,7 +12894,7 @@
    },
    "bounty": 5000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -13221,7 +13221,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -13789,7 +13789,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -14566,7 +14566,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -14979,7 +14979,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -15741,7 +15741,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -16419,7 +16419,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -16938,7 +16938,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -17617,7 +17617,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -17966,7 +17966,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -18685,120 +18685,6 @@
     "_id": "2bjudowIAYe6Zw4t"
    },
    {
-    "name": "Сомна",
-    "type": "spell",
-    "img": "icons/magic/control/sleep-bubble-purple.webp",
-    "system": {
-     "description": "<p>Сомна усыпляет одну цель успокаивающей магией. При применении этого знака, если цель не смогла защититься, она засыпает и считается Дезориентированной до тех пор, пока не проснется через 8 часов. Если вы потратите 2 очка Вын на применение этого Знака, цель проснется, если получит урон, если кто-то разбудит ее или раздастся громкий шум. Если вы потратите 4 очка Вын, цель проснется только в том случае, если она получит урон или если кто-то попытается разбудить ее действием. Если вы потратите 6 очков Вын, цель проснется, только если получит урон или если кто-то попытается разбудить ее действием полного раунда. Если вы потратите 7 очков Вын, цель проснется, только если получит урон. Если у цели нет причин подозревать магическое вмешательство до того, как ее усыпят, она не узнает, что на нее воздействовала магия, когда проснется.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 2,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "8 м",
-     "duration": "8 часов",
-     "defense": "resistMagic",
-     "defenseText": "сопротивление магии",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.omnRmDYQbY6VhbRz"
-     }
-    },
-    "_id": "zrCfnCRu5BgBEzHf"
-   },
-   {
-    "name": "Сомна",
-    "type": "spell",
-    "img": "icons/magic/control/sleep-bubble-purple.webp",
-    "system": {
-     "description": "<p>Сомна усыпляет одну цель успокаивающей магией. При применении этого знака, если цель не смогла защититься, она засыпает и считается Дезориентированной до тех пор, пока не проснется через 8 часов. Если вы потратите 2 очка Вын на применение этого Знака, цель проснется, если получит урон, если кто-то разбудит ее или раздастся громкий шум. Если вы потратите 4 очка Вын, цель проснется только в том случае, если она получит урон или если кто-то попытается разбудить ее действием. Если вы потратите 6 очков Вын, цель проснется, только если получит урон или если кто-то попытается разбудить ее действием полного раунда. Если вы потратите 7 очков Вын, цель проснется, только если получит урон. Если у цели нет причин подозревать магическое вмешательство до того, как ее усыпят, она не узнает, что на нее воздействовала магия, когда проснется.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 2,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "8 м",
-     "duration": "8 часов",
-     "defense": "resistMagic",
-     "defenseText": "сопротивление магии",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.omnRmDYQbY6VhbRz"
-     }
-    },
-    "_id": "YtIchGjgwh8Fm2Qy"
-   },
-   {
     "name": "Супирре",
     "type": "spell",
     "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
@@ -18853,7 +18739,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.H2Y4svWWLUhsEg7Q"
      }
     },
-    "_id": "Z2GENd9qJH03pa9y"
+    "_id": "DRceHQazTe0IGeLy"
    },
    {
     "name": "«Картечь»",
@@ -18907,121 +18793,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "0yAPVad6oWP6dUvd"
-   },
-   {
-    "name": "Супирре",
-    "type": "spell",
-    "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
-    "system": {
-     "description": "<p>Нанесение Знака Супирре на поверхность позволяет связать его с точкой в радиусе действия заклинания. При подключении вы можете слышать все, что происходит рядом с этой точкой, как если бы это было прямо рядом с вами, и можете сосредоточиться на одном звуке или разговоре, отключив все другие шумы. Пока этот знак активен, вам не нужно делать проверку Внимания, чтобы услышать какой-либо разговор в связанной точке. Знак может быть связан только с одним местом и должен быть переделан для прослушивания в другом месте. Диапазон действия этого знака определяется количеством очков выносливости, потраченных при применении. При использовании с 1 очком Вын Супирре имеет дальность действия 2 м. За каждое потраченное сверх этого очка выносливости максимальная дальность действия знака увеличивается на 2 м.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 1,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "разное",
-     "duration": "10 минут",
-     "defense": "none",
-     "defenseText": "нет",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.H2Y4svWWLUhsEg7Q"
-     }
-    },
-    "_id": "neOLbg1b8XBPNWLd"
-   },
-   {
-    "name": "Супирре",
-    "type": "spell",
-    "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
-    "system": {
-     "description": "<p>Нанесение Знака Супирре на поверхность позволяет связать его с точкой в радиусе действия заклинания. При подключении вы можете слышать все, что происходит рядом с этой точкой, как если бы это было прямо рядом с вами, и можете сосредоточиться на одном звуке или разговоре, отключив все другие шумы. Пока этот знак активен, вам не нужно делать проверку Внимания, чтобы услышать какой-либо разговор в связанной точке. Знак может быть связан только с одним местом и должен быть переделан для прослушивания в другом месте. Диапазон действия этого знака определяется количеством очков выносливости, потраченных при применении. При использовании с 1 очком Вын Супирре имеет дальность действия 2 м. За каждое потраченное сверх этого очка выносливости максимальная дальность действия знака увеличивается на 2 м.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 1,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "разное",
-     "duration": "10 минут",
-     "defense": "none",
-     "defenseText": "нет",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.H2Y4svWWLUhsEg7Q"
-     }
-    },
-    "_id": "SBYCSUVhCconYEnW"
+    "_id": "HOUkKzb6fsCbqt8L"
    },
    {
     "name": "«Ласточка»",
@@ -19075,7 +18847,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.rUZY2olm8cVR1yLd"
      }
     },
-    "_id": "bEHxXNy90zeR5IkY"
+    "_id": "putYgaJmPRa13LTp"
    },
    {
     "name": "Активный щит",
@@ -19132,7 +18904,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.jJZ8zuw8HfmkuyPI"
      }
     },
-    "_id": "Wj5i0qr11zDlovXI"
+    "_id": "P9ytXitNGiRSAB0V"
    },
    {
     "name": "«Самум»",
@@ -19186,7 +18958,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "cPnUpJvrcOW2X5gG"
+    "_id": "DUJ8nuI6FBi9jLna"
    },
    {
     "name": "Масло против трупоедов",
@@ -19240,7 +19012,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.mHFlrC8InjmeHX4g"
      }
     },
-    "_id": "2FoQYXVBQMFH33cR"
+    "_id": "Dq3zhppaC8fzJiyX"
    },
    {
     "name": "Сметающий Аард",
@@ -19306,7 +19078,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.6zLt2v9FmKskbagh"
      }
     },
-    "_id": "Z7xMkVGGbtrvZf94"
+    "_id": "aEfny6gTXPv0r6yC"
    },
    {
     "name": "Отвар из кладбищенской бабы",
@@ -19360,7 +19132,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.lEXKOj6CmvVcYbT7"
      }
     },
-    "_id": "IPI2wAclhNFC1KWC"
+    "_id": "xVIi4dtku5JRc5eG"
    },
    {
     "name": "Огненный поток",
@@ -19422,7 +19194,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.ne1aVbrlNT5pMpbp"
      }
     },
-    "_id": "y6rc5Tcu10kiRgP1"
+    "_id": "cSJkbfcjVQAgo8sW"
    },
    {
     "name": "Масло против зверей",
@@ -19476,7 +19248,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.8vEeXU6xe6Jd03Ku"
      }
     },
-    "_id": "pmCdOQw7VszcOpBS"
+    "_id": "UOaD5bQDKJ7BVZqE"
    },
    {
     "name": "Марионетка",
@@ -19533,7 +19305,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.NlrYR0Q0oCOGGp99"
      }
     },
-    "_id": "dOdZFDjEasnFJuEC"
+    "_id": "PRnFGg25Hz1hj5nQ"
    },
    {
     "name": "«Гром»",
@@ -19594,7 +19366,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.89ssMKuTQnyj4ims"
      }
     },
-    "_id": "GD2NTmkfQe2vj5Io"
+    "_id": "ouZY8z7oP3FMNayB"
    }
   ],
   "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/witcher/ivo_iz_belhavena_anna_podedworna.webp",
@@ -19617,7 +19389,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -20030,7 +19802,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -20381,7 +20153,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "humanoid",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -20505,7 +20277,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Огры"
@@ -20987,7 +20759,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Трупоеды"
@@ -21533,7 +21305,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Реликты"
@@ -21946,7 +21718,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -22466,7 +22238,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Трупоеды"
@@ -23243,7 +23015,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -23767,7 +23539,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -24114,7 +23886,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -25608,7 +25380,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -26134,7 +25906,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи стихий"
@@ -26693,7 +26465,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -27144,7 +26916,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -27495,7 +27267,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -27603,7 +27375,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -28045,7 +27817,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи стихий"
@@ -28497,7 +28269,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -29110,7 +28882,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи стихий"
@@ -29757,7 +29529,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -30169,7 +29941,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -30584,7 +30356,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -31252,7 +31024,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -31701,7 +31473,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Реликты"
@@ -32251,7 +32023,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -32713,7 +32485,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -33348,7 +33120,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -33761,7 +33533,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -34278,7 +34050,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Трупоеды"
@@ -34627,7 +34399,7 @@
    "armor": 5,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -34752,7 +34524,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -35367,7 +35139,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -35883,7 +35655,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -36301,7 +36073,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -36650,7 +36422,7 @@
    },
    "bounty": 5000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -37550,7 +37322,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -38295,7 +38067,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -39985,7 +39757,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -40333,7 +40105,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -41883,7 +41655,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -42357,7 +42129,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -43100,7 +42872,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -43448,7 +43220,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -45003,7 +44775,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -45417,7 +45189,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -45768,7 +45540,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -45842,7 +45614,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -46191,7 +45963,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -46398,7 +46170,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -46810,7 +46582,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -47374,7 +47146,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -47831,7 +47603,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -48498,7 +48270,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -49104,7 +48876,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -49690,7 +49462,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Огры"
@@ -50103,7 +49875,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -50865,7 +50637,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -51407,7 +51179,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -52298,7 +52070,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -52649,7 +52421,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -52807,7 +52579,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -53391,7 +53163,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Исключительные"
@@ -53914,7 +53686,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гибриды"
@@ -54674,7 +54446,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -55425,7 +55197,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -55889,7 +55661,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -56296,7 +56068,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -56749,7 +56521,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -57307,7 +57079,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -58011,7 +57783,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гибриды"
@@ -58478,7 +58250,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -58827,7 +58599,7 @@
    },
    "bounty": 5000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -59857,7 +59629,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -60281,7 +60053,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -60696,7 +60468,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -61197,7 +60969,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -61609,7 +61381,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -62138,7 +61910,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -62881,7 +62653,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -63324,39 +63096,44 @@
   },
   "items": [
    {
-    "name": "Укус (Вран)",
+    "name": "Укус",
     "type": "weapon",
-    "img": "systems/vedmak/assets/fan/bs/skills_icons/bite.webp",
+    "img": "systems/vedmak/assets/fan/bestiary/attacks/bite.webp",
     "system": {
-     "description": "<p>- ОТРАВЛЯЮЩЕЕ (50 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]</p>",
+     "description": "<p>Высасывание крови (2d6) (100%). Усыпляющая слюна (-5 ВЫН) (100%).</p>",
      "quantity": 1,
-     "weight": 0.0,
-     "cost": 0.0,
+     "weight": 0,
+     "cost": 0,
      "availability": "everywhere",
-     "concealment": "tiny",
+     "concealment": "none",
      "equipped": true,
      "source": {
-      "book": "Книга сказаний",
+      "book": "Компендиум BS & Tobi",
       "page": ""
      },
-     "category": "bludgeon",
+     "category": "natural",
      "skill": "melee",
      "accuracy": 0,
-     "damage": "3d6",
+     "damage": "5d6",
      "damageTypes": [
       "piercing"
      ],
      "reliability": {
-      "value": 99,
-      "max": 99
+      "value": 10,
+      "max": 10
      },
-     "hands": 1,
+     "hands": 0,
      "range": "",
      "attackSpeed": 1,
      "effects": [
       {
-       "key": "poison",
-       "value": "50%",
+       "key": "bleeding",
+       "value": "75%",
+       "source": ""
+      },
+      {
+       "key": "improvedAP",
+       "value": "",
        "source": ""
       }
      ],
@@ -63371,12 +63148,7 @@
      },
      "crossbowMods": []
     },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.weapons.Item.gjHIn7jlEeWHNw4T"
-     }
-    },
-    "_id": "VV9i1LVAZFmpEEbg"
+    "_id": "Cn2fCwlxrAosr9nn"
    },
    {
     "name": "Когти",
@@ -63505,7 +63277,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды"
@@ -63906,7 +63678,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -64450,7 +64222,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -64797,7 +64569,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -66861,7 +66633,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -67457,7 +67229,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи стихий"
@@ -67977,7 +67749,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -68693,7 +68465,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -69510,7 +69282,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Дракониды"
@@ -69922,7 +69694,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -70478,7 +70250,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -70956,7 +70728,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -71718,7 +71490,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -72132,7 +71904,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -72690,7 +72462,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -73107,7 +72879,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -73631,7 +73403,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -74216,7 +73988,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -75844,7 +75616,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -76259,7 +76031,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -76933,7 +76705,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -77282,7 +77054,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 9,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -78844,7 +78616,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -79302,7 +79074,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -80166,7 +79938,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -80766,7 +80538,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -81173,7 +80945,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -81784,7 +81556,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Трупоеды"
@@ -82587,7 +82359,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -83258,7 +83030,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Огры"
@@ -83797,7 +83569,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -85031,7 +84803,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -85750,7 +85522,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -86362,7 +86134,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -86711,7 +86483,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -86874,7 +86646,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -87403,7 +87175,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -87876,7 +87648,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -88329,7 +88101,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -89057,7 +88829,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи стихий"
@@ -90159,7 +89931,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -90905,7 +90677,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -92024,7 +91796,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -92472,7 +92244,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -92892,7 +92664,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -93241,7 +93013,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -93970,120 +93742,6 @@
     "_id": "tMUJHV6rlnFTX6jh"
    },
    {
-    "name": "Сомна",
-    "type": "spell",
-    "img": "icons/magic/control/sleep-bubble-purple.webp",
-    "system": {
-     "description": "<p>Сомна усыпляет одну цель успокаивающей магией. При применении этого знака, если цель не смогла защититься, она засыпает и считается Дезориентированной до тех пор, пока не проснется через 8 часов. Если вы потратите 2 очка Вын на применение этого Знака, цель проснется, если получит урон, если кто-то разбудит ее или раздастся громкий шум. Если вы потратите 4 очка Вын, цель проснется только в том случае, если она получит урон или если кто-то попытается разбудить ее действием. Если вы потратите 6 очков Вын, цель проснется, только если получит урон или если кто-то попытается разбудить ее действием полного раунда. Если вы потратите 7 очков Вын, цель проснется, только если получит урон. Если у цели нет причин подозревать магическое вмешательство до того, как ее усыпят, она не узнает, что на нее воздействовала магия, когда проснется.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 2,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "8 м",
-     "duration": "8 часов",
-     "defense": "resistMagic",
-     "defenseText": "сопротивление магии",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.omnRmDYQbY6VhbRz"
-     }
-    },
-    "_id": "onpprxT2EIPRmFnb"
-   },
-   {
-    "name": "Сомна",
-    "type": "spell",
-    "img": "icons/magic/control/sleep-bubble-purple.webp",
-    "system": {
-     "description": "<p>Сомна усыпляет одну цель успокаивающей магией. При применении этого знака, если цель не смогла защититься, она засыпает и считается Дезориентированной до тех пор, пока не проснется через 8 часов. Если вы потратите 2 очка Вын на применение этого Знака, цель проснется, если получит урон, если кто-то разбудит ее или раздастся громкий шум. Если вы потратите 4 очка Вын, цель проснется только в том случае, если она получит урон или если кто-то попытается разбудить ее действием. Если вы потратите 6 очков Вын, цель проснется, только если получит урон или если кто-то попытается разбудить ее действием полного раунда. Если вы потратите 7 очков Вын, цель проснется, только если получит урон. Если у цели нет причин подозревать магическое вмешательство до того, как ее усыпят, она не узнает, что на нее воздействовала магия, когда проснется.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 2,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "8 м",
-     "duration": "8 часов",
-     "defense": "resistMagic",
-     "defenseText": "сопротивление магии",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.omnRmDYQbY6VhbRz"
-     }
-    },
-    "_id": "2GT2Lg4KINRdTYY4"
-   },
-   {
     "name": "Супирре",
     "type": "spell",
     "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
@@ -94138,7 +93796,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.H2Y4svWWLUhsEg7Q"
      }
     },
-    "_id": "eRIKzj1blcdaR3Ck"
+    "_id": "9A9GRT329fB0sZyh"
    },
    {
     "name": "«Картечь»",
@@ -94192,121 +93850,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.TN2LI9U1O3QjAEnx"
      }
     },
-    "_id": "zEj5M0bscqPEI4Zj"
-   },
-   {
-    "name": "Супирре",
-    "type": "spell",
-    "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
-    "system": {
-     "description": "<p>Нанесение Знака Супирре на поверхность позволяет связать его с точкой в радиусе действия заклинания. При подключении вы можете слышать все, что происходит рядом с этой точкой, как если бы это было прямо рядом с вами, и можете сосредоточиться на одном звуке или разговоре, отключив все другие шумы. Пока этот знак активен, вам не нужно делать проверку Внимания, чтобы услышать какой-либо разговор в связанной точке. Знак может быть связан только с одним местом и должен быть переделан для прослушивания в другом месте. Диапазон действия этого знака определяется количеством очков выносливости, потраченных при применении. При использовании с 1 очком Вын Супирре имеет дальность действия 2 м. За каждое потраченное сверх этого очка выносливости максимальная дальность действия знака увеличивается на 2 м.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 1,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "разное",
-     "duration": "10 минут",
-     "defense": "none",
-     "defenseText": "нет",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.H2Y4svWWLUhsEg7Q"
-     }
-    },
-    "_id": "NRhP8VdZbTJ0v3DC"
-   },
-   {
-    "name": "Супирре",
-    "type": "spell",
-    "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
-    "system": {
-     "description": "<p>Нанесение Знака Супирре на поверхность позволяет связать его с точкой в радиусе действия заклинания. При подключении вы можете слышать все, что происходит рядом с этой точкой, как если бы это было прямо рядом с вами, и можете сосредоточиться на одном звуке или разговоре, отключив все другие шумы. Пока этот знак активен, вам не нужно делать проверку Внимания, чтобы услышать какой-либо разговор в связанной точке. Знак может быть связан только с одним местом и должен быть переделан для прослушивания в другом месте. Диапазон действия этого знака определяется количеством очков выносливости, потраченных при применении. При использовании с 1 очком Вын Супирре имеет дальность действия 2 м. За каждое потраченное сверх этого очка выносливости максимальная дальность действия знака увеличивается на 2 м.</p>",
-     "kind": "sign",
-     "level": "journeyman",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 1,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "разное",
-     "duration": "10 минут",
-     "defense": "none",
-     "defenseText": "нет",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Том Хаоса",
-      "page": "101"
-     }
-    },
-    "flags": {
-     "core": {
-      "sourceId": "Compendium.vedmak.magic.Item.H2Y4svWWLUhsEg7Q"
-     }
-    },
-    "_id": "odkEXdM3IVTI2Wkv"
+    "_id": "3TOrQJdbjeZI5VhE"
    },
    {
     "name": "«Ласточка»",
@@ -94360,7 +93904,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.rUZY2olm8cVR1yLd"
      }
     },
-    "_id": "uefbm00YiamQdc8b"
+    "_id": "IXYqhdKpwEUHRyTc"
    },
    {
     "name": "Активный щит",
@@ -94417,7 +93961,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.jJZ8zuw8HfmkuyPI"
      }
     },
-    "_id": "Zl3z7BePiGsreYNi"
+    "_id": "hm3eYqNN4xutq16J"
    },
    {
     "name": "«Самум»",
@@ -94471,7 +94015,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.UxzXP8d9KYYlxZz4"
      }
     },
-    "_id": "trdUoDQ2U2J9i8FY"
+    "_id": "xAVJ4q1dVHvbCRNe"
    },
    {
     "name": "Масло против трупоедов",
@@ -94525,7 +94069,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.mHFlrC8InjmeHX4g"
      }
     },
-    "_id": "QsR9bi7cSEyqIpvZ"
+    "_id": "YzXlLybGL0JQTsO1"
    },
    {
     "name": "Сметающий Аард",
@@ -94591,7 +94135,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.6zLt2v9FmKskbagh"
      }
     },
-    "_id": "ReqDb8nyhZb5ilvD"
+    "_id": "DJq6cMA2yCd7WGXz"
    },
    {
     "name": "Отвар из кладбищенской бабы",
@@ -94645,7 +94189,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.lEXKOj6CmvVcYbT7"
      }
     },
-    "_id": "El90MHhJQJztYmmy"
+    "_id": "PrYOSJymTKiGq6Ya"
    },
    {
     "name": "Огненный поток",
@@ -94707,7 +94251,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.ne1aVbrlNT5pMpbp"
      }
     },
-    "_id": "ywhCl18GJq3DhCwQ"
+    "_id": "FBRkGOxlxmZV0kqY"
    },
    {
     "name": "Масло против зверей",
@@ -94761,7 +94305,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.8vEeXU6xe6Jd03Ku"
      }
     },
-    "_id": "rJ0c38xseF9J6O1K"
+    "_id": "oknkUamIWCLrZtuB"
    },
    {
     "name": "Марионетка",
@@ -94818,7 +94362,7 @@
       "sourceId": "Compendium.vedmak.magic.Item.NlrYR0Q0oCOGGp99"
      }
     },
-    "_id": "dXqNx26CZ5GSFUvU"
+    "_id": "Egv53Oe9YhhP8hSe"
    },
    {
     "name": "«Гром»",
@@ -94879,7 +94423,7 @@
       "sourceId": "Compendium.vedmak.alchemy.Item.89ssMKuTQnyj4ims"
      }
     },
-    "_id": "wMP4lBzxeILypOfv"
+    "_id": "jCgrwcZmwp1n9XDL"
    }
   ],
   "img": "systems/vedmak/assets/fan/bestiary/humanoid_enemy/witcher/ivo_iz_belhavena_anna_podedworna.webp",
@@ -94902,7 +94446,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -95251,7 +94795,7 @@
    },
    "bounty": 100,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 10,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -96455,7 +95999,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -97211,7 +96755,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -97896,7 +97440,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -98377,7 +97921,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -98726,7 +98270,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [
@@ -98857,7 +98401,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Вампиры"
@@ -99534,7 +99078,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -100253,7 +99797,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -100793,7 +100337,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи стихий"
@@ -101142,7 +100686,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -101261,7 +100805,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -101610,7 +101154,7 @@
    "armor": 10,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "large",
    "materialWeakness": "auto",
    "resistances": [
     "bludgeoning"
@@ -101845,7 +101389,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -102527,7 +102071,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Исключительные"
@@ -103287,7 +102831,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -103700,7 +103244,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -104231,7 +103775,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -104873,7 +104417,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Дракониды"
@@ -105520,7 +105064,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -105997,7 +105541,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -106523,7 +106067,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -106985,7 +106529,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -107727,7 +107271,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -108141,7 +107685,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -108492,7 +108036,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -108644,7 +108188,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -109117,7 +108661,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -109464,7 +109008,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -111029,7 +110573,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -111715,7 +111259,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -112134,7 +111678,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -112548,7 +112092,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -113105,7 +112649,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -113519,7 +113063,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -113934,7 +113478,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -114512,7 +114056,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Вампиры"
@@ -115002,7 +114546,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -115740,7 +115284,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -116248,7 +115792,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -116717,7 +116261,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -117135,7 +116679,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -117486,7 +117030,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "large",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -117594,7 +117138,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -118017,7 +117561,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -118570,7 +118114,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Огры"
@@ -118917,7 +118461,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -120502,7 +120046,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -120998,7 +120542,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -121745,7 +121289,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -122286,7 +121830,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -123564,7 +123108,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -123913,7 +123457,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -125473,7 +125017,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -126300,7 +125844,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -126650,7 +126194,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -126770,7 +126314,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -127177,7 +126721,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -127719,7 +127263,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -128309,7 +127853,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -128774,7 +128318,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -129419,7 +128963,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Трупоеды"
@@ -130185,7 +129729,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -130839,7 +130383,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -131186,7 +130730,7 @@
    },
    "bounty": 110,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -131926,7 +131470,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -132275,7 +131819,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -133779,7 +133323,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -134182,7 +133726,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -134856,7 +134400,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -135276,7 +134820,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -135864,7 +135408,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -136580,7 +136124,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -137276,7 +136820,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Дракониды"
@@ -137738,7 +137282,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -138225,7 +137769,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -139138,7 +138682,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -139819,7 +139363,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -140234,7 +139778,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -140648,7 +140192,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -141514,7 +141058,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -142072,7 +141616,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -142595,7 +142139,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гибриды"
@@ -143057,7 +142601,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -143406,7 +142950,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "monster",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -143520,7 +143064,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -144269,7 +143813,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -144879,7 +144423,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -145365,7 +144909,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -145926,7 +145470,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -146669,7 +146213,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -147446,7 +146990,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -147971,7 +147515,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -149148,7 +148692,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -149751,7 +149295,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -150428,7 +149972,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -150777,7 +150321,7 @@
    },
    "bounty": 100,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -152323,7 +151867,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -152976,7 +152520,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -153509,7 +153053,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -154032,7 +153576,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -154742,7 +154286,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -155462,7 +155006,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Дракониды"
@@ -155921,7 +155465,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -156663,7 +156207,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -157116,7 +156660,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -157702,7 +157246,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Исключительные"
@@ -158114,7 +157658,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -158585,7 +158129,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -159239,7 +158783,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Реликты"
@@ -160368,7 +159912,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -160798,7 +160342,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -161466,7 +161010,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -162069,7 +161613,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гибриды"
@@ -163171,7 +162715,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -163624,7 +163168,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -164094,7 +163638,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -164903,7 +164447,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -165397,7 +164941,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -166154,7 +165698,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -166563,7 +166107,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -167468,7 +167012,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -167944,7 +167488,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -168591,7 +168135,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Вампиры"
@@ -169269,7 +168813,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -169794,7 +169338,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Трупоеды"
@@ -170286,7 +169830,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -170773,7 +170317,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Инсектоиды"
@@ -171583,7 +171127,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -171931,7 +171475,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 7,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -173526,7 +173070,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -174006,7 +173550,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -175693,7 +175237,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -176287,7 +175831,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гибриды"
@@ -176699,7 +176243,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -177445,7 +176989,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -177794,7 +177338,7 @@
    },
    "bounty": 1000,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 9,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -179366,7 +178910,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -179781,7 +179325,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -180326,7 +179870,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -180843,7 +180387,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Звери"
@@ -181321,7 +180865,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Огры"
@@ -181733,7 +181277,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -182485,7 +182029,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -182988,7 +182532,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -183335,7 +182879,7 @@
    },
    "bounty": 500,
    "armor": 0,
-   "vigor": 0,
+   "vigor": 25,
    "bodyType": "humanoid",
    "size": "medium",
    "materialWeakness": "auto",
@@ -185067,7 +184611,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -185575,7 +185119,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Духи"
@@ -185987,7 +185531,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -186338,7 +185882,7 @@
    "armor": 0,
    "vigor": 0,
    "bodyType": "humanoid",
-   "size": "medium",
+   "size": "small",
    "materialWeakness": "auto",
    "resistances": [],
    "susceptibilities": [],
@@ -186462,7 +186006,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Огры"
@@ -187209,7 +186753,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -187755,7 +187299,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Проклятые"
@@ -188499,7 +188043,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -188969,7 +188513,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",
@@ -189555,7 +189099,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Исключительные"
@@ -190332,7 +189876,7 @@
    "bar2": {
     "attribute": "sta"
    },
-   "lockRotation": true
+   "lockRotation": false
   },
   "folder": [
    "Гуманоиды",

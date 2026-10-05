@@ -13,7 +13,7 @@ import { STATS } from "../config/stats.mjs";
 import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
-import { postCard, resolveActor, tokenDistance } from "../combat/common.mjs";
+import { postCard, resolveActor, tokenDistance, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS } from "../combat/zones.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
@@ -321,19 +321,46 @@ export async function applyPreparation(actor, item) {
   const s = item.system;
   const target = [...game.user.targets][0]?.actor ?? actor;
   const lines = [`${target === actor ? actor.name : `${actor.name} → ${target.name}`}: ${s.effect}`];
-  for (const st of s.use.removeStatuses ?? []) {
+  if (target.isOwner) lines.push(...await preparationOnTarget(target, s.use));
+  else {
+    // Чужая цель (порошок на раненого товарища): состояние меняет ведущий — по предмету отправителя, а не по запросу
+    if (!game.users.activeGM) return ui.notifications.warn("Нужен ведущий в игре: состав на чужую цель накладывает он.");
+    // Заряд тратит тоже ведущий — после применения: иначе последний заряд исчез бы раньше, чем он прочтёт предмет
+    await asGM("alchemyPreparation", { actorUuid: actor.uuid, itemId: item.id, targetUuid: target.token?.uuid ?? target.uuid });
+    lines.push("Действие на цель применяет ведущий.");
+  }
+  if (target.isOwner) await spendOne(item);
+  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "apply" } } });
+}
+
+/** Снять и наложить состояния состава на цель. @returns {string[]} строки карточки */
+async function preparationOnTarget(target, use) {
+  const lines = [];
+  for (const st of use.removeStatuses ?? []) {
     if (target.statuses.has(st)) {
       await target.toggleStatusEffect(st, { active: false });
       lines.push(`Снято: ${CONFIG.statusEffects[st]?.name ?? st}.`);
     }
   }
-  if (s.use.status && target.isOwner) {
-    await applyStatus(target, s.use.status, s.use.statusRounds);
-    lines.push(`Эффект: ${CONFIG.statusEffects[s.use.status]?.name ?? s.use.status}.`);
+  if (use.status) {
+    await applyStatus(target, use.status, use.statusRounds);
+    lines.push(`Эффект: ${CONFIG.statusEffects[use.status]?.name ?? use.status}.`);
   }
-  await spendOne(item);
-  return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "apply" } } });
+  return lines;
 }
+
+// Ведущий: состав игрока на чужую цель. Отправитель должен владеть персонажем с этим составом; что снять и что
+// наложить — из самого предмета
+registerGMHandler("alchemyPreparation", async ({ actorUuid, itemId, targetUuid }, userId) => {
+  const actor = resolveActor(actorUuid);
+  const item = actor?.items.get(itemId);
+  const target = resolveActor(targetUuid);
+  if (!item || !target || item.system.use?.action !== "apply" || !userOwnsAny(userId, actor)) {
+    return console.warn(`vedmak | отклонён состав на цель от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  await preparationOnTarget(target, item.system.use);
+  await spendOne(item);
+});
 
 /* ------------------------------ Бросок склянки ------------------------------ */
 

@@ -816,8 +816,9 @@ export class CharacterSheet extends VedmakActorSheet {
       });
       if (!ok) return;
     }
-    data.branches[bi] = { name: alt.name, extra: alt.extra ?? "", abilities: alt.abilities };
-    data.altBranches[ai] = { name: old.name, source: old.extra ? alt.source : (prof.system.source?.book || ""), extra: old.extra ?? "", abilities: old.abilities };
+    data.branches[bi] = { name: alt.name, extra: alt.extra ?? "", source: alt.source ?? "", abilities: alt.abilities };
+    // Своя книга ветви; у основной ветви профессии её нет — книга профессии
+    data.altBranches[ai] = { name: old.name, source: old.source || prof.system.source?.book || "", extra: old.extra ?? "", abilities: old.abilities };
     await prof.update({ "system.branches": data.branches, "system.altBranches": data.altBranches });
   }
 

@@ -7308,14 +7308,14 @@
     "type": "document",
     "name": "Извлечение Айфры",
     "description": "",
-    "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+    "img": "icons/magic/water/vortex-water-whirlpool-blue.webp",
     "weight": 1,
     "range": [
      3,
      3
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.magic.Item.7H0J6RYPnMYgg0aK"
+    "documentUuid": "Compendium.vedmak.magic.Item.J5xI0929X3f2Dlem"
    },
    {
     "_id": "RmiBFY08fxfHzEJJ",
@@ -9274,14 +9274,14 @@
     "type": "document",
     "name": "Друидический тотем",
     "description": "",
-    "img": "icons/magic/nature/root-vine-caduceus-healing.webp",
+    "img": "icons/magic/nature/tree-spirit-green.webp",
     "weight": 1,
     "range": [
      1,
      1
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.magic.Item.sm5VdRnqAY8BZ1kS"
+    "documentUuid": "Compendium.vedmak.magic.Item.NSQ6UaRVYnY4J3Eq"
    },
    {
     "_id": "80o45a0oc1yxbnw0",
@@ -10065,14 +10065,14 @@
     "type": "document",
     "name": "Благословение богатства",
     "description": "",
-    "img": "icons/commodities/currency/coins-stitched-pouch-brown.webp",
+    "img": "icons/magic/control/buff-luck-fortune-gold.webp",
     "weight": 1,
     "range": [
      3,
      3
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.magic.Item.JbddFaOaUim6GZ6a"
+    "documentUuid": "Compendium.vedmak.magic.Item.GijPCPtTxO2xlQZg"
    },
    {
     "_id": "oijx763jb94p9x7k",
@@ -12950,7 +12950,7 @@
     "_id": "QocwrqHNIALwm9No",
     "type": "text",
     "name": "",
-    "description": "[[1d2] Единиц",
+    "description": "[[1d2]] Единиц",
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
@@ -21059,14 +21059,14 @@
     "type": "document",
     "name": "Потестаквизитор",
     "description": "",
-    "img": "icons/commodities/tech/antenna-powered-purple.webp",
+    "img": "icons/tools/scribal/lens-blue.webp",
     "weight": 1,
     "range": [
      28,
      28
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.gear.Item.ihxwGjor7bpSap2G"
+    "documentUuid": "Compendium.vedmak.gear.Item.r5HmiOsTdtr1YLpa"
    },
    {
     "_id": "5I4LT9hoVcHe2tfK",
@@ -23952,14 +23952,14 @@
     "type": "document",
     "name": "Зачарованный амулет",
     "description": "",
-    "img": "icons/equipment/neck/collar-rounded-red.webp",
+    "img": "icons/magic/symbols/rune-sigil-green.webp",
     "weight": 1,
     "range": [
      5,
      5
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.magic.Item.k3WKJGszsHFMj4sa"
+    "documentUuid": "Compendium.vedmak.magic.Item.CYiGaDvfT6mmBSdx"
    }
   ],
   "folder": [
@@ -24125,14 +24125,14 @@
     "type": "document",
     "name": "Наполнить трофей",
     "description": "",
-    "img": "icons/commodities/gems/pearl-swirl-blue.webp",
+    "img": "icons/magic/death/skull-cattle-totem-glow-red.webp",
     "weight": 1,
     "range": [
      11,
      11
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.magic.Item.agbE6nwaxPQ3TPAB"
+    "documentUuid": "Compendium.vedmak.magic.Item.rzF932dVfIuiqR2Q"
    },
    {
     "_id": "xenghn4mur9q598d",
@@ -24153,14 +24153,14 @@
     "type": "document",
     "name": "Спорная подвеска",
     "description": "",
-    "img": "icons/equipment/neck/collar-carved-bone-teeth-red.webp",
+    "img": "icons/magic/control/buff-luck-fortune-green.webp",
     "weight": 1,
     "range": [
      13,
      13
     ],
     "drawn": false,
-    "documentUuid": "Compendium.vedmak.magic.Item.hVUWiZfsUTfdqGDL"
+    "documentUuid": "Compendium.vedmak.magic.Item.yWuJJJP1715iievt"
    }
   ],
   "folder": [

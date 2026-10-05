@@ -4,7 +4,7 @@ import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, HEALING_DAYS } from "../config/c
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate, ringHtml } from "../util.mjs";
 import { postCard, rollFormula, asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "./common.mjs";
-import { applyDamageToActor } from "./damage.mjs";
+import { applyDamageToActor, serialByActor } from "./damage.mjs";
 import { STATUS_EFFECTS } from "./statuses.mjs";
 
 const DAMAGE_STATUSES = ["burning", "poisoned", "bleeding", "frozen", "disoriented", "blind", "prone", "suffocating", "nauseated", "intoxicated", "hallucinating"];
@@ -61,6 +61,9 @@ export async function manualDamage(actors, preset = {}) {
     results.push(data);
     applies.push({ uuid: actor.token?.uuid ?? actor.uuid, data });
   }
+  // Параметры урона — во флаг карточки: по чужой цели ведущий пересчитает урон сам по ним, а не по запросу
+  const params = { formula: cfg.formula, damageType: cfg.damageType, ignoreArmor: cfg.ignoreArmor, nonLethal: cfg.nonLethal };
+  const per = Object.fromEntries(applies.map(a => [doneKey(a.uuid), { where: a.data.where, effects: a.data.effects }]));
   // Сначала карточка, потом применение: по карточке ведущий проверяет, что игрок вправе бить именно эти цели
   // (бомбу бросает игрок, а цели — чужие токены). Автор карточки — настоящий отправитель, от сервера Foundry
   const card = await postCard({
@@ -68,7 +71,7 @@ export async function manualDamage(actors, preset = {}) {
     data: { ...cfg, total, results, statusLabel: CONFIG.statusEffects[cfg.status]?.name ?? "" },
     // «Себе» у игрока спрятало бы карточку и от ведущего, а он по ней проверяет запрос: игроку — «Ведущему»
     actor: null, rolls: roll ? [roll] : [], messageMode: !game.user.isGM && cfg.messageMode === "self" ? "gm" : cfg.messageMode,
-    flags: { manualDamage: { total, targets: applies.map(a => a.uuid) } }
+    flags: { manualDamage: { total, targets: applies.map(a => a.uuid), params, per } }
   });
   if (!card) return null;
   for (const a of applies) await asGM("applyManualDamage", { ...a, messageId: card.id });
@@ -76,7 +79,7 @@ export async function manualDamage(actors, preset = {}) {
 }
 
 /** Урон по одной или всем частям тела с бронёй, сопротивлениями и множителями. */
-async function computeManual(actor, { total, damageType, where, ignoreArmor, nonLethal, status, statusChance = 100, statusRounds = "" }) {
+async function computeManual(actor, { total, damageType, where, ignoreArmor, nonLethal, status, statusChance = 100, statusRounds = "", presetEffects = null }) {
   const sys = actor.system;
   const d = sys.derived;
   const table = d.bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
@@ -90,6 +93,8 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
   const rows = [];
   const wear = [];
   let final = 0;
+  // Куда пришёлся урон — для пересчёта ведущим той же части тела (applyManualDamage)
+  const resolvedWhere = keys.length > 1 ? "all" : keys[0];
   for (const key of keys) {
     const loc = d.armor?.[key] ?? { sp: 0, resist: [] };
     const sp = ignoreArmor ? 0 : loc.sp;
@@ -104,8 +109,9 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
     if (after > 0 && loc.sp > 0 && !ignoreArmor) wear.push({ location: key, amount: 1 });
     rows.push({ label: table[key].label, sp, locMult, mult, value });
   }
-  const effects = [];
-  if (status) {
+  let effects = [];
+  if (Array.isArray(presetEffects)) effects = presetEffects;
+  else if (status) {
     const label = CONFIG.statusEffects[status]?.name ?? status;
     if (statusChance >= 100) effects.push({ success: true, status, label, rounds: statusRounds });
     else {
@@ -114,7 +120,7 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
         label: `${label}: ${r.total} ${r.total <= statusChance ? "≤" : ">"} ${statusChance}%` });
     }
   }
-  return { name: actor.name, rows, final, nonLethal, wear, effects, crit: null, stunSave: null };
+  return { name: actor.name, rows, final, nonLethal, wear, effects, crit: null, stunSave: null, where: resolvedWhere };
 }
 
 /** Применения, которые идут прямо сейчас (по карточке и цели): второй такой же запрос не должен ударить ещё раз. */
@@ -125,6 +131,7 @@ registerGMHandler("applyManualDamage", async ({ uuid, data, messageId }, userId)
   if (!actor || !data || typeof data !== "object") return;
   let key = null;
   if (!userOwnsAny(userId, actor)) {
+    // Цифры урона из запроса для чужой цели не берём: ведущий считает их сам по карточке (ниже)
     // Чужая цель (бомба, ловушка): только по карточке, которую создал сам отправитель, с этой целью в списке,
     // и один раз на цель
     const card = game.messages.get(messageId);
@@ -134,6 +141,14 @@ registerGMHandler("applyManualDamage", async ({ uuid, data, messageId }, userId)
       || flag.applied?.[doneKey(uuid)] || applyingManual.has(key)) {
       return console.warn(`vedmak | отклонён урон без атаки от ${game.users.get(userId)?.name ?? userId}`);
     }
+    // Итог броска не больше максимума формулы из карточки — иначе «бросок» вписан руками
+    const p = flag.params ?? {};
+    const max = p.formula && Roll.validate(p.formula) ? (await new Roll(p.formula).evaluate({ maximize: true })).total : 0;
+    if (!(Number(flag.total) >= 0) || Number(flag.total) > max) {
+      return console.warn(`vedmak | отклонён урон без атаки от ${game.users.get(userId)?.name ?? userId}: итог вне формулы`);
+    }
+    const per = flag.per?.[doneKey(uuid)] ?? {};
+    data = await computeManual(actor, { ...p, total: Number(flag.total), where: per.where ?? "torso", presetEffects: per.effects ?? [] });
     applyingManual.add(key);
     try {
       await card.update({ [`flags.vedmak.manualDamage.applied.${doneKey(uuid)}`]: true });
@@ -143,7 +158,7 @@ registerGMHandler("applyManualDamage", async ({ uuid, data, messageId }, userId)
     }
   }
   try {
-    await applyDamageToActor(actor, data);
+    await serialByActor(actor, () => applyDamageToActor(actor, data));
   } finally {
     if (key) applyingManual.delete(key);
   }
