@@ -434,7 +434,7 @@ export async function rollAttack(actor, src, targets, cfg) {
   const data = {
     kind: "attack",
     attacker: { actorUuid: actor.uuid, tokenUuid: actor.token?.uuid ?? actorToken(actor)?.document.uuid ?? null, name: actor.name },
-    source: { kind: src.kind, itemId: src.item?.id ?? null },
+    source: { kind: src.kind, itemId: src.item?.id ?? null, key: src.kind === "ram" ? src.key : undefined },
     label: src.label, img: src.img,
     weapon: src.weapon,
     skill: skillKey,
@@ -470,5 +470,9 @@ export async function repeatAttack(message) {
   if (!actor?.isOwner) return ui.notifications.warn("Повторить атаку может только её владелец.");
   const src = describeSource(actor, data.source);
   if (!src) return null;
+  // Как и первая атака — только тем, что в руках (оружие могли убрать между атаками)
+  if ((src.kind === "weapon" || src.kind === "shield") && !(src.kind === "shield" ? src.item?.system.equipped : isReadyWeapon(actor, src.item))) {
+    return ui.notifications.warn(`«${src.item?.name ?? src.label}» не в руках — наденьте на вкладке «Снаряжение», тогда можно атаковать.`);
+  }
   return rollAttack(actor, src, data.targets, { ...data.config, extraAction: false, luck: 0 });
 }

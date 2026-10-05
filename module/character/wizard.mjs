@@ -139,7 +139,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     };
     const magic = [];
     for (const pack of game.packs.filter(p => p.documentName === "Item")) {
-      const index = await pack.getIndex({ fields: ["type", "system.kind", "system.level", "system.danger", "system.branch", "system.staCost"] });
+      const index = await pack.getIndex({ fields: ["type", "system.kind", "system.level", "system.danger", "system.branch", "system.staCost", "system.source.book"] });
       for (const e of index) if (e.type === "spell") magic.push({ ...e, uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}` });
     }
     for (const i of game.items.filter(i => i.type === "spell")) {
@@ -341,11 +341,14 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
     if (s.step === "profession") {
       context.professions = this.data.professions.map(p => {
-        const allowed = !p.system.allowedRaces.length || !this.raceKey || p.system.allowedRaces.includes(this.raceKey);
+        // Ведьмаку — только профессия «Ведьмак» (PLAN 4.79): запрет в обе стороны, как при переносе на лист
+        const allowed = (!p.system.allowedRaces.length || !this.raceKey || p.system.allowedRaces.includes(this.raceKey))
+          && (this.raceKey !== "witcher" || p.system.key === "witcher");
         return { uuid: p.uuid, name: p.name, img: p.img, selected: p.uuid === s.professionUuid, allowed,
           vigor: p.system.vigor, vigorSegs: Array.from({ length: Math.min(p.system.vigor, 8) }, () => ({})),
           defining: p.system.definingSkill.name, money: `${p.system.startingMoney} × 2d6`,
-          lock: allowed ? "" : p.system.allowedRaces.length === 1 ? "только ведьмаку" : "недоступно расе" };
+          lock: allowed ? "" : this.raceKey === "witcher" && p.system.key !== "witcher" ? "ведьмаку — только «Ведьмак»"
+            : p.system.allowedRaces.length === 1 ? "только ведьмаку" : "недоступно расе" };
       });
       if (prof) {
         const q = prof.system.magicQuota ?? {};
@@ -470,7 +473,9 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       .map(e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(kind, e.system.level), cost: e.system.staCost }))
       .sort((a, b) => compareRu(a.name, b.name));
     const groups = [];
-    if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true, items: pick("sign") });
+    // «Все базовые знаки» ведьмака — пять знаков корника, а не знаки фанатских книг того же уровня
+    if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true,
+      items: pick("sign").filter(i => all.find(e => e.uuid === i.uuid)?.system?.source?.book === "Корник") });
     const labels = { spell: "Заклинания новичка", invocation: "Инвокации новичка", ritual: "Ритуалы новичка", hex: "Порча низкой опасности", sign: "Знаки" };
     for (const kind of ["spell", "invocation", "ritual", "hex", "sign"]) {
       if (q[kind] > 0) groups.push({ kind, label: labels[kind], count: q[kind], auto: false, items: pick(kind) });
@@ -489,6 +494,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     else {
       const allowed = prof.system.allowedRaces;
       if (race && allowed.length && !allowed.includes(race.system.key)) out.profession = `${prof.name} недоступен для расы «${race.name}».`;
+      else if (race?.system.key === "witcher" && prof.system.key !== "witcher") out.profession = "Ведьмаку доступна только профессия «Ведьмак».";
       prof.system.skillChoices.forEach((c, i) => {
         if ((s.skillChoices[i] ?? []).length !== c.count) out.profession ??= `${c.label}: выбрано ${(s.skillChoices[i] ?? []).length} из ${c.count}.`;
       });
@@ -984,25 +990,64 @@ const GEAR_ALIASES = {
   "мул и повозка с товарами на 1000 крон": [["Мул", 1], ["Повозка", 1]],
   "формула эликсира": [["Формула эликсира (на выбор)", null]],
   "формула масла": [["Формула масла (на выбор)", null]],
-  "формула отвара": [["Формула отвара (на выбор)", null]]
+  "формула отвара": [["Формула отвара (на выбор)", null]],
+  // Профессии дополнений и фанатских книг: другое написание того же предмета или два предмета в одной строке
+  "короткий лук и стрелы": [["Короткий лук", 1], ["Стандартные боеприпасы", 10]],
+  "длинный лук и стрелы": [["Длинный лук", 1], ["Стандартные боеприпасы", 10]],
+  "арбалет и 20 болтов": [["Арбалет", 1], ["Стандартные боеприпасы", 20]],
+  "арбалет и 10 болтов": [["Арбалет", 1], ["Стандартные боеприпасы", 10]],
+  "лошадь и седло": [["Лошадь", 1], ["Седло", 1]],
+  "лошадь с седлом": [["Лошадь", 1], ["Седло", 1]],
+  "10 серебряных боеприпасов": [["Серебряный боеприпас", 10]],
+  "капюшон верденского лучника": [["Лёгкий подшлемник", 1]],
+  "капюшон вердэнского лучника": [["Лёгкий подшлемник", 1]],
+  "тонфхельм": [["Салад с бувигером", 1]],
+  "топфхельм": [["Салад с бувигером", 1]],
+  "усиленный гамбезон": [["Укреплённый гамбезон", 1]],
+  "эльфийский мессер": [["Эльфский мессер", 1]],
+  "перемётная сумка": [["Перемётная сума", null]],
+  "заплечная сумка": [["Наплечная сумка", null]],
+  "песочные часы": [["Песочные часы (час)", null]],
+  "колода гвинта": [["Колода для гвинта", null]],
+  "святой символ": [["Священный символ", null]],
+  "бурдюк с водой": [["Бурдюк", null]],
+  "факелы": [["Факел", null]],
+  "кровесвёртывающий порошок": [["Кровосвёртывающий порошок", null]]
 };
+
+/** Имя для сравнения: без регистра, «ё» как «е». */
+const normName = s => String(s).toLowerCase().replace(/ё/g, "е").trim();
+const ALIASES_NORM = Object.fromEntries(Object.entries(GEAR_ALIASES).map(([k, v]) => [normName(k), v]));
 
 export async function itemsForLabel(label) {
   const qty = Number(label.match(/[×x]\s*(\d+)\s*$/)?.[1] ?? 1);
   const name = label.replace(/\s*[×x]\s*\d+\s*$/, "").trim();
-  const alias = GEAR_ALIASES[name.toLowerCase()];
-  if (!alias) return [await itemByName(name, qty)];
+  const alias = ALIASES_NORM[normName(name)];
+  if (!alias) {
+    const found = await itemByName(name, qty, { strict: true });
+    if (found) return [found];
+    // «Эсбода (меч)» — пояснение в скобках; «Нож и точильный камень» — два предмета в одной строке
+    const bare = name.replace(/\s*\([^)]*\)\s*$/, "");
+    if (bare !== name) { const b = await itemByName(bare, qty, { strict: true }); if (b) return [b]; }
+    const pair = name.split(/\s+и\s+/);
+    if (pair.length === 2) {
+      const both = await Promise.all(pair.map(n => itemByName(n.charAt(0).toUpperCase() + n.slice(1), 1, { strict: true })));
+      if (both.every(Boolean)) return both;
+    }
+    return [await itemByName(name, qty)];
+  }
   const out = [];
   for (const [n, q] of alias) out.push(await itemByName(n, typeof q === "function" ? q(qty) : q ?? qty));
   return out;
 }
 
-async function itemByName(name, qty = 1) {
-  const lower = name.toLowerCase();
+/** Предмет по имени из компендиумов или мира; strict — null вместо простого предмета-заглушки. */
+async function itemByName(name, qty = 1, { strict = false } = {}) {
+  const lower = normName(name);
   const physical = ["weapon", "armor", "gear", "alchemical", "component", "enhancement"];
   for (const pack of game.packs.filter(p => p.documentName === "Item")) {
     const index = await pack.getIndex({ fields: ["type"] });
-    const e = index.find(i => i.name.toLowerCase() === lower && physical.includes(i.type));
+    const e = index.find(i => normName(i.name) === lower && physical.includes(i.type));
     if (e) {
       const data = (await pack.getDocument(e._id)).toObject();
       delete data._id;
@@ -1011,13 +1056,14 @@ async function itemByName(name, qty = 1) {
       return data;
     }
   }
-  const world = game.items.find(i => i.name.toLowerCase() === lower && physical.includes(i.type));
+  const world = game.items.find(i => normName(i.name) === lower && physical.includes(i.type));
   if (world) {
     const data = world.toObject();
     delete data._id;
     if (qty > 1) data.system.quantity = qty;
     return data;
   }
+  if (strict) return null;
   return { name, type: "gear", system: { quantity: qty, category: "general" } };
 }
 

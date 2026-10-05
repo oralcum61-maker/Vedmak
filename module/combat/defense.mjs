@@ -12,16 +12,19 @@ import {
   isReadyWeapon
 } from "./common.mjs";
 
+/** Сломан ли щит или оружие: надёжность кончилась — блок пишет «сломан, больше не защищает». */
+const isBroken = i => { const r = i.system.reliability; return r?.max > 0 && r.value <= 0; };
+
 /** Чем можно блокировать или парировать. */
 function defenseItems(actor, attack, defense) {
   const out = [];
   if (defense === "block" || defense === "parry") {
-    for (const s of actor.itemTypes.armor.filter(i => i.system.isShield && i.system.equipped)) {
+    for (const s of actor.itemTypes.armor.filter(i => i.system.isShield && i.system.equipped && !isBroken(i))) {
       out.push({ id: s.id, label: `${s.name} (щит, Ближний бой)`, skill: "melee", shield: true, item: s });
     }
     if (!(defense === "block" && attack.isRanged)) {
       // Блокируют и парируют тем, что в руках
-      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged && isReadyWeapon(actor, w));
+      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged && isReadyWeapon(actor, w) && !isBroken(w));
       for (const w of weapons) out.push({ id: w.id, label: `${w.name} (${SKILLS[w.system.skill]?.label ?? ""})`, skill: w.system.skill, item: w });
     }
   }
@@ -132,6 +135,8 @@ function defenseBase(actor, typeKey, item) {
  * @returns {string} ключ защиты для defend()
  */
 export function bestDefense(actor, attack) {
+  // Без сознания или дезориентирован — беззащитная цель: атака против СЛ (defendAgainstDC), а не уклонение
+  if (["unconscious", "disoriented"].some(s => actor.statuses?.has(s))) return "none";
   const spellDefenses = attack.spell?.defenses;
   if (spellDefenses) {
     const rolled = spellDefenses.filter(k => DEFENSE_TYPES[k]);
@@ -391,7 +396,7 @@ async function defendAuto(message, attack, actor, defender, { messageMode } = {}
 
 function buildOutcome(message, attack, defender, r) {
   const critAllowed = !attack.spell || attack.spell.canCrit;
-  const critLevel = r.hit && critAllowed && !r.auto ? critLevelFor(r.margin) : null;
+  const critLevel = r.hit && critAllowed && !r.auto && !attack.noDamage ? critLevelFor(r.margin) : null;
   const canDamage = (r.hit || r.damageOnBlock) && !attack.noDamage;
   const spell = attack.spell ?? null;
   const canApplyEffects = r.hit && !!spell && attack.noDamage && !!(spell.statuses?.length || spell.regen || spell.hex || spell.buff);
@@ -405,7 +410,7 @@ function buildOutcome(message, attack, defender, r) {
       damageMod: attack.damageMod ?? 0, chargeFormula: attack.chargeFormula ?? "",
       noDamage: attack.noDamage, fixedLocation: attack.fixedLocation, hitText: attack.hitText,
       hitStatus: attack.hitStatus, stunSaveMod: attack.stunSaveMod, total: attack.roll.total,
-      spell
+      spell, drain: attack.drain ?? null
     },
     defender,
     ...r,

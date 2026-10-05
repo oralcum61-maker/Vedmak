@@ -261,6 +261,27 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const locMult = location === "head" ? Math.max(locCfg.mult, d.headMult ?? 3) : locCfg.mult;
   let final = Math.floor(afterArmor * typeMult * locMult);
 
+  // Заклинание по всему телу («Дыхание дракона», «Облако жуков»): урон по каждой части — со своей бронёй и
+  // множителем, как ручной урон «по всем частям» (manual.mjs); износ брони — у каждой пробитой части
+  let wear;
+  if (spell?.allLocations) {
+    wear = [];
+    const rows = [];
+    final = 0;
+    for (const [key, cfg] of Object.entries(table)) {
+      const a = d.armor?.[key] ?? { sp: 0, resist: [] };
+      const after = Math.max(0, dmg - (spell.ignoreArmor ? 0 : a.sp));
+      const halved = reasons.some(r => r !== "броня") || (!spell.ignoreArmor && a.resist?.includes(damageType));
+      const m = immune ? 0 : (halved ? 0.5 : 1) * (susceptible ? 2 : 1);
+      const lm = key === "head" ? Math.max(cfg.mult, d.headMult ?? 3) : cfg.mult;
+      const value = Math.floor(after * m * lm);
+      final += value;
+      if (after > 0 && a.sp > 0 && !spell.ignoreArmor) wear.push({ location: key, amount: 1 });
+      rows.push(`${cfg.label.toLowerCase()} ${value}`);
+    }
+    notes.push(`По всему телу: ${rows.join(", ")}.`);
+  }
+
   // Критическое ранение
   let crit = null;
   if (critLevel) {
@@ -355,7 +376,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   }
 
   return {
-    location, locationLabel: locCfg.label, locRoll, locMult,
+    location, locationLabel: spell?.allLocations ? "всё тело" : locCfg.label, locRoll, locMult, wear,
     damageType, damageTypeLabel: CONFIG.VEDMAK.DAMAGE_TYPES[damageType]?.label ?? damageType,
     parts, rawDamage, coverSp,
     sp: armor.sp, effectiveSp: sp, ap, improvedAP, afterArmor, penetrated,
@@ -418,7 +439,9 @@ export async function applyDamageToActor(actor, dmg) {
     lines.push(`Урон ${dmg.final}: ПЗ ${sys.hp.value} → ${hp}.`);
     if (hp < 0) {
       deathSave = true;
-      lines.push(wasDying ? "Ранен при смерти: новое испытание против смерти." : "При смерти! Испытание против смерти.");
+      // Новое ранение при смерти: порог испытания падает ещё на 1 (стр. 162 — «за раунд и за каждое новое ранение»)
+      if (wasDying) updates["system.deathSaves.penalty"] = (sys.deathSaves?.penalty ?? 0) + 1;
+      lines.push(wasDying ? "Ранен при смерти: порог испытания −1, новое испытание против смерти." : "При смерти! Испытание против смерти.");
     } else if (hp < sys.derived.woundThreshold && sys.hp.value >= sys.derived.woundThreshold) {
       lines.push("Ниже порога ранения: Реа, Лвк, Инт и Воля ×½.");
     }

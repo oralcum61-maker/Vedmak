@@ -393,7 +393,8 @@ export async function verbalDefend(message, target, defense, { skipDialog = fals
   };
   const card = await postCard({
     template: "systems/vedmak/templates/chat/verbal-outcome.hbs", data, actor: defender,
-    flags: { verbal: data }, rolls, messageMode: res?.choice.messageMode ?? messageMode ?? defaultMessageMode()
+    // Режим, переданный явно (автозащита НИП — режим атакующего игрока), важнее режима бросающего ведущего
+    flags: { verbal: data }, rolls, messageMode: messageMode ?? res?.choice.messageMode ?? defaultMessageMode()
   });
   await markDone(message, card);
   return card;

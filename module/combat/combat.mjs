@@ -57,11 +57,15 @@ export async function startOfTurn(actor, combat, context) {
   if (has("activeDodge")) { await actor.toggleStatusEffect("activeDodge", { active: false }); }
 
   // Эликсиры и масла, истёкшие по времени; магия: поддержание, регенерация, щиты, статусы с длительностью
-  lines.push(...await expireAlchemy(actor));
-  lines.push(...await trueFormStartOfTurn(actor));
-  lines.push(...await magicStartOfTurn(actor));
-  lines.push(...await expireZonesForTurn(actor, combat));
-  lines.push(...await repeatZonesForTurn(actor, combat));
+  // Каждая подсистема — отдельно: ошибка одной не должна отменять урон за ход и карточку хода
+  const step = async (name, fn) => {
+    try { lines.push(...(await fn() ?? [])); } catch (err) { console.error(`vedmak | начало хода: ${name}`, err); }
+  };
+  await step("алхимия", () => expireAlchemy(actor));
+  await step("Истинная форма", () => trueFormStartOfTurn(actor));
+  await step("магия", () => magicStartOfTurn(actor));
+  await step("зоны", () => expireZonesForTurn(actor, combat));
+  await step("повтор зон", () => repeatZonesForTurn(actor, combat));
 
   // Урон за ход
   let loss = 0;

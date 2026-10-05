@@ -757,7 +757,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     // вместе с правкой на открытой вкладке и откатили бы чужие изменения (кроны от ведущего, навыки из мастера).
     // Отключённые поля в форму не попадают; вкладку перерисует changeTab, когда её откроют.
     for (const part of this.#staleParts) {
-      for (const el of this.element.querySelectorAll(`[data-application-part="${part}"] :is(input, select, textarea, prose-mirror)`)) {
+      for (const el of this.element.querySelectorAll(`[data-application-part="${part}"] :is(input, select, textarea, prose-mirror, multi-checkbox, multi-select)`)) {
         el.disabled = true;
         el.setAttribute("disabled", "");
       }
@@ -891,6 +891,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onItemCreate(event, target) {
+    if (event?.detail > 1) return; // двойной щелчок — второй клик не создаёт дубль
     const type = target.dataset.type;
     const extra = target.dataset.kind ? { "system.kind": target.dataset.kind } : {};
     const label = game.i18n.localize(`TYPES.Item.${type}`);
@@ -921,7 +922,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     await VedmakActorSheet.#itemFrom.call(this, target)?.toChat();
   }
 
-  static async #onEffectCreate() {
+  static async #onEffectCreate(event) {
+    if (event?.detail > 1) return; // двойной щелчок — второй клик не создаёт дубль
     const [effect] = await this.actor.createEmbeddedDocuments("ActiveEffect", [{
       name: "Новый эффект", img: "icons/svg/aura.svg"
     }]);
@@ -940,7 +942,19 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onEffectDelete(event, target) {
-    await VedmakActorSheet.#effectFrom.call(this, target)?.delete();
+    const effect = VedmakActorSheet.#effectFrom.call(this, target);
+    if (!effect) return;
+    // Эффект предмета удаляется из самого предмета — навсегда, а не только с персонажа: спрашиваем
+    if (effect.parent?.documentName === "Item") {
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window: { title: "Удалить эффект предмета" },
+        content: `<p>Эффект «${effect.name}» принадлежит предмету «${effect.parent.name}» и будет удалён из предмета.
+          Чтобы только отключить его, нажмите переключатель.</p>`,
+        rejectClose: false
+      });
+      if (!ok) return;
+    }
+    await effect.delete();
   }
 
   static async #onEffectToggle(event, target) {
@@ -978,7 +992,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   /** Таран: выбрать скакуна или транспорт, затем обычное окно атаки. */
-  static async #onRam() {
+  static async #onRam(event) {
+    if (event?.detail > 1) return; // двойной щелчок — второй клик не создаёт дубль
     const options = Object.entries(MOUNTS).map(([k, m]) => `<option value="${k}">${m.label} (${m.ram})</option>`).join("");
     const key = await foundry.applications.api.DialogV2.wait({
       window: { title: "Таран" },
@@ -1009,7 +1024,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   /** Добавить критическое ранение вручную. */
-  static async #onCritCreate() {
+  static async #onCritCreate(event) {
+    if (event?.detail > 1) return; // двойной щелчок — второй клик не создаёт дубль
     const table = this.actor.system.derived.bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
     const groups = Object.entries(CRIT_LEVELS).map(([level, cfg]) => {
       const options = Object.entries(CRIT_WOUNDS).filter(([, w]) => w.level === level)

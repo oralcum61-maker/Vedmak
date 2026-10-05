@@ -68,7 +68,7 @@
     {{!-- Магия: разделы и поиск слева, плитки в колонки с прокруткой, справа — что держится (PLAN 4.68) --}}
     <div class="vh-deck vh-magic{{#unless (or maintained.length shield zones.length)}} no-held{{/unless}}">
       <div class="vh-mgroups">
-        <input type="search" class="vh-magic-search" value="{{magicQuery}}" placeholder="Найти…" aria-label="Найти заклинание" data-tooltip="Поиск по всем разделам; Enter — сотворить первое найденное, Esc — сбросить">
+        <input type="search" id="vh-magic-search" class="vh-magic-search" value="{{magicQuery}}" placeholder="Найти…" aria-label="Найти заклинание" data-tooltip="Поиск по всем разделам; Enter — сотворить первое найденное, Esc — сбросить">
         <div class="vh-mlist">
           {{#each magicGroups}}
           <button type="button" class="vh-mgroup{{#if active}} on{{/if}}" data-action="magicGroup" data-group="{{id}}">
@@ -148,7 +148,7 @@
       </div>
       <div class="vh-row">
         <span class="vh-cap">навык</span>
-        <input type="search" class="vh-skill" list="vh-skill-list" placeholder="Внимание, Скрытность… и Enter" aria-label="Бросок навыка по имени">
+        <input type="search" id="vh-skill-input" class="vh-skill" list="vh-skill-list" placeholder="Внимание, Скрытность… и Enter" aria-label="Бросок навыка по имени">
         <datalist id="vh-skill-list">{{#each skillOptions}}<option value="{{this}}"></option>{{/each}}</datalist>
         <button type="button" class="vh-sbtn sm" data-action="rollSkill" data-skill="awareness">Внимание</button>
         <button type="button" class="vh-sbtn sm" data-action="rollSkill" data-skill="stealth">Скрытность</button>

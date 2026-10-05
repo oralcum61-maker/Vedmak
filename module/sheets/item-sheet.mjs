@@ -16,6 +16,8 @@ import { animateTab } from "../fx/sheet-motion.mjs";
  * Без них лист расы из книги сбрасывал бы её ключ, а лист профессии терял бы такие расы из «Разрешённых рас».
  */
 let raceKeyCache = null;
+// Своя раса, созданная или удалённая в мире, — в списках сразу, без перезагрузки
+for (const hook of ["createItem", "updateItem", "deleteItem"]) Hooks.on(hook, item => { if (item.type === "race") raceKeyCache = null; });
 async function raceKeyLabels() {
   if (raceKeyCache) return raceKeyCache;
   const out = Object.fromEntries(Object.entries(RACES).map(([k, v]) => [k, v.label]));
@@ -208,7 +210,7 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       context.showCastDc = kind === "gift";
       context.maintainModes = { "": "Фиксированное", half: "½ вложенной Вын", full: "Вся вложенная Вын" };
       context.damageTypeOptions = Object.fromEntries(Object.entries(V.DAMAGE_TYPES).map(([k, v]) => [k, v.label]));
-      context.locationOptions = { "": "Бросок d10", torso: "Туловище", all: "Все части тела" };
+      context.locationOptions = { "": "Бросок d10", head: "Голова", torso: "Туловище", all: "Все части тела" };
       context.statusOptions = Object.fromEntries(STATUS_EFFECTS.map(s => [s.id, s.name]));
       context.statusRows = system.automation.statuses.map((row, index) => ({ ...row, index }));
       context.targetingLabel = { self: "на себя", area: "зона", direct: "прямое воздействие" }[targetingFor(system.range)];
@@ -259,7 +261,14 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       if (v && !Array.isArray(v) && typeof v === "object") foundry.utils.setProperty(data.system, key, toArray(v));
     }
     if (Array.isArray(data.system?.branches)) {
-      for (const b of data.system.branches) if (b) b.abilities = toArray(b.abilities) ?? [];
+      // Массив ветвей заменяется целиком: поля, которых нет в форме (таблицы и пояснения ветви из книги — `extra`),
+      // берём из сохранённой ветви, иначе правка любого поля листа их стирала бы
+      const saved = this.document._source.system?.branches ?? [];
+      data.system.branches.forEach((b, i) => {
+        if (!b) return;
+        b.abilities = toArray(b.abilities) ?? [];
+        for (const [k, v] of Object.entries(saved[i] ?? {})) if (!(k in b)) b[k] = foundry.utils.deepClone(v);
+      });
     }
     // Изменения эффекта алхимии — JSON в текстовом поле
     if (typeof data.system?.changes === "string") {

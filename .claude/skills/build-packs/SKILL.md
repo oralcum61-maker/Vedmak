@@ -28,6 +28,11 @@ description: Пересобрать компендиумы системы — п
    PLAN 4.75) → `gen_services` → `bs_items` → `fix_icons` →
    `bs_bestiary` → `bs_tables` → `bs_rules` → `restructure_folders` → `square-icons`.
 
+   Новые заклинания книг в `data/extra/*.json` без значка получают его скриптом `python pick_spell_icons.py --extra`
+   до `dlc_extra_characters.py` (иначе у всех запасной `orb-glowing-purple`; проставленные значки он не трогает, PLAN 4.85).
+   `restructure_folders.py` не перестраивает ветки «Фанатская магия» и «Вампирская магия», а `bs_tables.py` не стирает
+   таблицы других слоёв в своих пакетах (PLAN 4.87) — эти два шага можно запускать после слоёв.
+
    Точный список скриптов посмотри в `D:\Witcher\_tools`. Если порядок для нового скрипта неясен, спроси пользователя.
 3. **Сборка** из `D:\Witcher\vedmak`: `node tools/build-packs.mjs` — все пакеты, или
    `node tools/build-packs.mjs bestiary gear` — выбранные. `classic-level` берётся из Foundry по `FOUNDRY_APP`.

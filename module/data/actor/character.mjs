@@ -134,7 +134,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     const groups = [];
     const race = this.raceKey;
     if (race) groups.push(race);
-    if (this.professionKey === "mage") groups.push("mage");
+    // Маги дополнений и фанатских книг для окружающих тоже маги
+    if (["mage", "waterMage", "fireMage", "necromancer", "demonologistAlz"].includes(this.professionKey)) groups.push("mage");
     return groups;
   }
 

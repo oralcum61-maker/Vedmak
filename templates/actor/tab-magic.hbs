@@ -163,7 +163,7 @@
     {{#each magic.kinds}}<a class="add-kind" data-action="itemCreate" data-type="spell" data-kind="{{kind}}">{{label}}</a>{{/each}}
   </div>
 
-  <details class="learn">
+  <details class="learn" data-sync="learn">
     <summary>Как выучить новое <span class="dim">— стр. 123</span></summary>
     <div class="learn-grid">
       {{#each magic.learning}}

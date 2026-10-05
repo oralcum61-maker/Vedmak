@@ -100,15 +100,19 @@ export function toOptions(map) {
  * @param {Actor|null} actor
  * @param {string} title
  * @param {string} body — HTML
- * @param {object} [opts] — {subtitle, icon, cls, rolls, flags}
+ * @param {object} [opts] — {subtitle, icon, cls, rolls, flags, messageMode}
+ *   messageMode — режим чата; по умолчанию — режим того, кто бросает («в роли» и пустой — «всем»): без явного
+ *   режима v14 отдаёт карточку всем, и тайный бросок (репутация, зависимость, отдых) уходил в общий чат
  */
-export function postCard(actor, title, body, { subtitle = "", icon = "", cls = "", rolls, flags } = {}) {
+export function postCard(actor, title, body, { subtitle = "", icon = "", cls = "", rolls, flags, messageMode } = {}) {
   const content = `<div class="vedmak-card ${cls}"><header class="card-head">`
     + `${icon ? `<span class="card-glyph"><i class="${icon}"></i></span>` : ""}`
     + `<div class="card-ident"><span class="card-name">${title}</span>`
     + `${subtitle ? `<span class="card-sub">${subtitle}</span>` : ""}</div></header>`
     + `<div class="card-body">${body}</div></div>`;
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls, flags });
+  const own = game.settings.get("core", "messageMode");
+  messageMode ??= !own || own === "ic" ? "public" : own;
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls, flags }, { messageMode });
 }
 
 /** Разметка кольца медальона карточки чата (см. хелпер vedmakRing). dice — число, массив граней d10 или ничего. */

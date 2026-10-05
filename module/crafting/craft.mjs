@@ -325,7 +325,9 @@ export async function forage(actor, item) {
   const f = item.system.forage;
   if (!f.dc && !f.quantity) return ui.notifications.info(`«${item.name}» нельзя собрать — только купить, изготовить или добыть с чудовища.`);
   const result = await actor.rollSkill("wilderness", { dc: f.dc || null, subtitle: `Собирательство: ${item.name} (${f.where})` });
-  if (!result?.success && f.dc) return result;
+  // Окно проверки закрыли — не собрано (без СЛ иначе компоненты появлялись бы и при отмене)
+  if (!result) return null;
+  if (!result.success && f.dc) return result;
   let amount = 0;
   const q = String(f.quantity || "1").replace(/\s/g, "");
   if (/^\d+$/.test(q)) amount = Number(q);

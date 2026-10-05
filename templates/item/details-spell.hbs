@@ -59,7 +59,7 @@
     <p class="hint">В формулах: <code>@sta</code> — вложенная Вын, <code>@margin</code> — на сколько проверка превысила защиту. Пример: <code>(@sta)d6</code>, <code>(min(@margin, 10))d6</code>.</p>
     <div class="vd-grid g3">
       <label>Урон <input type="text" name="system.automation.damage" value="{{system.automation.damage}}" placeholder="4d6"></label>
-      <label>Тип урона <select name="system.automation.damageType">{{selectOptions damageTypeOptions selected=system.automation.damageType}}</select></label>
+      <label>Тип урона <select name="system.automation.damageType">{{selectOptions damageTypeOptions selected=system.automation.damageType blank="Стихийный (по умолчанию)"}}</select></label>
       <label>Часть тела <select name="system.automation.location">{{selectOptions locationOptions selected=system.automation.location}}</select></label>
       <label>Урон Вын <input type="text" name="system.automation.staDamage" value="{{system.automation.staDamage}}" placeholder="4d6"></label>
       <label class="check"><input type="checkbox" name="system.automation.ignoreArmor" {{checked system.automation.ignoreArmor}}> Мимо брони</label>

@@ -3,7 +3,7 @@
 // кто дальше и «Конец хода». В бою: игроку — его персонаж, мастеру — выделенный токен или тот, чей ход. Вне боя —
 // актор выделенного своего токена (настройка клиента «Худ вне боя»): зелья и знаки нужны не только в бою.
 
-import { SYSTEM_ID } from "../util.mjs";
+import { SYSTEM_ID, compareRu } from "../util.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
 import { attackSources } from "../combat/attack.mjs";
@@ -229,7 +229,11 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       this.actor.rollSkill(key, { skipDialog: event.shiftKey });
     };
     input.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); roll(event); } });
-    input.addEventListener("change", roll);
+    // Выбор из подсказки (datalist) приходит событием input без набора с клавиатуры; уход фокуса не бросает
+    input.addEventListener("input", event => {
+      const exact = Object.values(SKILLS).some(s => s.label.toLowerCase() === input.value.trim().toLowerCase());
+      if (exact && (!event.inputType || event.inputType === "insertReplacementText")) roll(event);
+    });
   }
 
   async _prepareContext(options) {
@@ -239,7 +243,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const system = actor.system;
     const d = system.derived;
     const combat = game.combat?.started ? game.combat : null;
-    const isCurrent = combat?.combatant?.actor?.id === actor.id;
+    const isCurrent = !!combat?.combatant && combat.combatant.actor === actor;
     const pct = (v, m) => (m > 0 ? Math.max(0, Math.min(100, Math.round((v / m) * 100))) : 0);
     const isCharacter = actor.type === "character";
 
@@ -274,7 +278,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const favIds = new Set(actor.getFlag(SYSTEM_ID, "hudFavorites") ?? []);
     const sta = system.sta?.value ?? 0;
     const blood = system.blood?.value ?? 0;
-    const allSpells = actor.itemTypes.spell.slice().sort((a, b) => a.name.localeCompare(b.name, "ru")).map(i => {
+    const allSpells = actor.itemTypes.spell.slice().sort((a, b) => compareRu(a.name, b.name)).map(i => {
       const sy = i.system;
       const need = sy.variableCost ? 1 : sy.staCost ?? 0;
       // Вампирская магия платится ОК, при нехватке — Выносливостью

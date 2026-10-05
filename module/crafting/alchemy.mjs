@@ -35,6 +35,23 @@ function card(actor, title, lines, { subtitle = "", buttons = [], rolls = [], fl
   });
 }
 
+/**
+ * Срок состава из текста «Длительности»: {rounds, minutes, rolled}. Кости бросаются («2d6 раундов»);
+ * «мгновенно» — один раунд; непонятный текст («до следующей атаки») — без срока, как раньше.
+ */
+async function durationFromText(text = "") {
+  const t = String(text).toLowerCase().replace(/[кk]/g, "d");
+  if (/мгновенн/.test(t)) return { rounds: 1, minutes: 0, rolled: false };
+  const m = t.match(/(\d*d\d+(?:\s*[+-]\s*\d+)?|\d+)\s*(раунд|минут|час|сут|дн|ден)/);
+  if (!m) return { rounds: 0, minutes: 0, rolled: false };
+  const rolled = /d/.test(m[1]);
+  const n = rolled ? (await new Roll(m[1].replace(/\s/g, "")).evaluate()).total : Number(m[1]);
+  const unit = m[2];
+  if (unit === "раунд") return { rounds: n, minutes: 0, rolled };
+  const minutes = unit === "минут" ? n : unit === "час" ? n * 60 : n * 1440;
+  return { rounds: 0, minutes, rolled };
+}
+
 async function spendOne(item) {
   const q = item.system.quantity ?? 1;
   if (q <= 1) await item.delete();
@@ -128,7 +145,15 @@ export async function drink(actor, item) {
     rounds = Number.isFinite(Number(auto.rounds)) ? Number(auto.rounds) : (await new Roll(String(auto.rounds)).evaluate()).total;
     lines.push(`Действует ${rounds} раундов.`);
   }
-  const minutes = s.durationMinutes || auto.minutes || 0;
+  // Срок только текстом («2d6 раундов», «30 минут», «24 часа», «мгновенно»): без него эффект и токсичность
+  // висели бы вечно. Мгновенный состав держит токсичность один раунд — ради проверки порога (стр. 247)
+  let textMinutes = 0;
+  if (!rounds && !s.durationMinutes && !auto.rounds && !auto.minutes) {
+    const parsed = await durationFromText(s.duration);
+    if (parsed.rounds) { rounds = parsed.rounds; if (parsed.rolled) lines.push(`Действует ${rounds} раундов.`); }
+    textMinutes = parsed.minutes;
+  }
+  const minutes = s.durationMinutes || auto.minutes || textMinutes || 0;
   const regen = u.regen || auto.regen || 0;
   const triggers = Object.fromEntries(["immune", "onKill", "onHit", "onDamaged", "untilHit", "doubleAdrenaline"]
     .filter(k => auto[k]).map(k => [k, foundry.utils.deepClone(auto[k])]));

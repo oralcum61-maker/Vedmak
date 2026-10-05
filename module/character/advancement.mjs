@@ -185,6 +185,19 @@ export function learningLevel(spell) {
 }
 
 /**
+ * Профессии из дополнений и фанатских книг (Исток, Ведьма, Друид, Маг воды…): корник их не знает, поэтому виды
+ * магии берутся из стартовой квоты профессии; без квоты — любая магия, кроме даров и вампирской (критерий книги
+ * один — Энергия больше 0, стр. 124).
+ */
+function bookMagicAccess(actor) {
+  if (!actor.system.professionKey) return null;
+  const quota = actor.items.find(i => i.type === "profession")?.system.magicQuota ?? {};
+  const kinds = ["spell", "invocation", "ritual", "hex", "sign"];
+  const fromQuota = kinds.filter(k => quota[k] > 0 || (k === "sign" && quota.allBasicSigns));
+  return fromQuota.length ? fromQuota : kinds;
+}
+
+/**
  * Можно ли изучить: Энергия больше 0; маги — заклинания, ритуалы, порча, знаки;
  * жрецы — инвокации, ритуалы, порча, знаки; ведьмаки — только знаки (стр. 124).
  * Магический дар («Том Хаоса», стр. 74) не учат: его даёт ведущий при создании персонажа.
@@ -194,7 +207,7 @@ export function learningCheck(actor, spell) {
   const key = actor.system.professionKey;
   if (kind === "gift") return "Магический дар не изучают: его даёт ведущий при создании персонажа.";
   if (!(actor.system.derived?.vigor > 0)) return "Энергия персонажа равна 0 — он не может изучать магию.";
-  const access = MAGIC_ACCESS[key];
+  const access = MAGIC_ACCESS[key] ?? bookMagicAccess(actor);
   if (!access) return "Профессия персонажа не позволяет изучать магию.";
   if (!access.includes(kind)) return `${actor.system.profession.name} не может изучать: ${CONFIG.VEDMAK.MAGIC_KINDS[kind]}.`;
   return "";

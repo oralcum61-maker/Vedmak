@@ -644,6 +644,8 @@ export function dependents(path) {
   if (path === "mage.birth") return ["mage.reaction", "mage.school", ...MAGE_SCHOOL_DEPS];
   if (path === "mage.school") return MAGE_SCHOOL_DEPS;
   if (path === "mage.appr") return ["mage.mentor", "mage.teach", "mage.moment", "mage.mentorEnd"];
+  // «Портал активен?» решает, бросать ли, куда он ведёт
+  if (/\.benefit\.portal$/.test(path)) return [path.replace(/portal$/, "sub")];
   // Декада академии: её подброски (союзник, обида, знание, кроны, событие) и ученичество, которое она могла дать
   if (/^mage\.acad\.\d+$/.test(path)) return [`${path}.ally`, `${path}.grudge`, `${path}.knowledge`, `${path}.d6`, `${path}.ev`,
     `${path}.skill`, "mage.appr", "mage.mentor", "mage.teach", "mage.moment", "mage.mentorEnd"];
@@ -1010,10 +1012,13 @@ function buildMage(b, { age = 25, gender = "" }) {
   const react = b.table(kid, "mage.reaction", "mgReaction", { col: regionCol, sides: 6, mod, label: "Как люди реагировали на вашу магию" });
   if (mod) react.detail = `Бросок ${react.value} − ${Math.abs(mod)} = ${react.shown}`;
 
-  // Школа — без броска: по месту рождения и полу, игрок может выбрать другую («Вдали от дома», стр. 20)
+  // Школа — без броска: по месту рождения и полу, игрок может выбрать другую («Вдали от дома», стр. 20).
+  // Подсказка не хранится среди бросков — иначе смена пола или «переброс» оставляли бы прежнюю школу
   const sch = b.section("Школа магии");
-  if (!("mage.school" in b.rolls)) b.rolls["mage.school"] = mageDefaultSchool(birth.value, gender);
+  const chosen = "mage.school" in b.rolls;
+  if (!chosen) b.rolls["mage.school"] = mageDefaultSchool(birth.value, gender);
   const school = b.table(sch, "mage.school", "mgSchool", { sides: 4, label: "Школа" });
+  if (!chosen) { delete b.rolls["mage.school"]; school.detail = "По месту рождения и полу — можно выбрать другую."; }
   const col = Math.max(0, Math.min(3, (school.row?.min ?? 4) - 1));
   const perk = cellOf(T.mgPerk.rows[col]);
   sch.entries.push({ label: "Дар школы", title: perk.title, text: perk.text, static: true });

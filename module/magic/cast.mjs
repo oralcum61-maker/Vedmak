@@ -27,6 +27,14 @@ export async function addVigorUsed(actor, amount) {
   if (combatant && amount) await combatant.setFlag("vedmak", "vigor", { round: game.combat.round, used: used + amount });
 }
 
+/**
+ * Потолок переменной стоимости: свой у заклинания, иначе 7 — но не ниже базовой Вын: у ступенчатых заклинаний
+ * («потратив 14 Вын, вы можете…») базовая стоимость — старшая ступень, и до неё должно хватать выбора.
+ */
+function variableMax(s) {
+  return s.maxCost || Math.max(7, s.staCost || 0);
+}
+
 /** Поддерживаемые заклинания актора (эффекты с флагом maintain). */
 export function maintainedSpells(actor) {
   return actor.effects.filter(e => e.flags?.vedmak?.maintain);
@@ -59,6 +67,12 @@ export async function castSpell(actor, item, opts = {}) {
   let targets = opts.targets ?? currentTargets();
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
 
+  // Квен и другие знаки со щитом: «нельзя сотворить снова, пока действует предыдущий» (стр. 114–115)
+  if (s.kind === "sign" && spellAutomation(item).shieldPerSta && actor.effects.some(e => e.flags?.vedmak?.timed?.key === "shield" && e.name === `Щит: ${item.name}`)) {
+    ui.notifications.warn(`${item.name} ещё действует — снова сотворить нельзя, пока не кончится прежний.`);
+    return null;
+  }
+
   // Вампирская магия — только своих ролей: основной и второй (после полной прокачки основной)
   if (s.isVampire && actor.type === "character") {
     const roles = actor.system.race?.system.activeRoles ?? [];
@@ -76,7 +90,7 @@ export async function castSpell(actor, item, opts = {}) {
 
   let cfg = {
     payWith: opts.payWith ?? vampirePay(actor, s),
-    cost: opts.cost ?? (s.variableCost ? Math.min(s.maxCost || 7, Math.max(1, d.vigor)) : s.staCost),
+    cost: opts.cost ?? (s.variableCost ? Math.min(variableMax(s), Math.max(1, d.vigor)) : s.staCost),
     useFocus: d.focus > 0,
     placeOfPower: false,
     dimeritium: 0,
@@ -184,7 +198,7 @@ async function castDialog(actor, item, cfg, targets) {
   const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
   const vb = s.isVampire ? vampireBase(actor, s) : null;
   const base = vb ? vb.value : castBase(actor, skillKey);
-  const maxCost = s.maxCost || 7;
+  const maxCost = variableMax(s);
   const auto = spellAutomation(item);
   const costDots = s.variableCost && maxCost <= 12
     ? Array.from({ length: maxCost }, (_, i) => ({
@@ -225,7 +239,7 @@ async function castDialog(actor, item, cfg, targets) {
       const f = form.elements;
       const cost = s.variableCost ? Math.max(1, Number(f.cost?.value) || 1) : s.staCost;
       const focus = f.useFocus?.checked ? d.focus : 0;
-      const paid = focus ? Math.max(1, cost - focus) : cost;
+      const paid = focus && cost ? Math.max(1, cost - focus) : cost;
       const vigor = Math.max(0, d.vigor + (f.placeOfPower?.checked ? 5 : 0) - (Number(f.dimeritium?.value) || 0));
       const spent = used + paid;
       const over = Math.max(0, spent - vigor);
@@ -256,7 +270,7 @@ async function castDialog(actor, item, cfg, targets) {
         return {
           ...readCommon(f, actor.system.luck?.value ?? 0),
           payWith: s.isVampire ? (s.resource === "sta" ? "sta" : f.payWith?.value || cfg.payWith) : "",
-          cost: s.variableCost ? Math.max(1, Math.min(s.maxCost || 99, Number(f.cost.value) || 1)) : s.staCost,
+          cost: s.variableCost ? Math.max(1, Math.min(variableMax(s), Number(f.cost.value) || 1)) : s.staCost,
           useFocus: !!f.useFocus?.checked,
           placeOfPower: !!f.placeOfPower?.checked,
           dimeritium: Math.max(0, Number(f.dimeritium?.value) || 0),
@@ -287,7 +301,7 @@ export async function performCast(actor, item, cfg, targets) {
   const vamp = s.isVampire;
   const cost = cfg.cost;
   const focus = cfg.useFocus && !vamp ? d.focus : 0;
-  const paid = focus ? Math.max(1, cost - focus) : cost;
+  const paid = focus && cost ? Math.max(1, cost - focus) : cost;
   const vigor = Math.max(0, d.vigor + (cfg.placeOfPower ? 5 : 0) - (cfg.dimeritium || 0));
   const { used } = vigorUsed(actor);
   const overload = vamp ? 0 : Math.max(0, used + paid - vigor);
@@ -405,6 +419,8 @@ export async function performCast(actor, item, cfg, targets) {
       if (existing) await existing.update(data);
       else await actor.createEmbeddedDocuments("ActiveEffect", [{ ...data, transfer: false }]);
       selfLines.push(`Поддержание: ${maintain} Вын за раунд.`);
+    } else if (s.maintainOptional) {
+      selfLines.push(`Действует ${s.duration}; продлить можно за ${s.maintainCost} Вын в раунд — списывается вручную.`);
     }
     // Бафф на себя из справочника (config/spell-auto.mjs)
     if (reg?.self) {
@@ -446,7 +462,18 @@ export async function performCast(actor, item, cfg, targets) {
     works, targeting
   };
   const hasTargetEffect = !!(a.damage || spellData.staDamage || spellData.statuses.length || spellData.regen || spellData.hex || spellData.buff);
-  const showTargets = works && targeting !== "self" && (hasTargetEffect || s.defense !== "none");
+  // «На себя» с уроном или состояниями (ауры: «Шокирующий удар», «Огни смерти») — по выбранным целям, если они есть
+  const showTargets = works && (targeting !== "self" || (hasTargetEffect && targets.length > 0))
+    && (hasTargetEffect || s.defense !== "none");
+  // «На себя» без урона и без целей («Невидимость», «Природный камуфляж»): состояния ложатся на заклинателя
+  if (works && targeting === "self" && !showTargets && !a.damage && !spellData.staDamage && spellData.statuses.length) {
+    const { applyStatus } = await import("../combat/damage.mjs");
+    for (const st of spellData.statuses) {
+      if (st.chance < 100 && Math.ceil(CONFIG.Dice.randomUniform() * 100) > st.chance) continue;
+      await applyStatus(actor, st.status, a.statusRounds || "");
+      selfLines.push(`${item.name}: ${game.i18n.localize(CONFIG.statusEffects.find(e => e.id === st.status)?.name ?? st.status)} на заклинателе.`);
+    }
+  }
 
   const data = {
     kind: "attack",
@@ -460,7 +487,8 @@ export async function performCast(actor, item, cfg, targets) {
     isRanged: true,
     damageFormula, damageMult: 1, nonLethal: false,
     noDamage: !a.damage && !spellData.staDamage,
-    fixedLocation: a.location === "torso" ? "torso" : "",
+    // Своя часть тела у заклинания («в голову», «в туловище»); «all» — по всему телу (computeDamage)
+    fixedLocation: a.location && a.location !== "all" ? a.location : "",
     hitText: "", hitStatus: "", stunSaveMod: null,
     roll, targets: showTargets ? targets : [],
     spell: spellData,

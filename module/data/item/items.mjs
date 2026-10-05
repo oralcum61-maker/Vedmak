@@ -372,10 +372,19 @@ export class SpellData extends foundry.abstract.TypeDataModel {
     return !!(a.damage || a.staDamage || a.statuses.length || Object.keys(a.statusesByCost ?? {}).length || a.regen.hp || a.shieldPerSta);
   }
 
-  /** Стоимость поддержания за раунд при вложенной Вын. */
+  /**
+   * Поддержание по желанию: у заклинания свой срок («2d6 раундов», «на 5 раундов»), а Вын за раунд лишь продлевает
+   * его («Вы можете тратить по 5 Вын в раунд на их поддержание», «Офир и Зеррикания»). Само не списывается.
+   */
+  get maintainOptional() {
+    return this.maintainCost > 0 && !this.maintainMode && !!this.duration && !/активн/i.test(this.duration);
+  }
+
+  /** Стоимость поддержания за раунд при вложенной Вын (0 — заклинание само не поддерживается). */
   maintainFor(spent) {
     if (this.maintainMode === "full") return spent;
     if (this.maintainMode === "half") return Math.max(1, Math.ceil(spent / 2));
+    if (this.maintainOptional) return 0;
     return this.maintainCost;
   }
 }

@@ -2,7 +2,7 @@
 // регенерация, щиты, поддержание активных заклинаний, порча.
 
 import { STATUS_RESIST_KEY } from "../config/combat.mjs";
-import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny } from "../combat/common.mjs";
+import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny, proxyMessageMode } from "../combat/common.mjs";
 import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
 import { applyBuff, buffLine, deleteEffectsClamped } from "./buffs.mjs";
@@ -10,6 +10,7 @@ import { isMagicTimed, timeIsUp, zeroShield, zeroShieldIfFree } from "./timed.mj
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
+import { immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 
 /** Кнопка «Применить эффекты» в карточке защиты от магии без урона. */
 export async function requestSpellEffects(message) {
@@ -48,11 +49,13 @@ async function applySpellEffectsNow(messageId, userId) {
   }
   const lines = [];
   const rolls = [];
+  // Невосприимчивость к состояниям от эликсиров и отваров («Иволга», «Кровь горы») — как у урона (damage.mjs)
+  const buffImmune = immuneStatuses(actor);
 
   for (const st of spell.statuses ?? []) {
     const resistKey = STATUS_RESIST_KEY[st.status];
     const label = CONFIG.statusEffects[st.status]?.name ?? st.status;
-    if (resistKey && actor.system.immunities?.includes?.(resistKey)) { lines.push(`${label}: невосприимчив.`); continue; }
+    if ((resistKey && actor.system.immunities?.includes?.(resistKey)) || buffImmune.has(st.status)) { lines.push(`${label}: невосприимчив.`); continue; }
     let ok = true, rollText = "";
     // «Буря» у заклинателя: +10% поджечь, заморозить, сбить с ног
     const chance = ["burning", "frozen", "prone"].includes(st.status)
@@ -83,7 +86,9 @@ async function applySpellEffectsNow(messageId, userId) {
   await postCard({
     template: "systems/vedmak/templates/chat/turn.hbs",
     data: { title: `${def.attack.label} → ${actor.name}`, img: def.attack.img, round: null, lines, buttons: [] },
-    actor, rolls, flags: { spellEffects: { messageId } }
+    actor, rolls, flags: { spellEffects: { messageId } },
+    // Отчёт пишет клиент ведущего: режим — как у сотворения (тайное заклинание НИП не уходит всем), у игрока — всем
+    messageMode: proxyMessageMode(caster, game.messages.get(def.attackMessageId)?.flags.vedmak?.attack?.config?.messageMode)
   });
 }
 
@@ -115,7 +120,13 @@ export async function magicStartOfTurn(actor) {
       toDelete.push(effect.id);
       ended.add(effect.flags.vedmak.maintain.itemId);
       lines.push(`${effect.name}: не хватает Вын — заклинание прекращено.`);
-      if (effect.flags.vedmak.maintain.shield) shieldEnded = true;
+      if (effect.flags.vedmak.maintain.shield) {
+        shieldEnded = true;
+        // Метка щита этого заклинания («Щит: …») уходит вместе с поддержанием: иначе zeroShieldIfFree примет
+        // её за другой щит, и щит продолжит поглощать урон
+        const spell = actor.items.get(effect.flags.vedmak.maintain.itemId)?.name ?? effect.name.replace(/^Поддержание:\s*/, "");
+        for (const e of actor.effects) if (e.flags?.vedmak?.timed?.key === "shield" && e.name === `Щит: ${spell}`) toDelete.push(e.id);
+      }
       // Свои баффы этого заклинания снимаем здесь же, с урезанием ПЗ до конца хода (хук снял бы их позже)
       for (const e of actor.effects) {
         const b = e.flags?.vedmak?.spellBuff;

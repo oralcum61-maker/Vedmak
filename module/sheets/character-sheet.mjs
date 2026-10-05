@@ -885,7 +885,8 @@ export class CharacterSheet extends VedmakActorSheet {
     return this.actor.system.toObject().addictions;
   }
 
-  static async #onAddictionAdd() {
+  static async #onAddictionAdd(event) {
+    if (event?.detail > 1) return; // двойной щелчок — второй клик не создаёт дубль
     const list = this.#addictions();
     list.push({ name: "", days: 0 });
     await this.actor.update({ "system.addictions": list });

@@ -18,6 +18,14 @@ const EXPIRY_EVENTS = {
 
 export class VedmakEffectConfig extends ActiveEffectConfig {
 
+  /**
+   * Окно ядра на смене «Как» пишет подсказку в поле приоритета, а в нашем окне его нет — TypeError на каждый выбор.
+   * Шаг ядра пропускаем, остальную обработку формы (общий предок) оставляем.
+   */
+  _onChangeForm(formConfig, event) {
+    Object.getPrototypeOf(ActiveEffectConfig.prototype)._onChangeForm.call(this, formConfig, event);
+  }
+
   static DEFAULT_OPTIONS = {
     classes: ["vedmak", "sheet", "vedmak-effect"],
     position: { width: 620, height: 620 },
