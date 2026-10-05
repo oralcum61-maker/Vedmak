@@ -38,27 +38,36 @@
 
     {{#unless collapsed}}
     {{#if showFight}}
-    <div class="vh-deck">
+    {{!-- Бой (PLAN 4.97): удары строками — картинка, пояснение, атака; справа испытания крупно, защиты ниже --}}
+    <div class="vh-deck vh-fight">
       <div class="vh-weapons">
         {{#each attacks}}
-        <div class="vh-well vh-wpn">
+        <div class="vh-well vh-wpn" data-tooltip="{{label}}{{#if tip}}<br>{{tip}}{{/if}}">
           <span class="vh-frame"><img src="{{img}}" alt=""></span>
-          <div class="vh-wtext" data-tooltip="{{label}}{{#if sub}}<br>{{sub}}{{/if}}"><span class="vh-wname">{{label}}</span><span class="vh-wsub">{{sub}}</span></div>
-          {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=base cls="vh-m38"}}
-          <div class="vh-dmg"><b>{{damage}}</b><span class="vh-cap">урон</span></div>
-          <button type="button" class="vh-go sm" data-action="attack" data-kind="{{kind}}" data-item-id="{{itemId}}">{{#if isRanged}}Выстрел{{else}}Атака{{/if}}</button>
+          <div class="vh-wtext">
+            <span class="vh-wline"><span class="vh-wname">{{label}}</span><span class="vh-wdmg" data-tooltip="Урон">{{damage}}</span></span>
+            <span class="vh-wline vh-wsub"><span class="vh-wskill">{{skill}}{{#if note}} · {{note}}{{/if}}</span><b data-tooltip="Основа атаки">{{base}}</b></span>
+          </div>
+          <button type="button" class="vh-go xs" data-action="attack" data-kind="{{kind}}" data-item-id="{{itemId}}">{{#if isRanged}}Выстрел{{else}}Атака{{/if}}</button>
         </div>
+        {{else}}
+        <span class="vh-empty">В руках нет оружия — возьмите его на вкладке «Снаряжение» листа.</span>
         {{/each}}
       </div>
-      <div class="vh-grp">
+      <div class="vh-guard">
+        <button type="button" class="vh-save" data-action="stunSave" data-tooltip="Испытание Устойчивости: d10 меньше порога">
+          <span class="t"><span class="n">Устойчивость</span><span class="s">испытание · d10 меньше порога</span></span><b>{{stun}}</b>
+        </button>
+        <button type="button" class="vh-save{{#if dying}} bad{{/if}}" data-action="deathSave" data-tooltip="Испытание против смерти: порог — Уст минус накопленный штраф">
+          <span class="t"><span class="n">Против смерти</span><span class="s">{{#if dying}}при смерти — каждый ход{{else}}Уст минус накопленный штраф{{/if}}</span></span><b>{{deathThreshold}}</b>
+        </button>
         <span class="vh-cap">защита</span>
-        <div class="vh-grid2">
-          {{#each defenses}}<button type="button" class="vh-sbtn" data-action="rollSkill" data-skill="{{key}}" data-tooltip="{{label}}"><span class="t">{{label}}</span> <b>{{base}}</b></button>{{/each}}
-        </div>
-        <span class="vh-cap">испытания</span>
-        <div class="vh-grid2">
-          <button type="button" class="vh-sbtn" data-action="stunSave" data-tooltip="Испытание Устойчивости"><span class="t">Уст · порог</span> <b>{{stun}}</b></button>
-          <button type="button" class="vh-sbtn{{#if dying}} bad{{/if}}" data-action="deathSave" data-tooltip="Испытание против смерти"><span class="t">Против смерти</span> <b>{{deathThreshold}}</b></button>
+        <div class="vh-defs">
+          {{#each defenses}}
+          <button type="button" class="vh-def" data-action="rollSkill" data-skill="{{key}}" data-tooltip="{{hint}}">
+            <span class="t"><span class="n">{{label}}</span><span class="s">{{sub}}</span></span><b>{{base}}</b>
+          </button>
+          {{/each}}
         </div>
       </div>
     </div>
@@ -132,26 +141,32 @@
     {{/if}}
 
     {{#if showActions}}
-    <div class="vh-deck vh-rows">
-      <div class="vh-row">
-        <button type="button" class="vh-sbtn" data-action="restTurn" data-tooltip="Ход отдыха: восстановить Выносливость">Отдых (ход) <b class="ok">+{{rec}}</b></button>
-        <button type="button" class="vh-sbtn" data-action="manualDamage">Урон без атаки</button>
-        <button type="button" class="vh-sbtn" data-action="controlCheck">Управление конём</button>
-        <button type="button" class="vh-sbtn" data-action="ram">Таран</button>
-        {{#if trueForm}}<button type="button" class="vh-sbtn{{#if trueForm.bad}} bad{{/if}}" data-action="trueForm" data-form="{{trueForm.action}}" data-tooltip="{{trueForm.hint}}"{{#if trueForm.off}} disabled{{/if}}>{{trueForm.label}}</button>{{/if}}
-        {{#if canFlip}}<button type="button" class="vh-sbtn" data-action="flipToken" data-tooltip="Токен в полный рост и обратно (Shift+F)">Перевернуть токен</button>{{/if}}
-        {{#if adrenalineRule}}<span class="vh-sbtn static">Адреналин <b>{{adrenaline}}</b></span>{{/if}}
+    {{!-- Действия (PLAN 4.97): столбцы по смыслу — ход, верхом, словесная дуэль, навык --}}
+    <div class="vh-deck vh-acts">
+      <div class="vh-col">
+        <span class="vh-cap">ход</span>
+        <button type="button" class="vh-abtn" data-action="restTurn" data-tooltip="Ход отдыха: восстановить Выносливость"><span class="t">Отдых</span> <b class="ok">+{{rec}}</b></button>
+        <button type="button" class="vh-abtn" data-action="manualDamage" data-tooltip="Нанести урон себе без атаки: падение, огонь, яд"><span class="t">Урон без атаки</span></button>
+        {{#if trueForm}}<button type="button" class="vh-abtn{{#if trueForm.bad}} bad{{/if}}" data-action="trueForm" data-form="{{trueForm.action}}" data-tooltip="{{trueForm.hint}}"{{#if trueForm.off}} disabled{{/if}}><span class="t">{{trueForm.label}}</span></button>{{/if}}
+        {{#if canFlip}}<button type="button" class="vh-abtn" data-action="flipToken" data-tooltip="Токен в полный рост и обратно (Shift+F)"><span class="t">Перевернуть токен</span></button>{{/if}}
+        {{#if adrenalineRule}}<span class="vh-abtn static" data-tooltip="Кости адреналина"><span class="t">Адреналин</span> <b>{{adrenaline}}</b></span>{{/if}}
       </div>
-      <div class="vh-row">
+      <div class="vh-col">
+        <span class="vh-cap">верхом</span>
+        <button type="button" class="vh-abtn" data-action="controlCheck" data-tooltip="Проверка управления конём"><span class="t">Управление</span></button>
+        <button type="button" class="vh-abtn" data-action="ram" data-tooltip="Таран конём"><span class="t">Таран</span></button>
+      </div>
+      <div class="vh-col duel">
         <span class="vh-cap">словесная дуэль</span>
-        {{#each verbal}}<button type="button" class="vh-sbtn sm" data-action="verbal" data-verbal="{{key}}">{{label}} <b>{{base}}</b></button>{{/each}}
+        <div class="vh-col2">
+          {{#each verbal}}<button type="button" class="vh-abtn" data-action="verbal" data-verbal="{{key}}"><span class="t">{{label}}</span> <b>{{base}}</b></button>{{/each}}
+        </div>
       </div>
-      <div class="vh-row">
+      <div class="vh-col">
         <span class="vh-cap">навык</span>
-        <input type="search" id="vh-skill-input" class="vh-skill" list="vh-skill-list" placeholder="Внимание, Скрытность… и Enter" aria-label="Бросок навыка по имени">
+        <input type="search" id="vh-skill-input" class="vh-skill" list="vh-skill-list" placeholder="Найти…" data-tooltip="Название навыка и Enter; Shift — без окна" aria-label="Бросок навыка по имени">
         <datalist id="vh-skill-list">{{#each skillOptions}}<option value="{{this}}"></option>{{/each}}</datalist>
-        <button type="button" class="vh-sbtn sm" data-action="rollSkill" data-skill="awareness">Внимание</button>
-        <button type="button" class="vh-sbtn sm" data-action="rollSkill" data-skill="stealth">Скрытность</button>
+        {{#each quickSkills}}<button type="button" class="vh-abtn" data-action="rollSkill" data-skill="{{key}}"><span class="t">{{label}}</span> <b>{{base}}</b></button>{{/each}}
       </div>
     </div>
     {{/if}}

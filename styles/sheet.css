@@ -567,7 +567,6 @@
 .vedmak-hud .vh-deck.vh-rows { flex-direction: column; align-items: stretch; justify-content: center; gap: 8px; }
 .vedmak-hud .vh-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .vedmak-hud .vh-grp { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
-.vedmak-hud .vh-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
 .vedmak-hud .vh-well { background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow); }
 .vedmak-hud .vh-empty { font-size: 11.5px; color: #a8a296; }
 
@@ -579,7 +578,7 @@
   background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
   box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95);
 }
-.vedmak-hud .vh-sbtn.sm, .vedmak-hud .vh-grid2 .vh-sbtn { height: 30px; padding: 0 10px; font-size: 10.5px; }
+.vedmak-hud .vh-sbtn.sm { height: 30px; padding: 0 10px; font-size: 10.5px; }
 .vedmak-hud .vh-sbtn:hover { background-color: #484a51; color: #fff; }
 .vedmak-hud .vh-sbtn.static { cursor: default; }
 .vedmak-hud .vh-sbtn b { font-family: var(--vd-font-head); font-weight: 400; font-size: 16px; color: #f1ece0; }
@@ -602,23 +601,68 @@
 .vedmak-hud .vh-go.xs { height: 26px; padding: 0 12px; font-size: 9px; letter-spacing: .14em; }
 .vedmak-hud .vh-go.wide { width: 100%; padding: 0; height: 36px; font-size: 10.5px; }
 
-/* Бой */
-.vedmak-hud .vh-weapons { flex: 1.7 1 0; min-width: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: center; gap: 6px; overflow-y: auto; scrollbar-width: thin; }
-.vedmak-hud .vh-wpn { display: flex; align-items: center; gap: 9px; padding: 6px 8px; }
+/* Бой (PLAN 4.97): слева удары строками — картинка, пояснение, атака; справа испытания двумя крупными кнопками,
+   под ними защиты — тёмным железом, в две строки (что делает и каким навыком), число в утопленном клейме */
+.vedmak-hud .vh-deck.vh-fight { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); align-items: stretch; gap: 12px; padding-block: 7px 8px; }
+.vedmak-hud .vh-weapons { min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: safe center; gap: 4px; overflow-y: auto; scrollbar-width: thin; }
+.vedmak-hud .vh-wpn { flex: none; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 5px 0 3px; box-sizing: border-box; }
 .vedmak-hud .vh-frame {
-  position: relative; flex: none; display: grid; place-items: center; width: 38px; height: 38px; overflow: hidden;
+  position: relative; flex: none; display: grid; place-items: center; width: 30px; height: 30px; overflow: hidden;
   background: #0b0c0e; border: 1px solid #040405; border-radius: 2px; box-shadow: inset 0 2px 8px rgba(0, 0, 0, .85), 0 1px 0 rgba(255, 240, 215, .08);
 }
-.vedmak-hud .vh-frame::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
-.vedmak-hud .vh-frame img { width: 32px; height: 32px; border: 0; object-fit: contain; }
+.vedmak-hud .vh-frame::after { content: ""; position: absolute; inset: 2px; border: 1px solid rgba(226, 221, 208, .13); pointer-events: none; }
+.vedmak-hud .vh-frame img { width: 26px; height: 26px; border: 0; object-fit: contain; }
 .vedmak-hud .vh-wtext { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-.vedmak-hud .vh-wname, .vedmak-hud .vh-wsub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vedmak-hud .vh-wname { font-family: var(--vd-font-head); font-size: 15px; color: #f1ece0; }
-.vedmak-hud .vh-wsub { font-size: 10px; color: #bab4a8; }
-.vedmak-hud .vd-medal.vh-m38 { --size: 38px; --rim: 6px; }
+/* Числа строки удара (урон, основа) не сжимаются — обрезаются только слова */
+.vedmak-hud .vh-wline { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.vedmak-hud .vh-wname, .vedmak-hud .vh-wskill { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-wname { font-family: var(--vd-font-head); font-size: 14px; line-height: 1.1; color: #f1ece0; }
+.vedmak-hud .vh-wdmg { flex: none; margin-left: auto; font-family: var(--vd-font-head); font-size: 12.5px; color: #d4cfc2; white-space: nowrap; }
+.vedmak-hud .vh-wsub { font-size: 10px; line-height: 1.2; color: #a8a296; }
+.vedmak-hud .vh-wsub b { flex: none; font-family: var(--vd-font-head); font-weight: 400; font-size: 13px; color: #f1ece0; }
+.vedmak-hud .vh-wpn .vh-go.xs { padding: 0 11px; }
 .vedmak-hud .vd-medal.vh-m52 { --size: 52px; --rim: 8px; }
-.vedmak-hud .vh-dmg { flex: none; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 64px; }
-.vedmak-hud .vh-dmg b { font-family: var(--vd-font-head); font-weight: 400; font-size: 15px; color: #f1ece0; white-space: nowrap; }
+
+.vedmak-hud .vh-guard { min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.vedmak-hud .vh-guard > .vh-cap { margin-top: 1px; }
+.vedmak-hud .vh-save, .vedmak-hud .vh-def { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; box-sizing: border-box; text-align: left; }
+.vedmak-hud .vh-save .t, .vedmak-hud .vh-def .t { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.vedmak-hud .vh-save .n, .vedmak-hud .vh-save .s, .vedmak-hud .vh-def .n, .vedmak-hud .vh-def .s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Испытание — светлая сталь во всю ширину колонки */
+.vedmak-hud .vh-save {
+  flex: none; height: 31px; padding: 0 5px 0 12px; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: linear-gradient(180deg, rgba(255, 250, 240, .2), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 4px 8px -3px rgba(0, 0, 0, .95);
+}
+.vedmak-hud .vh-save:hover { background-color: #484a51; color: #fff; }
+.vedmak-hud .vh-save .n { font-family: var(--vd-font-head); font-size: 15px; line-height: 1.05; }
+.vedmak-hud .vh-save .s { font-size: 9px; line-height: 1.15; color: #c8c2b6; }
+.vedmak-hud .vh-save b {
+  flex: none; display: grid; place-items: center; width: 34px; height: 23px; font-family: var(--vd-font-head); font-weight: 400; font-size: 18px; color: #f1ece0;
+  background: rgba(5, 6, 7, .45); border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .8), 0 1px 0 rgba(255, 250, 240, .12);
+}
+.vedmak-hud .vh-save.bad {
+  color: #ffeae3; background-color: #8f301f; border-color: #2a0c06;
+  background-image: linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(0, 0, 0, .34)), var(--vd-s-bad);
+}
+.vedmak-hud .vh-save.bad .s { color: #ffc9bb; }
+/* Защита — тёмное железо, две строки */
+.vedmak-hud .vh-defs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.vedmak-hud .vh-def {
+  gap: 5px; height: 28px; padding: 0 4px 0 7px; color: #e2ddd0;
+  background-color: #1c1d21; background-image: linear-gradient(180deg, rgba(255, 250, 240, .07), rgba(0, 0, 0, .3)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .1), 0 3px 6px -3px rgba(0, 0, 0, .9);
+}
+.vedmak-hud .vh-def:hover { background-color: #26282d; color: #fff; }
+.vedmak-hud .vh-def .n { font-size: 10.5px; font-weight: 600; line-height: 1.15; }
+.vedmak-hud .vh-def .s { font-size: 8.5px; line-height: 1.2; color: #8c867b; }
+.vedmak-hud .vh-def b {
+  flex: none; display: grid; place-items: center; min-width: 22px; height: 20px; padding: 0 3px; box-sizing: border-box;
+  font-family: var(--vd-font-head); font-weight: 400; font-size: 14px; color: #f1ece0;
+  background: #0a0b0c; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 0 0 1px #050607;
+}
 
 /* Магия (PLAN 4.68): слева поиск и разделы, в середине плитки в колонки с прокруткой, справа — что держится */
 .vedmak-hud .vh-deck.vh-magic { display: grid; grid-template-columns: 150px minmax(0, 1fr) 180px; align-items: stretch; gap: 10px; padding-block: 8px; }
@@ -699,9 +743,36 @@
 .vedmak-hud .vh-aside p b { font-family: var(--vd-font-head); font-weight: 400; font-size: 15px; color: #f1ece0; }
 .vedmak-hud .vh-aside p b.violet { color: #c9bdf0; }
 
-/* Действия */
+/* Действия (PLAN 4.97): столбцы по смыслу, в столбце кнопки во всю ширину — подпись слева, число справа */
+.vedmak-hud .vh-deck.vh-acts {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr) minmax(0, 2fr) minmax(0, 1fr);
+  align-items: stretch; gap: 0; padding-block: 7px 8px;
+}
+.vedmak-hud .vh-col { min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 0 10px; }
+.vedmak-hud .vh-col:first-child { padding-left: 0; }
+.vedmak-hud .vh-col:last-child { padding-right: 0; }
+.vedmak-hud .vh-col + .vh-col { border-left: 1px solid rgba(0, 0, 0, .6); box-shadow: inset 1px 0 0 rgba(255, 240, 215, .045); }
+.vedmak-hud .vh-col > .vh-cap { margin-bottom: 1px; }
+.vedmak-hud .vh-col2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.vedmak-hud .vh-abtn {
+  flex: none; display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; height: 26px; padding: 0 8px; box-sizing: border-box;
+  font-size: 10.5px; font-weight: 600; color: #f6f1e6; text-align: left; white-space: nowrap; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #34363c; background-image: linear-gradient(180deg, rgba(255, 250, 240, .17), rgba(255, 250, 240, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-btn);
+  background-size: 100% 100%, 512px 512px; border: 1px solid #060708; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .26), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 3px 6px -3px rgba(0, 0, 0, .95);
+}
+.vedmak-hud .vh-abtn .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.vedmak-hud .vh-abtn b { flex: none; font-family: var(--vd-font-head); font-weight: 400; font-size: 14px; color: #f1ece0; }
+.vedmak-hud .vh-abtn b.ok { color: #b4c79c; }
+.vedmak-hud .vh-abtn:hover { background-color: #43454c; color: #fff; }
+.vedmak-hud .vh-abtn.static { cursor: default; background: #17181b; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .8); }
+.vedmak-hud .vh-abtn.bad {
+  color: #ffeae3; background-color: #8f301f; border-color: #2a0c06;
+  background-image: linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(0, 0, 0, .34)), var(--vd-s-bad);
+}
+.vedmak-hud .vh-abtn:disabled { opacity: .45; cursor: default; }
 .vedmak-hud input.vh-skill {
-  width: 240px; height: 30px; padding: 0 10px; font-size: 12px; color: #e2ddd0; background: #0a0b0c;
+  flex: none; width: 100%; height: 26px; padding: 0 8px; box-sizing: border-box; font-size: 11px; color: #e2ddd0; background: #0a0b0c;
   border: 1px solid #040405; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
 }
 
@@ -746,9 +817,10 @@
   .vedmak-hud .vh-tabsrow { padding-inline: 32px; }
   .vedmak-hud .vh-switch a { padding: 0 8px; font-size: 12.5px; gap: 5px; }
   .vedmak-hud .vh-deck { padding: 8px 10px; gap: 8px; }
-  .vedmak-hud .vh-dmg { min-width: 0; }
   .vedmak-hud .vh-wpn { gap: 7px; }
   .vedmak-hud .vh-go.sm { padding: 0 12px; letter-spacing: .1em; }
+  .vedmak-hud .vh-deck.vh-fight { gap: 10px; }
+  .vedmak-hud .vh-col { padding: 0 8px; }
   .vedmak-hud .vh-sgrid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .vedmak-hud .vh-deck.vh-magic { grid-template-columns: 140px minmax(0, 1fr) 170px; }
   .vedmak-hud .vh-deck.vh-magic.no-held { grid-template-columns: 140px minmax(0, 1fr); }
@@ -760,8 +832,18 @@
   .vedmak-hud .vh-turn { width: 108px; }
   .vedmak-hud .vh-switch a { padding: 0 6px; font-size: 12px; }
   .vedmak-hud .vh-switch .vh-count { display: none; }
-  .vedmak-hud .vh-weapons .vh-frame { display: none; }
-  .vedmak-hud .vh-grp:not(.vh-held) { flex: 0 0 168px; }
+  .vedmak-hud .vh-deck.vh-fight { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .vedmak-hud .vh-wpn .vh-go.xs { padding: 0 8px; letter-spacing: .06em; }
+  .vedmak-hud .vh-save .s { font-size: 8px; letter-spacing: 0; }
+  /* Защита в узком худе: название в две строки вместо пояснения (оно — в подсказке) */
+  .vedmak-hud .vh-def .s { display: none; }
+  .vedmak-hud .vh-def .n { font-size: 10px; line-height: 1.1; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .vedmak-hud .vh-deck.vh-acts { grid-template-columns: minmax(0, 1fr) minmax(0, .88fr) minmax(0, 1.95fr) minmax(0, .92fr); }
+  .vedmak-hud .vh-col { padding: 0 5px; }
+  .vedmak-hud .vh-col2 { gap: 3px; }
+  .vedmak-hud .vh-abtn { gap: 3px; padding: 0 5px; font-size: 10px; }
+  .vedmak-hud .vh-abtn b { font-size: 13px; }
+  .vedmak-hud input.vh-skill { padding: 0 5px; font-size: 10.5px; }
   .vedmak-hud .vh-sgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .vedmak-hud .vh-sgrid button { height: 19px; }
   .vedmak-hud .vh-side { width: 176px; }
@@ -774,13 +856,7 @@
   .vedmak-hud .vh-magic .vh-ltext { font-size: 11px; }
   .vedmak-hud .vh-turn { width: 104px; padding: 8px; }
   .vedmak-hud .vh-go.wide { font-size: 9.5px; letter-spacing: .08em; white-space: nowrap; }
-  .vedmak-hud .vh-dmg .vh-cap { display: none; }
-  .vedmak-hud .vh-dmg b { font-size: 14px; }
-  .vedmak-hud .vh-wpn { gap: 6px; padding: 5px 6px; }
-  .vedmak-hud .vh-wpn .vh-go.sm { padding: 0 10px; letter-spacing: .06em; }
-  .vedmak-hud .vh-grp:not(.vh-held) { flex: 0 0 156px; }
-  .vedmak-hud .vh-grid2 { gap: 4px; }
-  .vedmak-hud .vh-grid2 .vh-sbtn { padding: 0 7px; gap: 4px; }
+  .vedmak-hud .vh-wpn { gap: 6px; }
 }
 /* Подпись кнопки защиты обрезается, число — никогда */
 .vedmak-hud .vh-sbtn .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }

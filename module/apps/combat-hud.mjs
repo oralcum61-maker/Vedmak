@@ -32,6 +32,13 @@ const TABS = [
 const ALCH_GO = { drink: "violet", apply: "violet", mutagen: "violet", oil: "green", throw: "", trap: "" };
 /** Словесные действия на худе — самые ходовые; остальные — на вкладке «Социальный бой» листа. */
 const VERBAL_QUICK = ["persuade", "seduce", "deceive", "intimidate", "ignore", "changeSubject"];
+// Защиты на вкладке «Бой» (стр. 151–153): что делает и каким навыком — так же, как в окне защиты (DEFENSE_TYPES)
+const HUD_DEFENSES = [
+  { key: "dodge", label: "Уклонение", sub: "от удара и выстрела", hint: "Уклонение/Изворотливость: уйти от удара или выстрела" },
+  { key: "athletics", label: "Изменение позиции", sub: "Атлетика · ½ Скор", hint: "При успехе можно сместиться на ½ Скор" },
+  { key: "brawling", label: "Блок рукой", sub: "Борьба · урон в руку", hint: "Удар приходится в подставленную руку, броня работает" },
+  { key: "melee", label: "Блок и парирование", sub: "Ближний бой · парир. −3", hint: "Блок оружием тратит 1 надёжности; парирование −3, атакующий ошеломлён" }
+];
 /** Разделы магии в худе — порядок и короткие подписи. */
 const MAGIC_ORDER = ["sign", "spell", "invocation", "ritual", "hex", "gift", "vampire"];
 const MAGIC_GROUP_LABELS = { sign: "Знаки", spell: "Заклинания", invocation: "Инвокации", ritual: "Ритуалы", hex: "Порчи", gift: "Дары", vampire: "Вампирская" };
@@ -264,14 +271,21 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const luck = isCharacter ? Array.from({ length: Math.min(system.luck?.max ?? 0, 12) }, (_, k) => ({ on: k < (system.luck?.value ?? 0) })) : [];
 
     // Бой: чем бить (только то, что в руках — см. isReadyWeapon), защиты, испытания
-    const attacks = attackSources(actor).map(src => ({
-      kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
-      base: system.skills[src.skill].base + (src.accuracy || 0),
-      damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,
-      sub: [SKILLS[src.skill]?.label, src.item?.system.activeOil ? `масло: ${src.item.system.activeOil.name}` : "", src.isRanged ? `дистанция ${src.weapon.range}` : ""].filter(Boolean).join(" · "),
-      isRanged: !!src.isRanged
-    }));
-    const defenses = ["dodge", "athletics", "brawling", "melee"].map(key => ({ key, label: SKILLS[key].label.split("/")[0], base: system.skills[key].base }));
+    // Строка удара: навык и основа, урон; масло — пометкой, полностью — в подсказке
+    const attacks = attackSources(actor).map(src => {
+      const oil = src.item?.system.activeOil?.name ?? "";
+      return {
+        kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
+        skill: SKILLS[src.skill]?.label.split("/")[0] ?? "",
+        base: system.skills[src.skill].base + (src.accuracy || 0),
+        damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,
+        note: oil ? "масло" : "",
+        tip: [SKILLS[src.skill]?.label, oil ? `масло: ${oil}` : "", src.isRanged ? `дистанция ${src.weapon.range}` : ""].filter(Boolean).join(" · "),
+        isRanged: !!src.isRanged
+      };
+    });
+    const defenses = HUD_DEFENSES.map(def => ({ ...def, base: system.skills[def.key]?.base ?? 0 }));
+    const quickSkills = ["awareness", "stealth"].map(key => ({ key, label: SKILLS[key].label.split("/")[0], base: system.skills[key]?.base ?? 0 }));
     const deathThreshold = (d.stun ?? 0) - (system.deathSaves?.penalty ?? 0);
 
     // Магия: разделы по видам, «Избранное» (флаг актора), плитки по алфавиту; поиск — в _onRender, без перерисовки
@@ -351,7 +365,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       energyMax: vigor, energyLeft: Math.max(0, vigor - used), tox: vitals.find(v => v.key === "tox") ?? null,
       showFight: this.tab === "fight", showMagic: this.tab === "magic", showAlchemy: this.tab === "alchemy",
       showActions: this.tab === "actions", showStates: this.tab === "states",
-      attacks, defenses, stun: d.stun, deathThreshold, dying: d.dying,
+      attacks, defenses, quickSkills, stun: d.stun, deathThreshold, dying: d.dying,
       allSpells, magicGroups, magicQuery: this.magicQuery, maintained, zones, shield: system.shield?.value ?? 0,
       alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
       // Высший вампир: Истинная форма одной кнопкой (превратиться / вернуть разум / выйти)
