@@ -88,7 +88,7 @@ export async function drink(actor, item) {
 
   // Не-мутант и ведьмачий эликсир (стр. 246)
   if (witcherBrew && actor.type === "character" && !isMutant(actor)) {
-    const check = await enduranceCheck(actor, CRAFTING.toxicitySaveDc, `${item.name}: не-мутант`);
+    const check = await enduranceCheck(actor, s.poisonDc || CRAFTING.toxicitySaveDc, `${item.name}: не-мутант`);
     if (!check?.success) {
       await spendOne(item);
       await applyStatus(actor, "poisoned");

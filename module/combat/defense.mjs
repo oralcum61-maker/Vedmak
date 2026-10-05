@@ -7,6 +7,7 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import { witcherSchools } from "../config/character.mjs";
+import { magicFumble } from "../config/magic.mjs";
 import {
   resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat,
   isReadyWeapon
@@ -47,6 +48,13 @@ const ARM_DEFENSES = ["block", "parry", "brawlBlock"];
  * @returns {{error: string}|{defense: string, items: object[]}}
  */
 function resolveDefense(actor, attack, defense) {
+  if (defense === "dispel") {
+    if (!attack.spell) return { error: "Рассеять можно только магию." };
+    if (!knowsDispel(actor)) return { error: `${actor.name} не знает заклинания «Рассеивание».` };
+    const cost = dispelCost(attack);
+    if ((actor.system.sta?.value ?? 0) < cost) return { error: `Рассеивание стоит ${cost} Вын — у ${actor.name} столько нет.` };
+    return { defense, items: [] };
+  }
   if (defense === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) return { error: "Стрелы и болты нельзя парировать." };
   if (defense === "brawlBlock" && attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
   const items = defenseItems(actor, attack, defense);
@@ -56,6 +64,11 @@ function resolveDefense(actor, attack, defense) {
   }
   return { defense, items };
 }
+
+/** Знает ли защищающийся «Рассеивание» (стр. 102). */
+export const knowsDispel = actor => !!actor?.items?.some(i => i.type === "spell" && i.name === "Рассеивание");
+/** Цена Рассеивания: половина Вын, потраченной на рассеиваемое заклинание (не меньше 1). */
+const dispelCost = attack => Math.max(1, Math.floor((attack.spell?.cost ?? 0) / 2));
 
 /** Есть ли уже карточка защиты этой цели от этой атаки. Поиск по чату, а не отметка: её может не быть без ведущего. */
 function priorDefense(message, defender) {
@@ -151,7 +164,8 @@ export function bestDefense(actor, attack) {
   let best = { key: "dodge", value: -Infinity };
   for (const [key, type] of Object.entries(DEFENSE_TYPES)) {
     if (spellDefenses ? !spellDefenses.includes(key) : type.magicOnly) continue;
-    if (key === "brawlBlock") continue;
+    // Рассеивание стоит Вын — его выбирает ведущий сам
+    if (key === "brawlBlock" || key === "dispel") continue;
     const check = resolveDefense(actor, attack, key);
     if (check.error) continue;
     let item = null;
@@ -170,7 +184,8 @@ async function defenseDialog(actor, attack, cfg, items) {
   const spellDefenses = attack.spell?.defenses;
   // В списке — только допустимые защиты (стр. 164); «Блокирование» без оружия и щита — это «Блок рукой»
   const allowed = Object.entries(DEFENSE_TYPES).filter(([k, t]) => {
-    if (spellDefenses ? !spellDefenses.includes(k) : t.magicOnly) return false;
+    if (k === "dispel") { if (!attack.spell || !knowsDispel(actor)) return false; }
+    else if (spellDefenses ? !spellDefenses.includes(k) : t.magicOnly) return false;
     const check = resolveDefense(actor, attack, k);
     return !check.error && check.defense === k;
   });
@@ -283,8 +298,15 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   const roll = await performCheck({ actor, title: label, parts, luck: cfg.luck, toChat: false });
   const attackTotal = attack.roll.total;
   const margin = attackTotal - roll.total;
-  const hit = margin > 0;
+  // Рассеивание успешно, только если бросок больше броска заклинателя (стр. 102): ничья — в пользу магии
+  const hit = cfg.defense === "dispel" ? margin >= 0 : margin > 0;
   const notes = [];
+  if (cfg.defense === "dispel") {
+    const cost = dispelCost(attack);
+    await actor.update({ "system.sta.value": Math.max(0, actor.system.sta.value - cost) });
+    notes.push(`Рассеивание: −${cost} Вын (половина от ${attack.spell.cost ?? 0}).`);
+    if (cost > (actor.system.derived?.vigor ?? 0)) notes.push("Цена выше Энергии — перегрузка по правилам сотворения (стр. 167).");
+  }
 
   // Вын за дополнительную защиту
   const cost = defenseCostInfo(actor);
@@ -313,17 +335,19 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
       notes.push("Удар принят на руку: урон по подставленной конечности, броня работает.");
     }
     if (cfg.defense === "parry") notes.push("Парирование: атака отменена, атакующий ошеломлён.");
+    if (cfg.defense === "dispel") notes.push("Магия рассеяна: заклинание не действует на цель.");
     if (cfg.defense === "reposition") notes.push(`Можно сместиться на ${Math.floor(actor.system.stats.spd.effective / 2)} м.`);
     if (attack.attackType === "charge" && cfg.defense === "block") notes.push("Атака с разбега заблокирована: встречная Сила против Силы, чтобы сбить с ног.");
   }
 
   const fumbleKind = cfg.defense === "brawlBlock" || cfg.defense === "dodge" || cfg.defense === "reposition"
     ? "unarmed" : "weaponDefense";
+  const dispelFumble = cfg.defense === "dispel" && roll.fumble;
   const data = buildOutcome(message, attack, defender, {
     defense: cfg.defense, label, roll, total: roll.total, dc: null, hit, margin, notes,
     damageOnBlock, fixedLocation,
-    fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
-    fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
+    fumbleText: dispelFumble ? magicFumble(roll.fumbleValue).text : roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
+    fumbleLabel: dispelFumble ? "Магический провал" : roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
   });
   const card = await postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
   // Ошеломление атакующего — после карточки: ведущий проверяет по ней, что парирование было и кто парировал

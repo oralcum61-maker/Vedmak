@@ -38,6 +38,19 @@
       <span class="dim">{{#if magic.shieldLeft}}{{magic.shieldLeft}}{{else}}&nbsp;{{/if}}</span>
     </div>
     {{/if}}
+    {{#if magic.showDimeritium}}
+    <div class="cell dimeritium{{#if magic.dimeritium}} on{{/if}}">
+      <span class="cap">Двимерит</span>
+      {{#if magic.dimeritium}}<span class="dim-text">{{magic.dimeritium}}</span>{{else}}<span class="dim">нет касания</span>{{/if}}
+      {{#if editable}}
+      <span class="dim-btns">
+        <button type="button" class="go-btn steel" data-action="dimeritiumTouch"
+          data-tooltip="{{#if magic.dimeritium}}Новая проверка Стойкости: каждые полчаса контакта{{else}}Энергия 0 и Стойкость СЛ 16 по таблице эффектов (стр. 167){{/if}}">{{#if magic.dimeritium}}Полчаса{{else}}Касание{{/if}}</button>
+        {{#if magic.dimeritium}}<button type="button" class="go-btn steel" data-action="dimeritiumEnd" data-tooltip="Контакт прерван: Энергия возвращается">Убрать</button>{{/if}}
+      </span>
+      {{/if}}
+    </div>
+    {{/if}}
   </div>
 
   {{#if magic.maintained.length}}

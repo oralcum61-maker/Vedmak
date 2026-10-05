@@ -3,7 +3,7 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import {
-  SPELL_DEFENSES, MAGIC_SKILL, ELEMENTAL_FUMBLE, magicFumble, targetingFor, levelLabel
+  SPELL_DEFENSES, MAGIC_SKILL, ELEMENTAL_FUMBLE, magicFumble, targetingFor, levelLabel, ZONE_AURAS
 } from "../config/magic.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
@@ -127,8 +127,11 @@ export async function castSpell(actor, item, opts = {}) {
     const auto = spellAutomation(item);
     const lasting = !!(duration?.rounds || duration?.maintain);
     const repeat = lasting && !!(auto.damage || auto.staDamage || auto.statuses?.some(x => x.status));
+    // Аура (Ирден): штраф всем внутри, кроме заклинателя, — ставит и снимает ведущий (magic/zone-effects.mjs)
+    const auraDef = ZONE_AURAS[item.name];
+    const aura = auraDef ? { ...auraDef, value: cfg.cost, img: item.img } : null;
     region = await createZone(placed.shape, { name: item.name, color: zoneColor, actor, itemName: item.name, duration, maintainItemId: item.id,
-      extra: { itemId: item.id, repeat } });
+      extra: { itemId: item.id, repeat, aura } });
     targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);
   }
 
@@ -530,11 +533,13 @@ const DEFENSE_BUTTONS = {
   resistMagic: { label: "Сопротивление магии", short: "Магия" },
   willx3:      { label: "Против Воли ×3", short: "Воля ×3" },
   auto:        { label: "Эффект без защиты", short: "Сразу" },
-  none:        { label: "Без защиты: против СЛ", short: "СЛ" }
+  none:        { label: "Без защиты: против СЛ", short: "СЛ" },
+  dispel:      { label: "Рассеивание: Сотворение заклинаний против броска заклинателя, половина Вын заклинания (нужно знать заклинание)", short: "Рассеять" }
 };
 
 export function spellDefenseButtons(keys) {
-  return keys.map(key => ({ key, ...DEFENSE_BUTTONS[key] }));
+  // Рассеиванием можно защититься от любой магической атаки (стр. 102)
+  return [...keys, "dispel"].map(key => ({ key, ...DEFENSE_BUTTONS[key] }));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -625,33 +630,46 @@ export async function repeatZonesForTurn(actor, combat) {
     if (!z.repeat || z.actorUuid !== actor.uuid) continue;
     // Поддержание уже прекращено — зону снимет обработчик конца поддержания
     if (z.maintain && !actor.effects.some(e => e.flags?.vedmak?.maintain?.itemId === z.maintain)) continue;
-    const message = lastCastMessage(actor, z.itemId);
-    const atk = message?.flags.vedmak.attack;
-    const item = actor.items.get(z.itemId);
-    if (!atk || !item) continue;
     const shape = region.shapes?.[0];
     const onScene = canvas?.scene?.id === scene?.id;
     const tokens = shape && onScene ? zoneTokens(shape, { region, exclude: actorToken(actor), showHidden: !actor.hasPlayerOwner }) : [];
-    const targets = tokens.map(targetInfo);
-    // Скрытый токен в зоне: имя и портрет в общей карточке выдали бы его — карточка уходит только ведущим
-    const hiddenIn = tokens.some(t => t.document.hidden);
-    const s = item.system;
-    const data = { ...atk, targets, notes: ["Защита — против того же результата сотворения."] };
-    await postCard({
-      template: "systems/vedmak/templates/chat/cast.hbs", actor,
-      data: {
-        ...data, repeat: combat?.round ?? 1, hasTargets: targets.length > 0, showDefense: true,
-        defenseButtons: spellDefenseButtons(atk.spell.defenses),
-        kindLabel: CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel: levelLabel(s.kind, s.level),
-        elementLabel: s.kind === "spell" || s.kind === "sign" ? CONFIG.VEDMAK.MAGIC_ELEMENTS[s.element] : "",
-        range: s.range, duration: s.duration,
-        defenseLabel: s.defenseText || SPELL_DEFENSES[s.defense]?.label,
-        cost: atk.spell.cost, paid: atk.spell.paid, works: true, selfLines: []
-      },
-      flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } },
-      messageMode: hiddenIn ? "gm" : undefined
-    });
-    lines.push(`${item.name}: зона бьёт снова — целей ${targets.length}.`);
+    if (await postZoneRepeat(actor, region, tokens, { round: combat?.round ?? 1 })) {
+      lines.push(`${actor.items.get(z.itemId)?.name ?? region.name}: зона бьёт снова — целей ${tokens.length}.`);
+    }
   }
   return lines;
+}
+
+/**
+ * Карточка повторного удара долгой зоны по токенам: в начале хода заклинателя или когда кто-то вошёл в зону
+ * посреди раунда (magic/zone-effects.mjs). Защита — против исходного результата сотворения.
+ * @param {Array<Token|TokenDocument>} tokens
+ * @returns {Promise<boolean>} была ли карточка
+ */
+export async function postZoneRepeat(actor, region, tokens, { round = 1, note = "" } = {}) {
+  const z = region.flags.vedmak.zone;
+  const message = lastCastMessage(actor, z.itemId);
+  const atk = message?.flags.vedmak.attack;
+  const item = actor.items.get(z.itemId);
+  if (!atk || !item) return false;
+  const targets = tokens.map(targetInfo);
+  // Скрытый токен в зоне: имя и портрет в общей карточке выдали бы его — карточка уходит только ведущим
+  const hiddenIn = tokens.some(t => (t.document ?? t).hidden);
+  const s = item.system;
+  const data = { ...atk, targets, notes: [note, "Защита — против того же результата сотворения."].filter(Boolean) };
+  await postCard({
+    template: "systems/vedmak/templates/chat/cast.hbs", actor,
+    data: {
+      ...data, repeat: round, hasTargets: targets.length > 0, showDefense: true,
+      defenseButtons: spellDefenseButtons(atk.spell.defenses),
+      kindLabel: CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel: levelLabel(s.kind, s.level),
+      elementLabel: s.kind === "spell" || s.kind === "sign" ? CONFIG.VEDMAK.MAGIC_ELEMENTS[s.element] : "",
+      range: s.range, duration: s.duration,
+      defenseLabel: s.defenseText || SPELL_DEFENSES[s.defense]?.label,
+      cost: atk.spell.cost, paid: atk.spell.paid, works: true, selfLines: []
+    },
+    flags: { attack: data, cast: { itemId: item.id, works: true, repeat: true } },
+    messageMode: hiddenIn ? "gm" : undefined
+  });
+  return true;
 }

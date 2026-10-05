@@ -3448,6 +3448,12 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .magic-tab .source { display: flex; align-items: stretch; flex-wrap: wrap; padding: 0; }
 .vedmak .magic-tab .source .cell { display: flex; flex-direction: column; justify-content: center; gap: .3rem; padding: .6rem .9rem; min-width: 0; }
 .vedmak .magic-tab .source .cell + .cell { border-left: 1px solid rgba(0,0,0,.6); box-shadow: inset 1px 0 0 rgba(255,240,215,.045); }
+/* Двимерит (magic/dimeritium.mjs): касание гасит Энергию, строка таблицы — текстом */
+.vedmak .magic-tab .source .cell.dimeritium { flex: 1 1 12rem; }
+.vedmak .magic-tab .source .cell.dimeritium .dim-text { font-size: .72rem; line-height: 1.35; color: #e2ddd0; }
+.vedmak .magic-tab .source .cell.dimeritium.on .cap { color: #c0533f; }
+.vedmak .magic-tab .source .cell.dimeritium .dim-btns { display: flex; gap: .35rem; }
+.vedmak .magic-tab .source .cell.dimeritium .go-btn { height: 1.6rem; padding: 0 .6rem; letter-spacing: .1em; }
 .vedmak .magic-tab .source .energy { flex: 1 1 10rem; padding-left: 1rem; }
 .vedmak .magic-tab .source .energy .cap b { font-weight: 600; color: #d6d0c2; }
 .vedmak .magic-tab .segs { display: flex; flex-wrap: wrap; gap: 4px; min-height: 16px; }

@@ -12,6 +12,7 @@ import { levelLabel, ELEMENT_GLYPHS, SIGN_FORMS, MAGIC_LEARNING } from "../confi
 import { spellAutomation } from "../config/spell-auto.mjs";
 import { castSpell, vigorUsed, maintainedSpells, costNote } from "../magic/cast.mjs";
 import { endMaintained } from "../magic/effects.mjs";
+import { dimeritiumRow, touchDimeritium, endDimeritium } from "../magic/dimeritium.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
 import { compareRu, balanceColumns, worldSetting } from "../util.mjs";
@@ -179,7 +180,8 @@ function magicContext(actor, spells) {
     magic: {
       used, vigor: d.vigor ?? 0,
       energy: energySegments(d.vigor ?? 0, used, 0),
-      energyNote: used ? `${used} из ${d.vigor} уже влито в этом раунде` : "Энергия — сколько Вын можно без вреда влить за раунд",
+      energyNote: d.dimeritium ? "Касание двимерита: Энергия 0"
+        : used ? `${used} из ${d.vigor} уже влито в этом раунде` : "Энергия — сколько Вын можно без вреда влить за раунд",
       sta: { value: sta.value, max: sta.max, pct: sta.max ? Math.round(Math.max(0, Math.min(1, sta.value / sta.max)) * 100) : 0 },
       skills: [
         { key: "spellCasting", label: "Сотворение", value: skill("spellCasting"), show: true },
@@ -191,6 +193,9 @@ function magicContext(actor, spells) {
       kinds: Object.entries(CONFIG.VEDMAK.MAGIC_KINDS).map(([kind, label]) => ({ kind, label })),
       shield: system.shield?.value ?? 0, shieldLeft, showShield: !!(system.shield?.value || has("sign")),
       maintained,
+      // Двимерит: касание и его последствия (стр. 167); ячейка — у тех, кто владеет магией
+      showDimeritium: !!sorted.length || (d.vigor ?? 0) > 0 || !!d.dimeritium,
+      dimeritium: dimeritiumRow(actor)?.text ?? "",
       learning: Object.entries(MAGIC_LEARNING).map(([level, l]) => ({
         label: levelLabel("spell", level), pips: [1, 2, 3, 4].map(n => ({ on: n <= LEVEL_ORDER[level] + 1 })), ...l,
         checksLabel: `${l.checks} ${l.checks < 5 ? "проверки" : "проверок"}`
@@ -269,6 +274,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       ram: VedmakActorSheet.#onRam,
       castSpell: VedmakActorSheet.#onCastSpell,
       endMaintained: VedmakActorSheet.#onEndMaintained,
+      dimeritiumTouch: function () { return touchDimeritium(this.actor); },
+      dimeritiumEnd: function () { return endDimeritium(this.actor); },
       profileSheet: VedmakActorSheet.#onProfileSheet,
       verbalAction: VedmakActorSheet.#onVerbalAction,
       duelReset: VedmakActorSheet.#onDuelReset,

@@ -50,6 +50,8 @@ import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
 import { registerImplantHooks, implantDialog } from "./module/crafting/implant.mjs";
+import { touchDimeritium, endDimeritium } from "./module/magic/dimeritium.mjs";
+import { registerZoneEffectHooks } from "./module/magic/zone-effects.mjs";
 import * as investigation from "./module/investigation/investigation.mjs";
 
 Hooks.once("init", () => {
@@ -237,6 +239,7 @@ Hooks.once("init", () => {
   registerChatListeners();
   registerCombatAutomation();
   registerZoneHooks();
+  registerZoneEffectHooks();
   registerAlchemyHooks();
   registerBuffHooks();
   registerRaceHooks();
@@ -255,6 +258,7 @@ Hooks.once("init", () => {
     performCheck, rollD10, attack, computeDamage, applyDamageToActor, rollStunSave, rollDeathSave,
     manualDamage, restTurn, restDays, controlCheck, castSpell,
     advancement, crafting, alchemy, enhancements, implant: implantDialog,
+    dimeritium: { touch: touchDimeritium, end: endDimeritium },
     openWizard: actor => new CharacterWizard({ actor }).render(true),
     profileSheet,
     hud: CombatHud,

@@ -21,6 +21,7 @@
 
     {{#if surcharge}}<p class="note">Материалы куплены за {{surcharge}} крон.</p>{{/if}}
     {{#if created}}<p class="note"><b>Готово:</b> {{created}}.</p>{{/if}}
+    {{#each abilityLines}}<p class="note">{{this}}</p>{{/each}}
     {{#if consumedList}}<p class="note dim">Потрачено: {{consumedList}}.</p>{{/if}}
     {{#if returned}}<p class="note"><b>Возвращено:</b> {{returned}}.</p>{{/if}}
     {{#if recycle}}{{#unless returned}}<p class="note dim">Материалы вернуть не удалось.</p>{{/unless}}{{/if}}

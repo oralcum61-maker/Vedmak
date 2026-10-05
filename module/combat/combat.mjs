@@ -8,6 +8,7 @@ import { trueFormStartOfTurn } from "../character/true-form.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
 import { expireZonesForTurn } from "./zones.mjs";
 import { repeatZonesForTurn } from "../magic/cast.mjs";
+import { dimeritiumTurn } from "../magic/dimeritium.mjs";
 
 export class VedmakCombat extends Combat {
 
@@ -96,6 +97,11 @@ export async function startOfTurn(actor, combat, context) {
   }
   if (has("suffocating")) { loss += 3; lines.push("Удушье: 3 урона."); }
   if (d.crit?.acid) { loss += d.crit.acid; lines.push(`Рана в живот: ${d.crit.acid} урона кислотой.`); }
+  // Касание двимерита: последствия строки таблицы (стр. 167)
+  const dim = await dimeritiumTurn(actor, context.round);
+  loss += dim.loss;
+  lines.push(...dim.lines);
+  if (dim.stun) buttons.push({ action: "stunSave", label: "Испытание Уст", reason: "Двимерит" });
 
   // Горение портит броню каждой части тела
   if (armorWear.length) lines.push(...await wearArmor(actor, armorWear.map(loc => ({ location: loc.key, amount: 1 }))));

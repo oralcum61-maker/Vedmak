@@ -332,6 +332,12 @@ export function zoneTokens(shape, { region = null, exclude = null, showHidden = 
   return byRegion.length || !own.length ? byRegion : own;
 }
 
+/** Точка в зоне: по области Foundry, если она умеет, иначе своя геометрия. */
+export function pointInZone(region, p) {
+  const shape = region?.shapes?.[0];
+  return !!shape && tester(shape, region)(p);
+}
+
 /* ------------------------------ Срок действия ------------------------------ */
 
 export const zonesOf = scene => (scene?.regions ?? []).filter(r => r.flags?.vedmak?.zone);

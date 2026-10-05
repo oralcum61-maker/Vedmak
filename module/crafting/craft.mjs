@@ -147,6 +147,115 @@ export function readiness(actor, recipe) {
   return { ok: req.materialsOk && req.toolsOk, materials: req.materialsOk, tools: req.toolsOk };
 }
 
+/* ------------------------- Способности ремесла ------------------------- */
+
+/** Уровень способности древа профессии по названию (0 — нет такой). */
+export function abilityLevel(actor, name) {
+  let best = 0;
+  for (const b of actor.system.profession?.system?.branches ?? []) {
+    for (const a of b.abilities ?? []) if (norm(a.name) === norm(name)) best = Math.max(best, Number(a.value) || 0);
+  }
+  return best;
+}
+
+/** Что усиливает «Дистилляция» (на выбор мага). */
+export const DISTILL_TARGETS = { duration: "длительность", damage: "урон", dc: "СЛ сопротивления" };
+
+/**
+ * Способности, которые меняют изготовление, — у кого они есть и к чему применимы:
+ * «Подмастерье» (Ремесленник) — оружие и броня; «Двойная порция» (Ремесленник, Алхимик) и «Дистилляция» (Маг) —
+ * алхимия; «Адаптация» (Ремесленник) — ведьмачьи эликсиры.
+ */
+async function craftAbilities(actor, recipe) {
+  const r = recipe.system;
+  const type = r.result.type;
+  const alchemy = r.isFormula || type === "alchemical";
+  const out = {};
+  const journeyman = abilityLevel(actor, "Подмастерье");
+  if (journeyman && ["weapon", "armor"].includes(type)) out.journeyman = { level: journeyman, dc: r.dc, armor: type === "armor" };
+  if (!alchemy) return out;
+  const double = abilityLevel(actor, "Двойная порция");
+  if (double) out.double = { level: double, dc: r.dc };
+  const adaptation = abilityLevel(actor, "Адаптация");
+  if (adaptation && (await findItemData(r.result.name, type)).system?.kind === "elixir") out.adaptation = { level: adaptation, dc: 3 + r.dc };
+  const distill = abilityLevel(actor, "Дистилляция");
+  if (distill) out.distill = { level: distill, dc: r.dc };
+  return out;
+}
+
+/** Проверка способности: Рем + уровень, без Удачи («Подмастерье» её запрещает, у прочих она не нужна). */
+function abilityCheck(actor, label, level, dc) {
+  const parts = [
+    { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
+    { label, value: level, always: true }
+  ];
+  return performCheck({ actor, title: label, parts, dc, toChat: false });
+}
+
+/**
+ * Применить способности к готовому изделию (данные предмета до выдачи). Изменённое изделие получает приписку
+ * в названии, чтобы не сложиться в одну стопку с обычным.
+ * @returns {Promise<{data: object, quantity: number, lines: string[], rolls: Roll[]}>}
+ */
+async function applyCraftAbilities(actor, recipe, data, quantity, abilities, cfg) {
+  const lines = [], rolls = [], tags = [];
+  const r = recipe.system;
+  const s = data.system ?? (data.system = {});
+  if (cfg.abilities.journeyman && abilities.journeyman) {
+    const a = abilities.journeyman;
+    const c = await abilityCheck(actor, "Подмастерье", a.level, a.dc);
+    rolls.push(...(c.rolls ?? []));
+    const bonus = c.success ? Math.min(5, Math.floor((c.total - a.dc) / 2)) : 0;
+    if (bonus > 0 && a.armor) {
+      for (const loc of Object.values(s.sp ?? {})) if (loc.max > 0) { loc.max += bonus; loc.value += bonus; }
+      tags.push(`Подмастерье +${bonus}`);
+      lines.push(`Подмастерье ${c.total} против ${a.dc}: ПБ +${bonus} по всем частям брони.`);
+    } else if (bonus > 0) {
+      // «2d6+2» и +5 → «2d6+7»: прибавка складывается с числом в конце формулы
+      const m = String(s.damage || "0").match(/^(.*?)([+-]\s*\d+)\s*$/);
+      s.damage = m ? `${m[1]}${(n => (n < 0 ? `${n}` : `+${n}`))(Number(m[2].replace(/\s/g, "")) + bonus)}` : `${s.damage || "0"}+${bonus}`;
+      tags.push(`Подмастерье +${bonus}`);
+      lines.push(`Подмастерье ${c.total} против ${a.dc}: урон +${bonus}.`);
+    } else lines.push(`Подмастерье ${c.total} против ${a.dc}: ${c.success ? "сверх СЛ меньше 2 — без прибавки" : "провал, изделие обычное"}.`);
+  }
+  if (cfg.abilities.double && abilities.double) {
+    const a = abilities.double;
+    const c = await abilityCheck(actor, "Двойная порция", a.level, a.dc);
+    rolls.push(...(c.rolls ?? []));
+    if (c.success) quantity *= 2;
+    lines.push(`Двойная порция ${c.total} против ${a.dc}: ${c.success ? `две порции, всего ${quantity}` : "провал, одна порция"}.`);
+  }
+  if (cfg.abilities.adaptation && abilities.adaptation) {
+    const a = abilities.adaptation;
+    const c = await abilityCheck(actor, "Адаптация", a.level, a.dc);
+    rolls.push(...(c.rolls ?? []));
+    if (c.success) {
+      // −1 за каждый пункт сверх СЛ изготовления (стр. корника, «Адаптация»), не ниже 12
+      const dc = Math.max(12, CRAFTING.toxicitySaveDc - Math.max(0, c.total - r.dc));
+      s.poisonDc = dc;
+      tags.push(`адаптирован, СЛ ${dc}`);
+      lines.push(`Адаптация ${c.total} против ${a.dc}: не-мутант выпивает со Стойкостью СЛ ${dc} вместо ${CRAFTING.toxicitySaveDc}.`);
+    } else lines.push(`Адаптация ${c.total} против ${a.dc}: провал, ядовитость эликсира прежняя.`);
+  }
+  if (cfg.abilities.distill && abilities.distill) {
+    // Дистилляция заменила Алхимию в самой проверке: здесь — только усиление изделия
+    const target = cfg.distillTarget in DISTILL_TARGETS ? cfg.distillTarget : "duration";
+    if (target === "duration") {
+      if (s.durationRounds) s.durationRounds = Math.floor(s.durationRounds * 1.5);
+      if (s.durationMinutes) s.durationMinutes = Math.floor(s.durationMinutes * 1.5);
+      if (s.duration) s.duration = `${s.duration} ×1,5`;
+    } else if (target === "damage" && s.use?.damage) {
+      s.use.damage = `floor((${s.use.damage}) * 1.5)`;
+    }
+    const note = `Дистилляция: ${DISTILL_TARGETS[target]} ×1,5 (округление вниз)${target === "dc" ? " — учитывает ведущий" : ""}.`;
+    s.effect = [s.effect, note].filter(Boolean).join(" ");
+    tags.push("дистиллят");
+    lines.push(note);
+  }
+  if (tags.length) data.name = `${data.name} (${tags.join(", ")})`;
+  return { data, quantity, lines, rolls };
+}
+
 /* ----------------------------- Изготовление ----------------------------- */
 
 /**
@@ -160,14 +269,27 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
   const req = requirements(actor, recipe);
   const crowns = actor.system.money?.crowns ?? 0;
 
-  let cfg = { blueprint: true, surcharge: false, toolsOverride: false, mod: 0, luck: 0, messageMode: game.settings.get("core", "messageMode") };
+  const abilities = await craftAbilities(actor, recipe);
+  let cfg = { blueprint: true, surcharge: false, toolsOverride: false, mod: 0, luck: 0, abilities: {}, distillTarget: "duration",
+    messageMode: game.settings.get("core", "messageMode") };
   if (!skipDialog) {
     const stat = actor.system.stats.cra;
     const skill = actor.system.skills[skillKey];
+    // Способности — переключателями; «Дистилляция» меняет навык проверки, поэтому её разница идёт правкой (data-mod)
+    const abilityPlates = [];
+    if (abilities.journeyman) abilityPlates.push({ key: "journeyman", label: "Подмастерье", value: `СЛ ${abilities.journeyman.dc}`,
+      text: `Рем + ${abilities.journeyman.level}: +1 к ${abilities.journeyman.armor ? "ПБ" : "урону"} за каждые 2 сверх СЛ, до +5; без Удачи` });
+    if (abilities.double) abilityPlates.push({ key: "double", label: "Двойная порция", value: `СЛ ${abilities.double.dc}`,
+      text: `Рем + ${abilities.double.level}: при успехе две порции из ингредиентов на одну` });
+    if (abilities.adaptation) abilityPlates.push({ key: "adaptation", label: "Адаптация", value: `СЛ ${abilities.adaptation.dc}`,
+      text: `Рем + ${abilities.adaptation.level}: СЛ отравления не-мутанта −1 за каждый пункт сверх СЛ изготовления, не ниже 12` });
+    if (abilities.distill) abilityPlates.push({ key: "distill", label: "Дистилляция", value: `${abilities.distill.level}`,
+      mod: abilities.distill.level - skill.total, targets: DISTILL_TARGETS,
+      text: `вместо Алхимии в проверке (${skill.total} → ${abilities.distill.level}); при успехе ×1,5 к выбранному` });
     // Чертёж перед глазами в основу не входит: он висит на плашке как правка (+2)
     const base = Math.max(0, stat.effective + skill.total + (skill.penalty || 0));
     const content = await renderTemplate("systems/vedmak/templates/dialog/craft.hbs", {
-      recipe, r, req, skill: SKILLS[skillKey].label, crowns, canSurcharge: r.surcharge > 0 && crowns >= r.surcharge,
+      recipe, r, req, skill: SKILLS[skillKey].label, crowns, canSurcharge: r.surcharge > 0 && crowns >= r.surcharge, abilities: abilityPlates,
       bonus: CRAFTING.blueprintBonus,
       categoryLabel: RECIPE_CATEGORIES[r.category] ?? "", memorizedNote: r.memorized,
       head: {
@@ -189,6 +311,8 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
           return {
             ...readCommon(f, actor.system.luck?.value ?? 0),
             blueprint: f.blueprint.checked, surcharge: !!f.surcharge?.checked, toolsOverride: !!f.toolsOverride?.checked,
+            abilities: Object.fromEntries(["journeyman", "double", "adaptation", "distill"].map(k => [k, !!f[`ab.${k}`]?.checked])),
+            distillTarget: f.distillTarget?.value ?? "duration",
             messageMode: game.settings.get("core", "messageMode")
           };
         }
@@ -236,9 +360,12 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
 
   const stat = actor.system.stats.cra;
   const skill = actor.system.skills[skillKey];
+  // «Дистилляция» (Маг): проверка Дистилляции вместо Алхимии
+  const distill = cfg.abilities.distill && abilities.distill;
   const parts = [
     { label: STATS.cra.label, value: stat.effective, always: true },
-    { label: SKILLS[skillKey].label, value: skill.total, always: true }
+    distill ? { label: "Дистилляция", value: abilities.distill.level, always: true }
+      : { label: SKILLS[skillKey].label, value: skill.total, always: true }
   ];
   if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
   if (cfg.blueprint) parts.push({ label: r.isFormula ? "Формула перед глазами" : "Чертёж перед глазами", value: CRAFTING.blueprintBonus });
@@ -246,10 +373,14 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
   const roll = await performCheck({ actor, title: `Изготовление: ${r.result.name}`, parts, dc: r.dc, luck: cfg.luck, toChat: false });
 
   let created = null;
+  let abilityLines = [], abilityRolls = [];
   if (roll.success) {
-    const data = await findItemData(r.result.name, r.result.type);
-    await giveItem(actor, data, r.result.quantity);
-    created = `${r.result.name}${r.result.quantity > 1 ? ` ×${r.result.quantity}` : ""}`;
+    const base = await findItemData(r.result.name, r.result.type);
+    const done = await applyCraftAbilities(actor, recipe, base, r.result.quantity, abilities, cfg);
+    abilityLines = done.lines;
+    abilityRolls = done.rolls;
+    await giveItem(actor, done.data, done.quantity);
+    created = `${done.data.name}${done.quantity > 1 ? ` ×${done.quantity}` : ""}`;
   }
 
   const flags = {
@@ -263,9 +394,9 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
     data: {
       ...roll, recipeName: recipe.name, resultName: r.result.name, time: r.time, created, surcharge: cfg.surcharge ? r.surcharge : 0,
       consumedList: consumed.map(c => `${c.data.name} ×${c.quantity}`).join(", "),
-      canRecycle: !roll.success && consumed.length > 0, actorUuid: actor.uuid
+      canRecycle: !roll.success && consumed.length > 0, actorUuid: actor.uuid, abilityLines
     },
-    actor, flags, rolls: roll.rolls, messageMode: cfg.messageMode
+    actor, flags, rolls: [...(roll.rolls ?? []), ...abilityRolls], messageMode: cfg.messageMode
   });
 }
 

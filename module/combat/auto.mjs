@@ -2,7 +2,7 @@
 // Каждый шаг включается своей настройкой мира (по умолчанию все выключены). Шаг выполняет один клиент — тот, кто отвечает
 // за актора, — поэтому карточки не дублируются, даже если у всех открыт чат.
 
-import { defend, bestDefense } from "./defense.mjs";
+import { defend, bestDefense, knowsDispel } from "./defense.mjs";
 import { damageFromDefense } from "./damage.mjs";
 import { resolveActor, asGM, proxyMessageMode, defaultMessageMode } from "./common.mjs";
 import { requestSpellEffects } from "../magic/effects.mjs";
@@ -32,7 +32,9 @@ async function onAttack(message, attack) {
     const actor = actorOf(target);
     if (!actor) continue;
     if (onlyAuto) {
-      if (setting("autoApply")) await defend(message, target, "auto", { skipDialog: true, messageMode });
+      // Цель игрока, знающая «Рассеивание», может рассеять и магию без защиты — решает сама кнопкой
+      const canDispel = actor.hasPlayerOwner && knowsDispel(actor);
+      if (setting("autoApply") && !canDispel) await defend(message, target, "auto", { skipDialog: true, messageMode });
       continue;
     }
     if (!setting("autoDefense") || actor.hasPlayerOwner) continue;

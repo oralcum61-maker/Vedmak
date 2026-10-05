@@ -270,6 +270,8 @@ export class AlchemicalData extends foundry.abstract.TypeDataModel {
       kind: str("preparation"),
       effect: str(""),
       toxicity: int(0, { min: 0 }),
+      // СЛ Стойкости не-мутанта против ведьмачьего эликсира; 0 — обычная (CRAFTING.toxicitySaveDc), «Адаптация» снижает
+      poisonDc: int(0, { min: 0 }),
       duration: str(""),
       durationRounds: int(0, { min: 0 }),
       durationMinutes: int(0, { min: 0 }),
