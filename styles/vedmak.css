@@ -4470,6 +4470,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   background: #1c1110; border: 1px solid #3a120a; border-radius: 2px;
 }
 .vedmak-card .crit-box { box-shadow: inset 0 2px 0 #b8432c; }
+.vedmak-card .fumble-note .fumble-apply { align-self: flex-start; flex: none; margin-top: .15rem; padding: 2px 12px; font-size: .62rem; }
 .vedmak-card .fumble-note b, .vedmak-card .crit-box b { font-family: var(--vd-font-head); font-weight: 400; font-size: .95rem; color: #ffd9cf; }
 .vedmak-card .crit-box .dim { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: #e0937f; }
 .vedmak-card .crit-box p { margin: 0; }
@@ -5254,6 +5255,13 @@ body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .me
   width: 2.8rem; height: 1.6rem; padding: 0; text-align: center; font-size: .8rem; color: #e2ddd0;
   background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
 }
+.vedmak .tavern .tv-player .bet { display: inline-flex; align-items: center; gap: .25rem; margin: 0; font-size: .74rem; color: #e0bf7d; }
+.vedmak .tavern .tv-player .bet input {
+  width: 3.4rem; height: 1.6rem; padding: 0; text-align: center; font-size: .8rem; color: #e0bf7d;
+  background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .tavern .tv-player .bet input:disabled { opacity: .7; }
+.vedmak .tavern .tv-player .bet.fixed { font-family: var(--vd-font-head); font-size: .9rem; }
 .vedmak .tavern .tv-x { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; color: #8c867b; cursor: var(--cursor-pointer, pointer); }
 .vedmak .tavern .tv-x:hover { color: #e0604a; }
 .vedmak .tavern .tv-dice { display: inline-flex; align-items: center; gap: .25rem; flex-wrap: nowrap; }

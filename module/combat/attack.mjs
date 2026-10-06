@@ -5,7 +5,7 @@ import { punchSteps } from "../config/stats.mjs";
 import { witcherSchools } from "../config/character.mjs";
 import {
   ATTACK_TYPES, UNARMED_ATTACKS, ATTACK_SITUATIONS, RANGE_BANDS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MOUNTS, WEIGHT_MODS,
-  fumbleText, locationGlyph
+  fumbleText, fumbleEffect, locationGlyph
 } from "../config/combat.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
@@ -457,6 +457,8 @@ export async function rollAttack(actor, src, targets, cfg) {
     roll,
     fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
     fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : "",
+    fumble: roll.fumble ? { kind: fumbleKind, value: roll.fumbleValue, itemId: src.item?.id ?? null } : null,
+    fumbleAuto: !!(roll.fumble && fumbleEffect(fumbleKind, roll.fumbleValue)),
     targets,
     notes,
     config: cfg

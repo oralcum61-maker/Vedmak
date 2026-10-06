@@ -69,6 +69,9 @@ function markDoneButtons(message, html) {
     if (game.user.isGM) button.style.opacity = "0.5";
     else button.disabled = true;
   };
+  if (flags?.fumbleApplied) {
+    for (const button of html.querySelectorAll("[data-vedmak='applyFumble']")) done(button, "Последствия уже применены");
+  }
   if (flags?.defended) {
     for (const row of html.querySelectorAll(".target-row[data-target-token], .target-row[data-target-actor]")) {
       const id = flags.defended[doneKey(row.dataset.targetToken || row.dataset.targetActor)];

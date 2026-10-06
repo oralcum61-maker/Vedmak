@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <details class="dlg-group fold">
+    <details class="dlg-group fold" {{#if cfg.coverAuto}}open{{/if}}>
       <summary class="dlg-label">УКРЫТИЕ ЦЕЛИ <span class="dim" data-cover-note>{{coverNote}}</span></summary>
       <div class="opt-row">
         {{#each covers}}

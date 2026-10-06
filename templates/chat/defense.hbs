@@ -21,7 +21,7 @@
       <p class="note dim">Без защиты: атака {{attack.total}} против СЛ {{dc}}.</p>
     {{/if}}{{/if}}
 
-    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}</div>{{/if}}
+    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}{{#if fumbleAuto}} <button type="button" class="fumble-apply" data-vedmak="applyFumble" data-tooltip="Применить к персонажу: состояние, надёжность, оружие, испытание Уст, удар по себе">Применить</button>{{/if}}</div>{{/if}}
 
     {{#if hit}}
       <div class="outcome failure">Попадание{{#if (gt margin 0)}} · атака выше на {{margin}}{{/if}}</div>

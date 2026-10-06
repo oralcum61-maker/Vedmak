@@ -6,7 +6,7 @@ import { CLUE_TYPES, MYSTERY_DIFFICULTY, OBFUSCATION, OBSTACLE_TYPES, OBSTACLES_
 import { SKILLS } from "../config/skills.mjs";
 import {
   mysteries, saveMysteries, newMystery, newClue, focusOf, actingActor, evidenceCheck, deductionHint, obstacle,
-  restFocus, setFocus
+  restFocus, setFocus, checkedToday, interrogationDuel
 } from "../investigation/investigation.mjs";
 import { resolveActor } from "../combat/common.mjs";
 import { compareRu } from "../util.mjs";
@@ -28,6 +28,7 @@ export class InvestigationApp extends HandlebarsApplicationMixin(ApplicationV2) 
       addClue: InvestigationApp.#onAddClue,
       deleteClue: InvestigationApp.#onDeleteClue,
       check: InvestigationApp.#onCheck,
+      duel: InvestigationApp.#onDuel,
       hint: InvestigationApp.#onHint,
       obstacle: InvestigationApp.#onObstacle,
       addPlayers: InvestigationApp.#onAddPlayers,
@@ -71,7 +72,9 @@ export class InvestigationApp extends HandlebarsApplicationMixin(ApplicationV2) 
     const clues = m.clues.filter(c => gm || c.revealed).map(c => ({
       ...c, typeLabel: CLUE_TYPES[c.type]?.label ?? c.type, example: CLUE_TYPES[c.type]?.example ?? "",
       skillsLabel: (CLUE_TYPES[c.type]?.skills ?? []).map(k => (k === "defining" ? "Магические познания" : SKILLS[k]?.label ?? k)).join(", "),
-      canCheck: !c.found && !m.solved && !!actor
+      canCheck: !c.found && !m.solved && !!actor && !checkedToday(c, actor.uuid),
+      checkedToday: !c.found && !!actor && checkedToday(c, actor.uuid),
+      interrogation: c.type === "interrogation" && !c.found && !m.solved
     }));
     const participants = m.participants.map(uuid => {
       const a = resolveActor(uuid);
@@ -167,6 +170,10 @@ export class InvestigationApp extends HandlebarsApplicationMixin(ApplicationV2) 
     if (!actor) return ui.notifications.warn("Назначьте себе персонажа или выделите его токен.");
     // Проверяющий — участник расследования: помехи и Фокус считаются на него (участника добавляет ведущий)
     await evidenceCheck(actor, this.selected, id);
+  }
+
+  static async #onDuel(event, target) {
+    await interrogationDuel(this.selected, target.closest("[data-clue-id]")?.dataset.clueId);
   }
 
   static async #onHint() {

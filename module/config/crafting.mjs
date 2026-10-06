@@ -154,6 +154,13 @@ export const IMPLANT_GLYPHS = {
 };
 export const IMPLANT_LIMIT = 2;
 
+/** Мутация глифа Игни у носителя (не ведьмака): шанс поджечь его самого выше на 10 % («Офир и Зеррикания», стр. 84). */
+export function implantBurnVulnerability(actor) {
+  if (actor?.system?.raceKey === "witcher") return 0;
+  return (actor?.items ?? []).some(i => i.flags?.vedmak?.implant?.kind === "glyph" && i.flags.vedmak.implant.key === "igni"
+    && !i.flags.vedmak.implant.extra) ? 10 : 0;
+}
+
 /**
  * Прибавки вживлённых рун к шансам эффектов атак носителя: {burning: 10, …} (ключи — как у эффектов оружия,
  * `disorient` — дезориентация Триглава). Вторая мутация провала (`extra`) прибавок не даёт.

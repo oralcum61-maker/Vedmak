@@ -74,7 +74,7 @@
           <span class="name">{{name}}</span>
           {{/if}}
           {{#if found}}<span class="inv-stamp ok">Разгадана</span>{{else if damaged}}<span class="inv-stamp bad">Повреждена · −5</span>{{/if}}
-          {{#unless ../gm}}{{#unless found}}{{#if canCheck}}<button type="button" class="go-btn" data-action="check">Проверить</button>{{/if}}{{/unless}}{{/unless}}
+          {{#unless ../gm}}{{#unless found}}{{#if canCheck}}<button type="button" class="go-btn" data-action="check">Проверить</button>{{else if checkedToday}}<span class="inv-stamp" data-tooltip="Одну улику персонаж проверяет раз в игровой день">Завтра</span>{{/if}}{{/unless}}{{/unless}}
         </div>
         {{#if ../gm}}
         <div class="clue-ctl">
@@ -83,6 +83,7 @@
           <select class="inv-select" data-clue="{{id}}" data-field="obf" data-number aria-label="Запутанность">{{selectOptions ../obfuscations selected=obf}}</select>
           <span class="clue-flags">
             <label class="inv-toggle icon" data-tooltip="Видна игрокам"><input type="checkbox" data-clue="{{id}}" data-field="revealed" {{checked revealed}}><span><i class="fa-solid fa-eye"></i></span></label>
+            {{#if interrogation}}<a class="inv-icon" data-action="duel" data-tooltip="Допрос выигран словесной дуэлью — засчитать" aria-label="Засчитать дуэль"><i class="fa-solid fa-comments"></i></a>{{/if}}
             <label class="inv-toggle icon ok" data-tooltip="Разгадана"><input type="checkbox" data-clue="{{id}}" data-field="found" {{checked found}}><span><i class="fa-solid fa-check"></i></span></label>
             <a class="inv-icon danger" data-action="deleteClue" data-tooltip="Удалить улику" aria-label="Удалить улику"><i class="fa-solid fa-xmark"></i></a>
           </span>

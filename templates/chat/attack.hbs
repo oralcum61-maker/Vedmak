@@ -13,7 +13,7 @@
 
   <div class="card-body">
     {{#with roll}}{{> "systems/vedmak/templates/chat/parts/roll.hbs"}}{{/with}}
-    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}</div>{{/if}}
+    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}{{#if fumbleAuto}} <button type="button" class="fumble-apply" data-vedmak="applyFumble" data-tooltip="Применить к персонажу: состояние, надёжность, оружие, испытание Уст, удар по себе">Применить</button>{{/if}}</div>{{/if}}
     {{#if mounted}}<p class="note dim">Верхом: проверка управления при каждой атаке.{{#if chargeDice}} Разбег +{{chargeDice}}d6{{#if (ne weightMult 1)}} ×{{weightMult}}{{/if}}.{{/if}}</p>{{/if}}
     {{#each notes}}<p class="note">{{this}}</p>{{/each}}
     {{#if typeHint}}<p class="note dim">{{typeHint}}</p>{{/if}}

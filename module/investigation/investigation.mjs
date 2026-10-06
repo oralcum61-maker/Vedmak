@@ -7,7 +7,7 @@
 
 import { CLUE_TYPES, MYSTERY_DIFFICULTY, DEDUCTION_HINT } from "../config/investigation.mjs";
 import { SKILLS } from "../config/skills.mjs";
-import { asGM, registerGMHandler, resolveActor, userOwnsAny } from "../combat/common.mjs";
+import { asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "../combat/common.mjs";
 import { postCard } from "../util.mjs";
 
 const SYS = "vedmak";
@@ -56,6 +56,12 @@ async function changeFocus(actor, delta) {
   return Math.max(0, f.max - lost);
 }
 
+/** Игровой день (по времени мира): одну улику персонаж проверяет не чаще раза в день. */
+export const gameDay = () => Math.floor((game.time?.worldTime ?? 0) / 86400);
+
+/** Проверял ли персонаж эту улику сегодня. */
+export const checkedToday = (clue, actorUuid) => clue?.tries?.[doneKey(actorUuid)] === gameDay();
+
 /** Персонаж, которым действует пользователь: назначенный, иначе выделенный свой токен. */
 export function actingActor() {
   const own = game.user.character;
@@ -87,6 +93,9 @@ export async function evidenceCheck(actor, mysteryId, clueId) {
   const clue = m?.clues.find(c => c.id === clueId);
   if (!m || !clue || !actor) return null;
   if (clue.found) return ui.notifications.info(`Улика «${clue.name}» уже разгадана.`);
+  if (checkedToday(clue, actor.uuid)) {
+    return ui.notifications.warn(`${actor.name} уже проверял улику «${clue.name}» сегодня — следующая попытка завтра.`);
+  }
   const focus = focusOf(actor);
   if (!focus) return ui.notifications.warn("Расследуют персонажи — у чудовищ нет Фокуса.");
   if (focus.value <= 0) return ui.notifications.warn(`${actor.name}: Фокус 0 — мысли путаются, проверять улики нельзя, пока не выспится.`);
@@ -100,6 +109,8 @@ export async function evidenceCheck(actor, mysteryId, clueId) {
       <option value="0">Нет</option><option value="1">+1 отрезок (+1)</option><option value="2">+2 отрезка (+2)</option><option value="3">+3 отрезка (+3)</option>
     </select></div><p class="hint">Каждый лишний отрезок, равный обычному времени проверки, — +1 к проверке и к урону улики (до +3).</p>` : ""}
     ${clue.damaged ? `<p class="hint warn">Улика повреждена: −5 к проверке.</p>` : ""}
+    ${clue.type === "interrogation" ? `<p class="hint">Допрос можно провести и словесной дуэлью — победу в ней засчитает ведущий.</p>` : ""}
+    <p class="hint">Одну улику персонаж проверяет раз в игровой день.</p>
   </div>`;
   const choice = await foundry.applications.api.DialogV2.wait({
     window: { title: `Улика: ${clue.name}` }, classes: ["vedmak", "vedmak-dialog"], content,
@@ -124,18 +135,23 @@ export async function evidenceCheck(actor, mysteryId, clueId) {
   });
 }
 
-registerGMHandler("invEvidence", async ({ mysteryId, clueId, actorUuid, total, fumble, time }, userId) => {
+registerGMHandler("invEvidence", async ({ mysteryId, clueId, actorUuid, total, fumble, time, duel }, userId) => {
   const actor = resolveActor(actorUuid);
   if (!actor || !userOwnsAny(userId, actor)) return console.warn(`vedmak | отклонена проверка улики от ${game.users.get(userId)?.name ?? userId}`);
+  // Победу в словесной дуэли засчитывает только ведущий
+  if (duel && !game.users.get(userId)?.isGM) return;
   const list = mysteries();
   const m = list.find(x => x.id === mysteryId);
   const clue = m?.clues.find(c => c.id === clueId);
   if (!m || !clue || clue.found || m.solved) return;
+  if (!duel && checkedToday(clue, actor.uuid)) return;
   const type = CLUE_TYPES[clue.type] ?? CLUE_TYPES.scene;
   const t = type.time ? Math.max(0, Math.min(3, Number(time) || 0)) : 0;
   const lines = [];
   const rolls = [];
-  if (Number(total) > clue.dc) {
+  if (!duel) clue.tries = { ...(clue.tries ?? {}), [doneKey(actor.uuid)]: gameDay() };
+  if (duel) lines.push("<p>Допрос выигран словесной дуэлью.</p>");
+  if (duel || Number(total) > clue.dc) {
     // Урон Сложности = бросок улики + параметр (+ лишнее время) − Запутанность, не меньше 1 (стр. 148)
     const statValue = actor.system.stats?.[type.stat]?.total ?? 0;
     const roll = await new Roll(`${type.damage} + ${statValue}${t ? ` + ${t}` : ""}`).evaluate();
@@ -161,6 +177,29 @@ registerGMHandler("invEvidence", async ({ mysteryId, clueId, actorUuid, total, f
   await postCard(actor, `${esc(m.goal)}: ${esc(clue.name)}`, lines.join(""),
     { subtitle: `${actor.name} · ${type.label}`, icon: "fa-solid fa-magnifying-glass", rolls, messageMode: "public" });
 });
+
+/** Ведущий засчитывает допрос, выигранный словесной дуэлью: улика разгадана, Сложность — как при успехе. */
+export async function interrogationDuel(mysteryId, clueId) {
+  if (!game.user.isGM) return null;
+  const m = mysteries().find(x => x.id === mysteryId);
+  const clue = m?.clues.find(c => c.id === clueId);
+  if (!m || !clue || clue.found) return null;
+  const people = m.participants.map(u => resolveActor(u)).filter(Boolean);
+  if (!people.length) return ui.notifications.warn("Сначала добавьте участников расследования.");
+  const content = `<div class="vedmak-roll-dialog">
+    <p>Кто выиграл словесную дуэль на допросе «${esc(clue.name)}»?</p>
+    <div class="form-group"><label>Победитель</label><select name="actor">${people.map(a => `<option value="${a.uuid}">${esc(a.name)}</option>`).join("")}</select></div>
+    <p class="hint">Улика станет разгаданной; урон Сложности — ${esc(CLUE_TYPES.interrogation.damage)} + Эмпатия победителя.</p>
+  </div>`;
+  const uuid = await foundry.applications.api.DialogV2.wait({
+    window: { title: "Допрос дуэлью" }, classes: ["vedmak", "vedmak-dialog"], content,
+    buttons: [{ action: "ok", label: "Засчитать", default: true, callback: (e, b) => b.form.elements.actor.value },
+      { action: "cancel", label: "Отмена" }],
+    rejectClose: false
+  });
+  if (!uuid || uuid === "cancel") return null;
+  return asGM("invEvidence", { mysteryId, clueId, actorUuid: uuid, duel: true });
+}
 
 /* ------------------------- Подсказка Дедукцией ------------------------- */
 

@@ -1,7 +1,7 @@
 // Защита от атаки из карточки: уклонение, изменение позиции, блок, парирование, против СЛ (стр. 164).
 
 import { SKILLS } from "../config/skills.mjs";
-import { DEFENSE_TYPES, DEFENSE_SITUATIONS, SIZE_MODS, RANGE_BANDS, CRIT_LEVELS, critLevelFor, fumbleText } from "../config/combat.mjs";
+import { DEFENSE_TYPES, DEFENSE_SITUATIONS, SIZE_MODS, RANGE_BANDS, CRIT_LEVELS, critLevelFor, fumbleText, fumbleEffect } from "../config/combat.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
@@ -347,7 +347,9 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     defense: cfg.defense, label, roll, total: roll.total, dc: null, hit, margin, notes,
     damageOnBlock, fixedLocation,
     fumbleText: dispelFumble ? magicFumble(roll.fumbleValue).text : roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
-    fumbleLabel: dispelFumble ? "Магический провал" : roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
+    fumbleLabel: dispelFumble ? "Магический провал" : roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : "",
+    fumble: roll.fumble && !dispelFumble ? { kind: fumbleKind, value: roll.fumbleValue, itemId: item?.item?.id ?? null } : null,
+    fumbleAuto: !!(roll.fumble && !dispelFumble && fumbleEffect(fumbleKind, roll.fumbleValue))
   });
   const card = await postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
   // Ошеломление атакующего — после карточки: ведущий проверяет по ней, что парирование было и кто парировал

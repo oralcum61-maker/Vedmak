@@ -12,7 +12,8 @@ import {
 } from "./common.mjs";
 import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 import { markDead } from "./saves.mjs";
-import { implantStatusBonus } from "../config/crafting.mjs";
+import { implantStatusBonus, implantBurnVulnerability } from "../config/crafting.mjs";
+import { wallCover } from "./cover.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
 
@@ -37,6 +38,11 @@ export async function damageFromDefense(message, { skipDialog = false, messageMo
     location: def.fixedLocation || attack.aim || "",
     cover: "none", mod: 0, adrenaline: 0, messageMode: messageMode ?? defaultMessageMode()
   };
+  // Стена сцены между стрелком и целью — укрытие цели (в окне урона его можно поменять)
+  if (attack.isRanged) {
+    const wc = wallCover(attack.attacker.tokenUuid, def.defender.tokenUuid);
+    if (wc) { cfg.cover = wc.key; cfg.coverAuto = true; }
+  }
   if (!skipDialog) {
     cfg = await damageDialog(attack, target, cfg, attacker);
     if (!cfg) return null;
@@ -96,7 +102,7 @@ async function damageDialog(attack, target, cfg, attacker) {
         glyph: locationGlyph(key, l) }))
     ),
     covers: Object.entries(COVER).map(([key, c]) => ({ key, label: c.label, sp: c.sp, selected: key === cfg.cover })),
-    coverNote: COVER[cfg.cover]?.label ?? "",
+    coverNote: cfg.coverAuto ? `${COVER[cfg.cover]?.label ?? ""} · стена между стрелком и целью` : COVER[cfg.cover]?.label ?? "",
     adrenalineMax: game.settings.get("vedmak", "adrenaline") ? (attacker.system.adrenaline?.value ?? 0) : 0,
     total: { noRoll: true, damage: formula, hint: "Броня и укрытие вычитаются после броска" },
     ...commonFields()
@@ -109,7 +115,8 @@ async function damageDialog(attack, target, cfg, attacker) {
     render: (event, dialog) => bindDialog(dialog, {
       extra: form => {
         const note = dialog.element.querySelector("[data-cover-note]");
-        if (note) note.textContent = `· ${COVER[form.elements.cover?.value]?.label ?? ""}`;
+        const cover = form.elements.cover?.value;
+        if (note) note.textContent = `· ${COVER[cover]?.label ?? ""}${cfg.coverAuto && cover === cfg.cover ? " · стена между стрелком и целью" : ""}`;
         const out = dialog.element.querySelector("[data-total-damage]");
         if (!out) return;
         const add = Number(form.elements.mod?.value) || 0;
@@ -173,6 +180,8 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const ELEMENTAL = ["burning", "frozen", "prone"];
   // Вживлённые руны «Офира и Зеррикании» (стр. 86): +5/10/15 % к шансу эффекта атак оружием, даже если у оружия его нет
   const runeBonus = !spell && attackerActor ? implantStatusBonus(attackerActor.items) : {};
+  // Цель с мутацией глифа Игни горит легче
+  const burnVuln = implantBurnVulnerability(target);
 
   // Часть тела
   let locRoll = null;
@@ -332,6 +341,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     let chance = Math.min(100, effChance(key) + (runeBonus[key] ?? 0));
     if (!chance) continue;
     if (ELEMENTAL.includes(status)) chance = Math.min(100, chance + elementalBonus);
+    if (status === "burning") chance = Math.min(100, chance + burnVuln);
     const needsWound = key === "bleeding" || key === "poison";
     const resistKey = EFFECT_RESIST_KEY[key];
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
@@ -357,7 +367,8 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
     const r = await new Roll("1d100").evaluate();
     rolls.push(r);
-    const chance = ELEMENTAL.includes(st.status) ? Math.min(100, st.chance + elementalBonus) : st.chance;
+    const chance = Math.min(100, (ELEMENTAL.includes(st.status) ? st.chance + elementalBonus : st.chance)
+      + (st.status === "burning" ? burnVuln : 0));
     const success = !immuneTo && r.total <= chance;
     effects.push({ key: st.status, status: st.status, label: CONFIG.statusEffects[st.status]?.name ?? st.status,
       chance, roll: r.total, success, immune: !!immuneTo, rounds: spell.statusRounds });

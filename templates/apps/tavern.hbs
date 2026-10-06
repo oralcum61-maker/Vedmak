@@ -42,6 +42,10 @@
           {{#if canReroll}}<button type="button" class="tv-mini" data-action="pokerReroll" data-uuid="{{uuid}}">Перебросить</button>{{/if}}
         </span>
         {{/if}}{{/if}}
+        {{#if ../bank}}
+        {{#if ../hoard}}<span class="bet fixed" data-tooltip="Каждый кладёт в кучу {{../stake}} крон">{{../stake}} кр.</span>
+        {{else}}<label class="bet" data-tooltip="Ставка в кронах: с первым ходом уходит в банк"><span>кр.</span><input type="number" data-bet="{{uuid}}" value="{{bet}}" min="0" {{#if ../started}}disabled{{/if}}></label>{{/if}}
+        {{/if}}
         <label class="mod" data-tooltip="Поправка: допинг, приём, шулерство, колода гвинта"><span>±</span><input type="number" data-mod="{{uuid}}" value="{{mod}}"></label>
         <a class="tv-x" data-action="removePlayer" data-uuid="{{uuid}}" data-tooltip="Убрать" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>
       </div>

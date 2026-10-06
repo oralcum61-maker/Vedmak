@@ -11,6 +11,7 @@ import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { immuneStatuses } from "../crafting/alchemy-triggers.mjs";
+import { implantBurnVulnerability } from "../config/crafting.mjs";
 
 /** Кнопка «Применить эффекты» в карточке защиты от магии без урона. */
 export async function requestSpellEffects(message) {
@@ -58,8 +59,8 @@ async function applySpellEffectsNow(messageId, userId) {
     if ((resistKey && actor.system.immunities?.includes?.(resistKey)) || buffImmune.has(st.status)) { lines.push(`${label}: невосприимчив.`); continue; }
     let ok = true, rollText = "";
     // «Буря» у заклинателя: +10% поджечь, заморозить, сбить с ног
-    const chance = ["burning", "frozen", "prone"].includes(st.status)
-      ? Math.min(100, st.chance + (caster?.system.fx?.statusChance ?? 0)) : st.chance;
+    const chance = Math.min(100, (["burning", "frozen", "prone"].includes(st.status)
+      ? st.chance + (caster?.system.fx?.statusChance ?? 0) : st.chance) + (st.status === "burning" ? implantBurnVulnerability(actor) : 0));
     if (chance < 100) {
       const r = await new Roll("1d100").evaluate();
       rolls.push(r);

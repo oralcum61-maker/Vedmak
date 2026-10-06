@@ -36,6 +36,8 @@ import { computeDamage, applyDamageToActor } from "./module/combat/damage.mjs";
 import { rollStunSave, rollDeathSave } from "./module/combat/saves.mjs";
 import { manualDamage, restTurn, restDays } from "./module/combat/manual.mjs";
 import { controlCheck } from "./module/combat/mounted.mjs";
+import { applyFumble } from "./module/combat/fumbles.mjs";
+import { registerWallCover, wallCover } from "./module/combat/cover.mjs";
 import { castSpell } from "./module/magic/cast.mjs";
 import "./module/magic/effects.mjs";
 import { CharacterWizard } from "./module/character/wizard.mjs";
@@ -138,6 +140,11 @@ Hooks.once("init", () => {
   game.settings.register(SYSTEM_ID, "adrenaline", {
     name: "Адреналин",
     hint: "Каждый нанесённый крит даёт кость d6 (не больше Тел). Кость: +1d6 урона, −10 Вын. Сгорает в конце боя (стр. 175).",
+    scope: "world", config: true, type: Boolean, default: false
+  });
+  game.settings.register(SYSTEM_ID, "groupInitiative", {
+    name: "Групповая инициатива",
+    hint: "НИП одного вида без игрока-владельца (один источник в бестиарии или одно имя актора) бросают инициативу одним броском и ходят подряд. Ускоряет бой с толпой утопцев или бандитов.",
     scope: "world", config: true, type: Boolean, default: false
   });
   // Автоматизация боя (module/combat/auto.mjs): по умолчанию выключена — всё по кнопкам, включается по шагу
@@ -252,13 +259,14 @@ Hooks.once("init", () => {
   registerMigrationSettings();
   registerInvestigationUi();
   registerTavernUi();
+  registerWallCover();
   registerImplantHooks();
 
   // API для макросов
   game.vedmak = {
     flipToken,
     performCheck, rollD10, attack, computeDamage, applyDamageToActor, rollStunSave, rollDeathSave,
-    manualDamage, restTurn, restDays, controlCheck, castSpell,
+    manualDamage, restTurn, restDays, controlCheck, castSpell, applyFumble, wallCover,
     advancement, crafting, alchemy, enhancements, implant: implantDialog,
     dimeritium: { touch: touchDimeritium, end: endDimeritium },
     openWizard: actor => new CharacterWizard({ actor }).render(true),

@@ -12,6 +12,38 @@ import { dimeritiumTurn } from "../magic/dimeritium.mjs";
 
 export class VedmakCombat extends Combat {
 
+  /**
+   * Групповая инициатива (настройка мира): НИП одного вида без игрока-владельца бросают один раз на группу —
+   * остальные берут тот же итог, а если кто-то из группы уже бросал, новые берут его число. Вид — источник
+   * в компендиуме, иначе имя актора: чудовище из бестиария, перетащенное дважды, — это два актора, но одна группа.
+   */
+  async rollInitiative(ids, options = {}) {
+    ids = typeof ids === "string" ? [ids] : Array.from(ids ?? []);
+    if (!game.settings.get("vedmak", "groupInitiative")) return super.rollInitiative(ids, options);
+    const groupOf = c => {
+      if (!c?.actor || c.hasPlayerOwner) return null;
+      const base = game.actors.get(c.actorId) ?? c.actor;
+      return base._stats?.compendiumSource || `name:${base.name}`;
+    };
+    const leaders = new Map();
+    const followers = [];
+    const rollIds = [];
+    for (const id of ids) {
+      const c = this.combatants.get(id);
+      const key = groupOf(c);
+      if (!key) { rollIds.push(id); continue; }
+      const rolled = this.combatants.find(o => !ids.includes(o.id) && groupOf(o) === key && o.initiative !== null);
+      if (rolled) followers.push([id, rolled.id]);
+      else if (leaders.has(key)) followers.push([id, leaders.get(key)]);
+      else { leaders.set(key, id); rollIds.push(id); }
+    }
+    if (rollIds.length) await super.rollInitiative(rollIds, options);
+    const updates = followers.map(([id, src]) => ({ _id: id, initiative: this.combatants.get(src)?.initiative ?? null }))
+      .filter(u => u.initiative !== null);
+    if (updates.length) await this.updateEmbeddedDocuments("Combatant", updates);
+    return this;
+  }
+
   /** Выполняется только у одного ведущего. */
   async _onStartTurn(combatant, context) {
     await super._onStartTurn(combatant, context);

@@ -1,6 +1,8 @@
 // Игры в таверне («Игры в таверне», Elsewhere & Beyond; PLAN 4.100): список игр, участники с поправкой «±»
 // (допинг, приёмы, шулерские кости, поддельные карты — по решению ведущего), броски идут сами, итог хода —
 // карточкой в чат. Кулачный бой — обычный бой системы, в окне только подсказка. Состояние игры живёт в окне.
+// Ставки: у каждого участника своя (в «Драконьем кладе» — 10 крон, они и есть куча); с первым ходом кроны
+// уходят в банк, исход игры отдаёт банк победителю, ничья или «Заново» до конца — возвращает ставки.
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
@@ -32,6 +34,9 @@ const GWENT_TABLE = [null,
   { label: "Плохая тасовка", mod: -2 }, { label: "Карта погоды", mod: 1 }, { label: "Карта погоды", mod: 1 },
   { label: "Вражеский шпион", mod: -1 }, { label: "Вражеский шпион", mod: -1 },
   { label: "Вынужденная жертва", mod: -2, next: 3 }, { label: "Путь к победе", reroll: true }];
+/** Игры с банком: филе ставят зрители (предел — их Азартные игры), кулачный бой — обычный бой. */
+const BANK_GAMES = ["armwrestle", "poker", "drinking", "hoard", "gwent"];
+const HOARD_STAKE = 10;
 const POKER_RANKS = ["ничего", "пара", "две пары", "сет", "малый стрит", "большой стрит", "фулл-хаус", "каре", "покер"];
 
 /** Комбинация покера на костях: 0 — ничего … 8 — покер. */
@@ -103,8 +108,13 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   get cfg() { return TAVERN_GAMES[this.game]; }
   get active() { return this.players.filter(p => !p.out); }
 
-  #fresh(p) { return { uuid: p.uuid, name: p.name, img: p.img, mod: p.mod ?? 0 }; }
-  #resetGame() {
+  #fresh(p) { return { uuid: p.uuid, name: p.name, img: p.img, mod: p.mod ?? 0, bet: p.bet ?? 0 }; }
+  get bank() { return BANK_GAMES.includes(this.game); }
+  #stake(p) { return this.game === "hoard" ? HOARD_STAKE : Math.max(0, Number(p.bet) || 0); }
+
+  async #resetGame() {
+    // Игра брошена до конца — ставки возвращаются
+    if (this.state.pot && !this.state.settled) await this.#refund("Игра прервана — ставки вернулись.");
     this.state = {};
     this.log = [];
     this.players = this.players.slice(0, this.cfg.max || this.players.length).map(p => this.#fresh(p));
@@ -118,6 +128,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       games: Object.entries(TAVERN_GAMES).map(([key, g]) => ({ key, ...g, active: key === this.game,
         size: g.max ? (g.min === g.max ? `${g.min}` : `${g.min}–${g.max}`) : "бой" })),
       game: { key: this.game, ...cfg }, brawl: this.game === "brawl",
+      bank: this.bank, started: !!st.started, hoard: this.game === "hoard", stake: HOARD_STAKE,
       players: this.players.map(p => ({
         ...p, dice: (p.dice ?? []).map((v, i) => ({ v, i, sel: p.sel?.includes(i) })), canReroll: !!p.dice && !p.rerolled && !st.shown,
         rank: p.dice ? POKER_RANKS[pokerRank(p.dice)] : "",
@@ -135,9 +146,14 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Поле игры: что сейчас на кону. */
   #board() {
     const st = this.state;
+    const pot = st.pot ? ` · банк ${st.pot} крон${st.settled ? " (роздан)" : ""}` : "";
+    return this.#boardText(st) + pot;
+  }
+
+  #boardText(st) {
     switch (this.game) {
       case "drinking": return `Порция ${st.round ?? 0} · следующая — Стойкость СЛ ${10 + 2 * (st.round ?? 0)}`;
-      case "hoard": return st.pile === undefined ? `В куче будет ${10 * this.players.length} монет` : `В куче ${st.pile} монет`;
+      case "hoard": return st.pile === undefined ? `В куче будет ${HOARD_STAKE * this.players.length} крон` : `В куче ${st.pile} крон`;
       case "fillet": return `Ускорений ${st.speed ?? 0} · СЛ ${12 + 3 * (st.speed ?? 0)}${(st.speed ?? 0) >= 2 ? " · предел ставок ×2" : ""}`;
       case "gwent": return `Раунд ${Math.min(3, (st.round ?? 0) + (st.done ? 0 : 1))} из 3`;
       case "armwrestle": return "Победа — два выигранных раунда подряд";
@@ -155,6 +171,12 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       el.addEventListener("change", () => {
         const p = this.players.find(x => x.uuid === el.dataset.mod);
         if (p) p.mod = Number(el.value) || 0;
+      });
+    }
+    for (const el of this.element.querySelectorAll("input[data-bet]")) {
+      el.addEventListener("change", () => {
+        const p = this.players.find(x => x.uuid === el.dataset.bet);
+        if (p) p.bet = Math.max(0, Number(el.value) || 0);
       });
     }
     for (const el of this.element.querySelectorAll("select[data-gwent-skill]")) {
@@ -175,9 +197,10 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   }
 
-  static #onPickGame(event, target) {
+  static async #onPickGame(event, target) {
+    await this.#resetGame();
     this.game = target.dataset.game;
-    this.#resetGame();
+    this.players = this.players.slice(0, this.cfg.max || this.players.length);
     this.render();
   }
 
@@ -194,18 +217,91 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static #onRemovePlayer(event, target) {
+    if (this.state.started && !this.state.done) return ui.notifications.warn("Игра идёт — участника не убрать, пока не нажмёте «Заново».");
     this.players = this.players.filter(p => p.uuid !== target.dataset.uuid);
     this.render();
   }
 
-  static #onReset() {
-    this.#resetGame();
+  static async #onReset() {
+    await this.#resetGame();
     this.render();
+  }
+
+  /* -------------------------------- Банк -------------------------------- */
+
+  /** Изменить кроны участника; false — у актора нет кошелька или нет прав (тогда расчёт вручную). */
+  async #pay(p, delta) {
+    const X = resolveActor(p.uuid);
+    if (!delta || !X?.system?.money || !X.isOwner) return false;
+    await X.update({ "system.money.crowns": (X.system.money.crowns ?? 0) + delta });
+    return true;
+  }
+
+  /** Первый ход: ставки уходят в банк. null — кому-то не хватает крон. */
+  async #collect() {
+    const st = this.state;
+    if (!this.bank) return [];
+    for (const p of this.players) {
+      const X = resolveActor(p.uuid);
+      const stake = this.#stake(p);
+      if (stake && X?.system?.money && X.isOwner && (X.system.money.crowns ?? 0) < stake) {
+        ui.notifications.warn(`У ${p.name} нет ${stake} крон на ставку.`);
+        return null;
+      }
+    }
+    const lines = [];
+    const manual = [];
+    st.pot = 0;
+    for (const p of this.players) {
+      p.paid = this.#stake(p);
+      if (!p.paid) continue;
+      st.pot += p.paid;
+      if (!(await this.#pay(p, -p.paid))) manual.push(p.name);
+    }
+    if (st.pot) lines.push(`Ставки в банке: <b>${st.pot} крон</b> (${this.players.filter(p => p.paid).map(p => `${esc(p.name)} ${p.paid}`).join(", ")}).`);
+    if (manual.length) lines.push(`Без кошелька на листе — списать вручную: ${manual.map(esc).join(", ")}.`);
+    return lines;
+  }
+
+  /** Раздать банк: победителю всё, при ничьей — вернуть ставки. Драконий клад — каждому его монеты. */
+  async #settle(winner) {
+    const st = this.state;
+    if (!st.pot || st.settled) return [];
+    st.settled = true;
+    const manual = [];
+    if (this.game === "hoard") {
+      const lines = [];
+      for (const p of this.players) {
+        if (!p.coins) continue;
+        if (!(await this.#pay(p, p.coins))) manual.push(`${p.name} ${p.coins}`);
+        lines.push(`${esc(p.name)} уносит ${p.coins} крон.`);
+      }
+      if (manual.length) lines.push(`Вручную: ${manual.map(esc).join(", ")}.`);
+      return lines;
+    }
+    if (!winner) return this.#refund("Ничья — ставки вернулись.", true);
+    if (!(await this.#pay(winner, st.pot))) manual.push(winner.name);
+    return [`Банк — <b>${st.pot} крон</b> — забирает ${esc(winner.name)}.${manual.length ? " Выдать вручную." : ""}`];
+  }
+
+  async #refund(note, quiet = false) {
+    this.state.settled = true;
+    const manual = [];
+    for (const p of this.players) {
+      if (p.paid && !(await this.#pay(p, p.paid))) manual.push(p.name);
+    }
+    const lines = [note + (manual.length ? ` Вернуть вручную: ${manual.map(esc).join(", ")}.` : "")];
+    if (!quiet) await this.#post(lines);
+    return lines;
   }
 
   /* -------------------------------- Ходы -------------------------------- */
 
   async #post(lines, rolls = []) {
+    // Игра закончилась этим ходом — раздать банк
+    if (this.state.done && this.state.pot && !this.state.settled) {
+      lines.push(...(await this.#settle(this.players.find(p => p.uuid === this.state.winner) ?? null)));
+    }
     this.log.push(...lines);
     const actor = resolveActor(this.players[0]?.uuid);
     await postCard(actor, `Таверна: ${this.cfg.label}`, lines.map(l => `<p>${l}</p>`).join(""),
@@ -224,7 +320,22 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.players.length < need.min) return ui.notifications.warn(`Нужно участников: ${need.min === need.max ? need.min : `${need.min}–${need.max}`}.`);
     const run = { armwrestle: this.#armwrestle, drinking: this.#drinking, hoard: this.#hoard, fillet: this.#fillet,
       gwent: this.#gwent, poker: this.#pokerRoll }[this.game];
-    if (run) await run.call(this);
+    if (!run) return;
+    let opening = [];
+    if (!this.state.started) {
+      opening = await this.#collect();
+      if (!opening) return;
+      this.state.started = true;
+    }
+    this.opening = opening;
+    await run.call(this);
+  }
+
+  /** Строки ставок первого хода — в начало карточки хода. */
+  #lead(lines) {
+    if (this.opening?.length) lines.unshift(...this.opening);
+    this.opening = null;
+    return lines;
   }
 
   async #armwrestle() {
@@ -246,8 +357,9 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     const left = [a, b].filter(p => !p.out);
     const champ = win?.streak >= 2 ? win : left.length === 1 ? left[0] : null;
-    if (champ) { this.state.done = true; lines.push(`<b>Победа: ${esc(champ.name)}.</b>`); }
-    await this.#post(lines, [...ra.rolls, ...rb.rolls]);
+    if (champ) { this.state.done = true; this.state.winner = champ.uuid; lines.push(`<b>Победа: ${esc(champ.name)}.</b>`); }
+    else if (!left.length) { this.state.done = true; lines.push("<b>Выдохлись оба — ничья.</b>"); }
+    await this.#post(this.#lead(lines), [...ra.rolls, ...rb.rolls]);
   }
 
   async #drinking() {
@@ -269,14 +381,15 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const left = this.active;
     if (left.length <= 1) {
       st.done = true;
+      st.winner = left[0]?.uuid ?? null;
       lines.push(left.length ? `<b>Победа: ${esc(left[0].name)}.</b>` : "<b>Выбыли все — ничья.</b>");
     }
-    await this.#post(lines, rolls);
+    await this.#post(this.#lead(lines), rolls);
   }
 
   async #hoard() {
     const st = this.state;
-    if (st.pile === undefined) { st.pile = 10 * this.players.length; for (const p of this.players) p.coins = 0; }
+    if (st.pile === undefined) { st.pile = HOARD_STAKE * this.players.length; for (const p of this.players) p.coins = 0; }
     const snake = await plainRoll(12);
     const lines = [`Змея следит: Внимание <b>${snake.total}</b>.`];
     const rolls = [...snake.rolls];
@@ -288,7 +401,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       if (r.total > snake.total) {
         const take = Math.min(5, st.pile);
         st.pile -= take; p.coins += take;
-        lines.push(`${esc(p.name)}: ${r.total} — стащил ${take} монет.`);
+        lines.push(`${esc(p.name)}: ${r.total} — стащил ${take} крон.`);
         continue;
       }
       const bite = await plainRoll(10);
@@ -302,7 +415,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       const best = Math.max(...this.players.map(p => p.coins ?? 0));
       lines.push(`<b>Куча пуста. Больше всех: ${this.players.filter(p => p.coins === best).map(p => esc(p.name)).join(", ")} (${best}).</b>`);
     }
-    await this.#post(lines, rolls);
+    await this.#post(this.#lead(lines), rolls);
   }
 
   async #fillet() {
@@ -315,7 +428,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const lines = [r.success ? `${esc(p.name)}: ${r.total} против СЛ ${dc} — нож мелькает между пальцами.`
       : `${esc(p.name)}: ${r.total} против СЛ ${dc} — нож задел руку, ставки проиграны.`];
     if (!r.success) st.done = true;
-    await this.#post(lines, r.rolls);
+    await this.#post(this.#lead(lines), r.rolls);
   }
 
   static async #onFilletSpeed() {
@@ -354,8 +467,12 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (win) win.wins += 1;
     lines.push(win ? `Раунд за ${esc(win.name)}.` : "Ничья в раунде.");
     const champ = [a, b].find(p => p.wins >= 2) ?? (st.round >= 3 ? (a.wins > b.wins ? a : b.wins > a.wins ? b : null) : null);
-    if (champ || st.round >= 3) { st.done = true; lines.push(champ ? `<b>Партия за ${esc(champ.name)}.</b>` : "<b>Партия вничью.</b>"); }
-    await this.#post(lines, rolls);
+    if (champ || st.round >= 3) {
+      st.done = true;
+      st.winner = champ?.uuid ?? null;
+      lines.push(champ ? `<b>Партия за ${esc(champ.name)}.</b>` : "<b>Партия вничью.</b>");
+    }
+    await this.#post(this.#lead(lines), rolls);
   }
 
   async #pokerRoll() {
@@ -370,7 +487,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     this.state.rolled = true;
     this.state.shown = false;
-    await this.#post(lines, rolls);
+    await this.#post(this.#lead(lines), rolls);
   }
 
   static #onPokerDie(event, target) {
@@ -400,10 +517,11 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const win = cmp > 0 ? a : cmp < 0 ? b : null;
     this.state.shown = true;
     this.state.done = true;
+    this.state.winner = win?.uuid ?? null;
     await this.#post([
       `${esc(a.name)}: ${a.dice.join(" ")} — ${POKER_RANKS[sa[0]]} (сумма ${sa[1]}).`,
       `${esc(b.name)}: ${b.dice.join(" ")} — ${POKER_RANKS[sb[0]]} (сумма ${sb[1]}).`,
-      win ? `<b>Банк забирает ${esc(win.name)}.</b>` : "<b>Ничья — ставки остаются.</b>"
+      win ? `<b>Победа: ${esc(win.name)}.</b>` : "<b>Ничья.</b>"
     ]);
   }
 }
