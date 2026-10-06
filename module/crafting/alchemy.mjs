@@ -15,6 +15,7 @@ import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { postCard, resolveActor, tokenDistance, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS } from "../combat/zones.mjs";
+import { zoneAuraFor } from "../config/magic.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
@@ -155,8 +156,14 @@ export async function drink(actor, item) {
   }
   const minutes = s.durationMinutes || auto.minutes || textMinutes || 0;
   const regen = u.regen || auto.regen || 0;
-  const triggers = Object.fromEntries(["immune", "onKill", "onHit", "onDamaged", "untilHit", "doubleAdrenaline"]
+  const triggers = Object.fromEntries(["immune", "onKill", "onHit", "onDamaged", "untilHit", "doubleAdrenaline", "berserk"]
     .filter(k => auto[k]).map(k => [k, foundry.utils.deepClone(auto[k])]));
+  // Зелье берсерка: Стойкость сразу после приёма; дальше — в начале каждого хода (combat.mjs)
+  if (auto.berserk) {
+    const check = await enduranceCheck(actor, auto.berserk.dc, `${item.name}: исступление`);
+    lines.push(check?.success ? "Стойкость пройдена: исступление пока сдержано."
+      : `Исступление: в свой ход атакует ближайшего. В начале каждого хода — Стойкость СЛ ${auto.berserk.dc}.`);
+  }
 
   // Эффект с длительностью
   const hasEffect = rounds || minutes || s.toxicity || changes.length || regen || u.heal
@@ -386,7 +393,10 @@ async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb) {
   // Облака без урона (двимерит, «Лунная пыль», «Сон дракона») висят столько раундов, сколько сказано в описании
   const lingering = !(u.damage || u.status);
   const duration = lingering ? (await parseZoneDuration(effect.match(/\d+\s*(?:раунд|ход)\S*/)?.[0] ?? "")) : { instant: true };
-  const region = await createZone(shape, { name, color, actor, itemName: name, duration });
+  // Облако с аурой («Лунная пыль» проявляет невидимое) — ставит и снимает ведущий (magic/zone-effects.mjs)
+  const auraDef = zoneAuraFor(name);
+  const extra = auraDef ? { aura: { ...auraDef, value: 0, img: "" } } : {};
+  const region = await createZone(shape, { name, color, actor, itemName: name, duration, extra });
   return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape };
 }
 
@@ -513,6 +523,16 @@ export async function applyMutagen(actor, item) {
   return card(actor, item.name, [s.effect, `Малая мутация: ${s.mutagen.minor}.`],
     { subtitle: "Мутаген принят", flags: { fx: { kind: "drink", color: s.mutagen.color || "red" } } });
 }
+
+/** Кнопка «Стойкость» в карточке хода под зельем берсерка. */
+registerChatAction("berserkSave", async (message, button) => {
+  const actor = resolveActor(button?.dataset.actor) ?? resolveActor(button?.dataset.fallback);
+  if (!actor?.isOwner) return ui.notifications.warn("Бросок делает владелец персонажа или ведущий.");
+  const effect = actor.effects.find(e => e.active && e.flags?.vedmak?.berserk);
+  const dc = effect?.flags.vedmak.berserk.dc ?? 16;
+  const check = await enduranceCheck(actor, dc, "Зелье берсерка: исступление");
+  if (check && !check.success) ui.notifications.info(`${actor.name} в исступлении: в этот ход атакует ближайшего.`);
+});
 
 registerChatAction("mutagenSave", async message => {
   const actor = resolveActor(message.flags.vedmak?.alchemy?.actorUuid);

@@ -180,7 +180,7 @@ function magicContext(actor, spells) {
     magic: {
       used, vigor: d.vigor ?? 0,
       energy: energySegments(d.vigor ?? 0, used, 0),
-      energyNote: d.dimeritium ? "Касание двимерита: Энергия 0"
+      energyNote: d.dimeritium ? `Касание двимерита: Энергия ${d.vigor ?? 0}`
         : used ? `${used} из ${d.vigor} уже влито в этом раунде` : "Энергия — сколько Вын можно без вреда влить за раунд",
       sta: { value: sta.value, max: sta.max, pct: sta.max ? Math.round(Math.max(0, Math.min(1, sta.value / sta.max)) * 100) : 0 },
       skills: [

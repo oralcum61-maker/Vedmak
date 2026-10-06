@@ -6209,7 +6209,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6266,7 +6266,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6323,7 +6323,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6380,7 +6380,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6437,7 +6437,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6492,9 +6492,9 @@
    "duration": "30 минут",
    "durationRounds": 0,
    "durationMinutes": 0,
-   "oilTarget": "",
+   "oilTarget": "elementa",
    "use": {
-    "action": "",
+    "action": "oil",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6551,7 +6551,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6610,7 +6610,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6667,7 +6667,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6724,7 +6724,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6781,7 +6781,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6838,7 +6838,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6895,7 +6895,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6950,9 +6950,9 @@
    "duration": "30 минут",
    "durationRounds": 0,
    "durationMinutes": 0,
-   "oilTarget": "",
+   "oilTarget": "specter",
    "use": {
-    "action": "",
+    "action": "oil",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7009,7 +7009,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7067,7 +7067,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7124,7 +7124,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7181,7 +7181,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7238,7 +7238,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7295,7 +7295,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7352,7 +7352,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7409,7 +7409,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7467,7 +7467,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7524,7 +7524,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7581,7 +7581,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7638,7 +7638,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8481,6 +8481,71 @@
   "flags": {
    "vedmak": {
     "layer": "bs"
+   }
+  }
+ },
+ {
+  "name": "Дьявольский мускус",
+  "type": "alchemical",
+  "img": "icons/consumables/potions/bottle-bulb-corked-glowing-red.webp",
+  "folder": [
+   "Алхимические составы"
+  ],
+  "system": {
+   "description": "<p>Сила +3 на 5 минут; когда действие кончается — тошнота. Формула: Алхимия СЛ 15, 1 час.</p>",
+   "quantity": 1,
+   "weight": 0.3,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Игры в таверне",
+    "page": "4"
+   },
+   "kind": "preparation",
+   "effect": "Сила +3 на 5 минут; когда действие кончается — тошнота. Формула: Алхимия СЛ 15, 1 час.",
+   "toxicity": 0,
+   "poisonDc": 0,
+   "duration": "5 минут",
+   "durationRounds": 0,
+   "durationMinutes": 5,
+   "oilTarget": "",
+   "use": {
+    "action": "drink",
+    "damage": "",
+    "damageType": "elemental",
+    "area": "",
+    "range": "",
+    "status": "",
+    "statusChance": 100,
+    "statusRounds": "",
+    "removeStatuses": [],
+    "regen": 0,
+    "heal": 0,
+    "charges": 1,
+    "clearToxicity": false
+   },
+   "changes": [
+    {
+     "key": "system.skills.physique.mod",
+     "type": "add",
+     "value": "3",
+     "phase": "initial"
+    }
+   ],
+   "mods": [],
+   "applied": false,
+   "mutagen": {
+    "color": "",
+    "dc": 0,
+    "minor": ""
+   }
+  },
+  "_id": "Fo0W34Dqm7pdQEip",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
    }
   }
  }

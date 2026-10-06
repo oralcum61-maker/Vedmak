@@ -82,7 +82,9 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       pool: [], assign: {},
       profSkills: {}, defining: 1, pickup: {},
       magic: [],
-      money: null, gear: []
+      money: null, gear: [],
+      // Покупки в лавке шага «Снаряжение» (PLAN 4.100): [{uuid, name, img, type, cost, qty}]
+      shop: []
     };
     this.data = null;
   }
@@ -108,6 +110,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       rollStats: CharacterWizard.#onRollStats,
       rollMoney: CharacterWizard.#onRollMoney,
       setField: CharacterWizard.#onSetField,
+      shopAdd: CharacterWizard.#onShopAdd,
+      shopQty: CharacterWizard.#onShopQty,
       fieldStep: CharacterWizard.#onFieldStep,
       apply: CharacterWizard.#onApply
     }
@@ -148,6 +152,33 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const byName = (x, y) => compareRu(x.name, y.name);
     this.data = { races: (await docsOf("race")).sort(byName), professions: (await docsOf("profession")).sort(byName), magic };
     return this.data;
+  }
+
+  /** Товары лавки: всё с ценой из компендиумов снаряжения, кроме уникального; один раз на окно. */
+  #shopCache = null;
+  async #shopIndex() {
+    if (this.#shopCache) return this.#shopCache;
+    const out = [];
+    for (const pack of game.packs.filter(p => p.documentName === "Item")) {
+      const index = await pack.getIndex({ fields: ["type", "system.cost", "system.availability", "system.kind"] });
+      for (const e of index) {
+        if (!SHOP_TYPES[e.type] || !(Number(e.system?.cost) > 0) || e.system?.availability === "unique") continue;
+        if (e.type === "alchemical" && e.system?.kind === "mutagen") continue;
+        out.push({ uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}`, name: e.name, img: e.img, type: e.type,
+          cost: Number(e.system.cost), cat: SHOP_TYPES[e.type] });
+      }
+    }
+    out.sort((a, b) => compareRu(a.name, b.name));
+    this.#shopCache = out;
+    return out;
+  }
+
+  /** Капитал и покупки: бросок профессии + кроны жизненного пути, потрачено в лавке, осталось. */
+  #shopTotals(lp) {
+    const s = this.wiz;
+    const budget = (s.money?.total ?? 0) + (lp.effects?.crowns ?? 0);
+    const spent = s.shop.reduce((sum, x) => sum + x.cost * x.qty, 0);
+    return { budget, spent, left: budget - spent };
   }
 
   get race() { return this.data?.races.find(r => r.uuid === this.wiz.raceUuid) ?? null; }
@@ -440,6 +471,11 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       context.gearFixed = prof.system.gearFixed;
       context.lifeItems = lp.effects?.items ?? [];
       context.moneyBase = prof.system.startingMoney;
+      // Лавка: корзина — шаблоном, поиск товаров — без перерисовки (_onRender)
+      this.#shopItems = await this.#shopIndex();
+      const t = this.#shopTotals(lp);
+      context.shop = { ...t, over: t.left < 0, cats: Object.entries(SHOP_CATS).map(([key, label]) => ({ key, label })),
+        basket: s.shop.map(x => ({ ...x, sum: x.cost * x.qty })), query: this.#shopQuery, cat: this.#shopCat };
     }
 
     if (s.step === "summary") {
@@ -527,6 +563,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         if (n !== g.count) { out.magic = `${g.label}: выбрано ${n} из ${g.count}.`; break; }
       }
       if (s.money === null) out.gear = "Бросьте начальный капитал.";
+      else if (this.#shopTotals(lp).left < 0) out.gear = `Покупки дороже капитала на ${-this.#shopTotals(lp).left} крон.`;
       else if (s.gear.length !== prof.system.gearChoice.count && prof.system.gearChoice.options.length) {
         out.gear = `Снаряжение: выбрано ${s.gear.length} из ${prof.system.gearChoice.count}.`;
       }
@@ -596,7 +633,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const prof = this.profession;
     const final = this.#finalStats(lp);
     const skills = this.#finalSkills(lp);
-    const money = (s.money?.total ?? 0) + (lp.effects?.crowns ?? 0);
+    const money = this.#shopTotals(lp).left;
     const magicChosen = this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || s.magic.includes(i.uuid)));
     return {
       art: prof?.img || this.race?.img || "",
@@ -606,7 +643,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       skillList: Object.entries(skills).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1] || compareRu(SKILLS[a[0]].label, SKILLS[b[0]].label))
         .map(([k, v]) => ({ n: SKILLS[k].label, v })),
       magicList: magicChosen.map(i => ({ n: i.name, img: i.img })),
-      gearList: [...(prof?.system.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? [])],
+      gearList: [...(prof?.system.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? []), ...s.shop.map(x => x.qty > 1 ? `${x.name} ×${x.qty}` : x.name)],
       definingName: prof?.system.definingSkill.name ?? "", definingValue: prof ? s.defining + (lp.effects?.definingBonus ?? 0) : 0,
       moneyRoll: s.money ? `${prof?.system.startingMoney ?? 0} × ${s.money.sum}` : "",
       name: s.name, race: this.race?.name, profession: prof?.name, age: s.age, gender: s.gender,
@@ -626,6 +663,19 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     const s = this.wiz;
+    // Лавка: поиск и разделы фильтруют товары без перерисовки окна (фокус остаётся в поле)
+    const shopSearch = this.element.querySelector("[data-shop-search]");
+    if (shopSearch) {
+      shopSearch.addEventListener("input", () => { this.#shopQuery = shopSearch.value; this.#renderShopResults(); });
+      for (const el of this.element.querySelectorAll("[data-shop-cat]")) {
+        el.addEventListener("click", () => {
+          this.#shopCat = this.#shopCat === el.dataset.shopCat ? "" : el.dataset.shopCat;
+          for (const c of this.element.querySelectorAll("[data-shop-cat]")) c.classList.toggle("on", c.dataset.shopCat === this.#shopCat);
+          this.#renderShopResults();
+        });
+      }
+      this.#renderShopResults();
+    }
     for (const el of this.element.querySelectorAll("[data-field]")) {
       el.addEventListener("change", event => {
         const field = el.dataset.field;
@@ -905,6 +955,44 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
+  /** Лавка: поиск и раздел помнятся окном, товары — списком без перерисовки. */
+  #shopItems = [];
+  #shopQuery = "";
+  #shopCat = "";
+
+  #renderShopResults() {
+    const box = this.element.querySelector("[data-shop-results]");
+    if (!box) return;
+    const q = this.#shopQuery.trim().toLowerCase().replace(/ё/g, "е");
+    const left = this.#shopTotals(this.#lifepath()).left;
+    const hits = this.#shopItems.filter(x => (!this.#shopCat || x.cat === this.#shopCat)
+      && (!q || x.name.toLowerCase().replace(/ё/g, "е").includes(q))).slice(0, 60);
+    const esc = v => foundry.utils.escapeHTML(String(v ?? ""));
+    box.innerHTML = hits.length ? hits.map(x => `<button type="button" class="shop-item${x.cost > left ? " dear" : ""}" data-action="shopAdd" data-uuid="${esc(x.uuid)}"
+        data-tooltip="${esc(x.name)} — ${x.cost} крон${x.cost > left ? " (не хватает крон)" : ""}">
+        <img src="${esc(x.img)}" alt=""><span class="nm">${esc(x.name)}</span><b>${x.cost}</b></button>`).join("")
+      : `<p class="hint">${q ? "Ничего не нашлось." : "Начните вводить название."}</p>`;
+  }
+
+  static #onShopAdd(event, target) {
+    const item = this.#shopItems.find(x => x.uuid === target.dataset.uuid);
+    if (!item) return;
+    const s = this.wiz;
+    const have = s.shop.find(x => x.uuid === item.uuid);
+    if (have) have.qty += 1;
+    else s.shop.push({ uuid: item.uuid, name: item.name, img: item.img, type: item.type, cost: item.cost, qty: 1 });
+    this.render();
+  }
+
+  static #onShopQty(event, target) {
+    const s = this.wiz;
+    const have = s.shop.find(x => x.uuid === target.dataset.uuid);
+    if (!have) return;
+    have.qty += Number(target.dataset.step) || 0;
+    if (have.qty <= 0) s.shop = s.shop.filter(x => x !== have);
+    this.render();
+  }
+
   static async #onRollMoney() {
     const prof = this.profession;
     if (!prof) return;
@@ -1100,6 +1188,10 @@ function replaceWarning(actor) {
 /** Биография, которую прежний мастер создания собирал из жизненного пути. */
 const GENERATED_BIO = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/;
 
+/** Лавка мастера: какие типы предметов продаются и под каким разделом. */
+const SHOP_CATS = { weapon: "Оружие", armor: "Броня", gear: "Снаряжение", alchemical: "Алхимия", component: "Компоненты", enhancement: "Усиления" };
+const SHOP_TYPES = { weapon: "weapon", armor: "armor", gear: "gear", alchemical: "alchemical", component: "component", enhancement: "enhancement" };
+
 /** Предметы, у которых есть число штук: докладываются до нужного (остальные при повторе пропускаются). */
 const STACKABLE_TYPES = ["gear", "component", "alchemical"];
 
@@ -1146,7 +1238,7 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
     "system.details.school": fx.school || (race?.system.key === "witcher" ? actor.system.details.school : ""),
     "system.social.feared": !!fx.feared,
     "system.social.region": "",
-    "system.money.crowns": (s.money?.total ?? 0) + fx.crowns,
+    "system.money.crowns": (s.money?.total ?? 0) + fx.crowns - s.shop.reduce((sum, x) => sum + x.cost * x.qty, 0),
     "system.reputation.value": fx.reputation,
     "system.bonus.hp": fx.hpBonus,
     "system.bonus.sta": fx.staBonus,
@@ -1215,6 +1307,18 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
       // Новое число в первой из одноимённых стопок; повтор того же названия в списке не складывается, берётся большее
       const total = Math.max(topUps.get(have[0].id) ?? 0, want - had + (Number(have[0].system.quantity) || 0));
       if (want > had) topUps.set(have[0].id, total);
+    }
+  }
+  // Покупки в лавке мастера: исчисляемое — стопкой, оружие и броня — по штуке
+  for (const buy of s.shop ?? []) {
+    const doc = await fromUuid(buy.uuid);
+    if (!doc) continue;
+    const data = doc.toObject();
+    if (STACKABLE_TYPES.includes(data.type)) {
+      data.system.quantity = (Number(data.system.quantity) || 1) * buy.qty;
+      items.push(data);
+    } else {
+      for (let n = 0; n < buy.qty; n++) items.push(foundry.utils.deepClone(data));
     }
   }
   for (const data of items) delete data._id;

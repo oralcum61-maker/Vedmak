@@ -224,8 +224,10 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   system.sta.max = Math.floor((bw * 5 + bonus("sta") + (crit.derived.sta ?? 0)) * (crit.mult.sta ?? 1));
   d.woundThreshold = Math.floor(system.hp.max / 5);
   // Касание двимерита (стр. 167): Энергия падает до 0, пока длится контакт (magic/dimeritium.mjs)
-  const dimeritium = actor?.effects?.some(e => e.active && e.flags?.vedmak?.dimeritium);
-  d.vigor = dimeritium ? 0 : Math.max(0, baseVigor + bonus("vigor"));
+  // «Устойчивость к двимериту» мага: устоял — половина Энергии
+  const dimeritium = actor?.effects?.find(e => e.active && e.flags?.vedmak?.dimeritium);
+  const fullVigor = Math.max(0, baseVigor + bonus("vigor"));
+  d.vigor = !dimeritium ? fullVigor : dimeritium.flags.vedmak.dimeritium.resisted ? Math.floor(fullVigor / 2) : 0;
   d.dimeritium = !!dimeritium;
 
   // Фокусирующий предмет в руках: работает только один — берём лучший (стр. 167)

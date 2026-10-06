@@ -4,28 +4,55 @@
 // снимает по 1 Энергии за единицу в 5 м — это поле окна сотворения.
 
 import { DIMERITIUM_DC, DIMERITIUM_TOUCH } from "../config/magic.mjs";
+import { STATS } from "../config/stats.mjs";
 import { postCard } from "../util.mjs";
+import { performCheck } from "../dice/check.mjs";
+import { abilityLevel } from "../crafting/craft.mjs";
+
+/** «Устойчивость к двимериту» (Маг, Маг воды и огня, Некромант): Воля + способность против СЛ 16. */
+const RESIST = { name: "Устойчивость к двимериту", dc: 16,
+  text: "Устойчивость к двимериту: кружится голова, дискомфорт, но половина Энергии и сотворение сохраняются." };
 
 const SYS = "vedmak";
 const IMG = "systems/vedmak/assets/fan/components/t3-dimeritium-ingot.webp";
 
 export const dimeritiumEffect = actor => actor?.effects?.find(e => e.flags?.[SYS]?.dimeritium);
-/** Строка таблицы для текущего контакта (или null). */
+/** Строка таблицы для текущего контакта (или null); устоял благодаря способности — {text, resisted}. */
 export function dimeritiumRow(actor) {
   const eff = dimeritiumEffect(actor);
-  return eff ? DIMERITIUM_TOUCH[eff.flags[SYS].dimeritium.row] ?? null : null;
+  if (!eff) return null;
+  if (eff.flags[SYS].dimeritium.resisted) return { text: RESIST.text, resisted: true };
+  return DIMERITIUM_TOUCH[eff.flags[SYS].dimeritium.row] ?? null;
 }
 
 /** Касание или проверка через полчаса: Стойкость СЛ 16, строка по итогу броска. */
 export async function touchDimeritium(actor) {
   if (!actor) return null;
   const existing = dimeritiumEffect(actor);
+  // Маг со способностью сначала пробует устоять: успех — половина Энергии, таблица не нужна
+  const resistLevel = abilityLevel(actor, RESIST.name);
+  if (resistLevel) {
+    const parts = [
+      { label: STATS.will.label, value: actor.system.stats.will.effective, always: true },
+      { label: RESIST.name, value: resistLevel, always: true }
+    ];
+    const check = await performCheck({ actor, title: RESIST.name, subtitle: "Касание двимерита", parts, dc: RESIST.dc });
+    if (check?.success) {
+      const prevStatus = existing ? DIMERITIUM_TOUCH[existing.flags[SYS].dimeritium.row]?.status : null;
+      const flags = { [SYS]: { dimeritium: { row: -1, resisted: true, nextSpasm: 0 } } };
+      if (existing) await existing.update({ description: RESIST.text, flags });
+      else await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Касание двимерита", img: IMG, description: RESIST.text, flags }]);
+      if (prevStatus && actor.statuses.has(prevStatus)) await actor.toggleStatusEffect(prevStatus, { active: false });
+      return postCard(actor, "Двимерит: устоял", `<p>${RESIST.text}</p><p>Проверка — каждые полчаса контакта.</p>`,
+        { icon: "fa-solid fa-link-slash" });
+    }
+  }
   const result = await actor.rollSkill("endurance", { subtitle: existing ? "Двимерит: проверка через полчаса" : "Касание двимерита", dc: DIMERITIUM_DC });
   if (!result) return null;
   const rowIndex = DIMERITIUM_TOUCH.findIndex(r => result.total >= r.min);
   const row = DIMERITIUM_TOUCH[rowIndex];
-  const prevStatus = existing ? DIMERITIUM_TOUCH[existing.flags[SYS].dimeritium.row]?.status : null;
-  const flags = { [SYS]: { dimeritium: { row: rowIndex, nextSpasm: 0 } } };
+  const prevStatus = existing && !existing.flags[SYS].dimeritium.resisted ? DIMERITIUM_TOUCH[existing.flags[SYS].dimeritium.row]?.status : null;
+  const flags = { [SYS]: { dimeritium: { row: rowIndex, resisted: false, nextSpasm: 0 } } };
   const description = `${row.text} Энергия 0, пока длится касание.`;
   if (existing) await existing.update({ description, flags });
   else await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Касание двимерита", img: IMG, description, flags }]);
@@ -41,7 +68,7 @@ export async function touchDimeritium(actor) {
 export async function endDimeritium(actor) {
   const eff = dimeritiumEffect(actor);
   if (!eff) return null;
-  const status = DIMERITIUM_TOUCH[eff.flags[SYS].dimeritium.row]?.status;
+  const status = eff.flags[SYS].dimeritium.resisted ? null : DIMERITIUM_TOUCH[eff.flags[SYS].dimeritium.row]?.status;
   await eff.delete();
   if (status && actor.statuses.has(status)) await actor.toggleStatusEffect(status, { active: false });
   return postCard(actor, "Двимерит убран", `<p>${actor.name} больше не касается двимерита: Энергия возвращается.</p>`,
@@ -55,7 +82,7 @@ export async function endDimeritium(actor) {
 export async function dimeritiumTurn(actor, round) {
   const out = { loss: 0, lines: [], stun: false };
   const eff = dimeritiumEffect(actor);
-  const row = eff ? DIMERITIUM_TOUCH[eff.flags[SYS].dimeritium.row] : null;
+  const row = eff && !eff.flags[SYS].dimeritium.resisted ? DIMERITIUM_TOUCH[eff.flags[SYS].dimeritium.row] : null;
   if (!row) return out;
   if (row.damage) {
     const r = await new Roll(row.damage).evaluate();

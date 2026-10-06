@@ -7856,6 +7856,133 @@
   }
  },
  {
+  "name": "Скрытый вес",
+  "type": "weapon",
+  "img": "icons/weapons/fist/fist-brass-knuckles.webp",
+  "folder": [
+   "Прочее",
+   "Людей"
+  ],
+  "system": {
+   "description": "<p>Утяжелитель, зажатый в кулаке: незаметное (найти — Внимание СЛ 18), рукопашное. Чертёж: Изготовление СЛ 13, 45 минут, сталь, полотно и нитки; доплата 60 крон.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 120,
+   "availability": "poor",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Игры в таверне",
+    "page": "4"
+   },
+   "category": "other",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "1d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "concealable",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "hands",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "Y7G0x5f24OAFw8xn",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Крюк-кошка (протез)",
+  "type": "weapon",
+  "img": "icons/tools/fasteners/chain-hook-grey.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Атака крюком-кошкой из протеза: Точность −2, урон 2d6 (колющий), дальность 8 м; медленно перезаряжается (притянуть крюк — действие), захватное.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Лавка Клауса и Нострадамуса",
+    "page": "2"
+   },
+   "category": "natural",
+   "skill": "athletics",
+   "accuracy": -2,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 0,
+   "range": "8 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "vB1t8U1DbsAtFnw8",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
   "name": "Укус высшего вампира",
   "type": "weapon",
   "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
@@ -7865,7 +7992,7 @@
   "system": {
    "description": "<p>Раса «Высший вампир», основная атака: 6d6, колющий, борьба, кровопускание 100%, пробивание брони. Перед атакой можно заявить Высасывание крови (+2d6 урона, столько же ПЗ или ОК вампиру).</p>",
    "quantity": 1,
-   "weight": 0,
+   "weight": 0.0,
    "cost": 0,
    "availability": "everywhere",
    "concealment": "none",
@@ -7928,7 +8055,7 @@
   "system": {
    "description": "<p>Раса «Высший вампир», дополнительная атака: 5d6+3, колюще-режущий, ближний бой, кровопускание 75%.</p>",
    "quantity": 1,
-   "weight": 0,
+   "weight": 0.0,
    "cost": 0,
    "availability": "everywhere",
    "concealment": "none",
@@ -7987,7 +8114,7 @@
   "system": {
    "description": "<p>Высший вампир в Истинной форме: 8d6, кровопускание 100%, улучшенное пробитие брони, высасывание крови без дополнительной проверки.</p>",
    "quantity": 1,
-   "weight": 0,
+   "weight": 0.0,
    "cost": 0,
    "availability": "everywhere",
    "concealment": "none",
@@ -8050,7 +8177,7 @@
   "system": {
    "description": "<p>Высший вампир в Истинной форме: 6d6+3, кровопускание 75%, пробитие брони. С 7-го уровня Превращения когти бьют двух целей одним действием.</p>",
    "quantity": 1,
-   "weight": 0,
+   "weight": 0.0,
    "cost": 0,
    "availability": "everywhere",
    "concealment": "none",

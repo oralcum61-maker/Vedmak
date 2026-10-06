@@ -3,13 +3,13 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import {
-  SPELL_DEFENSES, MAGIC_SKILL, ELEMENTAL_FUMBLE, magicFumble, targetingFor, levelLabel, ZONE_AURAS
+  SPELL_DEFENSES, MAGIC_SKILL, ELEMENTAL_FUMBLE, magicFumble, targetingFor, levelLabel, zoneAuraFor
 } from "../config/magic.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate, inCombat, roundsAsTime } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
-import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor } from "../combat/common.mjs";
+import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf, ZONE_COLORS } from "../combat/zones.mjs";
 import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
 import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
@@ -110,6 +110,8 @@ export async function castSpell(actor, item, opts = {}) {
   if (!opts.skipDialog) {
     cfg = await castDialog(actor, item, cfg, targets);
     if (!cfg) return null;
+    // Союзники, выбранные в окне, — цели вместо выделенных токенов
+    if (cfg.allies?.length) targets = cfg.allies.map(allyTarget).filter(Boolean);
   }
 
   // Зоны этого же поддерживаемого заклинания от прошлого сотворения: запоминаем до постановки новой
@@ -128,7 +130,7 @@ export async function castSpell(actor, item, opts = {}) {
     const lasting = !!(duration?.rounds || duration?.maintain);
     const repeat = lasting && !!(auto.damage || auto.staDamage || auto.statuses?.some(x => x.status));
     // Аура (Ирден): штраф всем внутри, кроме заклинателя, — ставит и снимает ведущий (magic/zone-effects.mjs)
-    const auraDef = ZONE_AURAS[item.name];
+    const auraDef = zoneAuraFor(item.name);
     const aura = auraDef ? { ...auraDef, value: cfg.cost, img: item.img } : null;
     region = await createZone(placed.shape, { name: item.name, color: zoneColor, actor, itemName: item.name, duration, maintainItemId: item.id,
       extra: { itemId: item.id, repeat, aura } });
@@ -199,6 +201,26 @@ export function costNote(a, cost) {
   return bits.join(" · ");
 }
 
+/**
+ * Союзники для баффа без выделенных целей (PLAN 4.100): дружественные токены сцены без заклинателя;
+ * сцены нет — персонажи игроков. {uuid, name, img}; токен — по токену, иначе по актору.
+ */
+function allyChoices(actor) {
+  const own = actorToken(actor);
+  const tokens = (canvas?.scene?.tokens ?? []).filter(t => t.actor && t.object !== own && t.actor !== actor
+    && t.disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY && !t.hidden);
+  if (tokens.length) return tokens.map(t => ({ uuid: t.uuid, name: t.name, img: t.texture?.src ?? t.actor.img }));
+  return game.actors.filter(a => a.type === "character" && a.hasPlayerOwner && a !== actor).map(a => ({ uuid: a.uuid, name: a.name, img: a.img }));
+}
+
+/** Цель из выбора союзника: токен или актор без токена. */
+function allyTarget(uuid) {
+  const doc = fromUuidSync(uuid);
+  if (!doc) return null;
+  if (doc.documentName === "Token") return targetInfo(doc);
+  return { tokenUuid: null, actorUuid: doc.uuid, name: doc.name, img: doc.img };
+}
+
 async function castDialog(actor, item, cfg, targets) {
   const s = item.system;
   const d = actor.system.derived;
@@ -217,8 +239,11 @@ async function castDialog(actor, item, cfg, targets) {
     : [];
   const damage = resolveSta(auto.damage, cfg.cost);
 
+  // Бафф или лечение на другого, а цели не выделены — союзники жетонами прямо в окне
+  const helpful = !!(spellAuto(item.name)?.target || auto.regen?.hp);
+  const allies = !targets.length && helpful && targetingFor(s.range) === "direct" ? allyChoices(actor) : [];
   const content = await renderTemplate("systems/vedmak/templates/dialog/cast.hbs", {
-    item, s, cfg, targets,
+    item, s, cfg, targets, allies,
     head: {
       title: item.name, img: item.img, base, baseHint: vb ? `${vb.name} (уровень навыка роли)` : `Воля + ${SKILLS[skillKey].label}`,
       subtitle: [CONFIG.VEDMAK.MAGIC_KINDS[s.kind], vb ? CONFIG.VEDMAK.MAGIC_BRANCHES[s.branch] : "", levelLabel(s.kind, s.level),
@@ -284,7 +309,8 @@ async function castDialog(actor, item, cfg, targets) {
           placeOfPower: !!f.placeOfPower?.checked,
           dimeritium: Math.max(0, Number(f.dimeritium?.value) || 0),
           dc: f.dc?.value ?? cfg.dc,
-          helpers: Math.max(0, Math.min(4, Number(f.helpers?.value) || 0))
+          helpers: Math.max(0, Math.min(4, Number(f.helpers?.value) || 0)),
+          allies: [...button.form.querySelectorAll('[name="ally"]:checked')].map(i => i.value)
         };
       }
     }, { action: "cancel", label: "Отмена" }],
@@ -433,13 +459,18 @@ export async function performCast(actor, item, cfg, targets) {
     }
     // Бафф на себя из справочника (config/spell-auto.mjs)
     if (reg?.self) {
-      const buff = buffData(item, actor, reg.self, buffTime);
+      const buff = { ...buffData(item, actor, reg.self, buffTime), cast: { total: roll.total, cost } };
       await applyBuff(actor, buff);
       selfLines.push(buffLine(buff));
     }
     if (reg?.note) notes.push(reg.note);
+    // Рассеивание: снять действующую магию с целей, если бросок выше броска её заклинателя
+    if (reg?.dispel) {
+      if (!targets.length) notes.push("Рассеивание: выделите цель — с неё снимается магия слабее этого броска.");
+      for (const t of targets) notes.push(...await dispelOn(actor, t, roll.total, paid));
+    }
     if (s.kind === "ritual" && regen && !targets.length) {
-      const { term } = await applyRegen(actor, { ...regen, name: item.name, img: item.img });
+      const { term } = await applyRegen(actor, { ...regen, name: item.name, img: item.img, cast: { total: roll.total, cost } });
       selfLines.push(`${item.name}: +${regen.hp} ПЗ за ход${term}.`);
     }
   }
@@ -466,7 +497,7 @@ export async function performCast(actor, item, cfg, targets) {
     statusRounds: a.statusRounds,
     regen,
     hex: s.kind === "hex",
-    buff: reg?.target ? buffData(item, actor, reg.target, buffTime) : null,
+    buff: reg?.target ? { ...buffData(item, actor, reg.target, buffTime), cast: { total: roll.total, cost } } : null,
     allLocations: a.location === "all",
     works, targeting
   };
@@ -586,10 +617,11 @@ async function regenData(actor, item, auto, cost) {
  * maintain — пока заклинатель поддерживает заклинание (снимает buffs.mjs вместе с поддержанием).
  * @returns {Promise<{effect: ActiveEffect, term: string}>} term — срок для карточки: « (5 раундов)»
  */
-export async function applyRegen(actor, { hp, rounds, minutes = 0, maintain = false, casterUuid, itemId, name, img }) {
+export async function applyRegen(actor, { hp, rounds, minutes = 0, maintain = false, casterUuid, itemId, name, img, cast = null }) {
   let n = 0;
   if (rounds) n = Number.isFinite(Number(rounds)) ? Number(rounds) : (await new Roll(String(rounds)).evaluate()).total;
   const extra = { regen: hp };
+  if (cast) extra.cast = cast;
   if (casterUuid) extra.spellLink = { casterUuid, itemId, maintain: !!maintain };
   const effect = await setTimedEffect(actor, { name: `Регенерация: ${name}`, img, key: `regen:${name}`, rounds: n, minutes, extra });
   const term = n ? ` (${n} раундов)` : minutes ? ` (${minutes} мин)` : maintain ? ", пока поддерживается" : "";
@@ -597,13 +629,64 @@ export async function applyRegen(actor, { hp, rounds, minutes = 0, maintain = fa
 }
 
 /** Порча как эффект на жертве: описание и условия снятия. */
-export async function applyHex(actor, item) {
+export async function applyHex(actor, item, cast = null) {
   return actor.createEmbeddedDocuments("ActiveEffect", [{
     name: `Порча: ${item.name}`, img: item.img, transfer: false,
     description: item.system.description,
-    flags: { vedmak: { hex: item.name } }
+    flags: { vedmak: { hex: item.name, ...(cast ? { cast } : {}) } }
   }]);
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Рассеивание действующей магии (стр. 102)                                   */
+/* -------------------------------------------------------------------------- */
+
+/** Магические эффекты актора: баффы, регенерация, порча и всё, где записан бросок заклинателя. */
+const magicEffectsOf = actor => (actor?.effects ?? []).filter(e => {
+  const v = e.flags?.vedmak;
+  return v?.cast || v?.spellBuff || v?.hex || v?.spellLink;
+});
+
+/**
+ * Рассеивание на цель: снимается эффект, чей бросок заклинателя меньше броска Рассеивания (ничья — в пользу
+ * магии); цена — половина Вын снятого. Эффект без записанного броска (поставлен до 4.100) сравнивает ведущий.
+ * @returns {Promise<string[]>} строки карточки
+ */
+async function dispelOn(caster, t, total, paid) {
+  const target = resolveActor(t.tokenUuid) ?? resolveActor(t.actorUuid);
+  if (!target) return [];
+  const magic = magicEffectsOf(target);
+  if (!magic.length) return [`${target.name}: действующей магии нет.`];
+  const beaten = [], held = [], unknown = [];
+  for (const e of magic) {
+    const c = e.flags.vedmak.cast;
+    if (!c) unknown.push(e);
+    else if (total > c.total) beaten.push(e);
+    else held.push(e);
+  }
+  const lines = [];
+  if (beaten.length) {
+    await asGM("dispelEffects", { uuid: t.tokenUuid ?? t.actorUuid, ids: beaten.map(e => e.id), casterUuid: caster.uuid });
+    const need = beaten.reduce((sum, e) => sum + Math.floor((e.flags.vedmak.cast.cost ?? 0) / 2), 0);
+    lines.push(`${target.name}: рассеяно — ${beaten.map(e => `«${e.name}» (${e.flags.vedmak.cast.total})`).join(", ")}.`
+      + ` Цена — половина Вын: ${need}${paid < need ? ` (потрачено ${paid} — доплатите вручную)` : ""}.`);
+  }
+  if (held.length) lines.push(`${target.name}: устояло — ${held.map(e => `«${e.name}» (${e.flags.vedmak.cast.total})`).join(", ")}.`);
+  if (unknown.length) lines.push(`${target.name}: бросок не записан, сравнивает ведущий — ${unknown.map(e => `«${e.name}»`).join(", ")}.`);
+  return lines;
+}
+
+registerGMHandler("dispelEffects", async ({ uuid, ids, casterUuid }, userId) => {
+  const caster = resolveActor(casterUuid);
+  if (!game.users.get(userId)?.isGM && !userOwnsAny(userId, caster)) {
+    return console.warn(`vedmak | отклонено Рассеивание от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  const target = resolveActor(uuid);
+  if (!target) return;
+  const allowed = new Set(magicEffectsOf(target).map(e => e.id));
+  const del = (ids ?? []).filter(id => allowed.has(id));
+  if (del.length) await target.deleteEmbeddedDocuments("ActiveEffect", del);
+});
 
 /* -------------------------------------------------------------------------- */
 /*  Долгие зоны: удар каждый раунд                                            */

@@ -352,7 +352,32 @@
     <div class="vd-panel"><div class="group-head"><span class="bronze-tag">Из жизненного пути</span><span class="rule"></span></div>
       <span class="chips">{{#each lifeItems}}<span class="chip gold">{{this}}</span>{{/each}}</span></div>
     {{/if}}
-    <p class="hint">Предметы ищутся по названию в компендиумах; если их там нет, создаётся простое снаряжение с этим названием. Докупить остальное можно на оставшиеся кроны.</p>
+    {{#if shop}}
+    <div class="vd-panel shop">
+      <div class="group-head"><span class="bronze-tag">Лавка</span><span class="rule"></span>
+        <span class="budget{{#if shop.over}} off{{/if}}">осталось <b>{{shop.left}}</b> из {{shop.budget}} крон</span></div>
+      <div class="shop-cols">
+        <div class="shop-find">
+          <input type="search" data-shop-search value="{{shop.query}}" placeholder="Найти: меч, ласточка, факел…" aria-label="Поиск товара">
+          <div class="shop-cats">{{#each shop.cats}}<button type="button" class="shop-cat{{#if (eq key ../shop.cat)}} on{{/if}}" data-shop-cat="{{key}}">{{label}}</button>{{/each}}</div>
+          <div class="shop-results" data-shop-results></div>
+        </div>
+        <div class="shop-basket">
+          <span class="cap">Корзина{{#if shop.spent}} · {{shop.spent}} крон{{/if}}</span>
+          {{#each shop.basket}}
+          <div class="shop-line">
+            <img src="{{img}}" alt=""><span class="nm">{{name}}</span>
+            <span class="qty"><a class="mini" data-action="shopQty" data-uuid="{{uuid}}" data-step="-1" aria-label="Меньше"><i class="fa-solid fa-minus"></i></a><b>{{qty}}</b><a class="mini" data-action="shopQty" data-uuid="{{uuid}}" data-step="1" aria-label="Больше"><i class="fa-solid fa-plus"></i></a></span>
+            <span class="sum">{{sum}}</span>
+          </div>
+          {{else}}
+          <p class="hint">Пусто. Щелчок по товару слева — в корзину.</p>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    {{/if}}
+    <p class="hint">Предметы ищутся по названию в компендиумах; если их там нет, создаётся простое снаряжение с этим названием. Купленное в лавке ложится в сумку, его цена вычитается из крон.</p>
     {{/if}}
   {{/if}}
 

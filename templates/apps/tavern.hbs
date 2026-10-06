@@ -1,0 +1,66 @@
+{{!-- Игры в таверне (PLAN 4.100; module/apps/tavern-app.mjs): слева игры, справа участники с «±», поле, ходы и журнал. --}}
+<section class="tavern">
+  <aside class="tv-games">
+    <span class="cap">Игры</span>
+    {{#each games}}
+    <a class="tv-game{{#if active}} active{{/if}}" data-action="pickGame" data-game="{{key}}">
+      <i class="{{icon}}" aria-hidden="true"></i><span class="nm">{{label}}</span><span class="sz">{{size}}</span>
+    </a>
+    {{/each}}
+  </aside>
+
+  <div class="tv-main">
+    <header class="tv-head">
+      <h2><i class="{{game.icon}}" aria-hidden="true"></i> {{game.label}}</h2>
+      <p class="hint">{{game.hint}}</p>
+    </header>
+
+    {{#if brawl}}
+    <p class="tv-note">Кулачный бой ведётся обычными атаками на листе и в худе. Жульничество — «Скрытый вес» в кулаке (найти — Внимание СЛ 18).</p>
+    {{else}}
+    <section class="tv-sec">
+      <div class="group-head"><span class="bronze-tag">Участники</span><span class="rule"></span>
+        <span class="count">{{players.length}} из {{need}}</span>
+        <button type="button" class="tv-add" data-action="addSelected" data-tooltip="Добавить выделенные на сцене токены"><i class="fa-solid fa-user-plus"></i> Выделенные</button>
+        <button type="button" class="tv-add" data-action="addPlayers" data-tooltip="Добавить персонажей игроков"><i class="fa-solid fa-users"></i> Игроки</button>
+      </div>
+      {{#each players}}
+      <div class="tv-player{{#if out}} out{{/if}}">
+        <span class="pic"><img src="{{img}}" alt=""></span>
+        <span class="nm">{{name}}{{#if status}}<small>{{status}}</small>{{/if}}</span>
+        {{#if gwent}}
+        <select data-gwent-skill="{{uuid}}" aria-label="Навык для гвинта">
+          <option value="" {{#unless skill}}selected{{/unless}}>лучший навык</option>
+          <option value="gambling" {{#if (eq skill "gambling")}}selected{{/if}}>Азартные игры</option>
+          <option value="tactics" {{#if (eq skill "tactics")}}selected{{/if}}>Тактика</option>
+        </select>
+        {{/if}}
+        {{#if ../poker}}{{#if dice.length}}
+        <span class="tv-dice">
+          {{#each dice}}<a class="die{{#if sel}} sel{{/if}}" data-action="pokerDie" data-uuid="{{../uuid}}" data-i="{{i}}" data-tooltip="Отметить к перебросу">{{v}}</a>{{/each}}
+          <em>{{rank}}</em>
+          {{#if canReroll}}<button type="button" class="tv-mini" data-action="pokerReroll" data-uuid="{{uuid}}">Перебросить</button>{{/if}}
+        </span>
+        {{/if}}{{/if}}
+        <label class="mod" data-tooltip="Поправка: допинг, приём, шулерство, колода гвинта"><span>±</span><input type="number" data-mod="{{uuid}}" value="{{mod}}"></label>
+        <a class="tv-x" data-action="removePlayer" data-uuid="{{uuid}}" data-tooltip="Убрать" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>
+      </div>
+      {{else}}
+      <p class="hint">Выделите токены и нажмите «Выделенные» — или добавьте персонажей игроков.</p>
+      {{/each}}
+    </section>
+
+    <footer class="tv-actions">
+      {{#if board}}<span class="tv-board">{{board}}</span>{{/if}}
+      {{#if (eq game.key "fillet")}}<button type="button" class="go-btn steel" data-action="filletSpeed" {{#if done}}disabled{{/if}}>Ускорить</button>{{/if}}
+      {{#if poker}}{{#if rolled}}<button type="button" class="go-btn steel" data-action="pokerShow" {{#if shown}}disabled{{/if}}>Вскрыться</button>{{/if}}{{/if}}
+      <button type="button" class="go-btn steel" data-action="reset">Заново</button>
+      <button type="button" class="go-btn" data-action="turn" {{#unless ready}}disabled{{/unless}} {{#if done}}disabled{{/if}}>{{turnLabel}}</button>
+    </footer>
+
+    <section class="tv-log">
+      {{#each log}}<p>{{{this}}}</p>{{else}}<p class="hint">Здесь будет ход игры; каждый раунд уходит и в чат.</p>{{/each}}
+    </section>
+    {{/if}}
+  </div>
+</section>

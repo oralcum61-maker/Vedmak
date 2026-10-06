@@ -61,6 +61,9 @@ export function registerStatusEffects() {
   CONFIG.specialStatusEffects.INVISIBLE = "invisible";
 }
 
+/** Невидимость, которую Ирден и лунная пыль ослабляют: предел бонуса атаки и защиты и поправка Скрытности. */
+const PARTIAL_REVEAL = { "Покров": { attack: 3, defense: 3, stealth: -5 } };
+
 /**
  * Модификаторы бросков от статусов.
  * @param {Actor} actor
@@ -87,12 +90,24 @@ export function statusRollMods(actor, kind, { skill } = {}) {
     const sight = actor?.system?.derived?.sightMod;
     if (sight) parts.push({ label: "Ранение глаза (зрение)", value: sight });
   }
+  // Проявлен: стоит в круге Ирдена или облаке лунной пыли (аура зоны с `reveals`, magic/zone-effects.mjs)
+  const revealed = (actor?.effects ?? []).some(e => e.active && e.flags?.vedmak?.reveals);
   // Модификаторы бросков от эффектов («Покров» +5 к атаке и защите, «Чемпион реки» +5 ко всему)
   for (const effect of actor?.effects ?? []) {
     // active: истёкший эффект v14 не удаляет, а помечает — его правки к броскам уже не действуют
     const mods = effect.active && effect.flags?.vedmak?.rollMods;
-    const value = mods ? (mods[kind] ?? 0) + (mods.all ?? 0) : 0;
-    if (value) parts.push({ label: effect.name, value });
+    let value = mods ? (mods[kind] ?? 0) + (mods.all ?? 0) : 0;
+    // «Покров» у проявленного — лишь частичная невидимость: +3 вместо +5 к атаке и защите (стр. 108)
+    const partial = revealed && PARTIAL_REVEAL[effect.flags?.vedmak?.spellBuff?.name];
+    if (partial && value > partial[kind]) value = partial[kind] ?? value;
+    if (value) parts.push({ label: partial ? `${effect.name}: частично виден` : effect.name, value });
+  }
+  // …и Скрытность +5 вместо +10
+  if (skill === "stealth" && revealed) {
+    for (const effect of actor?.effects ?? []) {
+      const partial = effect.active && PARTIAL_REVEAL[effect.flags?.vedmak?.spellBuff?.name];
+      if (partial?.stealth) parts.push({ label: `${effect.name}: частично виден`, value: partial.stealth });
+    }
   }
   return parts;
 }

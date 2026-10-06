@@ -141,6 +141,14 @@ export async function startOfTurn(actor, combat, context) {
     buttons.push({ action: "deathSave", label: "Испытание против смерти" });
   }
 
+  // Зелье берсерка: каждый ход Стойкость, провал — атакует ближайшего
+  const berserk = actor.effects.find(e => e.active && e.flags?.vedmak?.berserk);
+  if (berserk) {
+    const dc = berserk.flags.vedmak.berserk.dc ?? 16;
+    lines.push(`${berserk.name}: Стойкость СЛ ${dc}, при провале в этот ход атакует ближайшего.`);
+    buttons.push({ action: "berserkSave", label: `Стойкость СЛ ${dc}`, reason: berserk.name });
+  }
+
   // Напоминания о тяжёлых состояниях
   if (has("disoriented")) lines.push("Дезориентирован: полный ход на испытание Уст, чтобы прийти в себя.");
   if (has("frozen")) lines.push("Заморожен: Сила СЛ 16 действием, чтобы сломать лёд.");

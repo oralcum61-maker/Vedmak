@@ -3214,7 +3214,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .craft-tab .craft-head { margin: .2rem 0 .1rem; }
 
 /* Эмалевая кнопка действия: выпить / нанести — фиолет, масло — зелень, бросить и изготовить — киноварь */
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn {
   flex: none; width: auto; height: 1.75rem; padding: 0 .8rem; margin: 0; line-height: 1;
   font-family: var(--vd-font-body); font-weight: 600; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: #fff3ea;
   background-color: var(--vd-go, #b8432c); background-image: var(--vd-gloss);
@@ -3222,12 +3222,12 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   box-shadow: inset 0 1px 0 rgba(255,235,220,.4), inset 0 -2px 0 rgba(0,0,0,.3), 0 5px 12px -4px rgba(0,0,0,.9);
   text-shadow: 0 -1px 0 rgba(0,0,0,.5);
 }
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn:hover { filter: brightness(1.12); }
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn:active { box-shadow: inset 0 2px 4px rgba(0,0,0,.45); }
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn.blood { --vd-go: #b8432c; }
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn.arcane { --vd-go: #6b4f9a; }
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn.oil { --vd-go: #5c6e34; }
-.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation) .go-btn.steel {
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn:hover { filter: brightness(1.12); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn:active { box-shadow: inset 0 2px 4px rgba(0,0,0,.45); }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn.blood { --vd-go: #b8432c; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn.arcane { --vd-go: #6b4f9a; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn.oil { --vd-go: #5c6e34; }
+.vedmak :is(.craft-tab, .magic-tab, .bio-tab, .wizard, .investigation, .tavern) .go-btn.steel {
   color: var(--vd-text); background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255,245,225,.1), rgba(0,0,0,.28));
   box-shadow: var(--vd-lift-sm); text-shadow: 0 1px 0 rgba(0,0,0,.8);
 }
@@ -5154,3 +5154,129 @@ body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .me
   margin: 0; padding: .5rem .7rem; font-size: .78rem; line-height: 1.4; color: #d4cfc2;
   background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-well-shadow);
 }
+
+/* ============================ Лавка мастера создания (PLAN 4.100) ============================
+   Шаг «Снаряжение»: слева поиск и разделы, товары столбцом (значок, название, цена); справа корзина.
+   Дорогое приглушено, но щёлкается — перебор капитала мастер покажет ошибкой шага. */
+.vedmak .wizard .shop-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .9rem; margin-top: .4rem; }
+.vedmak .wizard .shop-find { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.vedmak .wizard .shop-find input[type=search] {
+  height: 1.9rem; padding: 0 .55rem; font-size: .8rem; color: #e2ddd0;
+  background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .wizard .shop-cats { display: flex; flex-wrap: wrap; gap: .25rem; }
+.vedmak .wizard .shop-cat {
+  flex: none; width: auto; height: 1.55rem; margin: 0; padding: 0 .55rem; font-size: .68rem; line-height: 1; color: #a8a296;
+  background: #141518; border: 1px solid #060708; border-radius: 2px; box-shadow: none;
+}
+.vedmak .wizard .shop-cat:hover { color: #e2ddd0; }
+.vedmak .wizard .shop-cat.on { color: #f3eee2; background: #2a2c31; box-shadow: inset 0 2px 0 #b8432c; }
+.vedmak .wizard .shop-results {
+  display: flex; flex-direction: column; gap: 2px; max-height: 15rem; padding: 3px; overflow-y: auto;
+  background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink);
+}
+.vedmak .wizard .shop-results .hint { margin: .4rem .3rem; }
+.vedmak .wizard .shop-item {
+  display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) auto; align-items: center; gap: .5rem; width: 100%; height: 2rem;
+  margin: 0; padding: 0 .5rem 0 .25rem; text-align: left; color: #e2ddd0; background: transparent; border: 1px solid transparent; border-radius: 2px; box-shadow: none;
+}
+.vedmak .wizard .shop-item:hover { background: #1d1e22; border-color: #060708; }
+.vedmak .wizard .shop-item img { width: 1.5rem; height: 1.5rem; object-fit: contain; border: 0; }
+.vedmak .wizard .shop-item .nm, .vedmak .wizard .shop-line .nm { min-width: 0; font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .wizard .shop-item b { font-family: var(--vd-font-head); font-weight: 400; font-size: .95rem; color: #e0bf7d; }
+.vedmak .wizard .shop-item.dear { opacity: .45; }
+.vedmak .wizard .shop-basket { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
+.vedmak .wizard .shop-line {
+  display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) auto auto; align-items: center; gap: .4rem; padding: .25rem .45rem .25rem .25rem;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-well-shadow);
+}
+.vedmak .wizard .shop-line img { width: 1.5rem; height: 1.5rem; object-fit: contain; border: 0; }
+.vedmak .wizard .shop-line .qty { display: inline-flex; align-items: center; gap: .2rem; }
+.vedmak .wizard .shop-line .qty .mini { width: 1.25rem; height: 1.25rem; font-size: .55rem; }
+.vedmak .wizard .shop-line .qty b { min-width: 1.2rem; text-align: center; font-family: var(--vd-font-head); font-weight: 400; font-size: 1rem; }
+.vedmak .wizard .shop-line .sum { text-align: right; font-family: var(--vd-font-head); font-size: .95rem; color: #e0bf7d; }
+
+/* ============================ Игры в таверне (PLAN 4.100) ============================
+   Как «Расследования»: слева игры, справа участники колодцами с «±», внизу ходы и журнал. Кости покера —
+   утопленными клеймами, отмеченные к перебросу — выпуклой сталью с нитью киновари. */
+.vedmak.tavern-app .window-content { padding: 0; }
+.vedmak .tavern { display: grid; grid-template-columns: 14rem minmax(0, 1fr); height: 100%; min-height: 0; color: #e2ddd0; }
+.vedmak .tavern .cap { font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: #a8a296; }
+.vedmak .tavern .hint { margin: .3rem 0 0; font-size: .74rem; line-height: 1.4; color: #a8a296; }
+.vedmak .tavern .tv-games {
+  display: flex; flex-direction: column; gap: .3rem; padding: .75rem .6rem; overflow-y: auto;
+  background-color: #131417; border-right: 1px solid #060708; box-shadow: inset -1px 0 0 rgba(255, 240, 215, .05);
+}
+.vedmak .tavern .tv-game {
+  display: grid; grid-template-columns: 1.2rem minmax(0, 1fr) auto; align-items: center; gap: .5rem; padding: .45rem .55rem;
+  color: #d4cfc2; background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+  cursor: var(--cursor-pointer, pointer);
+}
+.vedmak .tavern .tv-game:hover { color: #f1ece0; background: #1b1c20; }
+.vedmak .tavern .tv-game.active {
+  color: #f1ece0; background-color: #2a2c31; background-image: linear-gradient(180deg, rgba(255, 250, 240, .12), rgba(0, 0, 0, .25));
+  border-color: #060708; box-shadow: inset 0 2px 0 #b8432c, 0 3px 8px -3px rgba(0, 0, 0, .9);
+}
+.vedmak .tavern .tv-game i { color: #a8a296; text-align: center; }
+.vedmak .tavern .tv-game .nm { font-family: var(--vd-font-head); font-size: .95rem; line-height: 1.15; }
+.vedmak .tavern .tv-game .sz { font-size: .65rem; color: #8c867b; }
+.vedmak .tavern .tv-main { display: flex; flex-direction: column; gap: .75rem; min-height: 0; padding: .9rem 1rem 1rem; overflow-y: auto; }
+.vedmak .tavern .tv-main > * { flex: none; }
+.vedmak .tavern .tv-head h2 { margin: 0; border: 0; font-family: var(--vd-font-head); font-size: 1.5rem; color: #f1ece0; }
+.vedmak .tavern .tv-head h2 i { font-size: 1.1rem; color: #a8a296; }
+.vedmak .tavern .tv-note {
+  margin: 0; padding: .6rem .75rem; font-size: .82rem; line-height: 1.45; color: #d4cfc2;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.vedmak .tavern .tv-sec { display: flex; flex-direction: column; gap: .4rem; }
+.vedmak .tavern .group-head .count { margin: 0 .4rem; font-size: .72rem; color: #a8a296; white-space: nowrap; }
+.vedmak .tavern .tv-add {
+  flex: none; width: auto; height: 1.6rem; margin: 0 0 0 .25rem; padding: 0 .55rem; font-size: .66rem; color: #d4cfc2;
+  background: #222428; border: 1px solid #060708; border-radius: 2px; box-shadow: none;
+}
+.vedmak .tavern .tv-add:hover { color: #fff; background: #2c2e33; }
+.vedmak .tavern .tv-player {
+  display: flex; flex-wrap: nowrap; align-items: center; gap: .55rem; padding: .35rem .5rem;
+  background: var(--vd-well-bg); border: 1px solid #040405; border-radius: 3px; box-shadow: var(--vd-well-shadow);
+}
+.vedmak .tavern .tv-player > :not(.nm) { flex: none; }
+.vedmak .tavern .tv-player .nm small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vedmak .tavern .tv-player.out { opacity: .55; }
+.vedmak .tavern .tv-player .pic { flex: none; width: 2rem; height: 2rem; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px #050607, 0 0 0 2px #3a3c42; }
+.vedmak .tavern .tv-player .pic img { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
+.vedmak .tavern .tv-player .nm { flex: 1 1 auto; min-width: 4rem; display: flex; flex-direction: column; font-family: var(--vd-font-head); font-size: .98rem; }
+.vedmak .tavern .tv-player .nm small { font-family: var(--vd-font-body); font-size: .68rem; color: #c9bdf0; }
+.vedmak .tavern .tv-player select {
+  width: auto; height: 1.6rem; font-size: .72rem; color: #e2ddd0; background: #0c0d0f; border: 1px solid #040405; border-radius: 2px;
+}
+.vedmak .tavern .tv-player .mod { display: inline-flex; align-items: center; gap: .25rem; margin: 0; font-size: .8rem; color: #a8a296; }
+.vedmak .tavern .tv-player .mod input {
+  width: 2.8rem; height: 1.6rem; padding: 0; text-align: center; font-size: .8rem; color: #e2ddd0;
+  background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.vedmak .tavern .tv-x { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; color: #8c867b; cursor: var(--cursor-pointer, pointer); }
+.vedmak .tavern .tv-x:hover { color: #e0604a; }
+.vedmak .tavern .tv-dice { display: inline-flex; align-items: center; gap: .25rem; flex-wrap: nowrap; }
+.vedmak .tavern .tv-dice .die {
+  display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; font-family: var(--vd-font-head); font-size: 1.1rem; color: #f1ece0;
+  background: #0a0b0c; border: 1px solid #040405; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .95), 0 1px 0 rgba(255, 240, 215, .06);
+  cursor: var(--cursor-pointer, pointer);
+}
+.vedmak .tavern .tv-dice .die.sel { background: #2a2c31; box-shadow: inset 0 2px 0 #b8432c, 0 3px 6px -2px rgba(0, 0, 0, .9); }
+.vedmak .tavern .tv-dice em { font-style: normal; font-size: .72rem; color: #e0bf7d; }
+.vedmak .tavern .tv-mini {
+  width: auto; height: 1.5rem; margin: 0; padding: 0 .5rem; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: #e2ddd0;
+  background: #2a2c31; border: 1px solid #060708; border-radius: 2px; box-shadow: none;
+}
+.vedmak .tavern .tv-actions {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .45rem; padding-top: .55rem;
+  border-top: 1px solid rgba(0, 0, 0, .55); box-shadow: inset 0 1px 0 rgba(255, 240, 215, .045);
+}
+.vedmak .tavern .tv-board { margin-right: auto; font-family: var(--vd-font-head); font-size: 1rem; color: #e0bf7d; }
+.vedmak .tavern .tv-log {
+  display: flex; flex-direction: column; gap: .2rem; max-height: 12rem; padding: .5rem .65rem; overflow-y: auto;
+  background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink);
+}
+.vedmak .tavern .tv-log p { margin: 0; font-size: .76rem; line-height: 1.4; color: #d4cfc2; }
+.vedmak .tavern .tv-log p b { color: #f1ece0; }
+#sidebar .directory-header .vd-tavern { flex: 1 0 100%; }

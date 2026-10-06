@@ -70,12 +70,13 @@ async function applySpellEffectsNow(messageId, userId) {
     lines.push(`${label}${rollText}: ${ok ? "да" : "нет"}.`);
   }
   if (spell.regen) {
-    const { term } = await applyRegen(actor, { ...spell.regen, name: def.attack.label, img: def.attack.img });
+    const { term } = await applyRegen(actor, { ...spell.regen, name: def.attack.label, img: def.attack.img,
+      cast: { total: def.attack.total, cost: spell.cost } });
     lines.push(`Регенерация: +${spell.regen.hp} ПЗ за ход${term}.`);
   }
   if (spell.hex) {
     const item = caster?.items.get(spell.itemId);
-    if (item) { await applyHex(actor, item); lines.push(`Наложена порча «${item.name}».`); }
+    if (item) { await applyHex(actor, item, { total: def.attack.total, cost: spell.cost }); lines.push(`Наложена порча «${item.name}».`); }
   }
   if (spell.buff) {
     await applyBuff(actor, spell.buff);

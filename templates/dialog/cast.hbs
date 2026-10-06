@@ -87,6 +87,15 @@
     </div>
     {{/unless}}
 
+    {{#if allies.length}}
+    <div class="dlg-group">
+      <span class="dlg-label">НА КОГО <span class="dim">· цели не выделены — союзники на сцене</span></span>
+      <div class="opt-row">
+        {{#each allies}}<label class="chip"><input type="checkbox" name="ally" value="{{uuid}}"><span>{{name}}</span></label>{{/each}}
+      </div>
+    </div>
+    {{/if}}
+
     {{#if targets.length}}
     <div class="dlg-group">
       <span class="dlg-label">ЦЕЛИ</span>

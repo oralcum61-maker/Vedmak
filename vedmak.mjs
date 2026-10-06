@@ -49,6 +49,7 @@ import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
+import { TavernApp, registerTavernUi } from "./module/apps/tavern-app.mjs";
 import { registerImplantHooks, implantDialog } from "./module/crafting/implant.mjs";
 import { touchDimeritium, endDimeritium } from "./module/magic/dimeritium.mjs";
 import { registerZoneEffectHooks } from "./module/magic/zone-effects.mjs";
@@ -250,6 +251,7 @@ Hooks.once("init", () => {
   registerFx();
   registerMigrationSettings();
   registerInvestigationUi();
+  registerTavernUi();
   registerImplantHooks();
 
   // API для макросов
@@ -263,6 +265,7 @@ Hooks.once("init", () => {
     profileSheet,
     hud: CombatHud,
     investigation: { ...investigation, open: () => InvestigationApp.open() },
+    tavern: { open: () => TavernApp.open() },
     config: CONFIG.VEDMAK
   };
 });

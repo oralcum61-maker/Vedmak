@@ -113,6 +113,8 @@ export async function applyBuff(actor, buff) {
   if (hpBonus > 0) vedmak.hpBonus = hpBonus;
   if (buff.immune?.length) vedmak.immune = buff.immune;
   if (buff.rollMods) vedmak.rollMods = buff.rollMods;
+  // Бросок заклинателя и цена в Вын: по ним Рассеивание решает, снимается ли эффект (стр. 102)
+  if (buff.cast) vedmak.cast = buff.cast;
   // Вне боя раунды не отсчитываются — такой срок ставится временем мира
   const combat = inCombat(actor);
   if (buff.rounds && combat) vedmak.timed = { rounds: buff.rounds, key: `buff:${buff.name}` };

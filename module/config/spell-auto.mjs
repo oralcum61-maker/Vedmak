@@ -23,6 +23,9 @@ export const SPELL_AUTO = {
   "свет покаяния": { automation: { staDamage: "2d6" }, note: "У цели с порогом Энергии 1+ — ещё 2d6 Вын." },
   "извлечение айнфры": { automation: { staDamage: "8d6" } },
 
+  // Рассеивание (стр. 102): снимает с целей магию, чей бросок заклинателя ниже (cast.mjs dispelOn)
+  "рассеивание": { dispel: true },
+
   // На себя
   "очарование": { self: { changes: [S("seduction", 3), S("charisma", 3), S("leadership", 3)] } },
   "благословение любви": { self: { changes: [S("charisma", 3), S("seduction", 3)] } },

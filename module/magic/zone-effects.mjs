@@ -18,17 +18,19 @@ async function setAura(tokenDoc, region, inside) {
   const z = region.flags[SYS].zone;
   if (!actor || !z.aura) return;
   const existing = auraEffects(actor, region.id);
-  if (!inside || actor.uuid === z.actorUuid) {
+  // Штраф ауры (Ирден) заклинателя не трогает; облако лунной пыли проявляет и бросившего
+  if (!inside || (actor.uuid === z.actorUuid && z.aura.stats?.length)) {
     if (existing.length) await actor.deleteEmbeddedDocuments("ActiveEffect", existing.map(e => e.id));
     return;
   }
   if (existing.length) return;
   const value = Math.max(0, Number(z.aura.value) || 0);
-  const changes = z.aura.stats.map(k => ({ key: `system.stats.${k}.mod`, type: "add", value: String(-value), phase: "initial" }));
+  const changes = value ? (z.aura.stats ?? []).map(k => ({ key: `system.stats.${k}.mod`, type: "add", value: String(-value), phase: "initial" })) : [];
   await actor.createEmbeddedDocuments("ActiveEffect", [{
     name: z.aura.label, img: z.aura.img || "icons/magic/symbols/runes-triangle-magenta.webp",
-    system: { changes }, description: `${z.aura.text} Штраф −${value}.`,
-    flags: { [SYS]: { zoneAura: region.id } }
+    system: { changes }, description: value ? `${z.aura.text} Штраф −${value}.` : z.aura.text,
+    // reveals — проявлен: «Покров» слабее (statusRollMods)
+    flags: { [SYS]: { zoneAura: region.id, reveals: !!z.aura.reveals } }
   }]);
 }
 
