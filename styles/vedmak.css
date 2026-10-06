@@ -6,7 +6,7 @@
 @font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: normal; font-display: swap; }
 @font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: italic; font-display: swap; }
 
-.vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   /* Холодная сталь и тёплое серебро: акцент держится светлотой; киноварь — атака и опасность, латунь — Удача
      (переменные латуни и материалов — в слое «Гравюра») */
   --vd-bg: #17181b;
@@ -32,6 +32,8 @@
   --vd-tex-stone: none; --vd-tex-slate: none; --vd-tex-wood: none;
   --vd-material: none;
   --vd-material-size: auto;
+}
+.vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   font-variant-numeric: tabular-nums;  font-family: var(--vd-font-body);
 }
 
@@ -2369,7 +2371,7 @@ body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="tr
    только светлоту поверхности, но не её цвет. Киноварь — атака, урон и опасность; латунь — только Удача;
    остальное — сталь и серебро. Forum — имена, вкладки, разделы и числа; IBM Plex Sans — текст. */
 
-.vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
+body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   --vd-grain: url("../assets/textures/grain.png");
   --vd-t-leather: url("../assets/textures/leather.webp");
   --vd-t-plate: url("../assets/textures/steel-plate.webp");
@@ -4947,7 +4949,7 @@ body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
 /* Фактуры кожи, стали и зерна запечены с цветом в плитки assets/textures/baked (tools/bake-surfaces.sh): раньше
    каждая поверхность смешивала 2–4 слоя в режиме overlay при каждой отрисовке, а зерно было SVG с feTurbulence.
    Настройка клиента «Облегчённая графика» (body.vd-lite) убирает и плитки: остаются цвета, объём и раскладка. */
-body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message, #tooltip, .locked-tooltip) {
+body.vd-lite, body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message, #tooltip, .locked-tooltip) {
   --vd-grain: linear-gradient(transparent, transparent);
   --vd-t-leather: linear-gradient(transparent, transparent); --vd-t-plate: linear-gradient(transparent, transparent);
   --vd-t-brushed: linear-gradient(transparent, transparent); --vd-t-scratch: linear-gradient(transparent, transparent);
@@ -4963,7 +4965,7 @@ body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message, #tooltip, 
   body.vd-lite ::-webkit-scrollbar-track, body.vd-lite ::-webkit-scrollbar-track:horizontal { background-image: none; }
 }
 /* Облегчённая графика: тени без большого размытия, литые числа без фильтра тени */
-body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message) {
+body.vd-lite, body.vd-lite :is(.vedmak, .vedmak-card, .chat-message.vedmak-message) {
   --vd-lift: inset 0 1px 0 rgba(255, 240, 215, .1), inset 0 -1px 0 rgba(0, 0, 0, .55), 0 2px 3px rgba(0, 0, 0, .55);
 }
 body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .metal, .blood) { filter: none !important; }
@@ -5307,3 +5309,200 @@ body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .me
 .vedmak .tavern .tv-log p { margin: 0; font-size: .76rem; line-height: 1.4; color: #d4cfc2; }
 .vedmak .tavern .tv-log p b { color: #f1ece0; }
 #sidebar .directory-header .vd-tavern { flex: 1 0 100%; }
+
+
+/* ============================ Окна Foundry в духе системы (PLAN 4.110) ============================
+   Стандартные окна ядра и модулей — настройки, журналы, таблицы, настройка токена и сцены, окна подтверждения и выбора
+   файла — той же кожей и сталью, что окна системы. Окно — любое с планкой (.window-header), кроме окон системы
+   (.vedmak) со своим видом. Ядро красит окна палитрой (--color-cool-*, --color-warm-*, --color-light-*) и переменными
+   кнопок и полей на самих элементах; слой системы в каскаде идёт после слоёв ядра, поэтому здесь они перекрываются
+   целиком, а свои правила модулей (слой modules) остаются за модулями. */
+
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) {
+  /* Палитра ядра — в тона системы: холодная сталь вместо фиолетовой ночи, серебро вместо охры, киноварь вместо оранжевого */
+  --color-cool-5: #111215; --color-cool-5-25: rgba(17, 18, 21, .25); --color-cool-5-50: rgba(17, 18, 21, .5);
+  --color-cool-5-75: rgba(17, 18, 21, .75); --color-cool-5-90: rgba(17, 18, 21, .92);
+  --color-cool-4: #1f2024; --color-cool-3: #3a3c42;
+  --color-warm-1: #cfc8b8; --color-warm-2: #44464d; --color-warm-3: #3a1a14;
+  --color-light-1: #f1ece0; --color-light-2: #e2ddd0; --color-light-3: #d6d0c3; --color-light-4: #bab4a8;
+  --color-light-5: #8c867b; --color-light-6: #5a5650;
+  --color-text-emphatic: #f1ece0; --color-text-primary: #e2ddd0; --color-text-secondary: #bab4a8; --color-text-subtle: #8c867b;
+  --color-text-accent: #e0937f; --color-text-hyperlink: #e0937f;
+  --color-text-selection: #f1ece0; --color-text-selection-bg: #5a2a20;
+  --color-shadow-primary: transparent; --color-shadow-highlight: rgba(241, 236, 224, .3);
+  --color-border-highlight: #8a8578; --color-border-highlight-alt: #b8432c; --color-underline-header: #3a3c42;
+  --background: var(--vd-bg);
+  --color-header-background: #131417;
+  --color-border: var(--vd-edge);
+  --color-tabs-border: #050607;
+  --color-fieldset-border: #050607;
+  --color-form-hint: #a8a296; --color-form-hint-hover: #bab4a8;
+  --color-form-label: #bab4a8; --color-form-label-hover: #f1ece0;
+  --color-data-border: #3a3c42; --color-data-background: #1f2024;
+  --hr-gradient: linear-gradient(90deg, transparent 0%, #6f6b62 50%, transparent 100%);
+  --table-background-color: rgba(12, 13, 15, .5); --table-header-bg-color: #25262b; --table-header-border-color: #050607;
+  --table-row-color-even: rgba(255, 240, 215, .035); --table-row-color-odd: transparent; --table-row-color-highlight: #2d2f34;
+  --content-link-background: #1f2024; --content-link-border-color: #3a3c42;
+  --content-link-icon-color: #bab4a8; --content-link-text-color: #e2ddd0;
+  --sidebar-entry-hover-bg: rgba(255, 240, 215, .06); --sidebar-separator: 1px solid #050607;
+  /* Шрифты системы: текст — IBM Plex Sans, заголовки — Forum */
+  --font-sans: var(--vd-font-body); --font-body: var(--vd-font-body);
+  --font-h1: var(--vd-font-head); --font-h2: var(--vd-font-head); --font-h3: var(--vd-font-head); --font-h4: var(--vd-font-head);
+  font-family: var(--vd-font-body);
+  color: var(--color-text-primary);
+  /* Рамка (её цвет — --color-border), скругление и тень остаются от ядра — такие же у окон системы */
+  background: var(--vd-bg);
+}
+
+/* Планка — шлифованная сталь, заголовок — гравировка антиквой */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) > .window-header {
+  background-color: #131417;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(0, 0, 0, .25)), var(--vd-s-header);
+  background-size: 100% 100%, 512px 512px;
+  border-bottom: 1px solid var(--vd-edge);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .08);
+  color: var(--vd-silver);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) > .window-header .window-title {
+  font-family: var(--vd-font-head); font-weight: 400; letter-spacing: .06em;
+  color: var(--vd-silver); text-shadow: var(--vd-engrave);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) > .window-header :is(.window-icon, button.header-control, a.header-button) { color: #a8a296; text-shadow: 0 1px 0 #000; }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) > .window-header :is(button.header-control, a.header-button):hover { --button-text-color: var(--vd-silver); color: var(--vd-silver); }
+
+/* Основа — выделанная кожа, как у окон системы; размытие подложки ядра не нужно: окно непрозрачное */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content {
+  background-color: var(--vd-bg);
+  background-image: radial-gradient(130% 100% at 50% 0%, rgba(255, 240, 215, .04), transparent 50%, rgba(0, 0, 0, .35)), var(--vd-s-window);
+  background-size: 100% 100%, 512px 512px;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  color: var(--color-text-primary);
+}
+
+/* Поля — утопленные колодцы, как на листе */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) :is(input, select, textarea, code-mirror, formula-input, color-picker, file-picker, document-tags, string-tags, label.icon) {
+  --input-background-color: var(--vd-input); --input-border-color: #2a2c31; --input-text-color: var(--vd-text);
+  --input-focus-outline-color: #8a8578; --input-placeholder-color: #6f6b62;
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) :is(input, select, textarea, formula-input, color-picker, file-picker, document-tags, string-tags):focus { --input-text-color: var(--vd-silver); }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) :is(input, select, textarea, code-mirror, formula-input, color-picker, file-picker, document-tags, string-tags):disabled,
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) input[readonly] {
+  --input-background-color: #141518; --input-border-color: #222428; --input-text-color: #8c867b;
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]), select, textarea) {
+  border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) :is(input[type="checkbox"], input[type="radio"]) {
+  --checkbox-checked-color: var(--vd-gold); --checkbox-background-color: var(--vd-input); --checkbox-disabled-color: #3a3c42;
+  --checkbox-checkmark-color: transparent; /* светлая тема ядра рисует тёмную птичку на светлом квадрате */
+}
+
+/* Кнопки — выпуклая сталь; в подвале — надписи капителью разрядкой, как кнопки окон проверок */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(button, a.button):not(.header-control, .plain, .inline-control, .icon, :is(color-picker, file-picker, formula-input) > button, .input-group > button, menu button) {
+  --button-background-color: #25262b; --button-border-color: var(--vd-edge); --button-text-color: var(--vd-text);
+  --button-hover-background-color: #2d2f34; --button-hover-border-color: var(--vd-edge); --button-hover-text-color: var(--vd-silver);
+  --button-focus-outline-color: #6f6b62;
+  background-image: var(--vd-grain), linear-gradient(180deg, rgba(255, 245, 225, .1), rgba(0, 0, 0, .28));
+  background-size: 160px 160px, 100% 100%;
+  background-blend-mode: overlay, normal;
+  border-radius: 2px;
+  box-shadow: var(--vd-lift-sm);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .8);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(button, a.button):not(.header-control, .plain, .inline-control, .icon, :is(color-picker, file-picker, formula-input) > button, .input-group > button, menu button):active { box-shadow: var(--vd-sink-sm); background-image: var(--vd-grain); }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(button, a.button):not(.header-control, .plain, .inline-control, .icon, :is(color-picker, file-picker, formula-input) > button, .input-group > button, menu button):disabled { --button-background-color: #1a1b1e; --button-text-color: #6f6b62; box-shadow: none; }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(button, a.button):not(.header-control, .plain, .inline-control, .icon, :is(color-picker, file-picker, formula-input) > button, .input-group > button, menu button):focus-visible { outline: 1px solid #8a8578; outline-offset: 1px; }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(.form-footer, .dialog-buttons) :is(button, a.button) {
+  min-height: 2.1rem;
+  font-weight: 600; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+}
+/* Главная кнопка — сталь светлее с бликом: «Сохранить» у настроек, кнопка по умолчанию у окна подтверждения */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content .form-footer :is(button[autofocus], button.bright, a.button.bright),
+body.system-vedmak .application:not(.vedmak, .vedmak-hud, .dialog):has(> .window-header) .window-content .form-footer button[type="submit"] {
+  --button-background-color: #44464d; --button-hover-background-color: #4e5158;
+  --button-text-color: #f3eee2; --button-hover-text-color: #fff;
+  background-image: var(--vd-grain), var(--vd-gloss);
+  box-shadow: inset 0 1px 0 rgba(255, 235, 220, .25), inset 0 -2px 0 rgba(0, 0, 0, .3), 0 5px 12px -4px rgba(0, 0, 0, .9);
+}
+
+/* Вкладки — утопленная полоса, выбранная — серебро с кромкой киновари снизу */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs {
+  background: rgba(10, 11, 13, .5);
+  border-top: 1px solid #050607; border-bottom: 1px solid #050607;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, .6), 0 1px 0 rgba(255, 240, 215, .05);
+}
+/* Вертикальные вкладки (разделы настроек) — колодец, выбранная — светлее с кромкой киновари слева */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs.vertical { border: 1px solid #050607; border-radius: 2px; box-shadow: var(--vd-sink-sm); }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs.vertical [data-tab] { padding-inline: .5rem; border-bottom-color: #050607; box-shadow: 0 1px 0 rgba(255, 240, 215, .04); }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs [data-tab] {
+  font-family: var(--vd-font-head); letter-spacing: .05em; color: #a8a296; text-shadow: var(--vd-engrave);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs [data-tab]:hover { color: var(--vd-text); text-shadow: var(--vd-engrave); }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs [data-tab].active { color: var(--vd-silver); text-shadow: var(--vd-engrave); box-shadow: inset 0 -2px 0 var(--vd-blood); }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content nav.tabs.vertical [data-tab].active { background: rgba(255, 240, 215, .05); box-shadow: inset 2px 0 0 var(--vd-blood), 0 1px 0 rgba(255, 240, 215, .04); }
+
+/* Группы полей — пластины, как разделы листа: светлее кожи и с выпуклой кромкой, чтобы край группы был виден
+   со всех сторон (утопленная группа с чёрной рамкой сливалась с фоном, и текст будто упирался в рамку окна);
+   подпись группы — ромб и гравированная надпись разрядкой */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content fieldset {
+  border: 1px solid var(--vd-edge); border-radius: 2px;
+  background-color: var(--vd-plate);
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .05), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .2)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px;
+  box-shadow: var(--vd-lift-sm);
+}
+/* Подпись поля в две строки (узкое окно) — строки рядом, а не на высоту поля друг от друга */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content .form-group > label { line-height: 1.25; }
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content fieldset > legend {
+  padding: 0 .45rem;
+  font-family: var(--vd-font-head); font-weight: 400; font-size: .86rem; letter-spacing: .2em; text-transform: uppercase;
+  color: #d6d0c2; text-shadow: var(--vd-engrave);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content fieldset > legend::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 .5rem .14em 0; vertical-align: middle;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #f2ece0, #77726a); box-shadow: 0 0 0 1px #050607, 0 1px 2px rgba(0, 0, 0, .8);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(h1, h2, h3, h4) { font-weight: 400; text-shadow: var(--vd-engrave); }
+/* Тайное в журналах — киноварью, открытое игрокам — зеленью (ядро ставит цвета на сам блок) */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content section.secret { --color-secret-bg: rgba(184, 67, 44, .07); --color-secret-border: #6a3326; --color-revealed-bg: rgba(127, 154, 108, .07); }
+/* Журнал: страницы — утопленный колодец для чтения, заголовки страниц и записи — антиквой */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content .journal-entry-page {
+  --font-h1: var(--vd-font-head); --font-h2: var(--vd-font-head); --font-h3: var(--vd-font-head); --font-h4: var(--vd-font-head);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content .journal-entry-content {
+  background: rgba(10, 11, 13, .5);
+  border: 1px solid #050607; border-radius: 2px 0 0 0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, .7), inset 1px 0 0 rgba(255, 240, 215, .03);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content :is(.journal-header input.title, .journal-entry-content > header input.title, input[name="name"].title, .sheet-header input[name="name"]) {
+  font-family: var(--vd-font-head); font-weight: 400; letter-spacing: .02em;
+}
+/* Папки (компендиумы, вынесенные списки): свой цвет папки остаётся оттенком, но темнеет до стали */
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .folder-header {
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .38), rgba(0, 0, 0, .55));
+  border-color: #050607; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .06);
+}
+body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) .window-content hr { border: 0; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07); background: none; }
+
+/* Окна старого API (V1, у модулей): у ядра там цвета заданы прямо, а не переменными, и светлые */
+body.system-vedmak .app.window-app:not(.vedmak) .window-content :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"]), select, textarea) {
+  background: var(--vd-input); color: var(--vd-text); border: 1px solid #2a2c31; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+body.system-vedmak .app.window-app:not(.vedmak) .window-content :is(button, a.button):not(.header-control, .plain, .inline-control, .icon, menu button) {
+  background-color: #25262b; color: var(--vd-text); border: 1px solid var(--vd-edge);
+}
+body.system-vedmak .app.window-app:not(.vedmak) .window-content :is(button, a.button):not(.header-control, .plain, .inline-control, .icon, menu button):hover { background-color: #2d2f34; color: var(--vd-silver); }
+body.system-vedmak .app.window-app:not(.vedmak) .window-content .dialog-buttons button.default { background-color: #44464d; color: #f3eee2; border-color: var(--vd-edge); }
+body.system-vedmak .app.window-app:not(.vedmak) .window-content table { background: rgba(12, 13, 15, .5); border-color: #050607; }
+
+/* Контекстное меню (правый щелчок) — пластина, как подсказки */
+body.system-vedmak #context-menu {
+  --background-color: var(--vd-plate); --border-color: var(--vd-edge); --text-color: #d6d0c3; --hover-text-color: var(--vd-silver);
+  --group-separator: #2a2c31; --hover-entry-border: #2a2c31; --hover-entry-background: #2d2f34;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), rgba(255, 245, 225, 0) 35%, rgba(0, 0, 0, .24)), var(--vd-s-plate);
+  background-size: 100% 100%, 512px 512px;
+  border-radius: 2px; box-shadow: var(--vd-lift);
+  font-family: var(--vd-font-body);
+}
