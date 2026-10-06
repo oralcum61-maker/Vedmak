@@ -120,12 +120,12 @@ export async function startOfTurn(actor, combat, context) {
   if (has("bleeding")) {
     const n = Math.floor((2 + (d.crit?.bleedExtra ?? 0)) * effectMult(actor, "bleeding", { armorResist: armorResists(actor, "bleeding") }));
     loss += n;
-    lines.push(`Кровотечение: ${n} урона.`);
+    lines.push(n ? `Кровотечение: ${n} урона.` : "Кровотечение: невосприимчив — урона нет.");
   }
   if (has("poisoned")) {
     const n = Math.floor(3 * effectMult(actor, "poison", { armorResist: armorResists(actor, "poison") }));
     loss += n;
-    lines.push(`Отравление: ${n} урона мимо брони.`);
+    lines.push(n ? `Отравление: ${n} урона мимо брони.` : "Отравление: невосприимчив — урона нет.");
   }
   if (has("suffocating")) { loss += 3; lines.push("Удушье: 3 урона."); }
   if (d.crit?.acid) { loss += d.crit.acid; lines.push(`Рана в живот: ${d.crit.acid} урона кислотой.`); }

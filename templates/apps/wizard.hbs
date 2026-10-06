@@ -270,14 +270,14 @@
         {{#if definingSkill}}
         <div class="wskill defining">
           <span class="name">{{definingSkill.name}} <span class="dim">{{definingSkill.stat}}</span></span>
-          {{> stepper field="defining" value=definingSkill.value min=1 max=cap label=definingSkill.name}}
+          {{> stepper field="defining" value=definingSkill.value min=1 max=cap label=definingSkill.name minOff=definingSkill.minOff maxOff=definingSkill.maxOff}}
           <span class="bonus"></span><span class="final">{{definingSkill.value}}</span>
         </div>
         {{/if}}
         {{#each profSkillRows}}
         <div class="wskill">
           <span class="name">{{label}} <span class="dim">{{stat}}</span>{{#if difficult}} <i class="difficult" data-tooltip="Сложный навык: 2 очка за уровень">◆</i>{{/if}}</span>
-          {{> stepper field=(concat "profSkills." key) value=value min=1 max=../cap label=label}}
+          {{> stepper field=(concat "profSkills." key) value=value min=1 max=../cap label=label minOff=minOff maxOff=maxOff}}
           <span class="bonus">{{#if bonus}}+{{bonus}}{{/if}}{{#if native}}родной{{/if}}</span>
           <span class="final">{{final}}</span>
         </div>
@@ -290,7 +290,7 @@
         {{#each pickupRows}}
         <div class="wskill{{#if value}} used{{/if}}">
           <span class="name">{{label}} <span class="dim">{{stat}}</span>{{#if difficult}} <i class="difficult" data-tooltip="Сложный навык: 2 очка за уровень">◆</i>{{/if}}</span>
-          {{> stepper field=(concat "pickup." key) value=value min=0 max=../cap label=label}}
+          {{> stepper field=(concat "pickup." key) value=value min=0 max=../cap label=label minOff=minOff maxOff=maxOff}}
           <span class="bonus">{{#if bonus}}+{{bonus}}{{/if}}{{#if native}}родной{{/if}}</span>
           <span class="final">{{final}}</span>
         </div>

@@ -160,13 +160,17 @@ export function registerBuffHooks() {
     if (!(bonus > 0) || userId !== game.user.id || options?.vedmakHpHandled) return;
     if (effect.parent?.documentName === "Actor") clampHpLater(effect.parent, bonus);
   });
-  Hooks.on("deleteActiveEffect", effect => {
+  Hooks.on("deleteActiveEffect", (effect, options) => {
     const maintain = effect.flags?.vedmak?.maintain;
     const caster = effect.parent;
     if (!maintain || caster?.documentName !== "Actor" || !game.users.activeGM?.isSelf) return;
+    // Эффекты того же пакета удаления (сняли поддержание вместе с баффом) уже удаляются — второй раз их не трогаем
+    const sameBatch = new Set(options?.ids ?? []);
     const actors = new Set([caster, ...game.actors, ...(canvas?.tokens?.placeables ?? []).map(t => t.actor).filter(Boolean)]);
     for (const actor of actors) {
+      if (actor === caster && options?.deleteAll) continue;
       const ids = actor.effects.filter(e => {
+        if (actor === caster && sameBatch.has(e.id)) return false;
         const b = e.flags?.vedmak?.spellBuff ?? e.flags?.vedmak?.spellLink;
         return b?.maintain && b.casterUuid === caster.uuid && b.itemId === maintain.itemId;
       }).map(e => e.id);

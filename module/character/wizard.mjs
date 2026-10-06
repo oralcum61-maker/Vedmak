@@ -423,7 +423,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         return {
           key: k, label: STATS[k].label, abbr: STATS[k].abbr, about: STATS[k].about, base: base[k], race: rm[k] ?? 0, life: life[k] ?? 0,
           final: s.statMode === "random" && s.assign[k] === undefined ? "·" : final[k], mods,
-          minOff: base[k] <= CREATION.statMin, maxOff: base[k] >= CREATION.statCap,
+          minOff: base[k] <= CREATION.statMin, maxOff: !this.#canRaise(`stats.${k}`),
           poolOptions: s.pool.map((v, i) => ({ index: i, value: v, selected: s.assign[k] === i,
             used: Object.entries(s.assign).some(([sk, idx]) => idx === i && sk !== k) }))
         };
@@ -442,14 +442,17 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const pickupBudget = final.int + final.ref;
       const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, SKILLS[k]?.difficult), 0);
       const finalSkills = this.#finalSkills(lp);
-      context.definingSkill = prof ? { name: prof.system.definingSkill.name, stat: STATS[prof.system.definingSkill.stat]?.abbr, value: s.defining } : null;
+      context.definingSkill = prof ? { name: prof.system.definingSkill.name, stat: STATS[prof.system.definingSkill.stat]?.abbr, value: s.defining,
+        minOff: s.defining <= 1, maxOff: !this.#canRaise("defining") } : null;
       context.profSkillRows = profKeys.map(k => ({
         key: k, label: SKILLS[k].label, stat: STATS[SKILLS[k].stat].abbr, difficult: SKILLS[k].difficult,
-        value: s.profSkills[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native
+        value: s.profSkills[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native,
+        minOff: (s.profSkills[k] ?? 0) <= 1, maxOff: !this.#canRaise(`profSkills.${k}`)
       }));
       context.pickupRows = Object.entries(SKILLS).filter(([k]) => !profKeys.includes(k)).map(([k, def]) => ({
         key: k, label: def.label, stat: STATS[def.stat].abbr, difficult: def.difficult,
-        value: s.pickup[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native
+        value: s.pickup[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native,
+        minOff: !(s.pickup[k] > 0), maxOff: !this.#canRaise(`pickup.${k}`)
       }));
       Object.assign(context, {
         profSpent, profBudget: CREATION.professionSkillPoints, profRemaining: CREATION.professionSkillPoints - profSpent,
@@ -945,9 +948,43 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /** Ступенька «− / +» у числа: параметр, навык профессии, освоенный или определяющий навык. */
+  /**
+   * Можно ли поднять поле на 1: предел значения и оставшиеся очки (параметры по очкам, навыки профессии
+   * с определяющим, освоенные — Инт + Реа). Сложный навык стоит 2 очка за уровень.
+   */
+  #canRaise(field) {
+    const s = this.wiz;
+    const [group, key] = field.split(".");
+    const cap = CREATION.skillCapCreation;
+    const next = (k, v) => creationSkillCost(v + 1, SKILLS[k]?.difficult) - creationSkillCost(v, SKILLS[k]?.difficult);
+    if (group === "stats") {
+      if ((s.stats[key] ?? 0) >= CREATION.statCap) return false;
+      if (s.statMode !== "points") return true;
+      const spent = STAT_KEYS.reduce((sum, k) => sum + (s.stats[k] || 0), 0);
+      return spent < (STAT_POINT_BUY[s.level]?.points ?? 60);
+    }
+    if (group === "profSkills" || field === "defining") {
+      const v = field === "defining" ? s.defining : s.profSkills[key] ?? 0;
+      if (v >= cap) return false;
+      const spent = this.#professionSkillKeys().reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0)
+        + (s.defining || 0);
+      return spent + (field === "defining" ? 1 : next(key, v)) <= CREATION.professionSkillPoints;
+    }
+    if (group === "pickup") {
+      const v = s.pickup[key] ?? 0;
+      if (v >= cap) return false;
+      const final = this.#finalStats(this.#lifepath());
+      const spent = Object.entries(s.pickup).reduce((sum, [k, x]) => sum + creationSkillCost(x || 0, SKILLS[k]?.difficult), 0);
+      return spent + next(key, v) <= final.int + final.ref;
+    }
+    return true;
+  }
+
   static #onFieldStep(event, target) {
     const s = this.wiz;
     const field = target.dataset.field;
+    // Очки кончились — «+» не срабатывает (кнопка уже погашена, но двойной клик успевает до перерисовки)
+    if (Number(target.dataset.step) > 0 && !this.#canRaise(field)) return;
     const [group, key] = field.split(".");
     const current = field === "defining" ? s.defining
       : group === "stats" ? s.stats[key] : group === "profSkills" ? s.profSkills[key] ?? 0 : group === "pickup" ? s.pickup[key] ?? 0 : 0;
