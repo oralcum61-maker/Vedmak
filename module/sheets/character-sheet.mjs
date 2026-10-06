@@ -24,7 +24,7 @@ import { implantDialog } from "../crafting/implant.mjs";
 import { dragonFormContext, transformDragon, revertDragon } from "../character/dragon-form.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
-  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, editLifepathNote, findEntry
 } from "../character/lifepath.mjs";
 
 /** Нелюди родом из земель Старших Народов (мастер создания ставит им это происхождение сам). */
@@ -116,6 +116,8 @@ export class CharacterSheet extends VedmakActorSheet {
       lifepathReroll: CharacterSheet.#onLifepathReroll,
       lifepathRerollAll: CharacterSheet.#onLifepathRerollAll,
       lifepathRoll: CharacterSheet.#onLifepathRoll,
+      lifepathChoose: CharacterSheet.#onLifepathChoose,
+      lifepathNote: CharacterSheet.#onLifepathNote,
       investigation: () => InvestigationApp.open(),
       applyTattoo: CharacterSheet.#onApplyTattoo,
       implant: function () { return implantDialog(this.actor); },
@@ -404,7 +406,7 @@ export class CharacterSheet extends VedmakActorSheet {
     const edit = this.lifepathEdit && this.isEditable;
     return {
       edit, age: saved.age, next: lp.next,
-      cards: edit ? lifepathCards(lp.sections, { editable: true, action: "lifepathReroll", nextAction }) : null,
+      cards: edit ? lifepathCards(lp.sections, { editable: true, action: "lifepathReroll", nextAction, noteAction: "lifepathNote" }) : null,
       story: edit ? null : lifepathStory(lp.sections, { nextAction, sectionAction: nextAction && "lifepathSection" }),
       summary: lp.next ? [] : lifepathSummary(lp.effects)
     };
@@ -569,9 +571,10 @@ export class CharacterSheet extends VedmakActorSheet {
       this.#applyCraftFilter();
     });
     this.#applyCraftFilter();
-    // Жизненный путь: свой результат из списка, поведение ведьмака в десятилетии, возраст
+    // Жизненный путь: свой результат из списка (и следующий — не бросая), поведение ведьмака в десятилетии, возраст
     const onLifepath = (selector, fn) => this._listen(selector, "change", (event, el) => {
       event.stopPropagation();
+      if (el.value === "") return;
       this.#saveLifepath(data => fn(data, el));
     });
     onLifepath("select[data-roll-path]", (data, el) => choosePath(data.rolls, el.dataset.rollPath, el.value, el.dataset.mod));
@@ -759,20 +762,47 @@ export class CharacterSheet extends VedmakActorSheet {
     }
   }
 
-  /**
-   * Начать жизненный путь персонажу без него: по расе, происхождению и возрасту с листа.
-   * Первый бросок — сразу, остальные — кнопкой «Бросить» по одному.
-   */
   /** Нанести татуировку «Офира и Зеррикании» (плитка снаряжения). */
   static async #onApplyTattoo(event, target) {
     const item = this.actor.items.get(target.closest("[data-item-id]")?.dataset.itemId);
     if (item) await applyTattoo(this.actor, item);
   }
 
+  /**
+   * Начать жизненный путь персонажу без него: по расе, происхождению и возрасту с листа.
+   * Первый бросок — сразу, остальные — кнопкой «Бросить» по одному.
+   */
   static async #onLifepathRoll() {
+    await this.#stepLifepath(this.#newLifepath());
+  }
+
+  /** Начать путь без бросков: каждый результат выбирается из списка в карточках правки. */
+  static async #onLifepathChoose() {
+    this.lifepathEdit = true;
+    await this.actor.update({ "system.lifepath": writeLifepath(this.#newLifepath()) });
+  }
+
+  /** Своё описание строки: окно с текстом книги и полем для своего. */
+  static async #onLifepathNote(event, target) {
+    const saved = readLifepath(this.actor.system.lifepath);
+    const entry = saved && findEntry(buildFromSaved(foundry.utils.deepClone(saved)), target.dataset.path);
+    if (!entry) return;
+    const notes = foundry.utils.deepClone(saved.notes ?? {});
+    if (!await editLifepathNote(entry, notes)) return;
+    // Пока окно было открыто, путь могли поменять: записываем только эту строку
+    const path = entry.path;
+    await this.#saveLifepath(data => {
+      data.notes = { ...data.notes };
+      if (notes[path]) data.notes[path] = notes[path];
+      else delete data.notes[path];
+    });
+  }
+
+  /** Новый жизненный путь по расе, происхождению, профессии и возрасту с листа. */
+  #newLifepath() {
     const actor = this.actor;
     const witcher = actor.system.raceKey === "witcher" || actor.system.professionKey === "witcher";
-    const data = {
+    return {
       rolls: {}, witcher,
       age: Number.parseInt(actor.system.details.age) || (witcher ? 80 : 25),
       region: lifepathRegion(actor.system),
@@ -781,7 +811,6 @@ export class CharacterSheet extends VedmakActorSheet {
       kind: actor.system.professionKey === "mage" ? "tomeMage" : "",
       gender: actor.system.details.gender ?? ""
     };
-    await this.#stepLifepath(data);
   }
 
   static async #onLifepathClear() {

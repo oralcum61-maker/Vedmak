@@ -53,15 +53,18 @@
           <a class="mini" data-action="lifepathRerollAll" data-tooltip="Перебросить весь путь"><i class="fa-solid fa-dice"></i></a>
           <a class="mini" data-action="lifepathClear" data-tooltip="Убрать жизненный путь"><i class="fa-solid fa-trash"></i></a>
           {{/if}}
-          <button type="button" class="go-btn steel" data-action="lifepathEdit" data-tooltip="{{#if lifepath.edit}}Закончить правку{{else}}Перебросить или выбрать результаты{{/if}}">{{#if lifepath.edit}}Готово{{else}}Править{{/if}}</button>
+          <button type="button" class="go-btn steel" data-action="lifepathEdit" data-tooltip="{{#if lifepath.edit}}Закончить правку{{else}}Перебросить, выбрать результат или описать событие своими словами{{/if}}">{{#if lifepath.edit}}Готово{{else}}Править{{/if}}</button>
         {{else}}
+          <button type="button" class="go-btn steel" data-action="lifepathChoose" data-tooltip="Не бросать: каждый результат выбрать из списка таблицы. Раса, происхождение и возраст — с листа">Выбрать самому</button>
           <button type="button" class="go-btn blood" data-action="lifepathRoll" data-tooltip="Бросать по таблицам корника, по одному броску — каждый в чат. Раса, происхождение и возраст — с листа">Бросить путь</button>
         {{/if}}
       </div>
       {{/if}}
     </div>
     {{#if lifepath}}
-      {{#if lifepath.edit}}<p class="hint">Правка меняет историю. Кроны, навыки и предметы из жизненного пути мастер создания выдал один раз — их поправьте на листе сами.</p>{{/if}}
+      {{#if lifepath.edit}}<p class="hint">Правка меняет историю: кость — перебросить, список — выбрать результат, перо
+        <i class="fa-solid fa-feather"></i> — описать событие своими словами (летопись покажет его вместо текста книги).
+        Кроны, навыки и предметы из жизненного пути мастер создания выдал один раз — их поправьте на листе сами.</p>{{/if}}
       {{#if lifepath.edit}}
       {{> "systems/vedmak/templates/parts/lifepath-cards.hbs" cards=lifepath.cards}}
       {{else}}
@@ -75,7 +78,8 @@
       {{/if}}
     {{else}}
       <p class="hint">Жизненного пути нет. Его бросает мастер создания персонажа, а можно бросить и здесь — по таблицам корника
-        (стр. 25–36, у ведьмака — 238–245), по одному броску, каждый уходит в чат. Кроны, навыки и предметы из него впишите на лист сами.</p>
+        (стр. 25–36, у ведьмака — 238–245), по одному броску, каждый уходит в чат, — или выбрать каждый результат самому.
+        Кроны, навыки и предметы из него впишите на лист сами.</p>
     {{/if}}
   </div>
 

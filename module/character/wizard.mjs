@@ -10,7 +10,7 @@ import {
 import { levelLabel } from "../config/magic.mjs";
 import {
   buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath,
-  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, VAMPIRE_RACE, LIFEPATH_KINDS
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, editLifepathNote, findEntry, VAMPIRE_RACE, LIFEPATH_KINDS
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
 import { compareRu } from "../util.mjs";
@@ -73,7 +73,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       step: "race",
       name: actor.name, gender: d.gender ?? "", age: Number.parseInt(d.age) || 25,
       raceUuid: "", origin: "", homeland: "", homelandRoll: null, vassalRoll: null, language: "",
-      lifepath: true, rolls: {}, lifepathKind: "",
+      // notes — свои описания событий жизненного пути (путь броска → {was, text})
+      lifepath: true, rolls: {}, notes: {}, lifepathKind: "",
       // Возраст 80 выставила раса «ведьмак», а не игрок: при смене расы вернём прежний (ageAuto — признак, ageBefore — прежний)
       ageAuto: false, ageBefore: null,
       professionUuid: "", skillChoices: {},
@@ -107,6 +108,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       lpStep: CharacterWizard.#onLifepathStep,
       lpSection: CharacterWizard.#onLifepathSection,
       lpRest: CharacterWizard.#onLifepathRest,
+      lpNote: CharacterWizard.#onLifepathNote,
       rollStats: CharacterWizard.#onRollStats,
       rollMoney: CharacterWizard.#onRollMoney,
       setField: CharacterWizard.#onSetField,
@@ -191,7 +193,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса и выбранный путь из книг. */
   get #lifepathOpts() {
     const s = this.wiz;
-    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey, kind: s.lifepathKind || "", gender: s.gender };
+    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey, kind: s.lifepathKind || "", gender: s.gender,
+      notes: s.notes };
   }
 
   /**
@@ -362,7 +365,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     if (s.step === "lifepath") {
-      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep", sectionAction: "lpSection" });
+      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep", sectionAction: "lpSection", noteAction: "lpNote" });
       context.lifepathNext = lp.next;
       context.lifeChoices = (lp.effects?.skillChoices ?? []).map(c => ({
         ...c, options: choiceSkillOptions(c).map(o => ({ ...o, selected: s.rolls[c.path] === o.value }))
@@ -694,9 +697,10 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         this.render();
       });
     }
-    // Своё значение броска из списка
+    // Своё значение броска из списка — и следующего, не бросая
     for (const el of this.element.querySelectorAll("select[data-roll-path]")) {
       el.addEventListener("change", () => {
+        if (el.value === "") return;
         const path = el.dataset.rollPath;
         const mod = Number(el.dataset.mod) || 0;
         this.#clearDependents(path);
@@ -752,7 +756,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       if (field === "language") this.#pruneChoices();
     } else if (field === "lifepathKind") {
       // Путь из книги: броски прежнего пути не подходят — начинаем заново
-      if (s.lifepathKind !== value) { s.lifepathKind = value; s.rolls = {}; }
+      if (s.lifepathKind !== value) { s.lifepathKind = value; s.rolls = {}; s.notes = {}; }
     }
   }
 
@@ -832,6 +836,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (s.raceUuid === target.dataset.uuid) return;
     s.raceUuid = target.dataset.uuid;
     s.rolls = {};
+    s.notes = {};
     const key = this.race?.system.key;
     if (key === "witcher") {
       s.origin = ""; s.homeland = ""; s.language = "langCommon";
@@ -918,6 +923,12 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       this.#lifepathBusy = false;
     }
     this.render();
+  }
+
+  /** Своё описание события: окно с текстом книги и полем для своего. */
+  static async #onLifepathNote(event, target) {
+    const entry = findEntry(this.#lifepath(), target.dataset.path);
+    if (entry && await editLifepathNote(entry, this.wiz.notes)) this.render();
   }
 
   /** Добросить остаток пути разом — все броски одной карточкой в чат. */
@@ -1258,7 +1269,8 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   const styleText = i => style[i]?.text ?? "";
   // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
   const lifepath = s.lifepath && lp.sections.length
-    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "", kind: s.lifepathKind || "", gender: s.gender })
+    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "",
+      kind: s.lifepathKind || "", gender: s.gender, notes: s.notes })
     : "";
 
   const update = {

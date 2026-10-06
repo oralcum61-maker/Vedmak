@@ -83,6 +83,8 @@
     {{#if story.pending.sectionAction}}
     <a class="roll-btn" data-action="{{story.pending.sectionAction}}" data-tooltip="Бросить раздел «{{story.pending.cardTitle}}» — каждый бросок в чат">Раздел</a>
     {{/if}}
+    {{#if story.pending.options}}<select class="lp-choose" data-roll-path="{{story.pending.path}}" data-mod="{{story.pending.mod}}" data-tooltip="Не бросать — выбрать результат самому">
+          <option value="">или выбрать…</option>{{#each story.pending.options}}<option value="{{value}}">{{label}}</option>{{/each}}</select>{{/if}}
   </div>
   {{/if}}
 </div>

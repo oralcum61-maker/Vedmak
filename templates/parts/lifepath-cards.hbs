@@ -1,14 +1,21 @@
 {{!-- Жизненный путь карточками — общий для мастера создания и «Дневника». Контекст: cards (lifepathCards).
-      Строка: подпись, результат; если можно править — кость (переброс) и список (свой результат).
-      Путь бросается по шагу: следующий бросок — строкой с кнопкой в конце своей карточки (card.pending). --}}
+      Строка: подпись, результат; если можно править — кость (переброс), список (свой результат) и перо (своё описание:
+      показывается вместо текста книги). Путь бросается по шагу: следующий бросок — строкой с кнопкой в конце своей
+      карточки (card.pending); его можно и выбрать из списка, не бросая. --}}
 {{#*inline "lpValue"}}
+  {{#if note}}
+  <span class="lp-v lp-own" data-tooltip="Своё описание. По книге: {{original}}">{{note}}{{#if detail}} <i class="lp-detail">{{detail}}</i>{{/if}}</span>
+  {{else}}
   <span class="lp-v">{{#if title}}<b>{{title}}.</b> {{/if}}{{text}}{{#if detail}} <i class="lp-detail">{{detail}}</i>{{/if}}</span>
+  {{/if}}
   {{#if editable}}
   <span class="lp-ctl">
     {{#if options}}
     <select data-roll-path="{{path}}" data-mod="{{mod}}" data-tooltip="Выбрать результат">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
     {{/if}}
     <a class="lp-die" data-action="{{action}}" data-path="{{path}}" data-tooltip="Перебросить (d{{sides}})">{{value}}</a>
+    {{#if noteAction}}<a class="lp-pen{{#if note}} active{{/if}}" data-action="{{noteAction}}" data-path="{{path}}"
+      data-tooltip="{{#if note}}Поправить своё описание или вернуть текст книги{{else}}Описать своими словами{{/if}}"><i class="fa-solid fa-feather"></i></a>{{/if}}
   </span>
   {{/if}}
 {{/inline}}
@@ -54,7 +61,9 @@
       <span class="lp-ctl">{{#if c.pending.action}}<a class="roll-btn lp-next" data-action="{{c.pending.action}}" data-tooltip="Бросок уйдёт в чат">
         Бросить d{{c.pending.sides}}</a>
         <a class="roll-btn lp-next" data-action="{{c.pending.sectionAction}}" data-tooltip="Бросить раздел «{{c.pending.cardTitle}}» по очереди — каждый бросок в чат">
-        Раздел</a>{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
+        Раздел</a>
+        {{#if c.pending.options}}<select class="lp-choose" data-roll-path="{{c.pending.path}}" data-mod="{{c.pending.mod}}" data-tooltip="Не бросать — выбрать результат самому">
+          <option value="">или выбрать…</option>{{#each c.pending.options}}<option value="{{value}}">{{label}}</option>{{/each}}</select>{{/if}}{{else}}<span class="lp-v">ещё не брошено</span>{{/if}}</span>
     </div>
     {{/if}}
   </article>

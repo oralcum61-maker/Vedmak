@@ -7,7 +7,8 @@
 // Недостающие броски делаются на лету, поэтому переброс одного результата пересобирает только
 // зависящие от него строки. В пошаговом режиме (`step`) сборка останавливается на первом
 // недостающем броске и сообщает, какой бросок следующий: так путь бросается по одному броску,
-// и каждый уходит в чат (`rollLifepathStep`).
+// и каждый уходит в чат (`rollLifepathStep`). Следующий результат можно и выбрать самому — строка-заглушка
+// несёт список вариантов. Свои описания событий (`notes`: путь → {was, text}) меняют только текст летописи.
 
 import { LIFEPATH_TABLES } from "../config/lifepath-tables.mjs";
 import { VAMPIRE_TABLES, VAMPIRE_ROLE_BY_ROW, VAMPIRE_EVENTS_BY_AGE } from "../config/lifepath-vampire.mjs";
@@ -134,12 +135,14 @@ class Builder {
    * Значение броска: сохранённое или новое. В пошаговом режиме недостающий бросок не делается:
    * в раздел ставится строка-заглушка, и сборка останавливается.
    */
-  roll(path, sides = 10, { label = "", section = null, owner = null } = {}) {
+  roll(path, sides = 10, { label = "", section = null, owner = null, options = null, mod = 0 } = {}) {
     if (owner) this.owners[path] = owner;
     if (!(path in this.rolls)) {
       if (this.step) {
         this.next = { path, sides, label, section: section?.title ?? "" };
-        this.pendingEntry = { path, label, sides, pending: true, text: "" };
+        // Варианты — чтобы выбрать результат самому, не бросая; у числовых бросков («1d10 × 100 крон») — числа
+        options ??= sides <= 20 ? Array.from({ length: sides }, (_, i) => ({ value: i + 1, label: String(i + 1) })) : null;
+        this.pendingEntry = { path, label, sides, mod, options, pending: true, text: "" };
         section?.entries.push(this.pendingEntry);
         throw PENDING;
       }
@@ -157,13 +160,14 @@ class Builder {
   /** Строка по таблице книги. */
   table(section, path, tableKey, { label, col = 0, sides = 10, mod = 0 } = {}) {
     label ??= T[tableKey].label;
-    const raw = this.roll(path, sides, { label, section });
+    const options = tableOptions(tableKey, col);
+    const raw = this.roll(path, sides, { label, section, options, mod });
     const value = Math.max(1, Math.min(T[tableKey].rows.at(-1).max, raw + mod));
     const row = lookup(tableKey, value);
     const cell = cellOf(row, col);
     const entry = {
       path, label, value: raw, shown: value, mod, sides,
-      options: tableOptions(tableKey, col), title: cell.title, text: cell.text, row
+      options, title: cell.title, text: cell.text, row
     };
     section.entries.push(entry);
     return entry;
@@ -171,17 +175,18 @@ class Builder {
 
   /** Строка по подтаблице из текста. */
   sub(section, path, key, label) {
-    const value = this.roll(path, 10, { label, section });
-    const entry = { path, label, value, sides: 10, options: subOptions(key), title: "", text: subLookup(key, value), sub: true };
+    const options = subOptions(key);
+    const value = this.roll(path, 10, { label, section, options });
+    const entry = { path, label, value, sides: 10, options, title: "", text: subLookup(key, value), sub: true };
     section.entries.push(entry);
     return entry;
   }
 
   /** Строка «чёт/нечет» или произвольный бросок без таблицы. */
   plain(section, path, label, text, { sides = 10, options = null } = {}) {
-    const value = this.roll(path, sides, { label, section });
     const describe = v => (typeof text === "function" ? text(v) : text);
     if (!options && sides <= 10) options = Array.from({ length: sides }, (_, i) => ({ value: i + 1, label: `${i + 1}: ${describe(i + 1)}`.slice(0, 90) }));
+    const value = this.roll(path, sides, { label, section, options });
     const entry = { path, label, value, sides, options, title: "", text: describe(value), sub: true };
     section.entries.push(entry);
     return entry;
@@ -189,6 +194,8 @@ class Builder {
 }
 
 const EVEN_OPTIONS = (even, odd) => [{ value: 2, label: `Чёт: ${even}` }, { value: 1, label: `Нечет: ${odd}` }];
+/** Бросок d100 против порога — два исхода списком: «1–25: …» и «26–100: …». */
+const THRESHOLD_OPTIONS = (n, hit, miss) => [{ value: 1, label: `1–${n}: ${hit}` }, { value: n + 1, label: `${n + 1}–100: ${miss}` }];
 
 /** Бонусы предметов положения семьи (стр. 28). */
 function familyStatusEffects(entry, fx) {
@@ -406,7 +413,8 @@ function buildWitcher(b, { age = 80 }) {
     const risk = WITCHER_RISK[riskKey] ?? WITCHER_RISK.normal;
     sec.risk = riskKey;
     const danger = b.plain(sec, `${base}.danger`, "Опасность (d100)",
-      v => (v <= risk.danger ? `Что-то стряслось (${v} ≤ ${risk.danger}%)` : `Обошлось (${v} > ${risk.danger}%)`), { sides: 100 });
+      v => (v <= risk.danger ? `Что-то стряслось (${v} ≤ ${risk.danger}%)` : `Обошлось (${v} > ${risk.danger}%)`),
+      { sides: 100, options: THRESHOLD_OPTIONS(risk.danger, "что-то стряслось", "обошлось") });
     if (danger.value <= risk.danger) {
       const kind = b.table(sec, `${base}.dangerKind`, "wDanger");
       const k = kind.row?.min;
@@ -424,7 +432,8 @@ function buildWitcher(b, { age = 80 }) {
       } else {
         ["Пол", "Кто", "Причина", "Сила", "Насколько далеко зашло"].forEach((l, c) =>
           b.table(sec, `${base}.enemy.${c}`, "wEnemies", { col: c, label: `Враг: ${l.toLowerCase()}` }));
-        const alive = b.plain(sec, `${base}.enemy.alive`, "Жив ли враг (d100)", v => (v <= 30 ? "Враг умер" : "Враг жив"), { sides: 100 });
+        const alive = b.plain(sec, `${base}.enemy.alive`, "Жив ли враг (d100)", v => (v <= 30 ? "Враг умер" : "Враг жив"),
+          { sides: 100, options: THRESHOLD_OPTIONS(30, "враг умер", "враг жив") });
         if (alive.value <= 30) {
           b.plain(sec, `${base}.enemy.when`, "Когда умер", v => `Через ${v} десятилетий`);
           b.table(sec, `${base}.enemy.death`, "wEnemyDeath");
@@ -456,7 +465,8 @@ function buildWitcher(b, { age = 80 }) {
     } else if (outcome === "ally") {
       ["Пол", "Кто", "Как познакомились"].forEach((l, c) => b.table(sec, `${base}.ally.${c}`, "wAllies", { col: c, label: `Союзник: ${l.toLowerCase()}` }));
       b.table(sec, `${base}.ally.close`, "wCloseness", { label: "Близость" });
-      const alive = b.plain(sec, `${base}.ally.alive`, "Жив ли союзник (d100)", v => (v <= 30 ? "Союзник мёртв" : "Союзник жив"), { sides: 100 });
+      const alive = b.plain(sec, `${base}.ally.alive`, "Жив ли союзник (d100)", v => (v <= 30 ? "Союзник мёртв" : "Союзник жив"),
+        { sides: 100, options: THRESHOLD_OPTIONS(30, "союзник мёртв", "союзник жив") });
       if (alive.value <= 30) {
         b.plain(sec, `${base}.ally.when`, "Когда умер", v => `Через ${v} десятилетий`);
         b.table(sec, `${base}.ally.death`, "wAllyDeath");
@@ -589,7 +599,7 @@ function cardOf(next) {
 /**
  * Собрать жизненный путь.
  * @param {object} rolls — словарь бросков (изменяется: дописываются недостающие, кроме пошагового режима)
- * @param {object} opts — {witcher, age, region: north|nilfgaard|elder, race, step}
+ * @param {object} opts — {witcher, age, region: north|nilfgaard|elder, race, step, notes}; notes — свои описания событий
  * @returns {{sections: object[], effects: object, next: {path, sides, label, section}|null, resultOf: Function}}
  *   next — следующий бросок в пошаговом режиме; null — путь брошен до конца;
  *   resultOf(path) — что выпало по броску: {title, text, detail}
@@ -605,6 +615,7 @@ export function buildLifepath(rolls, opts) {
   } catch (err) {
     if (err !== PENDING) throw err;
   }
+  applyNotes(b.sections, opts.notes);
   const resultOf = path => {
     const own = b.sections.flatMap(sec => sec.entries).find(e => e.path === path && !e.pending);
     if (own) return { title: own.title ?? "", text: own.text ?? "", detail: own.detail ?? "" };
@@ -615,6 +626,64 @@ export function buildLifepath(rolls, opts) {
     Object.assign(b.pendingEntry, { cardTitle: b.next.cardTitle });
   }
   return { sections: b.sections, effects: b.effects, next: b.next, resultOf };
+}
+
+/**
+ * Что выпало строке — как в книге: «Заголовок. Пояснение». К этому тексту привязано своё описание:
+ * переброс или другой выбор дают другой результат, и своё описание прежнего уже не показывается.
+ */
+export function resultText(e) {
+  if (!e.title) return e.text ?? "";
+  return e.text ? `${e.title}${/[.!?…]$/.test(e.title) ? "" : "."} ${e.text}` : e.title;
+}
+
+/** Свои описания событий — строкам, чей результат не сменился с тех пор, как его переписали. */
+function applyNotes(sections, notes) {
+  if (!notes) return;
+  for (const sec of sections) for (const e of sec.entries) {
+    const n = e.path && !e.pending ? notes[e.path] : null;
+    if (n?.text && n.was === resultText(e)) e.note = n.text;
+  }
+}
+
+/** Записать своё описание строки; пустое или как в книге — убрать. */
+export function setLifepathNote(notes, entry, text) {
+  const t = String(text ?? "").trim();
+  if (!t || t === resultText(entry)) delete notes[entry.path];
+  else notes[entry.path] = { was: resultText(entry), text: t };
+}
+
+/**
+ * Окно своего описания строки: текст книги для сравнения и поле со своим.
+ * @param {object} entry — строка из buildLifepath
+ * @param {object} notes — свои описания (меняются)
+ * @returns {Promise<boolean>} поменялось ли
+ */
+export async function editLifepathNote(entry, notes) {
+  const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
+  const original = resultText(entry);
+  const label = plainLabel(entry.label);
+  const content = `<div class="vedmak lp-note-form">
+    <p class="lp-note-orig"><span class="lp-k">По книге</span> ${esc(original)}${entry.detail ? ` <i class="lp-detail">${esc(entry.detail)}</i>` : ""}</p>
+    <textarea name="text" rows="6" placeholder="Как это было у вашего персонажа">${esc(entry.note ?? original)}</textarea>
+    <p class="hint">Своё описание меняет только текст летописи. Что выпало и что это дало — кроны, навыки, предметы — остаётся как было.
+      Переброс или другой результат из списка вернёт текст книги.</p>
+  </div>`;
+  const buttons = [{ action: "save", label: "Сохранить", icon: "fa-solid fa-feather", default: true,
+    callback: (event, button) => button.form.elements.text.value }];
+  if (entry.note) buttons.push({ action: "reset", label: "Как в книге", icon: "fa-solid fa-book", callback: () => "" });
+  const text = await foundry.applications.api.DialogV2.wait({
+    window: { title: `Своё описание: ${label}` }, position: { width: 460 }, content, buttons, rejectClose: false
+  });
+  if (text === null || text === undefined) return false;
+  const before = JSON.stringify(notes[entry.path] ?? null);
+  setLifepathNote(notes, entry, text);
+  return JSON.stringify(notes[entry.path] ?? null) !== before;
+}
+
+/** Строка пути по пути броска — для окна своего описания. */
+export function findEntry(lp, path) {
+  return lp.sections.flatMap(sec => sec.entries).find(e => e.path === path && !e.pending) ?? null;
 }
 
 /** Удалить бросок и все зависящие от него (пути, начинающиеся с него). */
@@ -1048,7 +1117,8 @@ function buildMage(b, { age = 25, gender = "" }) {
     const beh = MAGE_BEHAVIOR[key];
     sec.risk = key;
     const danger = b.plain(sec, `${base}.danger`, "Опасность (d100)",
-      v => (v <= beh.danger ? `Что-то пошло не так (${v} ≤ ${beh.danger}%)` : `Обошлось (${v} > ${beh.danger}%)`), { sides: 100 });
+      v => (v <= beh.danger ? `Что-то пошло не так (${v} ≤ ${beh.danger}%)` : `Обошлось (${v} > ${beh.danger}%)`),
+      { sides: 100, options: THRESHOLD_OPTIONS(beh.danger, "что-то пошло не так", "обошлось") });
     if (danger.value <= beh.danger) mageDanger(b, sec, `${base}.trouble`, beh.col, seen);
     const outcomeOf = v => beh.outcome.find(([a, c]) => v >= a && v <= c)?.[2] ?? "nothing";
     const outcomeRoll = b.plain(sec, `${base}.outcome`, "Что пошло правильно", v => MAGE_OUTCOMES[outcomeOf(v)]);
@@ -1071,7 +1141,8 @@ function buildMage(b, { age = 25, gender = "" }) {
  * Жизненный путь персонажа — JSON в `system.lifepath`: броски и то, от чего они зависят.
  * В строке, а не в объекте: пути бросков содержат точки («event.0.kind»), а Foundry при обновлении
  * разворачивает такие ключи во вложенные объекты.
- * @returns {{rolls: object, witcher: boolean, age: number, region: string, race: string}|null}
+ * notes — свои описания событий: путь → {was: текст книги, к которому писали, text: своё}.
+ * @returns {{rolls: object, witcher: boolean, age: number, region: string, race: string, notes?: object}|null}
  */
 export function readLifepath(json) {
   try {
@@ -1082,13 +1153,16 @@ export function readLifepath(json) {
   }
 }
 
-export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human", kind = "", gender = "" }) {
-  return JSON.stringify({ rolls, witcher, age, region, race, kind, gender });
+export function writeLifepath({ rolls, witcher = false, age = 25, region = "north", race = "human", kind = "", gender = "", notes = null }) {
+  const data = { rolls, witcher, age, region, race, kind, gender };
+  if (notes && Object.keys(notes).length) data.notes = notes;
+  return JSON.stringify(data);
 }
 
 /** Параметры сборки из сохранённого жизненного пути. */
 export function savedOpts(data) {
-  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race, kind: data.kind || "", gender: data.gender || "" };
+  return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race, kind: data.kind || "", gender: data.gender || "",
+    notes: data.notes ?? null };
 }
 
 /** Собрать сохранённый жизненный путь пошагово: недостающие броски не делаются, `next` — следующий. */
@@ -1124,13 +1198,17 @@ function selectedOption(e) {
   return opt?.value ?? e.value;
 }
 
-/** Строка для шаблона: текст результата и, если можно править, кость и список. */
-function entryView(e, { editable, action }, label = e.label) {
+/**
+ * Строка для шаблона: текст результата и, если можно править, кость, список и перо своего описания.
+ * Своё описание показывается вместо текста книги; книжный — подсказкой.
+ */
+function entryView(e, { editable, action, noteAction }, label = e.label) {
   const view = { label, title: e.title ?? "", text: e.text ?? "", detail: e.detail ?? "", static: !!e.static || !e.path };
+  if (e.note) Object.assign(view, { note: e.note, original: resultText(e) });
   if (editable && e.path) {
     const picked = selectedOption(e);
     Object.assign(view, {
-      editable: true, action, path: e.path, value: e.value, sides: e.sides ?? 10, mod: e.mod ?? 0,
+      editable: true, action, noteAction, path: e.path, value: e.value, sides: e.sides ?? 10, mod: e.mod ?? 0,
       options: e.options?.map(o => ({ ...o, selected: o.value === picked })) ?? null
     });
   }
@@ -1139,6 +1217,11 @@ function entryView(e, { editable, action }, label = e.label) {
 
 const SIBLING_COLS = ["Пол", "Возраст", "Отношение", "Черта"];
 
+/** Следующий бросок можно не бросать, а выбрать: путь, поправка и варианты для списка (если бросать можно). */
+function pendingChoice(e, nextAction) {
+  return nextAction && e.options?.length ? { path: e.path, mod: e.mod ?? 0, options: e.options } : {};
+}
+
 /**
  * Разделы жизненного пути → карточки для показа:
  * семья — строками, братья и сёстры — таблицей, события — карточкой на каждое десятилетие,
@@ -1146,19 +1229,20 @@ const SIBLING_COLS = ["Пол", "Возраст", "Отношение", "Чер�
  * Следующий бросок (пошаговый режим) — строкой с кнопкой в конце своей карточки.
  * @param {object[]} sections — из buildLifepath
  * @param {object} [opts] — editable: показать кости и списки; action — data-action переброса;
- *   nextAction — data-action следующего броска (null — бросать нельзя); sectionAction — «Бросить раздел»
+ *   nextAction — data-action следующего броска (null — бросать нельзя); sectionAction — «Бросить раздел»;
+ *   noteAction — data-action своего описания строки (null — без пера)
  */
 export function lifepathCards(sections, {
-  editable = false, action = "reroll", nextAction = "lifepathStep", sectionAction = "lifepathSection"
+  editable = false, action = "reroll", nextAction = "lifepathStep", sectionAction = "lifepathSection", noteAction = null
 } = {}) {
-  const ctx = { editable, action };
+  const ctx = { editable, action, noteAction };
   // «20 лет: событие» → «Событие»: год уже в заголовке карточки
   const short = label => label.replace(/^\d+ лет:\s*/, "").replace(/^./, c => c.toUpperCase());
   const pendingOf = entries => {
     const e = entries.find(x => x.pending);
     return e ? {
       label: short(e.label), sides: e.sides, cardTitle: e.cardTitle ?? "",
-      action: nextAction, sectionAction: nextAction ? sectionAction : null
+      action: nextAction, sectionAction: nextAction ? sectionAction : null, ...pendingChoice(e, nextAction)
     } : null;
   };
   const cards = [];
@@ -1253,6 +1337,7 @@ const plainLabel = label => String(label ?? "").replace(/\s*\(d\d+\)/, "");
 
 /** Строка для чтения: подпись, заголовок, пояснение, подробность. */
 function fact(e, label = plainLabel(e.label)) {
+  if (e.note) return { label, ...splitText(e.note), detail: e.detail ?? "" };
   if (e.title) return { label, head: e.title, body: e.text, detail: e.detail ?? "" };
   return { label, ...splitText(e.text), detail: e.detail ?? "" };
 }
@@ -1269,7 +1354,8 @@ function facetsOf(entries, base) {
   const facets = [];
   let cur = null;
   for (const e of entries) {
-    if (STRUCTURAL.test(e.path ?? "")) continue;
+    // Развилки не видны, если их не переписали своими словами
+    if (STRUCTURAL.test(e.path ?? "") && !e.note) continue;
     const kind = (e.path ?? "").slice(base.length + 1).split(".")[0];
     const title = FACETS[kind] ?? "";
     if (!cur || cur.title !== title) facets.push(cur = { title, entries: [] });
@@ -1280,17 +1366,17 @@ function facetsOf(entries, base) {
     const lead = entries.find(e => /: кто$/.test(e.label)) ?? entries.find(e => /\.hunt\.target$/.test(e.path)) ?? entries[0];
     const main = fact(lead);
     const gender = entries.find(e => e !== lead && /: пол$/.test(e.label));
-    if (gender) main.head += ` (${GENDER[gender.text] ?? lowerFirst(gender.text)})`;
+    if (gender) main.head += ` (${gender.note || GENDER[gender.text] || lowerFirst(gender.text)})`;
     const meta = [], notes = [];
     if (main.body) notes.push(main.body);
     if (main.detail) notes.push(main.detail);
     const prefix = new RegExp(`^${title}:\\s*`, "i");
     for (const e of entries) {
       if (e === lead || e === gender) continue;
-      const value = e.title || e.text;
+      const value = e.note || e.title || e.text;
       const k = lowerFirst(plainLabel(e.label).replace(prefix, ""));
-      if (value.length > LONG) notes.push(`${e.title ? `${e.title}. ${e.text}` : value}`);
-      else meta.push({ k, v: lowerFirst(value) });
+      if (value.length > LONG) notes.push(e.note || resultText(e));
+      else meta.push({ k, v: e.note || lowerFirst(value) });
       if (e.detail) notes.push(e.detail);
     }
     return { title, head: main.head, meta, notes };
@@ -1311,15 +1397,16 @@ export function lifepathStory(sections, { nextAction = null, sectionAction = nul
   let pending = null;
   for (const sec of sections) {
     const pend = sec.entries.find(e => e.pending);
-    if (pend && nextAction) pending = { label: pend.label, sides: pend.sides, cardTitle: pend.cardTitle ?? sec.title, action: nextAction, sectionAction };
+    if (pend && nextAction) pending = { label: pend.label, sides: pend.sides, cardTitle: pend.cardTitle ?? sec.title, action: nextAction, sectionAction,
+      ...pendingChoice(pend, nextAction) };
     const done = sec.entries.filter(e => !e.pending);
     const has = path => done.some(e => e.path === path);
 
     const factSec = FACT_SECTIONS[sec.title];
     if (factSec) {
-      // Развилка «с семьёй что-то случилось» не нужна, если следом сказано, что именно
-      const rows = done.filter(e => !(e.path === "family" && has("familyFate")) && !(e.path === "parents" && has("parentsFate"))
-        && !(e.path === "ofir.family" && has("ofir.familyFate")) && !(e.path === "ofir.parents" && has("ofir.parentsFate")));
+      // Развилка «с семьёй что-то случилось» не нужна, если следом сказано, что именно (и её не переписали)
+      const rows = done.filter(e => e.note || (!(e.path === "family" && has("familyFate")) && !(e.path === "parents" && has("parentsFate"))
+        && !(e.path === "ofir.family" && has("ofir.familyFate")) && !(e.path === "ofir.parents" && has("ofir.parentsFate"))));
       const featured = rows.filter(e => factSec.featured.includes(e.path)).map(e => fact(e));
       const facts = rows.filter(e => !factSec.featured.includes(e.path)).map(inlineFact);
       if (featured.length || facts.length) blocks.push({ kind: "facts", title: factSec.title, featured, facts });
@@ -1338,27 +1425,32 @@ export function lifepathStory(sections, { nextAction = null, sectionAction = nul
         const f = fact(e, "");
         const fame = done.find(x => x.path === `${e.path}.fame`);
         chronicle.push({ age: `${i + 1}`, unit: "событие",
-          facets: [{ title: "", head: f.head, meta: [], notes: [f.body, fame?.text].filter(Boolean) }] });
+          facets: [{ title: "", head: f.head, meta: [], notes: [f.body, fame?.note || fame?.text].filter(Boolean) }] });
       });
       continue;
     }
     if (sec.title === "Характер") {
-      traits.push({ title: "Нрав", items: done.map(e => ({ k: e.label, v: e.title || e.text })) });
+      traits.push({ title: "Нрав", items: done.map(e => ({ k: e.label, v: e.note || e.title || e.text })) });
       continue;
     }
     if (sec.title === "Братья и сёстры") {
-      const count = done.find(e => e.path === "siblingsCount");
+      const count = done.find(e => e.path === "siblingsCount" || e.path === "ofir.sibCount");
       const byGroup = new Map();
       for (const e of done.filter(x => x.group !== undefined)) {
         if (!byGroup.has(e.group)) byGroup.set(e.group, []);
-        byGroup.get(e.group)[Number(e.path.split(".").pop())] = e.title || e.text;
+        byGroup.get(e.group)[Number(e.path.split(".").pop())] = e;
       }
-      const people = [...byGroup.values()].map(([gender, age, attitude, trait]) => ({
-        icon: gender === "Женский" ? "fa-venus" : gender === "Мужской" ? "fa-mars" : "fa-user",
-        who: gender === "Женский" ? "Сестра" : gender === "Мужской" ? "Брат" : "Брат или сестра",
-        meta: [age && lowerFirst(age), attitude && lowerFirst(attitude), trait && lowerFirst(trait)].filter(Boolean)
-      }));
-      blocks.push({ kind: "siblings", title: "Братья и сёстры", subtitle: count ? count.text : "", people });
+      // Своё описание — как написано; текст книги — со строчной, как продолжение строки
+      const shown = e => e && (e.note || lowerFirst(e.title || e.text));
+      const people = [...byGroup.values()].map(([gender, age, attitude, trait]) => {
+        const g = gender?.title || gender?.text;
+        return {
+          icon: g === "Женский" ? "fa-venus" : g === "Мужской" ? "fa-mars" : "fa-user",
+          who: gender?.note || (g === "Женский" ? "Сестра" : g === "Мужской" ? "Брат" : "Брат или сестра"),
+          meta: [shown(age), shown(attitude), shown(trait)].filter(Boolean)
+        };
+      });
+      blocks.push({ kind: "siblings", title: "Братья и сёстры", subtitle: count ? count.note || count.text : "", people });
       continue;
     }
     if (sec.title === "Важные события") {
@@ -1397,7 +1489,7 @@ export function lifepathStory(sections, { nextAction = null, sectionAction = nul
     }
     if (sec.title === "Личный стиль" || sec.title === "Ценности") {
       traits.push({ title: sec.title === "Личный стиль" ? "Облик" : "Ценности",
-        items: done.map(e => ({ k: e.label, v: e.title || e.text })) });
+        items: done.map(e => ({ k: e.label, v: e.note || e.title || e.text })) });
     }
   }
   for (const era of chronicle) if (era.from) era.age = `${era.from}–${era.to}`;
