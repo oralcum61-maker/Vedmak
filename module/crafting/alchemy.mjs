@@ -14,12 +14,13 @@ import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { postCard, resolveActor, tokenDistance, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS } from "../combat/zones.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS, pointInZone, removeZones } from "../combat/zones.mjs";
 import { zoneAuraFor } from "../config/magic.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
 import { manualDamage } from "../combat/manual.mjs";
 import { applyStatus } from "../combat/damage.mjs";
-import { alchemyAuto, anyoneCanDrink } from "../config/alchemy-auto.mjs";
+import { alchemyAuto, anyoneCanDrink, rollCount } from "../config/alchemy-auto.mjs";
+import { rollStunSave } from "../combat/saves.mjs";
 import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
 import { inCombat, roundsAsTime } from "../util.mjs";
 import { timeIsUp } from "../magic/timed.mjs";
@@ -71,6 +72,45 @@ async function enduranceCheck(actor, dc, title) {
 }
 
 const isMutant = actor => actor.type === "character" && actor.system.raceKey === "witcher";
+const statusLabel = id => CONFIG.statusEffects[id]?.name ?? id;
+/** «3 раунда», «5 раундов». */
+const roundsText = n => `${n} ${n % 10 === 1 && n % 100 !== 11 ? "раунд" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "раунда" : "раундов"}`;
+/** Срок словами: раунды, часы или минуты. */
+const spanText = (rounds, minutes) => rounds ? roundsText(rounds)
+  : minutes >= 60 && minutes % 60 === 0 ? `${minutes / 60} ч` : `${minutes} мин`;
+
+/** Флаги-срабатывания эффекта алхимии, которые читают бой и испытания (alchemy-triggers.mjs, saves.mjs, damage.mjs). */
+const TRIGGER_KEYS = ["immune", "onKill", "onHit", "onDamaged", "untilHit", "doubleAdrenaline", "berserk", "noStunSave",
+  "autoDeathSave", "burnVuln", "blackBlood", "wakeSave"];
+
+/**
+ * Эффект состава на актора: одинаковые не суммируются (старый заменяется). Раунды — отсчётом в бою, вне боя —
+ * временем мира; минуты — временем мира.
+ * @returns {Promise<ActiveEffect|null>}
+ */
+async function alchemyEffect(actor, item, { changes = [], rounds = 0, minutes = 0, regen = 0, keepRegen = false,
+  triggers = {}, statuses = [], toxicity = 0 } = {}) {
+  const same = alchemyEffects(actor).filter(e => e.flags.vedmak.alchemy.itemName === item.name).map(e => e.id);
+  // Порог токсичности проверяет вызывающий, когда новый эффект уже на месте
+  if (same.length) await actor.deleteEmbeddedDocuments("ActiveEffect", same, { vedmakToxicityChecked: true });
+  const effect = {
+    name: item.name, img: item.img,
+    system: { changes },
+    flags: { vedmak: { alchemy: { toxicity, kind: item.system.kind, itemName: item.name, at: Date.now() }, ...triggers } }
+  };
+  if (statuses.length) effect.statuses = statuses;
+  // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+  if (minutes) effect.duration = { value: minutes, units: "minutes", expiry: null };
+  if (rounds || regen || keepRegen) {
+    // Вне боя раунды не отсчитываются — срок ставится временем мира; регенерация идёт, если начнётся бой
+    const combat = inCombat(actor);
+    if (rounds && !combat && !minutes) effect.duration = roundsAsTime(rounds);
+    effect.flags.vedmak.timed = { rounds: combat ? rounds || 0 : 0, key: "alchemy" };
+    effect.flags.vedmak.regen = regen;
+  }
+  const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
+  return created ?? null;
+}
 
 /** Все активные эффекты эликсиров и отваров, новые — последними. */
 export function alchemyEffects(actor) {
@@ -113,8 +153,20 @@ export async function drink(actor, item) {
   for (const st of new Set([...(u.removeStatuses ?? []), ...(auto.immune ?? [])])) {
     if (actor.statuses.has(st)) {
       await actor.toggleStatusEffect(st, { active: false });
-      lines.push(`Снято: ${CONFIG.statusEffects.find(e => e.id === st)?.name ?? st}.`);
+      lines.push(`Снято: ${statusLabel(st)}.`);
     }
+  }
+
+  // Проверка Стойкости при приёме (ароматное зелье, фисштех): провал — состояния эффекта
+  let failStatuses = [];
+  let failMinutes = 0;
+  if (auto.save) {
+    const check = await enduranceCheck(actor, auto.save.dc, `${item.name}: Стойкость`);
+    if (check && !check.success) {
+      failStatuses = auto.save.statuses ?? [];
+      failMinutes = auto.save.minutes ?? 0;
+      lines.push(`Стойкость не пройдена: ${failStatuses.map(statusLabel).join(", ")}${failMinutes ? ` на ${failMinutes} минут` : ""}.`);
+    } else if (check) lines.push("Стойкость пройдена — состав не подействовал.");
   }
 
   // Мгновенное: Выносливость, лечение крита
@@ -143,21 +195,43 @@ export async function drink(actor, item) {
   }
   let rounds = s.durationRounds;
   if (!rounds && !s.durationMinutes && auto.rounds) {
-    rounds = Number.isFinite(Number(auto.rounds)) ? Number(auto.rounds) : (await new Roll(String(auto.rounds)).evaluate()).total;
-    lines.push(`Действует ${rounds} раундов.`);
+    rounds = await rollCount(auto.rounds);
+    if (!Number.isFinite(Number(auto.rounds))) lines.push(`Действует ${roundsText(rounds)}.`);
+  }
+  // Минуты и часы справочника — числом или формулой («1d6*30», «1d10» часов)
+  let autoMinutes = 0;
+  if (!rounds && !s.durationMinutes && (auto.minutes || auto.hours)) {
+    autoMinutes = await rollCount(auto.minutes) + 60 * await rollCount(auto.hours);
+    if (!Number.isFinite(Number(auto.minutes ?? 0)) || (auto.hours && !Number.isFinite(Number(auto.hours)))) {
+      lines.push(`Действует ${spanText(0, autoMinutes)}.`);
+    }
   }
   // Срок только текстом («2d6 раундов», «30 минут», «24 часа», «мгновенно»): без него эффект и токсичность
   // висели бы вечно. Мгновенный состав держит токсичность один раунд — ради проверки порога (стр. 247)
   let textMinutes = 0;
-  if (!rounds && !s.durationMinutes && !auto.rounds && !auto.minutes) {
+  if (!rounds && !s.durationMinutes && !auto.rounds && !autoMinutes) {
     const parsed = await durationFromText(s.duration);
-    if (parsed.rounds) { rounds = parsed.rounds; if (parsed.rolled) lines.push(`Действует ${rounds} раундов.`); }
+    if (parsed.rounds) { rounds = parsed.rounds; if (parsed.rolled) lines.push(`Действует ${roundsText(rounds)}.`); }
     textMinutes = parsed.minutes;
   }
-  const minutes = s.durationMinutes || auto.minutes || textMinutes || 0;
+  // Провал проверки с собственным сроком (фисштех — дезориентация на полчаса) задаёт срок эффекта
+  const minutes = failMinutes || s.durationMinutes || autoMinutes || textMinutes || 0;
+  if (failMinutes) rounds = 0;
   const regen = u.regen || auto.regen || 0;
-  const triggers = Object.fromEntries(["immune", "onKill", "onHit", "onDamaged", "untilHit", "doubleAdrenaline", "berserk"]
-    .filter(k => auto[k]).map(k => [k, foundry.utils.deepClone(auto[k])]));
+  const triggers = Object.fromEntries(TRIGGER_KEYS.filter(k => auto[k]).map(k => [k, foundry.utils.deepClone(auto[k])]));
+  // Адреналиновый эликсир: при смерти — испытания против смерти удаются сами, иначе нет штрафов порога ранения
+  if (auto.adrenaline) {
+    if (actor.system.hp.value < 0) {
+      triggers.autoDeathSave = true;
+      lines.push(`${roundsText(rounds)}: испытания против смерти удаются сами (штраф всё равно растёт); СЛ стабилизации −5.`);
+    } else {
+      fx("system.fx.ignoreWound", 1);
+      lines.push(`${roundsText(rounds)}: нет штрафов порога ранения.`);
+    }
+  }
+  const statuses = [...new Set([...(auto.statuses ?? []), ...failStatuses])];
+  // Проверка пройдена и больше ничего нет — эффекта нет (фисштех без последствий)
+  const onlySave = auto.save && !failStatuses.length && !changes.length && !s.toxicity;
   // Зелье берсерка: Стойкость сразу после приёма; дальше — в начале каждого хода (combat.mjs)
   if (auto.berserk) {
     const check = await enduranceCheck(actor, auto.berserk.dc, `${item.name}: исступление`);
@@ -166,29 +240,14 @@ export async function drink(actor, item) {
   }
 
   // Эффект с длительностью
-  const hasEffect = rounds || minutes || s.toxicity || changes.length || regen || u.heal
-    || auto.regen !== undefined || auto.vision || Object.keys(triggers).length;
+  const hasEffect = !onlySave && (rounds || minutes || s.toxicity || changes.length || regen || u.heal
+    || auto.regen !== undefined || auto.vision || Object.keys(triggers).length || statuses.length);
   if (hasEffect) {
-    // Одинаковые эликсиры не суммируются — старый заменяется
-    const same = alchemyEffects(actor).filter(e => e.flags.vedmak.alchemy.itemName === item.name).map(e => e.id);
-    // Порог проверяется ниже, когда новый эффект уже на месте
-    if (same.length) await actor.deleteEmbeddedDocuments("ActiveEffect", same, { vedmakToxicityChecked: true });
-    const effect = {
-      name: item.name, img: item.img,
-      system: { changes },
-      flags: { vedmak: { alchemy: { toxicity: s.toxicity, kind: s.kind, itemName: item.name, at: Date.now() }, ...triggers } }
-    };
-    // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
-    if (minutes) effect.duration = { value: minutes, units: "minutes", expiry: null };
-    if (rounds || regen || auto.regen !== undefined) {
-      // Вне боя раунды не отсчитываются — срок ставится временем мира; регенерация идёт, если начнётся бой
-      const combat = inCombat(actor);
-      if (rounds && !combat && !minutes) effect.duration = roundsAsTime(rounds);
-      effect.flags.vedmak.timed = { rounds: combat ? rounds || 0 : 0, key: "alchemy" };
-      effect.flags.vedmak.regen = regen;
-    }
-    const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
-    if (s.duration) lines.push(`Длительность: ${s.duration}.`);
+    const created = await alchemyEffect(actor, item, { changes, rounds, minutes, regen, keepRegen: auto.regen !== undefined,
+      triggers, statuses, toxicity: s.toxicity });
+    const overridden = auto.rounds || auto.minutes || auto.hours || failMinutes;
+    if (s.duration && !overridden) lines.push(`Длительность: ${s.duration}.`);
+    if (statuses.length && created) lines.push(`Состояние: ${statuses.map(statusLabel).join(", ")}.`);
     if (auto.vision && created) {
       const n = await applyVision(actor, created, auto.vision);
       if (n) lines.push(`Зрение токена: ${auto.vision.visionMode === "darkvision" ? "в темноте" : auto.vision.visionMode}, ${auto.vision.range} м.`);
@@ -202,6 +261,20 @@ export async function drink(actor, item) {
       await actor.update({ "system.hp.value": value });
       lines.push(`+${value - hp.value} ПЗ (${value} из ${hp.max}).`);
     }
+  }
+  if (auto.staNow) {
+    const sta = actor.system.sta;
+    const value = Math.min(sta.max, sta.value + auto.staNow);
+    if (value > sta.value) {
+      await actor.update({ "system.sta.value": value });
+      lines.push(`+${value - sta.value} Вын (${value} из ${sta.max}).`);
+    }
+  }
+  // Зависимость (фисштех — стр. 32)
+  if (auto.addiction) {
+    const check = await enduranceCheck(actor, auto.addiction, `${item.name}: зависимость`);
+    if (check) lines.push(check.success ? `Стойкость СЛ ${auto.addiction} против зависимости пройдена.`
+      : `Стойкость СЛ ${auto.addiction} не пройдена — зависимость (стр. 32).`);
   }
   if (auto.note) lines.push(auto.note);
   if (u.heal) {
@@ -326,9 +399,15 @@ Hooks.on("updateActor", (actor, changes, options, userId) => {
 /** Составы, которые наносят на рану, на цель или дают понюхать: цель — выбранный токен или сам персонаж. */
 export async function applyPreparation(actor, item) {
   const s = item.system;
+  const auto = alchemyAuto(item.name) ?? {};
+  // Яд на клинок (чёрный, трупный): окно выбора оружия; «в питьё или еду» — как раньше, на цель
+  if (auto.coat) {
+    const chosen = await coatWeapon(actor, item, auto.coat);
+    if (chosen !== "target") return chosen;
+  }
   const target = [...game.user.targets][0]?.actor ?? actor;
   const lines = [`${target === actor ? actor.name : `${actor.name} → ${target.name}`}: ${s.effect}`];
-  if (target.isOwner) lines.push(...await preparationOnTarget(target, s.use));
+  if (target.isOwner) lines.push(...await preparationOnTarget(target, s.use, item));
   else {
     // Чужая цель (порошок на раненого товарища): состояние меняет ведущий — по предмету отправителя, а не по запросу
     if (!game.users.activeGM) return ui.notifications.warn("Нужен ведущий в игре: состав на чужую цель накладывает он.");
@@ -340,9 +419,10 @@ export async function applyPreparation(actor, item) {
   return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], flags: { fx: { kind: "apply" } } });
 }
 
-/** Снять и наложить состояния состава на цель. @returns {string[]} строки карточки */
-async function preparationOnTarget(target, use) {
+/** Снять и наложить состояния состава на цель, эффекты справочника. @returns {string[]} строки карточки */
+async function preparationOnTarget(target, use, item) {
   const lines = [];
+  const auto = alchemyAuto(item?.name) ?? {};
   for (const st of use.removeStatuses ?? []) {
     if (target.statuses.has(st)) {
       await target.toggleStatusEffect(st, { active: false });
@@ -353,7 +433,70 @@ async function preparationOnTarget(target, use) {
     await applyStatus(target, use.status, use.statusRounds);
     lines.push(`Эффект: ${CONFIG.statusEffects[use.status]?.name ?? use.status}.`);
   }
+  if (auto.targetStatus) {
+    await applyStatus(target, auto.targetStatus);
+    lines.push(`Эффект: ${statusLabel(auto.targetStatus)}.`);
+  }
+  // Хлороформ: испытание Уст с поправкой; провал — без сознания, пока не пройдёт испытание (кнопка в начале хода)
+  if (auto.stunSave) {
+    const msg = await rollStunSave(target, { mod: auto.stunSave.mod ?? 0, reason: item.name, applyStatus: false,
+      outcomes: { ok: "Не подействовало", fail: statusLabel(auto.stunSave.status) } });
+    const ok = msg?.flags?.vedmak?.save?.success;
+    if (ok === false) {
+      await alchemyEffect(target, item, { statuses: [auto.stunSave.status], triggers: { wakeSave: { mod: 0 } } });
+      lines.push(`Испытание Уст провалено: ${statusLabel(auto.stunSave.status)}, пока не пройдёт испытание.`);
+    } else if (ok) lines.push("Испытание Уст пройдено — не подействовало.");
+  }
+  // Эффект на время (пепельная мазь, быстрый огонь, обезболивающие травы)
+  const triggers = Object.fromEntries(TRIGGER_KEYS.filter(k => auto[k]).map(k => [k, foundry.utils.deepClone(auto[k])]));
+  delete triggers.wakeSave;
+  if (item && (auto.changes?.length || Object.keys(triggers).length) && !auto.stunSave) {
+    const rounds = await rollCount(auto.rounds);
+    const minutes = rounds ? 0 : await rollCount(auto.minutes) + 60 * await rollCount(auto.hours);
+    for (const st of auto.immune ?? []) {
+      if (target.statuses.has(st)) { await target.toggleStatusEffect(st, { active: false }); lines.push(`Снято: ${statusLabel(st)}.`); }
+    }
+    const created = await alchemyEffect(target, item, { changes: foundry.utils.deepClone(auto.changes ?? []), rounds, minutes, triggers });
+    if (created && (rounds || minutes)) lines.push(`Действует ${spanText(rounds, minutes)}.`);
+  }
+  if (auto.note) lines.push(auto.note);
   return lines;
+}
+
+/* ------------------------------ Яд на клинок ------------------------------ */
+
+/**
+ * Нанести яд на клинок (чёрный яд — 1d10 раундов, трупный — до первого урона). Яд живёт во флаге оружия
+ * vedmak.coat; урон оружием с подходящим типом накладывает его состояния (combat/damage.mjs).
+ * @returns {Promise<"target"|ChatMessage|null>} "target" — состав пошёл не на клинок, а на цель (в питьё)
+ */
+async function coatWeapon(actor, item, coat) {
+  const weapons = actor.itemTypes.weapon.filter(w => (!w.system.isRanged || w.system.isThrown)
+    && (!coat.types?.length || w.system.damageTypes.some(t => coat.types.includes(t))));
+  const canTarget = !!item.system.use.status;
+  if (!weapons.length && !canTarget) {
+    return ui.notifications.warn(`Нет оружия, на которое можно нанести «${item.name}»${coat.types?.length ? " (нужно режущее или колющее)" : ""}.`);
+  }
+  const options = weapons.map(w => `<option value="${w.id}" ${w.system.equipped ? "selected" : ""}>${w.name}${w.flags?.vedmak?.coat ? ` (сейчас: ${w.flags.vedmak.coat.name})` : ""}</option>`);
+  if (canTarget) options.push(`<option value="target">На цель: в питьё или еду</option>`);
+  const id = await DialogV2.wait({
+    window: { title: item.name },
+    classes: ["vedmak", "vedmak-dialog"],
+    content: `<div class="vedmak-roll-dialog"><p>${item.system.effect}</p><div class="form-group"><label>Куда</label><select name="weapon">${options.join("")}</select></div>
+      <p class="hint">Смазать клинок — полный раунд. ${coat.once ? "Яд держится до первого нанесённого урона." : `Яд держится ${coat.rounds} раундов.`}</p></div>`,
+    buttons: [{ action: "ok", label: "Нанести", default: true, callback: (e, b) => b.form.elements.weapon.value },
+      { action: "cancel", label: "Отмена" }],
+    rejectClose: false
+  });
+  if (!id || id === "cancel") return null;
+  if (id === "target") return "target";
+  const weapon = actor.items.get(id);
+  const rounds = coat.rounds ? await rollCount(coat.rounds) : 0;
+  const until = rounds ? (game.time.worldTime ?? 0) + rounds * (CONFIG.time.roundTime || 3) : 0;
+  await weapon.setFlag("vedmak", "coat", { name: item.name, statuses: coat.statuses, types: coat.types ?? [], once: !!coat.once, until });
+  await spendOne(item);
+  return card(actor, item.name, [`Нанесено на «${weapon.name}»: ${coat.statuses.map(statusLabel).join(" и ")} при уроне${coat.types?.length ? " режущим или колющим" : ""}${rounds ? ` — ${roundsText(rounds)}` : " — до первого урона"}.`],
+    { subtitle: ALCHEMY_KINDS[item.system.kind], flags: { fx: { kind: "oil" } } });
 }
 
 // Ведущий: состав игрока на чужую цель. Отправитель должен владеть персонажем с этим составом; что снять и что
@@ -365,7 +508,7 @@ registerGMHandler("alchemyPreparation", async ({ actorUuid, itemId, targetUuid }
   if (!item || !target || item.system.use?.action !== "apply" || !userOwnsAny(userId, actor)) {
     return console.warn(`vedmak | отклонён состав на цель от ${game.users.get(userId)?.name ?? userId}`);
   }
-  await preparationOnTarget(target, item.system.use);
+  await preparationOnTarget(target, item.system.use, item);
   await spendOne(item);
 });
 
@@ -395,9 +538,9 @@ async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb) {
   const duration = lingering ? (await parseZoneDuration(effect.match(/\d+\s*(?:раунд|ход)\S*/)?.[0] ?? "")) : { instant: true };
   // Облако с аурой («Лунная пыль» проявляет невидимое) — ставит и снимает ведущий (magic/zone-effects.mjs)
   const auraDef = zoneAuraFor(name);
-  const extra = auraDef ? { aura: { ...auraDef, value: 0, img: "" } } : {};
+  const extra = { ...(auraDef ? { aura: { ...auraDef, value: 0, img: "" } } : {}), ...(alchemyAuto(name)?.zone ?? {}) };
   const region = await createZone(shape, { name, color, actor, itemName: name, duration, extra });
-  return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape };
+  return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape, region };
 }
 
 export async function throwItem(actor, item) {
@@ -426,8 +569,15 @@ export async function throwItem(actor, item) {
     lines.push("Цели не выбраны: выберите пострадавших (или одну цель — центр зоны) и нажмите кнопку ниже.");
     buttons.push({ action: "trapTrigger", label: "Урон по выбранным целям" });
   }
+  const auto = alchemyAuto(item.name) ?? {};
+  if (auto.ignite) {
+    lines.push(`Огонь в облаке — взрыв: ${auto.ignite.formula} по всем в нём, горение ${auto.ignite.chance}%.`);
+    buttons.push({ action: "gasIgnite", label: "Газ вспыхнул" });
+  }
+  if (auto.zone?.noMagic && zone?.region) lines.push("В облаке нельзя творить магию.");
   return card(actor, item.name, lines, { subtitle: ALCHEMY_KINDS[s.kind], buttons,
-    flags: { trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect },
+    flags: { zoneId: zone?.region?.id ?? null, sceneId: zone?.region?.parent?.id ?? null, ignite: auto.ignite ?? null,
+      trap: { name: item.name, use: foundry.utils.deepClone(u), effect: s.effect },
       fx: { kind: "bomb", zone: zone?.shape ? { x: zone.shape.x, y: zone.shape.y, radius: zone.shape.radius } : null,
         element: u.damageType === "elemental" ? "fire" : "" } } });
 }
@@ -451,10 +601,63 @@ registerChatAction("trapTrigger", async message => {
   if (zone === false) return;
   const victims = zone?.victims ?? areaTargets(radius);
   if (!victims.length) return ui.notifications.warn("Выберите цели в зоне ловушки (или одну — центр взрыва).");
+  const auto = alchemyAuto(trap.name) ?? {};
+  if (auto.trapSave || auto.mark) return trapOnVictims(owner, trap, victims, auto);
   return manualDamage(victims, {
     formula: trap.use.damage, reason: trap.name, damageType: trap.use.damageType, where: "all",
     status: trap.use.status, statusChance: trap.use.statusChance, statusRounds: trap.use.statusRounds
   });
+});
+
+/** Ловушки без урона: «Бешенство» — Стойкость, провал — исступление; «Метка» — эффект на сутки. */
+async function trapOnVictims(owner, trap, victims, auto) {
+  const lines = [];
+  const rolls = [];
+  const pseudo = { name: trap.name, img: "icons/magic/control/fear-fright-monster-grin-red-orange.webp", system: { kind: "trap" } };
+  for (const v of victims) {
+    if (!v.isOwner) { lines.push(`${v.name}: бросок и эффект — за владельцем или ведущим.`); continue; }
+    if (auto.trapSave) {
+      const check = await enduranceCheck(v, auto.trapSave.dc, `${trap.name}: Стойкость`);
+      if (!check) continue;
+      if (check.success) { lines.push(`${v.name}: Стойкость ${check.total} — держится.`); continue; }
+      await alchemyEffect(v, pseudo, { triggers: { berserk: { dc: auto.trapSave.dc, endOnSave: true } } });
+      lines.push(`${v.name}: Стойкость ${check.total} — бросается на ближайшего, пока не пройдёт Стойкость СЛ ${auto.trapSave.dc} (кнопка в начале хода).`);
+    }
+    if (auto.mark) {
+      await alchemyEffect(v, { ...pseudo, img: "icons/magic/symbols/runes-star-orange.webp" }, { minutes: auto.mark.minutes });
+      lines.push(`${v.name}: помечен на сутки.`);
+    }
+  }
+  if (auto.note) lines.push(auto.note);
+  return card(owner ?? victims[0], `Ловушка ${trap.name}`, [trap.effect, ...lines], { subtitle: "Сработала", rolls });
+}
+
+/** «Сон дракона»: газ вспыхнул — урон и горение всем в облаке, облако исчезает. */
+registerChatAction("gasIgnite", async message => {
+  const f = message.flags.vedmak?.alchemy ?? {};
+  const scene = game.scenes.get(f.sceneId) ?? canvas.scene;
+  const region = scene?.regions?.get(f.zoneId);
+  const victims = region && scene === canvas.scene
+    ? canvas.tokens.placeables.filter(t => t.actor && pointInZone(region, t.center)).map(t => t.actor)
+    : [...game.user.targets].map(t => t.actor).filter(Boolean);
+  if (!victims.length) return ui.notifications.warn("В облаке никого нет: выберите пострадавших целями.");
+  const ignite = f.ignite ?? { formula: "5d6", status: "burning", chance: 75 };
+  await manualDamage(victims, { formula: ignite.formula, reason: `${f.trap?.name ?? "Газ"}: взрыв`, damageType: "elemental",
+    where: "all", status: ignite.status, statusChance: ignite.chance });
+  if (region) await removeZones([region]);
+});
+
+/** Хлороформ: испытание Уст в начале хода; успех — приходит в себя. */
+registerChatAction("wakeSave", async (message, button) => {
+  const actor = resolveActor(button?.dataset.actor) ?? resolveActor(button?.dataset.fallback);
+  if (!actor?.isOwner) return ui.notifications.warn("Бросок делает владелец персонажа или ведущий.");
+  const effect = actor.effects.find(e => e.active && e.flags?.vedmak?.wakeSave);
+  const msg = await rollStunSave(actor, { mod: effect?.flags.vedmak.wakeSave.mod ?? 0, reason: effect?.name ?? "Очнуться", applyStatus: false,
+    outcomes: { ok: "Очнулся", fail: "Без сознания" } });
+  if (msg?.flags?.vedmak?.save?.success && effect) {
+    await effect.delete();
+    ui.notifications.info(`${actor.name} приходит в себя.`);
+  }
 });
 
 /* ---------------------------------- Масло ---------------------------------- */
@@ -530,8 +733,13 @@ registerChatAction("berserkSave", async (message, button) => {
   if (!actor?.isOwner) return ui.notifications.warn("Бросок делает владелец персонажа или ведущий.");
   const effect = actor.effects.find(e => e.active && e.flags?.vedmak?.berserk);
   const dc = effect?.flags.vedmak.berserk.dc ?? 16;
-  const check = await enduranceCheck(actor, dc, "Зелье берсерка: исступление");
+  const check = await enduranceCheck(actor, dc, `${effect?.name ?? "Зелье берсерка"}: исступление`);
   if (check && !check.success) ui.notifications.info(`${actor.name} в исступлении: в этот ход атакует ближайшего.`);
+  // «Бешенство» ловушки длится, пока не пройдена проверка
+  else if (check?.success && effect?.flags.vedmak.berserk.endOnSave) {
+    await effect.delete();
+    ui.notifications.info(`${actor.name} приходит в себя.`);
+  }
 });
 
 registerChatAction("mutagenSave", async message => {

@@ -21,6 +21,23 @@
 //   hpNow        — сразу прибавить к текущим ПЗ (вместе с ростом максимума), не выше нового максимума
 //   anyone       — эликсир не ведьмачий: пьёт кто угодно без Стойкости СЛ 18 у не-мутанта
 //   note         — что осталось текстом
+//   action       — действие, если у предмета оно не задано (составы без кнопки в данных)
+//   hours        — длительность в часах (число или формула «1d10»); minutes и rounds тоже понимают формулы
+//   statuses     — состояния на время эффекта (кома «Коматозника»)
+//   save         — Стойкость при приёме: {dc, statuses, minutes} — провал даёт состояния (на minutes или срок эффекта)
+//   addiction    — Стойкость против зависимости после приёма (СЛ)
+//   staNow       — сразу прибавить к текущей Вын (вместе с ростом максимума)
+//   noStunSave   — испытаний Уст нет: проходят сами (опиат)
+//   adrenaline   — адреналиновый эликсир: при смерти — испытания против смерти удаются сами, иначе нет штрафов порога
+//   burnVuln     — +% к шансу поджечь носителя («Быстрый огонь»)
+//   blackBlood   — «Чёрная кровь»: кто укусит или выпьет кровь, отравлен (Стойкость СЛ dc)
+//   stunSave     — «Применить» на цель: испытание Уст с поправкой mod, провал — состояние status (хлороформ)
+//   targetStatus — «Применить» на цель: состояние (яд аконита)
+//   coat         — яд на клинок: {statuses, types (тип урона оружия), rounds (срок), once (до первого урона)}
+//   zone         — флаги облака бомбы ({noMagic} — двимерит)
+//   ignite       — облако горючего газа: кнопка взрыва {formula, status, chance}
+//   trapSave     — ловушка: Стойкость {dc}, провал — исступление до успешной проверки
+//   mark         — ловушка-метка: эффект на целях на minutes
 
 const M = (key, value) => ({ key, type: "add", value, phase: "initial" });
 
@@ -28,11 +45,12 @@ export const ALCHEMY_AUTO = {
   // Эликсиры корника
   "кошка": { vision: { visionMode: "darkvision", range: 30 },
     note: "Невосприимчивость к гипнозу и +2 к раскрытию иллюзий — учитывайте сами." },
+  // Кто укусит ведьмака или выпьет его кровь, отравлен до Стойкости СЛ 20 и отскакивает на 2 м (combat/damage.mjs)
+  "чёрная кровь": { blackBlood: { dc: 20 } },
   "пурга": { onKill: { changes: [M("system.stats.ref.mod", 4)], once: true } },
   "иволга": { immune: ["poisoned"] },
   "лес марибора": { doubleAdrenaline: true },
   "косатка": { note: "Дыхание задерживается в полтора раза дольше, под водой нет штрафов зрения." },
-  "чёрная кровь": { note: "Кто выпьет кровь ведьмака, получает 3 урона за раунд до Стойкости СЛ 20 и отскакивает на 2 м." },
 
   // Отвары
   "отвар из главоглаза": { spPerFreeEnc: 2 },
@@ -63,8 +81,55 @@ export const ALCHEMY_AUTO = {
   // Не ведьмачьи составы других книг: лекарство от катрионы и зелье, которое подливают как яд
   "эликсир мец": { anyone: true },
   // Стойкость СЛ 16 сразу и в начале каждого хода; провал — в свой ход атакует ближайшего (1d10 раундов)
-  "зелье берсерка": { anyone: true, rounds: "1d10", berserk: { dc: 16 } }
+  "зелье берсерка": { anyone: true, rounds: "1d10", berserk: { dc: 16 } },
+
+  // Составы корника (стр. 87–88)
+  // Без сознания, пока не пройдёт испытание Уст: кнопка — в начале каждого хода
+  "хлороформ": { stunSave: { mod: -2, status: "unconscious" } },
+  "фисштех": { save: { dc: 16, statuses: ["disoriented"], minutes: 30 }, addiction: 18 },
+  "эликсир пантаграна": { minutes: "1d6*30", changes: [M("system.skills.resistCoercion.mod", -2)] },
+  "ароматное зелье": { hours: "1d10", save: { dc: 16, statuses: ["intoxicated"] } },
+  "обезболивающие травы": { rounds: "2d10", changes: [{ key: "system.fx.pain", type: "upgrade", value: 2, phase: "initial" }] },
+  "быстрый огонь": { minutes: 1440, burnVuln: 50, note: "+50 % к шансу загореться — до сожжения или суток." },
+  "чёрный яд": { coat: { statuses: ["poisoned"], rounds: "1d10" } },
+
+  // «Профессиональные инструменты»: составы Родольфа
+  "адреналиновый эликсир": { anyone: true, action: "drink", rounds: 3, adrenaline: true },
+  "пепельная мазь": { action: "apply", minutes: 60, immune: ["burning"] },
+  "яд аконита": { action: "apply", targetStatus: "suffocating" },
+
+  // «Компендиум BS & Tobi»: простые составы
+  "возбудитель (киноварь + солнце)": { anyone: true, changes: [M("system.stats.ref.mod", 3)] },
+  "соблазнитель (гидраген + ребис)": { anyone: true, changes: [M("system.skills.seduction.mod", 3)] },
+  // Запугиванию противостоит Храбрость
+  "устрашитель (фульгор + киноварь)": { anyone: true, changes: [M("system.skills.courage.mod", 3)] },
+  "концентратор (эфир + купорос)": { anyone: true, changes: [M("system.skills.awareness.mod", 3)] },
+  "энергетик (киноварь + квебрит)": { anyone: true, staNow: 15, changes: [M("system.fx.sta", 15)] },
+  "укрепитель (купорос + ребис)": { anyone: true, hpNow: 15, changes: [M("system.fx.hp", 15)] },
+  "коматозник (фульгор + солнце)": { anyone: true, statuses: ["unconscious"] },
+  "обезболивающее (квебрит + солнце)": { anyone: true, changes: [{ key: "system.fx.pain", type: "upgrade", value: 4, phase: "initial" }] },
+  // Слабый свет — как яркий: усиление света у токена; двойной штраф на ярком свету — учитывайте сами
+  "полуночник (эфир + аер)": { anyone: true, vision: { visionMode: "lightAmplification", range: 30 } },
+  "опиат киновари": { anyone: true, rounds: "1d10", noStunSave: true },
+
+  // «Лорды и земли»
+  "селестин": { anyone: true, changes: [M("system.skills.awareness.mod", -2)] },
+  "трупный яд": { coat: { statuses: ["poisoned", "nauseated"], types: ["slashing", "piercing"], once: true } },
+
+  // Бомбы и ловушки корника
+  "двимеритовая бомба": { zone: { noMagic: true } },
+  "сон дракона": { ignite: { formula: "5d6", status: "burning", chance: 75 } },
+  "бешенство": { trapSave: { dc: 18 } },
+  "метка": { mark: { minutes: 1440 } }
 };
+
+/** Число из числа или формулы («2d10», «1d6*30»); пусто — 0. */
+export async function rollCount(value) {
+  if (value === undefined || value === null || value === "") return 0;
+  const n = Number(value);
+  if (Number.isFinite(n)) return n;
+  return (await new Roll(String(value)).evaluate()).total;
+}
 
 /**
  * Книги, где эликсиры не ведьмачьи: обычные эликсиры «Фургончика Родольфа» и эликсиры магов «Тома Хаоса».

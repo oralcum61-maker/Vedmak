@@ -154,11 +154,16 @@ export const IMPLANT_GLYPHS = {
 };
 export const IMPLANT_LIMIT = 2;
 
-/** Мутация глифа Игни у носителя (не ведьмака): шанс поджечь его самого выше на 10 % («Офир и Зеррикания», стр. 84). */
+/**
+ * На сколько % легче поджечь актора: мутация глифа Игни у носителя-не ведьмака +10 («Офир и Зеррикания», стр. 84),
+ * «Быстрый огонь» на нём +50 (эффект с флагом vedmak.burnVuln).
+ */
 export function implantBurnVulnerability(actor) {
-  if (actor?.system?.raceKey === "witcher") return 0;
-  return (actor?.items ?? []).some(i => i.flags?.vedmak?.implant?.kind === "glyph" && i.flags.vedmak.implant.key === "igni"
-    && !i.flags.vedmak.implant.extra) ? 10 : 0;
+  const glyph = actor?.system?.raceKey !== "witcher" && (actor?.items ?? []).some(i => i.flags?.vedmak?.implant?.kind === "glyph"
+    && i.flags.vedmak.implant.key === "igni" && !i.flags.vedmak.implant.extra) ? 10 : 0;
+  const coated = Math.max(0, ...(actor?.effects ?? []).filter(e => e.active && e.flags?.vedmak?.burnVuln)
+    .map(e => Number(e.flags.vedmak.burnVuln) || 0));
+  return glyph + coated;
 }
 
 /**

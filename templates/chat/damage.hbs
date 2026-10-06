@@ -54,6 +54,7 @@
   {{#if applied}}
   <div class="card-buttons">
     {{#if report.stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}" data-mod="{{report.stunSave.mod}}" data-reason="{{report.stunSave.reason}}">Испытание Уст{{#if report.stunSave.mod}} ({{report.stunSave.mod}}){{/if}}</button>{{/if}}
+    {{#if report.dimeritium}}<button type="button" data-vedmak="dimeritiumTouch" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}">Касание двимерита</button>{{/if}}
     {{#if report.deathSave}}<button type="button" class="primary" data-vedmak="deathSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}">Испытание против смерти</button>{{/if}}
   </div>
   {{else}}

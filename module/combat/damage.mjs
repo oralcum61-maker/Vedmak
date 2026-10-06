@@ -56,6 +56,13 @@ export async function damageFromDefense(message, { skipDialog = false, messageMo
     });
   }
   const result = await computeDamage({ attack, target, critLevel: def.critLevel, aimed: !!attack.aim && !def.fixedLocation, ...cfg, adrenaline, margin: Math.max(0, def.margin ?? 0) });
+  if (result.coatSpent) {
+    const weapon = attacker.items.get(attack.weapon?.id);
+    if (weapon?.flags?.vedmak?.coat) await weapon.unsetFlag("vedmak", "coat");
+    result.notes.push("Яд с клинка израсходован.");
+  }
+  // Удар двимеритовым протезом: цели — касание двимерита (кнопка в карточке после применения)
+  if (attack.weapon?.dimeritium) result.dimeritium = true;
   const data = {
     kind: "damage",
     defenseMessageId: message.id,
@@ -351,6 +358,19 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     effects.push({ key, status, label: CONFIG.statusEffects[status]?.name ?? key, chance, roll: r.total, success, immune: !!immuneTo });
   }
 
+  // Яд на клинке (чёрный, трупный): при уроне оружием подходящего типа — его состояния (alchemy.mjs, coatWeapon)
+  let coatSpent = false;
+  const coat = !spell && w.coat && (!w.coat.until || w.coat.until > (game.time.worldTime ?? 0)) ? w.coat : null;
+  if (coat && final > 0 && (!coat.types?.length || coat.types.includes(damageType))) {
+    for (const status of coat.statuses ?? []) {
+      const resistKey = STATUS_RESIST_KEY[status];
+      const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
+      effects.push({ key: "coat", status, label: `${CONFIG.statusEffects[status]?.name ?? status} (${coat.name})`,
+        chance: 100, roll: "яд", success: !immuneTo, immune: !!immuneTo });
+    }
+    coatSpent = !!coat.once;
+  }
+
   // Шанс дезориентировать сразу (хвост дракона, руна Триглава) — в отличие от «Дезориентирующего» без испытания
   const disorient = Math.min(100, effChance("disorient") + (runeBonus.disorient ?? 0));
   if (disorient) {
@@ -408,6 +428,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     final, nonLethal: !!attack.nonLethal, crit, effects, stunSave, ablate, notes, staLoss, spell: !!spell,
     drain, drainMode: attack.drain?.mode ?? "",
     blockable: spell ? spell.defense === "dodgeBlock" : true,
+    coatSpent,
     rolls
   };
 }
@@ -607,7 +628,13 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
     const report = await serialByActor(actor, () => applyDamageToActor(actor, dmg));
     // Алхимия: отвары грифона и виверны, «Молния», убийства
     const dealt = dmg.nonLethal ? 0 : Math.max(0, hpBefore - actor.system.hp.value);
-    report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell }));
+    // Укус или высасывание крови — для «Чёрной крови» ведьмака
+    const bite = dmg.drain > 0 || /укус|клык/i.test(dmg.attackLabel ?? "");
+    report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell, bite }));
+    if (dmg.dimeritium && !actor.effects.some(e => e.flags?.vedmak?.dimeritium)) {
+      report.dimeritium = true;
+      report.lines.push("Удар двимеритом: касание двимерита (кнопка ниже).");
+    }
     // Высасывание крови: вампир восполняет ОК (до максимума ПЗ) или ПЗ
     if (dmg.drain > 0 && attacker?.system.blood?.enabled) {
       if (dmg.drainMode === "hp") {

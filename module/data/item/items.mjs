@@ -2,6 +2,7 @@
 
 import { int, num, str, html, source } from "../fields.mjs";
 import { ARMOR_LOCATIONS } from "../../config/items.mjs";
+import { alchemyAuto } from "../../config/alchemy-auto.mjs";
 
 const { SchemaField, BooleanField, ArrayField, StringField } = foundry.data.fields;
 
@@ -301,6 +302,11 @@ export class AlchemicalData extends foundry.abstract.TypeDataModel {
   }
 
   get isMutagen() { return this.kind === "mutagen"; }
+
+  prepareDerivedData() {
+    // Составы без действия в данных (пепельная мазь, яд аконита…): действие — из справочника автоматики
+    if (!this.use.action) this.use.action = alchemyAuto(this.parent?.name)?.action ?? "";
+  }
 }
 
 /** Усиление брони, руна или глиф (стр. 90, 256). */

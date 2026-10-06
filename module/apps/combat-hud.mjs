@@ -278,9 +278,10 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
         kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
         skill: SKILLS[src.skill]?.label.split("/")[0] ?? "",
         base: system.skills[src.skill].base + (src.accuracy || 0),
-        damage: src.kind === "unarmed" ? `${d.punch} / ${d.kick}` : src.weapon.damage,
-        note: oil ? "масло" : "",
-        tip: [SKILLS[src.skill]?.label, oil ? `масло: ${oil}` : "", src.isRanged ? `дистанция ${src.weapon.range}` : ""].filter(Boolean).join(" · "),
+        damage: src.weapon.punch !== undefined ? `${src.weapon.punch} / ${src.weapon.kick}` : src.weapon.damage,
+        note: oil ? "масло" : src.kind === "prosthetic" ? "протез" : "",
+        tip: [SKILLS[src.skill]?.label, oil ? `масло: ${oil}` : "", src.isRanged ? `дистанция ${src.weapon.range}` : "",
+          src.weapon.mods?.length ? `модификации: ${src.weapon.mods.join(", ")}` : ""].filter(Boolean).join(" · "),
         isRanged: !!src.isRanged
       };
     });

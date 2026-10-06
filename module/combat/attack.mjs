@@ -12,6 +12,7 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import { inTrueForm } from "../character/true-form.mjs";
+import { prostheticStrike, equippedProstheses } from "./prosthetics.mjs";
 
 /**
  * Высасывание крови («Высший вампир. Вторая редакция», стр. 9): укус вампира с запасом Очков Крови.
@@ -43,6 +44,26 @@ export function describeSource(actor, source) {
       types: UNARMED_ATTACKS, defaultType: "punch",
       weapon: { name: "Без оружия", damageTypes: ["bludgeoning"], effects: [], nonLethal: true, unarmed: true,
         punch: d.punch, kick: d.kick }
+    };
+  }
+
+  // Удар протезом: Борьба, удары рукой и ногой со свойствами протеза и модификаций (prosthetics.mjs)
+  if (source.kind === "prosthetic") {
+    const p = prostheticStrike(actor, source.itemId);
+    if (!p) return null;
+    const extra = p.damage ? ` + ${p.damage}` : "";
+    const types = Object.fromEntries(Object.entries(pick(UNARMED_ATTACKS, PROSTHETIC_ATTACKS)).map(([k, t]) => {
+      const out = p.lethal && t.nonLethal ? { ...t, nonLethal: false } : { ...t };
+      if (p.dimeritium && k === "grapple") out.hit = `${t.hit} Двимеритовый протез: касание двимерита.`;
+      return [k, out];
+    }));
+    return {
+      kind: "prosthetic", key: p.item.id, label: `${p.item.name}: удар`, img: p.item.img, item: p.item,
+      skill: "brawling", accuracy: p.accuracy, isRanged: false, types, defaultType: "punch",
+      reliability: p.reliability, fallsOff: p.fallsOff,
+      weapon: { id: p.item.id, name: p.item.name, img: p.item.img, damageTypes: ["bludgeoning"], effects: p.effects,
+        silverDamage: p.silver, nonLethal: !p.lethal, unarmed: true, prosthetic: true, dimeritium: p.dimeritium,
+        punch: `${d.punch}${extra}`, kick: `${d.kick}${extra}`, mods: p.mods }
     };
   }
 
@@ -96,6 +117,8 @@ export function describeSource(actor, source) {
     weapon: {
       id: item.id, name: item.name, img: item.img, damage, rawDamage: w.damage,
       oil: w.activeOil ? { name: w.oil.name, target: w.oil.target } : null,
+      // Яд на клинке (alchemy.mjs, coatWeapon): срок проверяет урон
+      coat: item.flags?.vedmak?.coat ?? null,
       damageTypes: w.damageTypes.length ? [...w.damageTypes] : ["bludgeoning"],
       silverDamage: w.silverDamage, effects: w.effects.map(e => ({ ...e })),
       isRanged: w.isRanged, isThrown: w.isThrown, isBow: w.isBow, isCrossbow: w.isCrossbow,
@@ -111,6 +134,9 @@ function schoolOf(actor) {
   return witcherSchools()[actor.system.details?.school] ?? null;
 }
 
+/** Удары протезом: рукой и ногой, разбег, захват (двимеритовый протез — касание двимерита). */
+const PROSTHETIC_ATTACKS = ["punch", "punchStrong", "kick", "kickStrong", "pushKick", "charge", "grapple"];
+
 function pick(map, keys) {
   return Object.fromEntries(keys.filter(k => map[k]).map(k => [k, map[k]]));
 }
@@ -125,6 +151,7 @@ export function attackSources(actor) {
     out.push(describeSource(actor, { kind: "shield", itemId: s.id }));
   }
   out.push(describeSource(actor, { kind: "unarmed" }));
+  for (const p of equippedProstheses(actor)) out.push(describeSource(actor, { kind: "prosthetic", itemId: p.id }));
   return out.filter(Boolean);
 }
 
@@ -205,7 +232,7 @@ function attackBase(actor, src, typeKey) {
 /** Формула урона вида атаки для показа в окне: то же, что уйдёт в карточку. */
 function previewDamage(actor, src, typeKey) {
   const typeCfg = src.types[typeKey] ?? Object.values(src.types)[0];
-  const unarmed = src.kind === "unarmed";
+  const unarmed = src.kind === "unarmed" || src.kind === "prosthetic";
   let formula = src.weapon.damage;
   let mult = typeCfg.damage ?? 1;
   if (unarmed) {
@@ -409,7 +436,15 @@ export async function rollAttack(actor, src, targets, cfg) {
   const roll = await performCheck({ actor, title: src.label, parts, luck: cfg.luck, toChat: false });
 
   // Урон и эффекты вида атаки
-  const unarmed = src.kind === "unarmed";
+  const unarmed = src.kind === "unarmed" || src.kind === "prosthetic";
+  // Модификации протеза — строкой; «Лёгкое покрытие» без Надёжности: протез отпадает после удара
+  if (src.kind === "prosthetic") {
+    if (src.weapon.mods?.length) notes.push(`Модификации: ${src.weapon.mods.join(", ")}.`);
+    if (src.fallsOff && typeCfg.damage) {
+      await src.item.update({ "system.equipped": false });
+      notes.push(`${src.item.name}: без Надёжности протез отпадает после удара — снят.`);
+    }
+  }
   let damageFormula = src.weapon.damage;
   let damageMult = typeCfg.damage ?? 1;
   let nonLethal = !!(typeCfg.nonLethal || src.weapon.nonLethal);

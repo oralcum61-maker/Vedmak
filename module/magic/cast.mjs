@@ -10,7 +10,7 @@ import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate, inCombat, roundsAsTime } from "../util.mjs";
 import { statusRollMods } from "../combat/statuses.mjs";
 import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolveActor, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
-import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf, ZONE_COLORS } from "../combat/zones.mjs";
+import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf, pointInZone, ZONE_COLORS } from "../combat/zones.mjs";
 import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
 import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
 
@@ -70,6 +70,14 @@ export async function castSpell(actor, item, opts = {}) {
   // Драконья магия «Офира и Зеррикании» (стр. 120): творится только в Драконьей форме
   if (item.flags?.vedmak?.dragonMagic && !actor.effects.some(e => e.active && e.flags?.vedmak?.dragonForm)) {
     ui.notifications.warn(`«${item.name}» — драконья магия: она творится только в Драконьей форме.`);
+    return null;
+  }
+
+  // Облако двимеритовой бомбы: в нём магию творить нельзя (корник, бомбы)
+  const caster = actorToken(actor);
+  const cloud = caster && zonesOf(canvas.scene).find(r => r.flags.vedmak.zone.noMagic && pointInZone(r, caster.center));
+  if (cloud) {
+    ui.notifications.warn(`${actor.name} в облаке «${cloud.name}» — магию творить нельзя.`);
     return null;
   }
 

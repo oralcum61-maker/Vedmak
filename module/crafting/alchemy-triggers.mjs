@@ -19,7 +19,7 @@ function withChange(effect, key, value) {
   return value ? [...rest, M(key, value)] : rest;
 }
 
-const statusName = id => CONFIG.statusEffects.find(e => e.id === id)?.name ?? id;
+const statusName = id => CONFIG.statusEffects[id]?.name ?? id;
 
 /* ---------------------------- Невосприимчивость ---------------------------- */
 
@@ -97,11 +97,20 @@ export async function healCritDialog(actor) {
  * и кладбищенской бабы.
  * @param {Actor|null} attacker
  * @param {Actor} target
- * @param {object} info — dealt: сколько ПЗ снято, hpBefore: ПЗ до удара, physical: не магия
+ * @param {object} info — dealt: сколько ПЗ снято, hpBefore: ПЗ до удара, physical: не магия, bite: укус или кровь
  * @returns {Promise<string[]>}
  */
-export async function alchemyAfterDamage(attacker, target, { dealt, hpBefore, physical }) {
+export async function alchemyAfterDamage(attacker, target, { dealt, hpBefore, physical, bite = false }) {
   const lines = [];
+  // «Чёрная кровь»: укусивший ведьмака отравлен (3 урона за раунд до Стойкости) и отскакивает на 2 м (стр. 247)
+  if (bite && attacker && attacker !== target) {
+    const blood = flagged(target, "blackBlood")[0];
+    if (blood && !attacker.statuses.has("poisoned") && !immuneStatuses(attacker).has("poisoned")
+      && !attacker.system.immunities?.includes?.("poison")) {
+      await attacker.toggleStatusEffect("poisoned", { active: true });
+      lines.push(`${attacker.name}: ${blood.name} — отравлен, пока не пройдёт Стойкость СЛ ${blood.flags.vedmak.blackBlood.dc ?? 20}; отскакивает на 2 м.`);
+    }
+  }
   if (dealt > 0) {
     // Отвар из грифона: больше 5 урона — +2 ПБ, складывается
     for (const e of flagged(target, "onDamaged")) {

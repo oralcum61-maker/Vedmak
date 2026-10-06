@@ -640,13 +640,13 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     // Бой
     context.attacks = attackSources(actor).map(src => {
       const skill = system.skills[src.skill];
-      const rel = src.item?.system.reliability;
+      const rel = src.item?.system.reliability ?? src.reliability;
       const w = src.weapon ?? {};
       return {
         kind: src.kind, itemId: src.item?.id ?? "", label: src.label, img: src.img,
         skillLabel: SKILLS[src.skill]?.label ?? "", base: skill.base + (src.accuracy || 0),
-        damage: src.kind === "unarmed" ? `${system.derived.punch} / ${system.derived.kick}` : w.damage,
-        damageLabel: src.kind === "unarmed" ? "рука / нога" : "урон",
+        damage: w.punch !== undefined ? `${w.punch} / ${w.kick}` : w.damage,
+        damageLabel: w.punch !== undefined ? "рука / нога" : "урон",
         // Естественное оружие (когти, клыки) не надевают — оно готово всегда
         equipped: src.item ? !!src.item.system.equipped || src.item.system.category === "natural" : true,
         reliability: rel, relPct: rel?.max ? Math.round((rel.value / rel.max) * 100) : 0,

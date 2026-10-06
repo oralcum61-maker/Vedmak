@@ -12,6 +12,7 @@ import {
   resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat,
   isReadyWeapon
 } from "./common.mjs";
+import { prostheticStrike, equippedProstheses, wearProsthesis, wearLine } from "./prosthetics.mjs";
 
 /** Снимает ли школа ведьмака штраф парирования щитом («Мастер щита» Мантикоры, своя школа с этим waive). */
 function shieldParryWaived(actor) {
@@ -33,6 +34,11 @@ function defenseItems(actor, attack, defense) {
       // Блокируют и парируют тем, что в руках
       const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged && isReadyWeapon(actor, w) && !isBroken(w));
       for (const w of weapons) out.push({ id: w.id, label: `${w.name} (${SKILLS[w.system.skill]?.label ?? ""})`, skill: w.system.skill, item: w });
+      // Протез с протезным покрытием — блок и парирование Борьбой («Лавка Клауса и Нострадамуса»)
+      for (const p of equippedProstheses(actor)) {
+        const rel = prostheticStrike(actor, p.id)?.reliability;
+        if (rel?.value > 0) out.push({ id: p.id, label: `${p.name} (протез, Борьба)`, skill: "brawling", item: p, prosthetic: true });
+      }
     }
   }
   return out;
@@ -321,7 +327,9 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   // Последствия успешной защиты
   let damageOnBlock = false, fixedLocation = "";
   if (!hit) {
-    if (cfg.defense === "block" && item) {
+    if (cfg.defense === "block" && item?.prosthetic) {
+      notes.push(wearLine(item.item, await wearProsthesis(actor, item.item, 1)));
+    } else if (cfg.defense === "block" && item) {
       // Пишем в исходное значение: в system уже прибавлены модификации арбалета («Стремя» +5),
       // и запись посчитанного числа поднимала бы надёжность с каждым блоком
       const src = item.item._source.system.reliability;

@@ -181,6 +181,13 @@ export async function startOfTurn(actor, combat, context) {
     buttons.push({ action: "berserkSave", label: `Стойкость СЛ ${dc}`, reason: berserk.name });
   }
 
+  // Хлороформ: без сознания, пока не пройдёт испытание Уст
+  const asleep = actor.effects.find(e => e.active && e.flags?.vedmak?.wakeSave);
+  if (asleep) {
+    lines.push(`${asleep.name}: без сознания — испытание Уст, чтобы очнуться.`);
+    buttons.push({ action: "wakeSave", label: "Испытание Уст: очнуться", reason: asleep.name });
+  }
+
   // Напоминания о тяжёлых состояниях
   if (has("disoriented")) lines.push("Дезориентирован: полный ход на испытание Уст, чтобы прийти в себя.");
   if (has("frozen")) lines.push("Заморожен: Сила СЛ 16 действием, чтобы сломать лёд.");

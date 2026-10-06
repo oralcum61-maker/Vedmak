@@ -43,6 +43,14 @@ const ACTIONS = {
     const actor = actorFrom(button);
     if (!actor) return;
     return deathSaveDialog(actor);
+  },
+
+  // Удар двимеритовым протезом (prosthetics.mjs): касание двимерита у цели, бросает её владелец
+  async dimeritiumTouch(message, button) {
+    const actor = actorFrom(button);
+    if (!actor) return;
+    const { touchDimeritium } = await import("../magic/dimeritium.mjs");
+    return touchDimeritium(actor);
   }
 };
 

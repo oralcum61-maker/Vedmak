@@ -9,6 +9,7 @@ import { registerChatAction } from "./chat.mjs";
 import { rollStunSave } from "./saves.mjs";
 import { manualDamage } from "./manual.mjs";
 import { postCard } from "../util.mjs";
+import { isProstheticItem, wearProsthesis, wearLine } from "./prosthetics.mjs";
 
 const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
@@ -39,7 +40,10 @@ export async function applyFumble(message) {
   if (fx.reliability) {
     const r = await new Roll(fx.reliability).evaluate();
     rolls.push(r);
-    if (item?.system.reliability?.max) {
+    if (isProstheticItem(item)) {
+      const wear = await wearProsthesis(actor, item, r.total);
+      lines.push(wear ? `Надёжность −${r.total}. ${wearLine(item, wear)}` : `${esc(item.name)}: у протеза нет Надёжности.`);
+    } else if (item?.system.reliability?.max) {
       // В исходное значение, как блок: в system уже прибавлены модификации
       const src = item._source.system.reliability;
       await item.update({ "system.reliability.value": Math.max(0, src.value - r.total) });

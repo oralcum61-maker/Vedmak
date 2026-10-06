@@ -124,6 +124,28 @@ export const GEAR_CATEGORIES = {
   prosthetic: "Протезы", prostheticMod: "Модификации протезов", other: "Прочее"
 };
 
+/**
+ * Протезы и модификации «Лавки Клауса и Нострадамуса» в ударе протезом (module/combat/prosthetics.mjs). Ключ — название
+ * в нижнем регистре без кавычек. accuracy — Точность; effects — свойства удара; silver — серебро (книга кубов не даёт —
+ * 1d6, как у ведьмачьего протеза); lethal и damage — смертельный удар с прибавкой; coating — Надёжность 15, блок и
+ * парирование Борьбой; reliability — поправка Надёжности; dimeritium — касание двимерита цели, Энергия 0 носителя.
+ */
+export const PROSTHETIC_PARTS = {
+  "масштабируемый протез": { coating: true },
+  "протез из сидерита": { coating: true, effects: [{ key: "meteorite" }, { key: "ablating" }] },
+  "двимеритовый протез": { dimeritium: true },
+  "серебряные шипы на кулаках/икрах": { silver: "1d6" },
+  "крючковатые шипы на кулаках/икрах": { effects: [{ key: "bleeding", value: "35%" }] },
+  "усиление пластины для пальцев/икр": { effects: [{ key: "armorPiercing" }] },
+  "усиление пальцев/икр": { lethal: true, damage: "2d6" },
+  "протезное покрытие": { coating: true },
+  "лёгкое покрытие": { accuracy: 2, reliability: -5 }
+};
+/** Надёжность протеза с протезным покрытием. */
+export const PROSTHETIC_RELIABILITY = 15;
+export const prostheticKey = name => String(name ?? "").toLowerCase().replace(/[«»"„“”]/g, "").replace(/\s+/g, " ").trim();
+export const prostheticPart = name => PROSTHETIC_PARTS[prostheticKey(name)] ?? null;
+
 /** Места татуировок и сколько их помещается («Офир и Зеррикания», стр. 78): руки и ноги — на каждой. */
 export const TATTOO_LOCATIONS = {
   head:     { label: "Голова", max: 2 },
