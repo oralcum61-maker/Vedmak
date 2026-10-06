@@ -602,7 +602,7 @@ registerChatAction("trapTrigger", async message => {
   const victims = zone?.victims ?? areaTargets(radius);
   if (!victims.length) return ui.notifications.warn("Выберите цели в зоне ловушки (или одну — центр взрыва).");
   const auto = alchemyAuto(trap.name) ?? {};
-  if (auto.trapSave || auto.mark) return trapOnVictims(owner, trap, victims, auto);
+  if (auto.trapSave || auto.mark) return trapOnVictims(owner, trap, victims, auto, message);
   return manualDamage(victims, {
     formula: trap.use.damage, reason: trap.name, damageType: trap.use.damageType, where: "all",
     status: trap.use.status, statusChance: trap.use.statusChance, statusRounds: trap.use.statusRounds
@@ -610,12 +610,18 @@ registerChatAction("trapTrigger", async message => {
 });
 
 /** Ловушки без урона: «Бешенство» — Стойкость, провал — исступление; «Метка» — эффект на сутки. */
-async function trapOnVictims(owner, trap, victims, auto) {
+async function trapOnVictims(owner, trap, victims, auto, message = null) {
   const lines = [];
   const rolls = [];
   const pseudo = { name: trap.name, img: "icons/magic/control/fear-fright-monster-grin-red-orange.webp", system: { kind: "trap" } };
+  // Чужие цели (чудовища ведущего) проверяет ведущий — по карточке этой ловушки
+  const foreign = victims.filter(v => !v.isOwner);
+  if (foreign.length && message) {
+    await asGM("trapVictims", { messageId: message.id, uuids: foreign.map(v => v.token?.uuid ?? v.uuid) });
+    lines.push(`Остальных (${foreign.map(v => v.name).join(", ")}) проверяет ведущий.`);
+  }
   for (const v of victims) {
-    if (!v.isOwner) { lines.push(`${v.name}: бросок и эффект — за владельцем или ведущим.`); continue; }
+    if (!v.isOwner) continue;
     if (auto.trapSave) {
       const check = await enduranceCheck(v, auto.trapSave.dc, `${trap.name}: Стойкость`);
       if (!check) continue;
@@ -631,6 +637,19 @@ async function trapOnVictims(owner, trap, victims, auto) {
   if (auto.note) lines.push(auto.note);
   return card(owner ?? victims[0], `Ловушка ${trap.name}`, [trap.effect, ...lines], { subtitle: "Сработала", rolls });
 }
+
+// Ведущий: ловушка игрока сработала на чужих целях. Один раз на карточку, только по карточке ловушки этого игрока
+registerGMHandler("trapVictims", async ({ messageId, uuids }, userId) => {
+  const message = game.messages.get(messageId);
+  const f = message?.flags?.vedmak?.alchemy;
+  const auto = alchemyAuto(f?.trap?.name);
+  if (!f?.trap || !(auto?.trapSave || auto?.mark) || message.author?.id !== userId || f.trapDone || !Array.isArray(uuids)) {
+    return console.warn(`vedmak | отклонена ловушка от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  await message.update({ "flags.vedmak.alchemy.trapDone": true });
+  const victims = uuids.slice(0, 50).map(u => resolveActor(u)).filter(Boolean);
+  if (victims.length) await trapOnVictims(null, f.trap, victims, auto);
+});
 
 /** «Сон дракона»: газ вспыхнул — урон и горение всем в облаке, облако исчезает. */
 registerChatAction("gasIgnite", async message => {

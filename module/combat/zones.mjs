@@ -9,6 +9,8 @@
 // остаются, их снимает ведущий.
 
 import { asGM, registerGMHandler, resolveActor, userOwnsAny } from "./common.mjs";
+import { zoneAuraFor } from "../config/magic.mjs";
+import { alchemyAuto } from "../config/alchemy-auto.mjs";
 
 const INSTANT_SECONDS = 15;
 
@@ -148,10 +150,24 @@ export async function createZone(shape, { name, color, actor, itemName = "", dur
     if (region && zone.instant && !combat) scheduleRemoval(region);
     return region ?? null;
   } catch (err) {
+    // Игроку область создаёт ведущий; ждём её по метке — по ней цели считаются областью, а карточки (газ «Сна
+    // дракона», снятие зоны несработавшего заклинания) знают, какое облако их
     console.warn("vedmak | зону создаёт ведущий", err);
+    const key = foundry.utils.randomID();
+    data.flags.vedmak.zone.key = key;
+    const created = waitForZone(key);
     await asGM("createZone", { sceneId: canvas.scene.id, data });
-    return null;
+    return created;
   }
+}
+
+/** Область, созданную ведущим по просьбе игрока, — по метке zone.key; null, если не пришла за timeout мс. */
+function waitForZone(key, timeout = 4000) {
+  return new Promise(resolve => {
+    const done = region => { Hooks.off("createRegion", hook); clearTimeout(timer); resolve(region); };
+    const hook = Hooks.on("createRegion", region => { if (region.flags?.vedmak?.zone?.key === key) done(region); });
+    const timer = setTimeout(() => done(null), timeout);
+  });
 }
 
 function scheduleRemoval(region) {
@@ -211,6 +227,21 @@ function cleanShape(raw) {
  * только известные поля (в первую очередь — без поведений: «Выполнить скрипт» исполнился бы с правами ведущего).
  * @returns {object|null} null — данные негодны
  */
+/**
+ * Особые свойства зоны от игрока: аура («Ирден», «Лунная пыль» — magic/zone-effects.mjs) и запрет магии
+ * (двимеритовая бомба). Берутся из справочников по названию; из запроса — только Вын ауры и картинка.
+ */
+function trustedZoneExtras(z) {
+  const out = {};
+  const name = text(z.itemName);
+  const aura = zoneAuraFor(name);
+  if (aura && z.aura) {
+    out.aura = { ...aura, value: finite(z.aura.value, { min: 0, max: 100 }) ? z.aura.value : 0, img: text(z.aura.img, 300) };
+  }
+  if (alchemyAuto(name)?.zone?.noMagic) out.noMagic = true;
+  return out;
+}
+
 function cleanRegionData(raw, scene, userId) {
   if (!raw || typeof raw !== "object") return null;
   const shapes = (Array.isArray(raw.shapes) ? raw.shapes : []).map(cleanShape);
@@ -244,7 +275,10 @@ function cleanRegionData(raw, scene, userId) {
         rounds: finite(z.rounds, { min: 0, max: 1e6 }) ? z.rounds : null,
         maintain: typeof z.maintain === "string" ? z.maintain : null,
         ...(typeof z.itemId === "string" ? { itemId: z.itemId } : {}),
-        ...(typeof z.repeat === "boolean" ? { repeat: z.repeat } : {})
+        ...(typeof z.repeat === "boolean" ? { repeat: z.repeat } : {}),
+        ...(typeof z.key === "string" ? { key: z.key.slice(0, 32) } : {}),
+        // Аура и запрет магии — из справочников по названию, а не из запроса: игрок не задаёт штрафы сам
+        ...trustedZoneExtras(z)
       } }
     }
   };
