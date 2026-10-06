@@ -45,9 +45,9 @@
       <a class="add" data-action="itemCreate" data-type="weapon" data-tooltip="Добавить оружие">+ Добавить</a>
     </div>
     {{#each weaponRows as |w|}}
-    <div class="gear-item{{#unless w.equipped}} stowed{{/unless}}{{#if w.broken}} broken{{/if}}" data-item-id="{{w.id}}">
+    <div class="gear-item{{#unless w.equipped}} stowed{{/unless}}{{#if w.broken}} broken{{/if}}{{#if w.stored}} away{{/if}}" data-item-id="{{w.id}}">
       <div class="item-frame">
-        {{#if w.broken}}<span class="ribbon steel">сломано</span>{{else if w.equipped}}<span class="ribbon">в руках</span>{{/if}}
+        {{#if w.broken}}<span class="ribbon steel">сломано</span>{{else if w.equipped}}<span class="ribbon">в руках</span>{{else if w.stored}}<span class="ribbon steel">не при себе</span>{{/if}}
         <img src="{{w.img}}" alt="">
       </div>
       <div class="item-body">
@@ -71,6 +71,7 @@
           {{/if}}
           <div class="item-tools">
             {{#if w.equipped}}<a data-action="itemToggleEquip" data-tooltip="Убрать"><i class="fa-solid fa-hand-fist"></i></a>{{/if}}
+            <a data-action="itemToggleStored" class="{{#if w.stored}}active{{/if}}" data-tooltip="{{#if w.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
             {{#if @root.isCharacter}}<a data-action="repairItem" data-tooltip="Починить (СЛ чертежа − 5)"><i class="fa-solid fa-screwdriver-wrench"></i></a>
             <a data-action="disassembleItem" data-tooltip="Разобрать на компоненты"><i class="fa-solid fa-hammer"></i></a>{{/if}}
             <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
@@ -115,9 +116,9 @@
       <a class="add" data-action="itemCreate" data-type="armor" data-tooltip="Добавить броню">+ Добавить</a>
     </div>
     {{#each armorRows as |a|}}
-    <div class="gear-item{{#unless a.equipped}} stowed{{/unless}}" data-item-id="{{a.id}}">
+    <div class="gear-item{{#unless a.equipped}} stowed{{/unless}}{{#if a.stored}} away{{/if}}" data-item-id="{{a.id}}">
       <div class="item-frame">
-        {{#if a.equipped}}<span class="ribbon">{{#if a.isShield}}в руке{{else}}надето{{/if}}</span>{{/if}}
+        {{#if a.equipped}}<span class="ribbon">{{#if a.isShield}}в руке{{else}}надето{{/if}}</span>{{else if a.stored}}<span class="ribbon steel">не при себе</span>{{/if}}
         <img src="{{a.img}}" alt="">
       </div>
       <div class="item-body">
@@ -134,6 +135,7 @@
           <span class="grow"></span>
           <div class="item-tools">
             <a data-action="itemToggleEquip" class="{{#if a.equipped}}active{{/if}}" data-tooltip="{{#if a.equipped}}Снять{{else}}Надеть{{/if}}"><i class="fa-solid fa-shirt"></i></a>
+            <a data-action="itemToggleStored" class="{{#if a.stored}}active{{/if}}" data-tooltip="{{#if a.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
             {{#if @root.isCharacter}}<a data-action="repairItem" data-tooltip="Починить (СЛ чертежа − 5)"><i class="fa-solid fa-screwdriver-wrench"></i></a>
             <a data-action="disassembleItem" data-tooltip="Разобрать на компоненты"><i class="fa-solid fa-hammer"></i></a>{{/if}}
             <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
@@ -175,9 +177,9 @@
     <span class="cap gear-cat">{{group.label}}</span>
     <div class="gear-grid">
       {{#each group.items as |item|}}
-      <div class="gear-tile{{#if item.system.equipped}} held{{/if}}" data-item-id="{{item.id}}">
+      <div class="gear-tile{{#if item.system.equipped}} held{{/if}}{{#if item.system.stored}} away{{/if}}" data-item-id="{{item.id}}">
         <div class="item-frame">
-          {{#if item.system.equipped}}<span class="ribbon">в руках</span>{{/if}}
+          {{#if item.system.equipped}}<span class="ribbon">в руках</span>{{else if item.system.stored}}<span class="ribbon steel">не при себе</span>{{/if}}
           {{#if item.system.tattoo.applied}}<span class="ribbon">{{lookup @root.tattooPlaces item.system.tattoo.location}}</span>{{/if}}
           <img src="{{item.img}}" alt="">
           <input type="number" class="qty item-field" data-field="system.quantity" value="{{item.system.quantity}}" min="0" data-tooltip="Количество" aria-label="Количество">
@@ -191,6 +193,7 @@
           {{else}}
           <a data-action="itemToggleEquip" class="{{#if item.system.equipped}}active{{/if}}" data-tooltip="{{#if item.system.equipped}}Убрать{{else}}Взять в руки или надеть{{/if}}"><i class="fa-solid fa-hand"></i></a>
           {{/if}}
+          <a data-action="itemToggleStored" class="{{#if item.system.stored}}active{{/if}}" data-tooltip="{{#if item.system.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
           <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
           <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
         </div>

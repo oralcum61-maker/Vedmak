@@ -21,6 +21,8 @@ function physical() {
     availability: str("common"),
     concealment: str("none"),
     equipped: new BooleanField({ initial: false }),
+    // Не при себе: лежит в повозке, на лошади, дома — в переносимый вес не идёт
+    stored: new BooleanField({ initial: false }),
     source: source()
   };
 }

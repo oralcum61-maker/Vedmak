@@ -156,7 +156,7 @@ export function carriedWeight(actor) {
   let total = 0;
   for (const item of actor?.items ?? []) {
     const w = Number(item.system?.weight);
-    if (!Number.isFinite(w) || w <= 0) continue;
+    if (!Number.isFinite(w) || w <= 0 || item.system?.stored) continue;
     total += w * (item.system.quantity ?? 1);
   }
   // Монеты (настройка мира «Вес монет»)

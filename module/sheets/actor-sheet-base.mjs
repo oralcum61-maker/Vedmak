@@ -62,7 +62,7 @@ function weaponRow(item) {
   const rel = s.reliability ?? { value: 0, max: 0 };
   return {
     id: item.id, img: item.img, name: item.name, system: s,
-    equipped: !!s.equipped, broken: rel.max > 0 && rel.value <= 0, relic: !!s.relic,
+    equipped: !!s.equipped, stored: !!s.stored, broken: rel.max > 0 && rel.value <= 0, relic: !!s.relic,
     oil: s.activeOil ? s.oil.name : "", runes: s.runes ?? [], crossbowMods: s.crossbowMods ?? [],
     skillLabel: SKILLS[s.skill]?.label ?? "", silver: s.isSilver ? `серебро ${s.silverDamage}` : "",
     acc: s.accuracy > 0 ? `+${s.accuracy}` : `${s.accuracy}`,
@@ -235,7 +235,7 @@ function armorRow(item) {
   const rel = s.reliability ?? { value: 0, max: 0 };
   return {
     id: item.id, img: item.img, name: item.name, system: s,
-    equipped: !!s.equipped, relic: !!s.relic, enhancements: s.enhancements ?? [],
+    equipped: !!s.equipped, stored: !!s.stored, relic: !!s.relic, enhancements: s.enhancements ?? [],
     isShield: !!s.isShield, parts, pips: [1, 2, 3].map(i => ({ on: i <= cls })),
     classLabel: CONFIG.VEDMAK.ARMOR_WEIGHT_CLASS?.[s.weightClass] ?? "",
     rel: { value: rel.value, max: rel.max, ...notches(rel.value, rel.max) },
@@ -256,6 +256,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       itemEdit: VedmakActorSheet.#onItemEdit,
       itemDelete: VedmakActorSheet.#onItemDelete,
       itemToggleEquip: VedmakActorSheet.#onItemToggleEquip,
+      itemToggleStored: VedmakActorSheet.#onItemToggleStored,
       itemPost: VedmakActorSheet.#onItemPost,
       effectCreate: VedmakActorSheet.#onEffectCreate,
       effectEdit: VedmakActorSheet.#onEffectEdit,
@@ -925,6 +926,14 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onItemToggleEquip(event, target) {
     const item = VedmakActorSheet.#itemFrom.call(this, target);
     if (item) await item.update({ "system.equipped": !item.system.equipped });
+  }
+
+  /** Не при себе (повозка, лошадь, дом) — вес не считается; взятое из хранилища снова при себе. */
+  static async #onItemToggleStored(event, target) {
+    const item = VedmakActorSheet.#itemFrom.call(this, target);
+    if (!item) return;
+    const stored = !item.system.stored;
+    await item.update(stored ? { "system.stored": true, "system.equipped": false } : { "system.stored": false });
   }
 
   static async #onItemPost(event, target) {
