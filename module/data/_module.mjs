@@ -1,11 +1,13 @@
 import { CharacterData } from "./actor/character.mjs";
 import { MonsterData } from "./actor/monster.mjs";
+import { LootData } from "./actor/loot.mjs";
 import { WeaponData, ArmorData, GearData, SpellData, ProfessionData, RaceData, CritWoundData, ComponentData, RecipeData,
   AlchemicalData, EnhancementData } from "./item/items.mjs";
 
 export const ACTOR_MODELS = {
   character: CharacterData,
-  monster: MonsterData
+  monster: MonsterData,
+  loot: LootData
 };
 
 export const ITEM_MODELS = {

@@ -16,6 +16,7 @@ import { VedmakActor } from "./module/documents/actor.mjs";
 import { VedmakItem } from "./module/documents/item.mjs";
 import { CharacterSheet } from "./module/sheets/character-sheet.mjs";
 import { MonsterSheet } from "./module/sheets/monster-sheet.mjs";
+import { LootSheet } from "./module/sheets/loot-sheet.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
@@ -234,6 +235,9 @@ Hooks.once("init", () => {
   });
   DSC.registerSheet(Actor, SYSTEM_ID, MonsterSheet, {
     types: ["monster"], makeDefault: true, label: "VEDMAK.SheetMonster"
+  });
+  DSC.registerSheet(Actor, SYSTEM_ID, LootSheet, {
+    types: ["loot"], makeDefault: true, label: "VEDMAK.SheetLoot"
   });
   DSC.registerSheet(Item, SYSTEM_ID, VedmakItemSheet, {
     makeDefault: true, label: "VEDMAK.SheetItem"

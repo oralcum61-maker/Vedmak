@@ -126,6 +126,7 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/actor/character-rail.hbs",
   "systems/vedmak/templates/actor/limited.hbs",
   "systems/vedmak/templates/actor/monster-header.hbs",
+  "systems/vedmak/templates/actor/loot-sheet.hbs",
   "systems/vedmak/templates/actor/monster-lore.hbs",
   "systems/vedmak/templates/actor/monster-stats.hbs",
   "systems/vedmak/templates/actor/tab-bio.hbs",

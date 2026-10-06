@@ -1,7 +1,7 @@
 // Персонаж игрока (корник стр. 20–60).
 
 import { worldSetting } from "../../util.mjs";
-import { int, str, html } from "../fields.mjs";
+import { int, str, html, moneySchema } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
 import { SOCIAL_TABLE, REGIONS, witcherSchools, abilityBonus, socialLabel } from "../../config/character.mjs";
 
@@ -27,10 +27,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       // Кошелёк по валютам (config/money.mjs): крона — основная, остальные меняются по курсу
       // Жизненный путь: JSON с бросками (character/lifepath.mjs → readLifepath); показывается в «Дневнике»
       lifepath: str(""),
-      money: new SchemaField({
-        crowns: int(0), orens: int(0, { min: 0 }), florens: int(0, { min: 0 }), ducats: int(0, { min: 0 }),
-        marks: int(0, { min: 0 }), lintars: int(0, { min: 0 }), bizants: int(0, { min: 0 })
-      }),
+      money: moneySchema(),
       details: new SchemaField({
         age: str(""),
         gender: str(""),

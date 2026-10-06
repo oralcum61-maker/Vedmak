@@ -2,6 +2,7 @@
 // (отметка в скрытой настройке мира), повторный запуск ничего не меняет.
 
 import { SYSTEM_ID } from "./util.mjs";
+import { convertMigratedLoot } from "./character/storage.mjs";
 
 /**
  * Энергия НИП из бестиария. Генератор брал её не из того поля, и маги с ведьмаками пришли с Энергией 0.
@@ -42,7 +43,17 @@ async function bestiaryRotation() {
   if (actors.length || tokens) ui.notifications.info(`Ведьмак: токены существ из бестиария можно вращать (${actors.length} НИП, ${tokens} токенов на сценах).`);
 }
 
-const MIGRATIONS = [{ key: "bestiaryVigor", run: bestiaryVigor }, { key: "bestiaryRotation", run: bestiaryRotation }];
+/**
+ * «Добыча» из TheWitcherTRPG (сундуки, повозки, лавки) была перенесена персонажами — своего хранилища не было
+ * (PLAN 4.108). Теперь это хранилища: вещи на листе одним списком, игроки берут и покупают (PLAN 4.115).
+ */
+async function storagesFromMigratedLoot() {
+  const n = await convertMigratedLoot();
+  if (n) ui.notifications.info(`Ведьмак: перенесённая «добыча» стала хранилищами — сундуки, повозки, лавки (${n}).`);
+}
+
+const MIGRATIONS = [{ key: "bestiaryVigor", run: bestiaryVigor }, { key: "bestiaryRotation", run: bestiaryRotation },
+  { key: "storagesFromMigratedLoot", run: storagesFromMigratedLoot }];
 
 export function registerMigrationSettings() {
   game.settings.register(SYSTEM_ID, "migrationsDone", { scope: "world", config: false, type: Array, default: [] });

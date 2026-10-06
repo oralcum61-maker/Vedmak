@@ -90,7 +90,9 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
   /** Актор, чьи кнопки показывать. */
   static actorFor() {
-    const controlled = canvas?.tokens?.controlled?.[0]?.actor ?? null;
+    // Хранилище (сундук, повозка) — не боец: худа у него нет
+    const first = canvas?.tokens?.controlled?.[0]?.actor ?? null;
+    const controlled = first?.type === "loot" ? null : first;
     if (!game.combat?.started) {
       let outside = true;
       try { outside = game.settings.get(SYSTEM_ID, "hudOutOfCombat"); } catch { /* до регистрации */ }

@@ -50,6 +50,11 @@
           "notes"
         ]
       },
+      "loot": {
+        "htmlFields": [
+          "description"
+        ]
+      },
       "monster": {
         "htmlFields": [
           "description",

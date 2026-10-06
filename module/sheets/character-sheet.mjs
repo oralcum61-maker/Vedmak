@@ -22,6 +22,7 @@ import { InvestigationApp } from "../apps/investigation-app.mjs";
 import { applyTattoo } from "../crafting/tattoo.mjs";
 import { implantDialog } from "../crafting/implant.mjs";
 import { dragonFormContext, transformDragon, revertDragon } from "../character/dragon-form.mjs";
+import { takeFromStorage } from "../character/storage.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, editLifepathNote, findEntry
@@ -620,6 +621,8 @@ export class CharacterSheet extends VedmakActorSheet {
     if (!this.actor.isOwner) return null;
     const actor = this.actor;
     const fromElsewhere = item.parent?.uuid !== actor.uuid;
+    // Из хранилища — взять (в лавке — купить): из сундука вещь уходит, а не копируется
+    if (fromElsewhere && item.parent?.type === "loot") return takeFromStorage(item.parent, item, { hero: actor });
     // Вампирская магия не изучается за О.У: её даёт роль высшего вампира
     if (fromElsewhere && item.type === "spell" && item.system.kind === "vampire") {
       const roles = actor.system.race?.system.activeRoles ?? [];
