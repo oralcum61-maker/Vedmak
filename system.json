@@ -2,7 +2,7 @@
   "id": "vedmak",
   "title": "Ведьмак: НРИ",
   "description": "Система для настольной ролевой игры «Ведьмак» (R. Talsorian Games) под Foundry VTT v14. Полностью на русском: парамеры персонажа, враги, предметы, магия, алхимия и многое другое.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "url": "https://github.com/oralcum61-maker/Vedmak",
   "manifest": "https://github.com/oralcum61-maker/Vedmak/releases/latest/download/system.json",
   "download": "https://github.com/oralcum61-maker/Vedmak/releases/latest/download/vedmak.zip",
