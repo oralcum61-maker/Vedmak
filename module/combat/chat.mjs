@@ -101,8 +101,16 @@ export function registerChatListeners() {
   });
   Hooks.on("renderChatMessageHTML", (message, html) => {
     // Сообщение с карточкой системы — отдельный класс: раньше CSS искал её селектором :has(),
-    // и браузер перепроверял его на каждое изменение в чате
-    if (html.querySelector(".vedmak-card")) html.classList.add("vedmak-message");
+    // и браузер перепроверял его на каждое изменение в чате. Прочие (текст, речь, действие, шёпот, броски ядра) —
+    // своим классом: та же рамка, что у карточек, вместо светлого пергамента ядра
+    html.classList.add(html.querySelector(".vedmak-card") ? "vedmak-message" : "vedmak-plain");
+    // Цвет автора ядро ставит рамке прямо в style — рамка остаётся стальной, цвет уходит нитью по верху шапки
+    const author = html.style.borderColor;
+    if (author) {
+      html.style.removeProperty("border-color");
+      html.style.setProperty("--vd-author", author);
+      html.classList.add("vd-authored");
+    }
     markDoneButtons(message, html);
     for (const button of html.querySelectorAll("[data-vedmak]")) {
       button.addEventListener("click", async event => {

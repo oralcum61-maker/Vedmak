@@ -12,7 +12,7 @@ export function registerHelpers() {
 
   /** Кольцо медальона в карточке чата: десять насечек, десятка сверху; выпавшие грани d10 светятся
       (десятка — калёная, единица первой кости — киноварь). Без костей — простое кольцо. */
-  H.registerHelper("vedmakRing", dice => new H.SafeString(ringHtml(dice)));
+  H.registerHelper("vedmakRing", (dice, options) => new H.SafeString(ringHtml(dice, { plain: !!options?.hash?.plain })));
 
   /** Насечки вместо полосы (надёжность, прочность): value светлых из max, не больше limit штук. */
   H.registerHelper("vedmakNotches", (value, max, options) => {
@@ -65,6 +65,7 @@ export function registerHelpers() {
 
 export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/chat/check.hbs",
+  "systems/vedmak/templates/chat/initiative.hbs",
   "systems/vedmak/templates/chat/item.hbs",
   "systems/vedmak/templates/dialog/roll.hbs",
   "systems/vedmak/templates/dialog/parts/head.hbs",

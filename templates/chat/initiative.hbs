@@ -1,0 +1,21 @@
+{{!-- Бросок инициативы (бой): формула участника — 1d10 + Реакция. Десятка и единица здесь не крит и не провал:
+      кость и кольцо медальона без пометок. group — на сколько участников группы бросок (групповая инициатива). --}}
+<div class="vedmak-card check initiative">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">Инициатива</span>
+      <span class="card-sub">{{name}}{{#if group}} · на группу из {{group}}{{/if}}</span>
+    </div>
+    <div class="card-value">{{vedmakRing dice plain=true}}
+      <b>{{total}}</b>
+      <span class="cap">итог</span>
+    </div>
+  </header>
+
+  <div class="card-body">
+    <div class="roll-line">
+      <span class="dice">{{#each dice}}{{> "systems/vedmak/templates/chat/parts/die.hbs" v=this plain=true}}{{/each}}</span>
+      <span class="roll-sum">основа <b>{{base}}</b> + <b>{{die}}</b></span>
+    </div>
+  </div>
+</div>

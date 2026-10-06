@@ -4384,7 +4384,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .chat-message.vedmak-message .message-header {
   margin: 0; padding: .4rem .65rem .35rem; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045);
 }
-.chat-message.vedmak-message .message-header .message-sender { font-family: var(--vd-font-head); font-size: .88rem; color: #cfc8b8; }
+.chat-message:is(.vedmak-message, .vedmak-plain) .message-header .message-sender { font-family: var(--vd-font-head); font-size: .88rem; color: #cfc8b8; }
 .chat-message.vedmak-message .message-header .message-timestamp { font-size: .62rem; color: #8c867b; }
 .chat-message.vedmak-message .message-content { padding: 0; }
 
@@ -4637,8 +4637,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
    vedmakRing). Исход — эмалевая табличка на двух заклёпках (успех — тёмно-зелёная, провал и попадание —
    киноварь), главные кнопки — киноварная эмаль с шлифовкой и царапинами в стальной рамке, прочие — светлая
    сталь. Фактуры приглушены вуалью цвета основы поверх: кожа и зерно видны вполсилы.
-   Заменяет слои 4.49 (фактура) и 4.50 (пергамент). */
-.chat-message.vedmak-message {
+   Заменяет слои 4.49 (фактура) и 4.50 (пергамент). Рамка, строчка и шапка — и у обычных сообщений (.vedmak-plain, 4.113). */
+.chat-message:is(.vedmak-message, .vedmak-plain) {
   --vm-rivet: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.2px, #3c3b38 2.4px, #050607 3px, transparent 3.5px);
   --vm-well: linear-gradient(#0c0d0f, #0c0d0f), linear-gradient(transparent, transparent);
   position: relative; padding: 0; overflow: visible; color: var(--vd-text);
@@ -4650,11 +4650,11 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   box-shadow: inset 0 1px 0 rgba(255,240,215,.08), inset 0 -1px 0 rgba(0,0,0,.5), 0 2px 3px rgba(0,0,0,.6), 0 16px 26px -14px rgba(0,0,0,.95);
 }
 /* Строчка по краю */
-.chat-message.vedmak-message::after {
+.chat-message:is(.vedmak-message, .vedmak-plain)::after {
   content: ""; position: absolute; inset: 5px; border: 1.5px dashed rgba(214,206,190,.3); border-radius: 4px;
   pointer-events: none; filter: drop-shadow(0 1px 0 rgba(0,0,0,.85));
 }
-.chat-message.vedmak-message .message-header {
+.chat-message:is(.vedmak-message, .vedmak-plain) .message-header {
   position: relative; z-index: 1; margin: 0; padding: .3rem 1.05rem; min-height: 26px; align-items: center;
   background-color: #16171a;
   background-image: var(--vm-rivet), linear-gradient(180deg, rgba(255,245,225,.09), rgba(0,0,0,.26)), var(--vd-s-chat-head);
@@ -4665,9 +4665,9 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   border: 0; border-bottom: 1px solid #060708; border-radius: 6px 6px 0 0;
   box-shadow: inset 0 1px 0 rgba(255,240,215,.1), 0 2px 4px -1px rgba(0,0,0,.7);
 }
-.chat-message.vedmak-message .message-header .message-sender { font-family: var(--vd-font-head); font-size: .86rem; letter-spacing: .03em; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95); }
-.chat-message.vedmak-message .message-header :is(.message-timestamp, a, .message-metadata) { color: #8c867b; }
-.chat-message.vedmak-message .message-header .whisper-to { color: #bab4a8; }
+.chat-message:is(.vedmak-message, .vedmak-plain) .message-header .message-sender { font-family: var(--vd-font-head); font-size: .86rem; letter-spacing: .03em; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95); }
+.chat-message:is(.vedmak-message, .vedmak-plain) .message-header :is(.message-timestamp, a, .message-metadata) { color: #8c867b; }
+.chat-message:is(.vedmak-message, .vedmak-plain) .message-header .whisper-to { color: #bab4a8; }
 .chat-message.vedmak-message .message-content { position: relative; padding: 0; color: var(--vd-text); }
 
 /* Сброс прежних слоёв карточки */
@@ -5577,4 +5577,50 @@ body.system-vedmak #hotbar .slot { border-color: #050607; box-shadow: var(--vd-s
 /* Трекер боя: строки и ход — сталь вместо белой дымки */
 body.system-vedmak .combat-tracker {
   --active-input-bg-color: var(--vd-input); --entry-hover-bg: rgba(255, 240, 215, .05); --entry-active-bg: rgba(184, 67, 44, .12);
+}
+
+
+/* ---------------------- Обычные сообщения чата в рамке карточек (PLAN 4.113) ---------------------- */
+/* Текст, речь персонажа, действие, шёпот и броски ядра (/r) — в той же коже со строчкой и стальной шапкой, что карточки
+   системы (класс vedmak-plain ставит хук отрисовки сообщения) вместо светлого пергамента ядра. Нитью по верху шапки
+   отмечены цвет автора (ядро красило им всю рамку), шёпот (фиолетовая) и слепой бросок (киноварная). */
+.chat-message.vedmak-plain .message-content {
+  position: relative; z-index: 1; padding: 9px 15px 13px;
+  font-size: .82rem; line-height: 1.45; color: var(--vd-text); overflow-wrap: anywhere;
+}
+.chat-message.vedmak-plain .message-content p { margin: 0 0 .45em; }
+.chat-message.vedmak-plain .message-content p:last-child { margin-bottom: 0; }
+.chat-message.vedmak-plain .message-content a:not(.content-link, .inline-roll) { color: #e0937f; }
+/* Речь персонажа — антиквой, как имя на листе; действие — курсивом */
+.chat-message.vedmak-plain.ic .message-content {
+  font-family: var(--vd-font-head); font-size: 1rem; line-height: 1.35; color: #f1ece0; text-shadow: 0 1px 0 rgba(0, 0, 0, .85);
+}
+.chat-message.vedmak-plain.emote .message-content { font-style: italic; color: #d6d0c2; }
+.chat-message.vedmak-plain .message-header .flavor-text {
+  flex: 0 0 100%; margin: 0; font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: #a8a296;
+}
+.chat-message:is(.vedmak-message, .vedmak-plain).vd-authored .message-header { box-shadow: inset 0 2px 0 var(--vd-author), inset 0 1px 0 rgba(255, 240, 215, .1), 0 2px 4px -1px rgba(0, 0, 0, .7); }
+.chat-message:is(.vedmak-message, .vedmak-plain).whisper .message-header { box-shadow: inset 0 2px 0 #8676b0, inset 0 1px 0 rgba(255, 240, 215, .1), 0 2px 4px -1px rgba(0, 0, 0, .7); }
+.chat-message:is(.vedmak-message, .vedmak-plain).blind .message-header { box-shadow: inset 0 2px 0 #b8432c, inset 0 1px 0 rgba(255, 240, 215, .1), 0 2px 4px -1px rgba(0, 0, 0, .7); }
+
+/* Бросок ядра (/r 2d6+3): формула и итог — колодцы, итог — антиквой; разбор костей — в колодце под формулой */
+.chat-message.vedmak-plain .dice-roll { margin: 0; }
+.chat-message.vedmak-plain .dice-roll .dice-result { display: flex; flex-direction: column; gap: 6px; }
+.chat-message.vedmak-plain .dice-roll :is(.dice-formula, .dice-total, .dice-tooltip .tooltip-part) {
+  margin: 0; background: #0c0d0f; border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
+}
+.chat-message.vedmak-plain .dice-roll .dice-formula { padding: 3px 8px; font-size: .74rem; text-align: center; color: #bab4a8; }
+.chat-message.vedmak-plain .dice-roll .dice-total {
+  padding: 5px 8px 3px; font-family: var(--vd-font-head); font-weight: 400; font-size: 1.75rem; line-height: 1.1; text-align: center;
+  color: #f1ece0; text-shadow: var(--vd-engrave);
+}
+.chat-message.vedmak-plain .dice-roll .dice-total.critical { color: #cfe0b8; }
+.chat-message.vedmak-plain .dice-roll .dice-total.fumble { color: #f0b3a5; }
+.chat-message.vedmak-plain .dice-roll .dice-tooltip .tooltip-part { padding: 4px 8px; }
+.chat-message.vedmak-plain .dice-roll .dice-tooltip .part-header { color: #a8a296; font-size: .72rem; }
+.chat-message.vedmak-plain .dice-roll .dice-tooltip .part-total { background: #25262b; color: #f1ece0; border-radius: 2px; }
+.chat-message.vedmak-plain .dice-roll .dice-rolls .roll { color: #f1ece0; }
+/* Бросок в строке текста ([[1d10]]) — стальная плашка */
+.chat-message.vedmak-plain a.inline-roll {
+  padding: 0 .35em; color: #f1ece0; background: #25262b; border: 1px solid var(--vd-edge); border-radius: 2px;
 }
