@@ -12,7 +12,7 @@ import { CharacterWizard } from "../character/wizard.mjs";
 import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
 import { racePowersContext, setPowerValue, powerStep } from "../character/race-powers.mjs";
 import { transform, extendForm, endForm, regainControl } from "../character/true-form.mjs";
-import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, crossbowModLimit } from "../config/crafting.mjs";
+import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, IMPLANT_LIMIT, crossbowModLimit } from "../config/crafting.mjs";
 import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
@@ -490,10 +490,19 @@ export class CharacterSheet extends VedmakActorSheet {
     });
 
     // Верстак: гнёзда мутагенов, печати памяти, три инструмента
-    const taken = items("alchemical").filter(i => i.system.isMutagen && i.system.applied);
+    const taken = items("alchemical").filter(i => i.system.isMutagen && i.system.applied && !i.flags?.vedmak?.implant);
     const sockets = Array.from({ length: CRAFTING.mutagenLimit }, (_, n) => {
       const m = taken[n];
       return m ? { id: m.id, img: m.img, name: m.name, effect: m.system.effect, color: m.system.mutagen?.color || "" } : { empty: true };
+    });
+    // Вживлённые руны и глифы — свои места, не гнёзда мутагенов; осложнение провала — подсказкой у своего места
+    const implanted = items("alchemical").filter(i => i.flags?.vedmak?.implant && !i.flags.vedmak.implant.extra);
+    const extras = items("alchemical").filter(i => i.flags?.vedmak?.implant?.extra);
+    const implants = Array.from({ length: IMPLANT_LIMIT }, (_, n) => {
+      const m = implanted[n];
+      if (!m) return { empty: true };
+      const extra = extras.find(x => x.flags.vedmak.implant.key === m.flags.vedmak.implant.key);
+      return { id: m.id, img: m.img, name: m.name, effect: m.system.effect, extra: extra ? " · вторая малая мутация" : "" };
     });
     const memorized = recipesAll.filter(r => r.system.memorized).length;
     const memoLimit = actor.system.stats.int.total;
@@ -532,6 +541,7 @@ export class CharacterSheet extends VedmakActorSheet {
     return {
       alchemy, recipes, components, substances, activeEffects, memorized, memoLimit, memoOver: memorized > memoLimit,
       mutagenCount: taken.length, mutagenLimit: CRAFTING.mutagenLimit, sockets, seals, workTools, otherTools, enhancements,
+      implants, implantCount: implanted.length, implantLimit: IMPLANT_LIMIT,
       readyCount: recipes.reduce((n, g) => n + g.items.filter(r => r.ready).length, 0),
       counts: {
         alchemy: alchemy.reduce((n, g) => n + g.items.length, 0), recipes: recipesAll.length,

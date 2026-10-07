@@ -708,7 +708,8 @@ export async function applyOil(actor, item) {
 export async function applyMutagen(actor, item) {
   const s = item.system;
   if (s.applied) return ui.notifications.info(`«${item.name}» уже принят.`);
-  const applied = actor.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;
+  // Вживлённые руны и глифы гнёзд мутагенов не занимают
+  const applied = actor.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied && !i.flags?.vedmak?.implant).length;
   if (applied >= CRAFTING.mutagenLimit) return ui.notifications.warn(`Уже принято ${applied} мутагена — больше нельзя (стр. 251).`);
   const ok = await DialogV2.confirm({
     window: { title: item.name },

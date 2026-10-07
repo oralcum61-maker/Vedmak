@@ -1,13 +1,14 @@
 // Вживление рун и глифов в тело («Офир и Зеррикания», стр. 84–86). Маг тратит целый день и всю свою Вын.
 // СЛ считается от подопытного: глиф — 28 − (Тел + Воля/2)/2; руна — 28 − (Тел + Воля)/2, обычный камень +1,
 // большой +2. Книга не называет навык мага — берём Сотворение заклинаний. Успех: руна или глиф приживаются и
-// дают малую мутацию (ведьмакам — нет). Провал: приживаются всё равно, но с второй малой мутацией, и она занимает
-// место второго мутагена. Вживлённого не больше двух; вживление занимает гнездо мутагена (сделано мутагеном с
-// флагом `implant`, поэтому поправки считаются как у мутагенов, character.mjs). Сварог даёт Точность — эффектом
+// дают малую мутацию (ведьмакам — нет). Провал: приживаются всё равно, но со второй малой мутацией. Вживлённого не
+// больше двух, и гнёзд мутагенов оно не занимает (автор, 07.10): это мутаген с флагом `implant` только ради
+// поправок (считаются как у мутагенов, character.mjs), из счёта гнёзд он исключён. Сварог даёт Точность — эффектом
 // с `rollMods.attack`; глиф даёт заклинание «Вживлённый глиф: …» из компендиума магии.
 
-import { CRAFTING, IMPLANT_RUNES, IMPLANT_GLYPHS, IMPLANT_TIERS, IMPLANT_LIMIT } from "../config/crafting.mjs";
+import { IMPLANT_RUNES, IMPLANT_GLYPHS, IMPLANT_TIERS, IMPLANT_LIMIT } from "../config/crafting.mjs";
 import { findItemData } from "./craft.mjs";
+import { RACES } from "../config/character.mjs";
 import { postCard, renderTemplate } from "../util.mjs";
 
 const SYS = "vedmak";
@@ -16,7 +17,6 @@ const IMPLANT_SKILL = "spellCasting";
 const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 export const implantsOf = actor => actor.items.filter(i => i.flags?.[SYS]?.implant && !i.flags[SYS].implant.extra);
-const usedSockets = actor => actor.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;
 
 /** СЛ вживления по параметрам подопытного (округление вниз). */
 export function implantDc(actor, kind, tier = "small") {
@@ -41,12 +41,32 @@ function implantEffect(kind, key, tier) {
   return { label: `руна ${r.label}`, text, mods, accuracy };
 }
 
-/** Окно вживления: что, размер камня, какой маг. */
+/** Шанс проверки «основа + d10 больше СЛ»: единица — провал, десятка взрывается (примерно). */
+export function checkChance(base, dc) {
+  const need = dc - base + 1;
+  let p;
+  if (need <= 2) p = 0.9;
+  else if (need <= 10) p = (11 - need) / 10;
+  else p = 0.1 * Math.max(0, 11 - (need - 10)) / 10;
+  return {
+    chance: p <= 0 ? "0%" : p < 0.01 ? "<1%" : `${Math.round(p * 100)}%`,
+    need: need <= 2 ? "провал только на единице" : need <= 10 ? `нужно ${need}+ на d10` : "только взрыв десятки"
+  };
+}
+
+/** Короткая сила руны на камне: «+2», «+10 %». */
+function tierValue(key, tier) {
+  const r = IMPLANT_RUNES[key];
+  const n = r.mods?.[tier]?.[0]?.value ?? r.accuracy?.[tier];
+  if (n !== undefined) return `+${n}`;
+  return r.text?.[tier]?.match(/\+\s*\d+\s*%/)?.[0].replace(/\s+/g, " ") ?? "";
+}
+
+/** Окно вживления: что, размер камня, какой маг (облик — PLAN 4.121). */
 export async function implantDialog(actor) {
   if (actor?.type !== "character") return null;
   const count = implantsOf(actor).length;
   if (count >= IMPLANT_LIMIT) return ui.notifications.warn(`${actor.name}: уже вживлено ${count} — больше нельзя (стр. 84).`);
-  if (usedSockets(actor) >= CRAFTING.mutagenLimit) return ui.notifications.warn(`${actor.name}: все места мутагенов заняты — вживлять некуда.`);
   // Маг — свой персонаж с Энергией (сам подопытный тоже), сильнейшие в Сотворении — первыми; магов нет — сам персонаж
   const castBase = a => a.system.skills?.spellCasting?.base ?? 0;
   const owned = [actor, ...game.actors.filter(a => a.type === "character" && a.isOwner && a !== actor)];
@@ -54,26 +74,34 @@ export async function implantDialog(actor) {
   const mages = withVigor.length ? withVigor : [actor];
   const runeDc = implantDc(actor, "rune"), glyphDc = implantDc(actor, "glyph");
   const witcher = actor.system.raceKey === "witcher";
-  // Окно (PLAN 4.98): плитки рун и глифов, размер камня и маг — жетонами; СЛ, эффект и мутация — по выбору
+  // Рунные камни в сумках подопытного и магов — отметка на камне и строка «в сумке»
+  const bagOf = label => [actor, ...mages.filter(m => m !== actor)].reduce((n, a) => n + a.items
+    .filter(i => i.type === "enhancement" && i.name === `Руна «${label}»`).reduce((q, i) => q + (i.system.quantity ?? 1), 0), 0);
+  const stats = actor.system.stats;
+  const race = RACES[actor.system.raceKey]?.label ?? "";
   const content = await renderTemplate("systems/vedmak/templates/dialog/implant.hbs", {
-    subject: { name: actor.name, img: actor.img }, count, limit: IMPLANT_LIMIT, runeDc, glyphDc, witcher,
+    subject: { name: actor.name, img: actor.img,
+      sub: [race.toLowerCase(), `Тел ${stats.body?.total ?? 0}`, `Воля ${stats.will?.total ?? 0}`].filter(Boolean).join(" · ") },
+    count, limit: IMPLANT_LIMIT, slots: Array.from({ length: IMPLANT_LIMIT }, (_, n) => ({ full: n < count })),
+    runeDc, glyphDc, witcher,
     runes: Object.entries(IMPLANT_RUNES).map(([key, r], n) => ({
-      key, label: r.label, img: r.img, minor: r.minor, selected: n === 0,
-      fx: Object.fromEntries(Object.keys(IMPLANT_TIERS).map(t => [t, implantEffect("rune", key, t).text]))
+      key, label: r.label, img: r.img, minor: r.minor, selected: n === 0, bag: bagOf(r.label),
+      bonus: r.bonus ?? `к шансу: ${(r.text?.small ?? "").replace(/\s*\+.*$/, "").toLowerCase()} у атак оружием`,
+      v: Object.fromEntries(Object.keys(IMPLANT_TIERS).map(t => [t, tierValue(key, t)]))
     })),
-    glyphs: Object.entries(IMPLANT_GLYPHS).map(([key, g]) => ({ key, label: g.label, img: g.img, minor: g.minor, fx: implantEffect("glyph", key).text })),
+    glyphs: Object.entries(IMPLANT_GLYPHS).map(([key, g]) => ({ key, label: g.label, img: g.img, minor: g.minor, spell: g.spell })),
     tiers: Object.entries(IMPLANT_TIERS).map(([key, t], n) => ({ key, label: t.label, dc: t.dc, selected: n === 0 })),
-    mages: mages.map((a, n) => ({ id: a.id, name: a.name, base: a.system.skills?.spellCasting?.base ?? 0, selected: n === 0 }))
+    mages: mages.map((a, n) => ({ id: a.id, name: a.name, img: a.img, base: castBase(a), sta: a.system.sta?.value ?? 0, selected: n === 0 }))
   });
   const choice = await foundry.applications.api.DialogV2.wait({
     window: { title: `Вживление: ${actor.name}`, icon: "fa-solid fa-gem" },
-    classes: ["vedmak", "vedmak-dialog", "check-dialog", "cast-dialog", "implant-window"], position: { width: 560 }, content,
+    classes: ["vedmak", "vedmak-dialog", "check-dialog", "cast-dialog", "implant-window"], position: { width: 660 }, content,
     render: (event, dialog) => bindImplantDialog(dialog.element),
-    buttons: [{ action: "ok", label: "Вживить", default: true,
+    buttons: [{ action: "ok", label: "Вживить", default: true, class: "violet",
       callback: (e, b) => {
         const f = b.form;
         const val = name => f.querySelector(`[name="${name}"]:checked`)?.value ?? "";
-        return { what: val("what"), tier: val("tier") || "small", mage: val("mage"), spend: f.elements.spend.checked };
+        return { what: val("what"), tier: val("tier") || "small", mage: val("mage"), spend: !!f.elements.spend?.checked };
       } },
     { action: "cancel", label: "Отмена" }],
     rejectClose: false
@@ -83,31 +111,59 @@ export async function implantDialog(actor) {
   return implant(actor, { kind, key, tier: kind === "rune" ? choice.tier : "", mage: game.actors.get(choice.mage) ?? actor, spend: choice.spend });
 }
 
-/** Живое окно вживления: СЛ в медальоне, эффект и мутация выбранного, камень — только у руны. */
+/** Живое окно вживления: вкладка рун или глифов, СЛ и шанс, карточка выбранного, маг и камень из сумки. */
 function bindImplantDialog(el) {
-  const root = el.querySelector(".implant-dialog");
+  const root = el.querySelector(".imp2");
   const form = el.querySelector("form");
   if (!root || !form) return;
+  const $ = sel => root.querySelector(sel);
+  const cap = t => t[0].toUpperCase() + t.slice(1);
   const update = () => {
-    const what = form.querySelector('[name="what"]:checked');
+    const kind = form.querySelector('[name="kind"]:checked')?.value ?? "rune";
+    const glyph = kind === "glyph";
+    for (const g of root.querySelectorAll(".imp2-grid")) g.hidden = g.dataset.kind !== kind;
+    let what = form.querySelector('[name="what"]:checked');
+    if (!what || what.dataset.kind !== kind) {
+      what = root.querySelector(`.imp2-grid[data-kind="${kind}"] input`);
+      if (what) what.checked = true;
+    }
+    if (!what) return;
+    const d = what.dataset;
     const tier = form.querySelector('[name="tier"]:checked')?.value ?? "small";
-    const glyph = what?.dataset.kind === "glyph";
-    const dc = glyph ? Number(root.dataset.glyphDc) : Number(root.dataset.runeDc) + (IMPLANT_TIERS[tier]?.dc ?? 0);
-    const medal = root.querySelector("[data-implant-dc] .vd-medal-face b");
-    if (medal) medal.textContent = String(dc);
-    const cap = root.querySelector("[data-implant-dc-cap]");
-    if (cap) cap.textContent = glyph ? "глиф" : `${IMPLANT_TIERS[tier]?.label.toLowerCase() ?? ""} камень`;
-    const fx = root.querySelector("[data-implant-fx]");
-    if (fx) fx.textContent = what?.dataset[`fx${tier[0].toUpperCase()}${tier.slice(1)}`] ?? "";
-    const minor = root.querySelector("[data-implant-minor]");
-    if (minor) minor.textContent = root.dataset.witcher ? "Ведьмаку малая мутация не грозит." : `Малая мутация: ${what?.dataset.minor ?? "—"}.`;
-    root.querySelector("[data-implant-tiers]")?.classList.toggle("off", glyph);
-    root.querySelector("[data-implant-spend]")?.classList.toggle("off", glyph);
-    const stone = root.querySelector("[data-implant-spend] .plate-value");
-    const label = what?.closest(".imp-opt")?.querySelector(".imp-name")?.textContent ?? "";
-    if (stone) stone.textContent = glyph ? "не нужен" : `Руна «${label}»`;
-    const hint = root.querySelector("[data-implant-hint]");
-    if (hint) hint.textContent = `Сотворение заклинаний мага против СЛ ${dc} · провал — вживлено, но с второй мутацией`;
+    const runeDc = Number(root.dataset.runeDc);
+    const dc = glyph ? Number(root.dataset.glyphDc) : runeDc + (IMPLANT_TIERS[tier]?.dc ?? 0);
+    const mage = form.querySelector('[name="mage"]:checked');
+    const { chance, need } = checkChance(Number(mage?.dataset.base ?? 0), dc);
+    $("[data-imp-dc]").textContent = String(dc);
+    $("[data-imp-dc-cap]").textContent = `шанс · СЛ ${dc}`;
+    $("[data-imp-chance]").textContent = chance;
+    $("[data-imp-need]").textContent = need;
+    $("[data-imp-img]").src = d.img;
+    $("[data-imp-name]").textContent = d.label;
+    $("[data-imp-kind]").textContent = glyph ? "глиф знака · заклинание без фокусирующих предметов"
+      : `руна · ${d[`v${cap(tier)}`]} ${d.bonus}`;
+    for (const t of Object.keys(IMPLANT_TIERS)) {
+      const v = root.querySelector(`[data-tier-v="${t}"]`);
+      if (v) v.textContent = d[`v${cap(t)}`] ?? "";
+      const c = root.querySelector(`[data-tier-dc="${t}"]`);
+      if (c) c.textContent = String(runeDc + (IMPLANT_TIERS[t]?.dc ?? 0));
+    }
+    $("[data-imp-tiers]").hidden = glyph;
+    $("[data-imp-spell]").hidden = !glyph;
+    $("[data-imp-spell-text]").textContent = glyph ? `«${d.spell}» — творится без фокусирующих предметов, сила по уровню Энергии. Энергию даёт только руна Велес.` : "";
+    $("[data-imp-minor]").textContent = root.dataset.witcher ? "Ведьмаку малая мутация не грозит." : `${d.minor}.`;
+    const plate = $("[data-imp-spend]");
+    plate.hidden = glyph;
+    $("[data-imp-noglyph]").hidden = !glyph;
+    const bag = Number(d.bag ?? 0);
+    const box = form.elements.spend;
+    box.disabled = !bag;
+    if (!bag) box.checked = false;
+    $("[data-imp-spend-text]").textContent = `Израсходовать камень «Руна «${d.label}»» из сумки`;
+    const bagEl = $("[data-imp-bag]");
+    bagEl.textContent = bag ? `в сумке: ${bag}` : "камня нет — решает ведущий";
+    bagEl.classList.toggle("ok", !!bag);
+    $("[data-imp-hint]").textContent = `Целый день работы, вся Вын мага уйдёт (${mage?.dataset.sta ?? 0} → 0). ${mage?.dataset.name ?? ""} — Сотворение заклинаний против СЛ ${dc}; провал — вживлено, но со второй малой мутацией.`;
   };
   form.addEventListener("change", update);
   update();
@@ -155,12 +211,11 @@ export async function implant(actor, { kind, key, tier = "small", mage = actor, 
     },
     flags: { [SYS]: { implant: { kind, key, tier } } }
   }];
-  const freeAfter = CRAFTING.mutagenLimit - usedSockets(actor) - 1;
-  if (!result.success && freeAfter > 0) items.push({
+  if (!result.success) items.push({
     name: `Вторая мутация: ${def.label}`, type: "alchemical", img: "icons/magic/unholy/strike-body-life-soul-purple.webp",
     system: {
-      kind: "mutagen", applied: true, quantity: 1, effect: "Провал вживления: вторая малая мутация занимает место второго мутагена.",
-      description: "<p>Провал вживления: вторая малая мутация (какая — решает ведущий). Место второго мутагена занято.</p>",
+      kind: "mutagen", applied: true, quantity: 1, effect: "Провал вживления: вторая малая мутация (какая — решает ведущий).",
+      description: "<p>Провал вживления: вторая малая мутация (какая — решает ведущий).</p>",
       mutagen: { color: "red", dc, minor: "вторая малая мутация (по решению ведущего)" }, source: { book: BOOK, page: "84" }
     },
     flags: { [SYS]: { implant: { kind, key, tier, extra: true } } }
@@ -181,9 +236,7 @@ export async function implant(actor, { kind, key, tier = "small", mage = actor, 
     lines.push(`<p>Заклинание «${esc(def.spell)}» — на вкладке «Магия». Энергию даёт только руна Велес.</p>`);
   }
   if (minor) lines.push(`<p>Малая мутация: ${esc(minor)}.</p>`);
-  if (!result.success) lines.push(extra
-    ? "<p><b>Провал:</b> вторая малая мутация (какая — решает ведущий) заняла место второго мутагена.</p>"
-    : "<p><b>Провал:</b> вторая малая мутация (какая — решает ведущий); места мутагенов уже заняты.</p>");
+  if (!result.success && extra) lines.push("<p><b>Провал:</b> вживлено, но со второй малой мутацией (какая — решает ведущий).</p>");
   if (stone) lines.push(`<p>Израсходован камень «${esc(stone.name)}» (${esc(stone.parent?.name)}).</p>`);
   lines.push(`<p>Вживил ${esc(mage.name)}: целый день работы, вся Вын потрачена.</p>`);
   return postCard(actor, result.success ? "Вживление удалось" : "Вживление с осложнением", lines.join(""),

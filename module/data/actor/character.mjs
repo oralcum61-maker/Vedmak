@@ -80,7 +80,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       else if (item.type === "gear" && s.equipped && ["prosthetic", "prostheticMod"].includes(s.category)) itemMods.push(...s.mods);
     }
     this.derived ??= {};
-    this.derived.mutagens = this.parent.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied).length;
+    // Вживлённые руны и глифы — отдельно: гнёзд мутагенов они не занимают (автор, 07.10)
+    const takenMutagens = this.parent.items.filter(i => i.type === "alchemical" && i.system.isMutagen && i.system.applied);
+    this.derived.mutagens = takenMutagens.filter(i => !i.flags?.vedmak?.implant).length;
+    this.derived.implants = takenMutagens.filter(i => i.flags?.vedmak?.implant && !i.flags.vedmak.implant.extra).length;
     for (const { target, value } of [...(race?.mods ?? []), ...(school.mods ?? []), ...itemMods]) {
       const [group, key] = target.split(".");
       if (group === "stats" && this.stats[key]) this.stats[key].mod += value;

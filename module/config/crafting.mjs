@@ -141,15 +141,15 @@ export const IMPLANT_RUNES = {
 };
 /** Глифы знаков: носитель получает заклинание «Вживлённый глиф: …» из компендиума магии. */
 export const IMPLANT_GLYPHS = {
-  aard: { label: "Аард", spell: "Вживлённый глиф: Аард", img: "icons/magic/air/wind-vortex-swirl-blue.webp",
+  aard: { label: "Аард", spell: "Вживлённый глиф: Аард", img: "systems/vedmak/assets/fan/magic/sg-aard.webp",
     minor: "Очень громкое чихание со странным эхом, которое трудно скрыть" },
-  quen: { label: "Квен", spell: "Вживлённый глиф: Квен", img: "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
+  quen: { label: "Квен", spell: "Вживлённый глиф: Квен", img: "systems/vedmak/assets/fan/magic/sg-quen.webp",
     minor: "Слабое свечение в темноте выдаёт колдовство" },
-  igni: { label: "Игни", spell: "Вживлённый глиф: Игни", img: "icons/magic/fire/flame-burning-hand-white.webp",
+  igni: { label: "Игни", spell: "Вживлённый глиф: Игни", img: "systems/vedmak/assets/fan/magic/sg-igni.webp",
     minor: "Легко воспламеняется: шанс поджечь носителя на +10 %" },
-  yrden: { label: "Ирден", spell: "Вживлённый глиф: Ирден", img: "icons/magic/symbols/runes-star-pentagon-orange.webp",
+  yrden: { label: "Ирден", spell: "Вживлённый глиф: Ирден", img: "systems/vedmak/assets/fan/magic/sg-yrden.webp",
     minor: "Кожа покрывается пурпурными родимыми пятнами" },
-  axii: { label: "Аксий", spell: "Вживлённый глиф: Аксий", img: "icons/magic/perception/eye-tendrils-web-purple.webp",
+  axii: { label: "Аксий", spell: "Вживлённый глиф: Аксий", img: "systems/vedmak/assets/fan/magic/sg-axii.webp",
     minor: "Постоянная обильная испарина: −2 к Эмп", mods: [{ target: "stats.emp", value: -2 }] }
 };
 export const IMPLANT_LIMIT = 2;
