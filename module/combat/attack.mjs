@@ -13,6 +13,7 @@ import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import { inTrueForm } from "../character/true-form.mjs";
 import { prostheticStrike, equippedProstheses } from "./prosthetics.mjs";
+import { aimBonus, clearAim } from "./manual.mjs";
 
 /**
  * Высасывание крови («Высший вампир. Вторая редакция», стр. 9): укус вампира с запасом Очков Крови.
@@ -185,10 +186,14 @@ export async function attack(actor, source, opts = {}) {
     return null;
   }
   const targets = opts.targets ?? currentTargets();
+  // Набранное прицеливание по этой цели — отмеченным пунктом «Прицеливание N раунд(а)»
+  const aimed = aimBonus(actor, targets[0]?.tokenUuid ?? null);
+  const situations = [...(opts.situations ?? [])];
+  if (aimed && !situations.some(k => /^aim\d$/.test(k))) situations.push(`aim${aimed}`);
   let cfg = {
     attackType: opts.attackType ?? src.defaultType, aim: opts.aim ?? "", band: opts.band,
     chargeMeters: opts.chargeMeters ?? 0, gallop: !!opts.gallop, weight: opts.weight ?? "light",
-    situations: opts.situations ?? [], extraAction: !!opts.extraAction, mod: opts.mod ?? 0,
+    situations, extraAction: !!opts.extraAction, mod: opts.mod ?? 0,
     damageMod: opts.damageMod ?? 0, luck: opts.luck ?? 0,
     messageMode: opts.messageMode ?? defaultMessageMode()
   };
@@ -434,6 +439,8 @@ export async function rollAttack(actor, src, targets, cfg) {
   }
 
   const roll = await performCheck({ actor, title: src.label, parts, luck: cfg.luck, toChat: false });
+  // Атака тратит прицеливание, даже если его не отметили
+  await clearAim(actor);
 
   // Урон и эффекты вида атаки
   const unarmed = src.kind === "unarmed" || src.kind === "prosthetic";

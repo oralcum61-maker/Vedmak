@@ -4,8 +4,8 @@
 // vedmak.reliability. Двимеритовый протез: цели — касание двимерита (кнопка в карточке урона), носителю — Энергия 0
 // (data/actor/common.mjs).
 //
-// Какая модификация на какой конечности, система не знает: надетые модификации действуют на удары всеми надетыми
-// протезами.
+// Модификация стоит на протезе, выбранном в её листе (флаг vedmak.prosthesis — id протеза у того же персонажа);
+// без выбора — на всех надетых протезах, как было до PLAN 4.124. Починка — craft.mjs `repair`.
 
 import { PROSTHETIC_RELIABILITY, prostheticPart } from "../config/items.mjs";
 
@@ -18,8 +18,14 @@ export const equippedProstheses = actor => actor?.itemTypes?.gear?.filter(isPros
 /** Протез — предмет снаряжения «Протезы». */
 export const isProstheticItem = item => item?.type === "gear" && item.system.category === "prosthetic";
 
+/** Модификация стоит на этом протезе: выбран он или не выбран никакой. */
+export const modOnProsthesis = (mod, item) => {
+  const on = mod.flags?.vedmak?.prosthesis;
+  return !on || on === item.id || !mod.parent?.items.has(on);
+};
+
 /**
- * Что даёт удар протезом: сам протез и надетые модификации.
+ * Что даёт удар протезом: сам протез и надетые модификации, стоящие на нём.
  * @returns {{item: Item, accuracy: number, effects: object[], silver: string, lethal: boolean, damage: string,
  *   dimeritium: boolean, coating: boolean, relMod: number, mods: string[], reliability: {value, max}|null,
  *   fallsOff: boolean}|null}
@@ -28,9 +34,14 @@ export function prostheticStrike(actor, itemId = null) {
   const list = equippedProstheses(actor);
   const item = itemId ? list.find(i => i.id === itemId) : list[0];
   if (!item) return null;
+  return prostheticStats(actor, item);
+}
+
+/** Свойства протеза с его модификациями — и у снятого (лист предмета, починка). */
+export function prostheticStats(actor, item) {
   const out = { item, accuracy: 0, effects: [], silver: "", lethal: false, damage: "", dimeritium: false, coating: false,
     relMod: 0, mods: [] };
-  for (const part of [item, ...actor.itemTypes.gear.filter(isMod)]) {
+  for (const part of [item, ...actor.itemTypes.gear.filter(i => isMod(i) && modOnProsthesis(i, item))]) {
     const cfg = prostheticPart(part.name);
     if (part !== item) out.mods.push(part.name);
     if (!cfg) continue;

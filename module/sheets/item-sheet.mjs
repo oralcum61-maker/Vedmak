@@ -10,6 +10,7 @@ import { SUBSTANCES } from "../config/crafting.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 import { animateTab } from "../fx/sheet-motion.mjs";
+import { isProstheticItem, prostheticStats } from "../combat/prosthetics.mjs";
 
 /**
  * Ключи рас для выпадающих списков: корник (RACES) и все расы компендиумов (дополнения, фанатские книги).
@@ -129,6 +130,13 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (["race", "weapon", "armor", "alchemical"].includes(item.type)) {
       context.modTargets = modTargets(STATS, SKILLS);
     }
+    // Протезы у персонажа: модификация — на каком протезе стоит, протез — Надёжность покрытия
+    const owner = item.parent?.documentName === "Actor" ? item.parent : null;
+    if (owner && item.type === "gear" && system.category === "prostheticMod") {
+      context.prosthesisOptions = { "": "На всех надетых", ...Object.fromEntries(owner.itemTypes.gear.filter(isProstheticItem).map(i => [i.id, i.name])) };
+      context.prosthesisId = item.flags?.vedmak?.prosthesis ?? "";
+    }
+    if (owner && isProstheticItem(item)) context.prostheticRel = prostheticStats(owner, item).reliability;
     if (item.type === "component") {
       context.substanceOptions = { "": "—", ...Object.fromEntries(Object.entries(SUBSTANCES).map(([k, v]) => [k, v.label])) };
       context.substance = SUBSTANCES[system.substance] ?? null;

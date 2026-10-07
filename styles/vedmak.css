@@ -2,9 +2,9 @@
    Разделы ниже держат раскладку; материал, объём и свет — в слое «Гравюра» в конце файла.
    Шрифты (SIL OFL, см. fonts/ИСТОЧНИКИ.txt): Forum — имена, вкладки, разделы и числа, IBM Plex Sans — текст. */
 
-@font-face { font-family: "Vedmak Display"; src: url("../fonts/Forum-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vedmak Sans"; src: url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype-variations"), url("../fonts/IBMPlexSans-Italic-Variable.ttf") format("truetype"); font-weight: 100 700; font-stretch: 85% 100%; font-style: italic; font-display: swap; }
+@font-face { font-family: "Vedmak Display"; src: url("../fonts/VedmakDisplay.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Vedmak Sans"; src: url("../fonts/VedmakSans.woff2") format("woff2-variations"), url("../fonts/VedmakSans.woff2") format("woff2"); font-weight: 100 700; font-stretch: 85% 100%; font-style: normal; font-display: swap; }
+@font-face { font-family: "Vedmak Sans"; src: url("../fonts/VedmakSans-Italic.woff2") format("woff2-variations"), url("../fonts/VedmakSans-Italic.woff2") format("woff2"); font-weight: 100 700; font-stretch: 85% 100%; font-style: italic; font-display: swap; }
 
 body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   /* Холодная сталь и тёплое серебро: акцент держится светлотой; киноварь — атака и опасность, латунь — Удача

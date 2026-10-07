@@ -5,7 +5,8 @@ import { SKILLS, skillsByStat } from "../config/skills.mjs";
 import { CRIT_LEVELS, CRIT_STATES, CRIT_WOUNDS, HEALING_DAYS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER } from "../config/combat.mjs";
 import { attackSources } from "../combat/attack.mjs";
 import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
-import { manualDamage, restTurn, restDays } from "../combat/manual.mjs";
+import { manualDamage, restTurn, restDays, aimTurn, aimBonus } from "../combat/manual.mjs";
+import { prostheticStats } from "../combat/prosthetics.mjs";
 import { controlCheck } from "../combat/mounted.mjs";
 import { MOUNTS } from "../config/combat.mjs";
 import { levelLabel, ELEMENT_GLYPHS, SIGN_FORMS, MAGIC_LEARNING } from "../config/magic.mjs";
@@ -269,6 +270,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       toggleStatus: VedmakActorSheet.#onToggleStatus,
       critCreate: VedmakActorSheet.#onCritCreate,
       restTurn: VedmakActorSheet.#onRestTurn,
+      aimTurn: VedmakActorSheet.#onAimTurn,
       restDays: VedmakActorSheet.#onRestDays,
       manualDamage: VedmakActorSheet.#onManualDamage,
       controlCheck: VedmakActorSheet.#onControlCheck,
@@ -537,6 +539,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
 
     context.stats = Object.entries(system.stats).map(([key, s]) => ({ key, ...s, rollable: key !== "luck" }));
+    // Набранное прицеливание — числом на кнопке «Прицелиться»
+    context.aimRounds = aimBonus(actor, null);
 
     // Навыки по параметрам
     const groups = skillsByStat();
@@ -570,10 +574,14 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     // Снаряжение по категориям книги; пустые категории не показываем
     const CATS = CONFIG.VEDMAK.GEAR_CATEGORIES ?? {};
-    const line = item => ({
-      id: item.id, name: item.name, img: item.img, system: item.system,
-      total: Math.round((item.system.weight ?? 0) * (item.system.quantity ?? 1) * 10) / 10
-    });
+    const line = item => {
+      const out = { id: item.id, name: item.name, img: item.img, system: item.system,
+        total: Math.round((item.system.weight ?? 0) * (item.system.quantity ?? 1) * 10) / 10 };
+      // Протез: Надёжность покрытия (с модификациями на нём); модификация: на каком протезе стоит
+      if (item.system.category === "prosthetic") out.prosRel = prostheticStats(actor, item).reliability;
+      if (item.system.category === "prostheticMod") out.mountedOn = actor.items.get(item.flags?.vedmak?.prosthesis)?.name ?? "";
+      return out;
+    };
     const known = new Set(Object.keys(CATS));
     // Места татуировок — подписью ленты на нанесённой («Офир и Зеррикания»)
     context.tattooPlaces = Object.fromEntries(Object.entries(CONFIG.VEDMAK.TATTOO_LOCATIONS ?? {}).map(([k, l]) => [k, l.label]));
@@ -988,6 +996,10 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onRestTurn() {
     await restTurn(this.actor);
+  }
+
+  static async #onAimTurn() {
+    await aimTurn(this.actor);
   }
 
   static async #onRestDays() {

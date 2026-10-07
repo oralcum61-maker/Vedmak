@@ -183,6 +183,51 @@ export async function restTurn(actor) {
 }
 
 /**
+ * Прицеливание (полный ход, стр. 151): +1 к следующей атаке по той же цели за каждый ход, не больше +3.
+ * Счёт — флаг актора `aim` {rounds, target (uuid токена или null), combatId, round}; сбрасывает его любая атака
+ * (rollAttack) и конец боя. Другая цель — счёт заново.
+ */
+export const AIM_MAX = 3;
+
+/** Сколько набрано прицеливания против этой цели (0 — нет или цель другая). */
+export function aimBonus(actor, targetUuid) {
+  const aim = actor?.getFlag("vedmak", "aim");
+  if (!aim?.rounds) return 0;
+  // Бой, в котором целились, кончился — прицеливание пропало
+  if (aim.combatId && !game.combats.has(aim.combatId)) return 0;
+  if (aim.target && targetUuid && aim.target !== targetUuid) return 0;
+  return Math.min(AIM_MAX, aim.rounds);
+}
+
+export async function aimTurn(actor) {
+  const target = game.user.targets.first() ?? null;
+  const targetUuid = target?.document.uuid ?? null;
+  const prev = actor.getFlag("vedmak", "aim");
+  const combat = game.combat?.started ? game.combat : null;
+  if (combat && prev?.combatId === combat.id && prev.round === combat.round) {
+    ui.notifications.warn(`${actor.name} уже целится в этом раунде: прицеливание — полный ход.`);
+    return null;
+  }
+  const same = aimBonus(actor, targetUuid) > 0 && (prev.target ?? null) === targetUuid;
+  const rounds = Math.min(AIM_MAX, same ? prev.rounds + 1 : 1);
+  await actor.setFlag("vedmak", "aim", { rounds, target: targetUuid, combatId: combat?.id ?? null, round: combat?.round ?? null });
+  const who = target ? ` в ${target.name}` : "";
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="vedmak-card turn"><header class="card-head"><span class="card-glyph"><i class="fa-solid fa-crosshairs"></i></span>`
+      + `<div class="card-ident"><span class="card-name">Прицеливание</span><span class="card-sub">полный ход</span></div>`
+      + `<div class="card-value">${ringHtml()}<b>+${rounds}</b><span class="cap">к атаке</span></div></header>`
+      + `<div class="card-body"><p class="note">${actor.name} целится${who}: +${rounds} к следующей атаке${target ? " по этой цели" : ""}`
+      + `${rounds >= AIM_MAX ? " (больше не набрать)" : ""}. Любая атака сбрасывает прицеливание.</p></div></div>`
+  });
+}
+
+/** Сбросить прицеливание (после атаки или в конце боя). */
+export async function clearAim(actor) {
+  if (actor?.getFlag("vedmak", "aim")) await actor.unsetFlag("vedmak", "aim");
+}
+
+/**
  * Дни отдыха (стр. 173–174): с уходом (Первая помощь или Лечащее прикосновение СЛ 14) — Отдых ПЗ в день,
  * при нагрузке ½; Лечащее прикосновение +3 ПЗ в день. Вылеченные ранения отсчитывают дни до снятия штрафов.
  */
@@ -230,10 +275,13 @@ export async function restDays(actor) {
 
   const sys = actor.system;
   const lines = [];
+  // Обеззараживающая жидкость: +2 к естественному заживлению и −2 дня каждому ранению (по разу на рану)
+  const disinfected = actor.effects.find(e => e.flags?.vedmak?.disinfected);
   let perDay = 0;
   if (cfg.care) {
     perDay = cfg.exertion ? Math.floor(sys.derived.rec / 2) : sys.derived.rec;
     if (cfg.touch) perDay += 3;
+    if (disinfected) perDay += 2;
   }
   const hp = Math.min(sys.hp.max, sys.hp.value + perDay * cfg.days);
   await actor.update({ "system.hp.value": hp, "system.sta.value": sys.sta.max });
@@ -249,6 +297,10 @@ export async function restDays(actor) {
       const body = Math.max(3, Math.min(13, sys.stats.body.raw));
       days = HEALING_DAYS[body][["simple", "complex", "difficult"].indexOf(wound.system.level)] ?? 0;
     }
+    if (disinfected && !wound.flags?.vedmak?.disinfected) {
+      days = Math.max(0, days - 2);
+      await wound.setFlag("vedmak", "disinfected", true);
+    }
     const left = days - cfg.days;
     if (left <= 0) done.push(wound);
     else {
@@ -259,6 +311,11 @@ export async function restDays(actor) {
   if (done.length) {
     await actor.deleteEmbeddedDocuments("Item", done.map(w => w.id));
     lines.push(`Зажили: ${done.map(w => w.name).join(", ")}.`);
+  }
+  // Обработка держится, пока есть что заживлять
+  if (disinfected && !(actor.itemTypes.critWound ?? []).length && actor.system.hp.value >= actor.system.hp.max) {
+    await disinfected.delete();
+    lines.push("Раны зажили — обработка больше не нужна.");
   }
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),

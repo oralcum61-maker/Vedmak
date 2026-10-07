@@ -1,3 +1,7 @@
 Forum (Денис Машаров) и IBM Plex Sans (IBM, Майк Эбберт и Bold Monday) — лицензия SIL Open Font License 1.1,
-тексты лицензий рядом: OFL-forum.txt, OFL-ibmplexsans.txt. Файлы взяты из репозитория google/fonts.
-IBM Plex Sans — вариативный (начертания 100–700, ширина 85–100 %), прямой и курсив.
+тексты лицензий рядом: OFL-forum.txt, OFL-ibmplexsans.txt. Исходные файлы взяты из репозитория google/fonts.
+IBM Plex Sans — вариативный (начертания 100–700, ширина 75–100 %), прямой и курсив.
+
+В системе лежат изменённые версии: подмножество WOFF2 (латиница, кириллица, пунктуация, стрелки и знаки), его
+собирает tools/make-fonts.py. По условиям OFL изменённая версия не носит зарезервированных имён «Forum» и «Plex»,
+поэтому шрифты внутри файлов названы «Vedmak Display» (из Forum) и «Vedmak Sans» (из IBM Plex Sans).

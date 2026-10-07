@@ -94,7 +94,9 @@ export function collectCritMods(actor) {
     }
     // Множители не складываются: берём самый суровый
     for (const [k, v] of Object.entries(m.mult ?? {})) out.mult[k] = Math.min(out.mult[k] ?? 1, v);
-    for (const k of ["action", "magic", "duel", "empathicDuel", "sight", "arm", "bleedExtra", "acid"]) out[k] += m[k] ?? 0;
+    for (const k of ["action", "magic", "duel", "empathicDuel", "sight", "arm", "bleedExtra"]) out[k] += m[k] ?? 0;
+    // Кислоту «Раны в живот» гасит щелочной порошок (флаг раны vedmak.acidNeutralized)
+    if (!item.flags?.vedmak?.acidNeutralized) out.acid += m.acid ?? 0;
     if (m.arm) {
       const loc = item.system.location || "arm";
       out.armBy[loc] = (out.armBy[loc] ?? 0) + m.arm;

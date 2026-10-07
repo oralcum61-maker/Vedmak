@@ -405,7 +405,11 @@ export async function applyPreparation(actor, item) {
     const chosen = await coatWeapon(actor, item, auto.coat);
     if (chosen !== "target") return chosen;
   }
-  const target = [...game.user.targets][0]?.actor ?? actor;
+  const chosenTarget = [...game.user.targets][0]?.actor ?? null;
+  if (auto.needTarget && (!chosenTarget || chosenTarget === actor)) {
+    return ui.notifications.warn(`«${item.name}»: выберите цель — на себя не применяется.`);
+  }
+  const target = chosenTarget ?? actor;
   const lines = [`${target === actor ? actor.name : `${actor.name} → ${target.name}`}: ${s.effect}`];
   if (target.isOwner) lines.push(...await preparationOnTarget(target, s.use, item));
   else {
@@ -433,9 +437,26 @@ async function preparationOnTarget(target, use, item) {
     await applyStatus(target, use.status, use.statusRounds);
     lines.push(`Эффект: ${CONFIG.statusEffects[use.status]?.name ?? use.status}.`);
   }
-  if (auto.targetStatus) {
-    await applyStatus(target, auto.targetStatus);
-    lines.push(`Эффект: ${statusLabel(auto.targetStatus)}.`);
+  for (const st of [auto.targetStatus ?? []].flat()) {
+    await applyStatus(target, st);
+    lines.push(`Эффект: ${statusLabel(st)}.`);
+  }
+  // Щелочной порошок: кислота «Раны в живот» больше не жжёт
+  if (auto.neutralizeAcid) {
+    const burning = (target.itemTypes.critWound ?? []).filter(w => w.system.mods?.acid && !w.flags?.vedmak?.acidNeutralized);
+    for (const w of burning) await w.setFlag("vedmak", "acidNeutralized", true);
+    lines.push(burning.length ? `Кислота нейтрализована: ${burning.map(w => w.name).join(", ")} больше не жжёт.` : "Кислотной раны нет — порошок только на одну порцию кислоты.");
+  }
+  // Обеззараживающая жидкость: метка на персонаже до заживления ран — её читает «Дни отдыха» (combat/manual.mjs)
+  if (auto.disinfect && item) {
+    const had = target.effects.some(e => e.flags?.vedmak?.disinfected);
+    if (!had) {
+      await target.createEmbeddedDocuments("ActiveEffect", [{ name: item.name, img: item.img,
+        description: "Раны обработаны: +2 ПЗ в день отдыха с уходом, заживление каждого критического ранения на 2 дня короче.",
+        flags: { vedmak: { disinfected: true } } }]);
+    }
+    lines.push(had ? "Раны уже обработаны — повторное применение не суммируется."
+      : "Раны обработаны: +2 ПЗ в день отдыха с уходом, заживление критических ранений на 2 дня короче.");
   }
   // Хлороформ: испытание Уст с поправкой; провал — без сознания, пока не пройдёт испытание (кнопка в начале хода)
   if (auto.stunSave) {

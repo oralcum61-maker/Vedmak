@@ -38,8 +38,9 @@ export async function damageFromDefense(message, { skipDialog = false, messageMo
     location: def.fixedLocation || attack.aim || "",
     cover: "none", mod: 0, adrenaline: 0, messageMode: messageMode ?? defaultMessageMode()
   };
-  // Стена сцены между стрелком и целью — укрытие цели (в окне урона его можно поменять)
-  if (attack.isRanged) {
+  // Стена сцены между атакующим и целью — укрытие цели (в окне урона его можно поменять). И в ближнем бою:
+  // удар через ограду, окно или пролом пробивает укрытие так же, как выстрел (стр. 155)
+  {
     const wc = wallCover(attack.attacker.tokenUuid, def.defender.tokenUuid);
     if (wc) { cfg.cover = wc.key; cfg.coverAuto = true; }
   }
@@ -109,7 +110,7 @@ async function damageDialog(attack, target, cfg, attacker) {
         glyph: locationGlyph(key, l) }))
     ),
     covers: Object.entries(COVER).map(([key, c]) => ({ key, label: c.label, sp: c.sp, selected: key === cfg.cover })),
-    coverNote: cfg.coverAuto ? `${COVER[cfg.cover]?.label ?? ""} · стена между стрелком и целью` : COVER[cfg.cover]?.label ?? "",
+    coverNote: cfg.coverAuto ? `${COVER[cfg.cover]?.label ?? ""} · стена между атакующим и целью` : COVER[cfg.cover]?.label ?? "",
     adrenalineMax: game.settings.get("vedmak", "adrenaline") ? (attacker.system.adrenaline?.value ?? 0) : 0,
     total: { noRoll: true, damage: formula, hint: "Броня и укрытие вычитаются после броска" },
     ...commonFields()
@@ -123,7 +124,7 @@ async function damageDialog(attack, target, cfg, attacker) {
       extra: form => {
         const note = dialog.element.querySelector("[data-cover-note]");
         const cover = form.elements.cover?.value;
-        if (note) note.textContent = `· ${COVER[cover]?.label ?? ""}${cfg.coverAuto && cover === cfg.cover ? " · стена между стрелком и целью" : ""}`;
+        if (note) note.textContent = `· ${COVER[cover]?.label ?? ""}${cfg.coverAuto && cover === cfg.cover ? " · стена между атакующим и целью" : ""}`;
         const out = dialog.element.querySelector("[data-total-damage]");
         if (!out) return;
         const add = Number(form.elements.mod?.value) || 0;

@@ -6,6 +6,14 @@
       <label>Фокус (−Вын на магию) <input type="number" name="system.focus" value="{{system.focus}}" min="0"></label>
       <label>Набор инструментов <select name="system.tool">{{selectOptions config.TOOL_KINDS selected=system.tool}}</select></label>
     </div>
+    {{#if prosthesisOptions}}
+    <label class="wide">Стоит на протезе <select name="flags.vedmak.prosthesis">{{selectOptions prosthesisOptions selected=prosthesisId}}</select></label>
+    {{/if}}
+    {{#if prostheticRel}}
+    <div class="vd-grid g2">
+      <label>Надёжность протеза (из {{prostheticRel.max}}) <input type="number" name="flags.vedmak.reliability" value="{{prostheticRel.value}}" min="0" max="{{prostheticRel.max}}"></label>
+    </div>
+    {{/if}}
     <label class="wide">Эффект <textarea name="system.effect" rows="3">{{system.effect}}</textarea></label>
   </fieldset>
   {{> "systems/vedmak/templates/item/physical.hbs"}}

@@ -14,6 +14,7 @@ import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate, compareRu } from "../util.mjs";
 import { resolveActor, postCard } from "../combat/common.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
+import { isProstheticItem, prostheticStats } from "../combat/prosthetics.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -489,6 +490,7 @@ function enhancementCount(item) {
  * по 1 единице каждого компонента чертежа; при провале компоненты пропадают, возможна переработка.
  */
 export async function repair(actor, item) {
+  if (isProstheticItem(item)) return repairProsthesis(actor, item);
   const recipe = await findRecipeFor(actor, item.name);
   if (!recipe) return ui.notifications.warn(`Нет чертежа для «${item.name}» — без него не понять, как чинить.`);
   const dc = Math.max(0, recipe.system.dc - CRAFTING.repairDcMinus + CRAFTING.repairPerEnhancement * enhancementCount(item));
@@ -532,6 +534,40 @@ export async function repair(actor, item) {
     flags: { craft: { actorUuid: actor.uuid, recipeName: recipe.name, resultName: item.name, dc, skill: "crafting", formula: false,
       blueprint: false, consumed: roll.success ? [] : consumed, recycled: false } }
   });
+}
+
+/**
+ * Починка протеза: Надёжность покрытия до максимума проверкой Ремесла. СЛ — чертёж протеза − 5, если он есть;
+ * иначе СЛ назначает ведущий (в окне, по умолчанию средняя — 14). Компоненты не тратятся: их у протезов нет в чертежах.
+ */
+async function repairProsthesis(actor, item) {
+  const rel = prostheticStats(actor, item).reliability;
+  if (!rel) return ui.notifications.warn(`У «${item.name}» нет Надёжности — чинить нечего (её даёт протезное покрытие).`);
+  if (rel.value >= rel.max) return ui.notifications.info(`«${item.name}» цел: Надёжность ${rel.value}/${rel.max}.`);
+  const recipe = await findRecipeFor(actor, item.name);
+  const suggested = recipe ? Math.max(0, recipe.system.dc - CRAFTING.repairDcMinus) : 14;
+  const dc = await DialogV2.prompt({
+    window: { title: `Починка: ${item.name}` },
+    classes: ["vedmak", "vedmak-dialog"],
+    content: `<div class="vedmak-roll-dialog craft-dialog"><p>Надёжность ${rel.value}/${rel.max}. Ремесло + Изготовление против СЛ;
+      успех — Надёжность до ${rel.max}.</p>
+      <label class="num"><span class="cap">СЛ</span> <input type="number" name="dc" value="${suggested}" min="0" max="40"></label>
+      <p class="hint">${recipe ? `Чертёж «${recipe.name}»: СЛ ${recipe.system.dc} − 5.` : "Чертежа нет — СЛ назначает ведущий."}</p></div>`,
+    ok: { label: "Чинить", callback: (event, button) => Number(button.form.elements.dc.value) || 0 },
+    rejectClose: false
+  });
+  if (dc === null || dc === undefined) return null;
+  const skill = actor.system.skills.crafting;
+  const parts = [
+    { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
+    { label: SKILLS.crafting.label, value: skill.total, always: true }
+  ];
+  const roll = await performCheck({ actor, title: `Починка: ${item.name}`, subtitle: `Надёжность ${rel.value}/${rel.max}`, parts, dc });
+  if (roll.success) {
+    await item.setFlag("vedmak", "reliability", rel.max);
+    ui.notifications.info(`«${item.name}» починен: Надёжность ${rel.max}/${rel.max}.`);
+  }
+  return roll;
 }
 
 /* ------------------------------- Разборка ------------------------------- */

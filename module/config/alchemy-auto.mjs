@@ -38,6 +38,9 @@
 //   ignite       — облако горючего газа: кнопка взрыва {formula, status, chance}
 //   trapSave     — ловушка: Стойкость {dc}, провал — исступление до успешной проверки
 //   mark         — ловушка-метка: эффект на целях на minutes
+//   needTarget   — «Применить» только на выбранную цель, не на себя (отравленная помада)
+//   neutralizeAcid — гасит кислоту «Раны в живот» у цели (щелочной порошок)
+//   disinfect    — обработка раны: +2 ПЗ в день при уходе, −2 дня заживления каждого крит. ранения (не суммируется)
 
 const M = (key, value) => ({ key, type: "add", value, phase: "initial" });
 
@@ -97,6 +100,11 @@ export const ALCHEMY_AUTO = {
   "адреналиновый эликсир": { anyone: true, action: "drink", rounds: 3, adrenaline: true },
   "пепельная мазь": { action: "apply", minutes: 60, immune: ["burning"] },
   "яд аконита": { action: "apply", targetStatus: "suffocating" },
+  // «Лавка Клауса и Нострадамуса» и составы недугов BS: что считается без механики недугов
+  "отравленная помада": { action: "apply", needTarget: true, targetStatus: ["poisoned", "intoxicated"],
+    note: "Поцелованный отравлен и пьян, пока действует яд. Помада держится час: следующий поцелуй — ещё одно применение." },
+  "щелочной порошок": { action: "apply", neutralizeAcid: true },
+  "обеззараживающая жидкость": { action: "apply", disinfect: true },
 
   // «Компендиум BS & Tobi»: простые составы
   "возбудитель (киноварь + солнце)": { anyone: true, changes: [M("system.stats.ref.mod", 3)] },

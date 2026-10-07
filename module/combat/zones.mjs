@@ -22,7 +22,7 @@ export const ZONE_COLORS = {
 
 /**
  * Разбор зоны по тексту дальности: «2-метровый конус», «конус 2 м», «зона радиусом 10 м», «радиус 8 м»,
- * «50 м радиус», «4 м (радиус 2 м)». Мили — не зона на сцене.
+ * «50 м радиус», «4 м (радиус 2 м)», «круг диаметром 50 см». Мили — не зона на сцене.
  * @param {string} text
  * @param {object} [opts] — plainIsRadius: «4 м» у бомб и ловушек — радиус
  * @returns {{type: "cone"|"circle", size: number}|null} размер в метрах
@@ -35,6 +35,8 @@ export function parseArea(text, { plainIsRadius = false } = {}) {
     const size = num(/(\d+(?:\.\d+)?)\s*-?\s*метров\S*\s+конус/) || num(/конус\S*\s*(\d+(?:\.\d+)?)/) || num(/(\d+(?:\.\d+)?)/);
     return size ? { type: "cone", size } : null;
   }
+  const diameter = t.match(/диаметр\S*\s*(\d+(?:\.\d+)?)\s*(см|м)/);
+  if (diameter) return { type: "circle", size: Number(diameter[1]) / (diameter[2] === "см" ? 200 : 2) };
   if (/радиус/.test(t)) {
     const size = num(/радиус\S*\s*(\d+(?:\.\d+)?)/) || num(/(\d+(?:\.\d+)?)\s*м\s*радиус/);
     return size ? { type: "circle", size } : null;
@@ -72,7 +74,9 @@ const pxPerUnit = () => canvas.scene.grid.size / canvas.scene.grid.distance;
 const toRad = deg => deg * Math.PI / 180;
 
 function shapeData(area) {
-  const radius = area.size * pxPerUnit();
+  // Круг меньше клетки (вживлённый Ирден — 50 см) занимает одну клетку: мельче на сетке его не поймать,
+  // а 0,45 клетки не задевает соседей
+  const radius = area.type === "circle" ? Math.max(area.size * pxPerUnit(), canvas.scene.grid.size * 0.45) : area.size * pxPerUnit();
   if (area.type === "cone") {
     return { type: "cone", x: 0, y: 0, rotation: 0, radius, angle: CONFIG.MeasuredTemplate?.defaults?.angle ?? 53.13 };
   }

@@ -179,20 +179,21 @@
       {{#each group.items as |item|}}
       <div class="gear-tile{{#if item.system.equipped}} held{{/if}}{{#if item.system.stored}} away{{/if}}" data-item-id="{{item.id}}">
         <div class="item-frame">
-          {{#if item.system.equipped}}<span class="ribbon">в руках</span>{{else if item.system.stored}}<span class="ribbon steel">не при себе</span>{{/if}}
+          {{#if item.system.equipped}}<span class="ribbon">{{#if (or (eq item.system.category "prosthetic") (eq item.system.category "prostheticMod"))}}надет{{else}}в руках{{/if}}</span>{{else if item.system.stored}}<span class="ribbon steel">не при себе</span>{{/if}}
           {{#if item.system.tattoo.applied}}<span class="ribbon">{{lookup @root.tattooPlaces item.system.tattoo.location}}</span>{{/if}}
           <img src="{{item.img}}" alt="">
           <input type="number" class="qty item-field" data-field="system.quantity" value="{{item.system.quantity}}" min="0" data-tooltip="Количество" aria-label="Количество">
         </div>
         <a class="tile-name" data-action="itemEdit"{{#if item.system.effect}} data-tooltip="{{item.system.effect}}"{{/if}}>{{item.name}}</a>
         {{!-- Вес, цена, фокус — только то, что есть: прочерк на месте пустого веса был лишним шумом --}}
-        <span class="tile-meta">{{#if item.total}}{{item.total}} кг{{/if}}{{#if item.system.cost}}{{#if item.total}} · {{/if}}{{item.system.cost}} кр.{{/if}}{{#if item.system.focus}}{{#if (or item.total item.system.cost)}} · {{/if}}фокус −{{item.system.focus}}{{/if}}</span>
+        <span class="tile-meta">{{#if item.total}}{{item.total}} кг{{/if}}{{#if item.system.cost}}{{#if item.total}} · {{/if}}{{item.system.cost}} кр.{{/if}}{{#if item.system.focus}}{{#if (or item.total item.system.cost)}} · {{/if}}фокус −{{item.system.focus}}{{/if}}{{#if item.prosRel}} · <span data-tooltip="Надёжность протеза">надёжн. {{item.prosRel.value}}/{{item.prosRel.max}}</span>{{/if}}{{#if item.mountedOn}} · на «{{item.mountedOn}}»{{/if}}</span>
         <div class="tile-tools">
           {{#if (eq item.system.category "tattoo")}}
           {{#unless item.system.tattoo.applied}}<a data-action="applyTattoo" data-tooltip="Нанести татуировку: место, Искусство против СЛ {{item.system.tattoo.dc}}"><i class="fa-solid fa-pen-nib"></i></a>{{/unless}}
           {{else}}
           <a data-action="itemToggleEquip" class="{{#if item.system.equipped}}active{{/if}}" data-tooltip="{{#if item.system.equipped}}Убрать{{else}}Взять в руки или надеть{{/if}}"><i class="fa-solid fa-hand"></i></a>
           {{/if}}
+          {{#if (and @root.isCharacter item.prosRel)}}<a data-action="repairItem" data-tooltip="Починить протез: Ремесло + Изготовление, Надёжность до {{item.prosRel.max}}"><i class="fa-solid fa-screwdriver-wrench"></i></a>{{/if}}
           <a data-action="itemToggleStored" class="{{#if item.system.stored}}active{{/if}}" data-tooltip="{{#if item.system.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
           <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
           <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>

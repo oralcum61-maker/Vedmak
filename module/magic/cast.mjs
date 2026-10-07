@@ -139,7 +139,7 @@ export async function castSpell(actor, item, opts = {}) {
     const repeat = lasting && !!(auto.damage || auto.staDamage || auto.statuses?.some(x => x.status));
     // Аура (Ирден): штраф всем внутри, кроме заклинателя, — ставит и снимает ведущий (magic/zone-effects.mjs)
     const auraDef = zoneAuraFor(item.name);
-    const aura = auraDef ? { ...auraDef, value: cfg.cost, img: item.img } : null;
+    const aura = auraDef ? { ...auraDef, value: auraDef.valueFrom === "vigor" ? (d.vigor ?? 0) : cfg.cost, img: item.img } : null;
     region = await createZone(placed.shape, { name: item.name, color: zoneColor, actor, itemName: item.name, duration, maintainItemId: item.id,
       extra: { itemId: item.id, repeat, aura } });
     targets = zoneTokens(placed.shape, { region, exclude: actorToken(actor) }).map(targetInfo);

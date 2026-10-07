@@ -92,6 +92,9 @@
         <button type="button" class="turn-btn" data-action="restTurn" data-tooltip="Полный ход: восстановить Вын">
           Отдых (ход) <b>+{{system.derived.rec}}</b>
         </button>
+        <button type="button" class="turn-btn" data-action="aimTurn" data-tooltip="Полный ход: +1 к следующей атаке по выбранной цели за ход, до +3. Любая атака сбрасывает">
+          Прицелиться{{#if aimRounds}} <b>+{{aimRounds}}</b>{{/if}}
+        </button>
         <button type="button" class="turn-btn" data-action="restDays" data-tooltip="Дни отдыха: ПЗ, Вын, заживление ран">
           Дни отдыха
         </button>

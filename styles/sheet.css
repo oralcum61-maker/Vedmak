@@ -798,13 +798,15 @@
 }
 .vedmak-hud .vh-abtn > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .vedmak-hud .vh-abtn .vh-clampnum { height: 19px; min-width: 26px; font-size: 15px; }
-/* Четыре-пять кнопок в столбце (переворот жетона, адреналин, облик вампира) — кнопки ниже, чтобы влезть в высоту худа */
+/* Четыре-шесть кнопок в столбце (переворот жетона, адреналин, облик вампира) — кнопки ниже, чтобы влезть в высоту худа */
 .vedmak-hud .vh-acts .vh-col:has(> :nth-child(5)) { gap: 3px; }
 .vedmak-hud .vh-acts .vh-col:has(> :nth-child(5)) > .vh-abtn { height: 22px !important; min-height: 0; }
 .vedmak-hud .vh-acts .vh-col:has(> :nth-child(6)) { gap: 1px; }
 .vedmak-hud .vh-deck.vh-acts:has(> .vh-col > :nth-child(6)) { padding-top: 4px; }
 .vedmak-hud .vh-acts .vh-col:has(> :nth-child(6)) > .vh-abtn { height: 19px !important; }
 .vedmak-hud .vh-acts .vh-col:has(> :nth-child(5)) .vh-clampnum { height: 16px; font-size: 13px; }
+.vedmak-hud .vh-acts .vh-col:has(> :nth-child(7)) > .vh-abtn { height: 17px !important; font-size: 10px; }
+.vedmak-hud .vh-acts .vh-col:has(> :nth-child(7)) .vh-clampnum { height: 14px; font-size: 12px; }
 .vedmak-hud .vh-abtn:hover { background-color: #43454c; color: #fff; }
 .vedmak-hud .vh-abtn.static { cursor: default; background: #17181b; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .8); }
 .vedmak-hud .vh-abtn.bad { color: #ffeae3; background-color: #8f301f; border-color: #2a0c06; background-image: linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(0, 0, 0, .34)), var(--vd-s-bad); }

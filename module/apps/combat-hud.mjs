@@ -7,7 +7,7 @@ import { SYSTEM_ID, compareRu } from "../util.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
 import { attackSources } from "../combat/attack.mjs";
-import { manualDamage, restTurn } from "../combat/manual.mjs";
+import { manualDamage, restTurn, aimTurn, aimBonus } from "../combat/manual.mjs";
 import { controlCheck } from "../combat/mounted.mjs";
 import { MOUNTS } from "../config/combat.mjs";
 import { verbalAction, VERBAL_GROUPS } from "../combat/verbal.mjs";
@@ -69,6 +69,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       endMaintained: CombatHud.#onEndMaintained,
       useAlchemical: CombatHud.#onUseAlchemical,
       restTurn: CombatHud.#onRestTurn,
+      aimTurn: CombatHud.#onAimTurn,
       trueForm: CombatHud.#onTrueForm,
       manualDamage: CombatHud.#onManualDamage,
       controlCheck: CombatHud.#onControlCheck,
@@ -442,7 +443,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       showActions: this.tab === "actions", showStates: this.tab === "states",
       attacks, defenses, quickSkills, stun: d.stun, deathThreshold, dying: d.dying,
       allSpells, magicGroups, magicQuery: this.magicQuery, maintained, zones, shield: system.shield?.value ?? 0,
-      alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
+      aim: aimBonus(actor, null), alchemy, verbal, canFlip: !!token && token.isOwner && canFlip(token), rec: d.rec,
       // Высший вампир: Истинная форма одной кнопкой (превратиться / вернуть разум / выйти)
       trueForm: actor.system.race?.system.power?.("trueForm") ? (() => {
         const st = trueFormState(actor);
@@ -510,6 +511,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onRestTurn() { if (this.actor) await restTurn(this.actor); }
+
+  static async #onAimTurn() { if (this.actor) await aimTurn(this.actor); }
 
   static async #onManualDamage() { if (this.actor) await manualDamage([this.actor]); }
 

@@ -154,6 +154,7 @@
       <div class="vh-col">
         <span class="vh-cap">ход</span>
         <button type="button" class="vh-abtn" data-action="restTurn" data-tooltip="Ход отдыха: восстановить Выносливость"><span>Отдых</span><b class="vh-clampnum ok">+{{rec}}</b></button>
+        <button type="button" class="vh-abtn" data-action="aimTurn" data-tooltip="Полный ход: +1 к следующей атаке по выбранной цели за ход, до +3. Любая атака сбрасывает"><span>Прицелиться</span>{{#if aim}}<b class="vh-clampnum ok">+{{aim}}</b>{{/if}}</button>
         <button type="button" class="vh-abtn" data-action="manualDamage" data-tooltip="Нанести урон себе без атаки: падение, огонь, яд"><span>Урон без атаки</span></button>
         {{#if trueForm}}<button type="button" class="vh-abtn{{#if trueForm.bad}} bad{{/if}}" data-action="trueForm" data-form="{{trueForm.action}}" data-tooltip="{{trueForm.hint}}"{{#if trueForm.off}} disabled{{/if}}><span>{{trueForm.label}}</span></button>{{/if}}
         {{#if canFlip}}<button type="button" class="vh-abtn" data-action="flipToken" data-tooltip="Токен в полный рост и обратно (Shift+F)"><span>Перевернуть токен</span></button>{{/if}}
