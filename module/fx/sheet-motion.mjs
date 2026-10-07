@@ -33,16 +33,20 @@ export function animateVitals(app, root, actorId) {
   const on = motionOn();
   for (const row of root.querySelectorAll(ROWS)) {
     const key = KEYS.find(k => row.classList.contains(k));
-    const fill = row.querySelector(".fill:not(.extra), .vh-tube .f, .vm-tube .f");
+    // Дуга медальона худа (PLAN 4.123) — не внутри строки, а рядом: ищем по ключу
+    const arc = row.classList.contains("vh-clamp") ? root.querySelector(`.vh-arc.${key}`) : null;
+    const fill = arc ?? row.querySelector(".fill:not(.extra), .vh-tube .f, .vm-tube .f");
     const num = row.querySelector("input[type='number'], .vh-num b");
     if (!key || !fill) continue;
     // Значения — из разметки (style и value), без чтения раскладки
-    const pct = parseFloat(fill.style.width) || 0;
+    const pct = arc ? parseFloat(arc.style.strokeDasharray) || 0 : parseFloat(fill.style.width) || 0;
     const value = Number(num?.value ?? num?.textContent);
     values[key] = { pct, value };
     const was = prev?.[key];
     if (!was || !on) continue;
-    if (was.pct !== pct) {
+    if (was.pct !== pct && arc) {
+      arc.animate([{ strokeDasharray: `${was.pct} 400` }, { strokeDasharray: `${pct} 400` }], { duration: 520, easing: EASE });
+    } else if (was.pct !== pct) {
       fill.animate([{ width: `${was.pct}%` }, { width: `${pct}%` }], { duration: 520, easing: EASE });
       if (pct < was.pct && key !== "tox") {
         const lag = document.createElement("span");

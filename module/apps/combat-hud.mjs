@@ -1,6 +1,6 @@
-// Худ персонажа (PLAN 4.58, холст design/11): пульт внизу экрана. Слева — портрет и показатели (ПЗ, Вын, Токсичность,
-// Энергия раунда, Удача), в центре — вкладки «Бой», «Магия», «Алхимия», «Действия», «Состояния», справа — раунд,
-// кто дальше и «Конец хода». В бою: игроку — его персонаж, мастеру — выделенный токен или тот, чей ход. Вне боя —
+// Худ персонажа (PLAN 4.58; облик «Медальон» — холст «Худ: новый облик», PLAN 4.123): пульт внизу экрана вместо панели
+// макросов. Слева портрет в кольце дуг ПЗ и Вын, выступающий над худом, под ним числа, Энергия и Удача; в середине
+// имя, вкладки «Бой», «Магия», «Алхимия», «Действия», «Состояния»; справа (в бою) — раунд, кто дальше и «Конец хода». В бою: игроку — его персонаж, мастеру — выделенный токен или тот, чей ход. Вне боя —
 // актор выделенного своего токена (настройка клиента «Худ вне боя»): зелья и знаки нужны не только в бою.
 
 import { SYSTEM_ID, compareRu } from "../util.mjs";
@@ -35,10 +35,21 @@ const VERBAL_QUICK = ["persuade", "seduce", "deceive", "intimidate", "ignore", "
 // Защиты на вкладке «Бой» (стр. 151–153): что делает и каким навыком — так же, как в окне защиты (DEFENSE_TYPES)
 const HUD_DEFENSES = [
   { key: "dodge", label: "Уклонение", sub: "от удара и выстрела", hint: "Уклонение/Изворотливость: уйти от удара или выстрела" },
-  { key: "athletics", label: "Изменение позиции", sub: "Атлетика · ½ Скор", hint: "При успехе можно сместиться на ½ Скор" },
+  { key: "athletics", short: "Смена позиции", label: "Изменение позиции", sub: "Атлетика · ½ Скор", hint: "При успехе можно сместиться на ½ Скор" },
   { key: "brawling", label: "Блок рукой", sub: "Борьба · урон в руку", hint: "Удар приходится в подставленную руку, броня работает" },
-  { key: "melee", label: "Блок и парирование", sub: "Ближний бой · парир. −3", hint: "Блок оружием тратит 1 надёжности; парирование −3, атакующий ошеломлён" }
+  { key: "melee", short: "Блок оружием", label: "Блок и парирование", sub: "Ближний бой · парир. −3", hint: "Блок оружием тратит 1 надёжности; парирование −3, атакующий ошеломлён" }
 ];
+/** Длина дуги шкалы медальона (радиус 70, 152°) и точка на ней по доле. */
+const ARC = 185.7;
+const arcPoint = (f, r) => {
+  const a = (194 + 152 * Math.max(0, Math.min(1, f))) * Math.PI / 180;
+  return [+(80 + r * Math.sin(a)).toFixed(1), +(80 - r * Math.cos(a)).toFixed(1)];
+};
+/** Глагол плитки алхимии: что сделает щелчок, и его цвет. */
+const ALCH_VERB = { drink: ["выпить", "violet"], apply: ["применить", "violet"], mutagen: ["принять", "violet"], oil: ["нанести", "green"],
+  throw: ["бросить", "red"], trap: ["поставить", "red"] };
+/** Полезные состояния горят зелёным, остальные — красным. */
+const GOOD_STATUSES = ["activeDodge", "invisible"];
 /** Разделы магии в худе — порядок и короткие подписи. */
 const MAGIC_ORDER = ["sign", "spell", "invocation", "ritual", "hex", "gift", "vampire"];
 const MAGIC_GROUP_LABELS = { sign: "Знаки", spell: "Заклинания", invocation: "Инвокации", ritual: "Ритуалы", hex: "Порчи", gift: "Дары", vampire: "Вампирская" };
@@ -182,16 +193,31 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!deck || deck.dataset.bound) return;
     deck.dataset.bound = "1";
     const input = deck.querySelector("input.vh-magic-search");
-    const tiles = [...deck.querySelectorAll(".vh-spell")];
+    const rows = [...deck.querySelectorAll(".vh-spell")];
     const empty = deck.querySelector(".vh-magic-empty");
+    const chips = [...deck.querySelectorAll(".vh-elc")];
     const apply = () => {
       const q = (this.magicQuery ?? "").trim().toLowerCase();
+      const el = this.magicElement ?? "";
+      // Пусто — свой раздел; набран текст — все разделы. Стихия — поверх; на кнопках стихий — сколько их в выборке
+      const base = rows.filter(t => (q ? t.dataset.search.includes(q) : t.dataset.inGroup === "1"));
       let shown = 0;
-      for (const t of tiles) {
-        // Пусто — свой раздел; набран текст — все разделы
-        const on = q ? t.dataset.search.includes(q) : t.dataset.inGroup === "1";
+      for (const t of rows) {
+        const on = base.includes(t) && (!el || t.dataset.element === el);
         t.hidden = !on;
+        t.classList.remove("first");
         if (on) shown++;
+      }
+      if (q) rows.find(t => !t.hidden)?.classList.add("first");
+      // Имя, что не влезло в строку, — в две строки мельче (сначала все замеры, потом правки)
+      const names = rows.filter(t => !t.hidden).map(t => t.querySelector(".n"));
+      for (const n of names) n.classList.remove("long");
+      for (const n of names.filter(n => n.scrollWidth > n.clientWidth + 1)) n.classList.add("long");
+      for (const c of chips) {
+        const n = base.filter(t => t.dataset.element === c.dataset.element).length;
+        c.querySelector("b").textContent = String(n);
+        c.classList.toggle("on", el === c.dataset.element);
+        c.classList.toggle("none", !n);
       }
       deck.classList.toggle("searching", !!q);
       if (empty) empty.hidden = shown > 0;
@@ -201,9 +227,13 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       if (event.key === "Escape") { input.value = ""; this.magicQuery = ""; apply(); }
       if (event.key !== "Enter") return;
       event.preventDefault();
-      const first = tiles.find(t => !t.hidden);
+      const first = rows.find(t => !t.hidden);
       const item = first && this.actor?.items.get(first.dataset.itemId);
       if (item) castSpell(this.actor, item, { skipDialog: event.shiftKey });
+    });
+    for (const c of chips) c.addEventListener("click", () => {
+      this.magicElement = this.magicElement === c.dataset.element ? "" : c.dataset.element;
+      apply();
     });
     deck.addEventListener("contextmenu", event => {
       const tile = event.target.closest(".vh-spell");
@@ -225,6 +255,17 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.actor) animateVitals(this, this.element, this.actor.id);
     bindVolumeSlider(this.element.querySelector(".vh-volpop input"));
     this.#bindMagic();
+    // Плитки ударов и флаконов (и столбцы действий в узком худе) листаются колесом; не всё влезло — край угасает
+    for (const tiles of this.element.querySelectorAll(".vh-tiles, .vh-acts")) {
+      const mark = () => tiles.classList.toggle("more", tiles.scrollLeft + tiles.clientWidth < tiles.scrollWidth - 2);
+      tiles.addEventListener("wheel", event => {
+        if (tiles.scrollWidth <= tiles.clientWidth || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+        event.preventDefault();
+        tiles.scrollLeft += event.deltaY;
+      }, { passive: false });
+      tiles.addEventListener("scroll", mark, { passive: true });
+      requestAnimationFrame(mark);
+    }
     const input = this.element.querySelector("input.vh-skill");
     if (!input || input.dataset.bound) return;
     input.dataset.bound = "1";
@@ -266,6 +307,15 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       key: "tox", label: "токс", value: system.toxicity.total, max: system.toxicity.max, suffix: "%",
       pct: pct(system.toxicity.total, system.toxicity.max), hint: `Токсичность ${system.toxicity.total}% из ${system.toxicity.max}%`
     });
+    // Медальон: дуги ПЗ (слева) и Вын (справа), насечка порога ранения на дуге ПЗ
+    const frac = (v, m) => (m > 0 ? Math.max(0, Math.min(1, v / m)) : 0);
+    const hpF = frac(system.hp.value, system.hp.max);
+    const woundF = frac(d.woundThreshold, system.hp.max);
+    const [w1x, w1y] = arcPoint(woundF, 63), [w2x, w2y] = arcPoint(woundF, 77);
+    const medal = {
+      hpArc: +(hpF * ARC).toFixed(1), staArc: +(frac(system.sta.value, system.sta.max) * ARC).toFixed(1),
+      wound: { x1: w1x, y1: w1y, x2: w2x, y2: w2y }, hasWound: (d.woundThreshold ?? 0) > 0
+    };
     const vigor = d.vigor ?? 0;
     const used = vigor ? vigorUsed(actor).used : 0;
     // Ячейки — пока их немного; у магов (Энергия 15–25) — числом «осталось из», иначе полоса вылезает из колонки
@@ -287,7 +337,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
         isRanged: !!src.isRanged
       };
     });
-    const defenses = HUD_DEFENSES.map(def => ({ ...def, base: system.skills[def.key]?.base ?? 0 }));
+    const defenses = HUD_DEFENSES.map(def => ({ ...def, short: def.short ?? def.label, base: system.skills[def.key]?.base ?? 0 }));
     const quickSkills = ["awareness", "stealth"].map(key => ({ key, label: SKILLS[key].label.split("/")[0], base: system.skills[key]?.base ?? 0 }));
     const deathThreshold = (d.stun ?? 0) - (system.deathSaves?.penalty ?? 0);
 
@@ -309,14 +359,21 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       };
     });
     const magicGroups = [
+      ...(allSpells.length > 1 ? [{ id: "all", label: "Все" }] : []),
       ...(favIds.size ? [{ id: "fav", label: "Избранное", icon: "fa-solid fa-star" }] : []),
       ...MAGIC_ORDER.filter(k => allSpells.some(sp => sp.kind === k)).map(k => ({ id: k, label: MAGIC_GROUP_LABELS[k] }))
-    ].map(g => ({ ...g, count: g.id === "fav" ? allSpells.filter(sp => sp.fav).length : allSpells.filter(sp => sp.kind === g.id).length }));
-    if (!magicGroups.some(g => g.id === this.magicGroup)) this.magicGroup = magicGroups[0]?.id ?? "sign";
+    ].map(g => ({ ...g, count: g.id === "all" ? allSpells.length : g.id === "fav" ? allSpells.filter(sp => sp.fav).length : allSpells.filter(sp => sp.kind === g.id).length }));
+    if (!magicGroups.some(g => g.id === this.magicGroup)) this.magicGroup = magicGroups.find(g => g.id !== "all")?.id ?? "all";
     for (const g of magicGroups) g.active = g.id === this.magicGroup;
     // Рисуются все плитки (поиск идёт по всем разделам), свой раздел помечен
-    for (const sp of allSpells) sp.inGroup = this.magicGroup === "fav" ? sp.fav : sp.kind === this.magicGroup;
-    const maintained = maintainedSpells(actor).map(e => ({ id: e.id, name: e.name, img: e.img, cost: e.flags.vedmak.maintain.cost }));
+    for (const sp of allSpells) sp.inGroup = this.magicGroup === "all" ? true : this.magicGroup === "fav" ? sp.fav : sp.kind === this.magicGroup;
+    // Кнопки стихий: какие есть у персонажа; числа и выбор пересчитывает #bindMagic
+    const ELEMENT_ORDER = ["fire", "water", "air", "earth", "mixed"];
+    const elementChips = ELEMENT_ORDER.filter(e => allSpells.some(sp => sp.element === e))
+      .map(e => ({ id: e, label: CONFIG.VEDMAK.MAGIC_ELEMENTS?.[e] ?? e }));
+    // Колонка и так подписана «держится» — приставку «Поддержание:» в ней не повторяем
+    const maintained = maintainedSpells(actor).map(e => ({ id: e.id, name: e.name.replace(/^Поддержание:\s*/, ""), full: e.name, img: e.img,
+      cost: e.flags.vedmak.maintain.cost }));
     // Зоны этого персонажа на открытой сцене — каждую можно снять
     const zones = (canvas?.scene?.regions ?? []).filter(r => r.flags?.vedmak?.zone?.actorUuid === actor.uuid).map(r => {
       const z = r.flags.vedmak.zone;
@@ -329,8 +386,10 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       .filter(i => i.system.quantity > 0 && i.system.use?.action && !(i.system.isMutagen && i.system.applied) && !i.system.applied)
       .map(i => {
         const action = i.system.use.action;
+        const [verb, verbCls] = ALCH_VERB[action] ?? ["применить", "violet"];
         return {
-          id: i.id, name: i.name, img: i.img, quantity: i.system.quantity,
+          id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, verb, verbCls,
+          tox: i.system.toxicity ? `${i.system.toxicity}%` : "",
           note: [i.system.toxicity ? `токс. ${i.system.toxicity}%` : "", i.system.duration].filter(Boolean).join(" · "),
           actionLabel: ALCHEMY_ACTIONS[action] ?? "Применить", go: ALCH_GO[action] ?? "violet",
           hint: i.system.effect ?? ""
@@ -348,7 +407,18 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       left: e.flags?.vedmak?.timed?.rounds ? `${e.flags.vedmak.timed.rounds} р.` : (e.isTemporary ? e.duration.label : ""),
       bad: [...e.statuses].some(s => ["bleeding", "poisoned", "burning", "dying", "staggered", "stunned"].includes(s))
     }));
-    const statusList = STATUS_EFFECTS.map(s => ({ id: s.id, name: s.name, img: s.img, on: actor.statuses.has(s.id), hint: STATUS_HINTS[s.id] ?? s.name }));
+    // Сетка состояний: включённые горят (полезные — зелёным), у срочных — сколько раундов осталось
+    const leftOf = id => {
+      const e = actor.appliedEffects.find(x => x.statuses.has(id) && (x.flags?.vedmak?.timed?.rounds || x.isTemporary));
+      return e?.flags?.vedmak?.timed?.rounds ? `${e.flags.vedmak.timed.rounds} р.` : "";
+    };
+    const statusList = STATUS_EFFECTS.map(s => {
+      const on = actor.statuses.has(s.id);
+      return { id: s.id, name: s.name, img: s.img, on, good: on && GOOD_STATUSES.includes(s.id), bad: on && !GOOD_STATUSES.includes(s.id),
+        left: on ? leftOf(s.id) : "", hint: STATUS_HINTS[s.id] ?? s.name };
+    });
+    // Значок в нижнем зазоре медальона: самое тревожное из того, что действует
+    const badge = effects.find(e => e.bad) ?? effects[0] ?? null;
 
     const counts = { magic: allSpells.length, alchemy: alchemy.length, states: effects.length };
     const tabs = TABS.filter(t => !(t.id === "magic" && !allSpells.length && !maintained.length)
@@ -364,7 +434,9 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       if (c && !(combat.settings?.skipDefeated && c.isDefeated)) { next = c; break; }
     }
     return Object.assign(context, {
-      actor, vitals, energy, luck, tabs, tab: this.tab,
+      actor, vitals, energy, luck, tabs, tab: this.tab, medal, badge,
+      hp: vitals[0], sta: vitals[1], elementChips,
+      statusChip: isCurrent ? "твой ход" : combat ? "ждёт хода" : "вне боя",
       energyMax: vigor, energyLeft: Math.max(0, vigor - used), tox: vitals.find(v => v.key === "tox") ?? null,
       showFight: this.tab === "fight", showMagic: this.tab === "magic", showAlchemy: this.tab === "alchemy",
       showActions: this.tab === "actions", showStates: this.tab === "states",
@@ -485,6 +557,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   static #onMagicGroup(event, target) {
     this.magicGroup = target.dataset.group;
     this.magicQuery = "";
+    this.magicElement = "";
     this.deckIn = true;
     this.render();
   }
@@ -492,6 +565,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Текущий раздел магии и строка поиска — живут, пока открыт клиент. */
   magicGroup = "";
   magicQuery = "";
+  magicElement = "";
 
   /** Правый щелчок по плитке заклинания — в «Избранное» или из него (флаг актора, видно всем, кто им играет). */
   async #toggleFavorite(itemId) {
