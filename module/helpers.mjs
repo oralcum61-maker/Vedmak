@@ -64,6 +64,7 @@ export function registerHelpers() {
 }
 
 export const TEMPLATE_PATHS = [
+  "systems/vedmak/templates/apps/tavern-hand.hbs",
   "systems/vedmak/templates/chat/check.hbs",
   "systems/vedmak/templates/chat/initiative.hbs",
   "systems/vedmak/templates/chat/item.hbs",

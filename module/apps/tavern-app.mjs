@@ -14,19 +14,19 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 export const TAVERN_GAMES = {
-  armwrestle: { label: "Борьба на руках", min: 2, max: 2, icon: "fa-solid fa-hand-fist",
+  armwrestle: { short: "Руки", label: "Борьба на руках", min: 2, max: 2, icon: "fa-solid fa-hand-fist",
     hint: "Встречные проверки Силы; победа — два выигранных раунда подряд. Каждый раунд оба теряют 5 Вын; кто опустился до порога ранения — проиграл." },
-  poker: { label: "Покер на костях", min: 2, max: 2, icon: "fa-solid fa-dice",
+  poker: { short: "Покер", label: "Покер на костях", min: 2, max: 2, icon: "fa-solid fa-dice",
     hint: "Каждый бросает пять d6 и один раз перебрасывает любые свои кости (щёлкните по ним), затем вскрываются." },
-  drinking: { label: "Соревнование по выпивке", min: 2, max: 8, icon: "fa-solid fa-beer-mug-empty",
+  drinking: { short: "Выпивка", label: "Соревнование по выпивке", min: 2, max: 8, icon: "fa-solid fa-beer-mug-empty",
     hint: "Стойкость СЛ 10, с каждой порцией СЛ +2. Первый провал — опьянение, второй — тошнота и выбывание." },
-  hoard: { label: "Драконий клад", min: 2, max: 4, icon: "fa-solid fa-coins",
+  hoard: { short: "Клад", label: "Драконий клад", min: 2, max: 4, icon: "fa-solid fa-coins",
     hint: "Змея делает Внимание (12 + d10). Перебил его Ловкостью рук — 5 монет из кучи; нет — Уклонение против укуса (10 + d10), иначе яд." },
-  fillet: { label: "Филе из пяти пальцев", min: 1, max: 1, icon: "fa-solid fa-hand",
+  fillet: { short: "Филе", label: "Филе из пяти пальцев", min: 1, max: 1, icon: "fa-solid fa-hand",
     hint: "Владение лёгкими клинками СЛ 12, каждое ускорение СЛ +3. После двух ускорений предел ставок вдвое; закончить можно после двух ускорений." },
-  gwent: { label: "Гвинт", min: 2, max: 2, icon: "fa-solid fa-layer-group",
+  gwent: { short: "Гвинт", label: "Гвинт", min: 2, max: 2, icon: "fa-solid fa-layer-group",
     hint: "До трёх раундов, побеждает выигравший два. В начале раунда d10 по таблице, поправка — к Азартным играм или Тактике. Колода даёт ±." },
-  brawl: { label: "Кулачный бой", min: 0, max: 0, icon: "fa-solid fa-hand-back-fist",
+  brawl: { short: "Драка", label: "Кулачный бой", min: 0, max: 0, icon: "fa-solid fa-hand-back-fist",
     hint: "Обычный бой системы: по пояс, без доспехов, кастетов и спрятанного оружия. Побеждает оставшийся в сознании или тот, кому сдались." }
 };
 const GWENT_TABLE = [null,
@@ -38,6 +38,20 @@ const GWENT_TABLE = [null,
 const BANK_GAMES = ["armwrestle", "poker", "drinking", "hoard", "gwent"];
 const HOARD_STAKE = 10;
 const POKER_RANKS = ["ничего", "пара", "две пары", "сет", "малый стрит", "большой стрит", "фулл-хаус", "каре", "покер"];
+
+/** Доля в процентах для шкал. */
+const pct = (v, max) => (max > 0 ? Math.max(0, Math.min(100, Math.round((Number(v) || 0) / max * 100))) : 0);
+/** Точки грани d6 в сетке 3×3. */
+const DIE_FACES = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+const dieCells = v => Array.from({ length: 9 }, (_, i) => (DIE_FACES[v] ?? []).includes(i));
+/** Брошенные кости лежат вразнобой — небольшой поворот. */
+const DIE_ROT = [-6, 3, -2, 8, -4, 5, -8, 2];
+/** Стопки монет банка: высоты по долям, всего монет — от суммы. */
+function coinStacks(sum, stacks = 3) {
+  const total = Math.max(sum ? 2 : 0, Math.min(stacks * 8, Math.round(stacks === 7 ? sum * 2 : sum / 3)));
+  const shape = stacks === 7 ? [.1, .16, .2, .22, .16, .1, .06] : [.3, .45, .25];
+  return shape.map(k => ({ coins: Array.from({ length: Math.max(sum ? 1 : 0, Math.round(total * k)) }) }));
+}
 
 /** Комбинация покера на костях: 0 — ничего … 8 — покер. */
 function pokerRank(dice) {
@@ -78,7 +92,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "vedmak-tavern",
     classes: ["vedmak", "vedmak-dialog", "tavern-app"],
     window: { title: "Игры в таверне", icon: "fa-solid fa-beer-mug-empty", resizable: true },
-    position: { width: 820, height: 620 },
+    position: { width: 860, height: 640 },
     actions: {
       pickGame: TavernApp.#onPickGame,
       addSelected: TavernApp.#onAddSelected,
@@ -89,11 +103,13 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       pokerDie: TavernApp.#onPokerDie,
       pokerReroll: TavernApp.#onPokerReroll,
       pokerShow: TavernApp.#onPokerShow,
-      filletSpeed: TavernApp.#onFilletSpeed
+      filletSpeed: TavernApp.#onFilletSpeed,
+      brawlStart: TavernApp.#onBrawlStart,
+      brawlNotes: TavernApp.#onBrawlNotes
     }
   };
 
-  static PARTS = { body: { template: "systems/vedmak/templates/apps/tavern.hbs", scrollable: [".tv-log"] } };
+  static PARTS = { body: { template: "systems/vedmak/templates/apps/tavern.hbs", scrollable: [".tv2-lines"] } };
 
   static open() {
     const app = foundry.applications.instances.get("vedmak-tavern") ?? new TavernApp();
@@ -123,24 +139,94 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   async _prepareContext() {
     const cfg = this.cfg;
     const st = this.state;
+    const key = this.game;
     const ready = this.players.length >= cfg.min && (!cfg.max || this.players.length <= cfg.max);
-    return {
-      games: Object.entries(TAVERN_GAMES).map(([key, g]) => ({ key, ...g, active: key === this.game,
-        size: g.max ? (g.min === g.max ? `${g.min}` : `${g.min}–${g.max}`) : "бой" })),
-      game: { key: this.game, ...cfg }, brawl: this.game === "brawl",
-      bank: this.bank, started: !!st.started, hoard: this.game === "hoard", stake: HOARD_STAKE,
-      players: this.players.map(p => ({
-        ...p, dice: (p.dice ?? []).map((v, i) => ({ v, i, sel: p.sel?.includes(i) })), canReroll: !!p.dice && !p.rerolled && !st.shown,
-        rank: p.dice ? POKER_RANKS[pokerRank(p.dice)] : "",
-        status: [p.out ? "выбыл" : "", p.streak ? `подряд ${p.streak}` : "", p.fails ? `провалов ${p.fails}` : "",
-          p.coins !== undefined ? `монет ${p.coins}` : "", p.wins !== undefined ? `раундов ${p.wins}` : "",
-          p.carry ? `в след. раунде +${p.carry}` : ""].filter(Boolean).join(" · "),
-        gwent: this.game === "gwent", skill: p.skill ?? ""
-      })),
-      need: cfg.min === cfg.max ? `${cfg.min}` : `${cfg.min}–${cfg.max}`, ready, done: !!st.done,
-      poker: this.game === "poker", rolled: !!st.rolled, shown: !!st.shown,
-      board: this.#board(), turnLabel: this.#turnLabel(), log: this.log.slice(-14).reverse()
+    const started = !!st.started;
+    const status = p => [p.out ? "выбыл" : "", p.streak ? `подряд ${p.streak}` : "", p.coins !== undefined && key !== "hoard" ? `монет ${p.coins}` : "",
+      p.carry ? `в следующем раунде +${p.carry}` : ""].filter(Boolean).join(" · ");
+    // Место за столом: портрет, ставка, «±» и то, что у участника перед ним
+    const seat = p => {
+      const X = resolveActor(p.uuid);
+      return {
+        uuid: p.uuid, name: p.name, img: p.img, mod: p.mod ?? 0, bet: p.bet ?? 0, out: !!p.out, status: status(p),
+        stake: this.#stake(p), started, bank: this.bank, hoard: key === "hoard", canRemove: !started || !!st.done,
+        hp: X ? { value: X.system.hp?.value ?? 0, max: X.system.hp?.max ?? 0, pct: pct(X.system.hp?.value, X.system.hp?.max) } : null,
+        sta: X ? { value: X.system.sta?.value ?? 0, max: X.system.sta?.max ?? 0, pct: pct(X.system.sta?.value, X.system.sta?.max),
+          wound: X.system.derived?.woundThreshold ?? 0, woundPct: pct(X.system.derived?.woundThreshold, X.system.sta?.max) } : null
+      };
     };
+    const ctx = {
+      games: Object.entries(TAVERN_GAMES).map(([k, g]) => ({ key: k, ...g, active: k === key,
+        size: g.max ? (g.min === g.max ? `${g.min}` : `${g.min}–${g.max}`) : "бой" })),
+      game: { key, ...cfg }, brawl: key === "brawl", poker: key === "poker", ready, done: !!st.done, started,
+      empty: !this.players.length, need: cfg.min === cfg.max ? `${cfg.min}` : `${cfg.min}–${cfg.max}`, count: this.players.length,
+      pot: st.pot ?? (this.bank ? this.players.reduce((n, p) => n + this.#stake(p), 0) : 0), potSettled: !!st.settled,
+      turnLabel: this.#turnLabel(), log: this.log.slice(-30).reverse(),
+      footNote: { hoard: `Каждый вносит в кучу ${HOARD_STAKE} крон · ход уходит и в чат`, fillet: "Ставят зрители, предел — их Азартные игры",
+        brawl: "Без банка: ставки — на словах" }[key] ?? "Каждый ход уходит и в чат",
+      showTurn: key !== "brawl" && !(key === "poker" && st.rolled), showReveal: key === "poker" && !!st.rolled
+    };
+    ctx.coins = coinStacks(ctx.pot);
+    const players = this.players;
+    if (key === "poker") {
+      const pokerSeat = p => {
+        if (!p) return null;
+        const fresh = p.fresh ?? [];
+        return { ...seat(p), rank: p.dice ? POKER_RANKS[pokerRank(p.dice)] : "", canReroll: !!p.dice && !p.rerolled && !st.shown,
+          rerolled: !!p.rerolled, selCount: p.sel?.length ?? 0,
+          dice: (p.dice ?? []).map((v, i) => ({ v, i, cells: dieCells(v), rot: DIE_ROT[(i + v) % DIE_ROT.length],
+            cls: `tv2-die${p.sel?.includes(i) ? " sel" : ""}${fresh.includes(i) ? " new" : ""}${p.rerolled || st.shown ? " idle" : ""}` })) };
+      };
+      ctx.top = pokerSeat(players[1]);
+      ctx.bottom = pokerSeat(players[0]);
+    } else if (key === "armwrestle") {
+      const [a, b] = players;
+      const streakA = a?.streak ?? 0, streakB = b?.streak ?? 0;
+      ctx.left = a ? { ...seat(a), last: st.last ? String(st.last[0]) : "—" } : null;
+      ctx.right = b ? { ...seat(b), last: st.last ? String(st.last[1]) : "—" } : null;
+      ctx.round = st.round ?? 0;
+      ctx.knot = [0, 25, 50, 75, 100][Math.max(0, Math.min(4, 2 - streakA + streakB))];
+      ctx.lastWinner = !st.last ? "" : st.last[0] > st.last[1] ? a?.name : st.last[1] > st.last[0] ? b?.name : "";
+      ctx.streakNote = streakA === 1 ? `ещё раунд за ${a.name} — и победа` : streakB === 1 ? `ещё раунд за ${b.name} — и победа`
+        : st.done ? "" : "победа — два раунда подряд";
+    } else if (key === "drinking") {
+      const seats = players.map(p => ({ ...seat(p), drunk: (p.fails ?? 0) === 1 && !p.out,
+        cups: (p.cups ?? []).map(c => ({ cls: c })) }));
+      const half = Math.ceil(seats.length / 2);
+      ctx.topRow = seats.slice(0, half);
+      ctx.bottomRow = seats.slice(half);
+      ctx.portion = (st.round ?? 0) + 1;
+      ctx.nextDc = 10 + 2 * (st.round ?? 0);
+      ctx.inGame = players.filter(p => !p.out).length;
+    } else if (key === "hoard") {
+      const seats = players.map(p => ({ ...seat(p), loot: p.coins ?? 0, poisoned: !!p.poisoned }));
+      const half = Math.ceil(seats.length / 2);
+      ctx.topRow = seats.slice(0, half);
+      ctx.bottomRow = seats.slice(half);
+      ctx.pile = st.pile ?? HOARD_STAKE * players.length;
+      ctx.pileOf = HOARD_STAKE * players.length;
+      ctx.heap = coinStacks(ctx.pile, 7);
+      ctx.snake = st.snake ?? null;
+    } else if (key === "fillet") {
+      const speed = st.speed ?? 0;
+      const last = Math.max(3, speed + 1);
+      ctx.steps = Array.from({ length: last + 1 }, (_, i) => ({ dc: 12 + 3 * i, label: i ? `×${i}` : "начало",
+        cls: i < speed ? "done" : i === speed ? "now" : "next" })).slice(-4);
+      ctx.speedNote = speed >= 2 ? "предел ставок удвоен · закончить уже можно" : `до двойного предела — ускорений: ${2 - speed}`;
+      ctx.solo = players[0] ? { ...seat(players[0]), last: st.last ?? null, hits: st.hits ?? 0 } : null;
+    } else if (key === "gwent") {
+      const gwentSeat = p => p ? { ...seat(p), skill: p.skill ?? "", card: p.card ?? null, total: p.total,
+        cardPlus: (p.card?.mod ?? 0) >= 0, gems: [0, 1].map(n => ({ on: (p.wins ?? 0) > n })) } : null;
+      ctx.top = gwentSeat(players[1]);
+      ctx.bottom = gwentSeat(players[0]);
+      const round = st.round ?? 0;
+      ctx.rounds = ["I", "II", "III"].map((label, i) => ({ label,
+        cls: i < round ? "done" : i === round && !st.done ? "now" : "",
+        note: i < round ? (st.rounds?.[i] ?? "") : i === round && !st.done ? "сейчас" : i === 2 ? "если ничья" : "" }));
+    } else if (key === "brawl") {
+      ctx.fighters = players.map(seat);
+    }
+    return ctx;
   }
 
   /** Поле игры: что сейчас на кону. */
@@ -162,7 +248,8 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   #turnLabel() {
-    return { armwrestle: "Раунд", drinking: "Порция", hoard: "Раунд со змеёй", fillet: "Удар ножом", gwent: "Раунд", poker: "Бросить кости" }[this.game] ?? "";
+    return { armwrestle: "Раунд", drinking: "Налить порцию", hoard: "Раунд со змеёй", fillet: "Удар ножом",
+      gwent: `Раунд ${Math.min(3, (this.state.round ?? 0) + 1)}`, poker: "Бросить кости" }[this.game] ?? "";
   }
 
   _onRender(context, options) {
@@ -344,6 +431,8 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!A || !B) return ui.notifications.warn("Участник не найден.");
     const ra = await skillCheck(A, "physique", a.mod, "Борьба на руках");
     const rb = await skillCheck(B, "physique", b.mod, "Борьба на руках");
+    this.state.round = (this.state.round ?? 0) + 1;
+    this.state.last = [ra.total, rb.total];
     const lines = [`Сила: ${esc(a.name)} <b>${ra.total}</b> · ${esc(b.name)} <b>${rb.total}</b>.`];
     const win = ra.total > rb.total ? a : rb.total > ra.total ? b : null;
     for (const p of [a, b]) p.streak = p === win ? (p.streak ?? 0) + 1 : 0;
@@ -373,6 +462,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       if (!X) continue;
       const r = await skillCheck(X, "endurance", p.mod, "Соревнование по выпивке", dc);
       rolls.push(...r.rolls);
+      p.cups = [...(p.cups ?? []), r.success ? "ok" : "bad"];
       if (r.success) { lines.push(`${esc(p.name)}: ${r.total} — держится.`); continue; }
       p.fails = (p.fails ?? 0) + 1;
       if (p.fails === 1) { await this.#status(X, "intoxicated"); lines.push(`${esc(p.name)}: ${r.total} — опьянение.`); }
@@ -391,6 +481,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const st = this.state;
     if (st.pile === undefined) { st.pile = HOARD_STAKE * this.players.length; for (const p of this.players) p.coins = 0; }
     const snake = await plainRoll(12);
+    st.snake = snake.total;
     const lines = [`Змея следит: Внимание <b>${snake.total}</b>.`];
     const rolls = [...snake.rolls];
     for (const p of this.active) {
@@ -407,7 +498,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       const bite = await plainRoll(10);
       const dodge = await skillCheck(X, "dodge", 0, "Укус змеи");
       rolls.push(...bite.rolls, ...dodge.rolls);
-      if (bite.total > dodge.total) { await this.#status(X, "poisoned"); lines.push(`${esc(p.name)}: ${r.total} — змея кусает (${bite.total} против ${dodge.total}): яд.`); }
+      if (bite.total > dodge.total) { p.poisoned = true; await this.#status(X, "poisoned"); lines.push(`${esc(p.name)}: ${r.total} — змея кусает (${bite.total} против ${dodge.total}): яд.`); }
       else lines.push(`${esc(p.name)}: ${r.total} — змея бросается, но мимо (${bite.total} против ${dodge.total}).`);
     }
     if (st.pile <= 0) {
@@ -425,6 +516,8 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!X) return;
     const dc = 12 + 3 * (st.speed ?? 0);
     const r = await skillCheck(X, "smallBlades", p.mod, "Филе из пяти пальцев", dc);
+    st.last = { total: r.total, dc, ok: r.success };
+    if (r.success) st.hits = (st.hits ?? 0) + 1;
     const lines = [r.success ? `${esc(p.name)}: ${r.total} против СЛ ${dc} — нож мелькает между пальцами.`
       : `${esc(p.name)}: ${r.total} против СЛ ${dc} — нож задел руку, ставки проиграны.`];
     if (!r.success) st.done = true;
@@ -460,11 +553,14 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       const r = await skillCheck(X, skill, (p.mod ?? 0) + tableMod, "Гвинт");
       rolls.push(...r.rolls);
       totals.push([p, r.total]);
+      p.card = { label: note, mod: tableMod, roll: t.total };
+      p.total = r.total;
       lines.push(`${esc(p.name)}: ${note} (${tableMod >= 0 ? "+" : ""}${tableMod}), ${SKILLS[skill].label} — <b>${r.total}</b>.`);
     }
     const [[a, ta], [b, tb]] = totals;
     const win = ta > tb ? a : tb > ta ? b : null;
     if (win) win.wins += 1;
+    st.rounds = [...(st.rounds ?? []), win?.name ?? "ничья"];
     lines.push(win ? `Раунд за ${esc(win.name)}.` : "Ничья в раунде.");
     const champ = [a, b].find(p => p.wins >= 2) ?? (st.round >= 3 ? (a.wins > b.wins ? a : b.wins > a.wins ? b : null) : null);
     if (champ || st.round >= 3) {
@@ -482,7 +578,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       const r = await new Roll("5d6").evaluate();
       rolls.push(r);
       p.dice = r.dice[0].results.map(x => x.result);
-      p.sel = []; p.rerolled = false;
+      p.sel = []; p.fresh = []; p.rerolled = false;
       lines.push(`${esc(p.name)}: ${p.dice.join(" ")} — ${POKER_RANKS[pokerRank(p.dice)]}.`);
     }
     this.state.rolled = true;
@@ -504,8 +600,43 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const r = await new Roll(`${p.sel.length}d6`).evaluate();
     const fresh = r.dice[0].results.map(x => x.result);
     p.sel.forEach((i, k) => { p.dice[i] = fresh[k]; });
+    p.fresh = [...p.sel];
     p.sel = []; p.rerolled = true;
     await this.#post([`${esc(p.name)} перебрасывает: ${p.dice.join(" ")} — ${POKER_RANKS[pokerRank(p.dice)]}.`], [r]);
+  }
+
+  /** Кулачный бой — обычный бой системы: участники со стола в трекер, инициатива сама (PLAN 4.122). */
+  static async #onBrawlStart() {
+    if (!game.user.isGM) return ui.notifications.info("Бой начинает ведущий.");
+    const scene = canvas?.scene;
+    if (!scene) return ui.notifications.warn("Нет активной сцены.");
+    const tokens = [];
+    for (const p of this.players) {
+      const doc = fromUuidSync(p.uuid);
+      const token = doc?.documentName === "Token" ? doc
+        : scene.tokens.find(t => t.actorId === (doc?.id ?? "") || t.actor?.uuid === p.uuid);
+      if (token?.parent === scene) tokens.push(token);
+    }
+    if (tokens.length < 2) return ui.notifications.warn("На сцене нужны токены хотя бы двух участников.");
+    const combat = game.combat?.scene?.id === scene.id ? game.combat : await Combat.create({ scene: scene.id, active: true });
+    const have = new Set(combat.combatants.map(c => c.tokenId));
+    const fresh = tokens.filter(t => !have.has(t.id)).map(t => ({ tokenId: t.id, sceneId: scene.id, actorId: t.actorId }));
+    if (fresh.length) await combat.createEmbeddedDocuments("Combatant", fresh);
+    await combat.rollAll();
+    if (!combat.started) await combat.startCombat();
+    this.log.push(`Кулачный бой начат: ${tokens.map(t => esc(t.name)).join(", ")}.`);
+    this.render();
+  }
+
+  /** Памятка «Игры в таверне» — правила и жульничество. */
+  static async #onBrawlNotes() {
+    for (const pack of game.packs.filter(p => p.documentName === "JournalEntry")) {
+      const entry = (await pack.getIndex()).find(e => e.name === "Игры в таверне");
+      if (entry) return (await pack.getDocument(entry._id))?.sheet.render(true);
+    }
+    const local = game.journal.getName("Игры в таверне");
+    if (local) return local.sheet.render(true);
+    ui.notifications.info("Памятка «Игры в таверне» не найдена.");
   }
 
   static async #onPokerShow() {
