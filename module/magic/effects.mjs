@@ -160,7 +160,10 @@ export async function magicStartOfTurn(actor) {
       continue;
     }
     if (effect.flags.vedmak.regen) {
-      const heal = Math.min(effect.flags.vedmak.regen, Math.max(0, actor.system.hp.max - hp));
+      // Число или формула («Фонтан жизни» — 1d6 за раунд)
+      const per = Number(effect.flags.vedmak.regen);
+      const amount = Number.isFinite(per) ? per : (await new Roll(String(effect.flags.vedmak.regen)).evaluate()).total;
+      const heal = Math.min(amount, Math.max(0, actor.system.hp.max - hp));
       if (heal) { hp += heal; lines.push(`${effect.name}: +${heal} ПЗ.`); }
     }
     if (timed.key === "shield" && !actor.system.shield.value) {

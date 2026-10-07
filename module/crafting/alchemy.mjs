@@ -13,7 +13,7 @@ import { STATS } from "../config/stats.mjs";
 import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
 import { performCheck } from "../dice/check.mjs";
-import { postCard, resolveActor, tokenDistance, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
+import { postCard, resolveActor, tokenDistance, asGM, registerGMHandler, userOwnsAny, actorToken } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS, pointInZone, removeZones } from "../combat/zones.mjs";
 import { zoneAuraFor } from "../config/magic.mjs";
 import { registerChatAction } from "../combat/chat.mjs";
@@ -25,6 +25,7 @@ import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
 import { inCombat, roundsAsTime } from "../util.mjs";
 import { timeIsUp } from "../magic/timed.mjs";
 import { deleteEffectsClamped } from "../magic/buffs.mjs";
+import { equippedProstheses, prostheticStats, wearProsthesis, wearLine } from "../combat/prosthetics.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -547,7 +548,7 @@ function areaTargets(radius) {
  * Зона склянки или ловушки на сцене: круг или конус ставится мышью.
  * @returns {Promise<{victims: Actor[]}|null|false>} false — отменили, null — зоны недоступны
  */
-async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb) {
+async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb, { excludeSelf = false } = {}) {
   const area = parseArea(u.area, { plainIsRadius: true });
   if (!area || !zonesAvailable()) return null;
   const placed = await placeZone(area, { name, color });
@@ -561,7 +562,59 @@ async function zoneVictims(actor, name, u, effect, color = ZONE_COLORS.bomb) {
   const auraDef = zoneAuraFor(name);
   const extra = { ...(auraDef ? { aura: { ...auraDef, value: 0, img: "" } } : {}), ...(alchemyAuto(name)?.zone ?? {}) };
   const region = await createZone(shape, { name, color, actor, itemName: name, duration, extra });
-  return { victims: zoneTokens(shape, { region }).map(t => t.actor), shape, region };
+  // Конус из своей руки (ручная пушка) стрелка не задевает
+  const exclude = excludeSelf ? actorToken(actor) : null;
+  return { victims: zoneTokens(shape, { region, exclude }).map(t => t.actor), shape, region };
+}
+
+/**
+ * Ручная пушка («Лавка Клауса и Нострадамуса»): бомба, собранная в протезе (час работы), подрывается полным ходом
+ * конусом длиной в радиус бомбы; попадание — Атлетика. Взрыв отнимает у протеза 10 Надёжности, а без Надёжности
+ * протез отлетает на 1d6 м (снимается).
+ */
+export async function handCannon(actor, mod) {
+  const bombs = actor.itemTypes.alchemical.filter(i => i.system.kind === "bomb" && (i.system.quantity ?? 0) > 0);
+  if (!bombs.length) return ui.notifications.warn("Нет бомбы: ручная пушка заряжается бомбой из снаряжения (собрать её в руке — час).");
+  let bomb = bombs[0];
+  if (bombs.length > 1) {
+    const id = await DialogV2.wait({
+      window: { title: mod.name }, classes: ["vedmak", "vedmak-dialog"],
+      content: `<div class="vedmak-roll-dialog"><p>${mod.system.effect ?? ""}</p><div class="form-group"><label>Бомба</label>
+        <select name="bomb">${bombs.map(b => `<option value="${b.id}">${b.name} (${b.system.use.area || "—"})</option>`).join("")}</select></div></div>`,
+      buttons: [{ action: "ok", label: "Подорвать", default: true, callback: (e, b) => b.form.elements.bomb.value },
+        { action: "cancel", label: "Отмена" }],
+      rejectClose: false
+    });
+    if (!id || id === "cancel") return null;
+    bomb = actor.items.get(id);
+  }
+  const u = bomb.system.use;
+  const radius = Number(String(u.area).match(/\d+(?:[.,]\d+)?/)?.[0]?.replace(",", ".") ?? 0) || 2;
+  const name = `${mod.name}: ${bomb.name}`;
+  const zone = await zoneVictims(actor, name, { ...u, area: `конус ${radius} м` }, bomb.system.effect ?? "", ZONE_COLORS.bomb, { excludeSelf: true });
+  if (zone === false) return null;
+  const attack = await actor.rollSkill("athletics", { subtitle: `${name} (конус ${radius} м)` });
+  // Передумали бросать — поставленный конус не нужен
+  if (!attack) { if (zone?.region) await removeZones([zone.region]); return null; }
+  await spendOne(bomb);
+  const victims = zone?.victims ?? [...game.user.targets].map(t => t.actor).filter(Boolean);
+  const lines = [bomb.system.effect, `Конус ${radius} м (радиус бомбы). Попадание — Атлетика.`];
+  const buttons = [];
+  if ((u.damage || u.status) && victims.length) {
+    await manualDamage(victims, { formula: u.damage, reason: name, damageType: u.damageType, where: "all",
+      status: u.status, statusChance: u.statusChance, statusRounds: u.statusRounds });
+  } else if (u.damage || u.status) lines.push("Цели не выбраны: урон — «Урон без атаки» по тем, кто в конусе.");
+  // Протез: тот, на котором стоит пушка, иначе первый надетый
+  const pros = actor.items.get(mod.flags?.vedmak?.prosthesis) ?? equippedProstheses(actor)[0] ?? null;
+  if (pros) {
+    if (prostheticStats(actor, pros).reliability) lines.push(wearLine(pros, await wearProsthesis(actor, pros, 10)));
+    else {
+      const meters = (await new Roll("1d6").evaluate()).total;
+      if (pros.system.equipped) await pros.update({ "system.equipped": false });
+      lines.push(`${pros.name}: Надёжности нет — протез отлетает на ${meters} м в случайную сторону (снят).`);
+    }
+  }
+  return card(actor, mod.name, lines, { subtitle: "Ручная пушка", buttons, flags: { fx: { kind: "throw" } } });
 }
 
 export async function throwItem(actor, item) {
@@ -575,7 +628,8 @@ export async function throwItem(actor, item) {
   const zone = await zoneVictims(actor, item.name, u, s.effect ?? "");
   if (zone === false) return null;
   const attack = await actor.rollSkill("athletics", { subtitle: `Бросок: ${item.name} (дистанция ${meters} м)` });
-  if (!attack) return null;
+  // Передумали бросать — поставленная зона не нужна
+  if (!attack) { if (zone?.region) await removeZones([zone.region]); return null; }
   await spendOne(item);
   const radius = Number(String(u.area).match(/\d+/)?.[0] ?? 0);
   const victims = zone?.victims ?? areaTargets(radius);

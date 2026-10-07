@@ -443,7 +443,10 @@ async function defendAuto(message, attack, actor, defender, { messageMode } = {}
 
 function buildOutcome(message, attack, defender, r) {
   const critAllowed = !attack.spell || attack.spell.canCrit;
-  const critLevel = r.hit && critAllowed && !r.auto && !attack.noDamage ? critLevelFor(r.margin) : null;
+  // Гавенкарский разбрызгивающий: после попадания +N к результату атаки — для крита (AMMO_PROPS.afterHit)
+  const afterHit = r.hit ? attack.weapon?.ammo?.afterHit ?? 0 : 0;
+  if (afterHit) r.notes = [...(r.notes ?? []), `${attack.weapon.ammo.name}: наконечник раскрылся — +${afterHit} к результату атаки для крита.`];
+  const critLevel = r.hit && critAllowed && !r.auto && !attack.noDamage ? critLevelFor(r.margin + afterHit) : null;
   const canDamage = (r.hit || r.damageOnBlock) && !attack.noDamage;
   const spell = attack.spell ?? null;
   const canApplyEffects = r.hit && !!spell && attack.noDamage && !!(spell.statuses?.length || spell.regen || spell.hex || spell.buff);

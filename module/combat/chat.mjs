@@ -2,7 +2,7 @@
 
 import { defend } from "./defense.mjs";
 import { repeatAttack } from "./attack.mjs";
-import { damageFromDefense, requestApplyDamage } from "./damage.mjs";
+import { damageFromDefense, requestApplyDamage, explodeAmmo } from "./damage.mjs";
 import { rollStunSave, deathSaveDialog } from "./saves.mjs";
 import { resolveActor, asGM, doneKey, sourceOfResult } from "./common.mjs";
 import { requestSpellEffects, ritualFocus } from "../magic/effects.mjs";
@@ -19,6 +19,9 @@ const ACTIONS = {
   damage: (message, button, event) => damageFromDefense(message, { skipDialog: event.shiftKey }),
 
   applyDamage: message => requestApplyDamage(message),
+
+  // Взрывной боеприпас: урон всем в радиусе от цели
+  ammoExplode: message => explodeAmmo(message),
 
   applySpellEffects: message => requestSpellEffects(message),
 

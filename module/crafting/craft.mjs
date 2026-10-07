@@ -538,21 +538,21 @@ export async function repair(actor, item) {
 
 /**
  * Починка протеза: Надёжность покрытия до максимума проверкой Ремесла. СЛ — чертёж протеза − 5, если он есть;
- * иначе СЛ назначает ведущий (в окне, по умолчанию средняя — 14). Компоненты не тратятся: их у протезов нет в чертежах.
+ * иначе 18 — «особые протезы чинит любой Ремесленник (СЛ 18)» («Лавка Клауса и Нострадамуса»); в окне её можно поменять.
  */
 async function repairProsthesis(actor, item) {
   const rel = prostheticStats(actor, item).reliability;
   if (!rel) return ui.notifications.warn(`У «${item.name}» нет Надёжности — чинить нечего (её даёт протезное покрытие).`);
   if (rel.value >= rel.max) return ui.notifications.info(`«${item.name}» цел: Надёжность ${rel.value}/${rel.max}.`);
   const recipe = await findRecipeFor(actor, item.name);
-  const suggested = recipe ? Math.max(0, recipe.system.dc - CRAFTING.repairDcMinus) : 14;
+  const suggested = recipe ? Math.max(0, recipe.system.dc - CRAFTING.repairDcMinus) : 18;
   const dc = await DialogV2.prompt({
     window: { title: `Починка: ${item.name}` },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog craft-dialog"><p>Надёжность ${rel.value}/${rel.max}. Ремесло + Изготовление против СЛ;
       успех — Надёжность до ${rel.max}.</p>
       <label class="num"><span class="cap">СЛ</span> <input type="number" name="dc" value="${suggested}" min="0" max="40"></label>
-      <p class="hint">${recipe ? `Чертёж «${recipe.name}»: СЛ ${recipe.system.dc} − 5.` : "Чертежа нет — СЛ назначает ведущий."}</p></div>`,
+      <p class="hint">${recipe ? `Чертёж «${recipe.name}»: СЛ ${recipe.system.dc} − 5.` : "Особые протезы чинит любой Ремесленник, СЛ 18; модификации — только Нострадамус и Клаус."}</p></div>`,
     ok: { label: "Чинить", callback: (event, button) => Number(button.form.elements.dc.value) || 0 },
     rejectClose: false
   });

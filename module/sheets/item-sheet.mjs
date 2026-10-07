@@ -10,7 +10,7 @@ import { SUBSTANCES } from "../config/crafting.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 import { animateTab } from "../fx/sheet-motion.mjs";
-import { isProstheticItem, prostheticStats } from "../combat/prosthetics.mjs";
+import { isProstheticItem, prostheticStats, prostheticWeaponCfg } from "../combat/prosthetics.mjs";
 
 /**
  * Ключи рас для выпадающих списков: корник (RACES) и все расы компендиумов (дополнения, фанатские книги).
@@ -133,8 +133,18 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     // Протезы у персонажа: модификация — на каком протезе стоит, протез — Надёжность покрытия
     const owner = item.parent?.documentName === "Actor" ? item.parent : null;
     if (owner && item.type === "gear" && system.category === "prostheticMod") {
-      context.prosthesisOptions = { "": "На всех надетых", ...Object.fromEntries(owner.itemTypes.gear.filter(isProstheticItem).map(i => [i.id, i.name])) };
+      // На одну конечность — одна модификация: занятые протезы подписаны
+      const busy = id => owner.itemTypes.gear.filter(m => m !== item && m.system.category === "prostheticMod" && m.flags?.vedmak?.prosthesis === id).map(m => m.name);
+      context.prosthesisOptions = { "": "На всех надетых", ...Object.fromEntries(owner.itemTypes.gear.filter(isProstheticItem)
+        .map(i => [i.id, busy(i.id).length ? `${i.name} (уже: ${busy(i.id).join(", ")})` : i.name])) };
       context.prosthesisId = item.flags?.vedmak?.prosthesis ?? "";
+      // Ручной арбалет и скрытый клинок: какое оружие стоит в протезе
+      const wcfg = prostheticWeaponCfg(item);
+      if (wcfg) {
+        context.mountLabel = wcfg.label;
+        context.mountOptions = { "": "—", ...Object.fromEntries(owner.itemTypes.weapon.filter(wcfg.fits).map(w => [w.id, w.name])) };
+        context.mountId = item.flags?.vedmak?.weapon ?? "";
+      }
     }
     if (owner && isProstheticItem(item)) context.prostheticRel = prostheticStats(owner, item).reliability;
     if (item.type === "component") {

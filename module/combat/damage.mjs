@@ -64,6 +64,9 @@ export async function damageFromDefense(message, { skipDialog = false, messageMo
   }
   // Удар двимеритовым протезом: цели — касание двимерита (кнопка в карточке после применения)
   if (attack.weapon?.dimeritium) result.dimeritium = true;
+  // Взрывной боеприпас: кнопка взрыва по всем в радиусе от цели (ammoExplode)
+  const ammo = attack.weapon?.ammo ?? null;
+  if (ammo?.explode) result.explode = { ...ammo.explode, name: ammo.name };
   const data = {
     kind: "damage",
     defenseMessageId: message.id,
@@ -78,7 +81,35 @@ export async function damageFromDefense(message, { skipDialog = false, messageMo
     flags: { damage: data }, rolls: result.rolls, messageMode: cfg.messageMode
   });
   await markDone(message, card);
+  // Разделяющийся боеприпас: за каждый пункт свыше защиты (не больше split) — ещё попадание полным уроном
+  // оружия в случайную часть тела; каждое — своей карточкой со своей кнопкой «Применить»
+  const extra = ammo?.split && !def.fixedLocation ? Math.min(ammo.split, Math.max(0, def.margin ?? 0)) : 0;
+  for (let i = 1; i <= extra; i++) {
+    const more = await computeDamage({ attack, target, critLevel: null, aimed: false, ...cfg, location: "", adrenaline: 0, margin: 0 });
+    more.notes.unshift(`${ammo.name}: добавочное попадание ${i} из ${extra}.`);
+    const moreData = { kind: "damage", defenseMessageId: message.id, attacker: attack.attacker, target: def.defender,
+      attackLabel: attack.label, img: attack.img, ...more, applied: false };
+    await postCard({ template: "systems/vedmak/templates/chat/damage.hbs", data: moreData, actor: attacker,
+      flags: { damage: moreData }, rolls: more.rolls, messageMode: cfg.messageMode });
+  }
   return card;
+}
+
+/** Взрыв боеприпаса: урон без атаки по всем частям тела всем в радиусе от цели (и самой цели). */
+export async function explodeAmmo(message) {
+  const dmg = message.flags.vedmak?.damage;
+  const ex = dmg?.explode;
+  if (!ex) return;
+  const attacker = resolveActor(dmg.attacker?.tokenUuid) ?? resolveActor(dmg.attacker?.actorUuid);
+  if (!game.user.isGM && !attacker?.isOwner) return ui.notifications.warn("Взрыв применяет стрелок или ведущий.");
+  const center = (() => { try { return fromUuidSync(dmg.target?.tokenUuid)?.object ?? null; } catch { return null; } })();
+  const victims = center && canvas?.ready
+    ? canvas.tokens.placeables.filter(t => t.actor && Math.hypot(t.center.x - center.center.x, t.center.y - center.center.y)
+      <= ex.radius * canvas.scene.grid.size / canvas.scene.grid.distance + Math.max(t.w, t.h) / 2).map(t => t.actor)
+    : [resolveActor(dmg.target?.actorUuid)].filter(Boolean);
+  // manual.mjs сам импортирует этот модуль — берём его при нажатии
+  const { manualDamage } = await import("./manual.mjs");
+  return manualDamage(victims, { formula: ex.formula, reason: `${ex.name}: взрыв`, damageType: "elemental", where: "all" });
 }
 
 /**
@@ -670,7 +701,8 @@ const actorOfRef = ref => resolveActor(ref?.tokenUuid) ?? resolveActor(ref?.acto
 /**
  * Карточку урона игрок создаёт сам, поэтому ведущий сверяет её цепочку: защита — настоящая карточка, её создал владелец
  * защитника (или ведущий), в ней те же атакующий и цель и разрешён урон, а по этой защите ещё не применяли другой урон.
- * Так нельзя ударить того, кто не защищался от этой атаки, и нельзя применить урон дважды разными карточками.
+ * Так нельзя ударить того, кто не защищался от этой атаки, и нельзя применить урон дважды разными карточками
+ * (кроме добавочных попаданий разделяющегося боеприпаса).
  */
 function damageChainValid(message, dmg, attacker, target) {
   const defMsg = game.messages.get(dmg.defenseMessageId);
@@ -678,8 +710,12 @@ function damageChainValid(message, dmg, attacker, target) {
   if (!def?.canDamage) return false;
   if (actorOfRef(def.defender) !== target || actorOfRef(def.attack?.attacker) !== attacker) return false;
   if (!(defMsg.author?.isGM || userOwnsAny(defMsg.author?.id, target))) return false;
-  return !game.messages.some(m => m.id !== message.id && m.flags.vedmak?.damage?.defenseMessageId === defMsg.id
-    && m.flags.vedmak.damage.applied);
+  // Разделяющийся боеприпас даёт по одной защите до 1 + min(split, превышение) попаданий — считаем по карточке защиты
+  const split = def.attack?.weapon?.ammo?.split ?? 0;
+  const allowed = 1 + (split ? Math.min(split, Math.max(0, def.margin ?? 0)) : 0);
+  const applied = game.messages.filter(m => m.id !== message.id && m.flags.vedmak?.damage?.defenseMessageId === defMsg.id
+    && m.flags.vedmak.damage.applied).length;
+  return applied < allowed;
 }
 
 /**

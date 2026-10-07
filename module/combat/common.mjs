@@ -1,5 +1,6 @@
 // Общие помощники боевых карточек: поиск документов, цели, сокет ведущего, отметки «уже брошено».
 
+import { weaponMount } from "./prosthetics.mjs";
 import { renderTemplate } from "../util.mjs";
 
 const SOCKET = "system.vedmak";
@@ -61,7 +62,8 @@ export function isReadyWeapon(actor, item) {
   if (!item || actor?.type === "monster") return true;
   // В Истинной форме вместо обычных укуса и когтей расы — оружие формы
   if (actor?.system?.derived?.trueForm && actor.system.race?.system.grants?.includes(item.name)) return false;
-  return !!item.system.equipped || item.system.category === "natural";
+  // Ручной арбалет или скрытый клинок в протезе — всегда при себе
+  return !!item.system.equipped || item.system.category === "natural" || !!weaponMount(actor, item);
 }
 
 export function combatantFor(actor) {

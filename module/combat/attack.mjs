@@ -12,7 +12,8 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import { inTrueForm } from "../character/true-form.mjs";
-import { prostheticStrike, equippedProstheses } from "./prosthetics.mjs";
+import { prostheticStrike, equippedProstheses, weaponMount } from "./prosthetics.mjs";
+import { ammoProps } from "../config/items.mjs";
 import { aimBonus, clearAim } from "./manual.mjs";
 
 /**
@@ -229,6 +230,7 @@ function attackBase(actor, src, typeKey) {
   let base = sum;
   if (skill.base !== Math.max(0, sum)) base += skill.base - sum;
   if (src.accuracy && !typeCfg.skill) base += src.accuracy;
+  if (src.kind === "weapon") base += weaponMount(actor, src.item)?.mod ?? 0;
   for (const m of statusRollMods(actor, "attack")) base += Number(m.value) || 0;
   if (usesArm(src, typeKey)) for (const m of armWoundParts(actor)) base += m.value;
   return base;
@@ -364,7 +366,7 @@ function pickAmmo(actor) {
 
 /**
  * Выстрел тратит боеприпас (персонажи, настройка «Бой: расход боеприпасов»).
- * @returns {Promise<string|null|false>} строка для карточки; false — стрелять нечем
+ * @returns {Promise<{note: string, item: Item}|null|false>} строка для карточки и боеприпас; false — стрелять нечем
  */
 async function spendAmmo(actor, src) {
   const w = src.item?.system;
@@ -376,12 +378,28 @@ async function spendAmmo(actor, src) {
   }
   const left = ammo.system.quantity - 1;
   await ammo.update({ "system.quantity": left });
-  return `Боеприпас: ${ammo.name} (осталось ${left}).${left ? "" : " Последний!"}`;
+  return { note: `Боеприпас: ${ammo.name} (осталось ${left}).${left ? "" : " Последний!"}`, item: ammo };
+}
+
+/** Оружие выстрела со свойствами боеприпаса (AMMO_PROPS): тип урона, эффекты, серебро, взрыв, разделение. */
+function withAmmo(weapon, ammo) {
+  const p = ammo && ammoProps(ammo.name);
+  if (!p) return weapon;
+  const w = { ...weapon, effects: [...(weapon.effects ?? [])] };
+  if (p.damageTypes) w.damageTypes = [...p.damageTypes];
+  for (const e of p.effects ?? []) if (!w.effects.some(x => x.key === e.key)) w.effects.push({ ...e });
+  if (p.nonLethal) w.nonLethal = true;
+  if (p.silver && !w.silverDamage?.trim?.()) w.silverDamage = p.silver;
+  w.ammo = { name: ammo.name, explode: p.explode ?? null, split: p.split ?? 0, afterHit: p.afterHit ?? 0, note: p.note ?? "" };
+  return w;
 }
 
 export async function rollAttack(actor, src, targets, cfg) {
-  const ammoNote = await spendAmmo(actor, src);
-  if (ammoNote === false) return null;
+  const spent = await spendAmmo(actor, src);
+  if (spent === false) return null;
+  const ammoNote = spent?.note ?? null;
+  // Особый боеприпас меняет оружие этого выстрела (урон, эффекты), не сам предмет
+  const weapon = withAmmo(src.weapon, spent?.item);
   const typeCfg = src.types[cfg.attackType] ?? Object.values(src.types)[0];
   const skillKey = typeCfg.skill ?? src.skill;
   const skill = actor.system.skills[skillKey];
@@ -395,6 +413,9 @@ export async function rollAttack(actor, src, targets, cfg) {
   if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
   if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
   if (src.accuracy && !typeCfg.skill) parts.push({ label: "Точность", value: src.accuracy });
+  // Оружие в протезе: ручной арбалет −3, скрытый клинок +4
+  const mount = src.kind === "weapon" ? weaponMount(actor, src.item) : null;
+  if (mount) parts.push({ label: mount.label, value: mount.mod });
   const school = schoolOf(actor);
   const waived = !!school?.waive?.includes(cfg.attackType);
   if (typeCfg.mod && waived) parts.push({ label: `${typeCfg.label}: ${school.label} — без штрафа`, value: 0, always: true });
@@ -419,6 +440,7 @@ export async function rollAttack(actor, src, targets, cfg) {
 
   // Дополнительное действие атаки: 3 Вын, −3 (стр. 151)
   const notes = ammoNote ? [ammoNote] : [];
+  if (weapon.ammo?.note) notes.push(weapon.ammo.note);
   if (cfg.extraAction) {
     parts.push({ label: "Доп. действие", value: -3 });
     const sta = actor.system.sta.value;
@@ -454,7 +476,7 @@ export async function rollAttack(actor, src, targets, cfg) {
   }
   let damageFormula = src.weapon.damage;
   let damageMult = typeCfg.damage ?? 1;
-  let nonLethal = !!(typeCfg.nonLethal || src.weapon.nonLethal);
+  let nonLethal = !!(typeCfg.nonLethal || weapon.nonLethal);
   if (unarmed) {
     damageFormula = typeCfg.damage === "kick" ? src.weapon.kick : typeCfg.damage === "punch" ? src.weapon.punch : "";
     damageMult = typeCfg.mult ?? 1;
@@ -484,7 +506,7 @@ export async function rollAttack(actor, src, targets, cfg) {
     attacker: { actorUuid: actor.uuid, tokenUuid: actor.token?.uuid ?? actorToken(actor)?.document.uuid ?? null, name: actor.name },
     source: { kind: src.kind, itemId: src.item?.id ?? null, key: src.kind === "ram" ? src.key : undefined },
     label: src.label, img: src.img,
-    weapon: src.weapon,
+    weapon,
     skill: skillKey,
     attackType: cfg.attackType, typeLabel: typeCfg.label, typeHint: typeCfg.hint ?? "",
     aim: cfg.aim, aimLabel,

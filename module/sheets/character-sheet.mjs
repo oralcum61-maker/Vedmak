@@ -14,7 +14,7 @@ import { racePowersContext, setPowerValue, powerStep } from "../character/race-p
 import { transform, extendForm, endForm, regainControl } from "../character/true-form.mjs";
 import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, IMPLANT_LIMIT, crossbowModLimit } from "../config/crafting.mjs";
 import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
-import { useAlchemical } from "../crafting/alchemy.mjs";
+import { useAlchemical, handCannon } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
 import { signed, compareRu, worldSetting, postCard } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
@@ -110,6 +110,7 @@ export class CharacterSheet extends VedmakActorSheet {
       forage: CharacterSheet.#onForage,
       attachEnhancement: CharacterSheet.#onAttachEnhancement,
       repairItem: CharacterSheet.#onRepairItem,
+      handCannon: CharacterSheet.#onHandCannon,
       disassembleItem: CharacterSheet.#onDisassembleItem,
       endAlchemyEffect: CharacterSheet.#onEndAlchemyEffect,
       moneyExchange: CharacterSheet.#onMoneyExchange,
@@ -1008,6 +1009,11 @@ export class CharacterSheet extends VedmakActorSheet {
   static async #onAttachEnhancement(event, target) {
     const item = CharacterSheet.#item.call(this, target);
     if (item) await attachEnhancement(this.actor, item);
+  }
+
+  static async #onHandCannon(event, target) {
+    const item = CharacterSheet.#item.call(this, target);
+    if (item) await handCannon(this.actor, item);
   }
 
   static async #onRepairItem(event, target) {

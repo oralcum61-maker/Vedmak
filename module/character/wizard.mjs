@@ -497,23 +497,26 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   #magicGroups() {
     const prof = this.profession;
     if (!prof) return [];
-    if (this.#magicCache?.prof === prof) return this.#magicCache.groups;
-    const groups = this.#buildMagicGroups(prof);
-    this.#magicCache = { prof, groups };
+    const extra = this.wiz.lifepath ? this.#lifepath().effects?.spells : null;
+    const key = JSON.stringify(extra ?? null);
+    if (this.#magicCache?.prof === prof && this.#magicCache.key === key) return this.#magicCache.groups;
+    const groups = this.#buildMagicGroups(prof, extra);
+    this.#magicCache = { prof, key, groups };
     return groups;
   }
 
-  #buildMagicGroups(prof) {
+  #buildMagicGroups(prof, extra = null) {
     const q = prof.system.magicQuota;
     const all = this.data.magic;
-    const novice = e => {
+    const levelOf = e => {
       const sys = e.system ?? {};
-      if (sys.kind === "hex") return (HEX_DANGER_LEVEL[String(sys.danger ?? "").toLowerCase()] ?? sys.level) === "novice";
-      return sys.level === "novice";
+      if (sys.kind === "hex") return HEX_DANGER_LEVEL[String(sys.danger ?? "").toLowerCase()] ?? sys.level;
+      return sys.level;
     };
-    const pick = kind => all.filter(e => e.system?.kind === kind && novice(e))
-      .map(e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(kind, e.system.level), cost: e.system.staCost }))
-      .sort((a, b) => compareRu(a.name, b.name));
+    const novice = e => levelOf(e) === "novice";
+    const row = e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(e.system.kind, e.system.level), cost: e.system.staCost });
+    const pick = (kind, level = "novice") => all.filter(e => e.system?.kind === kind && levelOf(e) === level)
+      .map(row).sort((a, b) => compareRu(a.name, b.name));
     const groups = [];
     // «Все базовые знаки» ведьмака — пять знаков корника, а не знаки фанатских книг того же уровня
     if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true,
@@ -522,7 +525,29 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const kind of ["spell", "invocation", "ritual", "hex", "sign"]) {
       if (q[kind] > 0) groups.push({ kind, label: labels[kind], count: q[kind], auto: false, items: pick(kind) });
     }
+    // Путь мага «Тома Хаоса»: заклинания сверх квоты (lifepath.mjs, effects.spells)
+    if (extra) {
+      if (extra.novice) {
+        const g = groups.find(x => x.kind === "spell");
+        if (g) { g.count += extra.novice; g.label = `${g.label} (+${extra.novice} из жизненного пути)`; }
+        else groups.push({ kind: "spell", label: "Заклинания новичка (жизненный путь)", count: extra.novice, auto: false, items: pick("spell") });
+      }
+      if (extra.journeyman) groups.push({ kind: "spell", key: "lpJourneyman", label: "Заклинание подмастерья (жизненный путь)",
+        count: extra.journeyman, auto: false, items: pick("spell", "journeyman") });
+      const named = extra.named.map(n => all.find(e => e.name === n && e.system?.kind)).filter(Boolean).map(row);
+      if (named.length) groups.push({ kind: "lifepath", label: "Из жизненного пути", count: 0, auto: true, items: named });
+      for (const c of extra.choice) {
+        const items = c.names.map(n => all.find(e => e.name === n && e.system?.kind)).filter(Boolean).map(row);
+        if (items.length) groups.push({ kind: "lifepath", label: c.label, count: Math.min(c.count, items.length), auto: false, items });
+      }
+    }
     return groups;
+  }
+
+  /** Выбранная магия без повторов: заклинание из пути может стоять и в группе профессии. */
+  #chosenMagic() {
+    const list = this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || this.wiz.magic.includes(i.uuid)));
+    return [...new Map(list.map(i => [i.uuid, i])).values()];
   }
 
   /** Что не так на каждом шаге (пусто — всё в порядке). */
@@ -640,7 +665,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const final = this.#finalStats(lp);
     const skills = this.#finalSkills(lp);
     const money = this.#shopTotals(lp).left;
-    const magicChosen = this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || s.magic.includes(i.uuid)));
+    const magicChosen = this.#chosenMagic();
     return {
       art: prof?.img || this.race?.img || "",
       line: [this.race?.name, prof?.name, s.gender, s.age ? `${s.age} ${plural(s.age, ["год", "года", "лет"])}` : "",
@@ -659,7 +684,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       defining: prof ? `${prof.system.definingSkill.name} ${s.defining + (lp.effects?.definingBonus ?? 0)}` : "",
       money,
       gear: [...(prof?.system.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? [])].join(", "),
-      magic: this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || s.magic.includes(i.uuid)).map(i => i.name)).join(", "),
+      magic: this.#chosenMagic().map(i => i.name).join(", "),
       effects: this.#effectsSummary(lp.effects)
     };
   }
@@ -1101,7 +1126,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     return {
       state: this.wiz, race: this.race, profession: this.profession, lifepath: lp,
       stats: this.#baseStats(), statParts: this.#statParts(lp), skills: this.#finalSkills(lp),
-      profKeys: this.#professionSkillKeys(), magic: this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || this.wiz.magic.includes(i.uuid))),
+      profKeys: this.#professionSkillKeys(), magic: this.#chosenMagic(),
       native: this.nativeLanguageKey
     };
   }

@@ -7,10 +7,31 @@
 // Модификация стоит на протезе, выбранном в её листе (флаг vedmak.prosthesis — id протеза у того же персонажа);
 // без выбора — на всех надетых протезах, как было до PLAN 4.124. Починка — craft.mjs `repair`.
 
-import { PROSTHETIC_RELIABILITY, prostheticPart } from "../config/items.mjs";
+import { PROSTHETIC_RELIABILITY, prostheticPart, prostheticKey } from "../config/items.mjs";
 
 const isProsthesis = i => i.type === "gear" && i.system.equipped && i.system.category === "prosthetic";
 const isMod = i => i.type === "gear" && i.system.equipped && i.system.category === "prostheticMod";
+
+/**
+ * Оружие в протезе («Лавка Клауса и Нострадамуса»): модификация с выбранным в её листе оружием (флаг vedmak.weapon).
+ * Ручной арбалет — выстрелы −3, но без штрафов протеза; скрытый клинок — +4 к атаке им и к скрытному выхватыванию.
+ * Такое оружие готово к бою, даже если не «в руках».
+ */
+export const PROSTHETIC_WEAPON_MODS = {
+  "ручной арбалет (протез)": { label: "Ручной арбалет в протезе", mod: -3, fits: w => !!w.system.isCrossbow },
+  "скрытый клинок": { label: "Скрытый клинок", mod: 4, fits: w => !w.system.isRanged && w.system.category !== "natural" }
+};
+export const prostheticWeaponCfg = mod => PROSTHETIC_WEAPON_MODS[prostheticKey(mod?.name)] ?? null;
+
+/** Модификация, в которой стоит это оружие, — надетая и на надетом протезе (или без привязки к протезу). */
+export function weaponMount(actor, weapon) {
+  if (!actor || !weapon) return null;
+  const mod = actor.itemTypes?.gear?.find(m => isMod(m) && prostheticWeaponCfg(m) && m.flags?.vedmak?.weapon === weapon.id);
+  if (!mod) return null;
+  const on = actor.items.get(mod.flags?.vedmak?.prosthesis);
+  if (on && !on.system.equipped) return null;
+  return { mod, ...prostheticWeaponCfg(mod) };
+}
 
 /** Надетые протезы актора. */
 export const equippedProstheses = actor => actor?.itemTypes?.gear?.filter(isProsthesis) ?? [];

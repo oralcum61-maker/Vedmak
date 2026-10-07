@@ -9,6 +9,9 @@
     {{#if prosthesisOptions}}
     <label class="wide">Стоит на протезе <select name="flags.vedmak.prosthesis">{{selectOptions prosthesisOptions selected=prosthesisId}}</select></label>
     {{/if}}
+    {{#if mountOptions}}
+    <label class="wide">{{mountLabel}}: оружие <select name="flags.vedmak.weapon">{{selectOptions mountOptions selected=mountId}}</select></label>
+    {{/if}}
     {{#if prostheticRel}}
     <div class="vd-grid g2">
       <label>Надёжность протеза (из {{prostheticRel.max}}) <input type="number" name="flags.vedmak.reliability" value="{{prostheticRel.value}}" min="0" max="{{prostheticRel.max}}"></label>

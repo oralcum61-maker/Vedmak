@@ -141,6 +141,27 @@ export const PROSTHETIC_PARTS = {
   "протезное покрытие": { coating: true },
   "лёгкое покрытие": { accuracy: 2, reliability: -5 }
 };
+/**
+ * Особые боеприпасы в выстреле (корник стр. 84, 255; «Домашние правила BS & Tobi»). Ключ — название в нижнем регистре.
+ * damageTypes — тип урона вместо оружейного; effects — свойства удара; nonLethal; silver — серебро; afterHit — после
+ * попадания +N к результату атаки для крита; split — до N добавочных попаданий за каждый пункт свыше защиты;
+ * explode — взрыв по всем частям тела всех в радиусе; note — что учитывается вручную.
+ */
+export const AMMO_PROPS = {
+  "боеприпасы с затупленным наконечником": { damageTypes: ["bludgeoning"], nonLethal: true },
+  "боеприпасы с широким наконечником": { effects: [{ key: "bleeding", value: "100%" }] },
+  "бронебойные боеприпасы": { effects: [{ key: "armorPiercing" }] },
+  "эльфские ввинчивающиеся боеприпасы": { effects: [{ key: "bleeding", value: "100%" }],
+    note: "Кровотечение от ввинчивающегося наконечника останавливает только его извлечение: Первая помощь СЛ 16." },
+  "краснолюдские пробивные боеприпасы": { damageTypes: ["bludgeoning"], effects: [{ key: "ablating" }] },
+  "взрывные боеприпасы": { damageTypes: ["elemental"], explode: { formula: "4d6", radius: 2 } },
+  "разделяющиеся боеприпасы": { split: 3 },
+  "выслеживающие боеприпасы": { note: "Пока боеприпас в теле цели, по свежему (до полусуток) следу её выслеживают без проверок." },
+  "серебряный боеприпас": { silver: "1d6" },
+  "гавенкарский разбрызгивающий": { afterHit: 3, note: "СЛ стабилизации критического ранения от него +3." }
+};
+export const ammoProps = name => AMMO_PROPS[prostheticKey(name)] ?? null;
+
 /** Надёжность протеза с протезным покрытием. */
 export const PROSTHETIC_RELIABILITY = 15;
 export const prostheticKey = name => String(name ?? "").toLowerCase().replace(/[«»"„“”]/g, "").replace(/\s+/g, " ").trim();

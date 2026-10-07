@@ -580,6 +580,11 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       // Протез: Надёжность покрытия (с модификациями на нём); модификация: на каком протезе стоит
       if (item.system.category === "prosthetic") out.prosRel = prostheticStats(actor, item).reliability;
       if (item.system.category === "prostheticMod") out.mountedOn = actor.items.get(item.flags?.vedmak?.prosthesis)?.name ?? "";
+      // Ручная пушка: кнопка подрыва, пока модификация надета; оружие в протезе — подписью
+      if (item.system.category === "prostheticMod") {
+        out.handCannon = item.system.equipped && /^ручная пушка$/i.test(item.name.trim());
+        out.mountedWeapon = actor.items.get(item.flags?.vedmak?.weapon)?.name ?? "";
+      }
       return out;
     };
     const known = new Set(Object.keys(CATS));
