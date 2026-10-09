@@ -44,12 +44,23 @@ function defenseItems(actor, attack, defense) {
   return out;
 }
 
+/** Уровень навыка профессии «Отбивание стрел» (ведьмак, ветвь «Убийца»); 0 — навыка нет. */
+export function deflectLevel(actor) {
+  const prof = actor.itemTypes?.profession?.[0];
+  for (const b of prof?.system.branches ?? []) for (const a of b.abilities) if (a.name === "Отбивание стрел") return a.value ?? 0;
+  return 0;
+}
+
+/** Есть ли в руках оружие ближнего боя: отбивать снаряд голыми руками нельзя. */
+const hasMeleeInHand = actor => actor.itemTypes.weapon.some(w => !w.system.isRanged && isReadyWeapon(actor, w) && !isBroken(w));
+
 /** Защиты, которые делаются рукой с оружием или щитом: к ним идёт штраф ран руки. */
 const ARM_DEFENSES = ["block", "parry", "brawlBlock"];
 
 /**
  * Ограничения защиты (стр. 164) — одни и те же для кнопки, окна и итога окна.
- * Стрелы и болты не парируют; дистанционную атаку блокируют только щитом (ни оружием, ни рукой);
+ * Стрелы, болты и метательное не парируют — снаряд отбивает только ведьмак навыком «Отбивание стрел»; без оружия
+ * (щита, протеза) не парируют вовсе (решения автора 10.10); дистанционную атаку блокируют только щитом;
  * «Блокирование» без оружия и щита — блок рукой (Борьба).
  * @returns {{error: string}|{defense: string, items: object[]}}
  */
@@ -61,9 +72,16 @@ function resolveDefense(actor, attack, defense) {
     if ((actor.system.sta?.value ?? 0) < cost) return { error: `Рассеивание стоит ${cost} Вын — у ${actor.name} столько нет.` };
     return { defense, items: [] };
   }
-  if (defense === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) return { error: "Стрелы и болты нельзя парировать." };
+  if (defense === "parry" && attack.isRanged) return { error: "Снаряд не парируют: стрелу, болт или метательное отбивает только ведьмак «Отбиванием стрел»." };
+  if (defense === "deflect") {
+    if (!attack.isRanged || attack.spell) return { error: "«Отбивание стрел» — только против летящего снаряда." };
+    if (!(deflectLevel(actor) > 0)) return { error: `У ${actor.name} нет навыка «Отбивание стрел».` };
+    if (!hasMeleeInHand(actor)) return { error: "Отбить снаряд можно только оружием в руке." };
+    return { defense, items: [] };
+  }
   if (defense === "brawlBlock" && attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
   const items = defenseItems(actor, attack, defense);
+  if (defense === "parry" && !items.length) return { error: "Без оружия парировать нельзя." };
   if (defense === "block" && !items.length) {
     if (attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
     return { defense: "brawlBlock", items: [] };
@@ -144,6 +162,11 @@ function defenseSkillKey(type, item) {
 /** Основа защиты — та же арифметика, что в rollDefense. */
 function defenseBase(actor, typeKey, item) {
   const type = DEFENSE_TYPES[typeKey] ?? DEFENSE_TYPES.dodge;
+  if (type.skill === "deflect") {
+    let base = actor.system.stats.dex.effective + deflectLevel(actor);
+    for (const m of statusRollMods(actor, "defense")) base += Number(m.value) || 0;
+    return base;
+  }
   const skill = actor.system.skills[defenseSkillKey(type, item)];
   const stat = actor.system.stats[SKILLS[defenseSkillKey(type, item)].stat];
   const sum = stat.effective + skill.total + skill.penalty;
@@ -180,7 +203,7 @@ export function bestDefense(actor, attack) {
       if (!item) continue;
     }
     const mod = key === "parry" && item?.shield && shieldParryWaived(actor) ? 0 : type.mod ?? 0;
-    const value = defenseBase(actor, key, item) + mod - (key === "parry" && attack.weapon?.isThrown ? 5 : 0);
+    const value = defenseBase(actor, key, item) + mod;
     if (value > best.value) best = { key, value };
   }
   return best.key;
@@ -208,15 +231,16 @@ async function defenseDialog(actor, attack, cfg, items) {
   if (gear.length && !gear.some(g => g.selected)) gear[0].selected = true;
   const pickedItem = () => byId.get(gear.find(g => g.selected)?.id) ?? null;
 
-  // Итог окна — как у броска (defend): парирование метательного ещё −5, щитом у школы с «Парированием щитом» — без −3
+  // Итог окна — как у броска (defend): щитом у школы с «Парированием щитом» парирование без −3
   const typeMod = (key, t) => {
     if (key !== "parry") return t.mod ?? 0;
     const it = pickedItem();
-    return (it?.shield && shieldParryWaived(actor) ? 0 : t.mod ?? 0) + (attack.weapon?.isThrown ? -5 : 0);
+    return it?.shield && shieldParryWaived(actor) ? 0 : t.mod ?? 0;
   };
   const types = allowed.map(([key, t]) => ({
     key, ...t, mod: typeMod(key, t), selected: key === cfg.defense,
-    note: [typeMod(key, t) ? `${typeMod(key, t)}` : "", SKILLS[defenseSkillKey(t, pickedItem())]?.label ?? ""].filter(Boolean).join(" · ")
+    note: [typeMod(key, t) ? `${typeMod(key, t)}` : "",
+      t.skill === "deflect" ? "Лвк + навык" : SKILLS[defenseSkillKey(t, pickedItem())]?.label ?? ""].filter(Boolean).join(" · ")
   }));
   const base = defenseBase(actor, cfg.defense, pickedItem());
 
@@ -277,23 +301,25 @@ function defenseCostInfo(actor) {
 async function rollDefense(message, attack, actor, defender, cfg, items) {
   const type = DEFENSE_TYPES[cfg.defense] ?? DEFENSE_TYPES.dodge;
   const item = items.find(i => i.id === cfg.itemId) ?? null;
-  const skillKey = type.skill === "weapon" ? (item?.skill ?? "brawling") : type.skill;
-  const skill = actor.system.skills[skillKey];
-  const stat = actor.system.stats[SKILLS[skillKey].stat];
-
-  const parts = [
-    { label: stat.label, value: stat.effective, always: true },
-    { label: skill.label, value: skill.total, always: true }
-  ];
-  const sum = stat.effective + skill.total + skill.penalty;
-  if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
-  if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  const parts = [];
+  if (type.skill === "deflect") {
+    // Навык профессии: Лвк + уровень «Отбивания стрел»
+    const dex = actor.system.stats.dex;
+    parts.push({ label: dex.label, value: dex.effective, always: true }, { label: "Отбивание стрел", value: deflectLevel(actor), always: true });
+  } else {
+    const skillKey = type.skill === "weapon" ? (item?.skill ?? "brawling") : type.skill;
+    const skill = actor.system.skills[skillKey];
+    const stat = actor.system.stats[SKILLS[skillKey].stat];
+    parts.push({ label: stat.label, value: stat.effective, always: true }, { label: skill.label, value: skill.total, always: true });
+    const sum = stat.effective + skill.total + skill.penalty;
+    if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
+    if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  }
   // Школа Мантикоры и своя школа с «Парированием щитом»: щитом парирует без штрафа
   const school = actor.type === "character" ? witcherSchools()[actor.system.details?.school] : null;
   if (type.mod && cfg.defense === "parry" && item?.shield && shieldParryWaived(actor)) {
     parts.push({ label: `${type.label} щитом: ${school.label} — без штрафа`, value: 0, always: true });
   } else if (type.mod) parts.push({ label: type.label, value: type.mod });
-  if (cfg.defense === "parry" && attack.weapon?.isThrown) parts.push({ label: "Парирование метательного", value: -5 });
   if (cfg.outnumbered > 1) parts.push({ label: `Противников в ближнем бою: ${cfg.outnumbered}`, value: -(cfg.outnumbered - 1) });
   for (const key of cfg.situations) parts.push({ label: DEFENSE_SITUATIONS[key].label, value: DEFENSE_SITUATIONS[key].mod });
   parts.push(...statusRollMods(actor, "defense"));
@@ -343,6 +369,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
       notes.push("Удар принят на руку: урон по подставленной конечности, броня работает.");
     }
     if (cfg.defense === "parry") notes.push("Парирование: атака отменена, атакующий ошеломлён.");
+    if (cfg.defense === "deflect") notes.push(`Снаряд отбит. Его можно направить в цель в пределах 10 м: она защищается против броска ${roll.total} или ошеломлена. Бомба взрывается там, куда отбита; если цель уклонилась — разброс (стр. 152).`);
     if (cfg.defense === "dispel") notes.push("Магия рассеяна: заклинание не действует на цель.");
     if (cfg.defense === "reposition") notes.push(`Можно сместиться на ${Math.floor(actor.system.stats.spd.effective / 2)} м.`);
     if (attack.attackType === "charge" && cfg.defense === "block") notes.push("Атака с разбега заблокирована: встречная Сила против Силы, чтобы сбить с ног.");

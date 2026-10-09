@@ -102,13 +102,20 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       extra.vigor += b.vigor ?? 0;
       toxicity += b.toxicity ?? 0;
     }
+    // Энергия ветвей — общий пул: у жреца «Божественная сила» и «Единение с природой» складываются, но вместе дают не
+    // больше, чем одна на 10-м уровне (Энергия 12, «значение Энергии общее» — решение 10.10)
+    let treeVigor = 0, treeVigorCap = 0;
     for (const branch of prof?.branches ?? []) {
       for (const ab of branch.abilities) {
         const b = abilityBonus(ab.mechanic, ab.value);
-        extra.vigor += b.vigor ?? 0;
+        if (b.vigor !== undefined) {
+          treeVigor += b.vigor;
+          treeVigorCap = Math.max(treeVigorCap, abilityBonus(ab.mechanic, 10).vigor);
+        }
         toxicity += b.toxicity ?? 0;
       }
     }
+    extra.vigor += Math.min(treeVigor, treeVigorCap);
     extra.vigor += school.vigor ?? 0;
 
     // Истинная форма высшего вампира: органическая броня естественным слоем, надетая не учитывается
