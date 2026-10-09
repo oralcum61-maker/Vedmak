@@ -2017,7 +2017,11 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
   width: 100%;
   margin: 0 auto .35rem;
   font-family: var(--vd-font-body);
+  /* На 35% меньше прежнего (просьба автора 10.10): zoom, а не transform — место в панели сжимается вместе с худом */
+  zoom: .65;
 }
+/* Худ поверх строки чата справа: средняя колонка интерфейса (в ней нижняя панель) встаёт над правой (z-index 30) */
+#ui-middle:has(> #ui-bottom > #vedmak-combat-hud) { z-index: 31; }
 /* Развёрнутый худ закрывает панель макросов целиком: она прячется, худ встаёт на её место у нижнего края (с тем же
    отступом снизу). Свёрнутый худ — полоса над макросами, как раньше. */
 #ui-bottom:has(> #vedmak-combat-hud .vh:not(.collapsed)) > #hotbar { display: none; }
