@@ -116,16 +116,19 @@ export const OVERRIDES = [
     img: `${A}c-hv-ab-lvl2-1.webp`,
     "system.description": p("Стальная кираса с наплечниками и защитой рук поверх кольчуги. Ноги остаются в стёганых штанах, поэтому полулаты заметно легче полного доспеха.")
   } },
-  { op: "set", pack: "armor", name: "Хиндарсфьяльский тяжёлый доспех", set: { img: `${A}c-hv-ab-lvl4.webp` } },
-  // Туссентские латы — сине-золотые
-  { op: "set", pack: "armor", name: "Латный доспех", set: { img: "icons/equipment/chest/breastplate-layered-steel-blue-gold.webp" } },
+  // Картинки из «Ведьмака 3», выбранные автором (09.10): инвентарный вид, по центру прозрачного квадрата
+  { op: "set", pack: "armor", name: "Хиндарсфьяльский тяжёлый доспех", set: { img: `${A}c-hindarsfjall-heavy-w3.webp` } },
+  { op: "set", pack: "armor", name: "Нильфгаардский латный доспех", set: { img: `${A}c-nilf-plate-w3.webp` } },
+  { op: "set", pack: "armor", name: "Броня реданского алебардщика", set: { img: `${A}c-redanian-halberdier-w3.webp` } },
+  { op: "set", pack: "armor", name: "Латный доспех", set: { img: `${A}c-plate-w3.webp` } },
+  { op: "set", pack: "armor", name: "Кольчуга гномьей работы", set: { img: `${A}c-dwarven-chainmail-w3.webp` } },
 
   /* ------------------------------ Броня: ноги ------------------------------ */
   { op: "rename", pack: "armor", from: "Кожаные штаны из Лирии", to: "Шинные поножи" },
-  // Латы Туссента — сине-стальные набедренники и наколенники; реданские — кожа со сталью в красном цвете Редании
-  { op: "set", pack: "armor", name: "Латные поножи", set: { img: "icons/equipment/leg/cuisses-plate-reticulated-steel-blue.webp" } },
-  { op: "set", pack: "armor", name: "Реданские поножи", set: { img: "icons/equipment/leg/pants-tasset-leather-steel-red.webp" } },
+  { op: "set", pack: "armor", name: "Латные поножи", set: { img: `${A}lg-plate-w3.webp` } },
+  { op: "set", pack: "armor", name: "Реданские поножи", set: { img: `${A}lg-redanian-w3.webp` } },
   { op: "set", pack: "armor", name: "Шинные поножи", set: {
+    img: `${A}lg-lyria-w3.webp`,
     "system.description": p("Поножи из продольных стальных полос-шин, нашитых на кожаную или стёганую основу. Прикрывают голени и бёдра, не сковывая шага.")
   } },
 
