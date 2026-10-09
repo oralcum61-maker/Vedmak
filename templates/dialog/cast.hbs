@@ -34,9 +34,9 @@
         <label class="chip"><input type="radio" name="payWith" value="blood" {{checked vampire.payBlood}}>
           Очки Крови <span class="dim">(есть {{vampire.blood}} из {{vampire.bloodMax}})</span></label>
         <label class="chip"><input type="radio" name="payWith" value="sta" {{checked vampire.paySta}}>
-          Выносливость <span class="dim">(есть {{sta}})</span></label>
+          Выносливость <span class="dim">({{vampire.staCost}} Вын, есть {{sta}})</span></label>
       </div>
-      <p class="hint">Выносливостью платят, когда запас ОК истощён (если заклинание это не запрещает).</p>
+      <p class="hint">Выносливостью платят, когда запас ОК истощён (если заклинание это не запрещает): 2 Вын за 1 ОК.</p>
       {{/if}}
     </div>
     {{else}}

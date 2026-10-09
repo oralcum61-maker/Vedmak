@@ -681,6 +681,12 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
         await attacker.update({ "system.blood.value": blood });
         report.lines.push(`${attacker.name}: высасывание крови +${dmg.drain} ОК (${blood}/${attacker.system.blood.max}).`);
       }
+      // После каждого Высасывания — Сопротивление Жажде крови (и в Истинной форме): провал — +1 пункт Шкалы Зверя
+      try {
+        const { drainBeastCheck } = await import("../character/true-form.mjs");
+        const line = await drainBeastCheck(attacker);
+        if (line) report.lines.push(line);
+      } catch (err) { console.error("vedmak | Шкала Зверя после Высасывания", err); }
     }
     // Адреналин: каждый нанесённый крит — кость d6 («Лес Марибора» — две), не больше Тел атакующего
     if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {

@@ -52,8 +52,31 @@ async function storagesFromMigratedLoot() {
   if (n) ui.notifications.info(`Ведьмак: перенесённая «добыча» стала хранилищами — сундуки, повозки, лавки (${n}).`);
 }
 
+/**
+ * Высший вампир — третья редакция (PLAN 4.132): у вампиров мира раса лежит копией со старыми навыками (бросок без Воли,
+ * СЛ второй редакции, прежние названия). Навыки и черты берутся из компендиума, уровни, роли и ОК — свои; когти — 4d6+3.
+ */
+async function vampireThirdEdition() {
+  const pack = game.packs.get("vedmak.races");
+  const entry = (await pack?.getIndex({ fields: ["system.key"] }))?.find(e => e.system?.key === "highVampire");
+  const source = entry ? (await pack.getDocument(entry._id)).toObject() : null;
+  if (!source) return;
+  const byKey = new Map(source.system.powers.map(p => [p.key, p]));
+  let n = 0;
+  for (const actor of game.actors) {
+    const race = actor.items.find(i => i.type === "race" && i.system.key === "highVampire");
+    if (!race) continue;
+    const powers = race.system.toObject().powers.map(p => (byKey.has(p.key) ? { ...byKey.get(p.key), value: p.value } : p));
+    await race.update({ "system.powers": powers, "system.traits": source.system.traits, "system.description": source.system.description });
+    const claws = actor.items.filter(i => i.type === "weapon" && i.name === "Когти высшего вампира" && i.system.damage === "5d6+3");
+    if (claws.length) await actor.updateEmbeddedDocuments("Item", claws.map(i => ({ _id: i.id, "system.damage": "4d6+3" })));
+    n++;
+  }
+  if (n) ui.notifications.info(`Ведьмак: высшие вампиры мира переведены на третью редакцию (${n}).`);
+}
+
 const MIGRATIONS = [{ key: "bestiaryVigor", run: bestiaryVigor }, { key: "bestiaryRotation", run: bestiaryRotation },
-  { key: "storagesFromMigratedLoot", run: storagesFromMigratedLoot }];
+  { key: "storagesFromMigratedLoot", run: storagesFromMigratedLoot }, { key: "vampireThirdEdition", run: vampireThirdEdition }];
 
 export function registerMigrationSettings() {
   game.settings.register(SYSTEM_ID, "migrationsDone", { scope: "world", config: false, type: Array, default: [] });

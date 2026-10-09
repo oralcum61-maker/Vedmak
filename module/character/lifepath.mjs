@@ -515,32 +515,36 @@ function vampireEffects(table, v, fx, entry) {
     else fx.notes.push("Клан Тдет: шанс отравления вдвое меньше");
     return;
   }
+  if (table === "vAge") {
+    skill(v <= 2 ? "streetwise" : v <= 5 ? "etiquette" : "education", 2);
+    return;
+  }
   if (table === "vEvent") {
     switch (v) {
-      case 1: fx.statMods.emp = (fx.statMods.emp ?? 0) + 1; break;
+      case 1: skill("perception", 2); break;
       case 2: skill("seduction", 2); break;
-      case 3: fx.notes.push("Заклятый враг — другой вампир: при встрече +1 к Воле"); break;
-      case 4: fx.notes.push("Сразился с ведьмаком: шанс отравления «Чёрной кровью» вдвое меньше"); break;
-      case 5: skill("monsterLore", 2); fx.notes.push("В логове — одно дикое среднее или три диких простых чудовища"); break;
-      case 6: fx.notes.push("Был «убит»: регенерация вдвое быстрее, если ПЗ ниже нуля"); break;
-      case 7: fx.notes.push("Ушёл в запой: −3 к репутации среди высших вампиров"); break;
+      case 3: skill("courage", 2); fx.notes.push("Заклятый враг — другой высший вампир"); break;
+      case 4: skill("endurance", 2); break;
+      case 5: skill("monsterLore", 2); fx.notes.push("В логове — дикое простое чудовище-питомец"); break;
+      case 6: skill("dodge", 2); fx.notes.push("Был «убит»: воскрешение временем вдвое быстрее"); break;
+      case 7: skill("intimidation", 2); fx.notes.push("Ушёл в запой: сородичи относятся с подозрением"); break;
       case 9: skill("persuasion", 1); skill("charisma", 1); fx.notes.push("Основал секту"); break;
-      case 10: fx.reputation += 5; fx.notes.push("Рыцарь в окрестностях своего логова"); break;
+      case 10: fx.reputation += 2; fx.notes.push("Рыцарь в окрестностях своего логова"); break;
     }
     return;
   }
   if (table === "vHobby") {
     switch (v) {
-      case 1: fx.notes.push("Торговля: 150 крон в неделю"); break;
-      case 2: skill("alchemy", 2); fx.notes.push("Алхимическая лаборатория и 5 формул на выбор"); break;
+      case 1: skill("business", 2); fx.notes.push("Торговля: 50 крон в неделю"); break;
+      case 2: skill("alchemy", 2); fx.notes.push("Лаборатория в логове и 2 формулы новичка"); break;
       case 3: skill("fineArts", 2); fx.notes.push("Своя мастерская"); break;
-      case 4: skill("deduction", 2); fx.notes.push("Два близких друга в местной страже"); break;
-      case 5: fx.notes.push("«Ферма»: 5 домашних людей для сбора ОК"); break;
+      case 4: skill("deduction", 2); fx.notes.push("Друг в местной страже"); break;
+      case 5: fx.notes.push("«Ферма»: двое домашних людей — раз в неделю 1d10 ОК без проверки Сопротивления Жажде"); break;
       case 6: skill("gambling", 2); fx.notes.push("Много должников в округе"); break;
-      case 7: skill("sailing", 2); fx.notes.push("Корабль с командой"); break;
+      case 7: skill("sailing", 2); fx.notes.push("Парусная лодка"); break;
       case 8: skill("riding", 2); fx.items.push("Лошадь", "Скаковое седло"); break;
-      case 9: fx.notes.push("Виноградник: 400 крон в месяц"); break;
-      case 10: fx.hpBonus += 10; fx.staBonus += 10; break;
+      case 9: skill("etiquette", 2); fx.notes.push("Виноградник: 50 крон в неделю"); break;
+      case 10: skill("athletics", 2); break;
     }
     return;
   }
@@ -553,6 +557,7 @@ function buildVampire(b) {
   const clan = b.table(origin, "vClan", "vClan", { sides: 6 });
   vampireEffects("vClan", clan.value, fx, clan);
   const age = b.table(origin, "vAge", "vAge");
+  vampireEffects("vAge", age.value, fx, age);
   b.table(origin, "vYouth", "vYouth");
 
   const ev = b.section("События жизни");
@@ -560,9 +565,10 @@ function buildVampire(b) {
   for (let i = 0; i < count; i++) {
     const e = b.table(ev, `vEvent.${i}`, "vEvent", { label: `${i + 1}-е событие` });
     if (e.value === 8) {
-      const fame = b.plain(ev, `vEvent.${i}.fame`, "Добрая или дурная слава", v => (v % 2 === 0 ? "Добрая слава: +3 к репутации" : "Дурная слава: −3 к репутации"),
-        { options: EVEN_OPTIONS("добрая слава, +3", "дурная слава, −3") });
-      fx.reputation += fame.value % 2 === 0 ? 3 : -3;
+      const fame = b.plain(ev, `vEvent.${i}.fame`, "Добрая или дурная слава", v => (v % 2 === 0 ? "Добрая слава: +2 к репутации" : "Дурная слава: +2 к Запугиванию"),
+        { options: EVEN_OPTIONS("добрая слава, +2 к репутации", "дурная слава, +2 к Запугиванию") });
+      if (fame.value % 2 === 0) fx.reputation += 2;
+      else fx.skills.intimidation = (fx.skills.intimidation ?? 0) + 2;
     } else vampireEffects("vEvent", e.value, fx, e);
   }
 

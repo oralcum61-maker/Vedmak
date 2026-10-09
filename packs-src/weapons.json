@@ -7998,7 +7998,7 @@
    "concealment": "none",
    "equipped": true,
    "source": {
-    "book": "Высший вампир. Вторая редакция",
+    "book": "Высший вампир. Третья редакция",
     "page": "8"
    },
    "category": "natural",
@@ -8053,7 +8053,7 @@
    "Естественное"
   ],
   "system": {
-   "description": "<p>Раса «Высший вампир», дополнительная атака: 5d6+3, колюще-режущий, ближний бой, кровопускание 75%.</p>",
+   "description": "<p>Раса «Высший вампир», дополнительная атака: 4d6+3, колюще-режущий, ближний бой, кровопускание 75%.</p>",
    "quantity": 1,
    "weight": 0.0,
    "cost": 0,
@@ -8061,13 +8061,13 @@
    "concealment": "none",
    "equipped": true,
    "source": {
-    "book": "Высший вампир. Вторая редакция",
+    "book": "Высший вампир. Третья редакция",
     "page": "8"
    },
    "category": "natural",
    "skill": "melee",
    "accuracy": 0,
-   "damage": "5d6+3",
+   "damage": "4d6+3",
    "damageTypes": [
     "piercing",
     "slashing"
@@ -8120,7 +8120,7 @@
    "concealment": "none",
    "equipped": true,
    "source": {
-    "book": "Высший вампир. Вторая редакция",
+    "book": "Высший вампир. Третья редакция",
     "page": "31"
    },
    "category": "natural",
@@ -8183,7 +8183,7 @@
    "concealment": "none",
    "equipped": true,
    "source": {
-    "book": "Высший вампир. Вторая редакция",
+    "book": "Высший вампир. Третья редакция",
     "page": "31"
    },
    "category": "natural",

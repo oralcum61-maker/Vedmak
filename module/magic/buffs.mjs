@@ -45,11 +45,21 @@ export function hpBonusOf(changes) {
 }
 
 /**
- * Текущие ПЗ после конца бонуса к максимуму: не выше нового максимума, но запас сверх максимума,
+ * Текущие ПЗ после конца бонуса к максимуму. base — ПЗ при наложении (флаг `hpBase`): урон сначала съедает бонус,
+ * и снимается только его непотраченный остаток — раненый, вошедший в форму и не битый, выходит таким же раненым,
+ * а не с полными ПЗ. Без base (эффекты до 09.10) — по-старому: не выше нового максимума, но запас сверх максимума,
  * который был и без бонуса (временные ПЗ зелий), не сгорает. max — максимум уже без бонуса.
  */
-export function hpAfterBonus(hp, max, bonus) {
+export function hpAfterBonus(hp, max, bonus, base = null) {
+  // Не выше нового максимума (прибавка Тел формы тоже уходит), кроме запаса сверх максимума, бывшего при наложении
+  if (Number.isFinite(base)) return Math.min(hp - Math.min(bonus, Math.max(0, hp - base)), Math.max(max, base));
   return Math.min(hp, Math.max(max, hp - bonus));
+}
+
+/** ПЗ при наложении для нескольких снимаемых эффектов: самое раннее; null, если хоть у одного не записано. */
+function hpBaseOf(effects) {
+  const bases = effects.filter(e => e.flags?.vedmak?.hpBonus > 0).map(e => e.flags.vedmak.hpBase);
+  return bases.length && bases.every(Number.isFinite) ? Math.min(...bases) : null;
 }
 
 /**
@@ -57,9 +67,9 @@ export function hpAfterBonus(hp, max, bonus) {
  * баффа идёт чтение ПЗ (начало хода: кровотечение пишет «ПЗ минус урон» от прочитанного значения), — отложенная
  * правка `clampHpLater` успевала бы после него и перезаписывала бы результат.
  */
-export async function clampHpNow(actor, bonus) {
+export async function clampHpNow(actor, bonus, base = null) {
   const { value, max } = actor.system.hp;
-  const hp = hpAfterBonus(value, max, bonus);
+  const hp = hpAfterBonus(value, max, bonus, base);
   if (hp !== value) await actor.update({ "system.hp.value": hp });
 }
 
@@ -71,24 +81,27 @@ export async function deleteEffectsClamped(actor, ids, options = {}) {
   const list = ids.filter(id => actor.effects.has(id));
   if (!list.length) return;
   const bonus = list.reduce((sum, id) => sum + (actor.effects.get(id).flags?.vedmak?.hpBonus ?? 0), 0);
+  const base = hpBaseOf(list.map(id => actor.effects.get(id)));
   await actor.deleteEmbeddedDocuments("ActiveEffect", list, { ...options, vedmakHpHandled: true });
-  if (bonus > 0) await clampHpNow(actor, bonus);
+  if (bonus > 0) await clampHpNow(actor, bonus, base);
 }
 
 /** Снятые эффекты с бонусом к ПЗ, по акторам: несколько в одном удалении — одна правка. */
 const endedHpBonus = new Map();
 
 /** Урезание ПЗ для ручного удаления (хук): после всех хуков этого удаления, без ожидания. */
-function clampHpLater(actor, bonus) {
+function clampHpLater(actor, effect) {
   const queued = endedHpBonus.has(actor);
-  endedHpBonus.set(actor, (endedHpBonus.get(actor) ?? 0) + bonus);
+  if (!queued) endedHpBonus.set(actor, []);
+  endedHpBonus.get(actor).push(effect);
   if (queued) return;
   // Хуки удаления идут подряд для всех снятых эффектов — правка после них, одна на всех
   queueMicrotask(() => {
-    const total = endedHpBonus.get(actor);
+    const ended = endedHpBonus.get(actor);
     endedHpBonus.delete(actor);
+    const total = ended.reduce((sum, e) => sum + e.flags.vedmak.hpBonus, 0);
     const { value, max } = actor.system.hp;
-    const hp = hpAfterBonus(value, max, total);
+    const hp = hpAfterBonus(value, max, total, hpBaseOf(ended));
     if (hp !== value) actor.update({ "system.hp.value": hp }).catch(err => console.error("vedmak | ПЗ после баффа", err));
   });
 }
@@ -104,13 +117,14 @@ export async function applyBuff(actor, buff) {
   let hp = actor.system.hp.value;
   if (same.length) {
     const oldBonus = same.reduce((sum, e) => sum + (e.flags.vedmak.hpBonus ?? 0), 0);
+    const oldBase = hpBaseOf(same);
     // ПЗ пересчитываются здесь, а не хуком удаления: иначе прибавка ниже прочла бы ещё не урезанные ПЗ
     await actor.deleteEmbeddedDocuments("ActiveEffect", same.map(e => e.id), { vedmakHpHandled: true });
-    if (oldBonus) hp = hpAfterBonus(hp, actor.system.hp.max, oldBonus);
+    if (oldBonus) hp = hpAfterBonus(hp, actor.system.hp.max, oldBonus, oldBase);
   }
   const hpBonus = hpBonusOf(buff.changes);
   const vedmak = { spellBuff: { name: buff.name, casterUuid: buff.casterUuid, itemId: buff.itemId, maintain: !!buff.maintain } };
-  if (hpBonus > 0) vedmak.hpBonus = hpBonus;
+  if (hpBonus > 0) Object.assign(vedmak, { hpBonus, hpBase: hp });
   if (buff.immune?.length) vedmak.immune = buff.immune;
   if (buff.rollMods) vedmak.rollMods = buff.rollMods;
   // Бросок заклинателя и цена в Вын: по ним Рассеивание решает, снимается ли эффект (стр. 102)
@@ -161,7 +175,7 @@ export function registerBuffHooks() {
   Hooks.on("deleteActiveEffect", (effect, options, userId) => {
     const bonus = effect.flags?.vedmak?.hpBonus;
     if (!(bonus > 0) || userId !== game.user.id || options?.vedmakHpHandled) return;
-    if (effect.parent?.documentName === "Actor") clampHpLater(effect.parent, bonus);
+    if (effect.parent?.documentName === "Actor") clampHpLater(effect.parent, effect);
   });
   Hooks.on("deleteActiveEffect", (effect, options) => {
     const maintain = effect.flags?.vedmak?.maintain;

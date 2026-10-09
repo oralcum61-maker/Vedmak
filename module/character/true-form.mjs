@@ -1,6 +1,7 @@
-// Истинная форма высшего вампира («Высший вампир. Вторая редакция», стр. 31–35): превращение за Очки Крови
-// с откатом, бонусы по уровню Превращения, органическая броня вместо надетой, регенерация в начале хода, укус
-// и когти формы, страх, проверки Сопротивления Зверю и звериный срыв при полной Шкале Зверя.
+// Истинная форма высшего вампира («Высший вампир», третья редакция с правками автора 09.10): превращение за Очки
+// Крови с откатом, бонусы по уровню Превращения, органическая броня — временные ПЗ (+30/50/60, надетая не действует),
+// регенерация в начале хода, укус и когти формы, страх, проверки контроля и звериный срыв при полной Шкале Зверя:
+// вернуть разум — 3 успеха против СЛ 18, не обязательно подряд, каждый провал снижает СЛ на 2 (не ниже 10).
 // Форма — эффект актора с флагом `trueForm` и сроком `timed` (раунды в бою отсчитывает magicStartOfTurn,
 // вне боя срок — время мира, timed.mjs); снятие эффекта убирает оружие формы и даёт усталость выхода.
 
@@ -30,13 +31,14 @@ export function formTier(level) {
   const perks = [];
   if (level >= 3) perks.push("+2 к Атлетике и Уклонению (учтено), +2 к физической защите; вертикальный рывок до 6 м без проверки; Укус по кровоточащей цели — +1d6 ОК");
   if (level >= 5) perks.push("+2 м к Бегу (учтено); первая атака после вертикального перемещения +2 к попаданию; регенерация 2d6, если в этом раунде ранено существо с кровью");
-  if (level >= 7) perks.push("Укус +2 по напуганной, раненой или кровоточащей цели; когти бьют двух целей одним действием; раз в сцену — проигнорировать критический эффект (не серебро, огонь, сильная магия) и стабилизировать лёгкий; после убийства существа с кровью — +2d6 ОК");
+  if (level >= 7) perks.push("Укус +2 по напуганной, раненой или кровоточащей цели; когти бьют двух целей одним действием; раз в сцену — не учитывать критическое ранение (не магический огонь, не сильная магия) и само стабилизировать лёгкое; после убийства существа с кровью — +2d6 ОК");
   if (level >= 9) perks.push("раз за превращение — ужасающий рывок до 10 м и сразу атака когтями или Укусом; раз за превращение — переброс проваленного Сопротивления Зверю");
   return {
-    armor: level >= 9 ? 60 : level >= 7 ? 50 : 30,
+    // Органическая броня третьей редакции — временные ПЗ, как у «Полнолуния»
+    tempHp: level >= 9 ? 60 : level >= 7 ? 50 : 30,
     regen: level >= 9 ? "2d6" : level >= 3 ? "1d6+2" : "1d6",
     beastBonus: level >= 9 ? 3 : level >= 7 ? 2 : level >= 5 ? 1 : 0,
-    controlDc: level >= 5 ? 13 : 15,
+    controlDc: level >= 5 ? 12 : 14,
     fearBonus: level >= 5 ? 2 : 0,
     fearArea: level >= 9,
     exitTired: level <= 4,
@@ -155,17 +157,22 @@ export async function transform(actor, { forced = false, skipDialog = false } = 
   const changes = ["ref", "dex", "spd", "body"].map(k => ({ key: `system.stats.${k}.mod`, type: "add", value: 5, phase: "initial" }));
   if (level >= 3) changes.push(...["athletics", "dodge"].map(k => ({ key: `system.skills.${k}.mod`, type: "add", value: 2, phase: "initial" })));
   if (level >= 5) changes.push({ key: "system.fx.run", type: "add", value: 2, phase: "initial" });
+  // Временные ПЗ: бонус к максимуму и к текущим; при выходе сначала снимается непотраченный бонус (magic/buffs.mjs)
+  changes.push({ key: "system.bonus.hp", type: "add", value: tier.tempHp, phase: "initial" });
   const data = {
     name: "Истинная форма", img: IMG, transfer: false,
-    description: `<p>Уровень Превращения ${level}. Органическая броня ${tier.armor} вместо надетой, регенерация ${tier.regen} ПЗ в начале хода, Укус и Когти формы.</p>`,
+    description: `<p>Уровень Превращения ${level}. Все ПЗ восстановлены, органическая броня — ${tier.tempHp} временных ПЗ (надетая броня не действует), регенерация ${tier.regen} ПЗ в начале хода, Укус и Когти формы.</p>`,
     system: { changes },
     flags: { [SYS]: {
-      [FLAG]: { level, armor: tier.armor, regen: tier.regen, forced, frenzy: forced || beast >= 10, streak: 0 },
+      [FLAG]: { level, armor: 0, regen: tier.regen, forced, frenzy: forced || beast >= 10, streak: 0, fails: 0 },
+      hpBonus: tier.tempHp, hpBase: actor.system.hp.max,
       timed: { key: TRUE_FORM_KEY, rounds: combat ? rounds : 0 }
     } }
   };
   if (!combat) data.duration = roundsAsTime(rounds);
   await actor.createEmbeddedDocuments("ActiveEffect", [data]);
+  // Превращение восстанавливает все ПЗ (решение автора 09.10), временные ПЗ брони — сверху, в новом максимуме
+  await actor.update({ "system.hp.value": actor.system.hp.max });
 
   // Оружие формы
   const weapons = [];
@@ -185,10 +192,10 @@ export async function transform(actor, { forced = false, skipDialog = false } = 
   const fearSkill = actor.system.skills.intimidation;
   const fearDc = (fearSkill?.base ?? 0) + 3 + tier.fearBonus;
   const body = [
-    forced ? "<p><b>Звериный срыв:</b> форма принята насильно — без ОК и отката. Разум уступает место Зверю; поведение определяет ведущий. Вернуть разум — 3 успешные проверки Сопротивления Зверю подряд со СЛ 20.</p>"
+    forced ? "<p><b>Звериный срыв:</b> форма принята насильно — без ОК и отката. Зверь нападает на ближайшее существо с кровью, союзников тоже; остальное поведение определяет ведущий. Вернуть разум — 3 успеха Сопротивления Жажде крови против СЛ 18, не обязательно подряд; каждый провал снижает СЛ на 2.</p>"
       : `<p>Потрачено ${COST} ОК. Следующее превращение — через ${tier.cooldownText}.</p>`,
     `<p>Длительность: <b>${rounds}</b> раундов (1d6 + ${level}). Продлить на 1d6 раундов — ${EXTEND_COST} ОК.</p>`,
-    `<ul><li>+5 к Реа, Лвк, Скор и Тел</li><li>органическая броня ${tier.armor} на всё тело — надетая броня не учитывается</li>`
+    `<ul><li>+5 к Реа, Лвк, Скор и Тел</li><li>все ПЗ восстановлены</li><li>органическая броня: +${tier.tempHp} временных ПЗ — надетая броня не действует</li>`
       + `<li>регенерация ${tier.regen} ПЗ в начале каждого хода</li><li>перемещение по горизонтали и вертикали</li>`
       + `<li>Укус 8d6 (кровопускание 100%, улучшенное пробитие, высасывание крови без проверки) и Когти 6d6+3</li>`
       + tier.perks.map(x => `<li>${x}</li>`).join("") + "</ul>",
@@ -197,7 +204,7 @@ export async function transform(actor, { forced = false, skipDialog = false } = 
       + " нельзя добровольно приблизиться в следующий ход, атаковать в ближнем бою — только после проверки Воли;"
       + ` низшие вампиры и животные отступают или замирают${tier.fearArea ? "; провалившие −3 к атаке и не приближаются до конца следующего раунда" : ""}.</p>`,
     ...lines.map(l => `<p>${l}</p>`),
-    !forced && beast >= 10 ? "<p><b>Шкала Зверя заполнена — звериный срыв:</b> вернуть разум — 3 успешные проверки Сопротивления Зверю подряд со СЛ 20.</p>" : ""
+    !forced && beast >= 10 ? "<p><b>Шкала Зверя заполнена — звериный срыв:</b> вернуть разум — 3 успеха против СЛ 18, не обязательно подряд; каждый провал снижает СЛ на 2.</p>" : ""
   ].join("");
   // Ужас: выбранные цели (враги, видящие превращение) проверяют Храбрость
   const fear = await fearChecks(actor, fearDc);
@@ -274,24 +281,47 @@ export async function endForm(actor) {
   return true;
 }
 
-/** Срыв: попытка вернуть разум — Сопротивление Зверю СЛ 20, нужно 3 успеха подряд. */
+/** СЛ возврата разума: 18, каждый провал в этом срыве — −2, не ниже 10 (правка автора 09.10). */
+export const regainDc = f => Math.max(10, 18 - 2 * (f?.fails ?? 0));
+
+/** Срыв: попытка вернуть разум — 3 успеха Сопротивления Жажде крови, не обязательно подряд. */
 export async function regainControl(actor) {
   const eff = trueFormEffect(actor);
   const f = eff?.flags[SYS][FLAG];
   if (!f?.frenzy) return null;
   const tier = formTier(f.level ?? 0);
-  const res = await beastCheck(actor, { dc: 20, bonus: tier.beastBonus, subtitle: `Звериный срыв: ${f.streak ?? 0} из 3 успехов подряд` });
+  const dc = regainDc(f);
+  const res = await beastCheck(actor, { dc, bonus: tier.beastBonus, subtitle: `Звериный срыв: ${f.streak ?? 0} из 3 успехов, СЛ ${dc}` });
   if (!res) return null;
-  const streak = res.success ? (f.streak ?? 0) + 1 : 0;
+  const streak = (f.streak ?? 0) + (res.success ? 1 : 0);
+  const fails = (f.fails ?? 0) + (res.success ? 0 : 1);
   if (streak >= 3) {
-    await eff.update({ [`flags.${SYS}.${FLAG}.frenzy`]: false, [`flags.${SYS}.${FLAG}.streak`]: 0 });
-    await postCard(actor, "Разум вернулся", `<p>Три успеха подряд: вампир снова владеет собой.</p>
+    await eff.update({ [`flags.${SYS}.${FLAG}.frenzy`]: false, [`flags.${SYS}.${FLAG}.streak`]: 0, [`flags.${SYS}.${FLAG}.fails`]: 0 });
+    // После срыва Шкала Зверя опускается до 5
+    if ((actor.system.beast?.value ?? 0) > 5) await actor.update({ "system.beast.value": 5 }, { vedmakBeastHandled: true });
+    await postCard(actor, "Разум вернулся", `<p>Три успеха: вампир снова владеет собой. Шкала Зверя — 5.</p>
       <p class="hint">На выбор ведущего: остаться в Истинной форме до конца срока или сразу выйти — тогда −1d6 Вын и −3 ко всем действиям до конца сцены.</p>`,
       { icon: "fa-solid fa-brain" });
   } else {
-    await eff.update({ [`flags.${SYS}.${FLAG}.streak`]: streak });
+    await eff.update({ [`flags.${SYS}.${FLAG}.streak`]: streak, [`flags.${SYS}.${FLAG}.fails`]: fails });
   }
   return res;
+}
+
+/**
+ * После Высасывания крови — проверка Сопротивления Жажде крови против СЛ 14 (третья редакция); в Истинной форме это
+ * проверка контроля с бонусом уровня, Шкала Зверя растёт и в форме (правка автора 09.10). Провал — +1 пункт.
+ * @returns {Promise<string>} строка для карточки урона
+ */
+export async function drainBeastCheck(actor) {
+  const eff = trueFormEffect(actor);
+  if (eff?.flags[SYS][FLAG]?.frenzy) return "";
+  const bonus = eff ? formTier(eff.flags[SYS][FLAG].level ?? 0).beastBonus : 0;
+  const res = await beastCheck(actor, { dc: 14, bonus, subtitle: "После Высасывания крови" });
+  if (!res || res.success) return `${actor.name}: Сопротивление Жажде крови — Зверь сдержан.`;
+  const beast = Math.min(10, (actor.system.beast?.value ?? 0) + 1);
+  await actor.update({ "system.beast.value": beast });
+  return `${actor.name}: Сопротивление Жажде крови провалено — Шкала Зверя ${beast}/10.`;
 }
 
 /** Начало хода: регенерация формы. */
@@ -304,7 +334,7 @@ export async function trueFormStartOfTurn(actor) {
   const heal = Math.min(roll.total, Math.max(0, hp.max - hp.value));
   if (heal) await actor.update({ "system.hp.value": hp.value + heal });
   const lines = [`Истинная форма: регенерация ${f.regen} = ${roll.total}${heal < roll.total ? `, восстановлено ${heal}` : ""} ПЗ.`];
-  if (f.frenzy) lines.push("Звериный срыв: вампир действует как хищник; в конце раунда — попытка вернуть разум (Сопротивление Зверю СЛ 20).");
+  if (f.frenzy) lines.push(`Звериный срыв: Зверь нападает на ближайшее существо с кровью; в конце раунда — попытка вернуть разум (СЛ ${regainDc(f)}, успехов ${f.streak ?? 0} из 3).`);
   return lines;
 }
 
@@ -329,7 +359,7 @@ async function formEnded(effect) {
 async function beastFull(actor) {
   const level = actor.system.race?.system.power?.("trueForm")?.value ?? 0;
   if (level >= 9) {
-    const res = await beastCheck(actor, { dc: 15, bonus: formTier(level).beastBonus, subtitle: "Полная Шкала Зверя: внеочередная проверка" });
+    const res = await beastCheck(actor, { dc: 14, bonus: formTier(level).beastBonus, subtitle: "Полная Шкала Зверя: внеочередная проверка" });
     if (res?.success) {
       await actor.update({ "system.beast.value": 9 });
       return postCard(actor, "Зверь сдержан", "<p>Срыва нет, Шкала Зверя −1.</p>", { icon: "fa-solid fa-shield-heart" });
@@ -338,8 +368,8 @@ async function beastFull(actor) {
   const eff = trueFormEffect(actor);
   if (eff) {
     if (eff.flags[SYS][FLAG].frenzy) return;
-    await eff.update({ [`flags.${SYS}.${FLAG}.frenzy`]: true, [`flags.${SYS}.${FLAG}.streak`]: 0 });
-    return postCard(actor, "Звериный срыв", "<p>Шкала Зверя заполнена: вампир теряет контроль в Истинной форме. Вернуть разум — 3 успешные проверки Сопротивления Зверю подряд со СЛ 20.</p>",
+    await eff.update({ [`flags.${SYS}.${FLAG}.frenzy`]: true, [`flags.${SYS}.${FLAG}.streak`]: 0, [`flags.${SYS}.${FLAG}.fails`]: 0 });
+    return postCard(actor, "Звериный срыв", "<p>Шкала Зверя заполнена: вампир теряет контроль в Истинной форме. Вернуть разум — 3 успеха против СЛ 18, не обязательно подряд; каждый провал снижает СЛ на 2.</p>",
       { icon: "fa-solid fa-skull" });
   }
   return transform(actor, { forced: true });

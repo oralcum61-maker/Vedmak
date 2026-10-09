@@ -261,7 +261,7 @@ async function castDialog(actor, item, cfg, targets) {
     kindLabel: CONFIG.VEDMAK.MAGIC_KINDS[s.kind], levelLabel: levelLabel(s.kind, s.level),
     isRitual: s.kind === "ritual", isHex: s.kind === "hex", noPlaces: s.kind === "hex" || !!vb,
     vampire: vb ? {
-      cost: s.staCost, staOnly: s.resource === "sta", payBlood: cfg.payWith === "blood", paySta: cfg.payWith === "sta",
+      cost: s.staCost, staCost: s.staCost * 2, staOnly: s.resource === "sta", payBlood: cfg.payWith === "blood", paySta: cfg.payWith === "sta",
       blood: actor.system.blood?.value ?? 0, bloodMax: actor.system.blood?.max ?? 0
     } : null,
     maxCost, costDots, costNote: costNote(auto, cfg.cost),
@@ -353,16 +353,19 @@ export async function performCast(actor, item, cfg, targets) {
     ui.notifications.warn(`${actor.name}: не хватает Очков Крови (${actor.system.blood?.value ?? 0} из ${paid}).`);
     return null;
   }
-  if (!payBlood && actor.system.sta.value < paid) {
-    ui.notifications.warn(`${actor.name}: не хватает Вын (${actor.system.sta.value} из ${paid}).`);
+  // Вампирская магия за ОК, оплаченная Выносливостью, — 2 Вын за 1 ОК (третья редакция); «Теневой рывок» и другие
+  // заклинания с ценой в Вын — как написано
+  const staPaid = vamp && !payBlood && s.resource !== "sta" ? paid * 2 : paid;
+  if (!payBlood && actor.system.sta.value < staPaid) {
+    ui.notifications.warn(`${actor.name}: не хватает Вын (${actor.system.sta.value} из ${staPaid}).`);
     return null;
   }
-  const staAfter = payBlood ? actor.system.sta.value : actor.system.sta.value - paid;
+  const staAfter = payBlood ? actor.system.sta.value : actor.system.sta.value - staPaid;
   const update = payBlood ? { "system.blood.value": actor.system.blood.value - paid } : { "system.sta.value": staAfter };
   if (overload) update["system.hp.value"] = actor.system.hp.value - overload * 5;
   await actor.update(update);
   if (!vamp) await addVigorUsed(actor, paid);
-  if (vamp) notes.push(payBlood ? `Оплачено: ${paid} ОК.` : `Оплачено: ${paid} Вын.`);
+  if (vamp) notes.push(payBlood ? `Оплачено: ${paid} ОК.` : `Оплачено: ${staPaid} Вын${staPaid !== paid ? ` (2 Вын за 1 ОК)` : ""}.`);
   if (focus) notes.push(`Фокус «${d.focusItem}»: −${focus} к затратам.`);
   if (overload) selfLines.push(`Перегрузка на ${overload}: −${overload * 5} ПЗ.`);
 
