@@ -2017,9 +2017,8 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
   width: 100%;
   margin: 0 auto .35rem;
   font-family: var(--vd-font-body);
-  /* Три четверти прежнего (автор 10.10: −35%, затем +15% от этого): zoom, а не transform — место в панели сжимается
-     вместе с худом */
-  zoom: .75;
+  /* 0,85 прежнего размера (подобрано автором 10.10): zoom, а не transform — место в панели сжимается вместе с худом */
+  zoom: .85;
 }
 /* Худ поверх строки чата справа: средняя колонка интерфейса (в ней нижняя панель) встаёт над правой (z-index 30) */
 #ui-middle:has(> #ui-bottom > #vedmak-combat-hud) { z-index: 31; }
