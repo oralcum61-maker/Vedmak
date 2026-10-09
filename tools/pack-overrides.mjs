@@ -12,11 +12,36 @@
 //   remove — {pack, name}: удалить документ и чертёж, который его делает
 //   copy   — {pack, from, name, set}: новый документ по образцу (id — из имени, как у build-packs)
 //   each   — {pack, set}: одно и то же поле всем документам пакета
+//   loot   — {pack, where(doc), row: {name, quantity, uuid}}: строка добычи существам, подходящим под where, —
+//            дописывается к их добыче, если такой строки ещё нет
+
+import { createHash } from "node:crypto";
 
 const W = "systems/vedmak/assets/fan/weapons/";
 const A = "systems/vedmak/assets/fan/armor/";
 const H = "icons/equipment/head/";
 const p = text => `<p>${text}</p>`;
+
+/** Сохранённые части «Тома Хаоса»: [имя, значок (icons/commodities/…), что это]. */
+const PRESERVED = [
+  ["Сохранённая голова", "bones/skull-canine-beige.webp", "Голова чудовища, сохранённая алхимически: мозг и железы годны для пересадки."],
+  ["Сохранённые крылья", "biological/wing-lizard-brown.webp", "Пара крыльев чудовища с костями и мышцами, сохранённая алхимически."],
+  ["Сохранённая конечность", "biological/hand-clawed-brown.webp", "Лапа, щупальце или хвост чудовища с костью и мышцами, сохранённые алхимически."]
+];
+/** Классы чудовищ с телом, с которого можно что-то срезать (люди, призраки и элементали — нет). */
+const BODILY = ["beast", "hybrid", "vampire", "cursed", "relict", "ogroid", "necrophage", "insectoid", "draconid"];
+/** Строка добычи — ссылка на компонент: id тот же, что даёт build-packs (stableId «пакет:тип:имя»). */
+function preservedRow(name) {
+  return { name, quantity: "1", uuid: `Compendium.vedmak.components.Item.${stableId(`components:component:${name}`)}` };
+}
+/** Тот же стабильный id, что у build-packs.mjs. */
+function stableId(key) {
+  const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  let n = BigInt("0x" + createHash("sha1").update(key).digest("hex"));
+  let out = "";
+  while (out.length < 16) { out += alphabet[Number(n % 62n)]; n /= 62n; }
+  return out;
+}
 
 export const OVERRIDES = [
   /* ---------------------------- Оружие (30.09) ---------------------------- */
@@ -171,7 +196,40 @@ export const OVERRIDES = [
       "system.description": p("Мутаген из добычи чудовища. Какой именно мутаген этого цвета и что он даёт, решает ведущий.") } })),
   // Знаки ведьмака — значками автора (07.10): заклинания вживлённых глифов показывают те же знаки
   ...[["Аард", "aard"], ["Квен", "quen"], ["Игни", "igni"], ["Ирден", "yrden"], ["Аксий", "axii"]].map(([sign, file]) => ({
-    op: "set", pack: "magic", name: `Вживлённый глиф: ${sign}`, set: { img: `systems/vedmak/assets/fan/magic/sg-${file}.webp` } }))
+    op: "set", pack: "magic", name: `Вживлённый глиф: ${sign}`, set: { img: `systems/vedmak/assets/fan/magic/sg-${file}.webp` } })),
+
+  /* ---------------- «Том Хаоса»: сохранённые части и слот зачарования (09.10) ---------------- */
+  // Чертежи мутаций требуют сохранённых голову, крылья и конечность — это части чудовищ, их срезают с туши
+  ...PRESERVED.map(([name, img, text]) => ({
+    op: "copy", pack: "components", from: "Кости животных", name, set: {
+      img: `icons/commodities/${img}`, "system.cost": 150, "system.weight": 2, "system.availability": "rare",
+      "system.source": { book: "Том Хаоса", page: "" }, "system.substance": "", "system.forage": { where: "", quantity: "", dc: 0 },
+      "system.description": p(`${text} Компонент чертежей мутаций «Тома Хаоса»; часть срезают с туши чудовища и сохраняют до работы.`)
+    } })),
+  // Голова и конечность — у всех телесных чудовищ (не люди, не призраки и не элементали), крылья — у летающих
+  { op: "loot", pack: "bestiary", where: m => BODILY.includes(m.system?.monsterClass), row: preservedRow("Сохранённая голова") },
+  { op: "loot", pack: "bestiary", where: m => BODILY.includes(m.system?.monsterClass), row: preservedRow("Сохранённая конечность") },
+  { op: "loot", pack: "bestiary", where: m => (m.system?.abilities ?? []).some(a => /^Пол[её]т/i.test(a.name ?? "")), row: preservedRow("Сохранённые крылья") },
+  // Медвежья форма берсерка («Новые профессии», «Том магии Альзура», стр. 35): оружие выдаётся на время формы
+  // (character/bear-form.mjs). «Сокрушающая сила» — свойство книги, в автоматике боя её нет: пометка в описании
+  { op: "copy", pack: "weapons", from: "Когти (Истинная форма)", name: "Удар когтями (Медвежья форма)", set: {
+    img: "icons/creatures/claws/claw-bear-paw-swipe-brown.webp", "system.damage": "4d6+5", "system.damageTypes": ["slashing"],
+    "system.effects": [], "system.attackSpeed": 2, "system.source": { book: "Новые профессии", page: "" },
+    "system.description": p("Берсерк в медвежьей форме: 4d6+5, Сокрушающая сила, 2 атаки за действие. «Острые когти» прибавляют половину уровня к урону и кровопускание.")
+  } },
+  { op: "copy", pack: "weapons", from: "Укус (Истинная форма)", name: "Укус (Медвежья форма)", set: {
+    img: "icons/creatures/abilities/bear-roar-bite-brown-green.webp", "system.damage": "8d6", "system.damageTypes": ["piercing"],
+    "system.effects": [{ key: "bleeding", value: "75%", source: "" }], "system.attackSpeed": 1,
+    "system.source": { book: "Новые профессии", page: "" },
+    "system.description": p("Берсерк в медвежьей форме: 8d6, Сокрушающая сила, кровопускание 75%.")
+  } },
+  // Чертёж «Слот зачарования» (стр. 115): изделие — пустая ячейка усиления для предмета (crafting/enhancements.mjs, вид «slot»)
+  { op: "copy", pack: "enhancements", from: "Руна «Чернобог»", name: "Слот зачарования", set: {
+    img: "icons/magic/symbols/rune-sigil-green-purple.webp", "system.kind": "slot", "system.cost": 1368, "system.weight": 0,
+    "system.availability": "rare", "system.source": { book: "Том Хаоса", page: "115" }, "system.weaponEffect": { key: "", value: "" },
+    "system.effect": "Добавляет оружию или броне пустую ячейку усиления — для рун и глифов. Нужны полная надёжность (у брони — полная ПБ); больше трёх ячеек у предмета не бывает.",
+    "system.description": p("Метеоритная сталь и дымная пыль, вплавленные в предмет: четыре часа работы и проверка Ремесла (СЛ 25) дают ему пустую ячейку усиления. В неё войдут только руны и глифы. У предмета должны быть полная надёжность или ПБ; больше трёх ячеек не бывает.")
+  } }
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -242,6 +300,13 @@ export function applyOverrides(packs) {
       // Чертёж, который делает удалённый предмет
       const recipes = packs.recipes ?? [];
       for (let j = recipes.length - 1; j >= 0; j--) if (recipes[j].system?.result?.name === o.name) recipes.splice(j, 1);
+      applied++;
+    } else if (o.op === "loot") {
+      for (const doc of docs) {
+        if (!o.where(doc)) continue;
+        const loot = doc.system.loot ??= [];
+        if (!loot.some(l => l.name === o.row.name)) loot.push(structuredClone(o.row));
+      }
       applied++;
     } else if (o.op === "copy") {
       if (find(o.pack, o.name)) continue;

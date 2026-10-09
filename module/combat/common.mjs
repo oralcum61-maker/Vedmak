@@ -62,6 +62,8 @@ export function isReadyWeapon(actor, item) {
   if (!item || actor?.type === "monster") return true;
   // В Истинной форме вместо обычных укуса и когтей расы — оружие формы
   if (actor?.system?.derived?.trueForm && actor.system.race?.system.grants?.includes(item.name)) return false;
+  // Медвежья форма: снаряжение превратилось вместе с берсерком — бьют только когти и зубы медведя
+  if (actor?.system?.derived?.bearForm) return !!item.flags?.vedmak?.bearFormWeapon;
   // Ручной арбалет или скрытый клинок в протезе — всегда при себе
   return !!item.system.equipped || item.system.category === "natural" || !!weaponMount(actor, item);
 }

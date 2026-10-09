@@ -6,6 +6,7 @@ import { renderTemplate } from "../util.mjs";
 import { wearArmor } from "./damage.mjs";
 import { magicStartOfTurn } from "../magic/effects.mjs";
 import { trueFormStartOfTurn } from "../character/true-form.mjs";
+import { bearFormStartOfTurn } from "../character/bear-form.mjs";
 import { expireAlchemy } from "../crafting/alchemy.mjs";
 import { expireZonesForTurn } from "./zones.mjs";
 import { repeatZonesForTurn } from "../magic/cast.mjs";
@@ -145,6 +146,7 @@ export async function startOfTurn(actor, combat, context) {
   };
   await step("алхимия", () => expireAlchemy(actor));
   await step("Истинная форма", () => trueFormStartOfTurn(actor));
+  await step("медвежья форма", () => bearFormStartOfTurn(actor));
   await step("магия", () => magicStartOfTurn(actor));
   await step("зоны", () => expireZonesForTurn(actor, combat));
   await step("повтор зон", () => repeatZonesForTurn(actor, combat));

@@ -17,6 +17,7 @@ import { useAlchemical } from "../crafting/alchemy.mjs";
 import { ALCHEMY_ACTIONS } from "../config/crafting.mjs";
 import { flipToken, canFlip } from "./token-flip.mjs";
 import { transform, extendForm, endForm, regainControl, trueFormState } from "../character/true-form.mjs";
+import { bearFormState, bearTransform, bearRevert, MARDREM } from "../character/bear-form.mjs";
 import { animateVitals } from "../fx/sheet-motion.mjs";
 import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
 import { levelLabel } from "../config/magic.mjs";
@@ -71,6 +72,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       restTurn: CombatHud.#onRestTurn,
       aimTurn: CombatHud.#onAimTurn,
       trueForm: CombatHud.#onTrueForm,
+      bearForm: CombatHud.#onBearForm,
       manualDamage: CombatHud.#onManualDamage,
       controlCheck: CombatHud.#onControlCheck,
       ram: CombatHud.#onRam,
@@ -452,6 +454,13 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
         if (st.frenzy) return { action: "regain", label: `Вернуть разум ${st.streak}/3`, hint: "Сопротивление Зверю СЛ 20, 3 успеха подряд", bad: true };
         return { action: "end", label: `Выйти из формы${st.rounds ? ` · ${st.rounds} р.` : ""}`, hint: "Shift — продлить на 1d6 раундов за 10 ОК" };
       })() : null,
+      // Берсерк: медвежья форма одной кнопкой
+      bearForm: isCharacter ? (() => {
+        const st = bearFormState(actor);
+        if (!st.available) return null;
+        if (st.active) return { action: "end", label: `Снова человек${st.hours ? ` · ${st.hours} ч` : ""}`, hint: `Самоконтроль в бою — СЛ ${st.dc}. ПЗ при возврате вдвое меньше` };
+        return { action: "go", label: "Медвежья форма", hint: st.mardrem ? `Съесть ${MARDREM} (есть ${st.mardrem})` : `Нет грибов «${MARDREM}»`, off: !st.mardrem };
+      })() : null,
       adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && isCharacter; } catch { return false; } })(),
       adrenaline: system.adrenaline?.value ?? 0,
       skillOptions: Object.entries(SKILLS).filter(([k]) => system.skills?.[k]).map(([, s]) => s.label),
@@ -501,6 +510,12 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /** Истинная форма: превратиться, вернуть разум при срыве или выйти (Shift — продлить). */
+  /** Медвежья форма берсерка: обратиться (съесть мардрём) или вернуться в человеческий облик. */
+  static async #onBearForm(event, target) {
+    if (!this.actor) return;
+    return target.dataset.form === "go" ? bearTransform(this.actor) : bearRevert(this.actor);
+  }
+
   static async #onTrueForm(event, target) {
     const actor = this.actor;
     if (!actor) return;

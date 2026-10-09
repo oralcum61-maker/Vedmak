@@ -86,7 +86,8 @@ export function clueSkills(actor, typeKey) {
 /* ---------------------------- Проверка улики ---------------------------- */
 
 /**
- * Проверка улики персонажем: окно выбора навыка и лишнего времени, бросок у себя, итог — ведущему.
+ * Проверка улики персонажем: окно выбора навыка и лишнего времени у игрока, бросок — у ведущего (итог, присланный
+ * игроком, можно было подделать из консоли).
  */
 export async function evidenceCheck(actor, mysteryId, clueId) {
   const m = mysteries().find(x => x.id === mysteryId);
@@ -120,22 +121,26 @@ export async function evidenceCheck(actor, mysteryId, clueId) {
     rejectClose: false
   });
   if (!choice || choice === "cancel") return null;
-  const extraParts = [];
-  if (choice.time) extraParts.push({ label: "Лишнее время", value: choice.time });
-  if (clue.damaged) extraParts.push({ label: "Улика повреждена", value: -5 });
-  const subtitle = `Улика: ${clue.name} · ${type.label}`;
-  const result = choice.skill === "defining"
-    ? await actor.rollDefining({ subtitle })
-    : await actor.rollSkill(choice.skill, { subtitle, extraParts });
-  if (!result) return null;
-  // Определяющий навык бросается без лишних слагаемых — поправки прибавляем к итогу здесь
-  const total = result.total + (choice.skill === "defining" ? extraParts.reduce((s, p) => s + p.value, 0) : 0);
-  return asGM("invEvidence", {
-    mysteryId, clueId, actorUuid: actor.uuid, total, fumble: !!result.fumble, time: choice.time
-  });
+  return asGM("invEvidence", { mysteryId, clueId, actorUuid: actor.uuid, skill: choice.skill, time: choice.time });
 }
 
-registerGMHandler("invEvidence", async ({ mysteryId, clueId, actorUuid, total, fumble, time, duel }, userId) => {
+/** Бросок улики у ведущего: навык — только из подходящих улике, поправки — по её состоянию. */
+async function rollEvidence(actor, clue, type, skill, time) {
+  if (!clueSkills(actor, clue.type).some(s => s.key === skill)) return null;
+  const extraParts = [];
+  if (time) extraParts.push({ label: "Лишнее время", value: time });
+  if (clue.damaged) extraParts.push({ label: "Улика повреждена", value: -5 });
+  const subtitle = `Улика: ${clue.name} · ${type.label}`;
+  const result = skill === "defining"
+    ? await actor.rollDefining({ subtitle, skipDialog: true })
+    : await actor.rollSkill(skill, { subtitle, extraParts, skipDialog: true });
+  if (!result) return null;
+  // Определяющий навык бросается без лишних слагаемых — поправки прибавляем к итогу здесь
+  const total = result.total + (skill === "defining" ? extraParts.reduce((s, p) => s + p.value, 0) : 0);
+  return { total, fumble: !!result.fumble };
+}
+
+registerGMHandler("invEvidence", async ({ mysteryId, clueId, actorUuid, skill, time, duel }, userId) => {
   const actor = resolveActor(actorUuid);
   if (!actor || !userOwnsAny(userId, actor)) return console.warn(`vedmak | отклонена проверка улики от ${game.users.get(userId)?.name ?? userId}`);
   // Победу в словесной дуэли засчитывает только ведущий
@@ -147,6 +152,12 @@ registerGMHandler("invEvidence", async ({ mysteryId, clueId, actorUuid, total, f
   if (!duel && checkedToday(clue, actor.uuid)) return;
   const type = CLUE_TYPES[clue.type] ?? CLUE_TYPES.scene;
   const t = type.time ? Math.max(0, Math.min(3, Number(time) || 0)) : 0;
+  let total = 0, fumble = false;
+  if (!duel) {
+    const r = await rollEvidence(actor, clue, type, skill, t);
+    if (!r) return console.warn(`vedmak | проверка улики: навык «${skill}» не подходит улике «${clue.name}»`);
+    ({ total, fumble } = r);
+  }
   const lines = [];
   const rolls = [];
   if (!duel) clue.tries = { ...(clue.tries ?? {}), [doneKey(actor.uuid)]: gameDay() };
@@ -207,16 +218,18 @@ export async function interrogationDuel(mysteryId, clueId) {
 export async function deductionHint(actor, mysteryId) {
   const m = mysteries().find(x => x.id === mysteryId);
   if (!m || !actor) return null;
-  const result = await actor.rollSkill("deduction", { subtitle: `Подсказка: ${m.goal}`, dc: DEDUCTION_HINT.dc });
-  if (!result) return null;
-  return asGM("invHint", { mysteryId, actorUuid: actor.uuid, success: !!result.success });
+  return asGM("invHint", { mysteryId, actorUuid: actor.uuid });
 }
 
-registerGMHandler("invHint", async ({ mysteryId, actorUuid, success }, userId) => {
+// Бросок Дедукции — у ведущего: успех, присланный игроком, можно было подделать
+registerGMHandler("invHint", async ({ mysteryId, actorUuid }, userId) => {
   const actor = resolveActor(actorUuid);
   if (!actor || !userOwnsAny(userId, actor)) return;
   const m = mysteries().find(x => x.id === mysteryId);
   if (!m) return;
+  const result = await actor.rollSkill("deduction", { subtitle: `Подсказка: ${m.goal}`, dc: DEDUCTION_HINT.dc, skipDialog: true });
+  if (!result) return;
+  const success = !!result.success;
   const roll = await new Roll(DEDUCTION_HINT.focus).evaluate();
   const left = await changeFocus(actor, -roll.total);
   await postCard(actor, `${esc(m.goal)}: подсказка`,

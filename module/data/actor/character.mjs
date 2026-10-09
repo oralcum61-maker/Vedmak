@@ -113,11 +113,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     // Истинная форма высшего вампира: органическая броня естественным слоем, надетая не учитывается
     const trueForm = this.parent.effects.find(e => e.active && e.flags?.vedmak?.trueForm)?.flags.vedmak.trueForm;
+    // Медвежья форма берсерка: природная броня вместо надетой (снаряжение превращается вместе с ним), ПЗ вдвое
+    const bearForm = this.parent.effects.find(e => e.active && e.flags?.vedmak?.bearForm)?.flags.vedmak.bearForm;
     prepareCommonDerived(this, {
       baseVigor: prof?.vigor ?? 0, bodyType: "humanoid", innateArmor, extra, caps, floors, evMod: school.ev ?? 0,
-      meleeBodyMod, naturalArmor: trueForm?.armor ?? 0, wornOff: !!trueForm
+      meleeBodyMod, naturalArmor: trueForm?.armor ?? bearForm?.armor ?? 0, wornOff: !!(trueForm || bearForm),
+      hpMult: bearForm ? 2 : 1
     });
     this.derived.trueForm = !!trueForm;
+    this.derived.bearForm = bearForm ? { resist: bearForm.resist ?? ["bludgeoning"] } : null;
     this.luck.max = this.stats.luck.total;
     this.blood.max = race?.resource === "blood" ? this.hp.max : 0;
     this.blood.enabled = race?.resource === "blood";

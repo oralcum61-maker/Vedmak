@@ -182,7 +182,7 @@ export function carriedWeight(actor) {
  * @param {number} [opts.meleeBodyMod] — поправка Тел для урона в рукопашной и захвата (гномы −3)
  */
 export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, innateArmor = 0, bodyType = "humanoid",
-  extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0, wornOff = false } = {}) {
+  extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0, wornOff = false, hpMult = 1 } = {}) {
   const actor = system.parent;
   const crit = collectCritMods(actor);
   // Обезболивающее: каждый штраф критических ранений мягче на N (до нуля)
@@ -237,7 +237,8 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   d.damageBonus = (extra.damage ?? 0) + (system.fx?.damage ?? 0);
   d.meleeBonus += (extra.meleeDamage ?? 0) + (system.fx?.meleeDamage ?? 0);
 
-  system.hp.max = bw * 5 + bonus("hp");
+  // hpMult — медвежья форма берсерка: ПЗ вдвое (character/bear-form.mjs)
+  system.hp.max = (bw * 5 + bonus("hp")) * hpMult;
   system.sta.max = Math.floor((bw * 5 + bonus("sta") + (crit.derived.sta ?? 0)) * (crit.mult.sta ?? 1));
   d.woundThreshold = Math.floor(system.hp.max / 5);
   // Касание двимерита (стр. 167): Энергия падает до 0, пока длится контакт (magic/dimeritium.mjs)

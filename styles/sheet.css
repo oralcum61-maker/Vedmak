@@ -1085,6 +1085,10 @@
   background: linear-gradient(180deg, #34363c, #1c1d21); border: 1px solid #060708; border-radius: 2px;
 }
 .application.vedmak .skills-tab .vv-btn.blood { background: linear-gradient(180deg, #a3262b, #5c0f12); }
+/* Медвежья форма берсерка — под определяющим навыком */
+.application.vedmak .skills-tab .vp-bear { display: flex; align-items: center; gap: .6rem; margin-top: .5rem; }
+.application.vedmak .skills-tab .vp-bear .vv-btn { display: inline-flex; align-items: center; gap: .35rem; width: auto; cursor: var(--cursor-pointer, pointer); }
+.application.vedmak .skills-tab .vp-bear .vv-btn:disabled { opacity: .45; cursor: var(--cursor-not-allowed, not-allowed); }
 .application.vedmak .skills-tab .vv-btn:hover { filter: brightness(1.2); text-shadow: none; }
 .application.vedmak .skills-tab .vv-btn.disabled { opacity: .45; pointer-events: none; }
 /* Драконья форма Золотого дракона (parts/dragon-form.hbs): над древом, переключатель — как у Истинной формы */

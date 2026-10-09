@@ -36,6 +36,20 @@
     </a>
   </div>
   {{#if prof.defining.effect}}<p class="vp-effect">{{prof.defining.effect}}</p>{{/if}}
+  {{#if bear}}
+  <div class="vp-bear">
+    {{#if bear.active}}
+    <button type="button" class="vv-btn" data-action="bearRevert" data-tooltip="Вернуться в человеческий облик: ПЗ снова вдвое меньше">
+      <i class="fa-solid fa-person"></i> Снова человек{{#if bear.hours}} · ещё {{bear.hours}} ч{{/if}}</button>
+    <span class="vd-cap">самоконтроль в бою — СЛ {{bear.dc}}</span>
+    {{else}}
+    <button type="button" class="vv-btn blood" data-action="bearTransform" {{#unless bear.mardrem}}disabled{{/unless}}
+      data-tooltip="{{#if bear.mardrem}}Съесть {{bear.mushroom}} и обратиться медведем{{else}}Нет грибов «{{bear.mushroom}}»{{/if}}">
+      <i class="fa-solid fa-paw"></i> Медвежья форма</button>
+    <span class="vd-cap">{{bear.mushroom}}: {{bear.mardrem}} · самоконтроль в бою — СЛ {{bear.dc}}</span>
+    {{/if}}
+  </div>
+  {{/if}}
 </section>
 
 <div class="vp-branches">

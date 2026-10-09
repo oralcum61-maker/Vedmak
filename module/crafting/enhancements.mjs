@@ -6,7 +6,7 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
-import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS } from "../config/crafting.mjs";
+import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS, MAX_ENHANCEMENT_SLOTS } from "../config/crafting.mjs";
 import { ARMOR_LOCATIONS } from "../config/items.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { postCard } from "../util.mjs";
@@ -109,6 +109,7 @@ export async function attachEnhancement(actor, item) {
   if (s.kind === "crossbow") return attachCrossbowMod(actor, item);
   if (s.kind === "runeword" || s.kind === "glyphword") return attachEnchantment(actor, item);
   if (s.kind === "weapon") return attachWeaponEnhancement(actor, item);
+  if (s.kind === "slot") return attachSlot(actor, item);
 
   const armors = actor.itemTypes.armor.filter(a => !a.system.isShield && a.system.covers.length);
   const candidates = armors.map(a => ({
@@ -232,6 +233,37 @@ async function attachGlyph(actor, item) {
   await armor.update({ "system.enhancements": enhancements });
   await spendOne(item);
   return postCard(actor, "Глиф нанесён", `<p><b>${item.name}</b> → «${armor.name}»: ${item.system.effect}</p>`, { icon: "fa-solid fa-gem" });
+}
+
+/** Целы ли оружие или броня: полная надёжность, у брони — полная ПБ во всех частях. */
+function isIntact(item) {
+  const s = item.system;
+  if (item.type === "armor") {
+    const parts = Object.values(s.sp ?? {}).filter(p => (p?.max ?? 0) > 0);
+    if (parts.some(p => p.value < p.max)) return false;
+  }
+  return !(s.reliability?.max > 0) || s.reliability.value >= s.reliability.max;
+}
+
+/**
+ * Слот зачарования («Том Хаоса», стр. 115): пустая ячейка усиления оружию или броне. Работа и проверка Ремесла —
+ * при изготовлении по чертежу; здесь ячейка ставится на выбранный предмет. Предмет цел, ячеек меньше трёх.
+ */
+async function attachSlot(actor, item) {
+  const candidates = [...actor.itemTypes.weapon, ...actor.itemTypes.armor]
+    .filter(i => i.system.category !== "natural" && (i.system.enhancementSlots ?? 0) < MAX_ENHANCEMENT_SLOTS && isIntact(i));
+  if (!candidates.length) {
+    return ui.notifications.warn(`Нет оружия или брони, куда встанет ячейка: нужна полная надёжность (у брони — ПБ), и ячеек меньше ${MAX_ENHANCEMENT_SLOTS}.`);
+  }
+  const chosen = await pickTargets(`${item.name}: какому предмету`, candidates.map(i => ({
+    item: i, label: `${i.name} — ячеек: ${i.system.enhancementSlots ?? 0} из ${MAX_ENHANCEMENT_SLOTS}`
+  })), { hint: "В ячейку войдут только руны и глифы. Убрать ячейку нельзя." });
+  if (!chosen) return null;
+  const target = chosen[0].item;
+  const slots = (target.system.enhancementSlots ?? 0) + 1;
+  await target.update({ "system.enhancementSlots": slots });
+  await spendOne(item);
+  return postCard(actor, "Слот зачарования", `<p>«${target.name}»: новая ячейка усиления — теперь их ${slots}.</p>`, { icon: "fa-solid fa-gem" });
 }
 
 /** Поставить модификацию на арбалет: полный ход, без проверки (DLC «Фургончик Родольфа»). */

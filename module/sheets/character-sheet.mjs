@@ -22,6 +22,7 @@ import { InvestigationApp } from "../apps/investigation-app.mjs";
 import { applyTattoo } from "../crafting/tattoo.mjs";
 import { implantDialog } from "../crafting/implant.mjs";
 import { dragonFormContext, transformDragon, revertDragon } from "../character/dragon-form.mjs";
+import { bearFormState, bearTransform, bearRevert, MARDREM } from "../character/bear-form.mjs";
 import { takeFromStorage } from "../character/storage.mjs";
 import {
   readLifepath, writeLifepath, buildFromSaved, savedOpts, lifepathCards, lifepathStory, lifepathSummary, rerollPath, choosePath, setDecadeRisk,
@@ -124,6 +125,8 @@ export class CharacterSheet extends VedmakActorSheet {
       applyTattoo: CharacterSheet.#onApplyTattoo,
       implant: function () { return implantDialog(this.actor); },
       dragonTransform: function () { return transformDragon(this.actor); },
+      bearTransform: function () { return bearTransform(this.actor); },
+      bearRevert: function () { return bearRevert(this.actor); },
       dragonRevert: function () { return revertDragon(this.actor); },
       lifepathStep: CharacterSheet.#onLifepathStep,
       lifepathSection: CharacterSheet.#onLifepathSection,
@@ -380,6 +383,9 @@ export class CharacterSheet extends VedmakActorSheet {
     context.vamp = racePowersContext(actor);
     // Золотой дракон («Офир и Зеррикания»): Драконья форма над древом профессии
     context.dragon = dragonFormContext(actor);
+    // Берсерк: медвежья форма у определяющего навыка
+    const bear = bearFormState(actor);
+    context.bear = bear.available ? { ...bear, mushroom: MARDREM } : null;
     return context;
   }
 

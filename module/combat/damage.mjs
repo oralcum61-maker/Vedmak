@@ -256,7 +256,9 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const weakness = target.type === "monster" && !spell ? tsys.weakness : null;
   const silver = !!w.silverDamage?.trim?.();
   const meteorite = has("meteorite");
-  if (weakness === "silver" && silver) {
+  // Медвежья форма берсерка: восприимчив к серебру (урон серебром прибавляется, как у чудовищ) и к маслу против проклятых
+  const bear = target.type === "character" ? tsys.derived?.bearForm : null;
+  if ((weakness === "silver" || (bear && !spell)) && silver) {
     const s = await rollFormula(w.silverDamage);
     if (s.roll) rolls.push(s.roll);
     dmg += s.total;
@@ -272,7 +274,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   // Масло для меча: +5 урона по своему классу чудовищ; «гуманоиды» — персонажи и чудовища-гуманоиды (стр. 248)
   if (w.oil && !spell) {
     const cls = target.type === "monster" ? tsys.monsterClass : "humanoid";
-    if (w.oil.target === cls) {
+    if (w.oil.target === cls || (bear && w.oil.target === "cursed")) {
       dmg += 5;
       parts.push({ label: w.oil.name || "Масло", value: 5 });
     }
@@ -299,6 +301,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const reasons = [];
   if (!ap && armor.resist?.includes(damageType)) reasons.push("броня");
   if (tsys.resistances?.includes?.(damageType)) reasons.push("сопротивление");
+  if (bear?.resist?.includes(damageType)) reasons.push("медвежья шкура");
   if (weakness && damageType !== "elemental") {
     if (weakness === "silver" && !silver) reasons.push("не серебро");
     if (weakness === "meteorite" && !meteorite) reasons.push("не метеоритная сталь");
