@@ -111,9 +111,21 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static PARTS = { body: { template: "systems/vedmak/templates/apps/tavern.hbs", scrollable: [".tv2-lines"] } };
 
+  /** Окно одно на сессию: состояние игры (и банк со ставками) живёт в нём и переживает закрытие окна. */
+  static #app = null;
+
   static open() {
-    const app = foundry.applications.instances.get("vedmak-tavern") ?? new TavernApp();
-    return app.render(true);
+    TavernApp.#app ??= new TavernApp();
+    return TavernApp.#app.render(true);
+  }
+
+  /** Идёт ход: второй щелчок, пока первый не закончился, не делает ничего (иначе ставки списались бы дважды). */
+  #busy = false;
+
+  async #once(fn) {
+    if (this.#busy) return;
+    this.#busy = true;
+    try { await fn(); } finally { this.#busy = false; }
   }
 
   game = "armwrestle";
@@ -285,10 +297,12 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onPickGame(event, target) {
-    await this.#resetGame();
-    this.game = target.dataset.game;
-    this.players = this.players.slice(0, this.cfg.max || this.players.length);
-    this.render();
+    await this.#once(async () => {
+      await this.#resetGame();
+      this.game = target.dataset.game;
+      this.players = this.players.slice(0, this.cfg.max || this.players.length);
+      this.render();
+    });
   }
 
   static #onAddSelected() {
@@ -310,8 +324,10 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onReset() {
-    await this.#resetGame();
-    this.render();
+    await this.#once(async () => {
+      await this.#resetGame();
+      this.render();
+    });
   }
 
   /* -------------------------------- Банк -------------------------------- */
@@ -402,6 +418,10 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onTurn() {
+    await this.#once(() => this.#turn());
+  }
+
+  async #turn() {
     if (this.state.done) return;
     const need = this.cfg;
     if (this.players.length < need.min) return ui.notifications.warn(`Нужно участников: ${need.min === need.max ? need.min : `${need.min}–${need.max}`}.`);
@@ -525,8 +545,9 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onFilletSpeed() {
+    if (this.#busy || this.state.done) return;
     this.state.speed = (this.state.speed ?? 0) + 1;
-    await this.#post([`Ускорение: СЛ ${12 + 3 * this.state.speed}${this.state.speed === 2 ? "; предел ставок удваивается, закончить уже можно" : ""}.`]);
+    await this.#once(() => this.#post([`Ускорение: СЛ ${12 + 3 * this.state.speed}${this.state.speed === 2 ? "; предел ставок удваивается, закончить уже можно" : ""}.`]));
   }
 
   async #gwent() {
@@ -557,6 +578,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       p.total = r.total;
       lines.push(`${esc(p.name)}: ${note} (${tableMod >= 0 ? "+" : ""}${tableMod}), ${SKILLS[skill].label} — <b>${r.total}</b>.`);
     }
+    if (totals.length < 2) return ui.notifications.warn("Участник гвинта не найден — уберите его и добавьте заново.");
     const [[a, ta], [b, tb]] = totals;
     const win = ta > tb ? a : tb > ta ? b : null;
     if (win) win.wins += 1;
@@ -595,7 +617,11 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onPokerReroll(event, target) {
-    const p = this.players.find(x => x.uuid === target.dataset.uuid);
+    await this.#once(() => this.#pokerReroll(target.dataset.uuid));
+  }
+
+  async #pokerReroll(uuid) {
+    const p = this.players.find(x => x.uuid === uuid);
     if (!p?.dice || p.rerolled || !p.sel.length) return;
     const r = await new Roll(`${p.sel.length}d6`).evaluate();
     const fresh = r.dice[0].results.map(x => x.result);
@@ -640,6 +666,10 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async #onPokerShow() {
+    await this.#once(() => this.#pokerShow());
+  }
+
+  async #pokerShow() {
     if (!this.state.rolled || this.state.shown) return;
     const score = p => [pokerRank(p.dice), p.dice.reduce((s, x) => s + x, 0)];
     const [a, b] = this.players;

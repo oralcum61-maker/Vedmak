@@ -206,6 +206,8 @@ export class CharacterSheet extends VedmakActorSheet {
       return context;
     }
     context.tabs = this._prepareTabs("primary");
+    // Подвкладка «Раса» есть только у рас с навыками: раса сменилась — вкладка навыков не должна остаться пустой
+    if (this.tabGroups.skills === "race" && !racePowersContext(this.actor)) this.tabGroups.skills = "list";
     context.skillTabs = this._prepareTabs("skills");
     context.craftTabs = this._prepareTabs("craft");
     const actor = this.actor;

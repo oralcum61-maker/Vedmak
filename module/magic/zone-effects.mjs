@@ -12,6 +12,18 @@ const SYS = "vedmak";
 const isActiveGM = () => game.users.activeGM?.isSelf;
 const auraEffects = (actor, regionId) => actor?.effects?.filter(e => e.flags?.[SYS]?.zoneAura === regionId) ?? [];
 
+/** Снять эффекты ауры, которые ещё есть: их мог уже снять другой токен того же актора или ведущий руками. */
+async function dropAura(actor, regionId) {
+  const ids = auraEffects(actor, regionId).map(e => e.id).filter(id => actor.effects.has(id));
+  if (!ids.length) return;
+  try {
+    await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
+  } catch (err) {
+    // Сняли одновременно с нами (истёк, убран руками) — это не ошибка
+    if (ids.some(id => actor.effects.has(id))) throw err;
+  }
+}
+
 /** Поставить или снять эффект ауры зоны на акторе токена. Заклинателя аура не трогает. */
 async function setAura(tokenDoc, region, inside) {
   const actor = tokenDoc.actor;
@@ -20,7 +32,7 @@ async function setAura(tokenDoc, region, inside) {
   const existing = auraEffects(actor, region.id);
   // Штраф ауры (Ирден) заклинателя не трогает; облако лунной пыли проявляет и бросившего
   if (!inside || (actor.uuid === z.actorUuid && z.aura.stats?.length)) {
-    if (existing.length) await actor.deleteEmbeddedDocuments("ActiveEffect", existing.map(e => e.id));
+    if (existing.length) await dropAura(actor, region.id);
     return;
   }
   if (existing.length) return;
@@ -81,10 +93,9 @@ export function registerZoneEffectHooks() {
   Hooks.on("deleteRegion", region => {
     if (!isActiveGM() || !region.flags?.[SYS]?.zone?.aura) return;
     const run = async () => {
-      for (const t of region.parent?.tokens ?? []) {
-        const ids = auraEffects(t.actor, region.id).map(e => e.id);
-        if (ids.length) await t.actor.deleteEmbeddedDocuments("ActiveEffect", ids);
-      }
+      // Связанный актор с несколькими токенами на сцене — один раз, иначе второй раз удалялся бы тот же эффект
+      const actors = new Set((region.parent?.tokens ?? []).map(t => t.actor).filter(Boolean));
+      for (const actor of actors) await dropAura(actor, region.id);
     };
     run().catch(err => console.error("vedmak | аура зоны", err));
   });

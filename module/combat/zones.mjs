@@ -180,17 +180,24 @@ function scheduleRemoval(region) {
 
 /** Удалить зоны: свои — сразу, чужие (для игрока) — просьбой к ведущему. */
 export async function removeZones(regions) {
-  const list = regions.filter(r => r?.parent?.regions?.has(r.id));
+  // Уже удаляемые не трогаем: время мира, сдвинутое дважды подряд, иначе удаляло бы ту же зону второй раз
+  const list = regions.filter(r => r?.parent?.regions?.has(r.id) && !removingZones.has(r.uuid));
   if (!list.length) return;
-  const byScene = new Map();
-  for (const r of list) byScene.set(r.parent, [...(byScene.get(r.parent) ?? []), r]);
-  for (const [scene, rs] of byScene) {
-    const mine = rs.filter(r => game.user.isGM || r.canUserModify(game.user, "delete"));
-    const others = rs.filter(r => !mine.includes(r));
-    if (mine.length) await scene.deleteEmbeddedDocuments("Region", mine.map(r => r.id));
-    if (others.length) await asGM("deleteZones", { sceneId: scene.id, ids: others.map(r => r.id) });
+  for (const r of list) removingZones.add(r.uuid);
+  try {
+    const byScene = new Map();
+    for (const r of list) byScene.set(r.parent, [...(byScene.get(r.parent) ?? []), r]);
+    for (const [scene, rs] of byScene) {
+      const mine = rs.filter(r => game.user.isGM || r.canUserModify(game.user, "delete"));
+      const others = rs.filter(r => !mine.includes(r));
+      if (mine.length) await scene.deleteEmbeddedDocuments("Region", mine.map(r => r.id));
+      if (others.length) await asGM("deleteZones", { sceneId: scene.id, ids: others.map(r => r.id) });
+    }
+  } finally {
+    for (const r of list) removingZones.delete(r.uuid);
   }
 }
+const removingZones = new Set();
 
 /* ------------------- Область, присланная игроком, — только из белого списка ------------------- */
 

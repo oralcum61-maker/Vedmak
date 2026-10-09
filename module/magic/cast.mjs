@@ -430,7 +430,8 @@ export async function performCast(actor, item, cfg, targets) {
     await applyHex(actor, item);
     selfLines.push(`На заклинателя наложена порча «${item.name}».`);
   }
-  if (staAfter <= 0) {
+  // Дезориентация — только если Вын потрачена сейчас (оплата Очками Крови её не трогает)
+  if (!payBlood && paid > 0 && staAfter <= 0) {
     await actor.toggleStatusEffect("disoriented", { active: true });
     selfLines.push("Вын исчерпана: дезориентация, испытание Уст и отдых до 20 Вын.");
   }
@@ -686,7 +687,8 @@ async function dispelOn(caster, t, total, paid) {
 
 registerGMHandler("dispelEffects", async ({ uuid, ids, casterUuid }, userId) => {
   const caster = resolveActor(casterUuid);
-  if (!game.users.get(userId)?.isGM && !userOwnsAny(userId, caster)) {
+  const knows = caster?.items?.some(i => i.type === "spell" && spellAuto(i.name)?.dispel);
+  if (!game.users.get(userId)?.isGM && (!userOwnsAny(userId, caster) || !knows)) {
     return console.warn(`vedmak | отклонено Рассеивание от ${game.users.get(userId)?.name ?? userId}`);
   }
   const target = resolveActor(uuid);

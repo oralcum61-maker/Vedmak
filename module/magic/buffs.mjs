@@ -148,6 +148,9 @@ export function buffLine(buff) {
   return `${buff.name}: ${bits.filter(Boolean).join(" · ")}${time ? ` (${time})` : ""}.`;
 }
 
+/** Эффекты, которые уже удаляются концом поддержания: второй снятый эффект того же заклинания их не трогает. */
+const endingLinked = new Set();
+
 /**
  * Конец поддержания: снять баффы и регенерацию этого заклинания со всех, на ком они висят (у активного ведущего).
  * Конец эффекта с бонусом к ПЗ: текущие ПЗ не выше нового максимума. Сроки щита, регенерации и статусов — timed.mjs.
@@ -171,10 +174,16 @@ export function registerBuffHooks() {
       if (actor === caster && options?.deleteAll) continue;
       const ids = actor.effects.filter(e => {
         if (actor === caster && sameBatch.has(e.id)) return false;
+        if (endingLinked.has(e.uuid)) return false;
         const b = e.flags?.vedmak?.spellBuff ?? e.flags?.vedmak?.spellLink;
         return b?.maintain && b.casterUuid === caster.uuid && b.itemId === maintain.itemId;
       }).map(e => e.id);
-      if (ids.length) actor.deleteEmbeddedDocuments("ActiveEffect", ids).catch(err => console.error("vedmak | баффы", err));
+      if (!ids.length) continue;
+      const uuids = ids.map(id => actor.effects.get(id).uuid);
+      for (const u of uuids) endingLinked.add(u);
+      actor.deleteEmbeddedDocuments("ActiveEffect", ids)
+        .catch(err => { if (ids.some(id => actor.effects.has(id))) console.error("vedmak | баффы", err); })
+        .finally(() => { for (const u of uuids) endingLinked.delete(u); });
     }
   });
 }

@@ -105,6 +105,39 @@ export async function findItemData(name, type = null) {
   return { name, type: fallbackType, system: {} };
 }
 
+/** Изделия чертежей, названные в книге иначе, чем предмет в компендиуме. */
+const RESULT_ALIASES = { "дополнительный слот улучшения": "Слот улучшения" };
+
+/**
+ * Изделие рецепта: точное имя (сначала нужного типа); иначе — варианты «Имя (Рука)» / «Имя (Нога)» с выбором
+ * (чертежи протезов называют протез целиком, а в компендиуме он двумя предметами); иначе — простой предмет.
+ */
+async function resultData(result, { skipDialog = false } = {}) {
+  const name = RESULT_ALIASES[norm(result.name)] ?? result.name;
+  for (const type of [result.type, null]) {
+    const data = await findItemData(name, type);
+    if (data._id) return data;
+  }
+  const n = norm(name);
+  const variants = [];
+  for (const pack of game.packs.filter(p => p.documentName === "Item")) {
+    const index = await pack.getIndex({ fields: ["type"] });
+    for (const e of index) if (PHYSICAL_TYPES.includes(e.type) && norm(e.name).startsWith(`${n} (`)) variants.push({ pack, e });
+  }
+  if (!variants.length) return findItemData(name, result.type);
+  let pick = variants[0];
+  if (variants.length > 1 && !skipDialog) {
+    const i = await DialogV2.wait({
+      window: { title: `Изготовление: ${result.name}` }, classes: ["vedmak", "vedmak-dialog"],
+      content: `<p>Какой именно предмет изготовлен?</p>`,
+      buttons: variants.map((v, k) => ({ action: `v${k}`, label: v.e.name, default: k === 0, callback: () => k })),
+      rejectClose: false
+    });
+    if (Number.isInteger(i)) pick = variants[i];
+  }
+  return (await pick.pack.getDocument(pick.e._id)).toObject();
+}
+
 /** Чертёж для предмета: сначала у персонажа, потом в компендиумах. */
 export async function findRecipeFor(actor, itemName) {
   const n = norm(itemName);
@@ -376,7 +409,7 @@ export async function craft(actor, recipe, { skipDialog = false } = {}) {
   let created = null;
   let abilityLines = [], abilityRolls = [];
   if (roll.success) {
-    const base = await findItemData(r.result.name, r.result.type);
+    const base = await resultData(r.result, { skipDialog });
     const done = await applyCraftAbilities(actor, recipe, base, r.result.quantity, abilities, cfg);
     abilityLines = done.lines;
     abilityRolls = done.rolls;

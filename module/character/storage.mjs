@@ -104,7 +104,7 @@ export async function takeFromStorage(storage, item, { hero = null, qty = null }
   }
   const request = { storageUuid: storage.uuid, itemId: item.id, qty, heroUuid: hero.uuid };
   // Своё хранилище (сумка игрока, ведущий) — сразу; чужое — через ведущего
-  if (storage.isOwner) return performTake(request, game.user.id);
+  if (storage.isOwner) return takeQueued(request, game.user.id);
   return asGM("storageTake", request);
 }
 
@@ -159,7 +159,7 @@ export async function takeStorageMoney(storage) {
   if (!hero) return null;
   if (!hero.isOwner) return ui.notifications.warn(`Класть деньги в кошелёк «${hero.name}» может его владелец или ведущий.`);
   const request = { storageUuid: storage.uuid, heroUuid: hero.uuid };
-  if (storage.isOwner) return performTakeMoney(request, game.user.id);
+  if (storage.isOwner) return moneyQueued(request, game.user.id);
   return asGM("storageMoney", request);
 }
 
@@ -197,7 +197,7 @@ export async function putIntoStorage(storage, item) {
   if (storage.system.kind === "shop" && !game.user.isGM) return ui.notifications.warn("Класть вещи в лавку может ведущий.");
   if (item.system?.equipped) return ui.notifications.warn(`«${item.name}» в руках или надето — сначала снимите.`);
   const request = { storageUuid: storage.uuid, itemUuid: item.uuid };
-  if (storage.isOwner) return performPut(request, game.user.id);
+  if (storage.isOwner) return putQueued(request, game.user.id);
   return asGM("storagePut", request);
 }
 
@@ -225,9 +225,28 @@ async function performPut({ storageUuid, itemUuid }, userId) {
     { icon: `fa-solid ${STORAGE_KINDS[storage.system.kind]?.icon ?? "fa-box-archive"}` });
 }
 
-registerGMHandler("storageTake", performTake);
-registerGMHandler("storageMoney", performTakeMoney);
-registerGMHandler("storagePut", performPut);
+/**
+ * Изменения одного хранилища — по очереди: каждое читает остаток в начале, а пишет после ответа сервера, и два
+ * одновременных «Взять» (два игрока, двойной щелчок) иначе выдавали бы одну вещь дважды.
+ */
+const storageQueues = new Map();
+function serialByStorage(fn) {
+  return (request, userId) => {
+    const key = request?.storageUuid ?? "";
+    const run = (storageQueues.get(key) ?? Promise.resolve()).then(() => fn(request, userId));
+    const tail = run.catch(() => {});
+    storageQueues.set(key, tail);
+    tail.then(() => { if (storageQueues.get(key) === tail) storageQueues.delete(key); });
+    return run;
+  };
+}
+const takeQueued = serialByStorage(performTake);
+const moneyQueued = serialByStorage(performTakeMoney);
+const putQueued = serialByStorage(performPut);
+
+registerGMHandler("storageTake", takeQueued);
+registerGMHandler("storageMoney", moneyQueued);
+registerGMHandler("storagePut", putQueued);
 
 /** Вид хранилища по названию — для перенесённых из старой системы: «Повозка», «Портной», «Склад». */
 export function guessStorageKind(name) {

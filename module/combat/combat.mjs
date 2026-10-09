@@ -179,10 +179,12 @@ export async function startOfTurn(actor, combat, context) {
   if (has("suffocating")) { loss += 3; lines.push("Удушье: 3 урона."); }
   if (d.crit?.acid) { loss += d.crit.acid; lines.push(`Рана в живот: ${d.crit.acid} урона кислотой.`); }
   // Касание двимерита: последствия строки таблицы (стр. 167)
-  const dim = await dimeritiumTurn(actor, context.round);
-  loss += dim.loss;
-  lines.push(...dim.lines);
-  if (dim.stun) buttons.push({ action: "stunSave", label: "Испытание Уст", reason: "Двимерит" });
+  try {
+    const dim = await dimeritiumTurn(actor, context.round);
+    loss += dim.loss;
+    lines.push(...dim.lines);
+    if (dim.stun) buttons.push({ action: "stunSave", label: "Испытание Уст", reason: "Двимерит" });
+  } catch (err) { console.error("vedmak | начало хода: двимерит", err); }
 
   // Горение портит броню каждой части тела
   if (armorWear.length) lines.push(...await wearArmor(actor, armorWear.map(loc => ({ location: loc.key, amount: 1 }))));
