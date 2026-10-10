@@ -2014,22 +2014,13 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 
 
 /* ---------------------------- Боевой худ ---------------------------- */
-/* Сам пульт — в styles/sheet.css (холст design/11, PLAN 4.58); здесь только место в нижней панели. */
-#vedmak-combat-hud {
-  pointer-events: all;
-  max-width: 1180px;
-  width: 100%;
-  margin: 0 auto .35rem;
-  font-family: var(--vd-font-body);
-  /* 0,85 прежнего размера (подобрано автором 10.10): zoom, а не transform — место в панели сжимается вместе с худом */
-  zoom: .85;
-}
-/* Худ поверх строки чата справа: средняя колонка интерфейса (в ней нижняя панель) встаёт над правой (z-index 30) */
-#ui-middle:has(> #ui-bottom > #vedmak-combat-hud) { z-index: 31; }
-/* Развёрнутый худ закрывает панель макросов целиком: она прячется, худ встаёт на её место у нижнего края (с тем же
-   отступом снизу). Свёрнутый худ — полоса над макросами, как раньше. */
-#ui-bottom:has(> #vedmak-combat-hud .vh:not(.collapsed)) > #hotbar { display: none; }
-#ui-bottom:has(> #vedmak-combat-hud .vh:not(.collapsed)) > #vedmak-combat-hud { margin-bottom: 16px; }
+/* Сам худ «Медальон на цепи» — в styles/hud.css (PLAN 4.163); здесь только место в нижней панели. */
+#vedmak-combat-hud { pointer-events: none; display: flex; justify-content: center; width: 100%; margin: 0 auto .35rem; }
+/* Списки худа поверх строки чата справа: средняя колонка интерфейса (в ней нижняя панель) встаёт над правой (z-index 30) */
+body.vd-hud #ui-middle { z-index: 31; }
+/* Развёрнутый худ встаёт на место панели макросов, свёрнутый (только медальон) — над ней */
+body.vd-hud-open #ui-bottom > #hotbar { display: none; }
+body.vd-hud-open #ui-bottom > #vedmak-combat-hud { margin-bottom: 6px; }
 
 /* ------------------------- Окно активного эффекта ------------------------- */
 
@@ -2353,7 +2344,9 @@ body.vedmak-cursor {
   --cursor-pointer-down: url("../assets/cursors/pointer-down.svg") 11 2, pointer;
   cursor: var(--cursor-default);
 }
-body.vedmak-cursor:active { cursor: var(--cursor-default-down); }
+/* «Нажатый» курсор у body (`body:active`) не ставим: кнопка мыши, зажатая где угодно — и при сдвиге сцены правой, —
+   делает body «нажатым», а курсор наследуется, и браузер пересчитывал стили всей страницы на каждое нажатие
+   и отпускание (лаги при перемещении сцены, PLAN 4.164). Над сценой «нажатый» курсор ставит сам холст Foundry. */
 /* Кнопки и ссылки, у которых указатель задан словом pointer, а не переменной; зажатая — «нажимаю» */
 body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data-action], [data-tab], .rollable,
   .content-link, .inline-roll, input[type="checkbox"], input[type="radio"], input[type="range"]):not(:disabled):not([disabled]) {

@@ -28,7 +28,8 @@
   ],
   "styles": [
     "styles/vedmak.css",
-    "styles/sheet.css"
+    "styles/sheet.css",
+    "styles/hud.css"
   ],
   "languages": [
     {

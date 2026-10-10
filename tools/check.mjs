@@ -20,7 +20,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FOUNDRY_APP = process.env.FOUNDRY_APP ?? "D:/FoundryVTT-WindowsPortable-14.365/App/resources/app";
 const HAS_FOUNDRY = fs.existsSync(path.join(FOUNDRY_APP, "package.json"));
 
-const SECTIONS = { code: "код", templates: "шаблоны", packs: "компендиумы" };
+const SECTIONS = { code: "код", templates: "шаблоны", styles: "стили", packs: "компендиумы" };
 const selected = process.argv.slice(2).filter(a => a in SECTIONS);
 const run = key => !selected.length || selected.includes(key);
 
@@ -35,7 +35,9 @@ const rel = f => path.relative(ROOT, f).split(path.sep).join("/");
 
 /** Файлы с расширением, без служебных папок, макетов и собранных пакетов. */
 function listFiles(dir, ext) {
-  const skip = new Set([".git", "node_modules", "dist", "design", "packs", "packs-src", "assets", "fonts"]);
+  const skip = new Set([".git", "node_modules", "dist", "design", "packs", "packs-src", "assets", "fonts",
+    // перенос облика в Claude Design (.design-sync/NOTES.md): чужие скрипты и сборка
+    ".ds-sync", ".ds-src", "ds-bundle", ".design-sync"]);
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) { if (!skip.has(entry.name)) out.push(...listFiles(path.join(dir, entry.name), ext)); }
@@ -384,11 +386,36 @@ async function checkPacks() {
   return `${docs} документов, ${links} ссылок, повторов значков — ${dups.length}`;
 }
 
+/**
+ * Стили: селекторы, из-за которых браузер пересчитывает стили всей страницы.
+ * - `:active` у body или html (PLAN 4.163): кнопка мыши, зажатая где угодно, делает body «нажатым»; правило
+ *   с наследуемым свойством (курсор) пересчитывало всю страницу на каждое нажатие и отпускание — лаги при сдвиге сцены.
+ * - атрибут style с потомками (`[style*=…] *`, PLAN 4.155): любое изменение style (сдвиг окна) пересчитывало поддерево.
+ */
+function checkStyles() {
+  const S = SECTIONS.styles;
+  let rules = 0;
+  for (const file of fs.readdirSync(path.join(ROOT, "styles")).filter(f => f.endsWith(".css"))) {
+    const css = fs.readFileSync(path.join(ROOT, "styles", file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const m of css.matchAll(/([^{}]+)\{/g)) {
+      const head = m[1].trim();
+      if (!head || head.startsWith("@")) continue;
+      rules++;
+      for (const sel of head.split(",").map(x => x.trim())) {
+        if (/^(html|body)\b[^\s>+~]*:active/.test(sel)) err(S, `${file}: «${sel}» — :active у ${sel.split(/[.:#[]/)[0]} пересчитывает всю страницу на каждый щелчок`);
+        if (/\[style[*^$~|]?=[^\]]*\][^,]*[\s>+~]\S/.test(sel)) err(S, `${file}: «${sel}» — селектор по атрибуту style с потомками пересчитывает поддерево при каждом сдвиге`);
+      }
+    }
+  }
+  return `${rules} правил`;
+}
+
 /* -------------------------------------------------------------------------- */
 
 const summary = [];
 if (run("code")) summary.push(`${SECTIONS.code}: ${checkCode()}`);
 if (run("templates")) summary.push(`${SECTIONS.templates}: ${checkTemplates()}`);
+if (run("styles")) summary.push(`${SECTIONS.styles}: ${checkStyles()}`);
 if (run("packs")) summary.push(`${SECTIONS.packs}: ${await checkPacks()}`);
 
 const print = (title, map, limit) => {

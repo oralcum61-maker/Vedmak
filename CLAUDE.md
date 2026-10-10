@@ -83,7 +83,8 @@
   `_preparePartContext`. Сортировка по-русски — `compareRu` из `util.mjs`, не `localeCompare`.
 - `module/dice/` — проверка d10 и окна бросков. Общая часть окон — `dialog-ui.mjs`: живой пересчёт по `data-base`/`data-mod`/`data-dc`.
 - `module/combat/` — атака, защита, урон, испытания, состояния, ход, словесная дуэль, верховой бой.
-- `module/magic/`, `module/character/` (развитие, жизненный путь, мастер создания), `module/crafting/`, `module/apps/combat-hud.mjs`.
+- `module/magic/`, `module/character/` (развитие, жизненный путь, мастер создания), `module/crafting/`, `module/apps/combat-hud.mjs`
+  (худ «Медальон на цепи», стили — `styles/hud.css`, движение — `module/fx/hud-motion.mjs`).
 - `templates/` — Handlebars; `styles/vedmak.css` — все стили; `lang/ru.json`. Подшаблон (`{{> …}}`)
   работает, только если его путь есть в `TEMPLATE_PATHS` в `module/helpers.mjs`.
 - `module/character/race.mjs` — черты расы при появлении на листе: естественное оружие, выбор навыков гнома.
@@ -128,6 +129,7 @@
 | `design/09-scrollbar` | [Ползунок прокрутки: «Ремень»](https://claude.ai/artifact/H62zqvKRcHe4G9DhjyZn7X) | 4.52 |
 | `design/10-sheet` | [Лист: колонка и вкладки одним языком](https://claude.ai/artifact/CEYi5Yk5nGp34vzELs25a8) | 4.55 |
 | `design/11-hud-and-sheets` | [Худ, профессия, чудовище, окна и предмет](https://claude.ai/artifact/XKwhutWYDAHwktTe2sfHrz) | 4.58–4.62 |
+| `design/12-hud-medallion` | [Худ «Медальон на цепи»](https://claude.ai/artifact/59X3SZGhChsbhRSNeiJ2nN) — живой макет, `build-artifact.mjs` | 4.163 |
 
 В каждой папке `canvas.json` хранит раскладку холста и заметки «что было — что стало».
 Файлы `*.dc.html` — артборды в формате холста: сами по себе они не открываются, им нужен `support.js` холста.

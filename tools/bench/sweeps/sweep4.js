@@ -45,7 +45,7 @@ for (const a of [fighter, dummy, beast, mage]) for (const sid of statuses) {
 await clearChat(); seen = new Set();
 
 // --- 2. Худ «Медальон»: каждая вкладка и каждая кнопка ---
-const hudSkip = new Set(["nextTurn", "toggleCollapse", "flipToken", "openSheet"]);
+const hudSkip = new Set(["nextTurn", "toggleCollapse", "flipToken", "togglePop", "magicKind"]);
 for (const tok of [fTok, mTok, bTok]) {
   stepName(`худ: ${tok.name}`);
   try {
@@ -53,19 +53,22 @@ for (const tok of [fTok, mTok, bTok]) {
     await wait(600);
     const hud = foundry.applications.instances.get("vedmak-combat-hud");
     if (!hud?.rendered) { log("худ не открылся для", tok.name); continue; }
-    const tabs = [...hud.element.querySelectorAll("[data-action='setTab']")].map(b => b.dataset.tab);
-    log("худ", tok.name, "вкладки:", tabs.join(","));
-    for (const tab of tabs) {
-      stepName(`худ: ${tok.name} → вкладка ${tab}`);
-      hud.element.querySelector(`[data-action='setTab'][data-tab='${tab}']`)?.click();
-      await wait(300);
+    // Худ «Медальон на цепи» (PLAN 4.163): гнёзда на цепи и списки ярлыков — в каждом по кнопке каждого вида
+    const pops = [null, ...[...hud.element.querySelectorAll("[data-action='togglePop'][data-pop]")].map(b => b.dataset.pop)];
+    log("худ", tok.name, "списки:", pops.filter(Boolean).join(","));
+    for (const pop of [...new Set(pops)]) {
+      stepName(`худ: ${tok.name} → ${pop ?? "цепь"}`);
+      if (pop && hud.pop !== pop) { hud.element.querySelector(`[data-action='togglePop'][data-pop='${pop}']`)?.click(); await wait(400); }
+      if (!pop && hud.pop) { hud.pop = null; await hud.render(); await wait(300); }
       const done = new Set();
       for (let k = 0; k < 30; k++) {
-        const b = [...hud.element.querySelectorAll("[data-action]")]
-          .find(x => !hudSkip.has(x.dataset.action) && x.dataset.action !== "setTab" && !done.has(x.dataset.action + "|" + (x.dataset.status ?? "")));
+        const scope = pop ? hud.element.querySelector(".hm-pop") : hud.element.querySelector(".hm-row");
+        if (!scope) break;
+        const b = [...scope.querySelectorAll("[data-action]")]
+          .find(x => !hudSkip.has(x.dataset.action) && !done.has(x.dataset.action + "|" + (x.dataset.status ?? "")));
         if (!b) break;
         done.add(b.dataset.action + "|" + (b.dataset.status ?? ""));
-        stepName(`худ: ${tok.name} → ${tab} → ${b.dataset.action}`);
+        stepName(`худ: ${tok.name} → ${pop ?? "цепь"} → ${b.dataset.action}`);
         b.click();
         await wait(700);
         await crawl(`худ ${tok.name} ${b.dataset.action}`, 2);
@@ -75,8 +78,11 @@ for (const tok of [fTok, mTok, bTok]) {
             try { await app.close({ animate: false }); } catch {}
           }
         }
+        // Список мог закрыться (щелчок по окну) — открыть снова
+        if (pop && hud.pop !== pop) { hud.element.querySelector(`[data-action='togglePop'][data-pop='${pop}']`)?.click(); await wait(400); }
       }
     }
+    hud.pop = null;
   } catch (e) { log("ERR худ", tok.name, e.message, (e.stack ?? "").split("\n").slice(1, 3).join(" ")); }
   await resetAll();
 }

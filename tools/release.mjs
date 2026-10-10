@@ -25,7 +25,7 @@ if (!/^\d+\.\d+\.\d+$/.test(version)) {
 
 /** Не входит в выпуск: разработка, источники компендиумов, жетоны без права раздачи. */
 const EXCLUDE = [
-  ".github/", ".claude/", "design/", "docs/", "packs-src/", "tools/", "assets/tokens/",
+  ".github/", ".claude/", ".design-sync/", "design/", "docs/", "packs-src/", "tools/", "assets/tokens/",
   "CLAUDE.md", ".gitignore", ".gitattributes"
 ];
 /** Нужно только на время сборки: пересборка бестиария. */
