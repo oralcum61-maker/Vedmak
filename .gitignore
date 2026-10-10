@@ -4,3 +4,4 @@ packs/*/LOG.old
 node_modules/
 dist/
 .claude/worktrees/
+tools/bench/results/
