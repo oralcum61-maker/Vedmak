@@ -29,6 +29,19 @@ ok(["Действия", "Защита", "Магия", "Алхимия"].every(n 
 ok(hm?.querySelector(".hm-coins") !== null, "монеты Удачи");
 const rect = hm?.getBoundingClientRect();
 ok(rect && rect.width < 900 && rect.height < 260, `размер худа ${Math.round(rect?.width)}×${Math.round(rect?.height)} — меньше прежней плиты`);
+// Медальон — по центру экрана при любой боковой панели и у кого угодно (у чудовища крылья неравные)
+const offCenter = () => { const r = hudEl()?.querySelector(".hm-medal")?.getBoundingClientRect(); return r ? Math.round(r.left + r.width / 2 - window.innerWidth / 2) : 999; };
+ok(Math.abs(offCenter()) <= 2, `медальон по центру экрана (сдвиг ${offCenter()} px)`);
+for (const state of ["expand", "collapse"]) {
+  ui.sidebar?.[state]?.(); await settle(700);
+  ok(Math.abs(offCenter()) <= 2, `боковая панель ${state === "expand" ? "развёрнута" : "свёрнута"}: сдвиг медальона ${offCenter()} px`);
+}
+const beast = await Actor.create({ ...(await game.packs.get("vedmak.bestiary").getDocuments()).find(d => d.type === "monster").toObject(), folder: folder.id });
+const tB = await placeToken(beast, 1600, 1000);
+tB.object.control({ releaseOthers: true }); await settle(700);
+const beastChips = hudEl()?.querySelectorAll(".hm-chip").length;
+ok(Math.abs(offCenter()) <= 2, `чудовище «${beast.name}» (${beastChips} ярлыка): сдвиг медальона ${offCenter()} px`);
+tG.object.control({ releaseOthers: true }); await settle(700);
 
 // Двойной щелчок по портрету — лист
 hm.querySelector(".hm-face").dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));

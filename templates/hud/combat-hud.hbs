@@ -11,12 +11,15 @@
 {{/inline}}
 {{#if actor}}
 <div class="hm{{#if collapsed}} collapsed{{/if}}{{#if isCurrent}}{{#if inCombat}} turn{{/if}}{{/if}}">
+  {{!-- Три колонки: крыло, медальон, крыло; крылья — равной ширины, поэтому медальон всегда по центру --}}
   <div class="hm-row">
+    <div class="hm-wing l">
     {{#unless collapsed}}
     <a class="hm-chip{{#if (eq pop "act")}} on{{/if}}" data-action="togglePop" data-pop="act">Действия</a>
     <a class="hm-chip{{#if (eq pop "def")}} on{{/if}}" data-action="togglePop" data-pop="def">Защита</a>
     {{> hmSock s=sockets.[0] index=0}}
     {{/unless}}
+    </div>
 
     <div class="hm-medal">
       <svg class="hm-base" viewBox="0 0 240 210" width="240" height="210" aria-hidden="true">
@@ -87,6 +90,7 @@
       {{#if canAdvance}}<a class="hm-endturn" data-action="nextTurn">Конец хода<i class="hm-sheen"></i></a>{{/if}}
     </div>
 
+    <div class="hm-wing r">
     {{#unless collapsed}}
     {{> hmSock s=sockets.[1] index=1}}
     {{#if pops.more}}<a class="hm-more{{#if (eq pop "more")}} on{{/if}}" data-action="togglePop" data-pop="more" data-tooltip="Ещё в руках: {{more.length}}">+{{more.length}}</a>{{/if}}
@@ -95,6 +99,7 @@
     {{else}}
     <a class="hm-unfold" data-action="toggleCollapse" data-tooltip="Развернуть худ">›</a>
     {{/unless}}
+    </div>
   </div>
 
   {{!-- ───────────── Списки ───────────── --}}

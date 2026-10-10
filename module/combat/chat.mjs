@@ -64,6 +64,14 @@ export function registerChatAction(name, fn) {
   ACTIONS[name] = fn;
 }
 
+/**
+ * Сколько действий кнопок карточек ещё идёт. Действие часто правит флаги своей карточки до конца работы
+ * (переработка ставит «переработано» до броска) — карточка перерисовывается, кнопка отцепляется, и по ней уже
+ * не понять, что действие закончилось. Обход карточек в автотестах ждёт, пока счётчик не обнулится.
+ */
+let running = 0;
+export const chatActionsRunning = () => running;
+
 function actorFrom(button) {
   const actor = resolveActor(button.dataset.actor) ?? resolveActor(button.dataset.fallback);
   if (!actor) { ui.notifications.warn("Персонаж не найден."); return null; }
@@ -123,12 +131,14 @@ export function registerChatListeners() {
         const action = ACTIONS[button.dataset.vedmak];
         if (!action) return;
         button.disabled = true;
+        running++;
         try {
           await action(message, button, event);
         } catch (err) {
           console.error("vedmak |", err);
           ui.notifications.error(err.message);
         } finally {
+          running--;
           button.disabled = false;
         }
       });

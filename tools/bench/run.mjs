@@ -167,10 +167,12 @@ async function runScenario(sc, debugPort) {
         ;${body}
         ;return { log: window.__log, fails: window.__fails };
       })()`);
+      // Пустой итог — страница перезагрузилась или закрылась посреди сценария (ответ CDP с ошибкой): провал, не падение прогонщика
+      if (!result?.fails) throw new Error("страница не вернула итог — перезагрузилась или закрылась посреди сценария");
     } catch (e) {
       let partial = {};
       try { partial = (await send("Runtime.evaluate", { expression: "({ log: window.__log, fails: window.__fails, step: window.__step })", returnByValue: true })).result?.result?.value ?? {}; } catch {}
-      result = { log: [...(partial.log ?? []), `ШАГ: ${partial.step ?? "?"}`], fails: [...(partial.fails ?? []), `исключение: ${String(e.message).slice(0, 800)}`] };
+      result = { log: [...(partial.log ?? []), `ШАГ: ${partial.step ?? step}`], fails: [...(partial.fails ?? []), `исключение: ${String(e.message).slice(0, 800)}`] };
     }
     clearInterval(poll);
     await sleep(800);

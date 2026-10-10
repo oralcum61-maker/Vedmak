@@ -2015,12 +2015,15 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 
 /* ---------------------------- Боевой худ ---------------------------- */
 /* Сам худ «Медальон на цепи» — в styles/hud.css (PLAN 4.163); здесь только место в нижней панели. */
-#vedmak-combat-hud { pointer-events: none; display: flex; justify-content: center; width: 100%; margin: 0 auto .35rem; }
+/* Худ — по центру экрана при любой ширине боковых панелей: закреплён относительно окна, а не нижней полосы
+   (она лежит между левыми инструментами и правой панелью и сдвигается вместе с ними). Свёрнутый — над макросами. */
+#vedmak-combat-hud { position: fixed; left: 0; right: 0; bottom: 6px; z-index: 31; pointer-events: none; display: flex; justify-content: center; }
+body:not(.vd-hud-open) #vedmak-combat-hud { bottom: calc(var(--hotbar-height, 52px) + 14px); }
 /* Списки худа поверх строки чата справа: средняя колонка интерфейса (в ней нижняя панель) встаёт над правой (z-index 30) */
 body.vd-hud #ui-middle { z-index: 31; }
 /* Развёрнутый худ встаёт на место панели макросов, свёрнутый (только медальон) — над ней */
 body.vd-hud-open #ui-bottom > #hotbar { display: none; }
-body.vd-hud-open #ui-bottom > #vedmak-combat-hud { margin-bottom: 6px; }
+
 
 /* ------------------------- Окно активного эффекта ------------------------- */
 

@@ -17,6 +17,7 @@ const A = await import("/systems/vedmak/module/combat/attack.mjs");
 const D = await import("/systems/vedmak/module/combat/defense.mjs");
 const G = await import("/systems/vedmak/module/combat/damage.mjs");
 const C = await import("/systems/vedmak/module/combat/common.mjs");
+const CHAT = await import("/systems/vedmak/module/combat/chat.mjs");
 const TAG = window.__tag ?? "main";
 // Свои карточки: метка ставится только на клиенте, который их создаёт (preCreate)
 Hooks.on("preCreateChatMessage", doc => { doc.updateSource({ "flags.world.bench": TAG }); });
@@ -92,7 +93,9 @@ async function crawl(label, maxDepth = 4, skip = []) {
         counts[act] = (counts[act] ?? 0) + 1;
         b.click();
         await wait(120);
-        for (let i = 0; i < 80 && b.isConnected && b.disabled; i++) await wait(100);
+        // Ждать конца действия, а не отцепления кнопки: действие правит флаги карточки до конца работы,
+        // карточка перерисовывается раньше, чем оно закончится (переработка — PLAN 4.165)
+        for (let i = 0; i < 150 && CHAT.chatActionsRunning(); i++) await wait(100);
         await wait(80);
       }
     }

@@ -14,11 +14,18 @@
 .hm { position: relative; pointer-events: none; }
 .hm-row, .hm-pop { pointer-events: auto; }
 
-/* ─── Цепь: кованые звенья, плоское и ребром, через весь худ на уровне центра медальона ─── */
-.hm-row { position: relative; display: flex; align-items: center; gap: 12px; }
-.hm-row::before { content: ""; position: absolute; left: 22px; right: 22px; top: 105px; height: 14px; margin-top: -7px; z-index: -1; pointer-events: none;
+/* ─── Раскладка: крыло · медальон · крыло. Колонки крыльев равны (1fr при ширине по содержимому — обе по
+   большему крылу), поэтому медальон всегда в центре худа, а худ — в центре экрана (vedmak.css) ─── */
+.hm-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: max-content; }
+.hm-wing { position: relative; display: flex; align-items: center; gap: 12px; }
+.hm-wing.l { justify-self: end; padding-right: 2px; } .hm-wing.r { justify-self: start; padding-left: 2px; }
+.hm-wing:empty { display: none; }
+/* ─── Цепь: кованые звенья, плоское и ребром — у каждого крыла своя, от крайней бирки до медальона ─── */
+.hm-wing::before { content: ""; position: absolute; top: 105px; height: 14px; margin-top: -7px; z-index: -1; pointer-events: none;
   background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='14'><defs><linearGradient id='m' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23efe9da'/><stop offset='.42' stop-color='%23aaa395'/><stop offset='.58' stop-color='%23464339'/><stop offset='1' stop-color='%23968f82'/></linearGradient></defs><ellipse cx='8' cy='7' rx='7' ry='4.6' fill='none' stroke='%23060708' stroke-width='3.8'/><ellipse cx='8' cy='7' rx='7' ry='4.6' fill='none' stroke='url(%23m)' stroke-width='2.2'/><rect x='13.2' y='5.3' width='12.6' height='3.4' rx='1.7' fill='url(%23m)' stroke='%23060708' stroke-width='.9'/></svg>") repeat-x left center / 26px 14px; }
-.hm.collapsed .hm-row::before { display: none; }
+.hm-wing.l::before { left: 14px; right: -30px; } .hm-wing.r::before { left: -30px; right: 14px; }
+.hm-wing { height: 210px; }
+.hm.collapsed .hm-wing::before { display: none; }
 
 /* ─── Ярлыки: кожаные бирки со строчкой, пришпилены к цепи заклёпкой; качаются при наведении ─── */
 .hm-chip { position: relative; flex: none; font: 600 10px/1 var(--vd-font-body); letter-spacing: .2em; text-transform: uppercase; color: #cfc6b4; white-space: nowrap;
