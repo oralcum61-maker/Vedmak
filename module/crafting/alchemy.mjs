@@ -12,7 +12,7 @@ import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { CRAFTING, ALCHEMY_KINDS } from "../config/crafting.mjs";
 import { MONSTER_CLASSES } from "../data/actor/monster.mjs";
-import { performCheck } from "../dice/check.mjs";
+import { performCheck, dialogCheck } from "../dice/check.mjs";
 import { postCard, resolveActor, tokenDistance, asGM, registerGMHandler, userOwnsAny, actorToken } from "../combat/common.mjs";
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, ZONE_COLORS, pointInZone, removeZones } from "../combat/zones.mjs";
 import { zoneAuraFor } from "../config/magic.mjs";
@@ -791,7 +791,8 @@ export async function applyMutagen(actor, item) {
     { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
     { label: SKILLS.alchemy.label, value: skill.total, always: true }
   ];
-  const check = await performCheck({ actor, title: `Мутаген: ${item.name}`, parts, dc: s.mutagen.dc });
+  const check = await dialogCheck({ actor, title: `Мутаген: ${item.name}`, parts, dc: s.mutagen.dc });
+  if (!check) return null;
   if (!check.success) {
     await spendOne(item);
     return card(actor, item.name, ["Подготовка не удалась — мутаген испорчен."], { subtitle: ALCHEMY_KINDS.mutagen });

@@ -8,6 +8,7 @@
 //  • Проверка сложности успешна, только если итог БОЛЬШЕ СЛ (равно — провал, стр. 57).
 
 import { renderTemplate } from "../util.mjs";
+import { rollDialog } from "./roll-dialog.mjs";
 
 /**
  * Бросок d10 с правилами взрыва и провала.
@@ -85,4 +86,32 @@ export async function performCheck(cfg) {
     }, { messageMode });
   }
   return result;
+}
+
+/**
+ * Окно модификаторов перед проверкой: правка, Удача и «кому видно» — как у бросков навыков. skipDialog — без окна ({}). Отмена — null.
+ * @returns {Promise<{mod?: number, luck?: number, messageMode?: string}|null>}
+ */
+export async function askCheck({ actor = null, title, parts = [], dc = null, skipDialog = false }) {
+  if (skipDialog) return {};
+  const luckMax = actor?.type === "character" ? (actor.system.luck?.value ?? 0) : 0;
+  return rollDialog({ title, parts, luckMax, dc });
+}
+
+/** Проверка с выбором окна askCheck: правка — слагаемым «Модификатор», Удача и режим чата — из окна. */
+export function checkWithChoice(cfg, choice = {}) {
+  const parts = [...(cfg.parts ?? [])];
+  if (choice.mod) parts.push({ label: "Модификатор", value: choice.mod });
+  return performCheck({ ...cfg, parts, luck: (cfg.luck ?? 0) + (choice.luck ?? 0), messageMode: choice.messageMode ?? cfg.messageMode });
+}
+
+/**
+ * Окно модификаторов и проверка. Отмена окна — null (вызывающий ничего не тратит);
+ * для вынужденных проверок `forced` — тогда бросок без правок.
+ * @param {object} cfg — как у performCheck, плюс skipDialog и forced
+ */
+export async function dialogCheck({ skipDialog = false, forced = false, ...cfg }) {
+  const choice = await askCheck({ ...cfg, skipDialog });
+  if (!choice && !forced) return null;
+  return checkWithChoice(cfg, choice ?? {});
 }

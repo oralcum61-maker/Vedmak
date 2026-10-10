@@ -9,7 +9,7 @@
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { SUBSTANCES, CRAFTING, RECIPE_CATEGORIES } from "../config/crafting.mjs";
-import { performCheck } from "../dice/check.mjs";
+import { performCheck, dialogCheck, askCheck, checkWithChoice } from "../dice/check.mjs";
 import { bindDialog, commonFields, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate, compareRu } from "../util.mjs";
 import { resolveActor, postCard } from "../combat/common.mjs";
@@ -448,7 +448,10 @@ registerChatAction("recycle", async message => {
   try {
     // Метка ставится до броска: пока бросок и выдача идут, второй щелчок уже видит «переработано»
     await message.setFlag("vedmak", "craft.recycled", true);
-    return await recycle(c, actor);
+    const done = await recycle(c, actor);
+    // Окно броска закрыли — переработка не состоялась, кнопка снова доступна
+    if (done === null) await message.setFlag("vedmak", "craft.recycled", false);
+    return done;
   } finally {
     recycling.delete(message.id);
   }
@@ -461,7 +464,8 @@ async function recycle(c, actor) {
     { label: SKILLS[c.skill].label, value: actor.system.skills[c.skill].total, always: true }
   ];
   if (c.blueprint) parts.push({ label: c.formula ? "Формула перед глазами" : "Чертёж перед глазами", value: CRAFTING.blueprintBonus });
-  const roll = await performCheck({ actor, title: `Переработка: ${c.resultName}`, parts, dc: c.dc, toChat: false });
+  const roll = await dialogCheck({ actor, title: `Переработка: ${c.resultName}`, parts, dc: c.dc, toChat: false });
+  if (!roll) return null;
   const returned = [];
   if (roll.success) {
     if (c.formula) {
@@ -538,17 +542,20 @@ export async function repair(actor, item) {
       ${req.materialsOk && req.toolsOk ? "" : `<p class="warn">Чего-то не хватает — ведущий может разрешить починку.</p>`}</div>`
   });
   if (!ok) return null;
-  const consumed = [];
-  for (const c of recipe.system.components) {
-    const it = itemsNamed(actor, c.name)[0];
-    if (it) consumed.push(await spendItem(it, 1));
-  }
   const skill = actor.system.skills.crafting;
   const parts = [
     { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
     { label: SKILLS.crafting.label, value: skill.total, always: true }
   ];
-  const roll = await performCheck({ actor, title: `Починка: ${item.name}`, parts, dc, toChat: false });
+  // Окно правок — до расхода компонентов: отмена ничего не тратит
+  const choice = await askCheck({ actor, title: `Починка: ${item.name}`, parts, dc });
+  if (!choice) return null;
+  const consumed = [];
+  for (const c of recipe.system.components) {
+    const it = itemsNamed(actor, c.name)[0];
+    if (it) consumed.push(await spendItem(it, 1));
+  }
+  const roll = await checkWithChoice({ actor, title: `Починка: ${item.name}`, parts, dc, toChat: false }, choice);
   if (roll.success) {
     if (item.type === "weapon" || item.system.isShield) {
       // Исходный максимум: в system он уже с модификациями арбалета
@@ -595,7 +602,8 @@ async function repairProsthesis(actor, item) {
     { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
     { label: SKILLS.crafting.label, value: skill.total, always: true }
   ];
-  const roll = await performCheck({ actor, title: `Починка: ${item.name}`, subtitle: `Надёжность ${rel.value}/${rel.max}`, parts, dc });
+  const roll = await dialogCheck({ actor, title: `Починка: ${item.name}`, subtitle: `Надёжность ${rel.value}/${rel.max}`, parts, dc });
+  if (!roll) return null;
   if (roll.success) {
     await item.setFlag("vedmak", "reliability", rel.max);
     ui.notifications.info(`«${item.name}» починен: Надёжность ${rel.max}/${rel.max}.`);

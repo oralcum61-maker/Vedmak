@@ -19,7 +19,7 @@
 // клиентах (конец Истинной и медвежьей формы дважды убирает оружие формы — «Item … does not exist»).
 // Тестовый Foundry работает с пакетами репозитория и трогает их файлы: после прогона — git checkout -- packs.
 
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -62,6 +62,39 @@ function pickScenarios() {
 
 async function serverUp() {
   try { return (await fetch(`${URL}/join`)).ok; } catch { return false; }
+}
+
+/**
+ * Завершить процесс со всеми потомками. На Windows `kill()` снимает только запускающий процесс: дочерние процессы
+ * Edge оставались жить, держали временный профиль (его нельзя было удалить) и копились от прогона к прогону.
+ */
+function killTree(child) {
+  if (!child?.pid) return;
+  if (process.platform === "win32") spawnSync("taskkill", ["/PID", String(child.pid), "/T", "/F"], { stdio: "ignore" });
+  else child.kill();
+}
+
+/**
+ * Закрыть безголовый Edge сценария. Edge перезапускает себя, и запущенный нами процесс — уже не родитель остальных:
+ * сначала просим браузер закрыться через протокол отладки, затем на Windows добиваем процессы с этим профилем.
+ */
+async function closeEdge(edge, debugPort, profile) {
+  try {
+    const v = await (await fetch(`http://127.0.0.1:${debugPort}/json/version`)).json();
+    const bws = new WebSocket(v.webSocketDebuggerUrl);
+    await new Promise(done => {
+      bws.onopen = () => { bws.send(JSON.stringify({ id: 1, method: "Browser.close" })); setTimeout(done, 1500); };
+      bws.onerror = done;
+      setTimeout(done, 3000);
+    });
+  } catch {}
+  killTree(edge);
+  if (process.platform === "win32") {
+    const filter = profile.replace(/'/g, "''");
+    spawnSync("powershell", ["-NoProfile", "-Command",
+      `Get-CimInstance Win32_Process -Filter "name='msedge.exe'" | Where-Object { $_.CommandLine -like '*${filter}*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }`],
+      { stdio: "ignore" });
+  }
 }
 
 async function startFoundry() {
@@ -145,9 +178,11 @@ async function runScenario(sc, debugPort) {
     return { ...result, errors: realErrors };
   } finally {
     try { ws?.close(); } catch {}
-    edge.kill();
+    await closeEdge(edge, debugPort, profile);
     await sleep(800);
-    rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 });
+    // Edge может ещё держать файлы профиля: недоудалённая временная папка не повод терять итог сценария
+    try { rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 }); }
+    catch (e) { console.warn(`\n  (профиль Edge не удалён: ${e.code}; ${profile})`); }
   }
 }
 
@@ -173,7 +208,7 @@ for (const sc of scenarios) {
   writeFileSync(join(RESULTS, `${sc.name}.json`), JSON.stringify(r, null, 1));
   summary.push({ name: sc.name, failed, secs });
 }
-if (foundry) foundry.kill();
+if (foundry) killTree(foundry);
 const bad = summary.filter(s => s.failed);
 console.log(`\nИтог: ${summary.length - bad.length} из ${summary.length} прошли.${bad.length ? ` Упали: ${bad.map(b => b.name).join(", ")}.` : ""} Подробности — ${RESULTS}`);
 process.exit(bad.length ? 1 : 0);

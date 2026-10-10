@@ -3348,7 +3348,7 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 
 /* Действует сейчас */
 .vedmak .craft-tab .active-now { padding: .6rem .9rem .7rem; }
-.vedmak .craft-tab .active-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .45rem; margin-top: .35rem; }
+.vedmak .craft-tab .active-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr)); gap: .45rem; margin-top: .35rem; }
 .vedmak .craft-tab .active-card {
   display: flex; align-items: center; gap: .55rem; padding: .4rem .5rem;
   background: var(--vd-well); border: 1px solid #040405; border-radius: 2px; box-shadow: var(--vd-sink-sm);
@@ -3372,21 +3372,22 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 /* Алхимия карточками */
 .vedmak .craft-tab .alchemy-pane .vd-panel, .vedmak .craft-tab .recipes-pane .vd-panel,
 .vedmak .craft-tab .enh-pane .vd-panel, .vedmak .craft-tab .comp-group { padding: .6rem .9rem .5rem; }
-.vedmak .craft-tab .alchemy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: .45rem; margin: .4rem 0 .3rem; }
+.vedmak .craft-tab .alchemy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(270px, 100%), 1fr)); gap: .45rem; margin: .4rem 0 .3rem; }
 .vedmak .craft-tab .alch-card {
-  display: flex; gap: .7rem; padding: .55rem .6rem .55rem .55rem;
+  display: flex; gap: .7rem; padding: .55rem .6rem .55rem .55rem; min-width: 0; overflow: hidden;
   background: rgba(0,0,0,.18); border: 1px solid rgba(0,0,0,.55); border-radius: 2px; box-shadow: inset 0 1px 0 rgba(255,240,215,.04);
 }
 .vedmak .craft-tab .alch-card:hover { background: rgba(255,245,225,.03); }
 .vedmak .craft-tab .alch-card .item-frame { width: 62px; height: 62px; }
 .vedmak .craft-tab .alch-card .item-frame img { width: 50px; height: 50px; }
 .vedmak .craft-tab .alch-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
-.vedmak .craft-tab .alch-body .item-name { font-size: 1.05rem; }
+.vedmak .craft-tab .alch-body .item-name { font-size: 1.05rem; overflow-wrap: anywhere; }
 .vedmak .craft-tab .alch-effect {
-  font-size: .74rem; line-height: 1.35; color: #bab4a8;
+  font-size: .74rem; line-height: 1.35; color: #bab4a8; overflow-wrap: anywhere;
   overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
-.vedmak .craft-tab .alch-meta { display: flex; align-items: center; gap: .45rem; margin-top: auto; }
+.vedmak .craft-tab .alch-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .45rem; margin-top: auto; min-width: 0; }
+.vedmak .craft-tab .alch-meta .go-btn { max-width: 100%; white-space: normal; line-height: 1.15; text-align: center; }
 .vedmak .craft-tab :is(.tox, .dur) { display: inline-flex; align-items: center; gap: .2rem; font-size: .72rem; color: #d6d0c2; white-space: nowrap; }
 .vedmak .craft-tab .tox svg { width: .7rem; height: .78rem; fill: #8e5aa0; stroke: #050607; stroke-width: 1.2; }
 .vedmak .craft-tab :is(.dur svg, svg.hg) { width: .7rem; height: .78rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }

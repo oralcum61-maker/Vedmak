@@ -8,7 +8,7 @@ import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS, MAX_ENHANCEMENT_SLOTS } from "../config/crafting.mjs";
 import { ARMOR_LOCATIONS } from "../config/items.mjs";
-import { performCheck } from "../dice/check.mjs";
+import { dialogCheck } from "../dice/check.mjs";
 import { postCard, spendOne } from "../util.mjs";
 import { hasTool, findItemData, giveItem } from "./craft.mjs";
 
@@ -21,7 +21,7 @@ async function craftingCheck(actor, dc, title) {
     { label: SKILLS.crafting.label, value: skill.total, always: true }
   ];
   if (!hasTool(actor, "craftsman")) parts.push({ label: "Без инструментов ремесленника", value: -4 });
-  return performCheck({ actor, title, parts, dc });
+  return dialogCheck({ actor, title, parts, dc });
 }
 
 /** Выбрать предметы галочками. */
@@ -69,7 +69,7 @@ async function attachWeaponEnhancement(actor, item) {
   if (!chosen) return null;
   const weapon = chosen[0].item;
   const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление оружия: ${item.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
 
   const src = weapon.system.toObject();
   const update = {};
@@ -117,7 +117,7 @@ export async function attachEnhancement(actor, item) {
   const noSlot = chosen.filter(c => c.item.system.freeSlots <= 0);
   if (noSlot.length) return ui.notifications.warn(`Нет свободных ячеек: ${noSlot.map(c => c.item.name).join(", ")}.`);
   const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление брони: ${item.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
 
   // Один набор — одно наложение (стр. 90): все выбранные части помнят общий номер набора
   // во флаге `armorKits`, чтобы снять набор целиком и вернуть ровно один. Вес набора — на первой части.
@@ -167,7 +167,7 @@ export async function detachEnhancement(actor, armor, index) {
     ? actor.itemTypes.armor.filter(a => armorKits(a).some(k => k.id === kitId))
     : [armor];
   const check = await craftingCheck(actor, CRAFTING.detachDc, `Снять усиление: ${e.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
   for (const piece of pieces) {
     const enhancements = piece.system.toObject().enhancements;
     const at = piece === armor ? index : enhancements.findIndex(x => x.kind === "armor" && x.name === e.name);
@@ -332,7 +332,7 @@ async function attachEnchantment(actor, item) {
   if (!chosen) return null;
   const target = chosen[0].item;
   const check = await craftingCheck(actor, s.size === "large" ? 21 : 15, `Зачарование: ${item.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
 
   if (weapon) {
     const effects = target.system.toObject().effects.filter(e => !e.source);
