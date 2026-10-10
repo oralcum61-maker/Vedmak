@@ -364,6 +364,23 @@ function applyCursor(on) {
 Hooks.on("canvasReady", () => applyCursor(!!game.settings.get(SYSTEM_ID, "themedCursor")));
 
 /**
+ * Курсор ожидания: Foundry ставит `cursor: wait | progress` прямо в стиль body — переводим в классы для CSS.
+ * Селектор по атрибуту style (`body[style*="cursor: wait"] *`) был дорогим: браузер от любого изменения style
+ * (сдвиг окна — left/top) пересчитывал стили всего поддерева.
+ */
+function watchBusyCursor() {
+  const body = document.body;
+  const sync = () => {
+    const cursor = body.style.cursor;
+    body.classList.toggle("vd-wait", cursor === "wait");
+    body.classList.toggle("vd-progress", cursor === "progress");
+  };
+  new MutationObserver(sync).observe(body, { attributes: true, attributeFilter: ["style"] });
+  sync();
+}
+Hooks.once("ready", watchBusyCursor);
+
+/**
  * Разложить компендиумы по папкам из манифеста.
  * Foundry делает это только при первом запуске мира, поэтому в уже созданных мирах
  * группы не появлялись бы вовсе.

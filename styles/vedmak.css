@@ -2373,9 +2373,11 @@ body.vedmak-cursor :is(abbr[title], .warning[data-tooltip]) { cursor: var(--curs
 body.vedmak-cursor .application .window-resize-handle { cursor: var(--cursor-nwse-resize); }
 body.vedmak-cursor .ProseMirror.resize-cursor { cursor: var(--cursor-ew-resize); }
 body.vedmak-cursor .vedmak .vd-limited .portrait-frame { cursor: var(--cursor-zoom-in); }
-/* Ожидание и загрузка Foundry ставит на body прямо в стиле элемента — перебиваем важностью */
-body.vedmak-cursor[style*="cursor: wait"], body.vedmak-cursor[style*="cursor: wait"] * { cursor: var(--cursor-wait) !important; }
-body.vedmak-cursor[style*="cursor: progress"], body.vedmak-cursor [aria-busy="true"] { cursor: var(--cursor-progress) !important; }
+/* Ожидание и загрузка: Foundry ставит курсор прямо в стиль body, наблюдатель (vedmak.mjs, watchBusyCursor) переводит его
+   в классы vd-wait / vd-progress. Селектор по атрибуту style с потомками (`[style*=…] *`) заставлял браузер при любом
+   изменении style любого элемента пересчитывать всё его поддерево — перетаскивание окна (left/top) фризило лист */
+body.vedmak-cursor.vd-wait, body.vedmak-cursor.vd-wait * { cursor: var(--cursor-wait) !important; }
+body.vedmak-cursor.vd-progress, body.vedmak-cursor [aria-busy="true"] { cursor: var(--cursor-progress) !important; }
 
 /* Добыча чудовища: монеты уже взяты — строка притушена, кнопка не нажимается, у ведущего «вернуть» */
 .vedmak .loot-list li.taken .loot-name, .vedmak .loot-list li.taken .loot-qty { opacity: .45; text-decoration: line-through; }
