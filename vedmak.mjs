@@ -51,6 +51,7 @@ import { registerFxSettings, registerFx } from "./module/fx/fx.mjs";
 import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
 import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
+import { CleanupApp } from "./module/apps/cleanup.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
@@ -190,6 +191,15 @@ Hooks.once("init", () => {
     hint: "Названия валют, курс к кроне, вес монеты и комиссия менялы. Цены в книгах — в кронах.",
     icon: "fa-solid fa-coins",
     type: CurrencyConfig,
+    restricted: true
+  });
+  // Зависшие эффекты и флаги от прежних версий или прерванных сценариев (module/apps/cleanup.mjs)
+  game.settings.registerMenu(SYSTEM_ID, "cleanupMenu", {
+    name: "Чистка зависших эффектов",
+    label: "Найти и снять",
+    hint: "Бессрочные регенерации, поддержание заклинаний без заклинателя, вышедшие сроки и раунды вне боя, «Решимость» дуэли — по всем акторам и токенам. Снимается только отмеченное.",
+    icon: "fa-solid fa-broom",
+    type: CleanupApp,
     restricted: true
   });
   game.settings.register(SYSTEM_ID, "coinWeight", {

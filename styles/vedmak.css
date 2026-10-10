@@ -2250,6 +2250,15 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 .vedmak-card .perf-table td + td, .vedmak-card .perf-table th + th { text-align: right; font-family: var(--vd-font-body); }
 .vedmak-card.perf-report .note { margin: .2rem 0; font-size: .74rem; }
 
+/* Чистка зависших эффектов (templates/apps/cleanup.hbs): группы по видам, строка — галочка, эффект и где он */
+.vedmak.cleanup-app .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.vedmak .cleanup-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .5rem; }
+.vedmak .cleanup-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: .5rem; padding-right: .2rem; }
+.vedmak .cleanup-row { display: grid; grid-template-columns: auto 1fr 1fr; align-items: center; gap: .5rem; padding: .1rem 0; }
+.vedmak .cleanup-row .where { color: var(--vd-text-dim); font-size: .85em; }
+.vedmak.cleanup-app .form-footer { display: flex; flex-direction: row; gap: .5rem; flex: none; }
+.vedmak.cleanup-app .form-footer button { flex: 1; }
+
 /* Ведьмачьи школы — настройки мира (templates/apps/schools.hbs): школа — вкладышем, механика — строками */
 .vedmak.school-config .window-content { display: flex; flex-direction: column; overflow: hidden; }
 .vedmak .school-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .5rem; }

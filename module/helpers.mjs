@@ -137,6 +137,8 @@ export const TEMPLATE_PATHS = [
   "systems/vedmak/templates/apps/currencies.hbs",
   "systems/vedmak/templates/apps/schools-footer.hbs",
   "systems/vedmak/templates/apps/schools.hbs",
+  "systems/vedmak/templates/apps/cleanup.hbs",
+  "systems/vedmak/templates/apps/cleanup-footer.hbs",
   "systems/vedmak/templates/apps/wizard.hbs",
   "systems/vedmak/templates/chat/lifepath.hbs",
   "systems/vedmak/templates/item/description.hbs",
