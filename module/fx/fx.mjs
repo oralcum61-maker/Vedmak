@@ -417,8 +417,13 @@ export function registerFx() {
   Hooks.on("createActiveEffect", onCreateEffect);
   Hooks.on("updateCombat", onUpdateCombat);
   Hooks.on("renderChatMessageHTML", onRenderMessage);
-  // База JB2A в Sequencer появляется к его собственному событию готовности — тогда и подгружаем анимации боя
-  Hooks.once("sequencerReady", preloadCombatFx);
+  // Видео боя JB2A подгружаются к первому бою, а не при входе в мир (10.10): в сессии без боя они не нужны, а при входе
+  // мешали загрузке сцены. База JB2A в Sequencer появляется к его собственному событию готовности
+  let fxPreloaded = false;
+  const preloadForCombat = () => { if (!fxPreloaded) fxPreloaded = preloadCombatFx(); };
+  Hooks.once("sequencerReady", () => { if (game.combats?.some(c => c.started || c.combatants.size)) preloadForCombat(); });
+  Hooks.on("createCombatant", preloadForCombat);
+  Hooks.on("combatStart", preloadForCombat);
   Hooks.once("ready", () => {
     applyUiMotion();
     preloadSounds();

@@ -167,12 +167,14 @@ export function playSpellFx(r, { caster, targets = [], zone = null, origin = nul
 /**
  * Подгрузить заранее анимации боя (по первой из списка на каждый вид): иначе первый удар за сессию
  * ждёт загрузки файла и запаздывает на секунду. Заклинания грузятся по требованию — их сотни.
+ * @returns {boolean} начата ли подгрузка (false — Sequencer или JB2A ещё не готовы)
  */
 export function preloadCombatFx() {
-  if (!jb2aReady() || !globalThis.Sequencer?.Preloader) return;
+  if (!jb2aReady() || !globalThis.Sequencer?.Preloader) return false;
   const files = ["slash", "slashHeavy", "unarmed", "claws", "bite", "arrow", "bolt", "impact", "blood", "sparks", "death"]
     .map(pick).filter(Boolean);
   try { Sequencer.Preloader.preload(files, false)?.catch?.(() => {}); } catch { /* старый Sequencer — без предзагрузки */ }
+  return true;
 }
 
 /**
