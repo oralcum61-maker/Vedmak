@@ -1,5 +1,7 @@
 // Статусы «Ведьмака» (эффекты стр. 161, состояния боя стр. 153–163) и их влияние на броски.
 
+import { invisibilityParts } from "./monster-traits.mjs";
+
 const change = (key, value) => ({ key, type: "add", value, phase: "initial" });
 
 /** Статусы для HUD токена. Механика без `changes` учитывается при бросках (см. statusRollMods). */
@@ -115,5 +117,7 @@ export function statusRollMods(actor, kind, { skill } = {}) {
       if (partial?.stealth) parts.push({ label: `${effect.name}: частично виден`, value: partial.stealth });
     }
   }
+  // Невидимость чудовищ («Превосходная невидимость», «Невидимость») — по статусу и способности
+  parts.push(...invisibilityParts(actor, kind, skill));
   return parts;
 }

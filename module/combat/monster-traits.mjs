@@ -3,6 +3,10 @@
 // поэтому работают и у бестиария BS & Tobi, и у существ из книг, и у существ, которых ведущий завёл сам.
 
 import { plainText } from "../util.mjs";
+import { performCheck } from "../dice/check.mjs";
+import { rollFormula } from "./common.mjs";
+import { computeManual } from "./manual.mjs";
+import { applyDamageToActor, serialByActor } from "./damage.mjs";
 
 const SYS = "vedmak";
 
@@ -34,14 +38,14 @@ function sentenceOf(text, re) {
  * Порог полёта: число — сбивает урон больше него, 0 — любой урон (птицы), null — урон не сбивает (Наблюдатель).
  * @param {Actor} actor
  * @returns {{regen: {amount: number, conditional: boolean, crits: boolean, text: string}|null, incorporeal: boolean,
- *   flight: {threshold: number|null, dc: number, text: string}|null}}
+ *   flight: {threshold: number|null, dc: number, text: string}|null, invisibility: "superior"|"basic"|null}}
  */
 export function monsterTraits(actor) {
   const list = actor?.type === "monster" ? actor.system.abilities : null;
-  if (!list) return { regen: null, incorporeal: false, flight: null };
+  if (!list) return { regen: null, incorporeal: false, flight: null, invisibility: null };
   let out = CACHE.get(list);
   if (out) return out;
-  out = { regen: null, incorporeal: false, flight: null };
+  out = { regen: null, incorporeal: false, flight: null, invisibility: null };
   for (const a of list) {
     const name = String(a.name ?? "").trim().toLowerCase();
     const text = plainText(a.description);
@@ -61,6 +65,10 @@ export function monsterTraits(actor) {
       else if (immortal) out.regen.crits = true;
     }
     if (name.startsWith("бесплотн")) out.incorporeal = true;
+    // «Превосходная невидимость» (брукса, высший вампир) — как «Покров»; «Невидимость», «Постоянная невидимость»
+    // (катакан, носферат, амарок) — обычная. «Невидимость для магии» — другое (медальон не чует)
+    const inv = name.match(/^(превосходная |постоянная )?невидимость$/);
+    if (inv && out.invisibility !== "superior") out.invisibility = inv[1]?.startsWith("превосход") ? "superior" : "basic";
     if (!out.flight && /^пол[её]т/.test(name)) {
       // «более 10 урона одной атакой», «более 5 пунктов урона» — порог; «нанеся ей урон» — любой урон;
       // ни того ни другого («только дезориентировав или заставив потерять сознание») — урон не сбивает
@@ -82,6 +90,49 @@ export function isIncorporeal(actor) {
   if (!actor) return false;
   const always = actor.type === "monster" && monsterTraits(actor).incorporeal;
   return (always || actor.statuses?.has(INCORPOREAL)) && !isRevealed(actor);
+}
+
+/**
+ * Невидимость чудовища сейчас: статус «Невидимость» у существа с такой способностью. Ирден и лунная пыль
+ * проявляют: превосходная — лишь частично, обычная — полностью.
+ * @returns {{kind: "superior"|"basic", revealed: boolean}|null}
+ */
+export function monsterInvisibility(actor) {
+  if (actor?.type !== "monster" || !actor.statuses?.has("invisible")) return null;
+  const kind = monsterTraits(actor).invisibility;
+  return kind ? { kind, revealed: isRevealed(actor) } : null;
+}
+
+/**
+ * Поправки к броскам невидимого чудовища: превосходная — +5 к атаке и защите, +10 к Скрытности (проявлена или
+ * замечена — +3 и +5); обычная — +5 к атаке и +10 к Скрытности, проявленная — ничего.
+ * @param {Actor} actor
+ * @param {"attack"|"defense"|"skill"} kind
+ * @param {string} [skill]
+ */
+export function invisibilityParts(actor, kind, skill) {
+  const inv = monsterInvisibility(actor);
+  if (!inv || (inv.kind === "basic" && inv.revealed)) return [];
+  const partial = inv.kind === "superior" && inv.revealed;
+  const label = inv.kind === "superior" ? (partial ? "Превосходная невидимость: частично видим" : "Превосходная невидимость") : "Невидимость";
+  const value = kind === "attack" ? (partial ? 3 : 5)
+    : kind === "defense" ? (inv.kind === "superior" ? (partial ? 3 : 5) : 0)
+    : skill === "stealth" ? (partial ? 5 : 10) : 0;
+  return value ? [{ label, value }] : [];
+}
+
+/** Против обычной невидимости даже заметившему: −3 к атаке по существу и к защите от его атак. */
+export function invisibleOpponentPart(opponent) {
+  const inv = monsterInvisibility(opponent);
+  return inv?.kind === "basic" && !inv.revealed ? [{ label: `${opponent.name}: невидим`, value: -3 }] : [];
+}
+
+/** Обычная невидимость спадает, когда существо атакует; превосходная — когда по нему попали. */
+export async function dropInvisibility(actor, reason) {
+  const inv = monsterInvisibility(actor);
+  if (!inv || (reason === "attack" ? inv.kind !== "basic" : inv.kind !== "superior")) return [];
+  await actor.toggleStatusEffect("invisible", { active: false });
+  return [reason === "attack" ? `${actor.name} атакует и становится видимым.` : `По ${actor.name} попали — невидимость спала.`];
 }
 
 /** Лунная пыль не даёт регенерировать (котолак, чёрт, териантроп…): аура облака или эффект с флагом noRegen. */
@@ -132,7 +183,36 @@ export async function flightAfterDamage(target, dealt) {
   if (height > 0) await Promise.all(tokens.filter(t => elevationOf(t) > 0).map(t => t.update({ elevation: 0 })));
   const why = byDamage ? `урон ${dealt} > ${threshold}` : CONFIG.statusEffects.find(s => s.id === status)?.name?.toLowerCase();
   const from = height > 0 ? ` с высоты ${height} м` : "";
-  return [`${target.name} сбит в полёте (${why}): падает${from} и сбит с ног. Атлетика СЛ ${dc}, иначе урон от падения.`];
+  return [`${target.name} сбит в полёте (${why}): падает${from} и сбит с ног.`, ...await fallDamage(target, height, dc)];
+}
+
+/**
+ * Падение сбитого летуна: Атлетика против СЛ из «Полёта» (без сознания — не проходит), при провале — урон
+ * от падения по корнику: высота в метрах / 2 костей d6 по туловищу, броня поглощает.
+ * @param {Actor} actor
+ * @param {number} height — высота в метрах
+ * @param {number} dc
+ * @returns {Promise<string[]>} строки для карточки
+ */
+export async function fallDamage(actor, height, dc) {
+  const dice = Math.floor(height / 2);
+  if (!dice || actor.statuses.has("dead")) return [];
+  let saved = false;
+  if (!actor.statuses.has("unconscious")) {
+    const stat = actor.system.stats.dex;
+    const skill = actor.system.skills.athletics;
+    const check = await performCheck({ actor, title: "Атлетика: падение", subtitle: `С высоты ${height} м`, dc,
+      parts: [{ label: stat.label, value: stat.effective, always: true }, { label: skill.label, value: skill.total, always: true },
+        { label: "Штрафы", value: skill.penalty ?? 0 }] });
+    saved = !!check.success;
+  }
+  if (saved) return [`Атлетика СЛ ${dc} — удержался, урона от падения нет.`];
+  const { total } = await rollFormula(`${dice}d6`);
+  const data = await computeManual(actor, { total, damageType: "bludgeoning", where: "torso" });
+  // Через очередь урона актора: удар, пришедший одновременно с падением, не перезапишет ПЗ
+  const report = await serialByActor(actor, () => applyDamageToActor(actor, data));
+  const why = actor.statuses.has("unconscious") ? "без сознания" : `Атлетика СЛ ${dc} провалена`;
+  return [`Падение (${why}): ${dice}d6 = ${total}, по туловищу ${data.final}.`, ...(report?.lines ?? [])];
 }
 
 /** Сообщение в чат от имени актора (для сбивания не уроном). */
@@ -173,6 +253,8 @@ export function traitSummary(actor) {
     if (t.regen.crits) out.push("заживление критов — напоминание");
   }
   if (t.incorporeal) out.push("бесплотен — оружие не ранит вне Ирдена и лунной пыли");
+  if (t.invisibility) out.push(t.invisibility === "superior" ? "превосходная невидимость по статусу «Невидимость» (+5 к атаке и защите, спадает от попадания)"
+    : "невидимость по статусу «Невидимость» (+5 к атаке, противникам −3, спадает при атаке)");
   if (t.flight) {
     const thr = t.flight.threshold;
     out.push(`полёт по высоте токена — сбивает ${thr === null ? "только дезориентация" : thr ? `урон больше ${thr}` : "любой урон"}, Атлетика СЛ ${t.flight.dc}`);

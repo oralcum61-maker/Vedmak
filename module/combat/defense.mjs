@@ -6,6 +6,7 @@ import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
+import { invisibleOpponentPart } from "./monster-traits.mjs";
 import { witcherSchools } from "../config/character.mjs";
 import { magicFumble } from "../config/magic.mjs";
 import {
@@ -323,6 +324,13 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   if (cfg.outnumbered > 1) parts.push({ label: `Противников в ближнем бою: ${cfg.outnumbered}`, value: -(cfg.outnumbered - 1) });
   for (const key of cfg.situations) parts.push({ label: DEFENSE_SITUATIONS[key].label, value: DEFENSE_SITUATIONS[key].mod });
   parts.push(...statusRollMods(actor, "defense"));
+  // Атакует невидимое чудовище (обычная невидимость): −3 к защите даже заметившему. Атакой невидимость спадает,
+  // поэтому сначала — признак из данных атаки, сделанной из невидимости
+  if (attack.attackerUnseen) parts.push({ label: `${attack.attacker.name}: невидим`, value: -3 });
+  else {
+    const attacker = resolveActor(attack.attacker?.tokenUuid) ?? resolveActor(attack.attacker?.actorUuid);
+    if (attacker) parts.push(...invisibleOpponentPart(attacker));
+  }
   if (ARM_DEFENSES.includes(cfg.defense)) parts.push(...armWoundParts(actor));
   if (cfg.mod) parts.push({ label: "Модификатор", value: cfg.mod });
 

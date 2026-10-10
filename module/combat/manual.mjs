@@ -79,7 +79,7 @@ export async function manualDamage(actors, preset = {}) {
 }
 
 /** Урон по одной или всем частям тела с бронёй, сопротивлениями и множителями. */
-async function computeManual(actor, { total, damageType, where, ignoreArmor, nonLethal, status, statusChance = 100, statusRounds = "", presetEffects = null }) {
+export async function computeManual(actor, { total, damageType, where, ignoreArmor, nonLethal, status, statusChance = 100, statusRounds = "", presetEffects = null }) {
   const sys = actor.system;
   const d = sys.derived;
   const table = d.bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;

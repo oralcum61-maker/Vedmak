@@ -14,7 +14,7 @@ import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafti
 import { markDead } from "./saves.mjs";
 import { implantStatusBonus, implantBurnVulnerability } from "../config/crafting.mjs";
 import { wallCover } from "./cover.mjs";
-import { isIncorporeal, flightAfterDamage } from "./monster-traits.mjs";
+import { isIncorporeal, flightAfterDamage, dropInvisibility } from "./monster-traits.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
 
@@ -681,6 +681,7 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
     const bite = dmg.drain > 0 || /укус|клык/i.test(dmg.attackLabel ?? "");
     report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell, bite }));
     report.lines.push(...await flightAfterDamage(actor, dealt));
+    report.lines.push(...await dropInvisibility(actor, "hit"));
     if (dmg.dimeritium && !actor.effects.some(e => e.flags?.vedmak?.dimeritium)) {
       report.dimeritium = true;
       report.lines.push("Удар двимеритом: касание двимерита (кнопка ниже).");

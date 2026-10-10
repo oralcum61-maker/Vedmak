@@ -15,6 +15,7 @@ import { inTrueForm } from "../character/true-form.mjs";
 import { prostheticStrike, equippedProstheses, weaponMount } from "./prosthetics.mjs";
 import { ammoProps } from "../config/items.mjs";
 import { aimBonus, clearAim } from "./manual.mjs";
+import { invisibleOpponentPart, monsterInvisibility, dropInvisibility } from "./monster-traits.mjs";
 
 /**
  * Высасывание крови («Высший вампир. Вторая редакция», стр. 9): укус вампира с запасом Очков Крови.
@@ -436,6 +437,9 @@ export async function rollAttack(actor, src, targets, cfg) {
     if (s) parts.push({ label: s.label, value: s.mod });
   }
   parts.push(...statusRollMods(actor, "attack"));
+  // Цель — невидимое чудовище (обычная невидимость): −3 даже заметившему
+  const target0 = resolveActor(targets[0]?.tokenUuid ?? targets[0]?.actorUuid);
+  if (target0) parts.push(...invisibleOpponentPart(target0));
   if (usesArm(src, cfg.attackType)) parts.push(...armWoundParts(actor));
 
   // Дополнительное действие атаки: 3 Вын, −3 (стр. 151)
@@ -501,6 +505,10 @@ export async function rollAttack(actor, src, targets, cfg) {
     ? (weightMult === 1 ? `${chargeDice}d6` : `floor(${chargeDice}d6 * ${weightMult})`) : "";
 
   const fumbleKind = unarmed ? "unarmed" : src.isRanged ? "ranged" : "melee";
+  // Обычная невидимость чудовища спадает, когда оно атакует, — но эта атака сделана из невидимости: защита от неё
+  // ещё с −3 (защиту бросают после карточки, когда статус уже снят, поэтому признак едет в данных атаки)
+  const inv = monsterInvisibility(actor);
+  const unveil = inv?.kind === "basic";
   const data = {
     kind: "attack",
     attacker: { actorUuid: actor.uuid, tokenUuid: actor.token?.uuid ?? actorToken(actor)?.document.uuid ?? null, name: actor.name },
@@ -525,14 +533,18 @@ export async function rollAttack(actor, src, targets, cfg) {
     fumbleAuto: !!(roll.fumble && fumbleEffect(fumbleKind, roll.fumbleValue)),
     targets,
     notes,
+    attackerUnseen: unveil && !inv.revealed,
     config: cfg
   };
 
-  return postCard({
+  if (unveil) notes.push(`${actor.name} атакует и становится видимым.`);
+  const card = await postCard({
     template: "systems/vedmak/templates/chat/attack.hbs",
     data: { ...data, hasTargets: targets.length > 0 },
     actor, flags: { attack: data }, rolls: roll.rolls ?? [], messageMode: cfg.messageMode
   });
+  if (unveil) await dropInvisibility(actor, "attack");
+  return card;
 }
 
 /** Повторить атаку с теми же настройками (вторая быстрая атака, СА чудовища). */
