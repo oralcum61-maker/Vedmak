@@ -9,7 +9,7 @@ import { STATS } from "../config/stats.mjs";
 import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS, MAX_ENHANCEMENT_SLOTS } from "../config/crafting.mjs";
 import { ARMOR_LOCATIONS } from "../config/items.mjs";
 import { performCheck } from "../dice/check.mjs";
-import { postCard } from "../util.mjs";
+import { postCard, spendOne } from "../util.mjs";
 import { hasTool, findItemData, giveItem } from "./craft.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -22,12 +22,6 @@ async function craftingCheck(actor, dc, title) {
   ];
   if (!hasTool(actor, "craftsman")) parts.push({ label: "Без инструментов ремесленника", value: -4 });
   return performCheck({ actor, title, parts, dc });
-}
-
-async function spendOne(item) {
-  const q = item.system.quantity ?? 1;
-  if (q <= 1) await item.delete();
-  else await item.update({ "system.quantity": q - 1 });
 }
 
 /** Выбрать предметы галочками. */

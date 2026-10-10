@@ -4,10 +4,9 @@
 // каждая рука и нога по 3. Книга не называет навык нанесения — берём Искусство.
 
 import { TATTOO_LOCATIONS, TATTOO_TIERS } from "../config/items.mjs";
-import { postCard, renderTemplate } from "../util.mjs";
+import { postCard, renderTemplate, esc } from "../util.mjs";
 import { checkChance } from "./implant.mjs";
 
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 const TATTOO_SKILL = "fineArts";
 // Фигура для окна (PLAN 4.121): силуэт одним контуром (посчитан полем расстояний, как рука в «Филе»), зоны мест
 // вырезаны из него многоугольниками. Спереди правая сторона тела — слева от зрителя, сзади — наоборот.

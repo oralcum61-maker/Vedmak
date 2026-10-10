@@ -22,7 +22,7 @@ import { applyStatus } from "../combat/damage.mjs";
 import { alchemyAuto, anyoneCanDrink, rollCount } from "../config/alchemy-auto.mjs";
 import { rollStunSave } from "../combat/saves.mjs";
 import { applyVision, healCritDialog } from "./alchemy-triggers.mjs";
-import { inCombat, roundsAsTime } from "../util.mjs";
+import { inCombat, roundsAsTime, spendOne } from "../util.mjs";
 import { timeIsUp } from "../magic/timed.mjs";
 import { deleteEffectsClamped } from "../magic/buffs.mjs";
 import { equippedProstheses, prostheticStats, wearProsthesis, wearLine } from "../combat/prosthetics.mjs";
@@ -53,12 +53,6 @@ async function durationFromText(text = "") {
   if (unit === "раунд") return { rounds: n, minutes: 0, rolled };
   const minutes = unit === "минут" ? n : unit === "час" ? n * 60 : n * 1440;
   return { rounds: 0, minutes, rolled };
-}
-
-async function spendOne(item) {
-  const q = item.system.quantity ?? 1;
-  if (q <= 1) await item.delete();
-  else await item.update({ "system.quantity": q - 1 });
 }
 
 /** Стойкость со СЛ (Тел + Стойкость). */
@@ -445,7 +439,7 @@ async function preparationOnTarget(target, use, item) {
   // Щелочной порошок: кислота «Раны в живот» больше не жжёт
   if (auto.neutralizeAcid) {
     const burning = (target.itemTypes.critWound ?? []).filter(w => w.system.mods?.acid && !w.flags?.vedmak?.acidNeutralized);
-    for (const w of burning) await w.setFlag("vedmak", "acidNeutralized", true);
+    if (burning.length) await target.updateEmbeddedDocuments("Item", burning.map(w => ({ _id: w.id, "flags.vedmak.acidNeutralized": true })));
     lines.push(burning.length ? `Кислота нейтрализована: ${burning.map(w => w.name).join(", ")} больше не жжёт.` : "Кислотной раны нет — порошок только на одну порцию кислоты.");
   }
   // Обеззараживающая жидкость: метка на персонаже до заживления ран — её читает «Дни отдыха» (combat/manual.mjs)
@@ -874,12 +868,9 @@ export function expireAlchemy(actor) {
     // magicStartOfTurn, после снятия зелий на раунды
     if (await clearToxicPoisonNow(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
     const now = game.time.worldTime ?? 0;
-    for (const w of actor.itemTypes?.weapon ?? []) {
-      if (w.system.oil.target && w.system.oil.until <= now) {
-        lines.push(`${w.name}: масло «${w.system.oil.name}» выдохлось.`);
-        await w.update({ "system.oil": { name: "", target: "", until: 0 } });
-      }
-    }
+    const dry = (actor.itemTypes?.weapon ?? []).filter(w => w.system.oil.target && w.system.oil.until <= now);
+    for (const w of dry) lines.push(`${w.name}: масло «${w.system.oil.name}» выдохлось.`);
+    if (dry.length) await actor.updateEmbeddedDocuments("Item", dry.map(w => ({ _id: w.id, "system.oil": { name: "", target: "", until: 0 } })));
     return lines;
   });
 }

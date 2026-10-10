@@ -600,11 +600,15 @@ export async function wearArmor(actor, wear) {
       natural = Math.max(natural, amount);
     }
   }
+  // Вся изношенная броня (надетая — предметы самого актора) одним запросом: по отдельности каждый предмет
+  // заново пересчитывал актора и перерисовывал лист
+  const updates = [];
   for (const [item, slots] of byItem) {
-    await item.update(Object.fromEntries(Object.entries(slots).map(([slot, v]) => [`system.sp.${slot}.value`, v])));
+    updates.push({ _id: item.id, ...Object.fromEntries(Object.entries(slots).map(([slot, v]) => [`system.sp.${slot}.value`, v])) });
     const labels = Object.entries(slots).map(([slot, v]) => `${CONFIG.VEDMAK.ARMOR_LOCATIONS[slot] ?? slot} ${v}`);
     lines.push(`${item.name}: ПБ ${labels.join(", ")}.`);
   }
+  if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
   if (natural && actor.type === "monster") {
     const value = Math.max(0, actor.system.armor - natural);
     await actor.update({ "system.armor": value });

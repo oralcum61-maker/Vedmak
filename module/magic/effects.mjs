@@ -146,8 +146,10 @@ export async function magicStartOfTurn(actor) {
     if (effect.flags.vedmak.timed?.key === "shield") shieldEnded = true;
   }
 
-  // Регенерация и щиты с отсчётом раундов
+  // Регенерация и щиты с отсчётом раундов; счётчики раундов всех эффектов — одним запросом в конце
   let hp = actor.system.hp.value;
+  const counters = new Map();
+  const count = (effect, path, left) => counters.set(effect.id, { ...counters.get(effect.id), _id: effect.id, [path]: left });
   for (const effect of actor.effects.filter(e => e.flags?.vedmak?.timed)) {
     const timed = effect.flags.vedmak.timed;
     // Снятое выше, выключенное и истёкшее (в том числе зелья — их снимает expireAlchemy) не лечит
@@ -177,11 +179,10 @@ export async function magicStartOfTurn(actor) {
         lines.push(`${effect.name}: действие закончилось.`);
         if (timed.key === "shield") shieldEnded = true;
       } else {
-        await effect.update({ "flags.vedmak.timed.rounds": left });
+        count(effect, "flags.vedmak.timed.rounds", left);
       }
     }
   }
-  if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
 
   // Статусы с длительностью в раундах
   // (отравление от токсичности — отдельный эффект без срока, его держит порог, alchemy.mjs)
@@ -191,9 +192,12 @@ export async function magicStartOfTurn(actor) {
       toDelete.push(effect.id);
       lines.push(`${effect.name}: прошло.`);
     } else {
-      await effect.update({ "flags.vedmak.statusRounds": left });
+      count(effect, "flags.vedmak.statusRounds", left);
     }
   }
+  const updates = [...counters.values()].filter(u => !toDelete.includes(u._id));
+  if (updates.length) await actor.updateEmbeddedDocuments("ActiveEffect", updates);
+  if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
 
   const unique = [...new Set(toDelete)].filter(id => actor.effects.has(id));
   // ПЗ после баффа с бонусом к максимуму урезаются тут же и с ожиданием: следом начало хода читает ПЗ

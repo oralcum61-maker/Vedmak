@@ -65,7 +65,6 @@ export async function castSpell(actor, item, opts = {}) {
   const s = item.system;
   const d = actor.system.derived;
   let targets = opts.targets ?? currentTargets();
-  const skillKey = MAGIC_SKILL[s.kind] ?? "spellCasting";
 
   // Драконья магия «Офира и Зеррикании» (стр. 120): творится только в Драконьей форме
   if (item.flags?.vedmak?.dragonMagic && !actor.effects.some(e => e.active && e.flags?.vedmak?.dragonForm)) {

@@ -2,13 +2,12 @@
 
 import { DERIVED, SKILL_STATS, STATS } from "../config/stats.mjs";
 import { SKILLS, skillsByStat } from "../config/skills.mjs";
-import { CRIT_LEVELS, CRIT_STATES, CRIT_WOUNDS, HEALING_DAYS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER } from "../config/combat.mjs";
+import { CRIT_LEVELS, CRIT_STATES, CRIT_WOUNDS, HEALING_DAYS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MOUNTS } from "../config/combat.mjs";
 import { attackSources } from "../combat/attack.mjs";
 import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
 import { manualDamage, restTurn, restDays, aimTurn, aimBonus } from "../combat/manual.mjs";
 import { prostheticStats } from "../combat/prosthetics.mjs";
 import { controlCheck } from "../combat/mounted.mjs";
-import { MOUNTS } from "../config/combat.mjs";
 import { levelLabel, ELEMENT_GLYPHS, SIGN_FORMS, MAGIC_LEARNING } from "../config/magic.mjs";
 import { spellAutomation } from "../config/spell-auto.mjs";
 import { castSpell, vigorUsed, maintainedSpells, costNote } from "../magic/cast.mjs";
@@ -16,7 +15,7 @@ import { endMaintained } from "../magic/effects.mjs";
 import { dimeritiumRow, touchDimeritium, endDimeritium } from "../magic/dimeritium.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { currencies, toCrowns, coinWeightKg, coinWeightEnabled, formatRate } from "../config/money.mjs";
-import { compareRu, balanceColumns, worldSetting } from "../util.mjs";
+import { compareRu, balanceColumns, worldSetting, plainText } from "../util.mjs";
 import { profileSheet } from "../apps/perf.mjs";
 import { verbalAction, verbalContext, resetDuel, setDuelResolve } from "../combat/verbal.mjs";
 import { detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
@@ -79,18 +78,6 @@ function weaponRow(item) {
 /* --------------------------------- Магия --------------------------------- */
 
 const LEVEL_ORDER = { novice: 0, journeyman: 1, master: 2, archPriest: 3 };
-// Описание без разметки: одно и то же описание чистится регулярками на каждую перерисовку «Магии» — запоминаем
-const PLAIN_CACHE = new Map();
-const plainText = html => {
-  const src = String(html ?? "");
-  let out = PLAIN_CACHE.get(src);
-  if (out === undefined) {
-    out = src.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
-    if (PLAIN_CACHE.size > 1000) PLAIN_CACHE.clear();
-    PLAIN_CACHE.set(src, out);
-  }
-  return out;
-};
 // Эмаль кнопки по виду магии: заклинание, знак и дар — фиолет, инвокация — золото, ритуал — сталь, порча — багрянец
 const CAST_GO = { spell: "arcane", sign: "arcane", gift: "arcane", invocation: "holy", ritual: "ritual", hex: "hex" };
 

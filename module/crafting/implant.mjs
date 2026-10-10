@@ -9,12 +9,11 @@
 import { IMPLANT_RUNES, IMPLANT_GLYPHS, IMPLANT_TIERS, IMPLANT_LIMIT } from "../config/crafting.mjs";
 import { findItemData } from "./craft.mjs";
 import { RACES } from "../config/character.mjs";
-import { postCard, renderTemplate } from "../util.mjs";
+import { postCard, renderTemplate, esc, spendOne } from "../util.mjs";
 
 const SYS = "vedmak";
 const BOOK = "Офир и Зеррикания";
 const IMPLANT_SKILL = "spellCasting";
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 export const implantsOf = actor => actor.items.filter(i => i.flags?.[SYS]?.implant && !i.flags[SYS].implant.extra);
 
@@ -177,12 +176,6 @@ function findStone(actors, label) {
     if (item) return item;
   }
   return null;
-}
-
-async function spendOne(item) {
-  const q = item.system.quantity ?? 1;
-  if (q > 1) return item.update({ "system.quantity": q - 1 });
-  return item.delete();
 }
 
 /** Вживить: проверка мага, мутация в гнезде, заклинание глифа или эффект Точности. */

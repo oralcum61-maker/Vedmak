@@ -3,7 +3,7 @@
 // имя, вкладки «Бой», «Магия», «Алхимия», «Действия», «Состояния»; справа (в бою) — раунд, кто дальше и «Конец хода». В бою: игроку — его персонаж, мастеру — выделенный токен или тот, чей ход. Вне боя —
 // актор выделенного своего токена (настройка клиента «Худ вне боя»): зелья и знаки нужны не только в бою.
 
-import { SYSTEM_ID, compareRu } from "../util.mjs";
+import { SYSTEM_ID, compareRu, setting } from "../util.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { STATUS_EFFECTS, STATUS_HINTS } from "../combat/statuses.mjs";
 import { attackSources } from "../combat/attack.mjs";
@@ -108,9 +108,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     const first = canvas?.tokens?.controlled?.[0]?.actor ?? null;
     const controlled = first?.type === "loot" ? null : first;
     if (!game.combat?.started) {
-      let outside = true;
-      try { outside = game.settings.get(SYSTEM_ID, "hudOutOfCombat"); } catch { /* до регистрации */ }
-      return outside && controlled?.isOwner ? controlled : null;
+      return setting("hudOutOfCombat", true) && controlled?.isOwner ? controlled : null;
     }
     const current = game.combat.combatant?.actor ?? null;
     if (game.user.isGM) return controlled ?? current;
@@ -123,10 +121,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Показать, спрятать или перерисовать худ по текущему состоянию. */
   static refresh() {
     if (!game.ready) return;
-    let enabled = true;
-    try { enabled = game.settings.get(SYSTEM_ID, "combatHud"); } catch { /* до регистрации настроек */ }
     const hud = CombatHud.instance;
-    const actor = enabled ? CombatHud.actorFor() : null;
+    const actor = setting("combatHud", true) ? CombatHud.actorFor() : null;
     if (!actor) {
       // Элемент живёт не в body, а в нижней панели: убираем его сами, чтобы полоса не осталась висеть
       const el = document.getElementById(CombatHud.DEFAULT_OPTIONS.id);
@@ -174,7 +170,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   actor = null;
 
   get collapsed() {
-    try { return !!game.settings.get(SYSTEM_ID, "combatHudCollapsed"); } catch { return false; }
+    return !!setting("combatHudCollapsed", false);
   }
 
   /** Худ живёт в нижней панели интерфейса, над макросами. */
@@ -461,7 +457,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
         if (st.active) return { action: "end", label: `Снова человек${st.hours ? ` · ${st.hours} ч` : ""}`, hint: `Самоконтроль в бою — СЛ ${st.dc}. ПЗ при возврате вдвое меньше` };
         return { action: "go", label: "Медвежья форма", hint: st.mardrem ? `Съесть ${MARDREM} (есть ${st.mardrem})` : `Нет грибов «${MARDREM}»`, off: !st.mardrem };
       })() : null,
-      adrenalineRule: (() => { try { return game.settings.get(SYSTEM_ID, "adrenaline") && isCharacter; } catch { return false; } })(),
+      adrenalineRule: !!setting("adrenaline", false) && isCharacter,
       adrenaline: system.adrenaline?.value ?? 0,
       skillOptions: Object.entries(SKILLS).filter(([k]) => system.skills?.[k]).map(([, s]) => s.label),
       effects, statusList,
@@ -469,8 +465,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       round: combat?.round ?? 0, nextName: combat ? (next?.name ?? "—") : "",
       canAdvance: !!combat && (isCurrent || game.user.isGM),
       ...(() => {
-        let volume = 0.7;
-        try { volume = Number(game.settings.get(SYSTEM_ID, "fxVolume")); } catch { /* до регистрации */ }
+        const volume = Number(setting("fxVolume", 0.7));
         return { volume, volPct: Math.round(volume * 100), volIcon: volumeIcon(volume), volOpen: this.volOpen };
       })()
     });

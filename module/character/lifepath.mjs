@@ -15,7 +15,7 @@ import { VAMPIRE_TABLES, VAMPIRE_ROLE_BY_ROW, VAMPIRE_EVENTS_BY_AGE } from "../c
 import { OFIR_TABLES } from "../config/lifepath-ofir.mjs";
 import { TOME_TABLES } from "../config/lifepath-tome.mjs";
 import { SKILLS } from "../config/skills.mjs";
-import { renderTemplate } from "../util.mjs";
+import { renderTemplate, plural } from "../util.mjs";
 
 const T = { ...LIFEPATH_TABLES, ...VAMPIRE_TABLES, ...OFIR_TABLES, ...TOME_TABLES };
 
@@ -879,7 +879,6 @@ function riskOf(key) {
 
 /** Колонка «Как люди реагировали» по месту рождения: Север (и Скеллиге), Старшие земли, Нильфгаард. */
 const mageRegionCol = birth => (birth === 11 ? 1 : birth >= 6 ? 2 : 0);
-const MAGE_SCHOOLS = ["Аретуза", "Бан Ард", "Гвейсон Хайль", "Малая академия"];
 
 /** Школа по месту рождения и полу (стр. 20) — только подсказка, игрок может выбрать другую. */
 function mageDefaultSchool(birth, gender = "") {
@@ -1531,11 +1530,6 @@ export function lifepathSummary(fx) {
 function firstSentence(text = "") {
   const m = text.match(/^.{20,}?[.!?](?=\s|$)/);
   return m && m[0].length < text.length ? `${m[0]} …` : text;
-}
-
-function plural(n, one, few, many) {
-  const a = n % 10, b = n % 100;
-  return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
 }
 
 function stepRow(next, value, lp) {

@@ -244,7 +244,14 @@ function decorate(region) {
   // Фигуры области — в координатах сцены; сама область может быть сдвинута (перетаскивание предпросмотра)
   look.position.set(-region.position.x, -region.position.y);
   region.addChild(look);
+  if (look._spin) SPINNING.add(look);
 }
+
+/**
+ * Кольца, которые вращаются (зоны системы, в том числе предпросмотр при постановке). Обработчик кадра крутит только
+ * их, а не перебирает все области сцены: в мирах с телепортами и этажами Levels областей десятки, и все — чужие.
+ */
+const SPINNING = new Set();
 
 /** Вращение колец у всех зон на сцене — один обработчик кадра на всех (тикер приложения живёт между сценами). */
 function spin() {
@@ -252,10 +259,11 @@ function spin() {
   if (!ticker || ticker._vdZoneSpin) return;
   ticker._vdZoneSpin = true;
   ticker.add(() => {
-    if (document.body.classList.contains("vd-no-anim")) return;
-    for (const r of canvas.regions?.placeables ?? []) if (r._vdLook?._spin) r._vdLook._spin.rotation += 0.003;
-    const preview = canvas.regions?.preview?.children ?? [];
-    for (const r of preview) if (r._vdLook?._spin) r._vdLook._spin.rotation += 0.003;
+    if (!SPINNING.size || document.body.classList.contains("vd-no-anim")) return;
+    for (const look of SPINNING) {
+      if (look.destroyed || !look._spin || look._spin.destroyed) SPINNING.delete(look);
+      else look._spin.rotation += 0.003;
+    }
   });
 }
 
@@ -264,6 +272,6 @@ export function registerZoneLook() {
     try { decorate(region); } catch (err) { console.warn("vedmak | вид зоны", err); }
   });
   Hooks.on("deleteRegion", doc => dropBadge(doc.id));
-  Hooks.on("canvasTearDown", () => { badges.clear(); badgeLayer = null; });
+  Hooks.on("canvasTearDown", () => { badges.clear(); badgeLayer = null; SPINNING.clear(); });
   Hooks.on("canvasReady", spin);
 }

@@ -7,8 +7,7 @@ import { damageFromDefense } from "./damage.mjs";
 import { resolveActor, asGM, proxyMessageMode, defaultMessageMode } from "./common.mjs";
 import { requestSpellEffects } from "../magic/effects.mjs";
 import { verbalDefend, bestVerbalDefense } from "./verbal.mjs";
-
-const setting = key => game.settings.get("vedmak", key);
+import { setting } from "../util.mjs";
 
 /** Кто бросает за актора: его игрок в сети, иначе ведущий. */
 function responsibleUser(actor) {

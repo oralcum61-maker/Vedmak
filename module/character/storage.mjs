@@ -9,10 +9,9 @@
 import { asGM, registerGMHandler } from "../combat/common.mjs";
 import { CURRENCY_KEYS, moneySetting, formatRate } from "../config/money.mjs";
 import { STORAGE_KINDS } from "../data/actor/loot.mjs";
-import { postCard } from "../util.mjs";
+import { postCard, esc } from "../util.mjs";
 
 const { DialogV2 } = foundry.applications.api;
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 /** Такие вещи складываются с одноимёнными у персонажа (как при перетаскивании на лист персонажа). */
 export const STACKABLE = ["gear", "component", "alchemical", "enhancement"];

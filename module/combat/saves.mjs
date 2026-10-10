@@ -88,11 +88,10 @@ export async function rollDeathSave(actor, { luck = 0, reason = "" } = {}) {
 export async function markDead(actor) {
   await actor.toggleStatusEffect("dead", { active: true, overlay: true });
   if (actor.statuses.has("dying")) await actor.toggleStatusEffect("dying", { active: false });
-  for (const combat of game.combats) {
-    for (const c of combat.combatants) {
-      if (c.actor === actor && !c.defeated) await c.update({ defeated: true });
-    }
-  }
+  await Promise.all(game.combats.map(combat => {
+    const ids = combat.combatants.filter(c => c.actor === actor && !c.defeated).map(c => ({ _id: c.id, defeated: true }));
+    return ids.length ? combat.updateEmbeddedDocuments("Combatant", ids) : null;
+  }));
 }
 
 /** Окно выбора Удачи перед испытанием против смерти. */

@@ -8,13 +8,9 @@
 import { CLUE_TYPES, MYSTERY_DIFFICULTY, DEDUCTION_HINT } from "../config/investigation.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "../combat/common.mjs";
-import { postCard } from "../util.mjs";
+import { postCard, esc } from "../util.mjs";
 
 const SYS = "vedmak";
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
-
-/** Включено ли правило расследования (настройка мира). */
-export const investigationOn = () => !!game.settings.get(SYS, "investigation");
 
 /** Тайны мира (копия — правится и сохраняется целиком). */
 export function mysteries() {

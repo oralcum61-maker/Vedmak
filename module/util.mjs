@@ -90,9 +90,40 @@ export function roundsAsTime(rounds) {
   return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds", expiry: null };
 }
 
-/** Словарь {key: label|{label}} → массив опций для selectOptions. */
-export function toOptions(map) {
-  return Object.fromEntries(Object.entries(map).map(([k, v]) => [k, typeof v === "string" ? v : v.label]));
+/** Настройка системы без запоминания (клиентские и те, что читаются редко); до регистрации — запасное значение. */
+export function setting(key, fallback) {
+  try { return game.settings.get(SYSTEM_ID, key); } catch { return fallback; }
+}
+
+/** Текст для вставки в HTML. */
+export const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
+
+/** HTML → строка без тегов; описаний немного, а читаются они на каждую перерисовку — с запоминанием. */
+const PLAIN_CACHE = new Map();
+export function plainText(html) {
+  const src = String(html ?? "");
+  let out = PLAIN_CACHE.get(src);
+  if (out === undefined) {
+    out = src.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+    if (PLAIN_CACHE.size > 1000) PLAIN_CACHE.clear();
+    PLAIN_CACHE.set(src, out);
+  }
+  return out;
+}
+
+/** Название для сравнения: без регистра, ё = е, пробелы схлопнуты. */
+export const normName = s => String(s ?? "").trim().toLowerCase().replaceAll("ё", "е").replace(/\s+/g, " ");
+
+/** Склонение по числу: plural(3, "раунд", "раунда", "раундов"). */
+export function plural(n, one, few, many) {
+  const a = Math.abs(n) % 10, b = Math.abs(n) % 100;
+  return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+}
+
+/** Потратить одну штуку предмета: последняя — предмет удаляется. */
+export function spendOne(item) {
+  const q = item.system.quantity ?? 1;
+  return q > 1 ? item.update({ "system.quantity": q - 1 }) : item.delete();
 }
 
 /**

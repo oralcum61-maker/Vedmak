@@ -8,10 +8,9 @@ import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { performCheck, rollD10 } from "../dice/check.mjs";
 import { resolveActor } from "../combat/common.mjs";
-import { postCard } from "../util.mjs";
+import { postCard, esc } from "../util.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 export const TAVERN_GAMES = {
   armwrestle: { short: "Руки", label: "Борьба на руках", min: 2, max: 2, icon: "fa-solid fa-hand-fist",

@@ -13,10 +13,10 @@ import { applyRaceExtras, removeRaceExtras } from "../character/race.mjs";
 import { racePowersContext, setPowerValue, powerStep } from "../character/race-powers.mjs";
 import { transform, extendForm, endForm, regainControl } from "../character/true-form.mjs";
 import { SUBSTANCES, COMPONENT_GROUPS, RECIPE_CATEGORIES, RECIPE_LEVELS, ALCHEMY_KINDS, ALCHEMY_ACTIONS, ENHANCEMENT_KINDS, TOOL_KINDS, CRAFTING, IMPLANT_LIMIT, crossbowModLimit } from "../config/crafting.mjs";
-import { craft, readiness, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
+import { craft, requirements, hasTool, forage, repair, disassemble, toggleMemorized } from "../crafting/craft.mjs";
 import { useAlchemical, handCannon } from "../crafting/alchemy.mjs";
 import { attachEnhancement } from "../crafting/enhancements.mjs";
-import { signed, compareRu, worldSetting, postCard } from "../util.mjs";
+import { signed, compareRu, worldSetting, postCard, normName } from "../util.mjs";
 import { exchangeDialog } from "../character/money.mjs";
 import { InvestigationApp } from "../apps/investigation-app.mjs";
 import { applyTattoo } from "../crafting/tattoo.mjs";
@@ -43,7 +43,6 @@ function lifepathRegion(system) {
 }
 
 /** Без «ё» и регистра: «Эббинг» и «эббинг», «Темерия » и «Темерия» — одна родина. */
-const normName = text => String(text ?? "").trim().toLowerCase().replaceAll("ё", "е").replace(/\s+/g, " ");
 
 /**
  * Родина по тексту с листа: «Родину» без мастера пишут словами, а homelandKey ставит только мастер.

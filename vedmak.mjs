@@ -102,7 +102,7 @@ Hooks.once("init", () => {
     hint: "Где сейчас находятся персонажи — от этого зависит социальный статус рас, ведьмаков и магов (стр. 21). У персонажа можно указать свою территорию.",
     scope: "world", config: true, type: String, default: "north",
     choices: Object.fromEntries(Object.entries(CHARACTER_CFG.REGIONS).map(([k, v]) => [k, v.label])),
-    onChange: () => game.actors.forEach(a => { a.prepareData(); a.sheet?.rendered && a.sheet.render(); })
+    onChange: () => game.actors.forEach(a => { a.prepareData(); if (a.sheet?.rendered) a.sheet.render(); })
   });
   game.settings.register(SYSTEM_ID, "combatHud", {
     name: "Боевой худ",
@@ -386,9 +386,8 @@ async function sortCompendiaIntoFolders() {
 // Адреналин сгорает в конце боя
 Hooks.on("deleteCombat", async combat => {
   if (!game.users.activeGM?.isSelf) return;
-  for (const c of combat.combatants) {
-    if (c.actor?.system.adrenaline?.value) await c.actor.update({ "system.adrenaline.value": 0 });
-  }
+  const actors = new Set(combat.combatants.map(c => c.actor).filter(a => a?.system.adrenaline?.value));
+  await Promise.all([...actors].map(a => a.update({ "system.adrenaline.value": 0 })));
 });
 
 /** Иконки по умолчанию для новых предметов. */

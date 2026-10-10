@@ -8,10 +8,8 @@ import { resolveActor } from "./common.mjs";
 import { registerChatAction } from "./chat.mjs";
 import { rollStunSave } from "./saves.mjs";
 import { manualDamage } from "./manual.mjs";
-import { postCard } from "../util.mjs";
+import { postCard, esc } from "../util.mjs";
 import { isProstheticItem, wearProsthesis, wearLine } from "./prosthetics.mjs";
-
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 /** Применить последствия провала с карточки атаки или защиты. */
 export async function applyFumble(message) {

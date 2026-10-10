@@ -236,13 +236,6 @@ export async function postCard({ template, data, actor, flags, rolls, messageMod
   }, { messageMode });
 }
 
-/** Режимы видимости сообщения для окон. */
-export function messageModes() {
-  return Object.entries(CONFIG.ChatMessage.modes)
-    .filter(([k]) => k !== "ic")
-    .map(([value, cfg]) => ({ value, label: game.i18n.localize(cfg.label) }));
-}
-
 /** Бросок формулы; пустая или ошибочная формула → 0. */
 export async function rollFormula(formula, data = {}) {
   const f = String(formula ?? "").trim();

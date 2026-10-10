@@ -3,7 +3,7 @@
 // Поэтому эффекты не рассылаются — каждый рисует и играет у себя, со своими настройками. Карточки, скрытые от
 // игрока, и спрятанные токены у него ничего не показывают и не озвучивают.
 
-import { SYSTEM_ID } from "../util.mjs";
+import { SYSTEM_ID, setting } from "../util.mjs";
 import { playSound, preloadSounds } from "./sounds.mjs";
 import { playJB2A, jb2aReady, playSpellFx, preloadCombatFx, playSteps } from "./jb2a.mjs";
 import { attackSteps, hitSteps, blockSteps } from "./weapon-fx.mjs";
@@ -16,9 +16,6 @@ const ELEMENT_COLORS = { fire: 0xff7a2a, air: 0xdcecff, water: 0x6ab0ff, earth: 
 /** Цвет пузырьков зелья: мутагены — по своему цвету, эликсиры — фиалка, отвары — киноварь. */
 const POTION_COLORS = { red: 0xd8341a, green: 0x8fd27a, blue: 0x6ab0ff, violet: 0xb48cff };
 
-const setting = (key, fallback) => {
-  try { return game.settings.get(SYSTEM_ID, key); } catch { return fallback; }
-};
 const sceneOn = () => setting("fxScene", true) && !!canvas?.ready;
 
 /** Токен на открытой сцене по {tokenUuid, actorUuid}; спрятанный — только ведущему. */
@@ -260,7 +257,6 @@ function onAlchemy(al) {
       playSound("bomb", { delay: 150 });
       if (at && center && sceneOn()) S.projectile(at, center, { color: 0xc9bdf0 });
       setTimeout(() => show("explosion", { at: center, size: radius * 2 }, () => S.explosion(center, radius, color)), 260);
-      return;
     }
   }
 }

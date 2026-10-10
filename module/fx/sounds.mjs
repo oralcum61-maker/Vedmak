@@ -1,7 +1,7 @@
 // Звуки системы (PLAN 4.66): синтезированы tools/make-sounds.py, лежат в assets/sounds. Играют у каждого клиента
 // сами по себе (хуки срабатывают везде), поэтому без рассылки: громкость у каждого своя.
 
-import { SYSTEM_ID } from "../util.mjs";
+import { setting } from "../util.mjs";
 
 const PATH = "systems/vedmak/assets/sounds/";
 
@@ -12,10 +12,6 @@ export const SOUNDS = {
   aard: 0.85, igni: 0.85, quen: 0.7, axii: 0.7, yrden: 0.7, spell: 0.7,
   drink: 0.7, bomb: 0.9, oil: 0.65,
   "ui-click": 0.35, "ui-coin": 0.5, "ui-turn": 0.6, "ui-success": 0.45, "ui-fail": 0.45, "ui-crit": 0.55
-};
-
-const setting = (key, fallback) => {
-  try { return game.settings.get(SYSTEM_ID, key); } catch { return fallback; }
 };
 
 /** Звуки включены у этого клиента (интерфейсные — отдельным переключателем). */

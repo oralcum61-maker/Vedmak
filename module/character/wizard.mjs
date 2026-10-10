@@ -13,7 +13,7 @@ import {
   rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, editLifepathNote, findEntry, VAMPIRE_RACE, LIFEPATH_KINDS
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
-import { compareRu } from "../util.mjs";
+import { compareRu, plainText, normName, plural } from "../util.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
@@ -34,14 +34,6 @@ const STAT_KEYS = Object.keys(STATS);
 /** Горные народы: родина по умолчанию — Махакам (краснолюды — корник, гномы, враны, боболаки — «Книга сказаний»). */
 const MOUNTAIN_RACES = ["dwarf", "gnome", "vran", "bobolak"];
 
-/** Склонение по числу: plural(5, ["заклинание", "заклинания", "заклинаний"]). */
-function plural(n, [one, few, many]) {
-  const m10 = n % 10, m100 = n % 100;
-  if (m10 === 1 && m100 !== 11) return one;
-  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
-  return many;
-}
-const plainText = html => String(html ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
 const signedNum = v => `${v > 0 ? "+" : "−"}${Math.abs(v)}`;
 
 /** Поправка расы словами — биркой у героя: «+1 Реа», «Эмп не выше 6», «броня 4». */
@@ -397,7 +389,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
           magic: prof.system.magicAbilities,
           quota: [
             ...(q.allBasicSigns ? [{ n: "все", label: "базовые знаки" }] : []),
-            ...Object.entries(QUOTA_WORDS).filter(([k]) => q[k] > 0).map(([k, w]) => ({ n: q[k], label: plural(q[k], w) }))
+            ...Object.entries(QUOTA_WORDS).filter(([k]) => q[k] > 0).map(([k, w]) => ({ n: q[k], label: plural(q[k], ...w) }))
           ],
           branches: prof.system.branches.map(b => ({ name: b.name, abilities: b.abilities.map(a => a.name).join(" → "),
             list: b.abilities.map(a => a.name) })),
@@ -513,7 +505,6 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       if (sys.kind === "hex") return HEX_DANGER_LEVEL[String(sys.danger ?? "").toLowerCase()] ?? sys.level;
       return sys.level;
     };
-    const novice = e => levelOf(e) === "novice";
     const row = e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(e.system.kind, e.system.level), cost: e.system.staCost });
     const pick = (kind, level = "novice") => all.filter(e => e.system?.kind === kind && levelOf(e) === level)
       .map(row).sort((a, b) => compareRu(a.name, b.name));
@@ -571,11 +562,9 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const budget = STAT_POINT_BUY[s.level]?.points ?? 60;
       if (spent !== budget) out.stats = `Распределено ${spent} очков из ${budget}.`;
       if (STAT_KEYS.some(k => s.stats[k] < CREATION.statMin || s.stats[k] > CREATION.statCap)) out.stats = "Параметр — от 1 до 10.";
-    } else {
-      if (s.pool.length !== 9) out.stats = "Бросьте кости параметров.";
-      else if (STAT_KEYS.some(k => s.assign[k] === undefined)) out.stats = "Распределите все результаты бросков.";
-      else if (new Set(Object.values(s.assign)).size !== 9) out.stats = "Каждый результат можно использовать один раз.";
-    }
+    } else if (s.pool.length !== 9) out.stats = "Бросьте кости параметров.";
+    else if (STAT_KEYS.some(k => s.assign[k] === undefined)) out.stats = "Распределите все результаты бросков.";
+    else if (new Set(Object.values(s.assign)).size !== 9) out.stats = "Каждый результат можно использовать один раз.";
     if (prof) {
       const keys = this.#professionSkillKeys();
       const spent = keys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0) + (s.defining || 0);
@@ -657,7 +646,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       art: prof?.img || race?.img || "",
       name: s.name || "Без имени",
       line: race ? `${race.name} · ${prof?.name ?? "профессия не выбрана"}` : "раса не выбрана",
-      sub: [s.gender, s.age ? `${s.age} ${plural(s.age, ["год", "года", "лет"])}` : ""].filter(Boolean).join(" · "),
+      sub: [s.gender, s.age ? `${s.age} ${plural(s.age, "год", "года", "лет")}` : ""].filter(Boolean).join(" · "),
       stats: STAT_KEYS.map(k => ({ k: STATS[k].abbr, title: STATS[k].label, v: unset(k) ? "·" : final[k], dim: unset(k) || stepIndex < statsStep })),
       note: stepIndex < statsStep ? "Параметры — на пятом шаге; поправки расы уже учтены." : "",
       mods: (race?.system.mods ?? []).map(raceModLabel).filter(Boolean)
@@ -673,7 +662,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const magicChosen = this.#chosenMagic();
     return {
       art: prof?.img || this.race?.img || "",
-      line: [this.race?.name, prof?.name, s.gender, s.age ? `${s.age} ${plural(s.age, ["год", "года", "лет"])}` : "",
+      line: [this.race?.name, prof?.name, s.gender, s.age ? `${s.age} ${plural(s.age, "год", "года", "лет")}` : "",
         HOMELANDS[s.homeland]?.label].filter(Boolean).join(" · "),
       derived: this.#derivedPreview(final, lp),
       skillList: Object.entries(skills).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1] || compareRu(SKILLS[a[0]].label, SKILLS[b[0]].label))
@@ -1184,7 +1173,6 @@ const GEAR_ALIASES = {
 };
 
 /** Имя для сравнения: без регистра, «ё» как «е». */
-const normName = s => String(s).toLowerCase().replace(/ё/g, "е").trim();
 const ALIASES_NORM = Object.fromEntries(Object.entries(GEAR_ALIASES).map(([k, v]) => [normName(k), v]));
 
 export async function itemsForLabel(label) {
@@ -1276,7 +1264,7 @@ const SHOP_TYPES = { weapon: "weapon", armor: "armor", gear: "gear", alchemical:
 const STACKABLE_TYPES = ["gear", "component", "alchemical"];
 
 async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
-  const { state: s, race, profession, stats, skills, profKeys, magic, native, statParts } = wizard.applyData;
+  const { state: s, race, profession, stats, skills, profKeys, magic, native } = wizard.applyData;
   const actor = wizard.actor;
   const fx = lp.effects ?? { crowns: 0, reputation: 0, luck: 0, hpBonus: 0, staBonus: 0, vigorBonus: 0, feared: false,
     skills: {}, skillChoices: [], statMods: {}, skillMods: {}, definingBonus: 0, items: [], addictions: [], notes: [], school: "" };

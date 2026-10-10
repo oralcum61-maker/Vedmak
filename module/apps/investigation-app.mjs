@@ -9,10 +9,9 @@ import {
   restFocus, setFocus, checkedToday, interrogationDuel
 } from "../investigation/investigation.mjs";
 import { resolveActor } from "../combat/common.mjs";
-import { compareRu } from "../util.mjs";
+import { compareRu, esc } from "../util.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
-const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
 export class InvestigationApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
