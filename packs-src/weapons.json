@@ -8230,5 +8230,133 @@
     "extraLayer": true
    }
   }
+ },
+ {
+  "name": "Стальной меч школы Улитки",
+  "type": "weapon",
+  "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Улитки — по легенде, первые такие ковали из плотницких топоров.</p><p>Ведьмак Улитки получает его вместо стандартного ведьмачьего меча.</p><p><b>Сокрушительная сила:</b> удар нельзя парировать, урон, разрушающий броню или оружие, удваивается.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "4"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": -6,
+   "damage": "8d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "pUlzKEJ0007UOmIY"
+ },
+ {
+  "name": "Серебряный меч школы Улитки",
+  "type": "weapon",
+  "img": "icons/weapons/swords/greatsword-crossguard-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Улитки — по легенде, первые такие ковали из плотницких топоров.</p><p>Ведьмак Улитки получает его вместо стандартного ведьмачьего меча.</p><p><b>Сокрушительная сила:</b> удар нельзя парировать, урон, разрушающий броню или оружие, удваивается.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "4"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": -6,
+   "damage": "5d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "CBp4uRxmlZxKOuWx"
  }
 ]

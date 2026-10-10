@@ -4157,5 +4157,74 @@
     "layer": "bs"
    }
   }
+ },
+ {
+  "name": "Латы школы Улитки",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-steel.webp",
+  "system": {
+   "description": "<p>Тяжёлые латы ведьмачьей школы Улитки на всё тело — с них школа и получила прозвище: в них ведьмаки едва передвигались.</p><p>Ведьмак Улитки получает их вместо двуслойного гамбезона.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "quantity": 1,
+   "weight": 42,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "4"
+   },
+   "weightClass": "heavy",
+   "isShield": false,
+   "sp": {
+    "head": {
+     "value": 30,
+     "max": 30
+    },
+    "torso": {
+     "value": 30,
+     "max": 30
+    },
+    "rightArm": {
+     "value": 30,
+     "max": 30
+    },
+    "leftArm": {
+     "value": 30,
+     "max": 30
+    },
+    "rightLeg": {
+     "value": 30,
+     "max": 30
+    },
+    "leftLeg": {
+     "value": 30,
+     "max": 30
+    }
+   },
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "encumbrance": 6,
+   "enhancementSlots": 1,
+   "resistances": {
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": true,
+    "bleeding": false,
+    "poison": false
+   },
+   "effectsText": "Сопротивление режущему, колющему, дробящему и стихийному урону.",
+   "relic": false,
+   "mods": [],
+   "enhancements": []
+  },
+  "folder": [
+   "Комплекты",
+   "Ведьмачьих школ"
+  ],
+  "_id": "C93RYjDkm90BWmKT"
  }
 ]

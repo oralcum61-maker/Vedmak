@@ -22659,5 +22659,265 @@
     "layer": "bs"
    }
   }
+ },
+ {
+  "name": "Чертёж: Стальной меч школы Улитки",
+  "type": "recipe",
+  "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
+  "system": {
+   "description": "<p>Компоненты: укреплённое дерево (×3), кожа (×2), метеорит (×1), сталь (×7), железо (×1), точильный порошок (×2), травильная кислота (×2), эфирная смазка (×2), нитки (×1), уголь (×1).</p><p>Чертежи снаряжения школы Улитки — уровня Мастер. Ведьмак Улитки начинает игру с ними, даже если у него нет навыков ремесла.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "kind": "blueprint",
+   "category": "witcher",
+   "level": "master",
+   "dc": 18,
+   "time": "13 часов",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Укреплённое дерево",
+     "quantity": 3
+    },
+    {
+     "name": "Кожа",
+     "quantity": 2
+    },
+    {
+     "name": "Метеорит",
+     "quantity": 1
+    },
+    {
+     "name": "Сталь",
+     "quantity": 7
+    },
+    {
+     "name": "Железо",
+     "quantity": 1
+    },
+    {
+     "name": "Точильный порошок",
+     "quantity": 2
+    },
+    {
+     "name": "Травильная кислота",
+     "quantity": 2
+    },
+    {
+     "name": "Эфирная смазка",
+     "quantity": 2
+    },
+    {
+     "name": "Нитки",
+     "quantity": 1
+    },
+    {
+     "name": "Уголь",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Стальной меч школы Улитки",
+    "type": "weapon",
+    "quantity": 1
+   },
+   "surcharge": 656,
+   "cost": 0,
+   "needsForge": true,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "3"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Ведьмачьи школы",
+   "Школа Улитки"
+  ],
+  "_id": "gk4VvnkFrJLHtPHZ"
+ },
+ {
+  "name": "Чертёж: Серебряный меч школы Улитки",
+  "type": "recipe",
+  "img": "icons/weapons/swords/greatsword-crossguard-silver.webp",
+  "system": {
+   "description": "<p>Компоненты: укреплённое дерево (×3), кожа (×2), серебро (×2), сталь (×2), железо (×4), точильный порошок (×2), травильная кислота (×1), эфирная смазка (×2), речная глина (×10), уголь (×1).</p><p>Чертежи снаряжения школы Улитки — уровня Мастер. Ведьмак Улитки начинает игру с ними, даже если у него нет навыков ремесла.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "kind": "blueprint",
+   "category": "witcher",
+   "level": "master",
+   "dc": 18,
+   "time": "13 часов",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Укреплённое дерево",
+     "quantity": 3
+    },
+    {
+     "name": "Кожа",
+     "quantity": 2
+    },
+    {
+     "name": "Серебро",
+     "quantity": 2
+    },
+    {
+     "name": "Сталь",
+     "quantity": 2
+    },
+    {
+     "name": "Железо",
+     "quantity": 4
+    },
+    {
+     "name": "Точильный порошок",
+     "quantity": 2
+    },
+    {
+     "name": "Травильная кислота",
+     "quantity": 1
+    },
+    {
+     "name": "Эфирная смазка",
+     "quantity": 2
+    },
+    {
+     "name": "Речная глина",
+     "quantity": 10
+    },
+    {
+     "name": "Уголь",
+     "quantity": 1
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Серебряный меч школы Улитки",
+    "type": "weapon",
+    "quantity": 1
+   },
+   "surcharge": 597,
+   "cost": 0,
+   "needsForge": true,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "3"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Ведьмачьи школы",
+   "Школа Улитки"
+  ],
+  "_id": "k8YQNpTuLAzsFrAk"
+ },
+ {
+  "name": "Чертёж: Латы школы Улитки",
+  "type": "recipe",
+  "img": "icons/equipment/chest/breastplate-layered-steel.webp",
+  "system": {
+   "description": "<p>Компоненты: двойное полотно (×10), нитки (×10), железо (×10), сталь (×10), метеорит (×2), эфирная смазка (×10), огров воск (×10), речная глина (×30), уголь (×20).</p><p>Чертежи снаряжения школы Улитки — уровня Мастер. Ведьмак Улитки начинает игру с ними, даже если у него нет навыков ремесла.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "kind": "blueprint",
+   "category": "witcher",
+   "level": "master",
+   "dc": 18,
+   "time": "24 часа",
+   "skill": "crafting",
+   "components": [
+    {
+     "name": "Двойное полотно",
+     "quantity": 10
+    },
+    {
+     "name": "Нитки",
+     "quantity": 10
+    },
+    {
+     "name": "Железо",
+     "quantity": 10
+    },
+    {
+     "name": "Сталь",
+     "quantity": 10
+    },
+    {
+     "name": "Метеорит",
+     "quantity": 2
+    },
+    {
+     "name": "Эфирная смазка",
+     "quantity": 10
+    },
+    {
+     "name": "Огров воск",
+     "quantity": 10
+    },
+    {
+     "name": "Речная глина",
+     "quantity": 30
+    },
+    {
+     "name": "Уголь",
+     "quantity": 20
+    }
+   ],
+   "substances": {
+    "vitriol": 0,
+    "rebis": 0,
+    "aether": 0,
+    "quebrith": 0,
+    "hydragenum": 0,
+    "vermilion": 0,
+    "sol": 0,
+    "caelum": 0,
+    "fulgur": 0
+   },
+   "result": {
+    "name": "Латы школы Улитки",
+    "type": "armor",
+    "quantity": 1
+   },
+   "surcharge": 1538,
+   "cost": 0,
+   "needsForge": true,
+   "memorized": false,
+   "quantity": 1,
+   "weight": 0,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "3"
+   }
+  },
+  "folder": [
+   "Чертежи",
+   "Ведьмачьи школы",
+   "Школа Улитки"
+  ],
+  "_id": "uyJNWL4z3otAFL33"
  }
 ]
