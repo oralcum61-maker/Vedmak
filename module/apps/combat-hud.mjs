@@ -19,7 +19,7 @@ import { flipToken, canFlip } from "./token-flip.mjs";
 import { transform, extendForm, endForm, regainControl, trueFormState } from "../character/true-form.mjs";
 import { bearFormState, bearTransform, bearRevert, MARDREM } from "../character/bear-form.mjs";
 import { isSnail, igniSlime, applyIgniSlime } from "../character/snail-school.mjs";
-import { animateVitals } from "../fx/sheet-motion.mjs";
+import { animateVitals, hudMoments } from "../fx/sheet-motion.mjs";
 import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
 import { levelLabel } from "../config/magic.mjs";
 import { removeZones } from "../combat/zones.mjs";
@@ -246,6 +246,24 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /** Навык из поля поиска: Enter или выбор из подсказок — бросок. */
+  /**
+   * Моменты худа (PLAN 4.156): что изменилось с прошлой отрисовки — начался свой ход, новое состояние, потрачена
+   * Удача. Первая отрисовка и смена персонажа ничего не играют: иначе худ вспыхивал бы при каждом выборе токена.
+   */
+  #moment = null;
+  #playMoments(context) {
+    const actor = this.actor;
+    if (!actor) { this.#moment = null; return; }
+    const now = {
+      id: actor.id, turn: !!(context.isCurrent && context.inCombat),
+      statuses: new Set(actor.statuses), effects: new Set(actor.appliedEffects.map(e => e.id)),
+      luck: actor.system.luck?.value ?? null
+    };
+    const prev = this.#moment;
+    this.#moment = now;
+    if (prev?.id === now.id && !this.collapsed) hudMoments(this.element, prev, now);
+  }
+
   _onRender(context, options) {
     super._onRender?.(context, options);
     // Смена вкладки — колода проявляется; обычные перерисовки (ПЗ, ход) — без анимации, чтобы не мигало
@@ -254,6 +272,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       this.element.querySelector(".vh-deck")?.classList.add("vh-in");
     }
     if (this.actor) animateVitals(this, this.element, this.actor.id);
+    this.#playMoments(context);
     bindVolumeSlider(this.element.querySelector(".vh-volpop input"));
     this.#bindMagic();
     // Плитки ударов и флаконов (и столбцы действий в узком худе) листаются колесом; не всё влезло — край угасает
@@ -404,7 +423,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Состояния: что действует (эффекты со сроком и состояния) и сетка всех состояний
     const effects = actor.appliedEffects.filter(e => e.isTemporary || e.statuses.size).map(e => ({
-      name: e.name, img: e.img,
+      id: e.id, name: e.name, img: e.img,
       left: e.flags?.vedmak?.timed?.rounds ? `${e.flags.vedmak.timed.rounds} р.` : (e.isTemporary ? e.duration.label : ""),
       bad: [...e.statuses].some(s => ["bleeding", "poisoned", "burning", "dying", "staggered", "stunned"].includes(s))
     }));

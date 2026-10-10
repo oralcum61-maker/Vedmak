@@ -370,7 +370,8 @@ function onRenderMessage(message, html) {
   const el = html instanceof HTMLElement ? html : html?.[0];
   if (!el) return;
   el.classList.add("vd-new");
-  setTimeout(() => el.classList.remove("vd-new"), 1600);
+  // Блик крита кончается на 1,6 с — класс снимается чуть позже
+  setTimeout(() => el.classList.remove("vd-new"), 1900);
 }
 
 /* ---------------------------------------------------------------- Регистрация */

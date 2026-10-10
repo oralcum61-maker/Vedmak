@@ -67,3 +67,49 @@ export function animateVitals(app, root, actorId) {
   }
   app._vdVitals = { actorId, values: Object.keys(values).length ? values : prev ?? {} };
 }
+
+/**
+ * Моменты худа (PLAN 4.156) — разовые и только на изменение: лента «Ваш ход», новое состояние «выскакивает»,
+ * потраченная монета Удачи переворачивается. Только transform и opacity через element.animate — видеокарта двигает
+ * слой без пересчёта раскладки; лента — один временный элемент, убирается по окончании.
+ * @param {HTMLElement} root — элемент худа
+ * @param {{turn: boolean, statuses: Set<string>, effects: Set<string>, luck: number|null}} prev
+ * @param {typeof prev} now
+ */
+export function hudMoments(root, prev, now) {
+  if (!motionOn() || !root) return;
+  const vh = root.querySelector(".vh");
+  if (!vh) return;
+  // Начался свой ход — лента пробегает поперёк худа
+  if (now.turn && !prev.turn) {
+    vh.querySelector(".vh-turnflash")?.remove();
+    const band = document.createElement("div");
+    band.className = "vh-turnflash";
+    band.textContent = "Ваш ход";
+    vh.append(band);
+    // Плавность — у отрезков, а не у всей анимации: общая кривая сжимала бы время и лента гасла бы раньше середины
+    band.animate([
+      { opacity: 0, transform: "translateX(-24px) scaleX(.92)", easing: EASE },
+      { opacity: 1, transform: "none", offset: .18, easing: "linear" },
+      { opacity: 1, transform: "none", offset: .72, easing: "ease-in" },
+      { opacity: 0, transform: "translateX(24px)" }
+    ], { duration: 1500 }).finished.then(() => band.remove(), () => band.remove());
+  }
+  // Новое состояние: значок в сетке «Состояния» и в медальоне выскакивает
+  const pop = el => el?.animate([
+    { transform: "scale(.6)", opacity: .2, easing: EASE }, { transform: "scale(1.18)", opacity: 1, offset: .6, easing: "ease-out" },
+    { transform: "none", opacity: 1 }
+  ], { duration: 380 });
+  for (const id of now.statuses) if (!prev.statuses.has(id)) pop(root.querySelector(`.vh-st[data-status="${id}"]`));
+  const badge = root.querySelector(".vh-badge[data-effect]");
+  if (badge && !prev.effects.has(badge.dataset.effect)) pop(badge);
+  // Потрачена Удача: погасшие монеты переворачиваются
+  if (prev.luck !== null && now.luck !== null && now.luck < prev.luck) {
+    const coins = [...root.querySelectorAll(".vh-pip-row .vd-coin")];
+    coins.slice(now.luck, prev.luck).forEach((coin, i) => coin.animate([
+      { transform: "rotateY(0deg) translateY(0)", opacity: 1 },
+      { transform: "rotateY(90deg) translateY(-5px)", opacity: 1, offset: .45 },
+      { transform: "rotateY(180deg) translateY(0)" }
+    ], { duration: 520, delay: i * 90, easing: "ease-in-out" }));
+  }
+}

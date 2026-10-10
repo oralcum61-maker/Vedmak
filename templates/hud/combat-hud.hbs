@@ -18,7 +18,7 @@
       {{#if medal.hasWound}}<line x1="{{medal.wound.x1}}" y1="{{medal.wound.y1}}" x2="{{medal.wound.x2}}" y2="{{medal.wound.y2}}" class="vh-wound"/>{{/if}}
     </svg>
     <span class="vh-portrait" data-action="openSheet" data-tooltip="Открыть лист"><img src="{{actor.img}}" alt=""></span>
-    {{#if badge}}<span class="vh-badge{{#if badge.bad}} bad{{/if}}" data-tooltip="{{badge.name}}{{#if badge.left}} — {{badge.left}}{{/if}}"><img src="{{badge.img}}" alt=""></span>{{/if}}
+    {{#if badge}}<span class="vh-badge{{#if badge.bad}} bad{{/if}}" data-effect="{{badge.id}}" data-tooltip="{{badge.name}}{{#if badge.left}} — {{badge.left}}{{/if}}"><img src="{{badge.img}}" alt=""></span>{{/if}}
     <div class="vh-clamps">
       <span class="vh-vit hp vh-clamp" data-tooltip="{{hp.hint}}"><span class="vh-cap">пз</span><span class="vh-num{{#if hp.bad}} bad{{/if}}"><b>{{hp.value}}</b><small>/ {{hp.max}}</small></span></span>
       <span class="vh-vit sta vh-clamp" data-tooltip="{{sta.hint}}"><span class="vh-cap">вын</span><span class="vh-num"><b>{{sta.value}}</b><small>/ {{sta.max}}</small></span></span>

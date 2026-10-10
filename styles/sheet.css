@@ -1383,6 +1383,39 @@
 /* Нажатие продавливает кнопку */
 .vedmak-hud :is(.vh-go, .vh-sbtn):active, .vedmak-dialog.check-dialog .form-footer button:active { transform: translateY(1px); }
 
+/* Яркие моменты карточки (PLAN 4.156): крит — латунный блик по шапке и прыжок числа, крит. провал — число вздрагивает,
+   исход («Успех», «Провал», «Попадание») ставится штампом после числа. Разово, только transform и opacity */
+@keyframes vd-sheen { from { transform: translateX(-120%); } to { transform: translateX(330%); } }
+@keyframes vd-crit-pop { 0% { opacity: 0; transform: scale(.5); } 55% { opacity: 1; transform: scale(1.3); } 100% { transform: none; } }
+@keyframes vd-shake { 0%, 100% { transform: none; } 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+@keyframes vd-stamp { 0% { opacity: 0; transform: scale(1.35); } 70% { opacity: 1; transform: scale(.97); } 100% { opacity: 1; transform: none; } }
+.chat-message.vedmak-message.vd-new .vedmak-card.is-crit .card-head { position: relative; overflow: hidden; }
+.chat-message.vedmak-message.vd-new .vedmak-card.is-crit .card-head::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 34%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(232, 201, 122, .3) 42%, rgba(255, 241, 205, .55) 50%, rgba(232, 201, 122, .3) 58%, transparent);
+  transform: translateX(-120%); animation: vd-sheen 900ms 700ms ease-in-out both;
+}
+.chat-message.vedmak-message.vd-new .vedmak-card.is-crit .card-value > b { animation: vd-crit-pop 560ms 380ms cubic-bezier(.2, .8, .2, 1) both; }
+/* Вздрагивание — без заливки до старта: иначе его первый кадр перекрыл бы проявление числа */
+.chat-message.vedmak-message.vd-new .vedmak-card.is-fumble .card-value > b { animation: vd-face-pop 460ms 380ms cubic-bezier(.2, .8, .2, 1) both, vd-shake 380ms 860ms ease-in-out; }
+.chat-message.vedmak-message.vd-new .vedmak-card .outcome { animation: vd-stamp 360ms 820ms cubic-bezier(.2, .8, .2, 1) both; }
+
+/* Лента «Ваш ход» поперёк худа (PLAN 4.156): временный элемент, анимирует fx/sheet-motion.mjs (hudMoments) */
+.vedmak-hud .vh-turnflash {
+  position: absolute; left: 0; right: 0; top: calc(50% - 19px); z-index: 6; height: 38px; pointer-events: none; opacity: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--vd-font-head); font-size: 22px; letter-spacing: .34em; text-transform: uppercase; color: #f6edd8;
+  text-shadow: 0 1px 0 #000, 0 0 14px rgba(232, 201, 122, .55);
+  background: linear-gradient(90deg, transparent, rgba(16, 17, 19, .93) 16%, rgba(16, 17, 19, .93) 84%, transparent);
+}
+.vedmak-hud .vh-turnflash::before, .vedmak-hud .vh-turnflash::after {
+  content: ""; position: absolute; left: 12%; right: 12%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232, 201, 122, .8), transparent);
+}
+.vedmak-hud .vh-turnflash::before { top: 0; }
+.vedmak-hud .vh-turnflash::after { bottom: 0; }
+body.vd-no-anim .vedmak-hud .vh-turnflash { display: none; }
+
 body.vd-no-anim .chat-message.vedmak-message.vd-new, body.vd-no-anim .chat-message.vedmak-message.vd-new *,
 body.vd-no-anim .vedmak-hud .vh-deck.vh-in, body.vd-no-anim .vedmak-hud .vh-portrait::after { animation: none !important; }
 
