@@ -350,7 +350,7 @@
  {
   "name": "Марид",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-marid.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -398,7 +398,7 @@
  {
   "name": "Золотой дракон",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-golden-dragon.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -458,7 +458,7 @@
  {
   "name": "Высший вампир",
   "type": "race",
-  "img": "icons/creatures/abilities/wing-batlike-white-blue.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-higher-vampire.webp",
   "folder": [
    "Фанатские",
    "Высший вампир. Третья редакция"
@@ -910,7 +910,7 @@
  {
   "name": "Водяной",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-vodyanoy.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -963,7 +963,7 @@
  {
   "name": "Дриада",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-dryad.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -997,6 +997,10 @@
     {
      "target": "skills.archery",
      "value": 2
+    },
+    {
+     "target": "skills.wilderness",
+     "value": 2
     }
    ],
    "grants": [],
@@ -1016,7 +1020,7 @@
  {
   "name": "Нереида",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-nereid.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1042,7 +1046,12 @@
      "effect": "Все нимфы очень привлекательны для людей и эльфов. Дриады, нереиды и наяды имеют +5 к Соблазнению против любого человека или эльфа, которого привлекают женщины."
     }
    ],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.wilderness",
+     "value": 2
+    }
+   ],
    "grants": [],
    "canUseMagic": true,
    "resource": "",
@@ -1060,7 +1069,7 @@
  {
   "name": "Наяда",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-naiad.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1090,7 +1099,12 @@
      "effect": "Все нимфы очень привлекательны для людей и эльфов. Дриады, нереиды и наяды имеют +5 к Соблазнению против любого человека или эльфа, которого привлекают женщины."
     }
    ],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.wilderness",
+     "value": 2
+    }
+   ],
    "grants": [],
    "canUseMagic": true,
    "resource": "",
@@ -1108,7 +1122,7 @@
  {
   "name": "Морской народ",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-merfolk.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1134,7 +1148,12 @@
      "effect": "Тритоны рождаются и растут в океанах. Благодаря этому они получают врождённый бонус +2 к Выживанию в дикой природе и +5 к Скрытности, когда находятся в морях. Раз в неделю тритоны могут совершить проверку Сотворения заклинаний СЛ 25, чтобы призвать кракена, находясь в океане. Он не атакует тритонов и их друзей."
     }
    ],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.wilderness",
+     "value": 2
+    }
+   ],
    "grants": [],
    "canUseMagic": true,
    "resource": "",
@@ -1152,7 +1171,7 @@
  {
   "name": "Морская ведьма (фукусья)",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-sea-witch.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1178,7 +1197,12 @@
      "effect": "Морские ведьмы имеют глубокую связь с магией, и поэтому маги-фукусьи получают +5 к своему изначальному показателю Энергии."
     }
    ],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.wilderness",
+     "value": 2
+    }
+   ],
    "grants": [],
    "canUseMagic": true,
    "resource": "",
@@ -1196,7 +1220,7 @@
  {
   "name": "Огр",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-ogre.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1261,7 +1285,7 @@
  {
   "name": "Сильван",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-sylvan.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1314,7 +1338,7 @@
  {
   "name": "Скальный тролль",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-rock-troll.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1383,14 +1407,14 @@
  {
   "name": "Единорог",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-unicorn.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
   ],
   "system": {
    "key": "unicorn",
-   "description": "<p>Разумные многомерные существа, способные пересекать Мультивселенную; наблюдают за действиями менее развитых видов. Похожи на лошадей с единственным (часто спиралевидным) рогом, общаются телепатией, простыми сообщениями («подтверждение», «отрицание»). Рог — универсальный антидот. Презирают тех, кто использует Силу, не любят Aen Elle.</p><p>Единороги не могут владеть обычным оружием: у них есть только копыта и рог (характеристики — в бестиарии книги); снаряжение — из раздела «Средства передвижения» основной книги.</p><p>В «Лошадиной скорости» опечатка оригинала: «+3 к РЕМ и СКОР, но штраф −4 к РЕМ». Скорее всего, +3 к РЕА и СКОР и −4 к РЕМ; в mods внесены только однозначные +3 Скор и −4 Рем. Если +3 относится к Реа, добавить stats.ref +3 вручную. Это скорее монстр, чем игровая раса: вопрос допуска за ГМ.</p>",
+   "description": "<p>Разумные многомерные существа, способные пересекать Мультивселенную; наблюдают за действиями менее развитых видов. Похожи на лошадей с единственным (часто спиралевидным) рогом, общаются телепатией, простыми сообщениями («подтверждение», «отрицание»). Рог — универсальный антидот. Презирают тех, кто использует Силу, не любят Aen Elle.</p><p>Единороги не могут владеть обычным оружием: у них есть только копыта и рог (характеристики — в бестиарии книги); снаряжение — из раздела «Средства передвижения» основной книги.</p><p>В «Лошадиной скорости» русского перевода опечатка: «+3 к РЕМ и СКОР, но штраф −4 к РЕМ». По английскому оригиналу (Vesemir&#x27;s Journal of Creatures: «+3 to their BODY and SPD stats and a -4 to their CRA») — +3 Тел и Скор, −4 Рем. Это скорее монстр, чем игровая раса: вопрос допуска за ГМ.</p>",
    "traits": [
     {
      "name": "Телепатия",
@@ -1414,7 +1438,7 @@
     },
     {
      "name": "Лошадиная скорость",
-     "effect": "Комплекция единорогов очень схожа с лошадиной. Благодаря этому они имеют врождённый бонус +3 к Рем и Скор, но штраф −4 к Рем (в тексте книги так — см. примечание)."
+     "effect": "Комплекция единорогов очень схожа с лошадиной. Благодаря этому они имеют врождённый бонус +3 к Тел и Скор, но штраф −4 к Рем."
     }
    ],
    "mods": [
@@ -1424,6 +1448,10 @@
     },
     {
      "target": "skills.spellCasting",
+     "value": 3
+    },
+    {
+     "target": "stats.body",
      "value": 3
     },
     {
@@ -1452,7 +1480,7 @@
  {
   "name": "Лепрекон",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-leprechaun.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1497,7 +1525,7 @@
  {
   "name": "Гамадриада",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-hamadryad.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1527,6 +1555,10 @@
     {
      "target": "skills.archery",
      "value": 2
+    },
+    {
+     "target": "skills.wilderness",
+     "value": 2
     }
    ],
    "grants": [],
@@ -1546,7 +1578,7 @@
  {
   "name": "Лимониада",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-leimoniad.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1568,7 +1600,12 @@
      "effect": "Лимониады имеют глубокую магическую связь с природой. Они не вредят животным: любой зверь, с которым они сталкиваются, считается дружелюбным и не нападает, если его не спровоцировать. Лимониады также автоматически находят любое растение, которое ищут, с доступностью «Редкое» (или ниже), при условии, что оно встречается естественным образом на территории поисков."
     }
    ],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.wilderness",
+     "value": 2
+    }
+   ],
    "grants": [],
    "canUseMagic": true,
    "resource": "",
@@ -1586,7 +1623,7 @@
  {
   "name": "Ореада",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-oread.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1608,7 +1645,12 @@
      "effect": "Ореады имеют глубокую магическую связь с природой. Они не вредят животным: любой зверь, с которым они сталкиваются, считается дружелюбным и не нападает, если его не спровоцировать. Ореады также автоматически находят любое растение, которое ищут, с доступностью «Редкое» (или ниже), при условии, что оно встречается естественным образом на территории поисков."
     }
    ],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.wilderness",
+     "value": 2
+    }
+   ],
    "grants": [],
    "canUseMagic": true,
    "resource": "",
@@ -1626,7 +1668,7 @@
  {
   "name": "Суккуб / Инкуб",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-succubus.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1683,7 +1725,7 @@
  {
   "name": "Стучак",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-knocker.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1727,7 +1769,7 @@
  {
   "name": "Прибожек",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-godling.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1771,7 +1813,7 @@
  {
   "name": "Кобольд",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-kobold.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1820,7 +1862,7 @@
  {
   "name": "Гоблин",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-goblin.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1860,7 +1902,7 @@
  {
   "name": "Допплер",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-doppler.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1905,7 +1947,7 @@
  {
   "name": "Тролль",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-troll.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -1974,7 +2016,7 @@
  {
   "name": "Домовой",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-domovoy.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -2031,7 +2073,7 @@
  {
   "name": "Полуэльф",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-half-elf.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"
@@ -2092,7 +2134,7 @@
  {
   "name": "Вампир",
   "type": "race",
-  "img": "icons/environment/people/commoner.webp",
+  "img": "systems/vedmak/assets/fan/people/art-race-vampire.webp",
   "folder": [
    "Фанатские",
    "Журнал Весемира"

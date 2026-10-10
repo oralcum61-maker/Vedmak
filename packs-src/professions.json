@@ -1434,7 +1434,7 @@
  {
   "name": "Исток",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-source.webp",
   "folder": [
    "Фанатские",
    "Исток"
@@ -1594,7 +1594,7 @@
  {
   "name": "Наёмник",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-mercenary.webp",
   "folder": [
    "Фанатские",
    "Много профессий (Leo's Homebrew)"
@@ -1755,7 +1755,7 @@
  {
   "name": "Тайный агент",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-secret-agent.webp",
   "folder": [
    "Фанатские",
    "Много профессий (Leo's Homebrew)"
@@ -1941,7 +1941,7 @@
  {
   "name": "Ведьма",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-witch.webp",
   "folder": [
    "Фанатские",
    "Много профессий (Leo's Homebrew)"
@@ -2088,7 +2088,7 @@
  {
   "name": "Алхимик",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-alchemist.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -2236,7 +2236,7 @@
  {
   "name": "Берсерк",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-berserker.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -2383,7 +2383,7 @@
  {
   "name": "Браконьер",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-poacher.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -2531,7 +2531,7 @@
  {
   "name": "Варвар",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-barbarian.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -2692,7 +2692,7 @@
  {
   "name": "Кулачный боец",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-pugilist.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -2840,7 +2840,7 @@
  {
   "name": "Куртизанка",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-courtesan.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -2988,7 +2988,7 @@
  {
   "name": "Ловчий",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-trapper.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -3144,7 +3144,7 @@
  {
   "name": "Мастер меча",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-swordmaster.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -3290,7 +3290,7 @@
  {
   "name": "Рейнджер",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-ranger.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -3457,7 +3457,7 @@
  {
   "name": "Танцор клинка",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-blade-dancer.webp",
   "folder": [
    "Фанатские",
    "Новые профессии"
@@ -3603,7 +3603,7 @@
  {
   "name": "Элитный Бессмертный",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-immortal.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -3760,7 +3760,7 @@
  {
   "name": "Всадник песков",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-sand-rider.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -3908,7 +3908,7 @@
  {
   "name": "Мастер рун",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-rune-master.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -3940,7 +3940,6 @@
     "endurance",
     "fineArts",
     "persuasion",
-    "perception",
     "crafting",
     "resistCoercion"
    ],
@@ -4065,7 +4064,7 @@
  {
   "name": "Маг воды",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-water-mage.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -4222,7 +4221,7 @@
  {
   "name": "Танцор клинка (Офир)",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-blade-dancer-ofir.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -4370,7 +4369,7 @@
  {
   "name": "Алхимик (Офир)",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-alchemist-ofir.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -4539,7 +4538,7 @@
  {
   "name": "Жрец Зеррикантермента",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-zerrikanterment-priest.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -4687,7 +4686,7 @@
  {
   "name": "Маг огня",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-fire-mage.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -4871,7 +4870,7 @@
  {
   "name": "Марид",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-marid.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -5038,7 +5037,7 @@
  {
   "name": "Золотой дракон",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-golden-dragon.webp",
   "folder": [
    "Фанатские",
    "Офир и Зеррикания"
@@ -5190,7 +5189,7 @@
  {
   "name": "Охотник на колдуний",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-witch-hunter.webp",
   "folder": [
    "Фанатские",
    "Охотник на колдуний"
@@ -5485,7 +5484,7 @@
  {
   "name": "Охотник",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-hunter.webp",
   "folder": [
    "Фанатские",
    "Том магии Альзура"
@@ -5633,7 +5632,7 @@
  {
   "name": "Травник",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-herbalist.webp",
   "folder": [
    "Фанатские",
    "Том магии Альзура"
@@ -5781,7 +5780,7 @@
  {
   "name": "Провидец",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-seer.webp",
   "folder": [
    "Фанатские",
    "Том магии Альзура"
@@ -5929,7 +5928,7 @@
  {
   "name": "Псионик",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-psionic.webp",
   "folder": [
    "Фанатские",
    "Том магии Альзура"
@@ -6077,7 +6076,7 @@
  {
   "name": "Демонолог",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-demonologist.webp",
   "folder": [
    "Фанатские",
    "Том магии Альзура"
@@ -6225,7 +6224,7 @@
  {
   "name": "Некромант",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-necromancer.webp",
   "folder": [
    "Фанатские",
    "Том магии Альзура"
@@ -6373,7 +6372,7 @@
  {
   "name": "Жрец (Том Хаоса)",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-priest-chaos.webp",
   "folder": [
    "Официальные дополнения",
    "Том Хаоса"
@@ -6521,7 +6520,7 @@
  {
   "name": "Друид",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-druid.webp",
   "folder": [
    "Официальные дополнения",
    "Том Хаоса"
@@ -6726,7 +6725,7 @@
  {
   "name": "Учёный",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-scholar.webp",
   "folder": [
    "Фанатские",
    "Учёный"
@@ -6889,14 +6888,14 @@
  {
   "name": "Крестьянин",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-peasant.webp",
   "folder": [
    "Официальные дополнения",
    "Крестьянин"
   ],
   "system": {
    "key": "peasant",
-   "description": "<p>Навыки профессии, снаряжение и стартовые деньги в модуле не указаны — добавьте их по книге «Крестьянин».</p><h1>Фермерская мудрость</h1>\n<table style=\"width: 100%; height: 119px;\" border=\"1\"><colgroup><col style=\"width: 31.6279%;\"><col style=\"width: 12.5409%;\"><col style=\"width: 55.8312%;\"></colgroup>\n<tbody>\n<tr>\n<td style=\"text-align: center;\"><strong>Ритуал</strong></td>\n<td style=\"text-align: center;\"><strong>СЛ</strong></td>\n<td style=\"text-align: center;\"><strong>Эффект</strong></td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Очищение крови</strong></td>\n<td style=\"height: 17px; text-align: center;\">8</td>\n<td style=\"height: 17px;\">Используя 2 единицы Эфира и 1 единицу Купороса, крестьянин может создать лосьон, который полностью стирает пятна крови с площади до пяти кубических метров.</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Предсказание погоды</strong></td>\n<td style=\"height: 17px; text-align: center;\">10</td>\n<td style=\"height: 17px;\">Осматривая небо и наблюдая за поведением животных, крестьянин может сказать, какой будет погода в следующие 24 часа</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Венок из трав</strong></td>\n<td style=\"height: 17px; text-align: center;\">12</td>\n<td style=\"height: 17px;\">Сплетая 3 единицы алхимических ингредиентов на растительной основе в венок и надевая его, крестьянин улучшает свою память и не забудет ничего, что произойдет в следующие 24 часа</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Круг от вредителей</strong></td>\n<td style=\"height: 17px; text-align: center;\">14</td>\n<td style=\"height: 17px;\">Рассыпая 5 единиц любого алхимического вещества по кругу с радиусом 20 метров, крестьянин вынуждает любых Инсектоидов и Зверей, прежде чем они смогут войти в круг, совершить проверку Выносливости, со СЛ, равной результату проверки \"\"Фермерской Мудрости<em>*</em></td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Убийца кошмаров</strong></td>\n<td style=\"height: 17px; text-align: center;\">16</td>\n<td style=\"height: 17px;\">Вывернув одежду наизнанку. надев шляпу задом наперед и произнеся специальный стишок, крестьянин не будет страдать в эту ночь от кошмаров (обычных или волшебных)</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Обнаружение черной магии</strong></td>\n<td style=\"height: 17px; text-align: center;\">18</td>\n<td style=\"height: 17px;\">Взяв кусок дерева и вырезав на нем определенные символы, крестьянин создает тотем, который становится черным, если он находится в пределах 5 метров от кого-то кто проклят или под порчей. Тотем чернеет только один раз</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Талисман на удачу</strong></td>\n<td style=\"height: 17px; text-align: center;\">20</td>\n<td style=\"height: 17px;\">Используя 1 единицу перьев и 3 единицы различных алхимических ингредиентов, крестьянин создает амулет, который дает владельцу бонус к Удаче, равный значению&nbsp;<strong><em>Фермерской Мудрости</em></strong> крестьянина. Данную Удачу можно использовать только один раз. Эффекты нескольких талисманов не суммируются</td>\n</tr>\n</tbody>\n</table>\n<p>&nbsp;</p>\n<h1>Мамино рагу</h1>\n<table style=\"width: 100%; height: 544px;\" border=\"1\"><colgroup><col style=\"width: 24.2364%;\"><col style=\"width: 36.8502%;\"><col style=\"width: 38.9134%;\"></colgroup>\n<tbody>\n<tr style=\"height: 16px;\">\n<td style=\"text-align: center; height: 16px;\"><strong>Рецепты</strong></td>\n<td style=\"text-align: center; height: 16px;\"><strong>Ингридиенты</strong></td>\n<td style=\"text-align: center; height: 16px;\"><strong>Эффект</strong></td>\n</tr>\n<tr style=\"height: 112px;\">\n<td style=\"height: 112px;\"><strong>Симфония урожая</strong></td>\n<td style=\"height: 112px;\">\n<p>Сырое Мясо (x2),</p>\n<p>Пиво (x3),&nbsp;</p>\n<p>Собачья петрушка (x3),</p>\n<p>Плод берберки (x4)</p>\n</td>\n<td style=\"height: 112px;\">Дает невосприимчивость к страху и ПБ для всех частей тела,&nbsp;равные 1/3 значения навыка Мамино Рагу. Бонусные ПБ&nbsp;складываются с таковыми от изношенной брони, но заменяют&nbsp;способность краснолюда &ndash; Закалённый, если они выше.</td>\n</tr>\n<tr style=\"height: 112px;\">\n<td style=\"height: 112px;\"><strong>Мамино Рагу</strong></td>\n<td style=\"height: 112px;\">Вороний глаз (x5), Лепестки<br>морозника (x3), Переступень (x2),<br>Собачья петрушка (x2)</td>\n<td style=\"height: 112px;\">Тот, кто это ест, получает состояние тошноты, пока не пройдет&nbsp;проверку Выносливости со СЛ, равной проверке навыка<br>Мамино Рагу, или пока эффект не закончится.</td>\n</tr>\n<tr style=\"height: 64px;\">\n<td style=\"height: 64px;\"><strong>Особый Бульон</strong></td>\n<td style=\"height: 64px;\">Звериные кости (x4),<br>Собачье сало (x2), Омела (x3),<br>Волокна хана (x3)</td>\n<td style=\"height: 64px;\">Уменьшает количество дней, необходимое для заживления&nbsp;критического ранения, на половину значения&nbsp;навыка Мамино Рагу (минимум 1 день).</td>\n</tr>\n<tr style=\"height: 80px;\">\n<td style=\"height: 80px;\"><strong>Весеннее Рагу</strong></td>\n<td style=\"height: 80px;\">Плод балиссы(x3), Сырое мясо (x2),<br>Грибы-шибальцы (x4),<br>Жимолость (x3)</td>\n<td style=\"height: 80px;\">Дает бонус к Соблазнению, равный половине значения<br>навыка Мамино Рагу, и бонус к Выносливости, равный&nbsp;значению навыка Мамино Рагу &times; 3.</td>\n</tr>\n<tr style=\"height: 80px;\">\n<td style=\"height: 80px;\"><strong>Рагу из Тролля</strong></td>\n<td style=\"height: 80px;\">Ячмень (x3), Склеродерм (x4),<br>Сера (x2), Сырое мясо(x3)</td>\n<td style=\"height: 80px;\">Дает бонус к снятию отравления, равный половине значения<br>навыка Мамино Рагу, и сопротивление к урону от яда.</td>\n</tr>\n<tr style=\"height: 80px;\">\n<td style=\"height: 80px;\"><strong>Зимнее Рагу</strong></td>\n<td style=\"height: 80px;\">Ячмень (x5) Звериные кости (x2),<br>Склеродерм (x3), Корень зерника (x2)</td>\n<td style=\"height: 80px;\">Дает невосприимчивость к замораживанию и позволяет<br>выживать в ледяных условиях в течение дополнительных<br>часов, в количестве значения навыка Мамино Рагу.</td>\n</tr>\n</tbody>\n</table>",
+   "description": "<blockquote><p>Во время беспорядков погибло 76 нелюдей, в том числе ведьмак Геральт из Ривии, раненный в грудь вилами человеком, о котором мы знаем только, что его звали Роб, и он задолжал 3 кроны в местной таверне.</p><p>— Вернон Роше</p></blockquote><p>Шуточная профессия R. Talsorian Games к 1 апреля. Стартовые деньги — 20 крон × 2d6 (в среднем 120).</p><h1>Фермерская мудрость</h1>\n<table style=\"width: 100%; height: 119px;\" border=\"1\"><colgroup><col style=\"width: 31.6279%;\"><col style=\"width: 12.5409%;\"><col style=\"width: 55.8312%;\"></colgroup>\n<tbody>\n<tr>\n<td style=\"text-align: center;\"><strong>Ритуал</strong></td>\n<td style=\"text-align: center;\"><strong>СЛ</strong></td>\n<td style=\"text-align: center;\"><strong>Эффект</strong></td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Очищение крови</strong></td>\n<td style=\"height: 17px; text-align: center;\">8</td>\n<td style=\"height: 17px;\">Используя 2 единицы Эфира и 1 единицу Купороса, крестьянин может создать лосьон, который полностью стирает пятна крови с площади до пяти кубических метров.</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Предсказание погоды</strong></td>\n<td style=\"height: 17px; text-align: center;\">10</td>\n<td style=\"height: 17px;\">Осматривая небо и наблюдая за поведением животных, крестьянин может сказать, какой будет погода в следующие 24 часа</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Венок из трав</strong></td>\n<td style=\"height: 17px; text-align: center;\">12</td>\n<td style=\"height: 17px;\">Сплетая 3 единицы алхимических ингредиентов на растительной основе в венок и надевая его, крестьянин улучшает свою память и не забудет ничего, что произойдет в следующие 24 часа</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Круг от вредителей</strong></td>\n<td style=\"height: 17px; text-align: center;\">14</td>\n<td style=\"height: 17px;\">Рассыпая 5 единиц любого алхимического вещества по кругу с радиусом 20 метров, крестьянин вынуждает любых Инсектоидов и Зверей, прежде чем они смогут войти в круг, совершить проверку Выносливости, со СЛ, равной результату проверки \"\"Фермерской Мудрости<em>*</em></td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Убийца кошмаров</strong></td>\n<td style=\"height: 17px; text-align: center;\">16</td>\n<td style=\"height: 17px;\">Вывернув одежду наизнанку. надев шляпу задом наперед и произнеся специальный стишок, крестьянин не будет страдать в эту ночь от кошмаров (обычных или волшебных)</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Обнаружение черной магии</strong></td>\n<td style=\"height: 17px; text-align: center;\">18</td>\n<td style=\"height: 17px;\">Взяв кусок дерева и вырезав на нем определенные символы, крестьянин создает тотем, который становится черным, если он находится в пределах 5 метров от кого-то кто проклят или под порчей. Тотем чернеет только один раз</td>\n</tr>\n<tr style=\"height: 17px;\">\n<td style=\"height: 17px;\"><strong>Талисман на удачу</strong></td>\n<td style=\"height: 17px; text-align: center;\">20</td>\n<td style=\"height: 17px;\">Используя 1 единицу перьев и 3 единицы различных алхимических ингредиентов, крестьянин создает амулет, который дает владельцу бонус к Удаче, равный значению&nbsp;<strong><em>Фермерской Мудрости</em></strong> крестьянина. Данную Удачу можно использовать только один раз. Эффекты нескольких талисманов не суммируются</td>\n</tr>\n</tbody>\n</table>\n<p>&nbsp;</p>\n<h1>Мамино рагу</h1>\n<table style=\"width: 100%; height: 544px;\" border=\"1\"><colgroup><col style=\"width: 24.2364%;\"><col style=\"width: 36.8502%;\"><col style=\"width: 38.9134%;\"></colgroup>\n<tbody>\n<tr style=\"height: 16px;\">\n<td style=\"text-align: center; height: 16px;\"><strong>Рецепты</strong></td>\n<td style=\"text-align: center; height: 16px;\"><strong>Ингридиенты</strong></td>\n<td style=\"text-align: center; height: 16px;\"><strong>Эффект</strong></td>\n</tr>\n<tr style=\"height: 112px;\">\n<td style=\"height: 112px;\"><strong>Симфония урожая</strong></td>\n<td style=\"height: 112px;\">\n<p>Сырое Мясо (x2),</p>\n<p>Пиво (x3),&nbsp;</p>\n<p>Собачья петрушка (x3),</p>\n<p>Плод берберки (x4)</p>\n</td>\n<td style=\"height: 112px;\">Дает невосприимчивость к страху и ПБ для всех частей тела,&nbsp;равные 1/3 значения навыка Мамино Рагу. Бонусные ПБ&nbsp;складываются с таковыми от изношенной брони, но заменяют&nbsp;способность краснолюда &ndash; Закалённый, если они выше.</td>\n</tr>\n<tr style=\"height: 112px;\">\n<td style=\"height: 112px;\"><strong>Мамино Рагу</strong></td>\n<td style=\"height: 112px;\">Вороний глаз (x5), Лепестки<br>морозника (x3), Переступень (x2),<br>Собачья петрушка (x2)</td>\n<td style=\"height: 112px;\">Тот, кто это ест, получает состояние тошноты, пока не пройдет&nbsp;проверку Выносливости со СЛ, равной проверке навыка<br>Мамино Рагу, или пока эффект не закончится.</td>\n</tr>\n<tr style=\"height: 64px;\">\n<td style=\"height: 64px;\"><strong>Особый Бульон</strong></td>\n<td style=\"height: 64px;\">Звериные кости (x4),<br>Собачье сало (x2), Омела (x3),<br>Волокна хана (x3)</td>\n<td style=\"height: 64px;\">Уменьшает количество дней, необходимое для заживления&nbsp;критического ранения, на половину значения&nbsp;навыка Мамино Рагу (минимум 1 день).</td>\n</tr>\n<tr style=\"height: 80px;\">\n<td style=\"height: 80px;\"><strong>Весеннее Рагу</strong></td>\n<td style=\"height: 80px;\">Плод балиссы(x3), Сырое мясо (x2),<br>Грибы-шибальцы (x4),<br>Жимолость (x3)</td>\n<td style=\"height: 80px;\">Дает бонус к Соблазнению, равный половине значения<br>навыка Мамино Рагу, и бонус к Выносливости, равный&nbsp;значению навыка Мамино Рагу &times; 3.</td>\n</tr>\n<tr style=\"height: 80px;\">\n<td style=\"height: 80px;\"><strong>Рагу из Тролля</strong></td>\n<td style=\"height: 80px;\">Ячмень (x3), Склеродерм (x4),<br>Сера (x2), Сырое мясо(x3)</td>\n<td style=\"height: 80px;\">Дает бонус к снятию отравления, равный половине значения<br>навыка Мамино Рагу, и сопротивление к урону от яда.</td>\n</tr>\n<tr style=\"height: 80px;\">\n<td style=\"height: 80px;\"><strong>Зимнее Рагу</strong></td>\n<td style=\"height: 80px;\">Ячмень (x5) Звериные кости (x2),<br>Склеродерм (x3), Корень зерника (x2)</td>\n<td style=\"height: 80px;\">Дает невосприимчивость к замораживанию и позволяет<br>выживать в ледяных условиях в течение дополнительных<br>часов, в количестве значения навыка Мамино Рагу.</td>\n</tr>\n</tbody>\n</table>",
    "definingSkill": {
     "name": "Нетерпимость",
     "stat": "will",
@@ -6914,13 +6913,35 @@
     "sign": 0,
     "allBasicSigns": false
    },
-   "skills": [],
+   "skills": [
+    "athletics",
+    "brawling",
+    "courage",
+    "crafting",
+    "endurance",
+    "firstAid",
+    "gambling",
+    "physique",
+    "smallBlades",
+    "wilderness"
+   ],
    "skillChoices": [],
-   "startingMoney": 0,
-   "gear": "",
+   "startingMoney": 20,
+   "gear": "Пиво, Ещё одно пиво, Корзина, Тёплая одежда, Принадлежности для готовки, Огниво, Колода для гвинта, Священный символ, Трубка и табак, Мешок",
    "gearChoice": {
-    "count": 0,
-    "options": []
+    "count": 5,
+    "options": [
+     "Пиво",
+     "Ещё одно пиво",
+     "Корзина",
+     "Тёплая одежда",
+     "Принадлежности для готовки",
+     "Огниво",
+     "Колода для гвинта",
+     "Священный символ",
+     "Трубка и табак",
+     "Мешок"
+    ]
    },
    "gearFixed": [],
    "allowedRaces": [],
@@ -7006,7 +7027,7 @@
    ],
    "source": {
     "book": "Крестьянин",
-    "page": ""
+    "page": "6–7"
    },
    "altBranches": []
   },
@@ -7015,7 +7036,7 @@
  {
   "name": "Аристократ",
   "type": "profession",
-  "img": "icons/environment/people/group.webp",
+  "img": "systems/vedmak/assets/fan/people/art-prof-noble.webp",
   "folder": [
    "Официальные дополнения",
    "Лорды и земли"
