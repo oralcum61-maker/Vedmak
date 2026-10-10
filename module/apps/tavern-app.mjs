@@ -103,6 +103,9 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       pokerReroll: TavernApp.#onPokerReroll,
       pokerShow: TavernApp.#onPokerShow,
       filletSpeed: TavernApp.#onFilletSpeed,
+      filletStop: TavernApp.#onFilletStop,
+      addSpectators: TavernApp.#onAddSpectators,
+      removeSpectator: TavernApp.#onRemoveSpectator,
       brawlStart: TavernApp.#onBrawlStart,
       brawlNotes: TavernApp.#onBrawlNotes
     }
@@ -129,6 +132,8 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   game = "armwrestle";
   players = [];
+  /** Зрители «Филе»: ставят против того, кто играет с ножом (PLAN 4.148). */
+  spectators = [];
   state = {};
   log = [];
 
@@ -138,6 +143,35 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   #fresh(p) { return { uuid: p.uuid, name: p.name, img: p.img, mod: p.mod ?? 0, bet: p.bet ?? 0 }; }
   get bank() { return BANK_GAMES.includes(this.game); }
   #stake(p) { return this.game === "hoard" ? HOARD_STAKE : Math.max(0, Number(p.bet) || 0); }
+
+  /**
+   * Предел ставки зрителя «Филе»: его «Азартные игры» в кронах, после двух ускорений — вдвое. Ставки зрителей не
+   * уходят в банк: в конце кроны переходят между игроком и зрителями (закончил — забирает ставки, порезался — платит).
+   */
+  #spectatorLimit(s) {
+    const X = resolveActor(s.uuid);
+    // Уровень навыка (без параметра): «предел — их Азартные игры»
+    const base = Math.max(1, X?.system?.skills?.gambling?.total ?? 0);
+    return (this.state.speed ?? 0) >= 2 ? base * 2 : base;
+  }
+
+  /** Расчёт «Филе» со зрителями: won — игрок закончил без промаха, иначе порезался. */
+  async #settleFillet(won) {
+    const st = this.state;
+    if (st.settled) return [];
+    st.settled = true;
+    const [p] = this.players;
+    const bets = this.spectators.filter(s => s.bet > 0);
+    if (!p || !bets.length) return [];
+    const sum = bets.reduce((n, s) => n + s.bet, 0);
+    const manual = [];
+    if (!(await this.#pay(p, won ? sum : -sum))) manual.push(p.name);
+    for (const s of bets) if (!(await this.#pay(s, won ? -s.bet : s.bet))) manual.push(s.name);
+    const list = bets.map(s => `${esc(s.name)} ${s.bet}`).join(", ");
+    return [won ? `Ставки зрителей (${list}) — <b>${sum} крон</b> — забирает ${esc(p.name)}.`
+      : `${esc(p.name)} платит зрителям их ставки (${list}) — <b>${sum} крон</b>.`,
+      ...(manual.length ? [`Без кошелька на листе — вручную: ${manual.map(esc).join(", ")}.`] : [])];
+  }
 
   async #resetGame() {
     // Игра брошена до конца — ставки возвращаются
@@ -173,7 +207,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       empty: !this.players.length, need: cfg.min === cfg.max ? `${cfg.min}` : `${cfg.min}–${cfg.max}`, count: this.players.length,
       pot: st.pot ?? (this.bank ? this.players.reduce((n, p) => n + this.#stake(p), 0) : 0), potSettled: !!st.settled,
       turnLabel: this.#turnLabel(), log: this.log.slice(-30).reverse(),
-      footNote: { hoard: `Каждый вносит в кучу ${HOARD_STAKE} крон · ход уходит и в чат`, fillet: "Ставят зрители, предел — их Азартные игры",
+      footNote: { hoard: `Каждый вносит в кучу ${HOARD_STAKE} крон · ход уходит и в чат`, fillet: "Зрители ставят против игрока, предел — их Азартные игры; закончил — забирает ставки, порезался — платит",
         brawl: "Без банка: ставки — на словах" }[key] ?? "Каждый ход уходит и в чат",
       showTurn: key !== "brawl" && !(key === "poker" && st.rolled), showReveal: key === "poker" && !!st.rolled
     };
@@ -225,6 +259,10 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
         cls: i < speed ? "done" : i === speed ? "now" : "next" })).slice(-4);
       ctx.speedNote = speed >= 2 ? "предел ставок удвоен · закончить уже можно" : `до двойного предела — ускорений: ${2 - speed}`;
       ctx.solo = players[0] ? { ...seat(players[0]), last: st.last ?? null, hits: st.hits ?? 0 } : null;
+      // Зрители: ставки против игрока, предел — «Азартные игры» (вдвое после двух ускорений)
+      ctx.spectators = this.spectators.map(s => ({ ...s, limit: this.#spectatorLimit(s), locked: !!st.done }));
+      ctx.spectatorSum = this.spectators.reduce((n, s) => n + (s.bet || 0), 0);
+      ctx.canStop = speed >= 2 && !st.done && !!st.started;
     } else if (key === "gwent") {
       const gwentSeat = p => p ? { ...seat(p), skill: p.skill ?? "", card: p.card ?? null, total: p.total,
         cardPlus: (p.card?.mod ?? 0) >= 0, gems: [0, 1].map(n => ({ on: (p.wins ?? 0) > n })) } : null;
@@ -271,6 +309,16 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (p) p.mod = Number(el.value) || 0;
       });
     }
+    for (const el of this.element.querySelectorAll("input[data-spectator-bet]")) {
+      el.addEventListener("change", () => {
+        const s = this.spectators.find(x => x.uuid === el.dataset.spectatorBet);
+        if (!s) return;
+        const limit = this.#spectatorLimit(s);
+        s.bet = Math.max(0, Math.min(limit, Number(el.value) || 0));
+        if (Number(el.value) > limit) ui.notifications.info(`${s.name}: предел ставки — ${limit} крон (Азартные игры${(this.state.speed ?? 0) >= 2 ? " ×2" : ""}).`);
+        this.render();
+      });
+    }
     for (const el of this.element.querySelectorAll("input[data-bet]")) {
       el.addEventListener("change", () => {
         const p = this.players.find(x => x.uuid === el.dataset.bet);
@@ -313,6 +361,24 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static #onAddPlayers() {
     this.#add(game.actors.filter(a => a.type === "character" && a.hasPlayerOwner).map(a => ({ uuid: a.uuid, name: a.name, img: a.img })));
+    this.render();
+  }
+
+  /** Зрители «Филе» — выделенные токены (кроме того, кто играет). */
+  static #onAddSpectators() {
+    const tokens = (canvas?.tokens?.controlled ?? []).filter(t => t.actor && !this.players.some(p => p.uuid === t.document.uuid));
+    if (!tokens.length) return ui.notifications.info("Выделите токены зрителей на сцене.");
+    for (const t of tokens) {
+      if (!this.spectators.some(s => s.uuid === t.document.uuid)) {
+        this.spectators.push({ uuid: t.document.uuid, name: t.document.name, img: t.document.texture?.src ?? t.actor.img, bet: 0 });
+      }
+    }
+    this.render();
+  }
+
+  static #onRemoveSpectator(event, target) {
+    if (this.state.started && !this.state.done) return ui.notifications.warn("Игра идёт — зритель уже поставил.");
+    this.spectators = this.spectators.filter(s => s.uuid !== target.dataset.uuid);
     this.render();
   }
 
@@ -539,8 +605,21 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (r.success) st.hits = (st.hits ?? 0) + 1;
     const lines = [r.success ? `${esc(p.name)}: ${r.total} против СЛ ${dc} — нож мелькает между пальцами.`
       : `${esc(p.name)}: ${r.total} против СЛ ${dc} — нож задел руку, ставки проиграны.`];
-    if (!r.success) st.done = true;
+    if (!r.success) {
+      st.done = true;
+      lines.push(...await this.#settleFillet(false));
+    }
     await this.#post(this.#lead(lines), r.rolls);
+  }
+
+  /** Закончить «Филе» после двух ускорений без промаха — ставки зрителей у игрока. */
+  static async #onFilletStop() {
+    if (this.#busy || this.state.done || (this.state.speed ?? 0) < 2 || !this.state.started) return;
+    await this.#once(async () => {
+      this.state.done = true;
+      const [p] = this.players;
+      await this.#post([`${esc(p?.name ?? "Игрок")} закончил: ${this.state.hits ?? 0} ударов без промаха.`, ...await this.#settleFillet(true)]);
+    });
   }
 
   static async #onFilletSpeed() {

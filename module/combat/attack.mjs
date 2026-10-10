@@ -16,6 +16,14 @@ import { prostheticStrike, equippedProstheses, weaponMount } from "./prosthetics
 import { ammoProps } from "../config/items.mjs";
 import { aimBonus, clearAim } from "./manual.mjs";
 import { invisibleOpponentPart, monsterInvisibility, dropInvisibility } from "./monster-traits.mjs";
+import { isSnail, GRAB_ATTACKS } from "../character/snail-school.mjs";
+
+/** Уровень «Удара сверху» берсерка; 0 — не в медвежьей форме или способности нет. */
+function bearSlamLevel(actor) {
+  if (actor?.type !== "character" || !actor.system.derived?.bearForm) return 0;
+  for (const b of actor.system.profession?.system.branches ?? []) for (const a of b.abilities) if (a.name === "Удар сверху") return a.value ?? 0;
+  return 0;
+}
 
 /**
  * Высасывание крови («Высший вампир. Вторая редакция», стр. 9): укус вампира с запасом Очков Крови.
@@ -39,6 +47,22 @@ const SHIELD_STEPS = { light: 0, medium: 2, heavy: 4 };
 export function describeSource(actor, source) {
   const d = actor.system.derived;
   const isMonster = actor.type === "monster";
+
+  // «Удар сверху» берсерка в медвежьей форме («Новые профессии»): полный ход, Реа + уровень способности; при
+  // попадании 6d6 в туловище, цель сбита с ног и обездвижена. Блок отменяет урон, но не падение (defense.mjs)
+  if (source.kind === "bearSlam") {
+    const level = bearSlamLevel(actor);
+    if (!level) return null;
+    return {
+      kind: "bearSlam", key: "bearSlam", label: "Удар сверху", img: "icons/creatures/abilities/bear-roar-bite-brown.webp",
+      skill: "brawling", ability: { stat: "ref", label: "Удар сверху", value: level }, accuracy: 0, isRanged: false,
+      types: { slam: { label: "Удар сверху (полный ход)", mod: 0, damage: 1, location: "torso", status: "prone", status2: "immobilized",
+        hint: "Встав на задние лапы — всеми когтями по цели рядом. Полный ход.",
+        hit: "Цель сбита с ног и обездвижена." } },
+      defaultType: "slam",
+      weapon: { name: "Удар сверху", damage: "6d6", damageTypes: ["slashing"], effects: [], silverDamage: "", bearSlam: true }
+    };
+  }
 
   if (source.kind === "unarmed") {
     return {
@@ -155,6 +179,7 @@ export function attackSources(actor) {
   }
   out.push(describeSource(actor, { kind: "unarmed" }));
   for (const p of equippedProstheses(actor)) out.push(describeSource(actor, { kind: "prosthetic", itemId: p.id }));
+  if (bearSlamLevel(actor)) out.push(describeSource(actor, { kind: "bearSlam" }));
   return out.filter(Boolean);
 }
 
@@ -404,15 +429,19 @@ export async function rollAttack(actor, src, targets, cfg) {
   const typeCfg = src.types[cfg.attackType] ?? Object.values(src.types)[0];
   const skillKey = typeCfg.skill ?? src.skill;
   const skill = actor.system.skills[skillKey];
-  const stat = actor.system.stats[SKILLS[skillKey].stat];
+  const stat = actor.system.stats[src.ability?.stat ?? SKILLS[skillKey].stat];
 
-  const parts = [
-    { label: stat.label, value: stat.effective, always: true },
-    { label: skill.label, value: skill.total, always: true }
-  ];
-  const sum = stat.effective + skill.total + skill.penalty;
-  if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
-  if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  const parts = [{ label: stat.label, value: stat.effective, always: true }];
+  if (src.ability) {
+    // Способность древа профессии вместо навыка («Удар сверху»): параметр + уровень, ранения — ко всем действиям
+    parts.push({ label: src.ability.label, value: src.ability.value, always: true });
+    if (actor.system.derived?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: actor.system.derived.actionMod });
+  } else {
+    parts.push({ label: skill.label, value: skill.total, always: true });
+    const sum = stat.effective + skill.total + skill.penalty;
+    if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
+    if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  }
   if (src.accuracy && !typeCfg.skill) parts.push({ label: "Точность", value: src.accuracy });
   // Оружие в протезе: ручной арбалет −3, скрытый клинок +4
   const mount = src.kind === "weapon" ? weaponMount(actor, src.item) : null;
@@ -440,6 +469,8 @@ export async function rollAttack(actor, src, targets, cfg) {
   // Цель — невидимое чудовище (обычная невидимость): −3 даже заметившему
   const target0 = resolveActor(targets[0]?.tokenUuid ?? targets[0]?.actorUuid);
   if (target0) parts.push(...invisibleOpponentPart(target0));
+  // Школа Улитки: схватить или удержать покрытого слизью ведьмака — −3
+  if (target0 && isSnail(target0) && GRAB_ATTACKS.includes(cfg.attackType)) parts.push({ label: "Слизь Улитки: выскальзывает", value: -3 });
   if (usesArm(src, cfg.attackType)) parts.push(...armWoundParts(actor));
 
   // Дополнительное действие атаки: 3 Вын, −3 (стр. 151)
@@ -523,7 +554,7 @@ export async function rollAttack(actor, src, targets, cfg) {
     damageFormula, damageMult, damageMod, chargeFormula, nonLethal, noDamage, drain,
     fixedLocation: typeCfg.location ?? "",
     chargeDice, weightMult, mounted: !!src.mounted || chargeDice > 0,
-    hitText: typeCfg.hit ?? "", hitStatus: typeCfg.status ?? "", stunSaveMod: typeCfg.stunSave ?? null,
+    hitText: typeCfg.hit ?? "", hitStatus: typeCfg.status ?? "", hitStatus2: typeCfg.status2 ?? "", stunSaveMod: typeCfg.stunSave ?? null,
     // СА — сколько обычных атак за действие; у быстрой и сильной её нет
     attackSpeed: actor.type === "monster" && cfg.attackType === "single" ? src.weapon.attackSpeed : null,
     roll,

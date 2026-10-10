@@ -5623,6 +5623,11 @@ body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .me
 .vedmak .tv2-last { display: inline-flex; align-items: baseline; gap: 6px; padding-left: 10px; border-left: 1px solid rgba(240, 225, 200, .15); }
 .vedmak .tv2-last b { font-size: 32px; line-height: 1; }
 .vedmak .tv2-last.bad b { background-image: linear-gradient(180deg, #ffe1d8 0%, #e79a86 44%, #9a4a38 56%, #f3b9aa 100%); }
+/* «Филе»: зрители со ставками против игрока — строкой под игроком */
+.vedmak .tv2-spectators { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(240, 225, 200, .12); }
+.vedmak .tv2-spectators > .cap { flex-basis: 100%; }
+.vedmak .tv2-spectator { display: inline-flex; align-items: center; gap: 6px; }
+.vedmak .tv2-spectator .tv2-chip input { width: 3.2em; }
 
 /* Гвинт: карта, сведения, счёт; раунды камнями */
 .vedmak .tv2-gseat { flex: none; width: 100%; display: flex; align-items: center; gap: 14px; }

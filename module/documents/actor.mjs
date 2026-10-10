@@ -86,7 +86,17 @@ export class VedmakActor extends Actor {
     ];
     if (this.system.derived?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: this.system.derived.actionMod });
     parts.push(...statusRollMods(this, "skill"));
-    return this.#check({ title: ab.name, subtitle: `${prof.system.branches[branch].name} · ${prof.name}`, parts, ...opts });
+    const subtitle = `${prof.system.branches[branch].name} · ${prof.name}`;
+    // Берсерк в облике человека: «Медвежьи чувства», «Спячка», «Медвежья шкура» — против СЛ самоконтроля, успех — эффект
+    const BF = await import("../character/bear-form.mjs");
+    if (BF.BEAR_HUMAN_ABILITIES.includes(ab.name) && BF.isBerserk(this)) {
+      if (BF.inBearForm(this)) return ui.notifications.warn(`«${ab.name}» — только в облике человека.`);
+      const bigBear = ab.name === "Медвежья шкура" && await BF.askBigBear(this);
+      const res = await this.#check({ title: ab.name, subtitle, parts, ...opts, dc: BF.controlDc(this) + (bigBear ? 5 : 0) });
+      if (res?.success) await BF.bearAbilitySuccess(this, ab.name, ab.value, { bigBear });
+      return res;
+    }
+    return this.#check({ title: ab.name, subtitle, parts, ...opts });
   }
 
   /**

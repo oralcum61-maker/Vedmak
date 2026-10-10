@@ -7,6 +7,7 @@ import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
 import { invisibleOpponentPart } from "./monster-traits.mjs";
+import { igniSlime } from "../character/snail-school.mjs";
 import { witcherSchools } from "../config/character.mjs";
 import { magicFumble } from "../config/magic.mjs";
 import {
@@ -332,6 +333,8 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     if (attacker) parts.push(...invisibleOpponentPart(attacker));
   }
   if (ARM_DEFENSES.includes(cfg.defense)) parts.push(...armWoundParts(actor));
+  // Школа Улитки: слизь Игни на руках — +3 к защите от разоружения
+  if (attack.attackType === "disarm" && igniSlime(actor)) parts.push({ label: "Слизь Игни", value: 3 });
   if (cfg.mod) parts.push({ label: "Модификатор", value: cfg.mod });
 
   const label = item ? `${type.label}: ${item.item.name}` : type.label;
@@ -381,6 +384,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     if (cfg.defense === "dispel") notes.push("Магия рассеяна: заклинание не действует на цель.");
     if (cfg.defense === "reposition") notes.push(`Можно сместиться на ${Math.floor(actor.system.stats.spd.effective / 2)} м.`);
     if (attack.attackType === "charge" && cfg.defense === "block") notes.push("Атака с разбега заблокирована: встречная Сила против Силы, чтобы сбить с ног.");
+    if (attack.weapon?.bearSlam && (cfg.defense === "block" || cfg.defense === "brawlBlock")) notes.push(...await bearSlamBlocked(actor, attack));
   }
 
   const fumbleKind = cfg.defense === "brawlBlock" || cfg.defense === "dodge" || cfg.defense === "reposition"
@@ -400,6 +404,23 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true, messageId: card.id });
   }
   return card;
+}
+
+/**
+ * «Удар сверху» заблокирован: урона нет, но цель сбита с ног и обездвижена, если не победит во встречной проверке
+ * Силы против Силы берсерка; победила — отбрасывает берсерка. Бросок берсерка — здесь же, у защищающегося.
+ */
+async function bearSlamBlocked(defender, attack) {
+  const berserk = resolveActor(attack.attacker?.tokenUuid) ?? resolveActor(attack.attacker?.actorUuid);
+  const strength = a => { const sk = a.system.skills.physique; const st = a.system.stats.body;
+    return [{ label: st.label, value: st.effective, always: true }, { label: sk.label, value: sk.total, always: true }]; };
+  const mine = await performCheck({ actor: defender, title: "Сила против Силы", subtitle: "Блок «Удара сверху»", parts: strength(defender), toChat: false });
+  const his = berserk ? await performCheck({ actor: berserk, title: "Сила против Силы", subtitle: "«Удар сверху»", parts: strength(berserk), toChat: false }) : null;
+  if (!mine || !his) return ["«Удар сверху» заблокирован: урона нет; встречная Сила против Силы — у ведущего."];
+  if (mine.total > his.total) return [`«Удар сверху» заблокирован: Сила ${mine.total} против ${his.total} — ${defender.name} отбрасывает берсерка, урона нет.`];
+  // Свои статусы защищающийся ставит себе сам — это его актор
+  for (const status of ["prone", "immobilized"]) await defender.toggleStatusEffect(status, { active: true });
+  return [`«Удар сверху» заблокирован: урона нет, но Сила ${mine.total} против ${his.total} — ${defender.name} сбит с ног и обездвижен.`];
 }
 
 /** Карточка защиты в чат и отметка на карточке атаки (погасить кнопки этой цели). */
@@ -494,7 +515,7 @@ function buildOutcome(message, attack, defender, r) {
       damageFormula: attack.damageFormula, damageMult: attack.damageMult, nonLethal: attack.nonLethal,
       damageMod: attack.damageMod ?? 0, chargeFormula: attack.chargeFormula ?? "",
       noDamage: attack.noDamage, fixedLocation: attack.fixedLocation, hitText: attack.hitText,
-      hitStatus: attack.hitStatus, stunSaveMod: attack.stunSaveMod, total: attack.roll.total,
+      hitStatus: attack.hitStatus, hitStatus2: attack.hitStatus2 ?? "", stunSaveMod: attack.stunSaveMod, total: attack.roll.total,
       spell, drain: attack.drain ?? null
     },
     defender,
@@ -503,7 +524,8 @@ function buildOutcome(message, attack, defender, r) {
     critLevel: r.damageOnBlock ? null : critLevel,
     critLabel: critLevel && !r.damageOnBlock ? CRIT_LEVELS[critLevel].label : "",
     canDamage, canApplyEffects,
-    hitStatusLabel: r.hit && attack.hitStatus ? CONFIG.statusEffects[attack.hitStatus]?.name ?? attack.hitStatus : "",
+    hitStatusLabel: r.hit && attack.hitStatus ? [attack.hitStatus, attack.hitStatus2].filter(Boolean)
+      .map(id => CONFIG.statusEffects.find(s => s.id === id)?.name ?? id).join(" и ") : "",
     showHitText: r.hit && attack.hitText,
     stunSave: r.hit && attack.stunSaveMod !== null && attack.stunSaveMod !== undefined && attack.noDamage
   };

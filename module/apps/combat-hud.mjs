@@ -18,6 +18,7 @@ import { ALCHEMY_ACTIONS } from "../config/crafting.mjs";
 import { flipToken, canFlip } from "./token-flip.mjs";
 import { transform, extendForm, endForm, regainControl, trueFormState } from "../character/true-form.mjs";
 import { bearFormState, bearTransform, bearRevert, MARDREM } from "../character/bear-form.mjs";
+import { isSnail, igniSlime, applyIgniSlime } from "../character/snail-school.mjs";
 import { animateVitals } from "../fx/sheet-motion.mjs";
 import { bindVolumeSlider, volumeIcon } from "../fx/volume.mjs";
 import { levelLabel } from "../config/magic.mjs";
@@ -73,6 +74,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
       aimTurn: CombatHud.#onAimTurn,
       trueForm: CombatHud.#onTrueForm,
       bearForm: CombatHud.#onBearForm,
+      igniSlime: CombatHud.#onIgniSlime,
       manualDamage: CombatHud.#onManualDamage,
       controlCheck: CombatHud.#onControlCheck,
       ram: CombatHud.#onRam,
@@ -457,6 +459,8 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
         if (st.active) return { action: "end", label: `Снова человек${st.hours ? ` · ${st.hours} ч` : ""}`, hint: `Самоконтроль в бою — СЛ ${st.dc}. ПЗ при возврате вдвое меньше` };
         return { action: "go", label: "Медвежья форма", hint: st.mardrem ? `Съесть ${MARDREM} (есть ${st.mardrem})` : `Нет грибов «${MARDREM}»`, off: !st.mardrem };
       })() : null,
+      // Школа Улитки: слизь Игни на руках (1 Вын)
+      snailSlime: isSnail(actor) ? { on: !!igniSlime(actor) } : null,
       adrenalineRule: !!setting("adrenaline", false) && isCharacter,
       adrenaline: system.adrenaline?.value ?? 0,
       skillOptions: Object.entries(SKILLS).filter(([k]) => system.skills?.[k]).map(([, s]) => s.label),
@@ -506,6 +510,10 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
 
   /** Истинная форма: превратиться, вернуть разум при срыве или выйти (Shift — продлить). */
   /** Медвежья форма берсерка: обратиться (съесть мардрём) или вернуться в человеческий облик. */
+  static async #onIgniSlime() {
+    if (this.actor) return applyIgniSlime(this.actor);
+  }
+
   static async #onBearForm(event, target) {
     if (!this.actor) return;
     return target.dataset.form === "go" ? bearTransform(this.actor) : bearRevert(this.actor);

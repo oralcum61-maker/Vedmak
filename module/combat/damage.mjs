@@ -302,7 +302,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const reasons = [];
   if (!ap && armor.resist?.includes(damageType)) reasons.push("броня");
   if (tsys.resistances?.includes?.(damageType)) reasons.push("сопротивление");
-  if (bear?.resist?.includes(damageType)) reasons.push("медвежья шкура");
+  if (bear?.resist?.includes(damageType) || (!bear && tsys.derived?.hideResist?.includes(damageType))) reasons.push("медвежья шкура");
   if (weakness && damageType !== "elemental") {
     if (weakness === "silver" && !silver) reasons.push("не серебро");
     if (weakness === "meteorite" && !meteorite) reasons.push("не метеоритная сталь");
@@ -772,7 +772,8 @@ function canSetStatus(userId, actor, status, active, messageId) {
   const defender = actorOfRef(def.defender);
   if (!defender || !userOwnsAny(card.author?.id, defender)) return false;
   if (def.hit) {
-    return status === def.attack?.hitStatus && defender === actor && userOwnsAny(userId, actorOfRef(def.attack.attacker));
+    return !!status && (status === def.attack?.hitStatus || status === def.attack?.hitStatus2) && defender === actor
+      && userOwnsAny(userId, actorOfRef(def.attack.attacker));
   }
   if (def.defense !== "parry" || status !== "staggered" || !userOwnsAny(userId, defender)) return false;
   const attack = game.messages.get(def.attackMessageId)?.flags.vedmak?.attack;

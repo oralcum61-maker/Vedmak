@@ -145,6 +145,14 @@
       {{#with solo}}<div class="tv2-seat bottom">{{> tvWho}}{{> tvChips}}
         {{#if last}}<span class="tv2-last{{#unless last.ok}} bad{{/unless}}" data-tooltip="Последний удар"><b class="metal">{{last.total}}</b><span class="stat">против СЛ {{last.dc}}{{#if hits}} · без промаха {{hits}}{{/if}}</span></span>{{/if}}
       </div>{{/with}}
+      <div class="tv2-spectators">
+        <span class="cap">зрители ставят против{{#if spectatorSum}} · всего {{spectatorSum}} кр.{{/if}}</span>
+        {{#each spectators}}<div class="tv2-spectator">{{> tvWho}}
+          <label class="tv2-chip gold" data-tooltip="Ставка против игрока; предел — Азартные игры ({{limit}} кр.)"><i class="tv2-mc"></i><input type="number" data-spectator-bet="{{uuid}}" value="{{bet}}" min="0" max="{{limit}}" {{#if locked}}disabled{{/if}} aria-label="Ставка зрителя"><small>/ {{limit}} кр.</small></label>
+          {{#unless locked}}<a class="tv2-x" data-action="removeSpectator" data-uuid="{{uuid}}" data-tooltip="Убрать зрителя" aria-label="Убрать зрителя"><i class="fa-solid fa-xmark"></i></a>{{/unless}}
+        </div>{{else}}<span class="stat">Выделите токены зрителей и нажмите «Зрители».</span>{{/each}}
+        <button type="button" class="tv2-addbtn" data-action="addSpectators" data-tooltip="Зрители — выделенные токены"><i class="fa-solid fa-user-plus"></i> Зрители</button>
+      </div>
 
       {{else if (eq game.key "gwent")}}
       {{#with top}}{{> tvGwent}}{{/with}}
@@ -177,7 +185,8 @@
       <button type="button" class="tv2-go" data-action="brawlStart" data-tooltip="Участники со стола — в трекер боя, инициатива сама">Начать бой</button>
       {{else}}
       <button type="button" class="tv2-btn" data-action="reset">Заново</button>
-      {{#if (eq game.key "fillet")}}<button type="button" class="tv2-btn" data-action="filletSpeed" {{#if done}}disabled{{/if}}>Ускорить</button>{{/if}}
+      {{#if (eq game.key "fillet")}}<button type="button" class="tv2-btn" data-action="filletSpeed" {{#if done}}disabled{{/if}}>Ускорить</button>
+      <button type="button" class="tv2-btn" data-action="filletStop" {{#unless canStop}}disabled{{/unless}} data-tooltip="После двух ускорений: закончить и забрать ставки зрителей">Закончить</button>{{/if}}
       {{#if showReveal}}<button type="button" class="tv2-go" data-action="pokerShow" {{#if done}}disabled{{/if}}>Вскрыться</button>{{/if}}
       {{#if showTurn}}<button type="button" class="tv2-go" data-action="turn" {{#unless ready}}disabled{{/unless}} {{#if done}}disabled{{/if}}>{{turnLabel}}</button>{{/if}}
       {{/if}}

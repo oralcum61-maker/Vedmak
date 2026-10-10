@@ -33,7 +33,9 @@ const ACTIONS = {
     const attacker = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
     if (!game.user.isGM && !attacker?.isOwner) return ui.notifications.warn("Применить эффект может атакующий или ведущий.");
     // messageId — карточка защиты: по ней ведущий проверяет, что просит атакующий, а цель — из этой карточки
-    return asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status: def.attack.hitStatus, active: true, messageId: message.id });
+    for (const status of [def.attack.hitStatus, def.attack.hitStatus2].filter(Boolean)) {
+      await asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status, active: true, messageId: message.id });
+    }
   },
 
   async stunSave(message, button) {

@@ -129,6 +129,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     });
     this.derived.trueForm = !!trueForm;
     this.derived.bearForm = bearForm ? { resist: bearForm.resist ?? ["bludgeoning"] } : null;
+    // «Медвежья шкура» берсерка в облике человека: сопротивления без восприимчивости медведя к серебру
+    this.derived.hideResist = this.parent.effects.filter(e => e.active && e.flags?.vedmak?.bearHide).flatMap(e => e.flags.vedmak.bearHide.resist ?? []);
     this.luck.max = this.stats.luck.total;
     this.blood.max = race?.resource === "blood" ? this.hp.max : 0;
     this.blood.enabled = race?.resource === "blood";

@@ -277,15 +277,21 @@ export async function restDays(actor) {
   const lines = [];
   // Обеззараживающая жидкость: +2 к естественному заживлению и −2 дня каждому ранению (по разу на рану)
   const disinfected = actor.effects.find(e => e.flags?.vedmak?.disinfected);
+  // «Спячка» берсерка: день сна — ПЗ вдвое против обычного, лечение критов на 2 дня короче; тратится этим отдыхом
+  const hibernate = actor.effects.find(e => e.active && e.flags?.vedmak?.bearHibernate);
   let perDay = 0;
   if (cfg.care) {
     perDay = cfg.exertion ? Math.floor(sys.derived.rec / 2) : sys.derived.rec;
     if (cfg.touch) perDay += 3;
     if (disinfected) perDay += 2;
   }
-  const hp = Math.min(sys.hp.max, sys.hp.value + perDay * cfg.days);
+  // Проспанный день — вдвое против обычного (без ухода «обычное» — Восстановление), остальные дни — как обычно
+  const sleepDay = hibernate ? 2 * (perDay || sys.derived.rec) : 0;
+  const healed = hibernate ? sleepDay + perDay * (cfg.days - 1) : perDay * cfg.days;
+  const hp = Math.min(sys.hp.max, sys.hp.value + healed);
   await actor.update({ "system.hp.value": hp, "system.sta.value": sys.sta.max });
-  lines.push(cfg.care ? `ПЗ ${sys.hp.value} → ${hp} (${perDay} в день × ${cfg.days}).` : "Без ухода ПЗ не восстановились.");
+  if (hibernate) lines.push(`ПЗ ${sys.hp.value} → ${hp} (спячка: ${sleepDay} за проспанный день${cfg.days > 1 ? `, далее ${perDay} в день` : ""}).`);
+  else lines.push(cfg.care ? `ПЗ ${sys.hp.value} → ${hp} (${perDay} в день × ${cfg.days}).` : "Без ухода ПЗ не восстановились.");
   lines.push(`Вын восстановлена: ${sys.sta.max}.`);
 
   // Вылеченные ранения: дни до снятия штрафов (смертельные — навсегда)
@@ -301,6 +307,7 @@ export async function restDays(actor) {
       days = Math.max(0, days - 2);
       await wound.setFlag("vedmak", "disinfected", true);
     }
+    if (hibernate) days = Math.max(0, days - 2);
     const left = days - cfg.days;
     if (left <= 0) done.push(wound);
     else {
@@ -312,6 +319,7 @@ export async function restDays(actor) {
     await actor.deleteEmbeddedDocuments("Item", done.map(w => w.id));
     lines.push(`Зажили: ${done.map(w => w.name).join(", ")}.`);
   }
+  if (hibernate) { await hibernate.delete(); lines.push("Спячка: проспал весь день."); }
   // Обработка держится, пока есть что заживлять
   if (disinfected && !(actor.itemTypes.critWound ?? []).length && actor.system.hp.value >= actor.system.hp.max) {
     await disinfected.delete();

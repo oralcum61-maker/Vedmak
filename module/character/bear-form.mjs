@@ -117,6 +117,61 @@ export async function bearTransform(actor) {
   return true;
 }
 
+/* ----------------------- Способности древа берсерка ----------------------- */
+
+/**
+ * Способности облика человека: проверка против СЛ самоконтроля, успех — эффект (PLAN 4.148).
+ * «Медвежьи чувства» (Инт) — ночное зрение и выслеживание по запаху; «Спячка» (Тел) — день сна: ПЗ вдвое и −2 дня
+ * лечения крита; «Медвежья шкура» (Тел) — ПБ по уровню, на 10-м — сопротивление дробящему, с «Большим медведем» по
+ * желанию СЛ +5 — сопротивления медвежьей формы. Чувства и шкура держатся столько часов, сколько очков в навыке.
+ */
+export const BEAR_HUMAN_ABILITIES = ["Медвежьи чувства", "Спячка", "Медвежья шкура"];
+
+/** Пытаться ли получить сопротивления медведя (СЛ +5): только с «Большим медведем». */
+export async function askBigBear(actor) {
+  if (!(abilityLevel(actor, "Большой медведь") > 0)) return false;
+  return foundry.applications.api.DialogV2.confirm({
+    window: { title: "Медвежья шкура" },
+    content: "<p>С «Большим медведем» можно бросить против СЛ самоконтроля +5, чтобы получить и сопротивления медвежьей формы. Пытаться?</p>",
+    yes: { label: "Да, СЛ +5" }, no: { label: "Нет, только ПБ" }
+  }).catch(() => false);
+}
+
+/** Успех проверки способности облика человека: эффект и карточка. */
+export async function bearAbilitySuccess(actor, name, level, { bigBear = false } = {}) {
+  const hours = Math.max(1, level);
+  const duration = { value: hours, units: "hours", expiry: null };
+  if (name === "Медвежьи чувства") {
+    const [eff] = await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Медвежьи чувства", img: "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      transfer: false, duration, description: "<p>Ночное зрение и выслеживание по запаху.</p>", flags: { [SYS]: { bearSenses: true } } }]);
+    const { applyVision } = await import("../crafting/alchemy-triggers.mjs");
+    await applyVision(actor, eff, { visionMode: "darkvision", range: 30 });
+    return postCard(actor, "Медвежьи чувства", `<p>На <b>${hours} ч</b>: ночное зрение (30 м) и выслеживание по запаху.</p>`, { icon: "fa-solid fa-paw" });
+  }
+  if (name === "Спячка") {
+    await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Спячка", img: "icons/magic/time/day-night-sunset-sunrise.webp", transfer: false,
+      duration: { value: 1, units: "days", expiry: null }, description: "<p>Следующий день отдыха: ПЗ вдвое, лечение критических ранений на 2 дня короче.</p>",
+      flags: { [SYS]: { bearHibernate: true } } }]);
+    return postCard(actor, "Спячка", "<p>Берсерк засыпает на весь день: при отдыхе (лист → «Отдых: дни») ПЗ восстанавливаются вдвое, лечение критических ранений — на 2 дня короче.</p>",
+      { icon: "fa-solid fa-moon" });
+  }
+  if (name === "Медвежья шкура") {
+    const resist = [];
+    if (level >= 10) resist.push("bludgeoning");
+    if (bigBear) for (const r of formStats(actor).resist) if (!resist.includes(r)) resist.push(r);
+    await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Медвежья шкура", img: IMG, transfer: false, duration,
+      system: { changes: [{ key: "system.fx.sp", type: "add", value: level, phase: "initial" }] },
+      flags: { [SYS]: { bearHide: { resist } } } }]);
+    const names = { bludgeoning: "дробящему", piercing: "колющему", slashing: "режущему" };
+    return postCard(actor, "Медвежья шкура", `<p>На <b>${hours} ч</b>: +${level} ПБ${resist.length ? `, сопротивление ${resist.map(r => names[r]).join(", ")} урону` : ""}.</p>`,
+      { icon: "fa-solid fa-shield" });
+  }
+  return null;
+}
+
+/** «Удар сверху» доступен: медвежья форма и способность в древе. */
+export const bearSlamLevel = actor => (inBearForm(actor) ? abilityLevel(actor, "Удар сверху") : 0);
+
 /** Вернуться в человеческий облик (пока владеет собой — в любой момент). */
 export async function bearRevert(actor, { reason = "" } = {}) {
   const eff = bearFormEffect(actor);

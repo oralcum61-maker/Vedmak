@@ -51,7 +51,9 @@ async function onDefense(message, def) {
   if (!setting("autoApply")) return;
   if (def.canApplyEffects && isMine(attacker)) await requestSpellEffects(message);
   if (def.hit && def.attack.hitStatus && game.users.activeGM?.isSelf) {
-    await asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status: def.attack.hitStatus, active: true, messageId: message.id });
+    for (const status of [def.attack.hitStatus, def.attack.hitStatus2].filter(Boolean)) {
+      await asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status, active: true, messageId: message.id });
+    }
   }
 }
 
