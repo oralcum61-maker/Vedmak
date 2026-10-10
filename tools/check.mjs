@@ -349,7 +349,13 @@ async function checkPacks() {
           if (!ok) err(S, `${where}: битая ссылка ${m[0]}`);
         }
         for (const m of s.matchAll(imgRe)) {
-          if (!fs.existsSync(path.join(ROOT, m[0].slice("systems/vedmak/".length)))) err(S, `${where}: нет картинки ${m[0]}`);
+          const file = path.join(ROOT, m[0].slice("systems/vedmak/".length));
+          // Маска токена Foundry (randomImg): «token-milva*.webp» — нужен хотя бы один подходящий файл
+          const found = m[0].includes("*")
+            ? (() => { const re = new RegExp(`^${path.basename(file).replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`);
+                return fs.existsSync(path.dirname(file)) && fs.readdirSync(path.dirname(file)).some(f => re.test(f)); })()
+            : fs.existsSync(file);
+          if (!found) err(S, `${where}: нет картинки ${m[0]}`);
         }
         for (const m of s.matchAll(coreRe)) {
           if (!HAS_FOUNDRY) coreUnchecked.add(m[0]);
