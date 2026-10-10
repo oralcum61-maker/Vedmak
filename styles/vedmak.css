@@ -1936,6 +1936,9 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 }
 
 .vedmak-dialog .craft-dialog h4 { margin: .4rem 0 .1rem; font-size: .8rem; border: none; }
+/* Пояснение над полями окна проверки (починка: Сложность и компоненты) */
+.vedmak-dialog.check-dialog .dlg-intro :is(p, ul) { margin: 0 0 .3rem; }
+.vedmak-dialog.check-dialog .dlg-intro p:last-child { margin-bottom: 0; }
 .vedmak-dialog .craft-dialog ul.req { list-style: none; margin: 0 0 .3rem; padding: 0; columns: 2; font-size: .85rem; }
 .vedmak-dialog .craft-dialog ul.req li.ok::before { content: "✓ "; color: #6d9a5b; }
 .vedmak-dialog .craft-dialog ul.req li.no::before { content: "✗ "; color: #c0533f; }
@@ -3388,6 +3391,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak .craft-tab .alch-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .45rem; margin-top: auto; min-width: 0; }
 .vedmak .craft-tab .alch-meta .go-btn { max-width: 100%; white-space: normal; line-height: 1.15; text-align: center; }
+/* Карточка обрезает вылезающее (overflow: hidden) — рамку фокуса рисуем внутри кнопки, иначе её срежет */
+.vedmak .craft-tab .alch-card :is(button, a):focus-visible { outline: 1px solid var(--vd-accent-lite); outline-offset: -3px; box-shadow: none; }
 .vedmak .craft-tab :is(.tox, .dur) { display: inline-flex; align-items: center; gap: .2rem; font-size: .72rem; color: #d6d0c2; white-space: nowrap; }
 .vedmak .craft-tab .tox svg { width: .7rem; height: .78rem; fill: #8e5aa0; stroke: #050607; stroke-width: 1.2; }
 .vedmak .craft-tab :is(.dur svg, svg.hg) { width: .7rem; height: .78rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }

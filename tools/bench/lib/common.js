@@ -5,8 +5,10 @@
 const ok = (cond, text) => { window.__log.push(`${cond ? "✓" : "✗"} ${text}`); if (!cond) window.__fails.push(text); return !!cond; };
 const log = (...a) => window.__log.push(a.join(" "));
 const stepName = s => { window.__step = s; };
-// Окна подтверждения и выбора — нажимаются сами (кнопка по умолчанию)
+// Окна подтверждения и выбора — нажимаются сами (кнопка по умолчанию). Сценарий, который сам проверяет окна,
+// ставит window.__noAutoDialog = true — иначе помощник нажмёт кнопку раньше проверки
 Hooks.on("renderDialogV2", app => setTimeout(() => {
+  if (window.__noAutoDialog) return;
   const b = app.element?.querySelector("footer button[autofocus], footer button.default, .form-footer button[autofocus]")
     ?? app.element?.querySelector("footer button, .form-footer button");
   b?.click();

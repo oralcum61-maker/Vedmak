@@ -90,19 +90,22 @@ export async function performCheck(cfg) {
 
 /**
  * Окно модификаторов перед проверкой: правка, Удача и «кому видно» — как у бросков навыков. skipDialog — без окна ({}). Отмена — null.
+ * intro — пояснение над полями (что тратится), editDc — Сложность правится в окне.
  * @returns {Promise<{mod?: number, luck?: number, messageMode?: string}|null>}
  */
-export async function askCheck({ actor = null, title, parts = [], dc = null, skipDialog = false }) {
+export async function askCheck({ actor = null, title, parts = [], dc = null, skipDialog = false, intro = "", editDc = false }) {
   if (skipDialog) return {};
   const luckMax = actor?.type === "character" ? (actor.system.luck?.value ?? 0) : 0;
-  return rollDialog({ title, parts, luckMax, dc });
+  return rollDialog({ title, parts, luckMax, dc, intro, editDc });
 }
 
 /** Проверка с выбором окна askCheck: правка — слагаемым «Модификатор», Удача и режим чата — из окна. */
 export function checkWithChoice(cfg, choice = {}) {
   const parts = [...(cfg.parts ?? [])];
   if (choice.mod) parts.push({ label: "Модификатор", value: choice.mod });
-  return performCheck({ ...cfg, parts, luck: (cfg.luck ?? 0) + (choice.luck ?? 0), messageMode: choice.messageMode ?? cfg.messageMode });
+  // Сложность из окна — только если её там правили (editDc); иначе окно возвращает ту же
+  const dc = choice.dc ?? cfg.dc ?? null;
+  return performCheck({ ...cfg, parts, dc, luck: (cfg.luck ?? 0) + (choice.luck ?? 0), messageMode: choice.messageMode ?? cfg.messageMode });
 }
 
 /**
@@ -110,8 +113,8 @@ export function checkWithChoice(cfg, choice = {}) {
  * для вынужденных проверок `forced` — тогда бросок без правок.
  * @param {object} cfg — как у performCheck, плюс skipDialog и forced
  */
-export async function dialogCheck({ skipDialog = false, forced = false, ...cfg }) {
-  const choice = await askCheck({ ...cfg, skipDialog });
+export async function dialogCheck({ skipDialog = false, forced = false, intro = "", editDc = false, ...cfg }) {
+  const choice = await askCheck({ ...cfg, skipDialog, intro, editDc });
   if (!choice && !forced) return null;
   return checkWithChoice(cfg, choice ?? {});
 }

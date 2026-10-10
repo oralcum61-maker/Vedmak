@@ -534,21 +534,17 @@ export async function repair(actor, item) {
   const req = requirements(actor, recipe, { perComponent: 1 });
   const lines = req.components.map(c => `<li class="${c.ok ? "ok" : "no"}">${c.name}: ${c.have}/${c.need}</li>`).join("");
   const tools = req.tools.map(t => `<li class="${t.ok ? "ok" : "no"}">${t.label}</li>`).join("");
-  const ok = await DialogV2.confirm({
-    window: { title: `Починка: ${item.name}` },
-    classes: ["vedmak", "vedmak-dialog"],
-    content: `<div class="vedmak-roll-dialog craft-dialog"><p>Изготовление, СЛ <b>${dc}</b> (чертёж ${recipe.system.dc} − 5${enhancementCount(item) ? ` + 2 × ${enhancementCount(item)}` : ""}).</p>
+  // Что тратится и откуда Сложность — в том же окне, что правка и Удача (одно окно вместо двух)
+  const intro = `<div class="craft-dialog"><p>Изготовление, СЛ <b>${dc}</b> (чертёж ${recipe.system.dc} − 5${enhancementCount(item) ? ` + 2 × ${enhancementCount(item)}` : ""}).</p>
       <p>Нужно по 1 единице компонентов:</p><ul class="req">${lines}</ul><ul class="req">${tools}</ul>
-      ${req.materialsOk && req.toolsOk ? "" : `<p class="warn">Чего-то не хватает — ведущий может разрешить починку.</p>`}</div>`
-  });
-  if (!ok) return null;
+      ${req.materialsOk && req.toolsOk ? "" : `<p class="warn">Чего-то не хватает — ведущий может разрешить починку.</p>`}</div>`;
   const skill = actor.system.skills.crafting;
   const parts = [
     { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
     { label: SKILLS.crafting.label, value: skill.total, always: true }
   ];
   // Окно правок — до расхода компонентов: отмена ничего не тратит
-  const choice = await askCheck({ actor, title: `Починка: ${item.name}`, parts, dc });
+  const choice = await askCheck({ actor, title: `Починка: ${item.name}`, parts, dc, intro });
   if (!choice) return null;
   const consumed = [];
   for (const c of recipe.system.components) {
@@ -586,23 +582,17 @@ async function repairProsthesis(actor, item) {
   if (rel.value >= rel.max) return ui.notifications.info(`«${item.name}» цел: Надёжность ${rel.value}/${rel.max}.`);
   const recipe = await findRecipeFor(actor, item.name);
   const suggested = recipe ? Math.max(0, recipe.system.dc - CRAFTING.repairDcMinus) : 18;
-  const dc = await DialogV2.prompt({
-    window: { title: `Починка: ${item.name}` },
-    classes: ["vedmak", "vedmak-dialog"],
-    content: `<div class="vedmak-roll-dialog craft-dialog"><p>Надёжность ${rel.value}/${rel.max}. Ремесло + Изготовление против СЛ;
+  // Сложность — поле в том же окне, что правка и Удача (назначает ведущий, если чертежа нет)
+  const intro = `<div class="craft-dialog"><p>Надёжность ${rel.value}/${rel.max}. Ремесло + Изготовление против СЛ;
       успех — Надёжность до ${rel.max}.</p>
-      <label class="num"><span class="cap">СЛ</span> <input type="number" name="dc" value="${suggested}" min="0" max="40"></label>
-      <p class="hint">${recipe ? `Чертёж «${recipe.name}»: СЛ ${recipe.system.dc} − 5.` : "Особые протезы чинит любой Ремесленник, СЛ 18; модификации — только Нострадамус и Клаус."}</p></div>`,
-    ok: { label: "Чинить", callback: (event, button) => Number(button.form.elements.dc.value) || 0 },
-    rejectClose: false
-  });
-  if (dc === null || dc === undefined) return null;
+      <p class="hint">${recipe ? `Чертёж «${recipe.name}»: СЛ ${recipe.system.dc} − 5.` : "Особые протезы чинит любой Ремесленник, СЛ 18; модификации — только Нострадамус и Клаус."}</p></div>`;
   const skill = actor.system.skills.crafting;
   const parts = [
     { label: STATS.cra.label, value: actor.system.stats.cra.effective, always: true },
     { label: SKILLS.crafting.label, value: skill.total, always: true }
   ];
-  const roll = await dialogCheck({ actor, title: `Починка: ${item.name}`, subtitle: `Надёжность ${rel.value}/${rel.max}`, parts, dc });
+  const roll = await dialogCheck({ actor, title: `Починка: ${item.name}`, subtitle: `Надёжность ${rel.value}/${rel.max}`, parts,
+    dc: suggested, intro, editDc: true });
   if (!roll) return null;
   if (roll.success) {
     await item.setFlag("vedmak", "reliability", rel.max);
