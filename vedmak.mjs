@@ -23,6 +23,7 @@ import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
 import { performCheck, rollD10 } from "./module/dice/check.mjs";
 import { SYSTEM_ID, forgetSetting } from "./module/util.mjs";
 import { registerStatusEffects } from "./module/combat/statuses.mjs";
+import { registerMonsterTraitHooks } from "./module/combat/monster-traits.mjs";
 import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
 import { registerCombatAutomation } from "./module/combat/auto.mjs";
@@ -90,6 +91,7 @@ Hooks.once("init", () => {
   // Корник: «раунд длится 3 секунды». По этому числу Foundry двигает время мира в бою и переводит раунды во время
   CONFIG.time.roundTime = 3;
   registerStatusEffects();
+  registerMonsterTraitHooks();
 
   game.settings.register(SYSTEM_ID, "booksMonsters", {
     name: "Чудовища из книг",

@@ -1518,6 +1518,7 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 .vedmak .resist-text { display: grid; grid-template-columns: max-content 1fr; gap: .15rem .7rem; margin: 0 0 .5rem; font-size: .85rem; }
 .vedmak .resist-text dt { color: var(--vd-text-dim); font-family: var(--vd-font-body); letter-spacing: .03em; }
 .vedmak .resist-text dd { margin: 0; }
+.vedmak .abilities-panel .auto-traits { margin: 0 0 .5rem; font-style: italic; }
 .vedmak .ability-group { margin-top: .4rem; }
 .vedmak .ability-group h4 {
   margin: .2rem 0 .3rem; padding-bottom: .15rem; border-bottom: 1px solid var(--vd-line);

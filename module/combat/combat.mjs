@@ -11,6 +11,7 @@ import { expireAlchemy } from "../crafting/alchemy.mjs";
 import { expireZonesForTurn } from "./zones.mjs";
 import { repeatZonesForTurn } from "../magic/cast.mjs";
 import { dimeritiumTurn } from "../magic/dimeritium.mjs";
+import { regenStartOfTurn } from "./monster-traits.mjs";
 
 export class VedmakCombat extends Combat {
 
@@ -148,6 +149,7 @@ export async function startOfTurn(actor, combat, context) {
   await step("Истинная форма", () => trueFormStartOfTurn(actor));
   await step("медвежья форма", () => bearFormStartOfTurn(actor));
   await step("магия", () => magicStartOfTurn(actor));
+  if (actor.type === "monster") await step("регенерация", () => regenStartOfTurn(actor));
   await step("зоны", () => expireZonesForTurn(actor, combat));
   await step("повтор зон", () => repeatZonesForTurn(actor, combat));
 

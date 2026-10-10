@@ -14,6 +14,7 @@ import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafti
 import { markDead } from "./saves.mjs";
 import { implantStatusBonus, implantBurnVulnerability } from "../config/crafting.mjs";
 import { wallCover } from "./cover.mjs";
+import { isIncorporeal, flightAfterDamage } from "./monster-traits.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
 
@@ -336,9 +337,18 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     notes.push(`По всему телу: ${rows.join(", ")}.`);
   }
 
+  // Бесплотность (полуденница, беанн’ши, полуночница — всегда; призрак после «Ускользания», Скрытый в облике дыма —
+  // статусом): оружие проходит насквозь, пока круг Ирдена или облако лунной пыли не сделают дух материальным.
+  // Магия действует как обычно
+  const ghost = !spell && isIncorporeal(target);
+  if (ghost) {
+    final = 0;
+    notes.push("Бесплотен: оружие проходит насквозь — нужен круг Ирдена или облако лунной пыли.");
+  }
+
   // Критическое ранение
   let crit = null;
-  if (critLevel) {
+  if (critLevel && !ghost) {
     const lvl = CRIT_LEVELS[critLevel];
     const balanced = has("balanced");
     let wound, critRoll;
@@ -381,7 +391,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const effects = [];
   for (const [key, status] of Object.entries(EFFECT_STATUS)) {
     let chance = Math.min(100, effChance(key) + (runeBonus[key] ?? 0));
-    if (!chance) continue;
+    if (!chance || ghost) continue;
     if (ELEMENTAL.includes(status)) chance = Math.min(100, chance + elementalBonus);
     if (status === "burning") chance = Math.min(100, chance + burnVuln);
     const needsWound = key === "bleeding" || key === "poison";
@@ -408,7 +418,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
 
   // Шанс дезориентировать сразу (хвост дракона, руна Триглава) — в отличие от «Дезориентирующего» без испытания
   const disorient = Math.min(100, effChance("disorient") + (runeBonus.disorient ?? 0));
-  if (disorient) {
+  if (disorient && !ghost) {
     const immuneTo = tsys.immunities?.includes?.(STATUS_RESIST_KEY.disoriented);
     const r = await new Roll("1d100").evaluate();
     rolls.push(r);
@@ -670,6 +680,7 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
     // Укус или высасывание крови — для «Чёрной крови» ведьмака
     const bite = dmg.drain > 0 || /укус|клык/i.test(dmg.attackLabel ?? "");
     report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell, bite }));
+    report.lines.push(...await flightAfterDamage(actor, dealt));
     if (dmg.dimeritium && !actor.effects.some(e => e.flags?.vedmak?.dimeritium)) {
       report.dimeritium = true;
       report.lines.push("Удар двимеритом: касание двимерита (кнопка ниже).");

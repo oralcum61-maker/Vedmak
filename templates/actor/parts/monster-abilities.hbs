@@ -35,6 +35,9 @@
   {{/each}}
 
   {{else}}
+  {{#if autoTraits.length}}
+  <p class="hint auto-traits" data-tooltip="Система делает это сама по тексту способностей">Автоматически: {{#each autoTraits}}{{#unless @first}}; {{/unless}}{{this}}{{/each}}.</p>
+  {{/if}}
   {{#each abilityGroups as |g|}}
   <section class="ability-group {{g.kind}}">
     <h4>{{g.label}}</h4>

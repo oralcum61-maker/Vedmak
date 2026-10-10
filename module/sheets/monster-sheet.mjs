@@ -5,6 +5,7 @@ import { MONSTER_CLASSES, THREAT_COMPLEXITY, THREAT_DIFFICULTY, MATERIAL_WEAKNES
 import { BODY_TYPES, RESIST_KEYS, SIZE_MODS } from "../config/combat.mjs";
 import { currencyForName, lootCoins } from "../character/money.mjs";
 import { asGM } from "../combat/common.mjs";
+import { traitSummary } from "../combat/monster-traits.mjs";
 
 /** Списки объектов на форме (name="system.abilities.0.name") — собираются обратно в массивы. */
 const OBJECT_ARRAYS = ["abilities", "loot"];
@@ -132,6 +133,8 @@ export class MonsterSheet extends VedmakActorSheet {
         .map(([kind, label]) => ({ kind, label, rows: rows.filter(r => (ABILITY_KINDS[r.kind] ? r.kind : "ability") === kind) }))
         .filter(g => g.rows.length);
       context.abilityRows = rows;
+      // Что из способностей система делает сама: регенерация, бесплотность, полёт
+      context.autoTraits = traitSummary(this.actor);
     }
     if (partId === "lore") {
       const [description, common, witcher, notes, playerNotes] = await Promise.all([system.description, system.commonKnowledge,
