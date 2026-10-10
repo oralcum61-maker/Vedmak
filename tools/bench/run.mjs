@@ -4,6 +4,7 @@
 //   node tools/bench/run.mjs полный          — обходы tools/bench/sweeps (каждое оружие, заклинание, рецепт,
 //                                              кнопка листа и мастер создания; долго, десятки минут)
 //   node tools/bench/run.mjs vampire rules   — выбранные сценарии по имени файла (без .js)
+//   node tools/bench/run.mjs путь/к/файлу.js — сценарий вне набора (сборщик заготовок _tools/pregens)
 //   --start — поднять тестовый Foundry самому (иначе он должен уже работать на VD_PORT)
 //
 // Пути — переменные среды, по умолчанию — машина автора: VD_FOUNDRY (папка app Foundry), VD_DATA (данные тестового
@@ -19,8 +20,8 @@
 // Тестовый Foundry работает с пакетами репозитория и трогает их файлы: после прогона — git checkout -- packs.
 
 import { spawn } from "node:child_process";
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync } from "node:fs";
+import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 
@@ -49,6 +50,9 @@ const names = args.filter(a => !a.startsWith("--"));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function pickScenarios() {
+  // Путь к файлу сценария вне набора (например, сборщик заготовок в _tools)
+  const files = names.filter(n => n.endsWith(".js") && existsSync(n));
+  if (files.length) return files.map(f => ({ name: basename(f, ".js"), file: f, sweep: false }));
   const dir = names[0] === "полный" || names[0] === "full" ? "sweeps" : "scenarios";
   const all = readdirSync(join(HERE, dir)).filter(f => f.endsWith(".js")).sort();
   const wanted = dir === "sweeps" || !names.length ? all : all.filter(f => names.includes(f.replace(/\.js$/, "")));

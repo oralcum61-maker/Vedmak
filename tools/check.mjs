@@ -365,7 +365,7 @@ async function checkPacks() {
   // Повторы значков: одна картинка на разные предметы (чертежи и формулы — намеренно по роду бумаги)
   const byImg = new Map();
   for (const [pack, list] of Object.entries(packs)) {
-    if (["bestiary", "tables", "generators", "chargen", "rules", "recipes"].includes(pack)) continue;
+    if (["bestiary", "pregens", "tables", "generators", "chargen", "rules", "recipes"].includes(pack)) continue;
     for (const d of list) {
       if (!d.img) continue;
       if (!byImg.has(d.img)) byImg.set(d.img, new Set());

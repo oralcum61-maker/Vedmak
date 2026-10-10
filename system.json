@@ -171,6 +171,19 @@
       "banner": "systems/vedmak/assets/banners/professions.webp"
     },
     {
+      "name": "pregens",
+      "label": "Заготовки персонажей",
+      "path": "packs/pregens",
+      "type": "Actor",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/professions.webp"
+    },
+    {
       "name": "weapons",
       "label": "Оружие",
       "path": "packs/weapons",
@@ -335,7 +348,8 @@
           "color": "#8a6a3a",
           "packs": [
             "races",
-            "professions"
+            "professions",
+            "pregens"
           ]
         },
         {
