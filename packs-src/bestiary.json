@@ -190409,7 +190409,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/aguara.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/augura.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -190960,7 +190960,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/al_gul_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/alghoul.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -191537,7 +191537,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/garkain-vojak.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/garkain.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -192057,7 +192057,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/amarok.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/wildernessanimals2022/winterwolf.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -192562,7 +192562,7 @@
    "width": 3,
    "height": 3,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/amfisbena.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vyper.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -193087,7 +193087,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/koroleva-glavoglazov.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/arachasqueen.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -193657,7 +193657,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/arahnomorf.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/koshchey.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -194217,7 +194217,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/arhigrifon.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/archigryphon.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -194743,7 +194743,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/pancirnyi-glavoglaz.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/arachas.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -195250,7 +195250,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/beann-si.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/noonwraith.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -195916,7 +195916,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vasilisk.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/cockatrice.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -196411,7 +196411,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gigantskaa-piavka.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/gigantskaa-piavka.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -196890,7 +196890,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/krysa-katriony.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token_2d/beasts/rat.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -197446,7 +197446,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/cemetavr.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/scurver.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -198036,7 +198036,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/hironeks.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/chironex.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -198636,7 +198636,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/cert.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/chort.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -199136,7 +199136,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/blagodetel_nica.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/witch2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -199646,7 +199646,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/kuharka.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/witch1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -200161,7 +200161,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/praha.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/witch2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -200676,7 +200676,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/septuha.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/witch3.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -201279,7 +201279,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/dagon.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/dagon.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -201718,7 +201718,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/demon.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/erynia.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -202264,7 +202264,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/aga.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/gravehag.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -202703,7 +202703,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/doppler.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/fantasytownsfolk2017/peasant2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -203243,7 +203243,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/drakopah.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/drakopah.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -203761,7 +203761,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/draug.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/draugr.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -204362,7 +204362,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/draugir.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/draugir.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -204900,7 +204900,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ehidna.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/greenarchespore.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -205477,7 +205477,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ekimma.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vampire1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -206039,7 +206039,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/glovoglaz.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/hairypede.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -206616,7 +206616,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/fleder.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vampiretransformed.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -207202,7 +207202,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vilohvost.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/wyvern.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -207719,7 +207719,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gargul_a.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/gargoylestatue.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -208188,7 +208188,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/djinn.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/djinn2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -208735,7 +208735,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gernihora.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/swampbeast.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -209299,7 +209299,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ledanoi-velikan.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/cyclops.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -209855,7 +209855,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gigaskorpion.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/stinger.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -210396,7 +210396,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/graveir.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/gravier.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -210875,7 +210875,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gippokamp.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/waterdevil.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -211421,7 +211421,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gidra.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/gidra.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -211931,7 +211931,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ledanoi-troll_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/troll.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -212448,7 +212448,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/jiritva.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/jiritva.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -213015,7 +213015,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/keiran.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/keiran.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -213529,7 +213529,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/kikimora.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/kikimorewarrior.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -214079,7 +214079,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/kraken.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/kraken.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -214696,7 +214696,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/lamia.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/nightsuccubus.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -215145,7 +215145,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/steklannyi-celovek.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/greywizard.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -215700,7 +215700,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/grazevoi-os_minog.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/zeugl.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -216304,7 +216304,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/mula.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/mula.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -216811,7 +216811,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/polunocnica.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/gravewraith2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -217388,7 +217388,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/nosferat.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/nosferat.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -217872,7 +217872,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/nimfa.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/woodelves2020/woodelfnobelwoman.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -218476,7 +218476,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/driada.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/dryad.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -218975,7 +218975,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/nereida.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/siren.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -219474,7 +219474,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/naada.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vodnik.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -220078,7 +220078,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/gamadriada.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/druidfemale1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -220572,7 +220572,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/limoniada.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/druidfemale2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -221066,7 +221066,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/oreada.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/druidfemale3.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -221610,7 +221610,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ogr.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/ogre.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -222159,7 +222159,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/suka.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token_2d/beasts/pike.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -222731,7 +222731,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/protofleder.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/protofleder.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -223216,7 +223216,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/psevdokrysa.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/ratcatcheress.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -223775,7 +223775,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/korolevskaa-viverna.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/wyvern.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -224264,7 +224264,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ruhin.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/ruehin.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -224764,7 +224764,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/pescanyi-cerv_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/mutanthound.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -225263,7 +225263,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/skelet.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set_two/skeletonarmed.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -225833,7 +225833,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/stryga.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/striga.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -226442,7 +226442,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/sval_blod.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/sval_blod.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -226946,7 +226946,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/sil_van.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/werebub.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -227503,7 +227503,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/klucnik.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/doyen.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -228015,7 +228015,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/straj.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/straj.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -228532,7 +228532,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/upravitel_.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/upravitel_.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -229082,7 +229082,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/teriantrop.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/ulfhedinn.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -229647,7 +229647,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/berserk.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/sinisterbear.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -230222,7 +230222,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/krysolak.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/ratogre.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -230739,7 +230739,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/dreven_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/spriggan.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -231266,7 +231266,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/plakucaa-iva.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/plakucaa-iva.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -231938,7 +231938,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/dreven_-bes.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/sprigganwolf.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -232615,7 +232615,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/dreven_-bogomol.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/dreven_-bogomol.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -233187,7 +233187,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/dreven_-vepr_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/forestboar.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -233716,7 +233716,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/zasitnik-lesa.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/forestprotector.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -234246,7 +234246,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/dubovik.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/dubovik.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -234862,7 +234862,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/rycar_-triton.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vodyanoypriest.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -235416,7 +235416,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/edinorog.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set_two/unicorn.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -235942,7 +235942,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/adovityi-glavoglaz.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/arachas.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -236475,7 +236475,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vespertil_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/plumard.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -237020,7 +237020,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vigilozavr.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/slyzard.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -237505,7 +237505,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vila.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set_two/specter.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -238054,7 +238054,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vodanoi.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vodyanoy.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -238594,7 +238594,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/voin-vranov.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/darkpikeman.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -239161,7 +239161,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vodnaa-baba.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/hybride.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -239738,7 +239738,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/bobolak-bandit.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/werebub.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -240283,7 +240283,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/viht.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/wight.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -240854,7 +240854,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/rigger.webp",
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/rigger.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -241441,7 +241441,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/prizyvnik.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards2019/guardspear.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -242073,7 +242073,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/razboinik.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/fantasytownsfolk2017/ruffian.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -242672,7 +242672,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/naemnik.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards2019/soldier1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -243259,7 +243259,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/pirat.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/rangers-rogues2018/rogue4.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -243849,7 +243849,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/pehotinec.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards22021/empireguard1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -244501,7 +244501,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/agent-sekretnoi-slujby.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/rangers-rogues2018/rangerf.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -245108,7 +245108,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/rycar_.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards22021/blackguard2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -245706,7 +245706,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/kavalerist.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards22021/yellowguard1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -246311,7 +246311,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ubiica.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/rangers-rogues2018/darkranger.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -246905,7 +246905,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/veteran-skoa-taelei.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/woodelves2020/woodelfwarrior3.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -247551,7 +247551,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/zasitnik-mahakama.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/dwarves2020/hammerandshield.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -248199,7 +248199,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/rubaila-iz-krinfrida.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/witchhunters2020/whunter7.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -248699,7 +248699,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/jrec-sval_bloda.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/warriorpriest.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -249184,7 +249184,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/jrica-sval_bloda.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/f.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -249730,7 +249730,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/fanatik-sval_bloda.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/wildmen2019/beserker.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -250224,7 +250224,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/vab_orn.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/wildmen2019/beserker2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -250724,7 +250724,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/artis.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/wildmen2019/spearwoman.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -251281,7 +251281,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/knut-svirepyi.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/wildmen2019/axeman2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -251832,7 +251832,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/sigval_d.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/wildmen2019/shieldwall1.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -252316,7 +252316,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/ordenskaa-goncaa.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/dogrussell.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -252801,7 +252801,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/mutant.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards2019/guardthug.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -253282,7 +253282,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/mutant-ubiica.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/townguards2019/guardthug2.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -253772,7 +253772,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/starsii-brat.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/greaterbrother.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -254257,7 +254257,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/professor.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/darkmage.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -254707,7 +254707,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/savolla.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/cultmage.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -255157,7 +255157,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/azar-aved.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/spellcasters22022/warlock.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -255186,7 +255186,7 @@
   "_id": "tMlVRwgkusGJOcKw",
   "name": "Рыба",
   "type": "monster",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/vedmak/assets/tokens/monster_token_2d/beasts/pike.webp",
   "system": {
    "stats": {
     "int": {
@@ -255632,7 +255632,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "icons/svg/mystery-man.svg",
+    "src": "systems/vedmak/assets/tokens/monster_token_2d/beasts/pike.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -256134,7 +256134,7 @@
   "_id": "1hEJjyMfEKNBCGH5",
   "name": "Черепаха",
   "type": "monster",
-  "img": "systems/vedmak/assets/fan/bestiary/books/cerepaha.webp",
+  "img": "icons/svg/mystery-man.svg",
   "system": {
    "stats": {
     "int": {
@@ -256585,7 +256585,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/cerepaha.webp",
+    "src": "icons/svg/mystery-man.svg",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -256613,7 +256613,7 @@
   "_id": "MLmwdPkKh8a38z6r",
   "name": "Страус",
   "type": "monster",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/goosebig.webp",
   "system": {
    "stats": {
     "int": {
@@ -257064,7 +257064,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "icons/svg/mystery-man.svg",
+    "src": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/goosebig.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -257553,7 +257553,7 @@
    "width": 1,
    "height": 1,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/pavlin.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/roosterbig.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -257581,7 +257581,7 @@
   "_id": "ygrcgFpuO5r6Li43",
   "name": "Верблюд",
   "type": "monster",
-  "img": "systems/vedmak/assets/fan/bestiary/books/verblud.webp",
+  "img": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/mule.webp",
   "system": {
    "stats": {
     "int": {
@@ -258032,7 +258032,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/verblud.webp",
+    "src": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/mule.webp",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -258584,7 +258584,7 @@
   "_id": "KZVtWU2SgpFwvKgs",
   "name": "Хирикка",
   "type": "monster",
-  "img": "systems/vedmak/assets/fan/bestiary/books/hirikka.webp",
+  "img": "icons/svg/mystery-man.svg",
   "system": {
    "stats": {
     "int": {
@@ -259041,7 +259041,7 @@
    "width": 2,
    "height": 2,
    "texture": {
-    "src": "systems/vedmak/assets/fan/bestiary/books/hirikka.webp",
+    "src": "icons/svg/mystery-man.svg",
     "scaleX": 1,
     "scaleY": 1
    },
@@ -259061,6 +259061,6811 @@
   "flags": {
    "vedmak": {
     "origin": "Журнал Весемира",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "XpItlFzqaymN0ydC",
+  "name": "Золотой дракон",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/zolotoi-drakon.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 10,
+     "mod": 0
+    },
+    "ref": {
+     "base": 15,
+     "mod": 0
+    },
+    "dex": {
+     "base": 14,
+     "mod": 0
+    },
+    "body": {
+     "base": 20,
+     "mod": 0
+    },
+    "spd": {
+     "base": 12,
+     "mod": 0
+    },
+    "emp": {
+     "base": 8,
+     "mod": 0
+    },
+    "cra": {
+     "base": 5,
+     "mod": 0
+    },
+    "will": {
+     "base": 12,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 7,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 1,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 160,
+    "max": 160
+   },
+   "sta": {
+    "value": 90,
+    "max": 90
+   },
+   "bonus": {
+    "hp": 80,
+    "sta": 10,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 1,
+    "enc": 300,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "draconid",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 10000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "monster",
+   "size": "huge",
+   "materialWeakness": "auto",
+   "resistances": [
+    "bludgeoning",
+    "fire",
+    "piercing",
+    "slashing"
+   ],
+   "susceptibilities": [],
+   "immunities": [
+    "bleeding",
+    "fire"
+   ],
+   "info": {
+    "height": "15 м",
+    "weight": "4000 кг",
+    "habitat": "Горы и леса",
+    "intelligence": "Разумный",
+    "organization": "Одиночка",
+    "senses": "Ночное зрение",
+    "resistText": "Режущий, Колящий, Дробящий, Дизориентация, Горение",
+    "immunityText": "Кровопускающее, Сбивающее с ног, Горение",
+    "susceptText": "Масло против драконоидов"
+   },
+   "knowledge": {
+    "commonDC": 20,
+    "witcherDC": 0
+   },
+   "description": "",
+   "commonKnowledge": "<p>(Золотой дракон (По ученому: Draconis Aurum nobilis) - легендарное существо, которое большинство экспертов считают мифом. Неясно, образуют ли они отдельную расу или являются просто редкими, чистыми мутациями среди более распространенных видов. Легенды приписывают им несколько чудесных свойств, одним из которых, несомненно, является их магическая способность обращаться в любое живое существо. Они изрыгают разрушительный огонь и горячий пар. Самые крупные экземпляры достигают 20 метров в длину. -</p><p>Родольф Казмер</p>",
+   "witcherKnowledge": "",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против драконоидов",
+     "kind": "weakness",
+     "description": ""
+    }
+   ],
+   "loot": [
+    {
+     "name": "Слёзы дракона",
+     "quantity": "2d10",
+     "uuid": "Compendium.vedmak.components.Item.5VgCM8BZ7Ci7yZH4"
+    },
+    {
+     "name": "Зубы дракона",
+     "quantity": "4d10",
+     "uuid": "Compendium.vedmak.components.Item.dbWztugnNyUc27IU"
+    },
+    {
+     "name": "Кровь дракона",
+     "quantity": "5d10",
+     "uuid": "Compendium.vedmak.components.Item.n1Viu49ffLSfUbG4"
+    },
+    {
+     "name": "Хвост дракона",
+     "quantity": "2d10",
+     "uuid": "Compendium.vedmak.components.Item.AyKG3Uxb5cXzCRIw"
+    },
+    {
+     "name": "Чешуя золотого дракона",
+     "quantity": "2d10",
+     "uuid": "Compendium.vedmak.components.Item.dVCZ9G3bzKZi9fOf"
+    },
+    {
+     "name": "The Dragon’s Horde",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Журнал Весемира",
+    "page": "176–177"
+   }
+  },
+  "items": [
+   {
+    "name": "Укус",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Журнал Весемира",
+      "page": "176–177"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "11d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 20,
+      "max": 20
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "armorPiercing",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "409z4ZBJs9DEjYVR"
+   },
+   {
+    "name": "Удар когтями",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила. Сбивающее с ног (50%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Журнал Весемира",
+      "page": "176–177"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "9d6",
+     "damageTypes": [
+      "slashing"
+     ],
+     "reliability": {
+      "value": 20,
+      "max": 20
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 3,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "bleeding",
+       "value": "75%",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "bpObdBk6o4zEC8YR"
+   },
+   {
+    "name": "Взмах крылом",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/wing-batlike-white-blue.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила. Сбивающее с ног (75%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Журнал Весемира",
+      "page": "176–177"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "6d6+4",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "stun",
+       "value": "100%",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "6MkdspNY74lbChMk"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Золотой дракон",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 3,
+   "height": 3,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/dragon.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Дракониды"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Журнал Весемира",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "mUpRqMyl88dOg7dp",
+  "name": "Скрытый",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/skrytyi.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 11,
+     "mod": 0
+    },
+    "ref": {
+     "base": 16,
+     "mod": 0
+    },
+    "dex": {
+     "base": 17,
+     "mod": 0
+    },
+    "body": {
+     "base": 14,
+     "mod": 0
+    },
+    "spd": {
+     "base": 12,
+     "mod": 0
+    },
+    "emp": {
+     "base": 8,
+     "mod": 0
+    },
+    "cra": {
+     "base": 7,
+     "mod": 0
+    },
+    "will": {
+     "base": 10,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 11,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 4,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 7,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 12,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 12,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 12,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 120,
+    "max": 120
+   },
+   "sta": {
+    "value": 60,
+    "max": 60
+   },
+   "bonus": {
+    "hp": 60,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 2,
+    "rec": 2,
+    "enc": 0,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "vampire",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 10000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [
+    "fire"
+   ],
+   "info": {
+    "height": "1.8 м",
+    "weight": "75 кг",
+    "habitat": "Поселения",
+    "intelligence": "Sapient",
+    "organization": "Одиночка",
+    "senses": "Night Vision Scent Tracking",
+    "resistText": "Магическое воздействие",
+    "immunityText": "Серебро, Магическое обнаржуние, Огонь",
+    "susceptText": "Элексир «Черная кровь», Масло против вампиров, Магия огня, Отстутствие отражения и тени, Дурное влияние крови"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 0
+   },
+   "description": "",
+   "commonKnowledge": "<p>(Образование СЛ:XX)</p><p>НИКТО ИЗ ПРОСТОЛЮДИНОВ НЕ ЗНАЕТ ЭТОГО МОНСТРА.</p><p>*см. жизненный путь Высшего вампира, выбрав 2 любое время. - Взрослый, 7</p><p>и 35</p><p>. Скрытый может призвать любого вампира, в на навыки.</p>",
+   "witcherKnowledge": "",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Элексир «Черная кровь»",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Масло против вампиров",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Магия огня",
+     "kind": "weakness",
+     "description": "<p>Скрытый лишен невосприимчивости к заклинаниям огня. Он получает обычный урон от любого источника огня, созданного магией, но никогда не получает вреда от горения.</p>"
+    },
+    {
+     "name": "Отстутствие отражения и тени",
+     "kind": "weakness",
+     "description": "<p>Скрытый не отражается в зеркале и при любом освещении не отбрасывает тень.</p>"
+    },
+    {
+     "name": "Дурное влияние крови",
+     "kind": "weakness",
+     "description": "<p>Если за 1 час вампир выпьет более 20 пунктов крови у любого количества жертв, следующий час он проведет в состоянии опьянения.</p>"
+    },
+    {
+     "name": "Превосходная невидимость",
+     "kind": "ability",
+     "description": "<p>В качестве действия скрытый может стать невидимым. Это дает +10 к Скрытности и +5 к атаке и защите. Даже если вы успешно прошли проверку Внимания, чтобы заметить скрытого, он получает бонус +3 к атаке и защите. Знак Ирден или бомба « Лунная пыль » делает скрытого частично видимым, снижая его бонус к Скрытности до +5 и бонус к атаке до +3. Если по скрытому нанесен удар, он лишается невидимости.</p>"
+    },
+    {
+     "name": "Бессмертие",
+     "kind": "ability",
+     "description": "<p>Вдобавок к обычной регенерации скрытый может залечивать критические ранения и даже оживать после смерти. В начале каждого раунда скрытый восстанавливает 20 ПЗ, а также частично исцеляет свои критические ранения. На исцеление легкого критического ранения скрытый тратит 1 раунд, среднего критического ранения – 2 раунда, тяжелого критического ранения – 4 раунда, смертельного критического ранения – 6 раундов. Регенерацию можно применять только к одному критическому ранению за раз, начиная с легких. После первого раунда регенерации ранение, к которому она применена, считается билизированным. Если скрытого убил кто-либо кроме другого высшего вампира, он возвращается к жизни через столько недель, сколько отрицательных ПЗ у него было на момент смерти. Второй высший вампир может снизить время восстановаления вдвое, раз в день подкармливая труп своей кровью. Превращение: Переменчивый облик Не тратя действия, скрытый может принять человеческий облик. Если после этого он совершит любую атаку или высосет кровь, то вернется к своему обычному облику. Либо, потратив действие, скрытый может превратиться в облако дыма или гигантского нетопыря. В виде дыма скрытый считается бесплотным и может в качестве перемещения двигаться по горизонтали или по вертикали. Если он кого-либо атакует, то немедленно вернется к своему обычному облику. В облике нетопыря скрытый также может в качестве перемещения двигаться по горизонтали или по вертикали, нобесплотным не считается. Кроме того, он теряет способность Превосходная невидимость, зато получает ПБ 20.</p>"
+    },
+    {
+     "name": "Высасывание крови",
+     "kind": "ability",
+     "description": "<p>Если скрытый наносит урон укусом, цель получает дополнительно 3d6 урона, а скрытый восстанавливает себе столько же ПЗ.</p>"
+    },
+    {
+     "name": "Магическое внушение",
+     "kind": "ability",
+     "description": "<p>В качестве действия скрытый может повлиять на разум любого, кто его слышит. Цель внушения должна пройти проверку Сопротивления магии против атаки скрытого с основой 25. При провале цель соглашается с скрытым и думает так, как он ей велит. Эффект длится 10 минут или пока цель, потратив действие, не воершит успешную встречную проверку Сопротивления магии против изначального броска скрытого.</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Лимфа мерзости",
+     "quantity": "1d6/2",
+     "uuid": "Compendium.vedmak.components.Item.JbUlHQ3rZetwCEfH"
+    },
+    {
+     "name": "Наэзанская соль",
+     "quantity": "1d10",
+     "uuid": "Compendium.vedmak.components.Item.mvqdiWfbrlYf1pQf"
+    },
+    {
+     "name": "Ноготь Скрытого",
+     "quantity": "1d10",
+     "uuid": "Compendium.vedmak.components.Item.Q7Ix9XtkKbSwQ9F2"
+    },
+    {
+     "name": "Эссенция смерти",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.Nh9TbUmhJpJxBsfF"
+    }
+   ],
+   "source": {
+    "book": "Журнал Весемира",
+    "page": "178–179"
+   }
+  },
+  "items": [
+   {
+    "name": "Укус",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+    "system": {
+     "description": "<p>Высасывание крови.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Журнал Весемира",
+      "page": "178–179"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "8d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "100%",
+       "source": ""
+      },
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "ERgQuConfrFfUAG7"
+   },
+   {
+    "name": "Удар когтями",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Журнал Весемира",
+      "page": "178–179"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "7d6+3",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 4,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "75%",
+       "source": ""
+      },
+      {
+       "key": "balanced",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "3EW0eJVpkjySTrZ0"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Скрытый",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/vampire2.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Вампиры"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Журнал Весемира",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "Rjyk92GpkhbnvyCy",
+  "name": "Рогатый",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/rogatyi.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 5,
+     "mod": 0
+    },
+    "ref": {
+     "base": 12,
+     "mod": 0
+    },
+    "dex": {
+     "base": 12,
+     "mod": 0
+    },
+    "body": {
+     "base": 10,
+     "mod": 0
+    },
+    "spd": {
+     "base": 7,
+     "mod": 0
+    },
+    "emp": {
+     "base": 2,
+     "mod": 0
+    },
+    "cra": {
+     "base": 2,
+     "mod": 0
+    },
+    "will": {
+     "base": 10,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 7,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 100,
+    "max": 100
+   },
+   "sta": {
+    "value": 50,
+    "max": 50
+   },
+   "bonus": {
+    "hp": 50,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 0,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "specter",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "uncommon"
+   },
+   "bounty": 1500,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "large",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [
+    "bleeding",
+    "fire",
+    "poison"
+   ],
+   "info": {
+    "height": "2.5м",
+    "weight": "162кг",
+    "habitat": "Где они были призваны",
+    "intelligence": "Разумный",
+    "organization": "Одиночка",
+    "senses": "Улучшенное ночное зрение",
+    "resistText": "",
+    "immunityText": "Огонь,отравление, кровотечение, болезнь, ужас",
+    "susceptText": "Двимеритовые бомбы, Масло против духов"
+   },
+   "knowledge": {
+    "commonDC": 16,
+    "witcherDC": 18
+   },
+   "description": "",
+   "commonKnowledge": "<p>Слышал об этих тварях один или два раза из моих менее пикантных источников. Хех, единственная причина, по которой ты когда-либо захочешь призвать рогатого, это если тебе нужен действительно сильный воин на твоей стороне. Насколько я слышал, рогатые — стражи царства демонов. У меня есть когти, которые перережут тебя от горла до потрохов быстрее, чем даже ведьмак сможет размахнуться. Они тоже всего лишь скелеты, так что их нельзя сжечь или отравить. Лучшее, что ты можешь сделать, это заключить с ними сделку, хех. Если ты позволишь им завладеть твоим телом, они дадут тебе достаточно силы.</p><p>—Родольф Казмер</p>",
+   "witcherKnowledge": "<p>Рогатые — демоны ярости и силы, которые входят в мир Ведьмака только для того, чтобы сеять боль и наслаждение мучениями смертных. Будучи демонами, они приходят откуда-то за пределами понимания даже самых образованных магов, и их социальная организация фактически неизвестна. Однако, соблюдая их, вы можете начать заполнять пробелы. Рогатые действительно могущественные воины с достаточно острыми когтями, чтобы отрезать конечности и оставлять кровоточащие раны при каждом ударе. Если вам нужно бороться с рогатым, лучше всего попытаться как-то его замедлить и взять с собой побольше кровоостанавливающего порошка. Эти когти на самом деле являются единственным оружием рогатых в его телесной форме, но по-настоящему сложной частью борьбы с рогатыми является их склонность к одержимости. Рогатый всегда будет начинать бой, пытаясь завладеть самой физически сильной целью в радиусе действия. Владея целью, рогатый может контролировать каждое ее движение и значительно улучшает свои физические возможности. Присутствие рогатого также нагревает кровь одержимой цели до температуры горящей реки, которая может расплавить плоть, поэтому не рекомендуется повреждать кожу одержимой цели. Единственный способ вытеснить рогатого из цели — нанести ей тяжелые раны, заставить мага, жреца или друида использовать магию, чтобы изгнать рогатого, или заставить их выпить церебральный эликсир. В некоторых обстоятельствах убийство одержимой цели может быть милосердием, поскольку они все еще знают обо всем, что происходит, и у них есть садистская привычка заставлять одержимую цель содрать кожу и съесть ее. Если возможно, заманите рогатых в ловушку в районе димеритиевой бомбы. Это сделает их неспособными владеть кем-либо. После того, как вы помешали рогатому завладеть кем-то, обстреляйте его дальнобойными атаками, покрытыми маслом против духов, избегая огня, к которому бесы невосприимчивы. Не пытайтесь отравить его, в конце концов, у бесов нет плоти или крови, чтобы это подействовало. Если вам не повезло столкнуться с великими рогатыми, имейте в виду, что они намного быстрее и смертоноснее, способны нанести три удара когтями за считанные секунды.</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Двимеритовые бомбы",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Масло против духов",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Одержимость",
+     "kind": "ability",
+     "description": "<p>Выполняя действие, рогатые могут попытаться завладеть целью в пределах досягаемости ближнего боя, совершив проверку Сотворения Заклинаний против своей проверки Сопротивления Магии. В случае успеха, рогатый берет под контроль тело цели. Это позволяет бесам использовать тело цели, но цель получает статистику Реа и Лвк бесов. Это изменение в статистике не влияет на производную статистику. Цель также получает способность «Кипящая кровь». Пока ими владеет рогатый, персонаж не может контролировать свое тело, но в остальном знает обо всем, что происходит вокруг него. Есть три способа вытеснить рогатого из одержимой цели: либо цель должна быть снижена до порога ранения, либо маг, жрец или друид должны потратить 10 очков выносливости и бросить проверку Сотворения Заклинаний, чтобы превзойти СЛ: 20, или одержимая цель должна выпить церебральный эликсир. Находясь в зоне двимеритиевой бомбы, рогатые не могут использовать эту способность. Завладев целью, рогатый не получает урона от атак, направленных против захваченной цели.</p>"
+    },
+    {
+     "name": "Кипящая кровь",
+     "kind": "ability",
+     "description": "<p>Всякий раз, когда вы наносите урон цели, одержимой рогатым, рубящим или колющим оружием, получающиеся в результате перегретые брызги крови наносят 5 единиц урона туловищу атакующего, что также разрушая любую броню на 1 единицу независимо от проникновения.</p>"
+    },
+    {
+     "name": "Альтернативная форма (Великий рогатый)",
+     "kind": "ability",
+     "description": "<p>У великого рогатого СА 3 с его Когтями, Реа и Лвк 14, а его способность «Кипящая кровь» снижает броню на 3, а не на 1.</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Прах",
+     "quantity": "2d10",
+     "uuid": ""
+    },
+    {
+     "name": "Кости животных",
+     "quantity": "1d10",
+     "uuid": "Compendium.vedmak.components.Item.1ohF86MGA5F1g7gU"
+    },
+    {
+     "name": "Рога рогатого",
+     "quantity": "1d6/3",
+     "uuid": ""
+    },
+    {
+     "name": "Дымная пыль",
+     "quantity": "2d10",
+     "uuid": "Compendium.vedmak.components.Item.r7IVJmTysavHSESu"
+    },
+    {
+     "name": "Призрачная пыль",
+     "quantity": "1d6",
+     "uuid": "Compendium.vedmak.components.Item.9D6xFn05LjH3KS2S"
+    },
+    {
+     "name": "Эссенция призрака",
+     "quantity": "2d6",
+     "uuid": "Compendium.vedmak.components.Item.iD9eCK2ENDe8GhMg"
+    },
+    {
+     "name": "Рунный камень Даждьбога",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Том Хаоса",
+    "page": "197–198"
+   }
+  },
+  "items": [
+   {
+    "name": "Когти",
+    "type": "weapon",
+    "img": "icons/creatures/claws/claw-bear-paw-swipe-brown.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том Хаоса",
+      "page": "197–198"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "5d6+4",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "100%",
+       "source": ""
+      },
+      {
+       "key": "balanced",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "3HV7kvPeiZj9lruH"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Рогатый",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 2,
+   "height": 2,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/rager.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Духи"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том Хаоса",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "XXutox1wg5gdGGqr",
+  "name": "Бестия Альзура",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/bestia-al_zura.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 1,
+     "mod": 0
+    },
+    "ref": {
+     "base": 15,
+     "mod": 0
+    },
+    "dex": {
+     "base": 16,
+     "mod": 0
+    },
+    "body": {
+     "base": 30,
+     "mod": 0
+    },
+    "spd": {
+     "base": 10,
+     "mod": 0
+    },
+    "emp": {
+     "base": 1,
+     "mod": 0
+    },
+    "cra": {
+     "base": 1,
+     "mod": 0
+    },
+    "will": {
+     "base": 10,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 19,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 18,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 4,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 15,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 28,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 300,
+    "max": 300
+   },
+   "sta": {
+    "value": 150,
+    "max": 150
+   },
+   "bonus": {
+    "hp": 200,
+    "sta": 50,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 200,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "hybrid",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 10000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "monster",
+   "size": "huge",
+   "materialWeakness": "auto",
+   "resistances": [
+    "bludgeoning",
+    "fire",
+    "piercing",
+    "slashing"
+   ],
+   "susceptibilities": [],
+   "immunities": [
+    "poison",
+    "stun"
+   ],
+   "info": {
+    "height": "16 м",
+    "weight": "130000 кг",
+    "habitat": "Там, где призовут",
+    "intelligence": "Дикий",
+    "organization": "Одиночка",
+    "senses": "Превосходное ночное зрение",
+    "resistText": "Огонь, К/Р/Д урон",
+    "immunityText": "Яд, Магическое воздействие, Страх, Дезориентация",
+    "susceptText": "Масло против зверей"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 23
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "<p>Этого удивительного зверя я увидел впервые. Это существо из другой вселенной, чей первый контакт с нашим миром был делом моих рук. У меня не было возможности изучить его подробно, но я использовал упрощенную версию Двойного креста, чтобы модифицировать существ из нашего измерения, и выяснил еще кое-что о ритуале, что дало мне гораздо больше знаний. За это меня исключили из ордена. Я продолжу исследования, но я бы не советовал позволять этому существу приближаться к нашему плану существования. Оно чрезвычайно сильно и взять его под контроль весьма проблематично. Альзур</p><p>—</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против зверей",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Обостренные Чувства",
+     "kind": "ability",
+     "description": "<p>Бестия Алзура обладает удивительным зрением, она способна видеть даже в полной темноте. Но это еще не все. Бестия не получает штрафов если использует только нюх и слух для ориентирования. атаку с разбега</p>"
+    },
+    {
+     "name": "Сверхъестественная скорость",
+     "kind": "ability",
+     "description": "<p>Потратив весь свой ход и 20 ВЫН, Бестия может совершить атаку сразу всем своим оружием (с указанной). После использования этой способности Бестия до тех пор, пока успешно не пройдет проверку Устойчивости. и</p>"
+    },
+    {
+     "name": "Атака с разбега",
+     "kind": "ability",
+     "description": "<p>Является действием полного хода. Если цель окажется более чем в 10 метрах, Бестия может совершить на расстояние до 20 м и сделать одиночную атаку Кровавым рогом с основой 21. Если цель не защищается, она получает 12d6 урона по туловищу и отбрасывается на 20 метров назад. Если цель цель при отлете во что-то врезается, она получает 1d6/2 за каждый метр, что она пролетела. Если Бестия не попадает по цели, она продолжает движение по прямой линии. Если она ударяется о стену или другой твердый предмет, то наносит половину урона преграде и дезориентируется до тех пор, пока успешно не пройдет проверку Устойчивости. и редкий ритуал, о котором ходят легенды.</p>"
+    },
+    {
+     "name": "Проглотить целиком",
+     "kind": "ability",
+     "description": "<p>Бестия Альзура может использовать действие атаки, чтобы проглотить цель целиком. Успешно схваченный противник автоматически считается обездвиженным получает удушье в следующем раунде, он также получает 2 разрушающего урона по всей броне и оружию (хрупкие предметы могут быть уничтожены). Побег возможен с помощью проверки Борьбы против показателя проверки захвата Бестии +2. Если Бестия получает более 30 единиц урона от одного удара, ее немедленно тошнит всем, что она успела проглотить. Двойной крест Альзура - это могущественный и таинственный ритуал, созданный магом Альзуром. Этот ритуал был вдохновением для иллюстрации на обложке этой книги и сделал возможным призыв гигантских и могущественных бестий. Существо, описанное здесь, абсурдно могущественное и должно использоваться только в конце длительных кампаний, когда игроки развили своих персонажей и набрали достаточно магических предметов и сильного оружия. Это монстр, биться с которым нужно с помощью армии, очень схож с драконами, и столкновение с ним закончится только смертью одной из сторон. Не стесняйтесь использовать Двойной крест Альзура в качестве мотивации кампании, поскольку это древний</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Кристаллизованная эссенция",
+     "quantity": "5d10",
+     "uuid": "Compendium.vedmak.components.Item.mHv0PimBW6JkvR6N"
+    },
+    {
+     "name": "Пятая эссенция",
+     "quantity": "5d10",
+     "uuid": "Compendium.vedmak.components.Item.QnyafLhiyPtcS3GJ"
+    },
+    {
+     "name": "Дымная пыль",
+     "quantity": "5d10",
+     "uuid": "Compendium.vedmak.components.Item.r7IVJmTysavHSESu"
+    },
+    {
+     "name": "Optima mater",
+     "quantity": "5d10",
+     "uuid": "Compendium.vedmak.components.Item.D0TdMDgv8MzKEr6s"
+    },
+    {
+     "name": "Случайная руна",
+     "quantity": "2d6",
+     "uuid": "Compendium.vedmak.generators.RollTable.3WXFgIYETEdQy5M1"
+    }
+   ],
+   "source": {
+    "book": "Том магии Альзура",
+    "page": "54–55"
+   }
+  },
+  "items": [
+   {
+    "name": "Укус",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "54–55"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "10d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 20,
+      "max": 20
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "armorPiercing",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "r79rSz80beFWu0j8"
+   },
+   {
+    "name": "Удар когтями",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила. Сбивающее с ног (50%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "54–55"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "8d6",
+     "damageTypes": [
+      "slashing"
+     ],
+     "reliability": {
+      "value": 20,
+      "max": 20
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 3,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "bleeding",
+       "value": "75%",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "udP5jvT0lzQXwLr4"
+   },
+   {
+    "name": "Удар хвостом",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/tail-strike-bone-orange.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила. Сбивающее с ног (75%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "54–55"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "5d6+3",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "stun",
+       "value": "100%",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "sGg1vuaGNq4ZDsae"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Бестия Альзура",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 3,
+   "height": 3,
+   "texture": {
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/bestia-al_zura.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Гибриды"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том магии Альзура",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "12gHEzdBZU8zqk4v",
+  "name": "Наблюдатель",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/nabludatel_.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 7,
+     "mod": 0
+    },
+    "ref": {
+     "base": 10,
+     "mod": 0
+    },
+    "dex": {
+     "base": 8,
+     "mod": 0
+    },
+    "body": {
+     "base": 15,
+     "mod": 0
+    },
+    "spd": {
+     "base": 10,
+     "mod": 0
+    },
+    "emp": {
+     "base": 6,
+     "mod": 0
+    },
+    "cra": {
+     "base": 1,
+     "mod": 0
+    },
+    "will": {
+     "base": 10,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 7,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 11,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 120,
+    "max": 120
+   },
+   "sta": {
+    "value": 60,
+    "max": 60
+   },
+   "bonus": {
+    "hp": 60,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 0,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "relict",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "uncommon"
+   },
+   "bounty": 5000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "large",
+   "materialWeakness": "auto",
+   "resistances": [
+    "fire"
+   ],
+   "susceptibilities": [],
+   "immunities": [],
+   "info": {
+    "height": "2.5 м",
+    "weight": "2000 кг",
+    "habitat": "Руины",
+    "intelligence": "Разумный",
+    "organization": "Одиночка",
+    "senses": "Превосходное 25 ночное зрение 20 9 16",
+    "resistText": "_",
+    "immunityText": "_",
+    "susceptText": "Масло против реликтов"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 30
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "<p>Наблюдатели - огромные и могущественные существа из другой вселенной. Они собирают сокровища, как драконы, и защищают свои логова, почти никогда не покидая их. У них сферические тела с большим глазом в центре и 9 глазами поменьше, и все зрячие. У каждого глаза есть своя магическая особенность. Если приблизиться к ним, они могут атаковать своими большими острыми зубами. Они также способны использовать магию воздуха и постоянно парят, что делает бой еще сложнее. На случай если вам все же удастся подобраться к ним, у них есть 7 щупалец, которые они не побоятся использовать для нападения. Нелегкий бой. — - Альзур</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против реликтов",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Лучи из глаз",
+     "kind": "ability",
+     "description": "<p>После совершения атаки Наблюдатель запускает три произвольных магических луча из своих глаз (повторные перебрасываются), выбирая от одной до трех целей, которые он видит в пределах 40 метров от себя: 1. Очаровывающий Луч. Цель должна совершить проверку Сопротивления магии СЛ 25 или будет Очарована на 1 час или до тех пор, пока Наблюдатель не нанесет ей урон. Очарованное существо считает Наблюдателя союзником. Этот луч никогда не промахивается. Цель может совершить проверку Блокирования СЛ 28, чтобы блокировать луч. При успехе эффект не накладывается. 2. Дезориентирующий луч. Цель должна совершить проверку Сопротивления магии СЛ 25 или, в течение 10 раундов, она должна будет делать проверку ти в начале своего хода. При провале цель дезориентирована до следующего хода. Этот луч никогда не промахивается. Цель может совершить проверку СЛ 28, чтобы блокировать луч. При успехе эффект не накладывается. 3.. Цель должна совершить проверку Сопротивления магии будет напугана в течение 10 раундов. Существо может используя действие полного хода, совершить бросок d10, и если выпавшее значение меньше показателя нажа, эффект немедленно прекращается. Напуганное существо не может добровольно приблизиться к Наблюдателю и имеет штраф -5 к проверкам атаки и защиты против него. Этот луч никогда не промахивается. Цель может совершить проверку СЛ 28, чтобы блокировать луч. При успехе эффект не накладывается. 4. Замедляющий луч. Цель должна совершить проверку Сопротивления магии 25 или его скорость уменьшается вдвое на 10 раундов. Цель также не может совершать Дополнительные действия до окончания действия эффекта. Этот луч никогда не промахивается. Цель может совершить проверку Блокирования СЛ 28, чтобы блокировать луч. Вес попавшего под луч объекта увеличивается вдвое на 10 раундов. 5. Телекинетический луч. Если целью является существо, оно должно совершить Уклонения/Изворотливости или Изменения позиции СЛ 25 или будет телекинетически отброшено на 10 м в любом направлении и захвачено следующего хода Наблюдателя. Цель может совершить проверку Блокирования 28, чтобы блокировать луч. При успехе цель только отбрасывается. Цель может совершить проверку Силы СЛ 25 чтобы устоять на месте. 6. Усыпляющий луч. Цель должна совершить проверку Сопротивления магии 25 или засыпает и остается без сознания в течении 10 раундов. Чтобы разбудить цель, требуется действие. Этот луч не оказывает никакого влияния на Элементалей и Призраков. Цель может совершить проверку Блокирования СЛ 28, чтобы блокировать луч. При успехе эффект не накладывается. 7. Луч окаменения. Цель должна совершить проверку Уклонения/Изворотливости или Изменения позиции СЛ 25 или получить эффект заклинания Тюрьмы Радарилда Цель может совершить проверку Блокирования СЛ 28, чтобы блокировать луч. Попавший под луч объект превращается в камень. 8.. Если целью является существо, оно должно совершить проверку Уклонения/Изворотливости или Изменения позиции СЛ 20 или получить урон от магического огня 10d6. Если ПЗ цели опускаются до 0 от этой атаки, она и все ее снаряжение превращаются в пыль. Цель может совершить проверку Блокирования 25, чтобы блокировать луч. Попавший под луч объект получает урон вместо цели. 9.. Цель должна совершить проверку Уклонения/Изворотливости Изменения позиции СЛ 20 или получить 10d6 некротического урона. Если опускаются до 0 от этой атаки, она поднимается как труп в соответствии с правилами Поднятие трупа. Цель может совершить проверку Блокирования чтобы блокировать луч. Попавший под луч объект получает урон вместо цели. 10. Выберите любой</p>"
+    },
+    {
+     "name": "Конус анти-магии",
+     "kind": "ability",
+     "description": "<p>Центральный глаз Наблюдателя постоянно создает 45метровый конус анти-магии (90°). Он действует в соответствии с заклинанием Анти-магическое поле магические и сверхъестественные силы и эффекты внутри конуса подавляются - даже способность Наблюдателя Лучи из глаз. Один раз за раунд, во время своего хода, Наблюдатель решает, активен конус или нет (он деактивирует конус, закрывая свой центральный глаз).</p>"
+    },
+    {
+     "name": "Полет",
+     "kind": "ability",
+     "description": "<p>В качестве перемещения Наблюдатель может взлететь, перемещаясь по вертикали или горизонтали на 30 м. Наблюдателя можно сбить только дезориентировав или заставив потерять сознание. Если Наблюдатель сбит, он должен пройти проверку Атлетики со СЛ 25, или получит урон от падения, соответствующий высоте в метрах, с которой он упал.</p>"
+    },
+    {
+     "name": "Покрыт глазами",
+     "kind": "ability",
+     "description": "<p>Меньшие глаза Наблюдателя видят так же хорошо, как и главный глаз. Поэтому его нельзя окружить (правило Объединения сил) и он получает бонус +4 на все проверки Внимания, основанные на зрении.</p>"
+    },
+    {
+     "name": "Особые навыки",
+     "kind": "note",
+     "description": "<p>Сопротивление магии Скрытность Выживание в дикой природе 10 (основа)</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Черная жемчужина",
+     "quantity": "1d6/3",
+     "uuid": "Compendium.vedmak.components.Item.SkXG5MFlftqp3PPX"
+    },
+    {
+     "name": "Эссенция смерти",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.Nh9TbUmhJpJxBsfF"
+    },
+    {
+     "name": "Пятая эссенция",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.QnyafLhiyPtcS3GJ"
+    },
+    {
+     "name": "Дымная пыль (x3d10) The",
+     "quantity": "1",
+     "uuid": ""
+    },
+    {
+     "name": "Сокровища наблюдателя",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Том магии Альзура",
+    "page": "56–57"
+   }
+  },
+  "items": [
+   {
+    "name": "Укус",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "56–57"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "10d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 20,
+      "max": 20
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "SBmgxelG0B5opJox"
+   },
+   {
+    "name": "Щупальца",
+    "type": "weapon",
+    "img": "icons/creatures/tentacles/tentacle-eyes-yellow-pink.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "56–57"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "4d6",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 20,
+      "max": 20
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 7,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "grappling",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "ablating",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "stun",
+       "value": "100%",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "6oZlSFadxTRq6gQ0"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Наблюдатель",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 2,
+   "height": 2,
+   "texture": {
+    "src": "systems/vedmak/assets/fan/bestiary/books/tokens/nabludatel_.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Реликты"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том магии Альзура",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "XuS1sdDC30LtiZgT",
+  "name": "Высший демон",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/vyssii-demon.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 10,
+     "mod": 0
+    },
+    "ref": {
+     "base": 14,
+     "mod": 0
+    },
+    "dex": {
+     "base": 14,
+     "mod": 0
+    },
+    "body": {
+     "base": 15,
+     "mod": 0
+    },
+    "spd": {
+     "base": 10,
+     "mod": 0
+    },
+    "emp": {
+     "base": 6,
+     "mod": 0
+    },
+    "cra": {
+     "base": 5,
+     "mod": 0
+    },
+    "will": {
+     "base": 12,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 7,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 17,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 130,
+    "max": 130
+   },
+   "sta": {
+    "value": 65,
+    "max": 65
+   },
+   "bonus": {
+    "hp": 65,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 0,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "relict",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 5000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "large",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [
+    "bleeding",
+    "fire"
+   ],
+   "info": {
+    "height": "Меняется",
+    "weight": "Меняется",
+    "habitat": "Где угодно",
+    "intelligence": "Разумный",
+    "organization": "Одиночка",
+    "senses": "Ночное зрение",
+    "resistText": "Некротический урон",
+    "immunityText": "Кровотечение, Магическое воздействие, Огонь",
+    "susceptText": "Масло против призраков, Сделки"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 20
+   },
+   "description": "<p>Является действием полного хода. Высший демон может выдохнуть 10-метровый конус какого-то магического элемента (определяется на жизненном пути). Все в области поражения должны совершить проверку позиции (если есть возможность переместиться за укрытие или выйти из области) против проверки атаки Демона, с основой 20. Если у существа есть павеза, оно может использовать</p>",
+   "commonKnowledge": "",
+   "witcherKnowledge": "<p>Демон - ужасный термин. Им описывается множество существ из разных измерений, разных по природе, с разными целями и способностями. Еще один ужасный термин – «Великий демон». Эти могущественные спектральные существа из другого измерения. Некоторые из них могут приходить в наше измерение по собственному желанию, а другим для этого нужна помощь. Но и те, и другие обладают огромной силой. Большинство из них родом из измерения под названием Лимбо, и они обладают уникальными способностями, которые позволяют им совершать невероятные вещи.</p><p>— Альзур</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против призраков",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Сделки",
+     "kind": "weakness",
+     "description": "<p>Высшие демоны обладают непревзойденной силой. Тем не менее, они высокомерны и любят всячески показывать и говорить, насколько они могущественны. Высший демон никогда не откажется от спора или сделки. Если он проиграет в этом споре, ему будет запрещено возвращаться в его измерение на протяжении 5 лет. Если только ему никто не поможет.</p>"
+    },
+    {
+     "name": "Телепортация",
+     "kind": "ability",
+     "description": "<p>Высший Демон может мгновенно телепортироваться в куда угодно по желанию. Они не могут взять кого-то с собой и телепортируются только с тем, что держат в руках.</p>"
+    },
+    {
+     "name": "Бессмертный",
+     "kind": "ability",
+     "description": "<p>Высший демон бессмертен. То, что приходит в наш мир, - это его физическое проявление. Его можно убиты только ПЗ до 0 некротическим уроном, к которому у них есть сопротивление. Если Высший демон атакован не некротическим уроном, получив по крайней мере 65 очков урона, он возвращается в свое измерение. Демон может вернуться к жизни через количество месяцев, равное тому, на сколько ниже 0 ушло значение его Чтобы ускорить его возвращение, можно провести ритуал призыва.</p>"
+    },
+    {
+     "name": "Исполнение желаний",
+     "kind": "ability",
+     "description": "<p>Подобно Джиннам, Высшие демоны могут исполнять желания в меру своих возможностей. Но, в отличие от джиннов, они не обменивают желание на свою свободу. За исполнение желания они могут назначать любую цену, какую захотят, но чаще всего им нужна ваша душа. Если вы заложите душу, как только условия договора будут исполнены, демон мгновенно убьет вас. Ваше тело и вещи превратятся в прах, а душа теперь будет принадлежать ему. Навечно. Магический выдох Изменения , чтобы укрыться за ней. Тем</p>"
+    },
+    {
+     "name": "Телепатия",
+     "kind": "ability",
+     "description": "<p>Высшие демоны говорят на любом языке по желанию, но не очень хорошо, и могут общаться с помощью телепатии. Они также могут проникать в разум цели, и, если цель сопротивляется, она должна совершить проверку Сопротивления магии СЛ 26. Превращение: Маскировка Высший демон может выглядеть как кто и что угодно, в том числе становиться невидимым. Замаскированный демон сохраняет свою внешность, но его все равно никто не замечает. В таком состоянии демон не может использовать оружие или Магический выдох</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Черная жемчужина",
+     "quantity": "1d6/3",
+     "uuid": "Compendium.vedmak.components.Item.SkXG5MFlftqp3PPX"
+    },
+    {
+     "name": "Эссенция смерти",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.Nh9TbUmhJpJxBsfF"
+    },
+    {
+     "name": "Пятая эссенция",
+     "quantity": "1d10",
+     "uuid": "Compendium.vedmak.components.Item.QnyafLhiyPtcS3GJ"
+    },
+    {
+     "name": "Дымная пыль",
+     "quantity": "1d10",
+     "uuid": "Compendium.vedmak.components.Item.r7IVJmTysavHSESu"
+    },
+    {
+     "name": "Сера",
+     "quantity": "5d10",
+     "uuid": "Compendium.vedmak.components.Item.XcOCAqan4wsYQJhN"
+    }
+   ],
+   "source": {
+    "book": "Том магии Альзура",
+    "page": "60–61"
+   }
+  },
+  "items": [
+   {
+    "name": "Демоническое оружие",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "60–61"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "6d6",
+     "damageTypes": [
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "13kyMlTRiD6in72W"
+   },
+   {
+    "name": "Удар когтями",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "60–61"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "5d6+3",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 4,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "75%",
+       "source": ""
+      },
+      {
+       "key": "balanced",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "78klrXg8OIRorbB0"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Высший демон",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 2,
+   "height": 2,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/rarasha.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Реликты"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том магии Альзура",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "qU1SVgUlLeSCvE5a",
+  "name": "Скульптор смерти",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/skul_ptor-smerti.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 10,
+     "mod": 0
+    },
+    "ref": {
+     "base": 8,
+     "mod": 0
+    },
+    "dex": {
+     "base": 8,
+     "mod": 0
+    },
+    "body": {
+     "base": 8,
+     "mod": 0
+    },
+    "spd": {
+     "base": 6,
+     "mod": 0
+    },
+    "emp": {
+     "base": 1,
+     "mod": 0
+    },
+    "cra": {
+     "base": 5,
+     "mod": 0
+    },
+    "will": {
+     "base": 16,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 4,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 12,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 2,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 120,
+    "max": 120
+   },
+   "sta": {
+    "value": 120,
+    "max": 120
+   },
+   "bonus": {
+    "hp": 60,
+    "sta": 60,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 0,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "specter",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 5000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [
+    "bleeding",
+    "poison"
+   ],
+   "info": {
+    "height": "1.8 м",
+    "weight": "75 кг",
+    "habitat": "Руины",
+    "intelligence": "Разумный",
+    "organization": "Одиночка",
+    "senses": "Превосходное ночное зрение",
+    "resistText": "_",
+    "immunityText": "Кровотечение, Яд, Ослепление, Отравление, Тошнота, Удушье, Болезнь, Магическое воздействие, Галлюцинации, Иллюзии",
+    "susceptText": "Огонь, Яд повешенного, Дикое желание силы"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 25
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "<p>Вот что происходит, когда некромант теряет контроль. Скульпторы смерти – уникальные и могущественные маги, полностью сошедшие с ума. Они наполовину мертвы, что делает их невосприимчивыми почти ко всем видам урона. Они чрезвычайно сильны и могут использовать множество заклинаний, что делает их, очень опасными и непредсказуемыми. У них есть два слабых места: Огонь и безумие. Их можно окончательно убить, только если полностью сжечь в прах. Они параноики и пристрастились к могуществу, поэтому их часто замечают охотящимися за мощной магической реликвией или сильным истоком, с целью стать еще сильнее. — Альзур</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Огонь",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Яд повешенного",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Дикое желание силы",
+     "kind": "weakness",
+     "description": "<p>Скульпторы смерти пристрастились к силе и ради нее пойдут на все. Даже на необдуманные поступки. Их паранойя и зависимость могут быть использованы против них самих. Если они чувствуют, что отдаляются от цели, они получают штраф -5 ко всем действиям. 25.</p>"
+    },
+    {
+     "name": "Бессмертный",
+     "kind": "ability",
+     "description": "<p>Подобно стандартной регенерации, тело Скульптора смерти может регенерировать после критических ранений и даже смерти. В начале каждого раунда Скульптор смерти исцеляет 20 ПЗ, даже потерянных от некротического урона, а также лечит критические ранения. Скульптору смерти требуется 1 ход, для исцеления Легкого критического ранения, 2 хода для Среднего критического ранения, 4 раунда для Тяжелого критического ранения и 6 раундов, чтобы исцелить Смертельное критическое ранение. Скульптор смерти может исцелять только одно критическое ранение за раз, начиная с Легкого. В первом раунде регенерация стабилизирует ранение. Если Скульптор убит каким-либо другим способом, кроме полного уничтожения тела огнем, он возвращается к жизни через количество недель, равное тому, на сколько ниже 0 ушло значение его ПЗ. Имейте в виду, он может вернуться, вселившись в свою точную копию, даже если убит огнем.</p>"
+    },
+    {
+     "name": "Знания - сила",
+     "kind": "ability",
+     "description": "<p>Скульптор смерти - могущественный маг, и не только благодаря своим манипуляциям с хаосом. Он может использовать любые заклинания некромантии, описанные в этой книге.</p>"
+    },
+    {
+     "name": "Солдат-нежить",
+     "kind": "ability",
+     "description": "<p>Скульптор смерти не одинок. Он может поднять любой труп, по желанию, и таким образом создают армию. Перед битвой с самим Скульптором смерти противнику предстоит встретиться с этой армией. За каждого противника количество скелетов в ней увеличивается на количество противников +2. За каждый труп существа с рейтингом сложности из армии убирается 2 скелета, а за каждое существо с рейтингом</p>"
+    },
+    {
+     "name": "Медальон души",
+     "kind": "ability",
+     "description": "<p>Медальон Души - это мощная магическая реликвия. Этот медальон содержит душу каждой нежити, которой когдалибо командовал носящий его, до тех пор, пока эти души не будут освобождены. Медальон является фокусирую- (5) и каждый урон, который подконтрольная нежить наносит противнику, регенерирует пользователю размере половины значения этого урона. Урон поглощается медальоном, и для регенерации требуется трата действия. Несмотря на всю мощь, использование этого медальона имеет свою цену. Вы постоянно слышите души умерших, которые могут всячески мешать. При использовании медальона у вас могут начаться галлюцинации по усмотрению ГМа (что не проблема для Скульптора). Под воздействием галлюцинаций, когда вы пытаетесь произнести заклинание, существует 10%-ная вероятность того, что оно просто не сработает, и вы должны будете совершить проверку Устойчивости штрафом -1, при провале вы получаете эффект дезориентации.</p>"
+    },
+    {
+     "name": "Архимаг",
+     "kind": "ability",
+     "description": "<p>Скульптор смерти - опытный и могущественный маг. Все его навыки некроманта 10-го уровня, что дает ему несколько дополнительных навыков и Энергию</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Эссенция смерти",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.Nh9TbUmhJpJxBsfF"
+    },
+    {
+     "name": "Посох скульптора",
+     "quantity": "1",
+     "uuid": ""
+    },
+    {
+     "name": "Магические предметы",
+     "quantity": "2d6",
+     "uuid": "Compendium.vedmak.generators.RollTable.pqIpoRH2m8lBdefU"
+    },
+    {
+     "name": "Медальон души",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Том магии Альзура",
+    "page": "64–65"
+   }
+  },
+  "items": [
+   {
+    "name": "Посох скульптора",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Заболевание (75%). Запугивание +2.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "64–65"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "3d6+2",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "greaterFocus",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "focus",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "bA5UG9C6K6xh1AC6"
+   },
+   {
+    "name": "Удар когтями",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Заболевание (25%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "64–65"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "5d6+3",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "75%",
+       "source": ""
+      },
+      {
+       "key": "balanced",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "LN4M4gZwrNBWgpES"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Скульптор смерти",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/riencedarkmage.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Духи"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том магии Альзура",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "Tz4xEMblBmrTQDsz",
+  "name": "Шёпот смерти",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/sepot-smerti.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 8,
+     "mod": 0
+    },
+    "ref": {
+     "base": 14,
+     "mod": 0
+    },
+    "dex": {
+     "base": 14,
+     "mod": 0
+    },
+    "body": {
+     "base": 10,
+     "mod": 0
+    },
+    "spd": {
+     "base": 12,
+     "mod": 0
+    },
+    "emp": {
+     "base": 1,
+     "mod": 0
+    },
+    "cra": {
+     "base": 5,
+     "mod": 0
+    },
+    "will": {
+     "base": 10,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 100,
+    "max": 100
+   },
+   "sta": {
+    "value": 50,
+    "max": 50
+   },
+   "bonus": {
+    "hp": 50,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 0,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "specter",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 8000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [
+    "bleeding",
+    "poison"
+   ],
+   "info": {
+    "height": "1.8 м",
+    "weight": "75 кг",
+    "habitat": "Руины",
+    "intelligence": "Разумный",
+    "organization": "Одиночка",
+    "senses": "23 Превосходное ночное зрение 22 Отслежива23 ние по запаху 22 27 15",
+    "resistText": "_",
+    "immunityText": "Кровотечение, Яд, Ослепление, Отравление, Тошнота, Удушье, Болезнь, Магическое влияние, Галлюцинации, Иллюзии",
+    "susceptText": "Огонь, Яд повешенного, Дикое желание силы"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 25
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "<p>Искаженные ведьмаки встречаются редко. Они не используют магию так активно, как некроманты. Но это случается, и результат не всегда успешен. И это может привести к опасным последствиям. Шепот смерти сочетают мутации ведьмака с разрушительной силой некромантии. Их скорость и боевые навыки не имеют равных, и, если бы они не были совершенно безумны, Континент уже был бы очищен от монстров. По какой-то причине, которую никто до конца не понимает, некромантия искажает способность ведьмака говорить, и он может только шептать ужасающим тоном.</p><p>—Альзур</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Огонь",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Яд повешенного",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Дикое желание силы",
+     "kind": "weakness",
+     "description": "<p>Шепот смерти пристрастились к силе и ради нее пойдут на все. Даже на необдуманные поступки. Их паранойя и зависимость могут быть использованы против них самих. Если они чувствуют, что отдаляются от цели, они получают штраф -5 ко всем действиям.</p>"
+    },
+    {
+     "name": "Бессмертный",
+     "kind": "ability",
+     "description": "<p>Подобно стандартной регенерации, тело Шепота смерти может регенерировать после критических ранений и даже смерти. В начале каждого раунда Шепот смерти исцеляет ПЗ, даже потерянных от некротического урона, а также лечит критические ранения. Шепоту требуется 1 ход, для исцеления Легкого критического ранения, 2 хода для Среднего критического ранения, 4 раунда для Тяжелого критического ранения и 6 раундов, чтобы исцелить Смертельное критическое ранение. Шепот смерти может исцелять только одно критическое ранение за раз, начиная с Легкого. В первом раунде регенерация стабилизирует ранение. Если Шепот убит каким-либо другим способом, кроме полного уничтожения тела огнем, он возвращается к жизни через количество недель, равное тому, на сколько ниже 0 ушло значение его ПЗ.</p>"
+    },
+    {
+     "name": "Знания - сила",
+     "kind": "ability",
+     "description": "<p>Шепот смерти - могущественный ведьмак, и не только благодаря своим манипуляциям с хаосом. Он может использовать любые знаки, в том числе и некромантические.</p>"
+    },
+    {
+     "name": "Проклятый медальон",
+     "kind": "ability",
+     "description": "<p>Проклятый медальон - это мощная магическая реликвия, созданная Шепотом смерти. Этот ведьмачий медальон содержит душу каждого существа, которое когда-либо убил носящий его, до тех пор, пока эти души не будут освобождены. Медальон является фокусирующим (5) и каждый урон, который подконтрольная нежить наносит противнику, регенерирует пользователю ПЗ в размере половины значения этого урона. Урон поглощается медальоном, и для регенерации требуется трата действия. Несмотря на всю мощь, использование этого медальона имеет свою цену. Вы постоянно слышите души умерших, которые могут всячески мешать. При использовании медальона у вас могут начаться галлюцинации по усмотрению ГМа (что не проблема для Скульптора). Под воздействием галлюцинаций, когда вы пытаетесь произнести заклинание, существует 10%-ная вероятность того, что оно просто не сработает, и вы должны будете совершить проверку Устойчивости с штрафом -1, при провале вы получаете эффект дезориентации</p>"
+    },
+    {
+     "name": "Скакун-нежить",
+     "kind": "ability",
+     "description": "<p>Шепот смерти не одинок, у него есть спутник, который принимает форму трупа лошади, и привзяан к Шепоту. Любой, кто пытается оседлать его, получает 1d6 некротического урона каждый раунд, а когда Шепот умирает, спутник умирает тоже. Этот скакун имеет характеристики боевого коня, но обладает такой же невпосприимчивостью, что и Шепот и восприимчик огню. Он также имеет удвоенный показатель Если скакун убит, он может быть поднят на следующий день силой воли Шепота.</p>"
+    },
+    {
+     "name": "Мастер ведьмак",
+     "kind": "ability",
+     "description": "<p>Шепот смерти - опытный и могущественный ведьмак. Все его профессиональные навыки ведьмака 10-го уровня, что дает ему несколько дополнительных навыков и Энергию 7.</p>"
+    },
+    {
+     "name": "Особые навыки",
+     "kind": "note",
+     "description": "<p>Сопротивление магии Верховая езда Сотворение заклинаний Скрытность Владение мечом Выживание в дикой природе 15 (основа)</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Проклятый медальон",
+     "quantity": "1",
+     "uuid": ""
+    },
+    {
+     "name": "Эссенция смерти",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.Nh9TbUmhJpJxBsfF"
+    },
+    {
+     "name": "Магические предметы",
+     "quantity": "2d6",
+     "uuid": "Compendium.vedmak.generators.RollTable.pqIpoRH2m8lBdefU"
+    },
+    {
+     "name": "Оружие Шепота",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Том магии Альзура",
+    "page": "68–69"
+   }
+  },
+  "items": [
+   {
+    "name": "Меч Шепота",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Заболевание (25%). Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "68–69"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "7d6",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "longReach",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "balanced",
+       "value": "",
+       "source": ""
+      },
+      {
+       "key": "armorPiercing",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "hTpwoaw5iyG7S3Y2"
+   },
+   {
+    "name": "Молчаливый арбалет",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Заболевание (25%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "68–69"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "10d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "Ym38LQM8XIDk3E1H"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Шёпот смерти",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set_two/wraith.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Духи"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том магии Альзура",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "xsP3mVdL4xS8pMix",
+  "name": "Рыцарь смерти",
+  "type": "monster",
+  "img": "systems/vedmak/assets/fan/bestiary/books/rycar_-smerti.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 8,
+     "mod": 0
+    },
+    "ref": {
+     "base": 10,
+     "mod": 0
+    },
+    "dex": {
+     "base": 10,
+     "mod": 0
+    },
+    "body": {
+     "base": 14,
+     "mod": 0
+    },
+    "spd": {
+     "base": 10,
+     "mod": 0
+    },
+    "emp": {
+     "base": 1,
+     "mod": 0
+    },
+    "cra": {
+     "base": 5,
+     "mod": 0
+    },
+    "will": {
+     "base": 12,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 13,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 10,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 130,
+    "max": 130
+   },
+   "sta": {
+    "value": 65,
+    "max": 65
+   },
+   "bonus": {
+    "hp": 65,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": -40,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "specter",
+   "threat": {
+    "complexity": "complex",
+    "difficulty": "hard"
+   },
+   "bounty": 5000,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "humanoid",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [
+    "bleeding",
+    "poison"
+   ],
+   "info": {
+    "height": "1.8 м",
+    "weight": "75 кг",
+    "habitat": "Руины",
+    "intelligence": "Sapient",
+    "organization": "Одиночка",
+    "senses": "Superior Night Vision",
+    "resistText": "_",
+    "immunityText": "Кровотечение, Яд, Ослепление, Отравление, Тошнота, Удушье, Болезнь, Магическое влияние, Галлюцинации, Иллюзии",
+    "susceptText": "Огонь, Яд повешенного, Неизменный путь"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 25
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "<p>Не только пользователи магии могут быть осквернены некромантией. Воины, искаженные ей, сходят с ума и бродят по Континенту, убивая всех, кто встречается у них на пути. Поскольку воины не используют магию, сами по себе они не превращаются в Рыцарей Смерти. Они искажаются сильными некромантами или из-за могущественных темных ритуалов. Рыцари смерти блуждают не в силах вымолвить ни слова, в надежде, что кто-то оборвет их жизнь. - Альзур</p>",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Огонь",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Яд повешенного",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Неизменный путь",
+     "kind": "weakness",
+     "description": "<p>У каждого Рыцаря смерти есть одна неизвестная цель. Из-за нее они отправляются в путешествие, и делают все, чтобы достичь ее. Как только Рыцарь достигает цели, его душа освобождается, и он умирает, чего жаждит каждый из них.</p>"
+    },
+    {
+     "name": "Бессмертный",
+     "kind": "ability",
+     "description": "<p>Подобно стандартной регенерации, тело Рыцаря смерти может регенерировать после критических ранений и даже смерти. В начале каждого раунда Рыцарь смерти исцеляет ПЗ, даже потерянных от некротического урона, а также лечит критические ранения. Рыцарю требуется 1 ход, для исцеления Легкого критического ранения, 2 хода для Среднего критического ранения, 4 раунда для Тяжелого критического ранения и 6 раундов, чтобы исцелить Смертельное критическое ранение. Рыцарь смерти может исцелять только одно критическое ранение за раз, начиная с Легкого. В первом раунде регенерация стабилизирует ранение. Если Рыцарь убит до достижения его цели, он возвращается к жизни через количество недель, равное тому, на сколько ниже 0 ушло значение его ПЗ.</p>"
+    },
+    {
+     "name": "Не сходит с пути",
+     "kind": "ability",
+     "description": "<p>Рыцари смерти никогда не теряются, в какой бы точке мира они ни находились. Что бы с ними ни делали, они всегда знают, где находятся.</p>"
+    },
+    {
+     "name": "Скакун-нежить",
+     "kind": "ability",
+     "description": "<p>Рыцарь смерти не одинок, у него есть спутник, который принимает форму трупа лошади, и привзяан к Рыцарю. Любой, кто пытается оседлать его, получает 1d6 некротического урона каждый раунд, а когда Рыцарь умирает, спутник умирает тоже. Этот скакун имеет характеристики боевого коня, но обладает такой же невпосприимчивостью, что и Рыцарь и восприимчик огню. Он также имеет удвоенный показатель. Если скакун убит, он может быть поднят на следующий день силой воли Рыцаря.</p>"
+    },
+    {
+     "name": "Проклятый щит",
+     "kind": "ability",
+     "description": "<p>Проклятый щит - это магический щит, сделанный из костей и плоти гуманоидного существа. Этот щит никогда не ломается, какой бы урон ему ни наносился. Несмотря на всю мощь, щит может быть опасным. Раз в день призрачные руки вылезают из щита и наносят 3d6 некротического урона цели, находящейся на дистанции ближнего боя. Владелец щита может использовать эту атаку как действие или как реакцию при защите щитом. Если владелец не «подпитывает» щит, он сам получает урон на закате дня, за минуту до полуночи.</p>"
+    },
+    {
+     "name": "Мастер-воин",
+     "kind": "ability",
+     "description": "<p>Рыцарь Смерти - это опытный и могущественный воин. Все его боевые профессиональные навыки 10-го уровня, что дает ему несколько дополнительных навыков.</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Проклятый щит",
+     "quantity": "1",
+     "uuid": ""
+    },
+    {
+     "name": "Эссенция смерти",
+     "quantity": "3d10",
+     "uuid": "Compendium.vedmak.components.Item.Nh9TbUmhJpJxBsfF"
+    },
+    {
+     "name": "Оружие рыцаря",
+     "quantity": "1",
+     "uuid": ""
+    },
+    {
+     "name": "Магические предметы",
+     "quantity": "2d6",
+     "uuid": "Compendium.vedmak.generators.RollTable.pqIpoRH2m8lBdefU"
+    }
+   ],
+   "source": {
+    "book": "Том магии Альзура",
+    "page": "72–73"
+   }
+  },
+  "items": [
+   {
+    "name": "Проклятый меч",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Заболевание (50%). Сокрушающая сила.</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "72–73"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "6d6",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "jS3QVF9hzEf13LZS"
+   },
+   {
+    "name": "Костяной арбалет",
+    "type": "weapon",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "system": {
+     "description": "<p>Заболевание (25%).</p>",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Том магии Альзура",
+      "page": "72–73"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "8d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "dF97CYZp6erFLSeZ"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Рыцарь смерти",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/monster_set/darkwarrior.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Духи"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Том магии Альзура",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "AmutigXtASH0PLb0",
+  "name": "Зебра",
+  "type": "monster",
+  "img": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/drafthorse.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 1,
+     "mod": 0
+    },
+    "ref": {
+     "base": 4,
+     "mod": 0
+    },
+    "dex": {
+     "base": 15,
+     "mod": 0
+    },
+    "body": {
+     "base": 12,
+     "mod": 0
+    },
+    "spd": {
+     "base": 14,
+     "mod": 0
+    },
+    "emp": {
+     "base": 2,
+     "mod": 0
+    },
+    "cra": {
+     "base": 1,
+     "mod": 0
+    },
+    "will": {
+     "base": 4,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 2,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 3,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 40,
+    "max": 40
+   },
+   "sta": {
+    "value": 40,
+    "max": 40
+   },
+   "bonus": {
+    "hp": 0,
+    "sta": 0,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 0,
+    "run": -6
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "beast",
+   "threat": {
+    "complexity": "simple",
+    "difficulty": "easy"
+   },
+   "bounty": 0,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "monster",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [],
+   "info": {
+    "height": "",
+    "weight": "",
+    "habitat": "",
+    "intelligence": "",
+    "organization": "",
+    "senses": "",
+    "resistText": "",
+    "immunityText": "",
+    "susceptText": "Масло против зверей"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 0
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против зверей",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Дикий",
+     "kind": "ability",
+     "description": "<p>При проверке Внимания и Выживания в дикой природе, зебры получают Инт 7 за инстинкты</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Кости животных",
+     "quantity": "1d6",
+     "uuid": "Compendium.vedmak.components.Item.1ohF86MGA5F1g7gU"
+    },
+    {
+     "name": "Кожа",
+     "quantity": "1d6/2",
+     "uuid": "Compendium.vedmak.components.Item.kV2uEg91goGQOtYI"
+    },
+    {
+     "name": "Сырое мясо",
+     "quantity": "1d6",
+     "uuid": "Compendium.vedmak.gear.Item.Wf4hZYg0o9ObZflc"
+    }
+   ],
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "140"
+   }
+  },
+  "items": [
+   {
+    "name": "Копыта",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/cougar-pounce-stalk-black.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Офир и Зеррикания",
+      "page": "140"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "2d6",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "TgcfOPCrzLbZGT6j"
+   },
+   {
+    "name": "Удар с разбега",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/cougar-pounce-stalk-black.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Офир и Зеррикания",
+      "page": "140"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "1d6",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "staggering",
+       "value": "50%",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "8uZeMS31IIIRBa0K"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Зебра",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/farmanimals2022/drafthorse.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Звери"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Офир и Зеррикания",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "geUkFCNOx7MxuEQA",
+  "name": "Лев",
+  "type": "monster",
+  "img": "systems/vedmak/assets/tokens/monster_token/wildernessanimals2022/panther.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 1,
+     "mod": 0
+    },
+    "ref": {
+     "base": 4,
+     "mod": 0
+    },
+    "dex": {
+     "base": 6,
+     "mod": 0
+    },
+    "body": {
+     "base": 7,
+     "mod": 0
+    },
+    "spd": {
+     "base": 7,
+     "mod": 0
+    },
+    "emp": {
+     "base": 1,
+     "mod": 0
+    },
+    "cra": {
+     "base": 1,
+     "mod": 0
+    },
+    "will": {
+     "base": 4,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 9,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 4,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 25,
+    "max": 25
+   },
+   "sta": {
+    "value": 20,
+    "max": 20
+   },
+   "bonus": {
+    "hp": 0,
+    "sta": -5,
+    "vigor": 0,
+    "stun": -1,
+    "rec": -1,
+    "enc": -20,
+    "run": -2
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "beast",
+   "threat": {
+    "complexity": "simple",
+    "difficulty": "easy"
+   },
+   "bounty": 0,
+   "armor": 0,
+   "vigor": 0,
+   "bodyType": "monster",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [],
+   "info": {
+    "height": "",
+    "weight": "",
+    "habitat": "",
+    "intelligence": "",
+    "organization": "",
+    "senses": "",
+    "resistText": "",
+    "immunityText": "",
+    "susceptText": "Масло против зверей"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 0
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против зверей",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Дикий",
+     "kind": "ability",
+     "description": "<p>При проверке Внимания и Выживания в дикой природе, тигры получают Инт 7 за инстинкты</p>"
+    },
+    {
+     "name": "Ночное зрение",
+     "kind": "ability",
+     "description": "<p>Львы действуют в зонах со слабым освещением без штрафов</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Кости животных",
+     "quantity": "1d6",
+     "uuid": "Compendium.vedmak.components.Item.1ohF86MGA5F1g7gU"
+    },
+    {
+     "name": "Шкура льва",
+     "quantity": "1",
+     "uuid": ""
+    },
+    {
+     "name": "Сырое мясо",
+     "quantity": "1d6",
+     "uuid": "Compendium.vedmak.gear.Item.Wf4hZYg0o9ObZflc"
+    },
+    {
+     "name": "Печень зверя",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "143"
+   }
+  },
+  "items": [
+   {
+    "name": "Когти",
+    "type": "weapon",
+    "img": "icons/creatures/claws/claw-bear-paw-swipe-brown.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Офир и Зеррикания",
+      "page": "143"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "2d6+2",
+     "damageTypes": [
+      "slashing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 2,
+     "effects": [],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "bDihHQFNaEsyPQZg"
+   },
+   {
+    "name": "Укус",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Офир и Зеррикания",
+      "page": "143"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "3d6+4",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "50%",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "9pdtmMGTMkMqWcTp"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Лев",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/wildernessanimals2022/panther.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Звери"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Офир и Зеррикания",
+    "layer": "books"
+   }
+  }
+ },
+ {
+  "_id": "kMXuf4c89BE944fZ",
+  "name": "Носорог",
+  "type": "monster",
+  "img": "systems/vedmak/assets/tokens/monster_token/wildernessanimals2022/bison2.webp",
+  "system": {
+   "stats": {
+    "int": {
+     "base": 1,
+     "mod": 0
+    },
+    "ref": {
+     "base": 4,
+     "mod": 0
+    },
+    "dex": {
+     "base": 4,
+     "mod": 0
+    },
+    "body": {
+     "base": 10,
+     "mod": 0
+    },
+    "spd": {
+     "base": 6,
+     "mod": 0
+    },
+    "emp": {
+     "base": 4,
+     "mod": 0
+    },
+    "cra": {
+     "base": 1,
+     "mod": 0
+    },
+    "will": {
+     "base": 6,
+     "mod": 0
+    },
+    "luck": {
+     "base": 0,
+     "mod": 0
+    }
+   },
+   "skills": {
+    "awareness": {
+     "value": 5,
+     "mod": 0,
+     "profession": false
+    },
+    "wilderness": {
+     "value": 2,
+     "mod": 0,
+     "profession": false
+    },
+    "deduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "monsterLore": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "education": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "streetwise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "teaching": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "tactics": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "business": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "etiquette": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langCommon": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langElder": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "langDwarven": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "melee": {
+     "value": 6,
+     "mod": 0,
+     "profession": false
+    },
+    "brawling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "riding": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "staffSpear": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "smallBlades": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "swordsmanship": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "sailing": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "dodge": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    },
+    "athletics": {
+     "value": 2,
+     "mod": 0,
+     "profession": false
+    },
+    "sleight": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "stealth": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crossbow": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "archery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "physique": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "endurance": {
+     "value": 7,
+     "mod": 0,
+     "profession": false
+    },
+    "gambling": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "grooming": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "performance": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "fineArts": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "leadership": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "deceit": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "perception": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "seduction": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "persuasion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "charisma": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "alchemy": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "picklock": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "trapcraft": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "crafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "disguise": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "firstAid": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "forgery": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "intimidation": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "hexWeaving": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "ritualCrafting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistMagic": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "resistCoercion": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "spellCasting": {
+     "value": 0,
+     "mod": 0,
+     "profession": false
+    },
+    "courage": {
+     "value": 8,
+     "mod": 0,
+     "profession": false
+    }
+   },
+   "hp": {
+    "value": 60,
+    "max": 60
+   },
+   "sta": {
+    "value": 60,
+    "max": 60
+   },
+   "bonus": {
+    "hp": 20,
+    "sta": 20,
+    "vigor": 0,
+    "stun": 0,
+    "rec": 0,
+    "enc": 20,
+    "run": 0
+   },
+   "deathSaves": {
+    "penalty": 0
+   },
+   "shield": {
+    "value": 0,
+    "max": 0
+   },
+   "monsterClass": "beast",
+   "threat": {
+    "complexity": "simple",
+    "difficulty": "easy"
+   },
+   "bounty": 0,
+   "armor": 4,
+   "vigor": 0,
+   "bodyType": "monster",
+   "size": "medium",
+   "materialWeakness": "auto",
+   "resistances": [],
+   "susceptibilities": [],
+   "immunities": [],
+   "info": {
+    "height": "",
+    "weight": "",
+    "habitat": "",
+    "intelligence": "",
+    "organization": "",
+    "senses": "",
+    "resistText": "",
+    "immunityText": "",
+    "susceptText": "Масло против зверей"
+   },
+   "knowledge": {
+    "commonDC": 0,
+    "witcherDC": 0
+   },
+   "description": "",
+   "commonKnowledge": "",
+   "witcherKnowledge": "",
+   "notes": "",
+   "abilities": [
+    {
+     "name": "Масло против зверей",
+     "kind": "weakness",
+     "description": ""
+    },
+    {
+     "name": "Дикий",
+     "kind": "ability",
+     "description": "<p>При проверке Внимания и Выживания в дикой природе, носороги получают Инт 7 за инстинкты</p>"
+    },
+    {
+     "name": "Атака с разбега",
+     "kind": "ability",
+     "description": "<p>Является действием полного хода. Если цель окажется более чем в 10 м от носорога, он может совершить атаку рогом с разбега со штрафом -4, нанося 8d6 урона. Если цель при отлете во что-то врезается, она получает таранящий урон, как от лошади. Эта атака игнорирует половину брони и снижает ее ПБ вдвое.</p>"
+    }
+   ],
+   "loot": [
+    {
+     "name": "Слоновая кость",
+     "quantity": "1d6/3",
+     "uuid": ""
+    },
+    {
+     "name": "Сырое мясо",
+     "quantity": "1d6",
+     "uuid": "Compendium.vedmak.gear.Item.Wf4hZYg0o9ObZflc"
+    },
+    {
+     "name": "Звериная печень",
+     "quantity": "1",
+     "uuid": ""
+    }
+   ],
+   "source": {
+    "book": "Офир и Зеррикания",
+    "page": "144"
+   }
+  },
+  "items": [
+   {
+    "name": "Рог",
+    "type": "weapon",
+    "img": "icons/creatures/abilities/bull-head-horns-glowing.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 0,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Офир и Зеррикания",
+      "page": "144"
+     },
+     "category": "natural",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "4d6+2",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 0,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "armorPiercing",
+       "value": "",
+       "source": ""
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "_id": "C9BxzZLbdKUVf1XD"
+   }
+  ],
+  "prototypeToken": {
+   "name": "Носорог",
+   "displayName": 20,
+   "actorLink": false,
+   "width": 1,
+   "height": 1,
+   "texture": {
+    "src": "systems/vedmak/assets/tokens/monster_token/wildernessanimals2022/bison2.webp",
+    "scaleX": 1,
+    "scaleY": 1
+   },
+   "disposition": -1,
+   "displayBars": 20,
+   "bar1": {
+    "attribute": "hp"
+   },
+   "bar2": {
+    "attribute": "sta"
+   },
+   "lockRotation": false
+  },
+  "folder": [
+   "Звери"
+  ],
+  "flags": {
+   "vedmak": {
+    "origin": "Офир и Зеррикания",
     "layer": "books"
    }
   }
