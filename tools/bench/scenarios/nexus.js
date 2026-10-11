@@ -67,6 +67,26 @@ const ids = pc.groups.flatMap(g => [...g.scenes, ...g.subs.flatMap(s => s.scenes
 ok(!ids.includes(from.id) && ids.includes(to.id), "закрытой активной сцены у игрока на доске нет, открытая — есть");
 ok(pc.here?.name === "Неизвестное место" || pc.here?.id !== from.id, "в бирке — без названия закрытой сцены");
 
+stepName("этажи");
+// Этажи сцены (Scene Levels ядра v14) — под биркой: сверху вниз, щелчок показывает этаж
+const lv = { cellar: foundry.utils.randomID(), ground: foundry.utils.randomID(), attic: foundry.utils.randomID() };
+const tower = await mk("Прогон: нексус - башня", { initialLevel: lv.ground, levels: [
+  { _id: lv.cellar, name: "Подвал", elevation: { bottom: -20, top: 0 } },
+  { _id: lv.ground, name: "Первый этаж", elevation: { bottom: 0, top: 20 } },
+  { _id: lv.attic, name: "Чердак", elevation: { bottom: 20, top: 40 } }] });
+const startView = canvas.scene;
+await tower.view(); await wait(1500);
+const rows = () => [...document.querySelectorAll("#vedmak-nexus .nx-level")];
+ok(rows().map(r => r.dataset.levelId).join() === [lv.attic, lv.ground, lv.cellar].join(), `под биркой три этажа сверху вниз (${rows().map(r => r.textContent.trim()).join(", ")})`);
+ok(rows().find(r => r.classList.contains("view"))?.dataset.levelId === canvas.level?.id, "текущий этаж отмечен");
+rows().find(r => r.dataset.levelId === lv.attic)?.querySelector("a").click(); await wait(1500);
+ok(canvas.level?.id === lv.attic, "щелчок по «Чердак» показывает чердак");
+ok(rows().find(r => r.classList.contains("view"))?.dataset.levelId === lv.attic, "отметка переехала на чердак");
+if (startView) await startView.view();
+await wait(800);
+ok(!document.querySelector("#vedmak-nexus .nx-levels") || (canvas.scene?.availableLevels?.size ?? 0) > 1, "на сцене с одним этажом списка нет");
+await tower.delete();
+
 await game.settings.set("vedmak", "sceneNexusOpen", false);
 if (startActive) await startActive.activate();
 await wait(600);

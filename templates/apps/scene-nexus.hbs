@@ -12,6 +12,17 @@
       <small>Игроки</small><b>{{live.name}}</b>
     </a>
     {{/if}}
+    {{#if levels}}
+    {{!-- Этажи текущей сцены (Scene Levels): сверху вниз, щелчок — показать этаж --}}
+    <ol class="nx-levels" aria-label="Этажи">
+      {{#each levels}}
+      <li class="nx-level {{#if view}}view{{/if}}" data-level-id="{{id}}">
+        <a data-action="viewLevel" data-tooltip="{{#if view}}Вы смотрите этот этаж{{else}}Показать этаж{{/if}}">{{name}}</a>
+        {{#if users.length}}<ul class="nx-pips">{{#each users}}<li style="--pip: {{color}}" data-tooltip="{{name}}">{{letter}}</li>{{/each}}</ul>{{/if}}
+      </li>
+      {{/each}}
+    </ol>
+    {{/if}}
   </div>
 
   {{#if open}}

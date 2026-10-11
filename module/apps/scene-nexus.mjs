@@ -83,7 +83,8 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       activate: SceneNexus.#onActivate,
       travel: SceneNexus.#onTravel,
       access: SceneNexus.#onAccess,
-      configure: SceneNexus.#onConfigure
+      configure: SceneNexus.#onConfigure,
+      viewLevel: SceneNexus.#onViewLevel
     }
   };
 
@@ -117,11 +118,13 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const hook of ["createScene", "updateScene", "deleteScene", "canvasReady", "renderSceneNavigation",
       "createToken", "deleteToken", "userConnected"]) Hooks.on(hook, again);
     for (const hook of ["createFolder", "updateFolder", "deleteFolder"]) Hooks.on(hook, f => { if (f.type === "Scene") again(); });
+    // Этажи сцены (Scene Levels ядра v14; модуль Levels переносит в них старые этажи): список под биркой
+    for (const hook of ["createLevel", "updateLevel", "deleteLevel"]) Hooks.on(hook, again);
     // Видимость жетона меняет, кого можно перевести
     Hooks.on("updateToken", (doc, changes) => { if ("hidden" in changes) again(); });
     // Выделение жетонов — кого переносить; перерисовка только при открытом окне места
     Hooks.on("controlToken", () => { if (SceneNexus.#instance?.pop) again(); });
-    Hooks.on("updateUser", (user, changes) => { if ("viewedScene" in changes || "role" in changes) again(); });
+    Hooks.on("updateUser", (user, changes) => { if ("viewedScene" in changes || "viewedLevel" in changes || "role" in changes) again(); });
     Hooks.once("ready", () => SceneNexus.refresh());
     registerGMHandler("nexusTravel", travelForUser);
   }
@@ -171,6 +174,21 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       (out[u.viewedScene] ??= []).push({ name: u.name, letter: u.name[0], color: u.color.css });
     }
     return out;
+  }
+
+  /**
+   * Этажи сцены сверху вниз — как в навигации Foundry, которую заменяет нексус: доступные пользователю (ведущему — все),
+   * текущий отмечен, у каждого — кто из игроков на нём. Один этаж — списка нет.
+   */
+  #levels(scene) {
+    const available = Array.from(scene.availableLevels ?? []);
+    if (available.length < 2) return null;
+    const current = canvas.scene === scene ? canvas.level?.id : null;
+    return available.toReversed().map(level => ({
+      id: level.id, name: level.name || "Этаж", view: level.id === current,
+      users: game.users.filter(u => u.active && u.viewedScene === scene.id && u.viewedLevel === level.id)
+        .map(u => ({ name: u.name, letter: u.name[0], color: u.color.css }))
+    }));
   }
 
   #item(scene, pips, gm, prefixes = []) {
@@ -223,6 +241,7 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
         : { id: here.id, name: "Неизвестное место", thumb: "", initial: "?" }) : null,
       live: live && live !== here && known(live) ? { id: live.id, name: label(live) } : null,
       users: here ? pips[here.id] ?? [] : [],
+      levels: here && known(here) ? this.#levels(here) : null,
       groups, total: shown.length,
       pop: this.open && this.pop ? this.#popContext(game.scenes.get(this.pop), gm) : null
     };
@@ -317,6 +336,12 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     if (folded.has(id)) folded.delete(id); else folded.add(id);
     await game.settings.set(SYSTEM_ID, "sceneNexusFolded", [...folded]);
     this.render();
+  }
+
+  /** Показать этаж текущей сцены (как в навигации Foundry: только себе). */
+  static #onViewLevel(event, target) {
+    const levelId = target.closest("[data-level-id]")?.dataset.levelId;
+    if (levelId && levelId !== canvas.level?.id) canvas.scene?.view({ level: levelId });
   }
 
   static async #onView(event, target) {
