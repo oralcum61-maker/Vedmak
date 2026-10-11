@@ -48,6 +48,9 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
    кожу, фактуры и тени на каждый кадр. Цена — шрифты в окне сглаживаются в оттенках серого (PLAN 4.35).
    Худ не двигается — ему слой не нужен. */
 .application.vedmak:not(.vedmak-hud) { will-change: transform; }
+/* Невидимый прогрев листа после входа (module/apps/warmup.mjs, PLAN 4.176): нарисован и растеризован, но не виден
+   и мышь не ловит. Не opacity: 0 — полностью прозрачное браузер не растеризует, и прогрева бы не было. */
+.application.vd-prewarm { opacity: .01 !important; pointer-events: none !important; animation: none !important; transition: none !important; }
 
 .vedmak.sheet .window-content {
   position: relative;

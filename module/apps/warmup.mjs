@@ -63,11 +63,36 @@ async function decode(urls, perIdle = 4) {
   return list.length;
 }
 
+/**
+ * Лист персонажа — один раз невидимо (PLAN 4.176). Замер (трасса открытия листа): собственный код листа — 3–4 мс,
+ * а первое открытие за сессию стоило 60–75 мс до кадра и ~480 мс работы видеокарты — компиляция шейдеров под эффекты
+ * листа, шаблоны, первая раскладка; повторное — ~20 мс. После невидимого открытия первое настоящее — как повторное.
+ * Греется отдельный экземпляр листа со своим id: настоящий лист игрока он не трогает, даже если тот открыт в это время.
+ */
+async function prewarmSheet() {
+  if (document.hidden) return null;
+  const owned = a => a?.type === "character" && a.testUserPermission(game.user, "OBSERVER");
+  const actor = [game.user.character, ...(canvas?.scene?.tokens.map(t => t.actor) ?? []), ...game.actors].find(owned);
+  if (!actor) return null;
+  await idle();
+  const sheet = new actor.sheet.constructor({ document: actor, id: "vd-prewarm-{id}", classes: ["vd-prewarm"] });
+  try {
+    await sheet.render({ force: true });
+    // Два кадра — лист нарисован и растеризован; ещё немного — видеокарта доделывает своё
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    await new Promise(resolve => setTimeout(resolve, 400));
+  } catch { /* прогрев не обязателен */ } finally {
+    if (sheet.rendered) await sheet.close({ animate: false }).catch(() => {});
+  }
+  return actor.name;
+}
+
 /** Запустить прогрев после входа в мир; сцене и интерфейсу — время собраться. */
 export function startWarmup() {
   setTimeout(async () => {
     const t0 = performance.now();
     const n = await decode([...cssImages(), ...gameImages()]);
-    console.debug(`${SYSTEM_ID} | прогрев: ${n} картинок за ${Math.round(performance.now() - t0)} мс`);
+    const sheet = await prewarmSheet();
+    console.debug(`${SYSTEM_ID} | прогрев: ${n} картинок${sheet ? `, лист «${sheet}»` : ""} за ${Math.round(performance.now() - t0)} мс`);
   }, 3000);
 }
