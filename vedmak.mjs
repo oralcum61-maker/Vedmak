@@ -47,6 +47,7 @@ import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
 import { SceneNexus } from "./module/apps/scene-nexus.mjs";
+import { VedmakPause } from "./module/apps/pause.mjs";
 import { registerTokenFlip, flipToken } from "./module/apps/token-flip.mjs";
 import { registerFxSettings, registerFx } from "./module/fx/fx.mjs";
 import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
@@ -65,6 +66,8 @@ import { registerZoneEffectHooks } from "./module/magic/zone-effects.mjs";
 import * as investigation from "./module/investigation/investigation.mjs";
 
 Hooks.once("init", () => {
+  // Пауза — медитация ведьмака (module/apps/pause.mjs)
+  CONFIG.ui.pause = VedmakPause;
   console.log(`${SYSTEM_ID} | Инициализация системы «Ведьмак: НРИ»`);
 
   CONFIG.VEDMAK = {

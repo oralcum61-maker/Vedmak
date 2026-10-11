@@ -145,9 +145,7 @@ body.vd-hud .nx-board { max-height: min(860px, calc(100vh / var(--ui-scale, 1) -
 .nx-pop-meta { margin: -4px 0 0; font-size: 11.5px; color: var(--nx-ash); }
 .nx-cap { font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--nx-dim); margin-bottom: 6px; }
 .nx-carry ul { display: flex; flex-wrap: wrap; gap: 6px; }
-.nx-carry li { width: 36px; height: 36px; border-radius: 50%; cursor: var(--cursor-pointer, pointer); opacity: .35; filter: grayscale(1); transition: opacity .15s, filter .15s;
-  box-shadow: 0 0 0 1px #050506; }
-.nx-carry li.on { opacity: 1; filter: none; box-shadow: 0 0 0 1px #050506, 0 0 0 2.5px #bdb6a6; }
+.nx-carry li { width: 36px; height: 36px; border-radius: 50%; box-shadow: 0 0 0 1px #050506, 0 0 0 2.5px #bdb6a6; }
 .nx-carry img { width: 100%; height: 100%; border: 0; border-radius: 50%; object-fit: cover; }
 .nx-acts { display: grid; gap: 5px; }
 #vedmak-nexus .nx-acts button { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 8px; margin: 0; height: auto; min-height: 34px; padding: 8px 11px;

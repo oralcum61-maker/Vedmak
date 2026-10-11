@@ -30,7 +30,8 @@
     "styles/vedmak.css",
     "styles/sheet.css",
     "styles/hud.css",
-    "styles/nexus.css"
+    "styles/nexus.css",
+    "styles/pause.css"
   ],
   "languages": [
     {

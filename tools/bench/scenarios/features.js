@@ -45,9 +45,9 @@ ok(!BF.bearFormEffect(bear) && bear.system.hp.max === max0, "выход из ф�
 
 stepName("расследование");
 const list = INV.mysteries();
-const m = INV.newMystery(); const c = INV.newClue(); c.dc = 1; m.clues.push(c); m.participants.push(smith.uuid); m.visible = true;
+const m = INV.newMystery(); const c = INV.newClue(); c.dc = -5; // ниже любого броска: критический провал d10 мог не превысить СЛ 1 m.clues.push(c); m.participants.push(smith.uuid); m.visible = true;
 await INV.saveMysteries([...list, m]);
 await game.vedmak.investigation.evidenceCheck?.(smith, m.id, c.id);
 await wait(1500);
-ok(INV.mysteries().find(x => x.id === m.id)?.clues[0]?.found === true, "улика со СЛ 1 разгадана броском у ведущего");
+ok(INV.mysteries().find(x => x.id === m.id)?.clues[0]?.found === true, "улика с заведомо лёгкой СЛ разгадана броском у ведущего");
 await INV.saveMysteries(list);

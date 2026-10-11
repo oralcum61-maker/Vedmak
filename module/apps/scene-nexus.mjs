@@ -82,7 +82,6 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       view: SceneNexus.#onView,
       activate: SceneNexus.#onActivate,
       travel: SceneNexus.#onTravel,
-      carry: SceneNexus.#onCarry,
       access: SceneNexus.#onAccess,
       configure: SceneNexus.#onConfigure
     }
@@ -120,6 +119,8 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const hook of ["createFolder", "updateFolder", "deleteFolder"]) Hooks.on(hook, f => { if (f.type === "Scene") again(); });
     // Видимость жетона меняет, кого можно перевести
     Hooks.on("updateToken", (doc, changes) => { if ("hidden" in changes) again(); });
+    // Выделение жетонов — кого переносить; перерисовка только при открытом окне места
+    Hooks.on("controlToken", () => { if (SceneNexus.#instance?.pop) again(); });
     Hooks.on("updateUser", (user, changes) => { if ("viewedScene" in changes || "role" in changes) again(); });
     Hooks.once("ready", () => SceneNexus.refresh());
     registerGMHandler("nexusTravel", travelForUser);
@@ -149,9 +150,8 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Свёрнутые папки — у клиента. */
   get folded() { return new Set(setting("sceneNexusFolded", [])); }
 
-  /** Сцена во всплывающем окне и снятые отметки жетонов для перевода. */
+  /** Сцена во всплывающем окне. */
   pop = null;
-  carryOff = new Set();
   query = "";
 
   _insertElement(element) {
@@ -228,17 +228,20 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     };
   }
 
-  /** Окно сцены: что можно сделать и кого перевести. */
+  /**
+   * Окно сцены: что можно сделать и кого перенести. Переносятся только выделенные жетоны текущей сцены — у игрока
+   * только свои (автор: «только выделенные токены»; перевода всех разом нет).
+   */
   #popContext(scene, gm) {
     if (!scene) return null;
-    const source = gm ? (game.scenes.active ?? canvas.scene) : canvas.scene;
-    const tokens = scene === source ? [] : partyTokens(source, gm ? null : game.user).map(t => ({
-      uuid: t.uuid, name: t.name, img: t.texture.src, on: !this.carryOff.has(t.uuid)
-    }));
+    const source = canvas.scene;
+    const tokens = scene === source ? [] : (canvas.tokens?.controlled ?? []).map(t => t.document)
+      .filter(t => t.parent === source && (gm || t.isOwner))
+      .map(t => ({ uuid: t.uuid, name: t.name, img: t.texture.src }));
     return {
       id: scene.id, name: gm ? scene.name : (scene.navName || scene.name), thumb: scene.thumb,
       folder: scene.folder?.name ?? "", active: scene.active, view: scene.isView, open: openToPlayers(scene),
-      source: source?.name ?? "", tokens, carrying: tokens.filter(t => t.on).length,
+      source: source?.name ?? "", here: scene === source, tokens,
       entry: scene.regions.find(r => ENTRY_RE.test(r.name))?.name ?? ""
     };
   }
@@ -300,7 +303,6 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
   static #onPick(event, target) {
     const id = target.closest("[data-scene-id]").dataset.sceneId;
     this.pop = this.pop === id ? null : id;
-    this.carryOff.clear();
     this.render();
   }
 
@@ -329,19 +331,22 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     ui.notifications.info(`Игроки на сцене «${scene.name}».`);
   }
 
-  /** Перевести отряд: ведущий — отмеченные жетоны и всех игроков; игрок — себя со своими жетонами. */
+  /**
+   * Перенести выделенные жетоны. Ведущий: жетоны уходят на сцену, за ними — их владельцы-игроки и сам ведущий; остальные
+   * игроки остаются где были. Игрок: свои выделенные жетоны и сам.
+   */
   static async #onTravel() {
     const scene = game.scenes.get(this.pop);
     if (!scene) return;
-    const ctx = this.#popContext(scene, game.user.isGM);
-    const uuids = ctx.tokens.filter(t => t.on).map(t => t.uuid);
+    const uuids = this.#popContext(scene, game.user.isGM).tokens.map(t => t.uuid);
     this.pop = null;
     if (game.user.isGM) {
       const tokens = uuids.map(u => fromUuidSync(u)).filter(Boolean);
+      const owners = game.users.filter(u => u.active && !u.isGM && tokens.some(t => t.testUserPermission(u, "OWNER")));
       const moved = await carryTokens(scene, tokens);
-      if (!scene.active) await scene.activate();
-      else { scene.pullUsers(game.users); await scene.view(); }
-      ui.notifications.info(`Отряд на сцене «${scene.name}»${moved ? `: перенесено жетонов — ${moved}` : ""}.`);
+      if (owners.length) scene.pullUsers(owners);
+      await scene.view();
+      if (moved) ui.notifications.info(`На сцену «${scene.name}» перенесено жетонов: ${moved}.`);
       return;
     }
     // Игрок переходит сам, без вопроса ведущему. Создавать жетоны на другой сцене Foundry разрешает только ведущему
@@ -351,12 +356,6 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       else ui.notifications.warn("Ведущего нет в игре — Foundry не даёт игрокам переносить жетоны между сценами. Вы перешли без жетона.");
     }
     await scene.view();
-  }
-
-  static #onCarry(event, target) {
-    const uuid = target.dataset.uuid;
-    if (this.carryOff.has(uuid)) this.carryOff.delete(uuid); else this.carryOff.add(uuid);
-    this.render();
   }
 
   /** Открыть или закрыть сцену игрокам: уровень «по умолчанию» — «ограниченный» или «нет». */

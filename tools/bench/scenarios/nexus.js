@@ -30,20 +30,24 @@ ok(places().includes("прогон: нексус - переименована") 
 await extra.delete(); await tick();
 ok(!places().includes("прогон: нексус - переименована"), "удалённая сцена ушла");
 
-stepName("перевод отряда");
+stepName("перенос выделенных");
 await from.activate();
 for (let i = 0; i < 40 && !(canvas.ready && canvas.scene?.id === from.id); i++) await wait(250);
 const player = game.users.find(u => !u.isGM);
 const hero = await Actor.create({ name: "Прогон: путник", type: "character", folder: folder.id, ownership: { default: 0, [player.id]: 3 } });
 const td = await hero.getTokenDocument({ x: 300, y: 300, actorLink: true });
-await from.createEmbeddedDocuments("Token", [td.toObject()]); await tick();
+const [heroTok] = await from.createEmbeddedDocuments("Token", [td.toObject()]);
+const [extraTok] = await from.createEmbeddedDocuments("Token", [{ ...td.toObject(), x: 500, name: "Прогон: не выделен" }]); await tick();
 document.querySelector(`#vedmak-nexus .nx-place[data-scene-id="${to.id}"]`).click(); await tick();
-ok(!!document.querySelector("#vedmak-nexus .nx-pop .nx-carry li.on"), "в окне места — жетон отряда, отмечен");
+ok(!document.querySelector("#vedmak-nexus .nx-pop [data-action=travel]"), "без выделения кнопки переноса нет");
+canvas.tokens.releaseAll(); heroTok.object.control({ releaseOthers: true }); await wait(600);
+ok(document.querySelectorAll("#vedmak-nexus .nx-pop .nx-carry li").length === 1, "в окне места — только выделенный жетон");
 document.querySelector("#vedmak-nexus .nx-pop [data-action=travel]").click();
-for (let i = 0; i < 40 && game.scenes.active?.id !== to.id; i++) await wait(250);
+for (let i = 0; i < 40 && canvas.scene?.id !== to.id; i++) await wait(250);
 await wait(800);
-ok(game.scenes.active?.id === to.id, "сцена стала активной");
-ok(to.tokens.some(t => t.actorId === hero.id) && !from.tokens.some(t => t.actorId === hero.id), "жетон перенесён");
+ok(game.scenes.active?.id === from.id, "активная сцена не сменилась — всех не переносит");
+ok(from.tokens.has(extraTok.id), "невыделенный жетон остался");
+ok(to.tokens.some(t => t.actorId === hero.id) && !from.tokens.has(heroTok.id), "выделенный жетон перенесён");
 
 stepName("доступ игрокам");
 const { openToPlayers } = await import("/systems/vedmak/module/apps/scene-nexus.mjs");

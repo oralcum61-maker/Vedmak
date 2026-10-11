@@ -54,26 +54,23 @@
         <h3>{{pop.name}}</h3>
         <p class="nx-pop-meta">{{#if pop.folder}}{{pop.folder}}{{/if}}{{#if pop.active}} · игроки здесь{{/if}}{{#if pop.view}} · вы смотрите{{/if}}</p>
 
-        {{#if pop.tokens.length}}
+        {{#unless pop.here}}
         <div class="nx-carry">
-          <div class="nx-cap">{{#if gm}}Перевести с «{{pop.source}}»{{else}}С собой{{/if}}</div>
-          <ul>
-            {{#each pop.tokens}}
-            <li class="{{#if on}}on{{/if}}" data-action="carry" data-uuid="{{uuid}}" data-tooltip="{{name}}"><img src="{{img}}" alt="{{name}}"></li>
-            {{/each}}
-          </ul>
+          {{#if pop.tokens.length}}
+          <div class="nx-cap">Перенести выделенные</div>
+          <ul>{{#each pop.tokens}}<li data-tooltip="{{name}}"><img src="{{img}}" alt="{{name}}"></li>{{/each}}</ul>
+          {{else}}<p class="nx-hint">Выделите жетоны на сцене — их можно будет перенести сюда.</p>{{/if}}
         </div>
-        {{/if}}
+        {{/unless}}
 
         <div class="nx-acts">
+          {{#if pop.tokens.length}}<button type="button" class="nx-go" data-action="travel">{{#if gm}}Перенести сюда{{else}}Перейти с жетоном{{/if}} <small>жетонов: {{pop.tokens.length}}</small></button>{{/if}}
           {{#if gm}}
-          <button type="button" class="nx-go" data-action="travel">Перевести отряд <small>{{#if pop.carrying}}жетонов: {{pop.carrying}} и все игроки{{else}}все игроки, без жетонов{{/if}}</small></button>
-          {{#unless pop.active}}<button type="button" data-action="activate">Сделать активной <small>игроки без жетонов</small></button>{{/unless}}
+          {{#unless pop.active}}<button type="button" data-action="activate">Сделать активной <small>игроки — без жетонов</small></button>{{/unless}}
           {{#unless pop.view}}<button type="button" data-action="view">Посмотреть самому</button>{{/unless}}
           <button type="button" class="nx-access {{#if pop.open}}on{{/if}}" data-action="access">{{#if pop.open}}Открыта игрокам{{else}}Закрыта от игроков{{/if}} <small>{{#if pop.open}}закрыть{{else}}открыть{{/if}}</small></button>
           <button type="button" data-action="configure">Настройки сцены</button>
           {{else}}
-          {{#if pop.tokens.length}}<button type="button" class="nx-go" data-action="travel">Перейти с персонажем <small>сразу, вместе с жетоном</small></button>{{/if}}
           {{#unless pop.view}}<button type="button" data-action="view">Перейти посмотреть</button>{{/unless}}
           {{/if}}
         </div>

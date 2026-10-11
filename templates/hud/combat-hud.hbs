@@ -4,7 +4,7 @@
 {{#*inline "hmSock"}}
 <a class="hm-sock{{#if s.spell}} spell{{/if}}{{#unless s}} empty{{/unless}}" data-index="{{index}}"
    {{#if s}}data-action="socket" data-key="{{s.key}}" data-type="{{s.type}}" data-kind="{{s.kind}}" data-item-id="{{s.itemId}}"
-   data-tooltip="{{s.tip}}<br><i>Щелчок — {{#if s.spell}}сотворить{{else}}{{s.verb}}{{/if}}, Shift — без окна. Сюда можно перетащить удар или заклинание</i>"
+   data-tooltip="{{s.tip}}"
    {{else}}data-tooltip="Пустое гнездо: перетащите сюда удар из «+» или заклинание из гримуара"{{/if}}>
   {{#if s}}<img src="{{s.img}}" alt=""><b><span>{{s.base}}</span></b>{{/if}}<i class="hm-sflash"></i>
 </a>
