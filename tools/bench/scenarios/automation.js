@@ -9,12 +9,7 @@ const setAbility = async (actor, values) => {
   await prof.update({ "system.branches": prof.toObject().system.branches.map(b => ({ ...b, abilities: b.abilities.map(a => ({ ...a, value: values[a.name] ?? a.value })) })) });
 };
 // Способности берсерка — проверки против СЛ самоконтроля (≈ 23) при основе ≈ 15: случайные попытки подряд проваливались
-// примерно в каждом четвёртом прогоне. Кости заданы: d10 = ceil((1 − u)·10) — 10 со взрывом и 5 (итог основа + 15)
-const surely = async fn => {
-  const orig = CONFIG.Dice.randomUniform, q = [0.05, 0.55];
-  CONFIG.Dice.randomUniform = () => q.length ? q.shift() : orig();
-  try { return await fn(); } finally { CONFIG.Dice.randomUniform = orig; }
-};
+// примерно в каждом четвёртом прогоне. Кости заданы помощником surely (lib/common.js): 10 со взрывом и 5 — итог основа + 15
 const abilityIndex = (actor, name) => {
   const br = actor.system.profession.system.branches;
   for (let b = 0; b < br.length; b++) for (let i = 0; i < br[b].abilities.length; i++) if (br[b].abilities[i].name === name) return [b, i];

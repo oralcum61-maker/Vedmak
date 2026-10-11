@@ -24,7 +24,8 @@ await v.system.race.update({ "system.powers": v.system.race.system.toObject().po
 for (let i = 0; i < 8 && !TF.trueFormEffect(v); i++) {
   await v.update({ "system.blood.value": v.system.blood.max });
   await v.unsetFlag("vedmak", "trueFormBlocked"); await v.unsetFlag("vedmak", "trueFormReady");
-  await TF.transform(v, { skipDialog: true }); await wait(400);
+  // 3 + d10 против СЛ 14 проходит только взрывом десятки (~10% за попытку): кость подкручена
+  await surely(() => TF.transform(v, { skipDialog: true })); await wait(400);
 }
 ok(!!TF.trueFormEffect(v), "превращение удалось");
 ok(v.system.hp.value === v.system.hp.max, `вход в форму раненым — все ПЗ (${v.system.hp.value}/${v.system.hp.max})`);

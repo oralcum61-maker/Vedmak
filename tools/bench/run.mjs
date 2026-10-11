@@ -8,7 +8,7 @@
 //   --start — поднять тестовый Foundry самому (иначе он должен уже работать на VD_PORT)
 //
 // Пути — переменные среды, по умолчанию — машина автора: VD_FOUNDRY (папка app Foundry), VD_DATA (данные тестового
-// Foundry; система подключена туда ссылкой на репозиторий), VD_NODE, VD_EDGE, VD_PORT (30014), VD_WORLD (test-vedmak),
+// Foundry; система там — копия репозитория, обновляется перед прогоном: tools/bench/lib/sync.mjs), VD_NODE, VD_EDGE, VD_PORT (30014), VD_WORLD (test-vedmak),
 // VD_USER (id ведущего тестового мира, пароль пустой). Живой мир пользователя никогда не используется.
 //
 // Сценарий — тело async-функции в странице мира: доступны помощники tools/bench/lib/common.js (log, ok, wait,
@@ -17,13 +17,14 @@
 //
 // Не держите тестовый мир открытым этим же ведущим в другом окне: обработчики «своих» удалений сработают в обоих
 // клиентах (конец Истинной и медвежьей формы дважды убирает оружие формы — «Item … does not exist»).
-// Тестовый Foundry работает с пакетами репозитория и трогает их файлы: после прогона — git checkout -- packs.
+// Тестовый Foundry пишет только в свою копию системы: репозиторий (и packs/) прогоны не трогают.
 
 import { spawn, spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
+import { syncSystem } from "./lib/sync.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const env = (k, d) => process.env[k] || d;
@@ -190,7 +191,10 @@ async function runScenario(sc, debugPort) {
 
 const scenarios = pickScenarios();
 let foundry = null;
-if (!(await serverUp())) {
+const up = await serverUp();
+const synced = syncSystem(CFG.data, { packs: !up });
+if (up && synced.copied) console.log("Тестовый Foundry уже работал: код и стили обновлены, пакеты — нет (перезапустите сервер, если менялись компендиумы).");
+if (!up) {
   if (!start) { console.error(`Тестовый Foundry не отвечает на ${URL}. Запустите его или добавьте --start.`); process.exit(2); }
   console.log("Поднимаю тестовый Foundry…");
   foundry = await startFoundry();

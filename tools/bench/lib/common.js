@@ -5,6 +5,13 @@
 const ok = (cond, text) => { window.__log.push(`${cond ? "✓" : "✗"} ${text}`); if (!cond) window.__fails.push(text); return !!cond; };
 const log = (...a) => window.__log.push(a.join(" "));
 const stepName = s => { window.__step = s; };
+// Наверняка: следующие броски — взрыв десятки и 5 (d10 = ceil((1-u)·10): u 0.05 → 10, 0.55 → 5), дальше — честные.
+// Для проверок, где важен итог успеха, а не случай: иначе сценарий падает по воле костей
+const surely = async fn => {
+  const orig = CONFIG.Dice.randomUniform, q = [0.05, 0.55];
+  CONFIG.Dice.randomUniform = () => q.length ? q.shift() : orig();
+  try { return await fn(); } finally { CONFIG.Dice.randomUniform = orig; }
+};
 // Окна подтверждения и выбора — нажимаются сами (кнопка по умолчанию). Сценарий, который сам проверяет окна,
 // ставит window.__noAutoDialog = true — иначе помощник нажмёт кнопку раньше проверки
 Hooks.on("renderDialogV2", app => setTimeout(() => {

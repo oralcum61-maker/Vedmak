@@ -1879,6 +1879,60 @@
     "effects": []
    },
    {
+    "name": "Квен",
+    "type": "spell",
+    "img": "systems/vedmak/assets/fan/magic/sg-quen.webp",
+    "system": {
+     "description": "<p>Квен создаёт щит с 5 ПЗ за каждое очко Вын, потраченное на защиту. Если вы не смогли (или не захотели) защититься от атаки или наносящего урон эффекта, урон сначала применяется к щиту Квен. Смертельный и несмертельный урон одинаковым образом уменьшают ПЗ щита Квен. Когда ПЗ щита снижаются до 0, оставшийся урон применяется к укрывшемуся за ним персонажу. Чтобы повлиять на ваши ПЗ или Вын, урон должен сначала преодолеть ПБ и сопротивление урону, как при любой атаке. Квен можно применять против любых заклинаний, которые поддаются блокированию, но против остальных заклинаний он бессилен. Также Квен не действует на уже имеющийся урон от отравления, болезней или удушения от нехватки кислорода в воздухе. Квен нельзя сотворить снова, пока действует предыдущий такой же знак.</p>",
+     "kind": "sign",
+     "level": "novice",
+     "element": "earth",
+     "branch": "",
+     "god": "",
+     "staCost": 0,
+     "variableCost": true,
+     "maxCost": 7,
+     "maintainCost": 0,
+     "maintainMode": "",
+     "effect": "",
+     "range": "на себя",
+     "duration": "10 раундов или пока не истрачен",
+     "defense": "none",
+     "defenseText": "нет",
+     "preparation": "",
+     "dc": 0,
+     "dcText": "",
+     "ingredients": "",
+     "altIngredients": "",
+     "danger": "",
+     "removal": "",
+     "automation": {
+      "damage": "",
+      "damageType": "elemental",
+      "location": "",
+      "ignoreArmor": false,
+      "canCrit": false,
+      "staDamage": "",
+      "statuses": [],
+      "statusRounds": "",
+      "statusesByCost": {},
+      "regen": {
+       "hp": 0,
+       "rounds": ""
+      },
+      "shieldPerSta": 5,
+      "shieldRounds": 10
+     },
+     "source": {
+      "book": "Корник",
+      "page": "114"
+     },
+     "resource": ""
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Аксий",
     "type": "spell",
     "img": "systems/vedmak/assets/fan/magic/sg-axii.webp",
@@ -1927,60 +1981,6 @@
       },
       "shieldPerSta": 0,
       "shieldRounds": 0
-     },
-     "source": {
-      "book": "Корник",
-      "page": "114"
-     },
-     "resource": ""
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Квен",
-    "type": "spell",
-    "img": "systems/vedmak/assets/fan/magic/sg-quen.webp",
-    "system": {
-     "description": "<p>Квен создаёт щит с 5 ПЗ за каждое очко Вын, потраченное на защиту. Если вы не смогли (или не захотели) защититься от атаки или наносящего урон эффекта, урон сначала применяется к щиту Квен. Смертельный и несмертельный урон одинаковым образом уменьшают ПЗ щита Квен. Когда ПЗ щита снижаются до 0, оставшийся урон применяется к укрывшемуся за ним персонажу. Чтобы повлиять на ваши ПЗ или Вын, урон должен сначала преодолеть ПБ и сопротивление урону, как при любой атаке. Квен можно применять против любых заклинаний, которые поддаются блокированию, но против остальных заклинаний он бессилен. Также Квен не действует на уже имеющийся урон от отравления, болезней или удушения от нехватки кислорода в воздухе. Квен нельзя сотворить снова, пока действует предыдущий такой же знак.</p>",
-     "kind": "sign",
-     "level": "novice",
-     "element": "earth",
-     "branch": "",
-     "god": "",
-     "staCost": 0,
-     "variableCost": true,
-     "maxCost": 7,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "на себя",
-     "duration": "10 раундов или пока не истрачен",
-     "defense": "none",
-     "defenseText": "нет",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 5,
-      "shieldRounds": 10
      },
      "source": {
       "book": "Корник",
@@ -10132,48 +10132,6 @@
   },
   "items": [
    {
-    "name": "Человек",
-    "type": "race",
-    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
-    "system": {
-     "key": "human",
-     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
-     "traits": [
-      {
-       "name": "Доверие",
-       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
-      },
-      {
-       "name": "Изобретательность",
-       "effect": "+1 к Дедукции."
-      },
-      {
-       "name": "Упрямство",
-       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
-      }
-     ],
-     "mods": [
-      {
-       "target": "skills.deduction",
-       "value": 1
-      }
-     ],
-     "canUseMagic": true,
-     "source": {
-      "book": "Корник",
-      "page": "24"
-     },
-     "grants": [],
-     "resource": "",
-     "roles": [],
-     "role": "",
-     "role2": "",
-     "powers": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Воин",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-warrior.webp",
@@ -10337,52 +10295,6 @@
     "effects": []
    },
    {
-    "name": "Булава",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-mace1.webp",
-    "system": {
-     "description": "<p>Серьёзная игрушка. Цельный кусок металла с выступающими лопастями или шипами. Удар булавой способен переломать кости. Знаю многих наёмников, которые с собой это оружие таскают только ради того, чтобы пробивать броню.</p>",
-     "quantity": 1,
-     "weight": 2,
-     "cost": 525,
-     "availability": "common",
-     "concealment": "large",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "bludgeon",
-     "skill": "melee",
-     "accuracy": 0,
-     "damage": "5d6",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 15,
-      "max": 15
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Короткий кинжал",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/sw-viper-steel.webp",
@@ -10432,6 +10344,94 @@
       "until": 0
      },
      "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Булава",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-mace1.webp",
+    "system": {
+     "description": "<p>Серьёзная игрушка. Цельный кусок металла с выступающими лопастями или шипами. Удар булавой способен переломать кости. Знаю многих наёмников, которые с собой это оружие таскают только ради того, чтобы пробивать броню.</p>",
+     "quantity": 1,
+     "weight": 2,
+     "cost": 525,
+     "availability": "common",
+     "concealment": "large",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "bludgeon",
+     "skill": "melee",
+     "accuracy": 0,
+     "damage": "5d6",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Человек",
+    "type": "race",
+    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
+    "system": {
+     "key": "human",
+     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
+     "traits": [
+      {
+       "name": "Доверие",
+       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
+      },
+      {
+       "name": "Изобретательность",
+       "effect": "+1 к Дедукции."
+      },
+      {
+       "name": "Упрямство",
+       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
+      }
+     ],
+     "mods": [
+      {
+       "target": "skills.deduction",
+       "value": 1
+      }
+     ],
+     "canUseMagic": true,
+     "source": {
+      "book": "Корник",
+      "page": "24"
+     },
+     "grants": [],
+     "resource": "",
+     "roles": [],
+     "role": "",
+     "role2": "",
+     "powers": []
     },
     "flags": {},
     "effects": []
@@ -13527,41 +13527,6 @@
     "effects": []
    },
    {
-    "name": "Ведьмачий медальон",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-medallion.webp",
-    "system": {
-     "description": "<p>Изготовить может только маг: отлить заготовку из единицы серебра, затем провести с ней час в месте силы (стр. 249).</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "247"
-     },
-     "category": "valuable",
-     "effect": "Дрожит в 20 м от любого чудовища, проклятия или сотворяемого заклинания, предупреждая ведьмака.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Торрур",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/t3-torrur.webp",
@@ -13611,6 +13576,41 @@
       "until": 0
      },
      "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Ведьмачий медальон",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-medallion.webp",
+    "system": {
+     "description": "<p>Изготовить может только маг: отлить заготовку из единицы серебра, затем провести с ней час в месте силы (стр. 249).</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "247"
+     },
+     "category": "valuable",
+     "effect": "Дрожит в 20 м от любого чудовища, проклятия или сотворяемого заклинания, предупреждая ведьмака.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
     },
     "flags": {},
     "effects": []
@@ -15812,41 +15812,6 @@
     "effects": []
    },
    {
-    "name": "Модная одежда",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-suit-nilf.webp",
-    "system": {
-     "description": "<p>Лучший наряд — это модный наряд. На приёмах не будешь выбиваться из толпы. Проблема одна: мода через пару месяцев изменится, и придётся покупать новую одёжку.</p>",
-     "quantity": 1,
-     "weight": 2,
-     "cost": 70,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "clothing",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Эсбода",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/sw-noma-lvl4.webp",
@@ -15889,6 +15854,41 @@
       "until": 0
      },
      "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Модная одежда",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-suit-nilf.webp",
+    "system": {
+     "description": "<p>Лучший наряд — это модный наряд. На приёмах не будешь выбиваться из толпы. Проблема одна: мода через пару месяцев изменится, и придётся покупать новую одёжку.</p>",
+     "quantity": 1,
+     "weight": 2,
+     "cost": 70,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "clothing",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
     },
     "flags": {},
     "effects": []
@@ -16178,23 +16178,23 @@
     "effects": []
    },
    {
-    "name": "Мегаскоп",
+    "name": "Духи/одеколон",
     "type": "gear",
-    "img": "icons/tools/scribal/lens-grey-red.webp",
+    "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
     "system": {
-     "description": "<p>Линзы, фокусы и три безупречных самоцвета. Ставится широким кругом на ровной поверхности, работает у любого с порогом Энергии от 1. Даёт связь с другим мегаскопом или телекоммуникатором без предела дальности, а с проверкой Сотворения заклинаний СЛ 16 — взгляд на человека, с которым у вас крепкая связь (до 10 минут). Пока связь держится, через мегаскоп можно телепортироваться. Повреждённый самоцвет делает мегаскоп опасным: взгляд через него — СЛ 25, при провале камни взрываются на 1d6 урона по каждой части тела в 4 метрах; Постоянный портал проваливается, а Телепортация может разорвать заклинателя.</p><p>Природа предмета опознаётся проверкой Образования СЛ 14 или Магическим познанием.</p>",
+     "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
      "quantity": 1,
-     "weight": 15,
-     "cost": 3500,
-     "availability": "rare",
-     "concealment": "large",
+     "weight": 0.1,
+     "cost": 22,
+     "availability": "common",
+     "concealment": "none",
      "equipped": false,
      "source": {
-      "book": "Том Хаоса",
-      "page": "118"
+      "book": "Корник",
+      "page": "93"
      },
-     "category": "valuable",
-     "effect": "Линзы, фокусы и три безупречных самоцвета. Ставится широким кругом на ровной поверхности, работает у любого с порогом Энергии от 1. Даёт связь с другим мегаскопом или телекоммуникатором без предела дальности, а с проверкой Сотворения заклинаний СЛ 16 — взгляд на человека, с которым у вас крепкая связь (до 10 минут). Пока связь держится, через мегаскоп можно телепортироваться. Повреждённый самоцвет делает мегаскоп опасным: взгляд через него — СЛ 25, при провале камни взрываются на 1d6 урона по каждой части тела в 4 метрах; Постоянный портал проваливается, а Телепортация может разорвать заклинателя.",
+     "category": "general",
+     "effect": "",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -16213,23 +16213,23 @@
     "effects": []
    },
    {
-    "name": "Духи/одеколон",
+    "name": "Мегаскоп",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
+    "img": "icons/tools/scribal/lens-grey-red.webp",
     "system": {
-     "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
+     "description": "<p>Линзы, фокусы и три безупречных самоцвета. Ставится широким кругом на ровной поверхности, работает у любого с порогом Энергии от 1. Даёт связь с другим мегаскопом или телекоммуникатором без предела дальности, а с проверкой Сотворения заклинаний СЛ 16 — взгляд на человека, с которым у вас крепкая связь (до 10 минут). Пока связь держится, через мегаскоп можно телепортироваться. Повреждённый самоцвет делает мегаскоп опасным: взгляд через него — СЛ 25, при провале камни взрываются на 1d6 урона по каждой части тела в 4 метрах; Постоянный портал проваливается, а Телепортация может разорвать заклинателя.</p><p>Природа предмета опознаётся проверкой Образования СЛ 14 или Магическим познанием.</p>",
      "quantity": 1,
-     "weight": 0.1,
-     "cost": 22,
-     "availability": "common",
-     "concealment": "none",
+     "weight": 15,
+     "cost": 3500,
+     "availability": "rare",
+     "concealment": "large",
      "equipped": false,
      "source": {
-      "book": "Корник",
-      "page": "93"
+      "book": "Том Хаоса",
+      "page": "118"
      },
-     "category": "general",
-     "effect": "",
+     "category": "valuable",
+     "effect": "Линзы, фокусы и три безупречных самоцвета. Ставится широким кругом на ровной поверхности, работает у любого с порогом Энергии от 1. Даёт связь с другим мегаскопом или телекоммуникатором без предела дальности, а с проверкой Сотворения заклинаний СЛ 16 — взгляд на человека, с которым у вас крепкая связь (до 10 минут). Пока связь держится, через мегаскоп можно телепортироваться. Повреждённый самоцвет делает мегаскоп опасным: взгляд через него — СЛ 25, при провале камни взрываются на 1d6 урона по каждой части тела в 4 метрах; Постоянный портал проваливается, а Телепортация может разорвать заклинателя.",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -19604,71 +19604,6 @@
     "effects": []
    },
    {
-    "name": "Посох с кристаллом",
-    "type": "weapon",
-    "img": "icons/weapons/staves/staff-blue-jewel.webp",
-    "system": {
-     "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
-     "quantity": 1,
-     "weight": 2.5,
-     "cost": 835,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "74"
-     },
-     "category": "staff",
-     "skill": "staffSpear",
-     "accuracy": 0,
-     "damage": "2d6+2",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 5,
-      "max": 5
-     },
-     "hands": 2,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "greaterFocus",
-       "value": "",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "focus",
-       "value": "3",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "longReach",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 2,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Маг",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-mage.webp",
@@ -19872,6 +19807,71 @@
        ]
       }
      ]
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Посох с кристаллом",
+    "type": "weapon",
+    "img": "icons/weapons/staves/staff-blue-jewel.webp",
+    "system": {
+     "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 835,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "74"
+     },
+     "category": "staff",
+     "skill": "staffSpear",
+     "accuracy": 0,
+     "damage": "2d6+2",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 2,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "greaterFocus",
+       "value": "",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "focus",
+       "value": "3",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "longReach",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 2,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
     },
     "flags": {},
     "effects": []
@@ -21038,60 +21038,6 @@
     "effects": []
    },
    {
-    "name": "Призыв посоха",
-    "type": "spell",
-    "img": "icons/magic/light/orbs-firefly-hand-yellow.webp",
-    "system": {
-     "description": "<p>Позволяет дематериализовать свой посох и отправить его в то место, в котором заклинатель был за последний день. Заклинание можно сотворить снова для призыва посоха обратно.</p>",
-     "kind": "spell",
-     "level": "novice",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 2,
-     "variableCost": false,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "неограниченная",
-     "duration": "мгновенное",
-     "defense": "none",
-     "defenseText": "нет",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Корник",
-      "page": "102"
-     },
-     "resource": ""
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Буря душ",
     "type": "spell",
     "img": "icons/magic/death/undead-ghosts-trio-blue.webp",
@@ -21139,6 +21085,60 @@
      "source": {
       "book": "Том Хаоса",
       "page": "132"
+     },
+     "resource": ""
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Призыв посоха",
+    "type": "spell",
+    "img": "icons/magic/light/orbs-firefly-hand-yellow.webp",
+    "system": {
+     "description": "<p>Позволяет дематериализовать свой посох и отправить его в то место, в котором заклинатель был за последний день. Заклинание можно сотворить снова для призыва посоха обратно.</p>",
+     "kind": "spell",
+     "level": "novice",
+     "element": "mixed",
+     "branch": "",
+     "god": "",
+     "staCost": 2,
+     "variableCost": false,
+     "maxCost": 0,
+     "maintainCost": 0,
+     "maintainMode": "",
+     "effect": "",
+     "range": "неограниченная",
+     "duration": "мгновенное",
+     "defense": "none",
+     "defenseText": "нет",
+     "preparation": "",
+     "dc": 0,
+     "dcText": "",
+     "ingredients": "",
+     "altIngredients": "",
+     "danger": "",
+     "removal": "",
+     "automation": {
+      "damage": "",
+      "damageType": "elemental",
+      "location": "",
+      "ignoreArmor": false,
+      "canCrit": false,
+      "staDamage": "",
+      "statuses": [],
+      "statusRounds": "",
+      "statusesByCost": {},
+      "regen": {
+       "hp": 0,
+       "rounds": ""
+      },
+      "shieldPerSta": 0,
+      "shieldRounds": 0
+     },
+     "source": {
+      "book": "Корник",
+      "page": "102"
      },
      "resource": ""
     },
@@ -21956,6 +21956,41 @@
     "effects": []
    },
    {
+    "name": "Амулет с самоцветом",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
+    "system": {
+     "description": "<p>Фокусирующее (3)</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 500,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "valuable",
+     "effect": "Фокусирующее (3)",
+     "focus": 3,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Торрур",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/t3-torrur.webp",
@@ -22005,41 +22040,6 @@
       "until": 0
      },
      "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Амулет с самоцветом",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
-    "system": {
-     "description": "<p>Фокусирующее (3)</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 500,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "valuable",
-     "effect": "Фокусирующее (3)",
-     "focus": 3,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
     },
     "flags": {},
     "effects": []
@@ -23576,48 +23576,6 @@
   },
   "items": [
    {
-    "name": "Человек",
-    "type": "race",
-    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
-    "system": {
-     "key": "human",
-     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
-     "traits": [
-      {
-       "name": "Доверие",
-       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
-      },
-      {
-       "name": "Изобретательность",
-       "effect": "+1 к Дедукции."
-      },
-      {
-       "name": "Упрямство",
-       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
-      }
-     ],
-     "mods": [
-      {
-       "target": "skills.deduction",
-       "value": 1
-      }
-     ],
-     "canUseMagic": true,
-     "source": {
-      "book": "Корник",
-      "page": "24"
-     },
-     "grants": [],
-     "resource": "",
-     "roles": [],
-     "role": "",
-     "role2": "",
-     "powers": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Маг",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-mage.webp",
@@ -23821,6 +23779,48 @@
        ]
       }
      ]
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Человек",
+    "type": "race",
+    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
+    "system": {
+     "key": "human",
+     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
+     "traits": [
+      {
+       "name": "Доверие",
+       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
+      },
+      {
+       "name": "Изобретательность",
+       "effect": "+1 к Дедукции."
+      },
+      {
+       "name": "Упрямство",
+       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
+      }
+     ],
+     "mods": [
+      {
+       "target": "skills.deduction",
+       "value": 1
+      }
+     ],
+     "canUseMagic": true,
+     "source": {
+      "book": "Корник",
+      "page": "24"
+     },
+     "grants": [],
+     "resource": "",
+     "roles": [],
+     "role": "",
+     "role2": "",
+     "powers": []
     },
     "flags": {},
     "effects": []
@@ -28057,6 +28057,41 @@
     "effects": []
    },
    {
+    "name": "Ручное зеркальце",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
+    "system": {
+     "description": "<p>Небольшое зеркало. И для прихорашивания сойдёт, и для того, чтобы себе за спину глянуть.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 27,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Хрустальный череп",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-crystal-skull.webp",
@@ -28100,41 +28135,6 @@
      "quantity": 1,
      "weight": 0.1,
      "cost": 22,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Ручное зеркальце",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
-    "system": {
-     "description": "<p>Небольшое зеркало. И для прихорашивания сойдёт, и для того, чтобы себе за спину глянуть.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 27,
      "availability": "common",
      "concealment": "none",
      "equipped": false,
@@ -30528,41 +30528,6 @@
     "effects": []
    },
    {
-    "name": "Инструменты для творчества",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-brush.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 2,
-     "cost": 55,
-     "availability": "common",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют создавать произведения искусства (картины, украшения, скульптуры и т. д.)",
-     "focus": 0,
-     "tool": "artisan",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Шулерские кости",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-coin-pouch.webp",
@@ -30582,6 +30547,41 @@
      "effect": "+3 к Азартным играм; заметить подлог — Внимание СЛ 16.",
      "focus": 0,
      "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Инструменты для творчества",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-brush.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 2,
+     "cost": 55,
+     "availability": "common",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют создавать произведения искусства (картины, украшения, скульптуры и т. д.)",
+     "focus": 0,
+     "tool": "artisan",
      "stored": false,
      "mods": [],
      "tattoo": {
@@ -31046,60 +31046,6 @@
     "effects": []
    },
    {
-    "name": "Сосуд заклятия",
-    "type": "spell",
-    "img": "icons/magic/control/fear-fright-jackolantern-yellow.webp",
-    "system": {
-     "description": "<p>Сосуд заклятия создаёт магический вихрь внутри запечатанного глиняного сосуда. Вихрь существует 1d6 дней и активируется при разбивании сосуда, сотворяя случайное заклинание из приведённого ниже списка. Совершите бросок 1d10/2: 1. Тюрьма Тальфрина 2. Зефир 3. Танио Ильхар 4. Туман Дормина 5. Статическая буря</p>",
-     "kind": "ritual",
-     "level": "novice",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 5,
-     "variableCost": false,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "",
-     "duration": "1d6 дней",
-     "defense": "none",
-     "defenseText": "",
-     "preparation": "5 раундов",
-     "dc": 15,
-     "dcText": "15",
-     "ingredients": "речная глина (х5), пятая эссенция (х1), нитки (х2), мелок (х1), воск (х1), волокна хана (х2), дымная пыль (х1)",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Корник",
-      "page": "118"
-     },
-     "resource": ""
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Пиромантия",
     "type": "spell",
     "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
@@ -31147,6 +31093,60 @@
      "source": {
       "book": "Корник",
       "page": "117"
+     },
+     "resource": ""
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Сосуд заклятия",
+    "type": "spell",
+    "img": "icons/magic/control/fear-fright-jackolantern-yellow.webp",
+    "system": {
+     "description": "<p>Сосуд заклятия создаёт магический вихрь внутри запечатанного глиняного сосуда. Вихрь существует 1d6 дней и активируется при разбивании сосуда, сотворяя случайное заклинание из приведённого ниже списка. Совершите бросок 1d10/2: 1. Тюрьма Тальфрина 2. Зефир 3. Танио Ильхар 4. Туман Дормина 5. Статическая буря</p>",
+     "kind": "ritual",
+     "level": "novice",
+     "element": "mixed",
+     "branch": "",
+     "god": "",
+     "staCost": 5,
+     "variableCost": false,
+     "maxCost": 0,
+     "maintainCost": 0,
+     "maintainMode": "",
+     "effect": "",
+     "range": "",
+     "duration": "1d6 дней",
+     "defense": "none",
+     "defenseText": "",
+     "preparation": "5 раундов",
+     "dc": 15,
+     "dcText": "15",
+     "ingredients": "речная глина (х5), пятая эссенция (х1), нитки (х2), мелок (х1), воск (х1), волокна хана (х2), дымная пыль (х1)",
+     "altIngredients": "",
+     "danger": "",
+     "removal": "",
+     "automation": {
+      "damage": "",
+      "damageType": "elemental",
+      "location": "",
+      "ignoreArmor": false,
+      "canCrit": false,
+      "staDamage": "",
+      "statuses": [],
+      "statusRounds": "",
+      "statusesByCost": {},
+      "regen": {
+       "hp": 0,
+       "rounds": ""
+      },
+      "shieldPerSta": 0,
+      "shieldRounds": 0
+     },
+     "source": {
+      "book": "Корник",
+      "page": "118"
      },
      "resource": ""
     },
@@ -34435,6 +34435,61 @@
     "effects": []
    },
    {
+    "name": "Нюхательная соль",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-oil-elementa-e.webp",
+    "system": {
+     "description": "<p>Если нюхательную соль дать понюхать персонажу или существу в состоянии без сознания или дезориентации, то персонаж/существо немедленно придёт в себя. Нюхательную соль можно использовать 25 раз.</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 25,
+     "availability": "common",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "88"
+     },
+     "kind": "preparation",
+     "effect": "Если нюхательную соль дать понюхать персонажу или существу в состоянии без сознания или дезориентации, то персонаж/существо немедленно придёт в себя. Нюхательную соль можно использовать 25 раз.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "apply",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [
+       "unconscious",
+       "disoriented"
+      ],
+      "regen": 0,
+      "heal": 0,
+      "charges": 25,
+      "clearToxicity": false
+     },
+     "changes": [],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Амулет с самоцветом",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
@@ -34500,61 +34555,6 @@
       "applied": false,
       "tries": 0
      }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Нюхательная соль",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-oil-elementa-e.webp",
-    "system": {
-     "description": "<p>Если нюхательную соль дать понюхать персонажу или существу в состоянии без сознания или дезориентации, то персонаж/существо немедленно придёт в себя. Нюхательную соль можно использовать 25 раз.</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 25,
-     "availability": "common",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "88"
-     },
-     "kind": "preparation",
-     "effect": "Если нюхательную соль дать понюхать персонажу или существу в состоянии без сознания или дезориентации, то персонаж/существо немедленно придёт в себя. Нюхательную соль можно использовать 25 раз.",
-     "toxicity": 0,
-     "duration": "",
-     "durationRounds": 0,
-     "durationMinutes": 0,
-     "oilTarget": "",
-     "use": {
-      "action": "apply",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [
-       "unconscious",
-       "disoriented"
-      ],
-      "regen": 0,
-      "heal": 0,
-      "charges": 25,
-      "clearToxicity": false
-     },
-     "changes": [],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
     },
     "flags": {},
     "effects": []
@@ -36372,59 +36372,6 @@
     "effects": []
    },
    {
-    "name": "Кастет",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-hammer-rusty.webp",
-    "system": {
-     "description": "<p>Друже, мир — место несправедливое. И некоторым просто не повезло родиться слабыми. Обычно мне не приходится идти с врагом врукопашную — да-да, преимущество арбалетчика, — но если бы мне надо было регулярно чистить рожи, я бы обзавёлся кастетом, чтобы кулаком больнее бить.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 50,
-     "availability": "everywhere",
-     "concealment": "tiny",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "bludgeon",
-     "skill": "brawling",
-     "accuracy": 1,
-     "damage": "1d6",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 15,
-      "max": 15
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "hands",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 1,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Низушечий защитный дублет",
     "type": "armor",
     "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl4-1.webp",
@@ -36487,6 +36434,59 @@
      "mods": [],
      "enhancements": [],
      "stored": false
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Кастет",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-hammer-rusty.webp",
+    "system": {
+     "description": "<p>Друже, мир — место несправедливое. И некоторым просто не повезло родиться слабыми. Обычно мне не приходится идти с врагом врукопашную — да-да, преимущество арбалетчика, — но если бы мне надо было регулярно чистить рожи, я бы обзавёлся кастетом, чтобы кулаком больнее бить.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 50,
+     "availability": "everywhere",
+     "concealment": "tiny",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "bludgeon",
+     "skill": "brawling",
+     "accuracy": 1,
+     "damage": "1d6",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "hands",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 1,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
     },
     "flags": {},
     "effects": []
@@ -36702,6 +36702,41 @@
     "effects": []
    },
    {
+    "name": "Духи/одеколон",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
+    "system": {
+     "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
+     "quantity": 3,
+     "weight": 0.1,
+     "cost": 22,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Модная одежда",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-suit-nilf.webp",
@@ -36784,41 +36819,6 @@
      },
      "stored": false,
      "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Духи/одеколон",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
-    "system": {
-     "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
-     "quantity": 3,
-     "weight": 0.1,
-     "cost": 22,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
     },
     "flags": {},
     "effects": []
@@ -38163,6 +38163,71 @@
     "effects": []
    },
    {
+    "name": "Посох с кристаллом",
+    "type": "weapon",
+    "img": "icons/weapons/staves/staff-blue-jewel.webp",
+    "system": {
+     "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 835,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "74"
+     },
+     "category": "staff",
+     "skill": "staffSpear",
+     "accuracy": 0,
+     "damage": "2d6+2",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 2,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "greaterFocus",
+       "value": "",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "focus",
+       "value": "3",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "longReach",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 2,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Маг",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-mage.webp",
@@ -38371,71 +38436,6 @@
     "effects": []
    },
    {
-    "name": "Посох с кристаллом",
-    "type": "weapon",
-    "img": "icons/weapons/staves/staff-blue-jewel.webp",
-    "system": {
-     "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
-     "quantity": 1,
-     "weight": 2.5,
-     "cost": 835,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "74"
-     },
-     "category": "staff",
-     "skill": "staffSpear",
-     "accuracy": 0,
-     "damage": "2d6+2",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 5,
-      "max": 5
-     },
-     "hands": 2,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "greaterFocus",
-       "value": "",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "focus",
-       "value": "3",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "longReach",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 2,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Низушечий защитный дублет",
     "type": "armor",
     "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl4-1.webp",
@@ -38557,41 +38557,6 @@
     "effects": []
    },
    {
-    "name": "Письменные принадлежности",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-inkwell.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 25,
-     "availability": "everywhere",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют писать письма, записки и т.п.",
-     "focus": 0,
-     "tool": "writing",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Амулет с самоцветом",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
@@ -38611,6 +38576,41 @@
      "effect": "Фокусирующее (3)",
      "focus": 3,
      "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Письменные принадлежности",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-inkwell.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 25,
+     "availability": "everywhere",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют писать письма, записки и т.п.",
+     "focus": 0,
+     "tool": "writing",
      "stored": false,
      "mods": [],
      "tattoo": {
@@ -38889,6 +38889,41 @@
     "effects": []
    },
    {
+    "name": "Ручное зеркальце",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
+    "system": {
+     "description": "<p>Небольшое зеркало. И для прихорашивания сойдёт, и для того, чтобы себе за спину глянуть.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 27,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Двуслойные штаны",
     "type": "armor",
     "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
@@ -38956,41 +38991,6 @@
     "effects": []
    },
    {
-    "name": "Ручное зеркальце",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-mirror-hand.webp",
-    "system": {
-     "description": "<p>Небольшое зеркало. И для прихорашивания сойдёт, и для того, чтобы себе за спину глянуть.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 27,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Наплечная сумка",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-horse-bag.webp",
@@ -39026,23 +39026,23 @@
     "effects": []
    },
    {
-    "name": "Набор для макияжа",
+    "name": "Духи/одеколон",
     "type": "gear",
-    "img": "icons/tools/hand/brush-paint-pink.webp",
+    "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
     "system": {
-     "description": "<p>+2 к Соблазнению и Харизме</p>",
+     "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
      "quantity": 1,
-     "weight": 0.5,
-     "cost": 35,
-     "availability": "everywhere",
-     "concealment": "tiny",
+     "weight": 0.1,
+     "cost": 22,
+     "availability": "common",
+     "concealment": "none",
      "equipped": false,
      "source": {
       "book": "Корник",
-      "page": "92"
+      "page": "93"
      },
-     "category": "tools",
-     "effect": "+2 к Соблазнению и Харизме",
+     "category": "general",
+     "effect": "",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -39061,23 +39061,23 @@
     "effects": []
    },
    {
-    "name": "Духи/одеколон",
+    "name": "Набор для макияжа",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-perfume.webp",
+    "img": "icons/tools/hand/brush-paint-pink.webp",
     "system": {
-     "description": "<p>Не стоит ими злоупотреблять. По сути, это просто приятно пахнущая жидкость, которой прикрывают неприятные ароматы.</p>",
+     "description": "<p>+2 к Соблазнению и Харизме</p>",
      "quantity": 1,
-     "weight": 0.1,
-     "cost": 22,
-     "availability": "common",
-     "concealment": "none",
+     "weight": 0.5,
+     "cost": 35,
+     "availability": "everywhere",
+     "concealment": "tiny",
      "equipped": false,
      "source": {
       "book": "Корник",
-      "page": "93"
+      "page": "92"
      },
-     "category": "general",
-     "effect": "",
+     "category": "tools",
+     "effect": "+2 к Соблазнению и Харизме",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -40268,294 +40268,6 @@
     "effects": []
    },
    {
-    "name": "Посох с кристаллом",
-    "type": "weapon",
-    "img": "icons/weapons/staves/staff-blue-jewel.webp",
-    "system": {
-     "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
-     "quantity": 1,
-     "weight": 2.5,
-     "cost": 835,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "74"
-     },
-     "category": "staff",
-     "skill": "staffSpear",
-     "accuracy": 0,
-     "damage": "2d6+2",
-     "damageTypes": [
-      "bludgeoning"
-     ],
-     "reliability": {
-      "value": 5,
-      "max": 5
-     },
-     "hands": 2,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "greaterFocus",
-       "value": "",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "focus",
-       "value": "3",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "longReach",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 2,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Стилет",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
-    "system": {
-     "description": "<p>Вот уж кто-кто, а чёрные могут даже из обычного кинжала сделать ещё более подлое оружие. Длинный тонкий клинок этого кинжала убирается в рукоять, так что спрятать эту дрянь можно где угодно.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 275,
-     "availability": "common",
-     "concealment": "tiny",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "smallBlade",
-     "skill": "smallBlades",
-     "accuracy": 2,
-     "damage": "1d6",
-     "damageTypes": [
-      "slashing",
-      "piercing"
-     ],
-     "reliability": {
-      "value": 5,
-      "max": 5
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "concealable",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 1,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Низушечий защитный дублет",
-    "type": "armor",
-    "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl4-1.webp",
-    "system": {
-     "description": "<p>Выглядит как обычный дублет: чтобы понять, что это броня, нужна проверка Внимания со СЛ 20.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 375,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "84"
-     },
-     "weightClass": "light",
-     "isShield": false,
-     "sp": {
-      "head": {
-       "value": 0,
-       "max": 0
-      },
-      "torso": {
-       "value": 8,
-       "max": 8
-      },
-      "rightArm": {
-       "value": 8,
-       "max": 8
-      },
-      "leftArm": {
-       "value": 8,
-       "max": 8
-      },
-      "rightLeg": {
-       "value": 0,
-       "max": 0
-      },
-      "leftLeg": {
-       "value": 0,
-       "max": 0
-      }
-     },
-     "reliability": {
-      "value": 0,
-      "max": 0
-     },
-     "encumbrance": 0,
-     "enhancementSlots": 1,
-     "resistances": {
-      "slashing": false,
-      "piercing": false,
-      "bludgeoning": false,
-      "elemental": false,
-      "bleeding": false,
-      "poison": false
-     },
-     "effectsText": "",
-     "relic": false,
-     "mods": [],
-     "enhancements": [],
-     "stored": false
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Двуслойные штаны",
-    "type": "armor",
-    "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
-    "system": {
-     "description": "<p>Двойная ткань — лучший выбор. Не столь раздутая, как средней руки стёганка, а зад твой прикроет.</p>",
-     "quantity": 1,
-     "weight": 1.5,
-     "cost": 225,
-     "availability": "rare",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "80"
-     },
-     "weightClass": "light",
-     "isShield": false,
-     "sp": {
-      "head": {
-       "value": 0,
-       "max": 0
-      },
-      "torso": {
-       "value": 0,
-       "max": 0
-      },
-      "rightArm": {
-       "value": 0,
-       "max": 0
-      },
-      "leftArm": {
-       "value": 0,
-       "max": 0
-      },
-      "rightLeg": {
-       "value": 8,
-       "max": 8
-      },
-      "leftLeg": {
-       "value": 8,
-       "max": 8
-      }
-     },
-     "reliability": {
-      "value": 0,
-      "max": 0
-     },
-     "encumbrance": 0,
-     "enhancementSlots": 0,
-     "resistances": {
-      "slashing": false,
-      "piercing": false,
-      "bludgeoning": false,
-      "elemental": false,
-      "bleeding": false,
-      "poison": false
-     },
-     "effectsText": "",
-     "relic": false,
-     "mods": [],
-     "enhancements": [],
-     "stored": false
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Амулет с самоцветом",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
-    "system": {
-     "description": "<p>Фокусирующее (3)</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 500,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "valuable",
-     "effect": "Фокусирующее (3)",
-     "focus": 3,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Маг",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-mage.webp",
@@ -40764,6 +40476,294 @@
     "effects": []
    },
    {
+    "name": "Стилет",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
+    "system": {
+     "description": "<p>Вот уж кто-кто, а чёрные могут даже из обычного кинжала сделать ещё более подлое оружие. Длинный тонкий клинок этого кинжала убирается в рукоять, так что спрятать эту дрянь можно где угодно.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 275,
+     "availability": "common",
+     "concealment": "tiny",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "smallBlade",
+     "skill": "smallBlades",
+     "accuracy": 2,
+     "damage": "1d6",
+     "damageTypes": [
+      "slashing",
+      "piercing"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "concealable",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 1,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Посох с кристаллом",
+    "type": "weapon",
+    "img": "icons/weapons/staves/staff-blue-jewel.webp",
+    "system": {
+     "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 835,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "74"
+     },
+     "category": "staff",
+     "skill": "staffSpear",
+     "accuracy": 0,
+     "damage": "2d6+2",
+     "damageTypes": [
+      "bludgeoning"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 2,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "greaterFocus",
+       "value": "",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "focus",
+       "value": "3",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "longReach",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 2,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Низушечий защитный дублет",
+    "type": "armor",
+    "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl4-1.webp",
+    "system": {
+     "description": "<p>Выглядит как обычный дублет: чтобы понять, что это броня, нужна проверка Внимания со СЛ 20.</p>",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 375,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "84"
+     },
+     "weightClass": "light",
+     "isShield": false,
+     "sp": {
+      "head": {
+       "value": 0,
+       "max": 0
+      },
+      "torso": {
+       "value": 8,
+       "max": 8
+      },
+      "rightArm": {
+       "value": 8,
+       "max": 8
+      },
+      "leftArm": {
+       "value": 8,
+       "max": 8
+      },
+      "rightLeg": {
+       "value": 0,
+       "max": 0
+      },
+      "leftLeg": {
+       "value": 0,
+       "max": 0
+      }
+     },
+     "reliability": {
+      "value": 0,
+      "max": 0
+     },
+     "encumbrance": 0,
+     "enhancementSlots": 1,
+     "resistances": {
+      "slashing": false,
+      "piercing": false,
+      "bludgeoning": false,
+      "elemental": false,
+      "bleeding": false,
+      "poison": false
+     },
+     "effectsText": "",
+     "relic": false,
+     "mods": [],
+     "enhancements": [],
+     "stored": false
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Амулет с самоцветом",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-ring.webp",
+    "system": {
+     "description": "<p>Фокусирующее (3)</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 500,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "valuable",
+     "effect": "Фокусирующее (3)",
+     "focus": 3,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Двуслойные штаны",
+    "type": "armor",
+    "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
+    "system": {
+     "description": "<p>Двойная ткань — лучший выбор. Не столь раздутая, как средней руки стёганка, а зад твой прикроет.</p>",
+     "quantity": 1,
+     "weight": 1.5,
+     "cost": 225,
+     "availability": "rare",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "80"
+     },
+     "weightClass": "light",
+     "isShield": false,
+     "sp": {
+      "head": {
+       "value": 0,
+       "max": 0
+      },
+      "torso": {
+       "value": 0,
+       "max": 0
+      },
+      "rightArm": {
+       "value": 0,
+       "max": 0
+      },
+      "leftArm": {
+       "value": 0,
+       "max": 0
+      },
+      "rightLeg": {
+       "value": 8,
+       "max": 8
+      },
+      "leftLeg": {
+       "value": 8,
+       "max": 8
+      }
+     },
+     "reliability": {
+      "value": 0,
+      "max": 0
+     },
+     "encumbrance": 0,
+     "enhancementSlots": 0,
+     "resistances": {
+      "slashing": false,
+      "piercing": false,
+      "bludgeoning": false,
+      "elemental": false,
+      "bleeding": false,
+      "poison": false
+     },
+     "effectsText": "",
+     "relic": false,
+     "mods": [],
+     "enhancements": [],
+     "stored": false
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Поясная сумка",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-belt-pouch.webp",
@@ -40904,58 +40904,6 @@
     "effects": []
    },
    {
-    "name": "Чёрный яд",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-oil-cursed-e.webp",
-    "system": {
-     "description": "<p>Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 45,
-     "availability": "common",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "87"
-     },
-     "kind": "preparation",
-     "effect": "Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.",
-     "toxicity": 0,
-     "duration": "",
-     "durationRounds": 0,
-     "durationMinutes": 0,
-     "oilTarget": "",
-     "use": {
-      "action": "apply",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "poisoned",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 0,
-      "heal": 0,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Невидимые чернила",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-dec-blue.webp",
@@ -40985,6 +40933,58 @@
       "area": "",
       "range": "",
       "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
+     },
+     "changes": [],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Чёрный яд",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-oil-cursed-e.webp",
+    "system": {
+     "description": "<p>Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 45,
+     "availability": "common",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "87"
+     },
+     "kind": "preparation",
+     "effect": "Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "apply",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "poisoned",
       "statusChance": 100,
       "statusRounds": "",
       "removeStatuses": [],
@@ -42914,6 +42914,73 @@
     "effects": []
    },
    {
+    "name": "Двуслойные штаны",
+    "type": "armor",
+    "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
+    "system": {
+     "description": "<p>Двойная ткань — лучший выбор. Не столь раздутая, как средней руки стёганка, а зад твой прикроет.</p>",
+     "quantity": 1,
+     "weight": 1.5,
+     "cost": 225,
+     "availability": "rare",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "80"
+     },
+     "weightClass": "light",
+     "isShield": false,
+     "sp": {
+      "head": {
+       "value": 0,
+       "max": 0
+      },
+      "torso": {
+       "value": 0,
+       "max": 0
+      },
+      "rightArm": {
+       "value": 0,
+       "max": 0
+      },
+      "leftArm": {
+       "value": 0,
+       "max": 0
+      },
+      "rightLeg": {
+       "value": 8,
+       "max": 8
+      },
+      "leftLeg": {
+       "value": 8,
+       "max": 8
+      }
+     },
+     "reliability": {
+      "value": 0,
+      "max": 0
+     },
+     "encumbrance": 0,
+     "enhancementSlots": 0,
+     "resistances": {
+      "slashing": false,
+      "piercing": false,
+      "bludgeoning": false,
+      "elemental": false,
+      "bleeding": false,
+      "poison": false
+     },
+     "effectsText": "",
+     "relic": false,
+     "mods": [],
+     "enhancements": [],
+     "stored": false
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Инструменты алхимика",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-paste.webp",
@@ -43143,68 +43210,53 @@
     "effects": []
    },
    {
-    "name": "Двуслойные штаны",
-    "type": "armor",
-    "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
+    "name": "Алхимический клей",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-dec-amber.webp",
     "system": {
-     "description": "<p>Двойная ткань — лучший выбор. Не столь раздутая, как средней руки стёганка, а зад твой прикроет.</p>",
-     "quantity": 1,
-     "weight": 1.5,
-     "cost": 225,
-     "availability": "rare",
-     "concealment": "none",
-     "equipped": true,
+     "description": "<p>Алхимический клей можно вылить или бросить на поверхность предмета или на персонажа. Через 2 раунда клей начинает затвердевать, навсегда склеивая предметы и/или персонажей. Чтобы разъединить склеенное, потребуется проверка Силы со СЛ 16. Для броска склянки проведите атаку с проверкой Атлетики и с дистанцией в метрах, равной вашему Тел х 2.</p>",
+     "quantity": 2,
+     "weight": 0.1,
+     "cost": 28,
+     "availability": "common",
+     "concealment": "tiny",
+     "equipped": false,
      "source": {
       "book": "Корник",
-      "page": "80"
+      "page": "87"
      },
-     "weightClass": "light",
-     "isShield": false,
-     "sp": {
-      "head": {
-       "value": 0,
-       "max": 0
-      },
-      "torso": {
-       "value": 0,
-       "max": 0
-      },
-      "rightArm": {
-       "value": 0,
-       "max": 0
-      },
-      "leftArm": {
-       "value": 0,
-       "max": 0
-      },
-      "rightLeg": {
-       "value": 8,
-       "max": 8
-      },
-      "leftLeg": {
-       "value": 8,
-       "max": 8
-      }
+     "kind": "preparation",
+     "effect": "Алхимический клей можно вылить или бросить на поверхность предмета или на персонажа. Через 2 раунда клей начинает затвердевать, навсегда склеивая предметы и/или персонажей. Чтобы разъединить склеенное, потребуется проверка Силы со СЛ 16. Для броска склянки проведите атаку с проверкой Атлетики и с дистанцией в метрах, равной вашему Тел х 2.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "throw",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "Тел×2 м",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
      },
-     "reliability": {
-      "value": 0,
-      "max": 0
-     },
-     "encumbrance": 0,
-     "enhancementSlots": 0,
-     "resistances": {
-      "slashing": false,
-      "piercing": false,
-      "bludgeoning": false,
-      "elemental": false,
-      "bleeding": false,
-      "poison": false
-     },
-     "effectsText": "",
-     "relic": false,
+     "changes": [],
      "mods": [],
-     "enhancements": [],
-     "stored": false
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
     },
     "flags": {},
     "effects": []
@@ -43362,58 +43414,6 @@
       "damageType": "elemental",
       "area": "",
       "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 0,
-      "heal": 0,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Алхимический клей",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-dec-amber.webp",
-    "system": {
-     "description": "<p>Алхимический клей можно вылить или бросить на поверхность предмета или на персонажа. Через 2 раунда клей начинает затвердевать, навсегда склеивая предметы и/или персонажей. Чтобы разъединить склеенное, потребуется проверка Силы со СЛ 16. Для броска склянки проведите атаку с проверкой Атлетики и с дистанцией в метрах, равной вашему Тел х 2.</p>",
-     "quantity": 2,
-     "weight": 0.1,
-     "cost": 28,
-     "availability": "common",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "87"
-     },
-     "kind": "preparation",
-     "effect": "Алхимический клей можно вылить или бросить на поверхность предмета или на персонажа. Через 2 раунда клей начинает затвердевать, навсегда склеивая предметы и/или персонажей. Чтобы разъединить склеенное, потребуется проверка Силы со СЛ 16. Для броска склянки проведите атаку с проверкой Атлетики и с дистанцией в метрах, равной вашему Тел х 2.",
-     "toxicity": 0,
-     "duration": "",
-     "durationRounds": 0,
-     "durationMinutes": 0,
-     "oilTarget": "",
-     "use": {
-      "action": "throw",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "Тел×2 м",
       "status": "",
       "statusChance": 100,
       "statusRounds": "",
@@ -44918,6 +44918,41 @@
     "effects": []
    },
    {
+    "name": "Колода для гвинта",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
+    "system": {
+     "description": "<p>Понятия не имею, как гвинт так быстро набрал популярность. В этой стратегической игре есть здоровенные колоды карт, основанные на пяти реальных силах: Королевства Севера, Нильфгаард, скоятаэли, чудовища и Скеллиге.</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 5,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Доска для покера на костях",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-dice.webp",
@@ -44972,41 +45007,6 @@
      "effect": "Позволяют проводить хирургические операции",
      "focus": 0,
      "tool": "surgeon",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Колода для гвинта",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
-    "system": {
-     "description": "<p>Понятия не имею, как гвинт так быстро набрал популярность. В этой стратегической игре есть здоровенные колоды карт, основанные на пяти реальных силах: Королевства Севера, Нильфгаард, скоятаэли, чудовища и Скеллиге.</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 5,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
      "stored": false,
      "mods": [],
      "tattoo": {
@@ -45093,41 +45093,6 @@
     "effects": []
    },
    {
-    "name": "Песочные часы (час)",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-flask.webp",
-    "system": {
-     "description": "<p>Если надо следить за временем, бери песочные часы. Песок из одной чаши в другую за час пересыпается.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 38,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Инструменты алхимика",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-paste.webp",
@@ -45147,6 +45112,41 @@
      "effect": "Позволяют создавать алхимические составы",
      "focus": 0,
      "tool": "alchemist",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Песочные часы (час)",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-flask.webp",
+    "system": {
+     "description": "<p>Если надо следить за временем, бери песочные часы. Песок из одной чаши в другую за час пересыпается.</p>",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 38,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
      "stored": false,
      "mods": [],
      "tattoo": {
@@ -45828,60 +45828,6 @@
     "effects": []
    },
    {
-    "name": "Рассеивание",
-    "type": "spell",
-    "img": "icons/magic/light/beam-rays-red-small.webp",
-    "system": {
-     "description": "<p>Рассеивание позволяет прекратить действие заклинания/ритуала/порчи в пределах своей дистанции. Это заклинание можно сотворить как действие защиты, чтобы блокировать магические атаки вне зависимости от наличия или отсутствия физических компонентов либо прекратить им длительное заклинание. Для отмены магического эффекта нужно затратить половину Выносливости, потребовавшейся для создания отменяемого магического эффекта, а также совершить проверку Сотворения заклинаний. Проверка считается успешной, если её результат больше проверки заклинателя, сотворившего отменяемый эффект.</p>",
-     "kind": "spell",
-     "level": "novice",
-     "element": "mixed",
-     "branch": "",
-     "god": "",
-     "staCost": 0,
-     "variableCost": true,
-     "maxCost": 0,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "10 м",
-     "duration": "мгновенное",
-     "defense": "casting",
-     "defenseText": "Сотворение заклинаний",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "",
-      "damageType": "elemental",
-      "location": "",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
-     "source": {
-      "book": "Корник",
-      "page": "102"
-     },
-     "resource": ""
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Кристаллический стазис",
     "type": "spell",
     "img": "icons/magic/water/ice-crystal-white.webp",
@@ -45929,6 +45875,60 @@
      "source": {
       "book": "Том Хаоса",
       "page": "89"
+     },
+     "resource": ""
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Рассеивание",
+    "type": "spell",
+    "img": "icons/magic/light/beam-rays-red-small.webp",
+    "system": {
+     "description": "<p>Рассеивание позволяет прекратить действие заклинания/ритуала/порчи в пределах своей дистанции. Это заклинание можно сотворить как действие защиты, чтобы блокировать магические атаки вне зависимости от наличия или отсутствия физических компонентов либо прекратить им длительное заклинание. Для отмены магического эффекта нужно затратить половину Выносливости, потребовавшейся для создания отменяемого магического эффекта, а также совершить проверку Сотворения заклинаний. Проверка считается успешной, если её результат больше проверки заклинателя, сотворившего отменяемый эффект.</p>",
+     "kind": "spell",
+     "level": "novice",
+     "element": "mixed",
+     "branch": "",
+     "god": "",
+     "staCost": 0,
+     "variableCost": true,
+     "maxCost": 0,
+     "maintainCost": 0,
+     "maintainMode": "",
+     "effect": "",
+     "range": "10 м",
+     "duration": "мгновенное",
+     "defense": "casting",
+     "defenseText": "Сотворение заклинаний",
+     "preparation": "",
+     "dc": 0,
+     "dcText": "",
+     "ingredients": "",
+     "altIngredients": "",
+     "danger": "",
+     "removal": "",
+     "automation": {
+      "damage": "",
+      "damageType": "elemental",
+      "location": "",
+      "ignoreArmor": false,
+      "canCrit": false,
+      "staDamage": "",
+      "statuses": [],
+      "statusRounds": "",
+      "statusesByCost": {},
+      "regen": {
+       "hp": 0,
+       "rounds": ""
+      },
+      "shieldPerSta": 0,
+      "shieldRounds": 0
+     },
+     "source": {
+      "book": "Корник",
+      "page": "102"
      },
      "resource": ""
     },
@@ -48894,60 +48894,6 @@
     "effects": []
    },
    {
-    "name": "Короткий кинжал",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sw-viper-steel.webp",
-    "system": {
-     "description": "<p>Оружие старой доброй темерской работы. Длинное, тонкое и лёгкое. В битве под Содденом я с чёрным дрался, а из оружия у меня был лишь этот вот ножик. Нильф мне шесть рёбер переломал, вот только я-то жив-здоров, а он — нет.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 350,
-     "availability": "rare",
-     "concealment": "small",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "smallBlade",
-     "skill": "smallBlades",
-     "accuracy": 1,
-     "damage": "2d6+2",
-     "damageTypes": [
-      "slashing",
-      "piercing"
-     ],
-     "reliability": {
-      "value": 10,
-      "max": 10
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "bleeding",
-       "value": "25%",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Укреплённый гамбезон",
     "type": "armor",
     "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl2-1.webp",
@@ -49010,6 +48956,60 @@
      "mods": [],
      "enhancements": [],
      "stored": false
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Короткий кинжал",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/sw-viper-steel.webp",
+    "system": {
+     "description": "<p>Оружие старой доброй темерской работы. Длинное, тонкое и лёгкое. В битве под Содденом я с чёрным дрался, а из оружия у меня был лишь этот вот ножик. Нильф мне шесть рёбер переломал, вот только я-то жив-здоров, а он — нет.</p>",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 350,
+     "availability": "rare",
+     "concealment": "small",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "smallBlade",
+     "skill": "smallBlades",
+     "accuracy": 1,
+     "damage": "2d6+2",
+     "damageTypes": [
+      "slashing",
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "25%",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
     },
     "flags": {},
     "effects": []
@@ -50016,6 +50016,66 @@
     "effects": []
    },
    {
+    "name": "Стальной меч школы Волка",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
+    "system": {
+     "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Снаряжение ведьмака",
+      "page": "3"
+     },
+     "category": "sword",
+     "skill": "swordsmanship",
+     "accuracy": 1,
+     "damage": "5d6+2",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "meteorite",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 3,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "stored": false,
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Ведьмак",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-witcher.webp",
@@ -50200,13 +50260,13 @@
     "effects": []
    },
    {
-    "name": "Стальной меч школы Волка",
+    "name": "Серебряный меч школы Волка",
     "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
+    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-silver.webp",
     "system": {
      "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
      "quantity": 1,
-     "weight": 2.5,
+     "weight": 1.5,
      "cost": 0,
      "availability": "unique",
      "concealment": "none",
@@ -50218,34 +50278,28 @@
      "category": "sword",
      "skill": "swordsmanship",
      "accuracy": 1,
-     "damage": "5d6+2",
+     "damage": "2d6+2",
      "damageTypes": [
       "piercing",
       "slashing"
      ],
      "reliability": {
-      "value": 15,
-      "max": 15
+      "value": 10,
+      "max": 10
      },
      "hands": 1,
      "range": "",
      "attackSpeed": 1,
      "effects": [
       {
-       "key": "improvedAP",
-       "value": "",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "meteorite",
+       "key": "armorPiercing",
        "value": "",
        "source": "",
        "slots": 1
       }
      ],
      "enhancementSlots": 3,
-     "silverDamage": "",
+     "silverDamage": "3d6",
      "relic": false,
      "mods": [],
      "oil": {
@@ -50322,60 +50376,6 @@
      "mods": [],
      "enhancements": [],
      "stored": false
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Серебряный меч школы Волка",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-silver.webp",
-    "system": {
-     "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
-     "quantity": 1,
-     "weight": 1.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Снаряжение ведьмака",
-      "page": "3"
-     },
-     "category": "sword",
-     "skill": "swordsmanship",
-     "accuracy": 1,
-     "damage": "2d6+2",
-     "damageTypes": [
-      "piercing",
-      "slashing"
-     ],
-     "reliability": {
-      "value": 10,
-      "max": 10
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "armorPiercing",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 3,
-     "silverDamage": "3d6",
-     "relic": false,
-     "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "stored": false,
-     "crossbowMods": []
     },
     "flags": {},
     "effects": []
@@ -50575,58 +50575,6 @@
     "effects": []
    },
    {
-    "name": "«Ласточка»",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-swallow.webp",
-    "system": {
-     "description": "<p>Вы восстанавливаете 3 ПЗ за раунд. В том раунде, когда по вам попадают, вы не восстанавливаете ПЗ. Эффект исцеления от нескольких порций «Ласточки» не суммируется.</p>",
-     "quantity": 3,
-     "weight": 0.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "247"
-     },
-     "kind": "elixir",
-     "effect": "Вы восстанавливаете 3 ПЗ за раунд. В том раунде, когда по вам попадают, вы не восстанавливаете ПЗ. Эффект исцеления от нескольких порций «Ласточки» не суммируется.",
-     "toxicity": 50,
-     "duration": "20 раундов",
-     "durationRounds": 20,
-     "durationMinutes": 0,
-     "oilTarget": "",
-     "use": {
-      "action": "drink",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 3,
-      "heal": 0,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "«Гром»",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-pot-thunderbolt.webp",
@@ -50719,6 +50667,58 @@
       "statusRounds": "",
       "removeStatuses": [],
       "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
+     },
+     "changes": [],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "«Ласточка»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-swallow.webp",
+    "system": {
+     "description": "<p>Вы восстанавливаете 3 ПЗ за раунд. В том раунде, когда по вам попадают, вы не восстанавливаете ПЗ. Эффект исцеления от нескольких порций «Ласточки» не суммируется.</p>",
+     "quantity": 3,
+     "weight": 0.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "247"
+     },
+     "kind": "elixir",
+     "effect": "Вы восстанавливаете 3 ПЗ за раунд. В том раунде, когда по вам попадают, вы не восстанавливаете ПЗ. Эффект исцеления от нескольких порций «Ласточки» не суммируется.",
+     "toxicity": 50,
+     "duration": "20 раундов",
+     "durationRounds": 20,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "drink",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 3,
       "heal": 0,
       "charges": 1,
       "clearToxicity": false
@@ -51473,7 +51473,7 @@
   "effects": [],
   "flags": {},
   "folder": [
-   "Ведьмаки"
+   "Погибшие к концу «Ведьмака 3»"
   ]
  },
  {
@@ -52037,6 +52037,66 @@
     "effects": []
    },
    {
+    "name": "Стальной меч школы Волка",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
+    "system": {
+     "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Снаряжение ведьмака",
+      "page": "3"
+     },
+     "category": "sword",
+     "skill": "swordsmanship",
+     "accuracy": 1,
+     "damage": "5d6+2",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "meteorite",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 3,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "stored": false,
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Ведьмак",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-witcher.webp",
@@ -52221,66 +52281,6 @@
     "effects": []
    },
    {
-    "name": "Стальной меч школы Волка",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
-    "system": {
-     "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
-     "quantity": 1,
-     "weight": 2.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Снаряжение ведьмака",
-      "page": "3"
-     },
-     "category": "sword",
-     "skill": "swordsmanship",
-     "accuracy": 1,
-     "damage": "5d6+2",
-     "damageTypes": [
-      "piercing",
-      "slashing"
-     ],
-     "reliability": {
-      "value": 15,
-      "max": 15
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "improvedAP",
-       "value": "",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "meteorite",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 3,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "stored": false,
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Серебряный меч школы Волка",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/sch-wolf-silver.webp",
@@ -52456,6 +52456,52 @@
     "effects": []
    },
    {
+    "name": "Метательный нож",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-knife-butter.webp",
+    "system": {
+     "description": "<p>Ножички эти — весьма занимательные штучки. Они маленькие (так что их легко спрятать) и сбалансированы для метания. Придётся попрактиковаться, чтобы запомнить скорость вращения и прочее, но оно того стоит. Хорошее оружие для убийцы.</p>",
+     "quantity": 3,
+     "weight": 0.5,
+     "cost": 50,
+     "availability": "everywhere",
+     "concealment": "tiny",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "74"
+     },
+     "category": "thrown",
+     "skill": "athletics",
+     "accuracy": 0,
+     "damage": "1d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 1,
+     "range": "Тел×4 м",
+     "attackSpeed": 1,
+     "effects": [],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "«Ласточка»",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-pot-swallow.webp",
@@ -52503,52 +52549,6 @@
      },
      "stored": false,
      "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Метательный нож",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-knife-butter.webp",
-    "system": {
-     "description": "<p>Ножички эти — весьма занимательные штучки. Они маленькие (так что их легко спрятать) и сбалансированы для метания. Придётся попрактиковаться, чтобы запомнить скорость вращения и прочее, но оно того стоит. Хорошее оружие для убийцы.</p>",
-     "quantity": 3,
-     "weight": 0.5,
-     "cost": 50,
-     "availability": "everywhere",
-     "concealment": "tiny",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "74"
-     },
-     "category": "thrown",
-     "skill": "athletics",
-     "accuracy": 0,
-     "damage": "1d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 5,
-      "max": 5
-     },
-     "hands": 1,
-     "range": "Тел×4 м",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
     },
     "flags": {},
     "effects": []
@@ -52717,11 +52717,11 @@
     "effects": []
    },
    {
-    "name": "Масло против гибридов",
+    "name": "Масло против трупоедов",
     "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/oil-hybrid.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/oil-necrophage.webp",
     "system": {
-     "description": "<p>+5 урона против гибридов. Масло действует 30 минут.</p>",
+     "description": "<p>+5 урона против трупоедов. Масло действует 30 минут.</p>",
      "quantity": 1,
      "weight": 0.5,
      "cost": 0,
@@ -52733,12 +52733,12 @@
       "page": "248"
      },
      "kind": "oil",
-     "effect": "+5 урона против гибридов. Масло действует 30 минут.",
+     "effect": "+5 урона против трупоедов. Масло действует 30 минут.",
      "toxicity": 0,
      "duration": "30 минут",
      "durationRounds": 0,
      "durationMinutes": 30,
-     "oilTarget": "hybrid",
+     "oilTarget": "necrophage",
      "use": {
       "action": "oil",
       "damage": "",
@@ -52769,11 +52769,11 @@
     "effects": []
    },
    {
-    "name": "Масло против трупоедов",
+    "name": "Масло против гибридов",
     "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/oil-necrophage.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/oil-hybrid.webp",
     "system": {
-     "description": "<p>+5 урона против трупоедов. Масло действует 30 минут.</p>",
+     "description": "<p>+5 урона против гибридов. Масло действует 30 минут.</p>",
      "quantity": 1,
      "weight": 0.5,
      "cost": 0,
@@ -52785,12 +52785,12 @@
       "page": "248"
      },
      "kind": "oil",
-     "effect": "+5 урона против трупоедов. Масло действует 30 минут.",
+     "effect": "+5 урона против гибридов. Масло действует 30 минут.",
      "toxicity": 0,
      "duration": "30 минут",
      "durationRounds": 0,
      "durationMinutes": 30,
-     "oilTarget": "necrophage",
+     "oilTarget": "hybrid",
      "use": {
       "action": "oil",
       "damage": "",
@@ -53922,6 +53922,66 @@
     "effects": []
    },
    {
+    "name": "Стальной меч школы Волка",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
+    "system": {
+     "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Снаряжение ведьмака",
+      "page": "3"
+     },
+     "category": "sword",
+     "skill": "swordsmanship",
+     "accuracy": 1,
+     "damage": "5d6+2",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": "",
+       "slots": 1
+      },
+      {
+       "key": "meteorite",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 3,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "stored": false,
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Ведьмак",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-witcher.webp",
@@ -54106,66 +54166,6 @@
     "effects": []
    },
    {
-    "name": "Стальной меч школы Волка",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sch-wolf-steel.webp",
-    "system": {
-     "description": "<p>Меч ведьмачьей школы Волка.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
-     "quantity": 1,
-     "weight": 2.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Снаряжение ведьмака",
-      "page": "3"
-     },
-     "category": "sword",
-     "skill": "swordsmanship",
-     "accuracy": 1,
-     "damage": "5d6+2",
-     "damageTypes": [
-      "piercing",
-      "slashing"
-     ],
-     "reliability": {
-      "value": 15,
-      "max": 15
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "improvedAP",
-       "value": "",
-       "source": "",
-       "slots": 1
-      },
-      {
-       "key": "meteorite",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 3,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "stored": false,
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Серебряный меч школы Волка",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/sch-wolf-silver.webp",
@@ -54287,6 +54287,41 @@
     "effects": []
    },
    {
+    "name": "Стандартные боеприпасы",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/am-standard.webp",
+    "system": {
+     "description": "<p>Если есть стрелковое оружие, нужны и боеприпасы. Стандартные боеприпасы — стрелы да болты. Вторые обычно меньше первых, но и у тех, и у других есть оперение и острый металлический наконечник.</p>",
+     "quantity": 15,
+     "weight": 0.05,
+     "cost": 1,
+     "availability": "everywhere",
+     "concealment": "large",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "74"
+     },
+     "category": "ammo",
+     "effect": "Урон: колющий. Надёжность 10.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Ручной арбалет",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/cb-hand.webp",
@@ -54335,41 +54370,6 @@
       "until": 0
      },
      "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Стандартные боеприпасы",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/am-standard.webp",
-    "system": {
-     "description": "<p>Если есть стрелковое оружие, нужны и боеприпасы. Стандартные боеприпасы — стрелы да болты. Вторые обычно меньше первых, но и у тех, и у других есть оперение и острый металлический наконечник.</p>",
-     "quantity": 15,
-     "weight": 0.05,
-     "cost": 1,
-     "availability": "everywhere",
-     "concealment": "large",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "74"
-     },
-     "category": "ammo",
-     "effect": "Урон: колющий. Надёжность 10.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
     },
     "flags": {},
     "effects": []
@@ -56442,6 +56442,65 @@
     "effects": []
    },
    {
+    "name": "«Неясыть»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-tawny-owl.webp",
+    "system": {
+     "description": "<p>Каждый раз, когда вы выполняете действие отдыха, чтобы восстановить Вын, получите дополнительно 2 Вын.</p>",
+     "quantity": 2,
+     "weight": 0.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "247"
+     },
+     "kind": "elixir",
+     "effect": "Каждый раз, когда вы выполняете действие отдыха, чтобы восстановить Вын, получите дополнительно 2 Вын.",
+     "toxicity": 50,
+     "duration": "20 раундов",
+     "durationRounds": 20,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "drink",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
+     },
+     "changes": [
+      {
+       "key": "system.fx.rec",
+       "type": "add",
+       "value": 2,
+       "phase": "initial"
+      }
+     ],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Масло против духов",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/oil-specter.webp",
@@ -56532,65 +56591,6 @@
       "clearToxicity": false
      },
      "changes": [],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "«Неясыть»",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-tawny-owl.webp",
-    "system": {
-     "description": "<p>Каждый раз, когда вы выполняете действие отдыха, чтобы восстановить Вын, получите дополнительно 2 Вын.</p>",
-     "quantity": 2,
-     "weight": 0.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "247"
-     },
-     "kind": "elixir",
-     "effect": "Каждый раз, когда вы выполняете действие отдыха, чтобы восстановить Вын, получите дополнительно 2 Вын.",
-     "toxicity": 50,
-     "duration": "20 раундов",
-     "durationRounds": 20,
-     "durationMinutes": 0,
-     "oilTarget": "",
-     "use": {
-      "action": "drink",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 0,
-      "heal": 0,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [
-      {
-       "key": "system.fx.rec",
-       "type": "add",
-       "value": 2,
-       "phase": "initial"
-      }
-     ],
      "mods": [],
      "applied": false,
      "mutagen": {
@@ -57321,7 +57321,7 @@
   "effects": [],
   "flags": {},
   "folder": [
-   "Ведьмаки"
+   "Погибшие к концу «Ведьмака 3»"
   ]
  },
  {
@@ -57885,6 +57885,60 @@
     "effects": []
    },
    {
+    "name": "Серебряный меч школы Кота",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/sch-cat-silver.webp",
+    "system": {
+     "description": "<p>Меч ведьмачьей школы Кота.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
+     "quantity": 1,
+     "weight": 1.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Снаряжение ведьмака",
+      "page": "3"
+     },
+     "category": "sword",
+     "skill": "swordsmanship",
+     "accuracy": 2,
+     "damage": "1d6+2",
+     "damageTypes": [
+      "piercing",
+      "slashing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "bleeding",
+       "value": "30%",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 2,
+     "silverDamage": "3d6",
+     "relic": false,
+     "mods": [],
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "stored": false,
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Ведьмак",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-witcher.webp",
@@ -58069,55 +58123,36 @@
     "effects": []
    },
    {
-    "name": "Серебряный меч школы Кота",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sch-cat-silver.webp",
+    "name": "Стандартные боеприпасы",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/am-standard.webp",
     "system": {
-     "description": "<p>Меч ведьмачьей школы Кота.</p><p>Ведьмак, который начинает игру со снаряжением своей школы, получает его вместо стандартного ведьмачьего меча.</p>",
-     "quantity": 1,
-     "weight": 1.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
+     "description": "<p>Если есть стрелковое оружие, нужны и боеприпасы. Стандартные боеприпасы — стрелы да болты. Вторые обычно меньше первых, но и у тех, и у других есть оперение и острый металлический наконечник.</p>",
+     "quantity": 10,
+     "weight": 0.05,
+     "cost": 1,
+     "availability": "everywhere",
+     "concealment": "large",
+     "equipped": false,
      "source": {
-      "book": "Снаряжение ведьмака",
-      "page": "3"
+      "book": "Корник",
+      "page": "74"
      },
-     "category": "sword",
-     "skill": "swordsmanship",
-     "accuracy": 2,
-     "damage": "1d6+2",
-     "damageTypes": [
-      "piercing",
-      "slashing"
-     ],
-     "reliability": {
-      "value": 10,
-      "max": 10
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "bleeding",
-       "value": "30%",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 2,
-     "silverDamage": "3d6",
-     "relic": false,
-     "mods": [],
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
+     "category": "ammo",
+     "effect": "Урон: колющий. Надёжность 10.",
+     "focus": 0,
+     "tool": "",
      "stored": false,
-     "crossbowMods": []
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
     },
     "flags": {},
     "effects": []
@@ -58315,6 +58350,65 @@
     "effects": []
    },
    {
+    "name": "«Гром»",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-thunderbolt.webp",
+    "system": {
+     "description": "<p>+3 к урону физическими атаками</p>",
+     "quantity": 2,
+     "weight": 0.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "247"
+     },
+     "kind": "elixir",
+     "effect": "+3 к урону физическими атаками",
+     "toxicity": 75,
+     "duration": "15 раундов",
+     "durationRounds": 15,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "drink",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
+     },
+     "changes": [
+      {
+       "key": "system.fx.damage",
+       "type": "add",
+       "value": 3,
+       "phase": "initial"
+      }
+     ],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Метательный нож",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/t3-knife-butter.webp",
@@ -58361,47 +58455,12 @@
     "effects": []
    },
    {
-    "name": "Стандартные боеприпасы",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/am-standard.webp",
-    "system": {
-     "description": "<p>Если есть стрелковое оружие, нужны и боеприпасы. Стандартные боеприпасы — стрелы да болты. Вторые обычно меньше первых, но и у тех, и у других есть оперение и острый металлический наконечник.</p>",
-     "quantity": 10,
-     "weight": 0.05,
-     "cost": 1,
-     "availability": "everywhere",
-     "concealment": "large",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "74"
-     },
-     "category": "ammo",
-     "effect": "Урон: колющий. Надёжность 10.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "«Кошка»",
+    "name": "«Полнолуние»",
     "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-cat.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-full-moon.webp",
     "system": {
-     "description": "<p>Нет штрафов в темноте или при слабом свете. Вы также невосприимчивы к гипнозу и получаете бонус +2 к раскрытию иллюзий.</p>",
-     "quantity": 2,
+     "description": "<p>Вы получаете +30 временных ПЗ до конца действия эликсира. Эффект нескольких «Полнолуний» не суммируется.</p>",
+     "quantity": 1,
      "weight": 0.5,
      "cost": 0,
      "availability": "unique",
@@ -58412,11 +58471,11 @@
       "page": "247"
      },
      "kind": "elixir",
-     "effect": "Нет штрафов в темноте или при слабом свете. Вы также невосприимчивы к гипнозу и получаете бонус +2 к раскрытию иллюзий.",
-     "toxicity": 25,
-     "duration": "2 часа",
+     "effect": "Вы получаете +30 временных ПЗ до конца действия эликсира. Эффект нескольких «Полнолуний» не суммируется.",
+     "toxicity": 75,
+     "duration": "1/2 часа",
      "durationRounds": 0,
-     "durationMinutes": 120,
+     "durationMinutes": 30,
      "oilTarget": "",
      "use": {
       "action": "drink",
@@ -58425,6 +58484,65 @@
       "area": "",
       "range": "",
       "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 30,
+      "charges": 1,
+      "clearToxicity": false
+     },
+     "changes": [
+      {
+       "key": "system.fx.hp",
+       "type": "add",
+       "value": 30,
+       "phase": "initial"
+      }
+     ],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Чёрный яд",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-oil-cursed-e.webp",
+    "system": {
+     "description": "<p>Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 45,
+     "availability": "common",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "87"
+     },
+     "kind": "preparation",
+     "effect": "Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.",
+     "toxicity": 0,
+     "duration": "",
+     "durationRounds": 0,
+     "durationMinutes": 0,
+     "oilTarget": "",
+     "use": {
+      "action": "apply",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "poisoned",
       "statusChance": 100,
       "statusRounds": "",
       "removeStatuses": [],
@@ -58500,176 +58618,6 @@
     "effects": []
    },
    {
-    "name": "«Полнолуние»",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-full-moon.webp",
-    "system": {
-     "description": "<p>Вы получаете +30 временных ПЗ до конца действия эликсира. Эффект нескольких «Полнолуний» не суммируется.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "247"
-     },
-     "kind": "elixir",
-     "effect": "Вы получаете +30 временных ПЗ до конца действия эликсира. Эффект нескольких «Полнолуний» не суммируется.",
-     "toxicity": 75,
-     "duration": "1/2 часа",
-     "durationRounds": 0,
-     "durationMinutes": 30,
-     "oilTarget": "",
-     "use": {
-      "action": "drink",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 0,
-      "heal": 30,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [
-      {
-       "key": "system.fx.hp",
-       "type": "add",
-       "value": 30,
-       "phase": "initial"
-      }
-     ],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "«Гром»",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-thunderbolt.webp",
-    "system": {
-     "description": "<p>+3 к урону физическими атаками</p>",
-     "quantity": 2,
-     "weight": 0.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "247"
-     },
-     "kind": "elixir",
-     "effect": "+3 к урону физическими атаками",
-     "toxicity": 75,
-     "duration": "15 раундов",
-     "durationRounds": 15,
-     "durationMinutes": 0,
-     "oilTarget": "",
-     "use": {
-      "action": "drink",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 0,
-      "heal": 0,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [
-      {
-       "key": "system.fx.damage",
-       "type": "add",
-       "value": 3,
-       "phase": "initial"
-      }
-     ],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Масло против гибридов",
-    "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/oil-hybrid.webp",
-    "system": {
-     "description": "<p>+5 урона против гибридов. Масло действует 30 минут.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 0,
-     "availability": "unique",
-     "concealment": "tiny",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "248"
-     },
-     "kind": "oil",
-     "effect": "+5 урона против гибридов. Масло действует 30 минут.",
-     "toxicity": 0,
-     "duration": "30 минут",
-     "durationRounds": 0,
-     "durationMinutes": 30,
-     "oilTarget": "hybrid",
-     "use": {
-      "action": "oil",
-      "damage": "",
-      "damageType": "elemental",
-      "area": "",
-      "range": "",
-      "status": "",
-      "statusChance": 100,
-      "statusRounds": "",
-      "removeStatuses": [],
-      "regen": 0,
-      "heal": 0,
-      "charges": 1,
-      "clearToxicity": false
-     },
-     "changes": [],
-     "mods": [],
-     "applied": false,
-     "mutagen": {
-      "color": "",
-      "dc": 0,
-      "minor": ""
-     },
-     "stored": false,
-     "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Медальон школы Кота",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/med-school-cat.webp",
@@ -58705,35 +58653,35 @@
     "effects": []
    },
    {
-    "name": "Чёрный яд",
+    "name": "«Кошка»",
     "type": "alchemical",
-    "img": "systems/vedmak/assets/fan/alchemy/t3-oil-cursed-e.webp",
+    "img": "systems/vedmak/assets/fan/alchemy/t3-pot-cat.webp",
     "system": {
-     "description": "<p>Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 45,
-     "availability": "common",
+     "description": "<p>Нет штрафов в темноте или при слабом свете. Вы также невосприимчивы к гипнозу и получаете бонус +2 к раскрытию иллюзий.</p>",
+     "quantity": 2,
+     "weight": 0.5,
+     "cost": 0,
+     "availability": "unique",
      "concealment": "tiny",
      "equipped": false,
      "source": {
       "book": "Корник",
-      "page": "87"
+      "page": "247"
      },
-     "kind": "preparation",
-     "effect": "Чёрный яд немедленно отравляет цель при попадании в кровь или при проглатывании. Проверка Стойкости со СЛ 16 отменяет эффект чёрного яда, но цель может снова отравиться, если примет чёрный яд внутрь или будет ранена оружием, покрытым этим ядом. Смазать клинок — полный раунд, оружие отравлено на 1d10 раундов. Заметить яд в питье — Внимание СЛ 16.",
-     "toxicity": 0,
-     "duration": "",
+     "kind": "elixir",
+     "effect": "Нет штрафов в темноте или при слабом свете. Вы также невосприимчивы к гипнозу и получаете бонус +2 к раскрытию иллюзий.",
+     "toxicity": 25,
+     "duration": "2 часа",
      "durationRounds": 0,
-     "durationMinutes": 0,
+     "durationMinutes": 120,
      "oilTarget": "",
      "use": {
-      "action": "apply",
+      "action": "drink",
       "damage": "",
       "damageType": "elemental",
       "area": "",
       "range": "",
-      "status": "poisoned",
+      "status": "",
       "statusChance": 100,
       "statusRounds": "",
       "removeStatuses": [],
@@ -58792,41 +58740,6 @@
     "effects": []
    },
    {
-    "name": "Лошадь",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-horse.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 0,
-     "cost": 520,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "91"
-     },
-     "category": "mount",
-     "effect": "Атлетика + Лвк: 11; модификатор управления +2; скорость 12; ПЗ 40; грузоподъёмность 100 кг. Параметры скакунов — стр. 312.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Тёмная одежда",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-clothes-dark.webp",
@@ -58857,6 +58770,65 @@
       "applied": false,
       "tries": 0
      }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Игни",
+    "type": "spell",
+    "img": "systems/vedmak/assets/fan/magic/sg-igni.webp",
+    "system": {
+     "description": "<p>Игни испускает волну огня и искр, наносящую 1d6 урона за каждое потраченное очко Вын и с вероятностью 50 % поджигающую всё, во что попадёт. Игни всегда наносит урон по туловищу, если только не применяется на минимальном расстоянии (в упор). При использовании в упор Игни можно направить на определённую часть тела.</p>",
+     "kind": "sign",
+     "level": "novice",
+     "element": "fire",
+     "branch": "",
+     "god": "",
+     "staCost": 0,
+     "variableCost": true,
+     "maxCost": 7,
+     "maintainCost": 0,
+     "maintainMode": "",
+     "effect": "",
+     "range": "2-метровый конус",
+     "duration": "мгновенный",
+     "defense": "dodgeBlock",
+     "defenseText": "уклонение или блокирование",
+     "preparation": "",
+     "dc": 0,
+     "dcText": "",
+     "ingredients": "",
+     "altIngredients": "",
+     "danger": "",
+     "removal": "",
+     "automation": {
+      "damage": "(@sta)d6",
+      "damageType": "elemental",
+      "location": "torso",
+      "ignoreArmor": false,
+      "canCrit": false,
+      "staDamage": "",
+      "statuses": [
+       {
+        "status": "burning",
+        "chance": "50"
+       }
+      ],
+      "statusRounds": "",
+      "statusesByCost": {},
+      "regen": {
+       "hp": 0,
+       "rounds": ""
+      },
+      "shieldPerSta": 0,
+      "shieldRounds": 0
+     },
+     "source": {
+      "book": "Корник",
+      "page": "114"
+     },
+     "resource": ""
     },
     "flags": {},
     "effects": []
@@ -58925,60 +58897,36 @@
     "effects": []
    },
    {
-    "name": "Игни",
-    "type": "spell",
-    "img": "systems/vedmak/assets/fan/magic/sg-igni.webp",
+    "name": "Лошадь",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-horse.webp",
     "system": {
-     "description": "<p>Игни испускает волну огня и искр, наносящую 1d6 урона за каждое потраченное очко Вын и с вероятностью 50 % поджигающую всё, во что попадёт. Игни всегда наносит урон по туловищу, если только не применяется на минимальном расстоянии (в упор). При использовании в упор Игни можно направить на определённую часть тела.</p>",
-     "kind": "sign",
-     "level": "novice",
-     "element": "fire",
-     "branch": "",
-     "god": "",
-     "staCost": 0,
-     "variableCost": true,
-     "maxCost": 7,
-     "maintainCost": 0,
-     "maintainMode": "",
-     "effect": "",
-     "range": "2-метровый конус",
-     "duration": "мгновенный",
-     "defense": "dodgeBlock",
-     "defenseText": "уклонение или блокирование",
-     "preparation": "",
-     "dc": 0,
-     "dcText": "",
-     "ingredients": "",
-     "altIngredients": "",
-     "danger": "",
-     "removal": "",
-     "automation": {
-      "damage": "(@sta)d6",
-      "damageType": "elemental",
-      "location": "torso",
-      "ignoreArmor": false,
-      "canCrit": false,
-      "staDamage": "",
-      "statuses": [
-       {
-        "status": "burning",
-        "chance": "50"
-       }
-      ],
-      "statusRounds": "",
-      "statusesByCost": {},
-      "regen": {
-       "hp": 0,
-       "rounds": ""
-      },
-      "shieldPerSta": 0,
-      "shieldRounds": 0
-     },
+     "description": "",
+     "quantity": 1,
+     "weight": 0,
+     "cost": 520,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
      "source": {
       "book": "Корник",
-      "page": "114"
+      "page": "91"
      },
-     "resource": ""
+     "category": "mount",
+     "effect": "Атлетика + Лвк: 11; модификатор управления +2; скорость 12; ПЗ 40; грузоподъёмность 100 кг. Параметры скакунов — стр. 312.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
     },
     "flags": {},
     "effects": []
@@ -59033,6 +58981,58 @@
       "page": "114"
      },
      "resource": ""
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Масло против гибридов",
+    "type": "alchemical",
+    "img": "systems/vedmak/assets/fan/alchemy/oil-hybrid.webp",
+    "system": {
+     "description": "<p>+5 урона против гибридов. Масло действует 30 минут.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 0,
+     "availability": "unique",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "248"
+     },
+     "kind": "oil",
+     "effect": "+5 урона против гибридов. Масло действует 30 минут.",
+     "toxicity": 0,
+     "duration": "30 минут",
+     "durationRounds": 0,
+     "durationMinutes": 30,
+     "oilTarget": "hybrid",
+     "use": {
+      "action": "oil",
+      "damage": "",
+      "damageType": "elemental",
+      "area": "",
+      "range": "",
+      "status": "",
+      "statusChance": 100,
+      "statusRounds": "",
+      "removeStatuses": [],
+      "regen": 0,
+      "heal": 0,
+      "charges": 1,
+      "clearToxicity": false
+     },
+     "changes": [],
+     "mods": [],
+     "applied": false,
+     "mutagen": {
+      "color": "",
+      "dc": 0,
+      "minor": ""
+     },
+     "stored": false,
+     "poisonDc": 0
     },
     "flags": {},
     "effects": []
@@ -60252,6 +60252,41 @@
     "effects": []
    },
    {
+    "name": "Хирургические инструменты",
+    "type": "gear",
+    "img": "icons/tools/medical/bandages-gauze.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 83,
+     "availability": "common",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют проводить хирургические операции",
+     "focus": 0,
+     "tool": "surgeon",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Дистилляционная камера",
     "type": "gear",
     "img": "icons/tools/laboratory/alembic-glass-ball-blue.webp",
@@ -60271,6 +60306,76 @@
      "effect": "Час работы и Алхимия СЛ 14 превращают до 10 единиц ингредиентов в столько же единиц очищенной субстанции.",
      "focus": 0,
      "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Медицинское кадило",
+    "type": "gear",
+    "img": "icons/tools/laboratory/burner-steel-grey.webp",
+    "system": {
+     "description": "<p>Курильница разносит алхимический состав дымом на 6 м вокруг, включая держащего. Горит 1 раунд за каждую заложенную единицу.</p>",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 80,
+     "availability": "common",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Профессиональные инструменты",
+      "page": "4"
+     },
+     "category": "tools",
+     "effect": "Курильница разносит алхимический состав дымом на 6 м вокруг, включая держащего. Горит 1 раунд за каждую заложенную единицу.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Инструменты алхимика",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-paste.webp",
+    "system": {
+     "description": "<p>Позволяют создавать алхимические составы</p>",
+     "quantity": 1,
+     "weight": 3,
+     "cost": 80,
+     "availability": "rare",
+     "concealment": "large",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют создавать алхимические составы",
+     "focus": 0,
+     "tool": "alchemist",
      "stored": false,
      "mods": [],
      "tattoo": {
@@ -60391,41 +60496,6 @@
     "effects": []
    },
    {
-    "name": "Инструменты алхимика",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-paste.webp",
-    "system": {
-     "description": "<p>Позволяют создавать алхимические составы</p>",
-     "quantity": 1,
-     "weight": 3,
-     "cost": 80,
-     "availability": "rare",
-     "concealment": "large",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют создавать алхимические составы",
-     "focus": 0,
-     "tool": "alchemist",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Кровосвёртывающий порошок",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-oil-relict-e.webp",
@@ -60475,111 +60545,6 @@
      },
      "stored": false,
      "poisonDc": 0
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Хирургические инструменты",
-    "type": "gear",
-    "img": "icons/tools/medical/bandages-gauze.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 83,
-     "availability": "common",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют проводить хирургические операции",
-     "focus": 0,
-     "tool": "surgeon",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Медицинское кадило",
-    "type": "gear",
-    "img": "icons/tools/laboratory/burner-steel-grey.webp",
-    "system": {
-     "description": "<p>Курильница разносит алхимический состав дымом на 6 м вокруг, включая держащего. Горит 1 раунд за каждую заложенную единицу.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 80,
-     "availability": "common",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Профессиональные инструменты",
-      "page": "4"
-     },
-     "category": "tools",
-     "effect": "Курильница разносит алхимический состав дымом на 6 м вокруг, включая держащего. Горит 1 раунд за каждую заложенную единицу.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Крепкий алкоголь",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/f-vodka.webp",
-    "system": {
-     "description": "<p>Крепкая выпивка. На севере чаще встречается краснолюдская настойка, на юге — нильфгаардская лимонная, обе очень забористые.</p>",
-     "quantity": 3,
-     "weight": 1,
-     "cost": 10,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "food",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
     },
     "flags": {},
     "effects": []
@@ -60696,23 +60661,23 @@
     "effects": []
    },
    {
-    "name": "Пустая склянка",
+    "name": "Крепкий алкоголь",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-empty-glass.webp",
+    "img": "systems/vedmak/assets/fan/gear/f-vodka.webp",
     "system": {
-     "description": "<p>Пустая бутылка из-под вина или пузырёк из-под эликсира — лишь бы пробка держала.</p>",
-     "quantity": 5,
-     "weight": 0.1,
-     "cost": 3,
-     "availability": "everywhere",
-     "concealment": "tiny",
+     "description": "<p>Крепкая выпивка. На севере чаще встречается краснолюдская настойка, на юге — нильфгаардская лимонная, обе очень забористые.</p>",
+     "quantity": 3,
+     "weight": 1,
+     "cost": 10,
+     "availability": "common",
+     "concealment": "none",
      "equipped": false,
      "source": {
-      "book": "Фургончик Родольфа",
-      "page": "1"
+      "book": "Корник",
+      "page": "93"
      },
-     "category": "container",
-     "effect": "Пустая бутылка из-под вина или пузырёк из-под эликсира — лишь бы пробка держала.",
+     "category": "food",
+     "effect": "",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -60766,41 +60731,6 @@
     "effects": []
    },
    {
-    "name": "Письменные принадлежности",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-inkwell.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 25,
-     "availability": "everywhere",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют писать письма, записки и т.п.",
-     "focus": 0,
-     "tool": "writing",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Дневник/гроссбух",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-book.webp",
@@ -60818,6 +60748,41 @@
      },
      "category": "general",
      "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Пустая склянка",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-empty-glass.webp",
+    "system": {
+     "description": "<p>Пустая бутылка из-под вина или пузырёк из-под эликсира — лишь бы пробка держала.</p>",
+     "quantity": 5,
+     "weight": 0.1,
+     "cost": 3,
+     "availability": "everywhere",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Фургончик Родольфа",
+      "page": "1"
+     },
+     "category": "container",
+     "effect": "Пустая бутылка из-под вина или пузырёк из-под эликсира — лишь бы пробка держала.",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -60931,6 +60896,41 @@
       "extraLayer": true
      }
     },
+    "effects": []
+   },
+   {
+    "name": "Письменные принадлежности",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-inkwell.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 25,
+     "availability": "everywhere",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют писать письма, записки и т.п.",
+     "focus": 0,
+     "tool": "writing",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
     "effects": []
    },
    {
@@ -61535,6 +61535,59 @@
     "effects": []
    },
    {
+    "name": "Эльфский зефар",
+    "type": "weapon",
+    "img": "icons/weapons/staves/staff-animal-bird.webp",
+    "system": {
+     "description": "<p>Гордость и отрада эльфов. Это длинный лук с четырьмя плечами, на который натянута крепкая вощёная тетива. Две пары плеч у зефара увеличивают силу выстрела в два раза. Что приятно, лук от этого тяжелее не становится.</p>",
+     "quantity": 1,
+     "weight": 2.5,
+     "cost": 1100,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "83"
+     },
+     "category": "bow",
+     "skill": "archery",
+     "accuracy": 2,
+     "damage": "6d6",
+     "damageTypes": [
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 2,
+     "range": "350 м",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "improvedAP",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 2,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Рейнджер",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-ranger.webp",
@@ -61735,59 +61788,6 @@
       "applied": false,
       "tries": 0
      }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Эльфский зефар",
-    "type": "weapon",
-    "img": "icons/weapons/staves/staff-animal-bird.webp",
-    "system": {
-     "description": "<p>Гордость и отрада эльфов. Это длинный лук с четырьмя плечами, на который натянута крепкая вощёная тетива. Две пары плеч у зефара увеличивают силу выстрела в два раза. Что приятно, лук от этого тяжелее не становится.</p>",
-     "quantity": 1,
-     "weight": 2.5,
-     "cost": 1100,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "83"
-     },
-     "category": "bow",
-     "skill": "archery",
-     "accuracy": 2,
-     "damage": "6d6",
-     "damageTypes": [
-      "piercing"
-     ],
-     "reliability": {
-      "value": 10,
-      "max": 10
-     },
-     "hands": 2,
-     "range": "350 м",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "improvedAP",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 2,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
     },
     "flags": {},
     "effects": []
@@ -62373,41 +62373,6 @@
     "effects": []
    },
    {
-    "name": "Походная постель",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-bedroll.webp",
-    "system": {
-     "description": "<p>Мне часто приходилось спать на земле, и походная постель в таких ситуациях — вещь незаменимая. А ведь как всё просто: подстилка да одеялко.</p>",
-     "quantity": 1,
-     "weight": 1.5,
-     "cost": 16,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Лошадь",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-horse.webp",
@@ -62441,12 +62406,47 @@
     },
     "flags": {},
     "effects": []
+   },
+   {
+    "name": "Походная постель",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-bedroll.webp",
+    "system": {
+     "description": "<p>Мне часто приходилось спать на земле, и походная постель в таких ситуациях — вещь незаменимая. А ведь как всё просто: подстилка да одеялко.</p>",
+     "quantity": 1,
+     "weight": 1.5,
+     "cost": 16,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
    }
   ],
   "effects": [],
   "flags": {},
   "folder": [
-   "Ганза и спутники"
+   "Погибшие к концу «Ведьмака 3»"
   ]
  },
  {
@@ -62944,48 +62944,6 @@
   },
   "items": [
    {
-    "name": "Человек",
-    "type": "race",
-    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
-    "system": {
-     "key": "human",
-     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
-     "traits": [
-      {
-       "name": "Доверие",
-       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
-      },
-      {
-       "name": "Изобретательность",
-       "effect": "+1 к Дедукции."
-      },
-      {
-       "name": "Упрямство",
-       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
-      }
-     ],
-     "mods": [
-      {
-       "target": "skills.deduction",
-       "value": 1
-      }
-     ],
-     "canUseMagic": true,
-     "source": {
-      "book": "Корник",
-      "page": "24"
-     },
-     "grants": [],
-     "resource": "",
-     "roles": [],
-     "role": "",
-     "role2": "",
-     "powers": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Воин",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-warrior.webp",
@@ -63181,6 +63139,102 @@
      "attackSpeed": 1,
      "effects": [],
      "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Человек",
+    "type": "race",
+    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
+    "system": {
+     "key": "human",
+     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
+     "traits": [
+      {
+       "name": "Доверие",
+       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
+      },
+      {
+       "name": "Изобретательность",
+       "effect": "+1 к Дедукции."
+      },
+      {
+       "name": "Упрямство",
+       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
+      }
+     ],
+     "mods": [
+      {
+       "target": "skills.deduction",
+       "value": 1
+      }
+     ],
+     "canUseMagic": true,
+     "source": {
+      "book": "Корник",
+      "page": "24"
+     },
+     "grants": [],
+     "resource": "",
+     "roles": [],
+     "role": "",
+     "role2": "",
+     "powers": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Клинок из Виковаро",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/sw-toussaint1.webp",
+    "system": {
+     "description": "<p>Такие мечи можно узнать по тяжёлой гарде. Обычно ими дерутся рыцари из Виковаро, но из-за войны их можно найти чуть ли не всюду. Вот что я тебе скажу: видал я, как на эти мечи обрушивались целые замки, и даже после такого этим оружием рубили руки-ноги.</p>",
+     "quantity": 1,
+     "weight": 1.5,
+     "cost": 955,
+     "availability": "unique",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "sword",
+     "skill": "swordsmanship",
+     "accuracy": 0,
+     "damage": "5d6+4",
+     "damageTypes": [
+      "slashing",
+      "piercing"
+     ],
+     "reliability": {
+      "value": 15,
+      "max": 15
+     },
+     "hands": 2,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "balanced",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 1,
      "silverDamage": "",
      "relic": false,
      "mods": [],
@@ -63397,60 +63451,6 @@
     "effects": []
    },
    {
-    "name": "Клинок из Виковаро",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/sw-toussaint1.webp",
-    "system": {
-     "description": "<p>Такие мечи можно узнать по тяжёлой гарде. Обычно ими дерутся рыцари из Виковаро, но из-за войны их можно найти чуть ли не всюду. Вот что я тебе скажу: видал я, как на эти мечи обрушивались целые замки, и даже после такого этим оружием рубили руки-ноги.</p>",
-     "quantity": 1,
-     "weight": 1.5,
-     "cost": 955,
-     "availability": "unique",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "sword",
-     "skill": "swordsmanship",
-     "accuracy": 0,
-     "damage": "5d6+4",
-     "damageTypes": [
-      "slashing",
-      "piercing"
-     ],
-     "reliability": {
-      "value": 15,
-      "max": 15
-     },
-     "hands": 2,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "balanced",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 1,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Боевой конь",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/g-warhorse.webp",
@@ -63521,23 +63521,23 @@
     "effects": []
    },
    {
-    "name": "Краснолюдский точильный камень",
+    "name": "Военная перемётная сума",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-whetstone.webp",
+    "img": "systems/vedmak/assets/fan/gear/g-saddlebags2.webp",
     "system": {
-     "description": "<p>Полчаса заточки дают одному режущему или колющему оружию (либо 10 стрелам или болтам) эффект «Пробивающее броню» до конца следующего боя. Хватает на 3 раза.</p>",
+     "description": "",
      "quantity": 1,
-     "weight": 0.1,
-     "cost": 300,
-     "availability": "unique",
-     "concealment": "tiny",
+     "weight": 2,
+     "cost": 150,
+     "availability": "rare",
+     "concealment": "none",
      "equipped": false,
      "source": {
-      "book": "Профессиональные инструменты",
-      "page": "4"
+      "book": "Корник",
+      "page": "91"
      },
-     "category": "tools",
-     "effect": "Полчаса заточки дают одному режущему или колющему оружию (либо 10 стрелам или болтам) эффект «Пробивающее броню» до конца следующего боя. Хватает на 3 раза.",
+     "category": "mount",
+     "effect": "В каждое из двух отделений влезает 50 кг предметов небольшого или среднего размера. Снаружи есть крепления для 6 крупных предметов",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -63556,23 +63556,23 @@
     "effects": []
    },
    {
-    "name": "Военная перемётная сума",
+    "name": "Краснолюдский точильный камень",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-saddlebags2.webp",
+    "img": "systems/vedmak/assets/fan/gear/t3-whetstone.webp",
     "system": {
-     "description": "",
+     "description": "<p>Полчаса заточки дают одному режущему или колющему оружию (либо 10 стрелам или болтам) эффект «Пробивающее броню» до конца следующего боя. Хватает на 3 раза.</p>",
      "quantity": 1,
-     "weight": 2,
-     "cost": 150,
-     "availability": "rare",
-     "concealment": "none",
+     "weight": 0.1,
+     "cost": 300,
+     "availability": "unique",
+     "concealment": "tiny",
      "equipped": false,
      "source": {
-      "book": "Корник",
-      "page": "91"
+      "book": "Профессиональные инструменты",
+      "page": "4"
      },
-     "category": "mount",
-     "effect": "В каждое из двух отделений влезает 50 кг предметов небольшого или среднего размера. Снаружи есть крепления для 6 крупных предметов",
+     "category": "tools",
+     "effect": "Полчаса заточки дают одному режущему или колющему оружию (либо 10 стрелам или болтам) эффект «Пробивающее броню» до конца следующего боя. Хватает на 3 раза.",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -63769,7 +63769,7 @@
   "effects": [],
   "flags": {},
   "folder": [
-   "Ганза и спутники"
+   "Погибшие к концу «Ведьмака 3»"
   ]
  },
  {
@@ -64460,6 +64460,53 @@
     "effects": []
    },
    {
+    "name": "Кинжал",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-knife-ritual.webp",
+    "system": {
+     "description": "<p>Кинжалы бывают разной формы и размеров, но обычно они достаточно малы, чтобы влезать в карман. Кинжал при себе носят все, от рыцарей до крестьян.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 50,
+     "availability": "everywhere",
+     "concealment": "small",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "smallBlade",
+     "skill": "smallBlades",
+     "accuracy": 0,
+     "damage": "1d6+2",
+     "damageTypes": [
+      "slashing",
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Стилет",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
@@ -64514,6 +64561,41 @@
     "effects": []
    },
    {
+    "name": "Наручные ножны",
+    "type": "gear",
+    "img": "icons/weapons/swords/shortsword-sheathed-brown.webp",
+    "system": {
+     "description": "<p>Такими любят пользоваться наёмники и убийцы. Небольшие ножны для лёгких клинков, прикрепляемые ко внутренней стороне руки (проверка Внимания со СЛ 15 для обнаружения).</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 13,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "container",
+     "effect": "Лёгкий клинок на внутренней стороне руки; обнаружить — Внимание СЛ 15.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Метательный нож",
     "type": "weapon",
     "img": "systems/vedmak/assets/fan/weapons/t3-knife-butter.webp",
@@ -64555,155 +64637,6 @@
       "until": 0
      },
      "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Кинжал",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-knife-ritual.webp",
-    "system": {
-     "description": "<p>Кинжалы бывают разной формы и размеров, но обычно они достаточно малы, чтобы влезать в карман. Кинжал при себе носят все, от рыцарей до крестьян.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 50,
-     "availability": "everywhere",
-     "concealment": "small",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "smallBlade",
-     "skill": "smallBlades",
-     "accuracy": 0,
-     "damage": "1d6+2",
-     "damageTypes": [
-      "slashing",
-      "piercing"
-     ],
-     "reliability": {
-      "value": 10,
-      "max": 10
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Наручные ножны",
-    "type": "gear",
-    "img": "icons/weapons/swords/shortsword-sheathed-brown.webp",
-    "system": {
-     "description": "<p>Такими любят пользоваться наёмники и убийцы. Небольшие ножны для лёгких клинков, прикрепляемые ко внутренней стороне руки (проверка Внимания со СЛ 15 для обнаружения).</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 13,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "container",
-     "effect": "Лёгкий клинок на внутренней стороне руки; обнаружить — Внимание СЛ 15.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Гамбезон",
-    "type": "armor",
-    "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl1-1.webp",
-    "system": {
-     "description": "<p>Ну, по-хорошему, гамбезон — это поддоспешник для более тяжёлых доспехов, но многие бедняки используют его вместо брони. Против меча не поможет, зато спасёт от кинжала и тому подобного.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 100,
-     "availability": "everywhere",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "79"
-     },
-     "weightClass": "light",
-     "isShield": false,
-     "sp": {
-      "head": {
-       "value": 0,
-       "max": 0
-      },
-      "torso": {
-       "value": 3,
-       "max": 3
-      },
-      "rightArm": {
-       "value": 3,
-       "max": 3
-      },
-      "leftArm": {
-       "value": 3,
-       "max": 3
-      },
-      "rightLeg": {
-       "value": 0,
-       "max": 0
-      },
-      "leftLeg": {
-       "value": 0,
-       "max": 0
-      }
-     },
-     "reliability": {
-      "value": 0,
-      "max": 0
-     },
-     "encumbrance": 0,
-     "enhancementSlots": 0,
-     "resistances": {
-      "slashing": false,
-      "piercing": false,
-      "bludgeoning": false,
-      "elemental": false,
-      "bleeding": false,
-      "poison": false
-     },
-     "effectsText": "",
-     "relic": false,
-     "mods": [],
-     "enhancements": [],
-     "stored": false
     },
     "flags": {},
     "effects": []
@@ -64776,36 +64709,68 @@
     "effects": []
    },
    {
-    "name": "Воровские инструменты",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-lockpick.webp",
+    "name": "Гамбезон",
+    "type": "armor",
+    "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl1-1.webp",
     "system": {
-     "description": "",
+     "description": "<p>Ну, по-хорошему, гамбезон — это поддоспешник для более тяжёлых доспехов, но многие бедняки используют его вместо брони. Против меча не поможет, зато спасёт от кинжала и тому подобного.</p>",
      "quantity": 1,
      "weight": 1,
-     "cost": 80,
-     "availability": "rare",
-     "concealment": "tiny",
-     "equipped": false,
+     "cost": 100,
+     "availability": "everywhere",
+     "concealment": "none",
+     "equipped": true,
      "source": {
       "book": "Корник",
-      "page": "92"
+      "page": "79"
      },
-     "category": "tools",
-     "effect": "Позволяют вскрывать замки",
-     "focus": 0,
-     "tool": "thief",
-     "stored": false,
+     "weightClass": "light",
+     "isShield": false,
+     "sp": {
+      "head": {
+       "value": 0,
+       "max": 0
+      },
+      "torso": {
+       "value": 3,
+       "max": 3
+      },
+      "rightArm": {
+       "value": 3,
+       "max": 3
+      },
+      "leftArm": {
+       "value": 3,
+       "max": 3
+      },
+      "rightLeg": {
+       "value": 0,
+       "max": 0
+      },
+      "leftLeg": {
+       "value": 0,
+       "max": 0
+      }
+     },
+     "reliability": {
+      "value": 0,
+      "max": 0
+     },
+     "encumbrance": 0,
+     "enhancementSlots": 0,
+     "resistances": {
+      "slashing": false,
+      "piercing": false,
+      "bludgeoning": false,
+      "elemental": false,
+      "bleeding": false,
+      "poison": false
+     },
+     "effectsText": "",
+     "relic": false,
      "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
+     "enhancements": [],
+     "stored": false
     },
     "flags": {},
     "effects": []
@@ -64863,6 +64828,76 @@
      },
      "category": "container",
      "effect": "Вмещает 5 кг маленьких предметов; обнаружить — Внимание СЛ 16.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Воровские инструменты",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-lockpick.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 80,
+     "availability": "rare",
+     "concealment": "tiny",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют вскрывать замки",
+     "focus": 0,
+     "tool": "thief",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Колода для гвинта",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
+    "system": {
+     "description": "<p>Понятия не имею, как гвинт так быстро набрал популярность. В этой стратегической игре есть здоровенные колоды карт, основанные на пяти реальных силах: Королевства Севера, Нильфгаард, скоятаэли, чудовища и Скеллиге.</p>",
+     "quantity": 1,
+     "weight": 0.1,
+     "cost": 5,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "general",
+     "effect": "",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -64986,41 +65021,6 @@
     "effects": []
    },
    {
-    "name": "Колода для гвинта",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-gwent.webp",
-    "system": {
-     "description": "<p>Понятия не имею, как гвинт так быстро набрал популярность. В этой стратегической игре есть здоровенные колоды карт, основанные на пяти реальных силах: Королевства Севера, Нильфгаард, скоятаэли, чудовища и Скеллиге.</p>",
-     "quantity": 1,
-     "weight": 0.1,
-     "cost": 5,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "general",
-     "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Огниво",
     "type": "gear",
     "img": "icons/sundries/survival/fire-lighter-brass-lit.webp",
@@ -65094,7 +65094,7 @@
   "effects": [],
   "flags": {},
   "folder": [
-   "Ганза и спутники"
+   "Погибшие к концу «Ведьмака 3»"
   ]
  },
  {
@@ -65634,6 +65634,41 @@
     "effects": []
    },
    {
+    "name": "Хирургические инструменты",
+    "type": "gear",
+    "img": "icons/tools/medical/bandages-gauze.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 83,
+     "availability": "common",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют проводить хирургические операции",
+     "focus": 0,
+     "tool": "surgeon",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Медик",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-medic.webp",
@@ -65785,41 +65820,6 @@
     "effects": []
    },
    {
-    "name": "Хирургические инструменты",
-    "type": "gear",
-    "img": "icons/tools/medical/bandages-gauze.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 83,
-     "availability": "common",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют проводить хирургические операции",
-     "focus": 0,
-     "tool": "surgeon",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Шприц полевого врача",
     "type": "weapon",
     "img": "icons/tools/laboratory/injector-needle-syringe-plunger.webp",
@@ -65926,20 +65926,20 @@
     "effects": []
    },
    {
-    "name": "Стёганые штаны",
+    "name": "Гамбезон",
     "type": "armor",
-    "img": "systems/vedmak/assets/fan/armor/lg-light3.webp",
+    "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl1-1.webp",
     "system": {
-     "description": "",
+     "description": "<p>Ну, по-хорошему, гамбезон — это поддоспешник для более тяжёлых доспехов, но многие бедняки используют его вместо брони. Против меча не поможет, зато спасёт от кинжала и тому подобного.</p>",
      "quantity": 1,
      "weight": 1,
-     "cost": 125,
-     "availability": "common",
+     "cost": 100,
+     "availability": "everywhere",
      "concealment": "none",
      "equipped": true,
      "source": {
       "book": "Корник",
-      "page": "80"
+      "page": "79"
      },
      "weightClass": "light",
      "isShield": false,
@@ -65949,24 +65949,24 @@
        "max": 0
       },
       "torso": {
-       "value": 0,
-       "max": 0
+       "value": 3,
+       "max": 3
       },
       "rightArm": {
-       "value": 0,
-       "max": 0
+       "value": 3,
+       "max": 3
       },
       "leftArm": {
+       "value": 3,
+       "max": 3
+      },
+      "rightLeg": {
        "value": 0,
        "max": 0
       },
-      "rightLeg": {
-       "value": 5,
-       "max": 5
-      },
       "leftLeg": {
-       "value": 5,
-       "max": 5
+       "value": 0,
+       "max": 0
       }
      },
      "reliability": {
@@ -65974,7 +65974,7 @@
       "max": 0
      },
      "encumbrance": 0,
-     "enhancementSlots": 1,
+     "enhancementSlots": 0,
      "resistances": {
       "slashing": false,
       "piercing": false,
@@ -66040,6 +66040,73 @@
      },
      "stored": false,
      "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Стёганые штаны",
+    "type": "armor",
+    "img": "systems/vedmak/assets/fan/armor/lg-light3.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 125,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "80"
+     },
+     "weightClass": "light",
+     "isShield": false,
+     "sp": {
+      "head": {
+       "value": 0,
+       "max": 0
+      },
+      "torso": {
+       "value": 0,
+       "max": 0
+      },
+      "rightArm": {
+       "value": 0,
+       "max": 0
+      },
+      "leftArm": {
+       "value": 0,
+       "max": 0
+      },
+      "rightLeg": {
+       "value": 5,
+       "max": 5
+      },
+      "leftLeg": {
+       "value": 5,
+       "max": 5
+      }
+     },
+     "reliability": {
+      "value": 0,
+      "max": 0
+     },
+     "encumbrance": 0,
+     "enhancementSlots": 1,
+     "resistances": {
+      "slashing": false,
+      "piercing": false,
+      "bludgeoning": false,
+      "elemental": false,
+      "bleeding": false,
+      "poison": false
+     },
+     "effectsText": "",
+     "relic": false,
+     "mods": [],
+     "enhancements": [],
+     "stored": false
     },
     "flags": {},
     "effects": []
@@ -66241,6 +66308,41 @@
     "effects": []
    },
    {
+    "name": "Наплечная сумка",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-horse-bag.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 14,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "container",
+     "effect": "Вмещает 30 кг небольших предметов.",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Письменные принадлежности",
     "type": "gear",
     "img": "systems/vedmak/assets/fan/gear/t3-inkwell.webp",
@@ -66293,41 +66395,6 @@
      },
      "category": "general",
      "effect": "",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Наплечная сумка",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-horse-bag.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 14,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "container",
-     "effect": "Вмещает 30 кг небольших предметов.",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -66411,73 +66478,6 @@
       "applied": false,
       "tries": 0
      }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Гамбезон",
-    "type": "armor",
-    "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl1-1.webp",
-    "system": {
-     "description": "<p>Ну, по-хорошему, гамбезон — это поддоспешник для более тяжёлых доспехов, но многие бедняки используют его вместо брони. Против меча не поможет, зато спасёт от кинжала и тому подобного.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 100,
-     "availability": "everywhere",
-     "concealment": "none",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "79"
-     },
-     "weightClass": "light",
-     "isShield": false,
-     "sp": {
-      "head": {
-       "value": 0,
-       "max": 0
-      },
-      "torso": {
-       "value": 3,
-       "max": 3
-      },
-      "rightArm": {
-       "value": 3,
-       "max": 3
-      },
-      "leftArm": {
-       "value": 3,
-       "max": 3
-      },
-      "rightLeg": {
-       "value": 0,
-       "max": 0
-      },
-      "leftLeg": {
-       "value": 0,
-       "max": 0
-      }
-     },
-     "reliability": {
-      "value": 0,
-      "max": 0
-     },
-     "encumbrance": 0,
-     "enhancementSlots": 0,
-     "resistances": {
-      "slashing": false,
-      "piercing": false,
-      "bludgeoning": false,
-      "elemental": false,
-      "bleeding": false,
-      "poison": false
-     },
-     "effectsText": "",
-     "relic": false,
-     "mods": [],
-     "enhancements": [],
-     "stored": false
     },
     "flags": {},
     "effects": []
@@ -66984,48 +66984,6 @@
   },
   "items": [
    {
-    "name": "Человек",
-    "type": "race",
-    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
-    "system": {
-     "key": "human",
-     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
-     "traits": [
-      {
-       "name": "Доверие",
-       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
-      },
-      {
-       "name": "Изобретательность",
-       "effect": "+1 к Дедукции."
-      },
-      {
-       "name": "Упрямство",
-       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
-      }
-     ],
-     "mods": [
-      {
-       "target": "skills.deduction",
-       "value": 1
-      }
-     ],
-     "canUseMagic": true,
-     "source": {
-      "book": "Корник",
-      "page": "24"
-     },
-     "grants": [],
-     "resource": "",
-     "roles": [],
-     "role": "",
-     "role2": "",
-     "powers": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Тайный агент",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-secret-agent.webp",
@@ -67327,6 +67285,48 @@
       "applied": false,
       "tries": 0
      }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Человек",
+    "type": "race",
+    "img": "systems/vedmak/assets/fan/people/art-race-human.webp",
+    "system": {
+     "key": "human",
+     "description": "<p>Преобладающая раса Континента: изобретательная, упрямая и многочисленная.</p><p>Люди могут быть магами и жрецами.</p>",
+     "traits": [
+      {
+       "name": "Доверие",
+       "effect": "+1 к Харизме, Соблазнению и Убеждению против людей."
+      },
+      {
+       "name": "Изобретательность",
+       "effect": "+1 к Дедукции."
+      },
+      {
+       "name": "Упрямство",
+       "effect": "Можно перебросить неудачную проверку Сопротивления убеждению или Храбрости, но не более 3 раз за игровую партию; из двух результатов берётся наибольший. Если и он провальный, снова использовать Упрямство нельзя."
+      }
+     ],
+     "mods": [
+      {
+       "target": "skills.deduction",
+       "value": 1
+      }
+     ],
+     "canUseMagic": true,
+     "source": {
+      "book": "Корник",
+      "page": "24"
+     },
+     "grants": [],
+     "resource": "",
+     "roles": [],
+     "role": "",
+     "role2": "",
+     "powers": []
     },
     "flags": {},
     "effects": []
@@ -68346,6 +68346,142 @@
     "effects": []
    },
    {
+    "name": "Кинжал",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-knife-ritual.webp",
+    "system": {
+     "description": "<p>Кинжалы бывают разной формы и размеров, но обычно они достаточно малы, чтобы влезать в карман. Кинжал при себе носят все, от рыцарей до крестьян.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 50,
+     "availability": "everywhere",
+     "concealment": "small",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "smallBlade",
+     "skill": "smallBlades",
+     "accuracy": 0,
+     "damage": "1d6+2",
+     "damageTypes": [
+      "slashing",
+      "piercing"
+     ],
+     "reliability": {
+      "value": 10,
+      "max": 10
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [],
+     "enhancementSlots": 0,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Стилет",
+    "type": "weapon",
+    "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
+    "system": {
+     "description": "<p>Вот уж кто-кто, а чёрные могут даже из обычного кинжала сделать ещё более подлое оружие. Длинный тонкий клинок этого кинжала убирается в рукоять, так что спрятать эту дрянь можно где угодно.</p>",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 275,
+     "availability": "common",
+     "concealment": "tiny",
+     "equipped": true,
+     "source": {
+      "book": "Корник",
+      "page": "73"
+     },
+     "category": "smallBlade",
+     "skill": "smallBlades",
+     "accuracy": 2,
+     "damage": "1d6",
+     "damageTypes": [
+      "slashing",
+      "piercing"
+     ],
+     "reliability": {
+      "value": 5,
+      "max": 5
+     },
+     "hands": 1,
+     "range": "",
+     "attackSpeed": 1,
+     "effects": [
+      {
+       "key": "concealable",
+       "value": "",
+       "source": "",
+       "slots": 1
+      }
+     ],
+     "enhancementSlots": 1,
+     "silverDamage": "",
+     "relic": false,
+     "mods": [],
+     "stored": false,
+     "oil": {
+      "name": "",
+      "target": "",
+      "until": 0
+     },
+     "crossbowMods": []
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Набор для маскировки",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/g-mask.webp",
+    "system": {
+     "description": "<p>+2 к Маскировке</p>",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 58,
+     "availability": "rare",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "+2 к Маскировке",
+     "focus": 0,
+     "tool": "disguise",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Тайный агент",
     "type": "profession",
     "img": "systems/vedmak/assets/fan/people/art-prof-secret-agent.webp",
@@ -68535,177 +68671,6 @@
     "effects": []
    },
    {
-    "name": "Кинжал",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-knife-ritual.webp",
-    "system": {
-     "description": "<p>Кинжалы бывают разной формы и размеров, но обычно они достаточно малы, чтобы влезать в карман. Кинжал при себе носят все, от рыцарей до крестьян.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 50,
-     "availability": "everywhere",
-     "concealment": "small",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "smallBlade",
-     "skill": "smallBlades",
-     "accuracy": 0,
-     "damage": "1d6+2",
-     "damageTypes": [
-      "slashing",
-      "piercing"
-     ],
-     "reliability": {
-      "value": 10,
-      "max": 10
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [],
-     "enhancementSlots": 0,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Стилет",
-    "type": "weapon",
-    "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
-    "system": {
-     "description": "<p>Вот уж кто-кто, а чёрные могут даже из обычного кинжала сделать ещё более подлое оружие. Длинный тонкий клинок этого кинжала убирается в рукоять, так что спрятать эту дрянь можно где угодно.</p>",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 275,
-     "availability": "common",
-     "concealment": "tiny",
-     "equipped": true,
-     "source": {
-      "book": "Корник",
-      "page": "73"
-     },
-     "category": "smallBlade",
-     "skill": "smallBlades",
-     "accuracy": 2,
-     "damage": "1d6",
-     "damageTypes": [
-      "slashing",
-      "piercing"
-     ],
-     "reliability": {
-      "value": 5,
-      "max": 5
-     },
-     "hands": 1,
-     "range": "",
-     "attackSpeed": 1,
-     "effects": [
-      {
-       "key": "concealable",
-       "value": "",
-       "source": "",
-       "slots": 1
-      }
-     ],
-     "enhancementSlots": 1,
-     "silverDamage": "",
-     "relic": false,
-     "mods": [],
-     "stored": false,
-     "oil": {
-      "name": "",
-      "target": "",
-      "until": 0
-     },
-     "crossbowMods": []
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Набор для маскировки",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-mask.webp",
-    "system": {
-     "description": "<p>+2 к Маскировке</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 58,
-     "availability": "rare",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "+2 к Маскировке",
-     "focus": 0,
-     "tool": "disguise",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Инструменты для подделки",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-letter.webp",
-    "system": {
-     "description": "",
-     "quantity": 1,
-     "weight": 0.5,
-     "cost": 58,
-     "availability": "rare",
-     "concealment": "small",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "92"
-     },
-     "category": "tools",
-     "effect": "Позволяют создавать поддельные монеты и документы",
-     "focus": 0,
-     "tool": "forgery",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
     "name": "Невидимые чернила",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-dec-blue.webp",
@@ -68753,6 +68718,41 @@
      },
      "stored": false,
      "poisonDc": 0
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
+    "name": "Инструменты для подделки",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/t3-letter.webp",
+    "system": {
+     "description": "",
+     "quantity": 1,
+     "weight": 0.5,
+     "cost": 58,
+     "availability": "rare",
+     "concealment": "small",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "92"
+     },
+     "category": "tools",
+     "effect": "Позволяют создавать поддельные монеты и документы",
+     "focus": 0,
+     "tool": "forgery",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
     },
     "flags": {},
     "effects": []
@@ -68863,14 +68863,14 @@
     "effects": []
    },
    {
-    "name": "Потайной карман",
+    "name": "Простая одежда",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/g-pocket.webp",
+    "img": "systems/vedmak/assets/fan/gear/t3-shirt.webp",
     "system": {
-     "description": "<p>Такой небольшой кармашек, вшиваемый с изнанки одежды, вмещает 5 кг маленьких предметов (проверка Внимания со СЛ 16 для обнаружения).</p>",
+     "description": "<p>Рубаха, штаны да сапоги. Или платье, если надо. При необходимости ещё и плащ.</p>",
      "quantity": 1,
-     "weight": 0.1,
-     "cost": 11,
+     "weight": 2,
+     "cost": 10,
      "availability": "common",
      "concealment": "none",
      "equipped": false,
@@ -68878,8 +68878,8 @@
       "book": "Корник",
       "page": "93"
      },
-     "category": "container",
-     "effect": "Вмещает 5 кг маленьких предметов; обнаружить — Внимание СЛ 16.",
+     "category": "clothing",
+     "effect": "",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -68898,14 +68898,14 @@
     "effects": []
    },
    {
-    "name": "Простая одежда",
+    "name": "Потайной карман",
     "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/t3-shirt.webp",
+    "img": "systems/vedmak/assets/fan/gear/g-pocket.webp",
     "system": {
-     "description": "<p>Рубаха, штаны да сапоги. Или платье, если надо. При необходимости ещё и плащ.</p>",
+     "description": "<p>Такой небольшой кармашек, вшиваемый с изнанки одежды, вмещает 5 кг маленьких предметов (проверка Внимания со СЛ 16 для обнаружения).</p>",
      "quantity": 1,
-     "weight": 2,
-     "cost": 10,
+     "weight": 0.1,
+     "cost": 11,
      "availability": "common",
      "concealment": "none",
      "equipped": false,
@@ -68913,8 +68913,8 @@
       "book": "Корник",
       "page": "93"
      },
-     "category": "clothing",
-     "effect": "",
+     "category": "container",
+     "effect": "Вмещает 5 кг маленьких предметов; обнаружить — Внимание СЛ 16.",
      "focus": 0,
      "tool": "",
      "stored": false,
@@ -69073,6 +69073,41 @@
     "effects": []
    },
    {
+    "name": "Крепкий алкоголь",
+    "type": "gear",
+    "img": "systems/vedmak/assets/fan/gear/f-vodka.webp",
+    "system": {
+     "description": "<p>Крепкая выпивка. На севере чаще встречается краснолюдская настойка, на юге — нильфгаардская лимонная, обе очень забористые.</p>",
+     "quantity": 1,
+     "weight": 1,
+     "cost": 10,
+     "availability": "common",
+     "concealment": "none",
+     "equipped": false,
+     "source": {
+      "book": "Корник",
+      "page": "93"
+     },
+     "category": "food",
+     "effect": "",
+     "focus": 0,
+     "tool": "",
+     "stored": false,
+     "mods": [],
+     "tattoo": {
+      "tier": "",
+      "achievement": "",
+      "size": 0,
+      "dc": 0,
+      "location": "",
+      "applied": false,
+      "tries": 0
+     }
+    },
+    "flags": {},
+    "effects": []
+   },
+   {
     "name": "Хлороформ",
     "type": "alchemical",
     "img": "systems/vedmak/assets/fan/alchemy/t3-oil-hybrid-e.webp",
@@ -69142,41 +69177,6 @@
      },
      "category": "container",
      "effect": "Вмещает 5 кг маленьких предметов.",
-     "focus": 0,
-     "tool": "",
-     "stored": false,
-     "mods": [],
-     "tattoo": {
-      "tier": "",
-      "achievement": "",
-      "size": 0,
-      "dc": 0,
-      "location": "",
-      "applied": false,
-      "tries": 0
-     }
-    },
-    "flags": {},
-    "effects": []
-   },
-   {
-    "name": "Крепкий алкоголь",
-    "type": "gear",
-    "img": "systems/vedmak/assets/fan/gear/f-vodka.webp",
-    "system": {
-     "description": "<p>Крепкая выпивка. На севере чаще встречается краснолюдская настойка, на юге — нильфгаардская лимонная, обе очень забористые.</p>",
-     "quantity": 1,
-     "weight": 1,
-     "cost": 10,
-     "availability": "common",
-     "concealment": "none",
-     "equipped": false,
-     "source": {
-      "book": "Корник",
-      "page": "93"
-     },
-     "category": "food",
-     "effect": "",
      "focus": 0,
      "tool": "",
      "stored": false,
