@@ -1,0 +1,180 @@
+{{!-- Лист поселения (PLAN 4.183) --}}
+<div class="sv">
+  <header class="sv-head">
+    <span class="sv-sock big"><img class="sv-arms" src="{{actor.img}}" alt="" data-edit="img" data-tooltip="Герб поселения"></span>
+    <div class="sv-title">
+      {{#if editable}}<input class="sv-name" type="text" name="name" value="{{actor.name}}" aria-label="Название">
+      {{else}}<h1 class="sv-name">{{actor.name}}</h1>{{/if}}
+      <div class="sv-cal">
+        <span class="sv-week">Неделя {{cal.week}}</span><i></i><span>{{cal.season.label}}, {{cal.weekOfSeason}}-я неделя</span><i></i><span>год {{cal.year}}</span>
+      </div>
+    </div>
+    {{#if gm}}<button type="button" class="sv-next" data-action="week" data-tooltip="Посчитать неделю: стройка, работа, еда, одобрение, семьи; итог — в чат">Прошла неделя</button>{{/if}}
+  </header>
+
+  <section class="sv-plaques">
+    <div class="sv-plaque" data-tooltip="Работают: {{families.assigned}} · свободны: {{families.free}}{{#if families.builders}} (строят: {{families.builders}}){{/if}}">
+      <span class="cap">Семьи</span>
+      {{#if gm}}<input type="number" name="system.families" value="{{sys.families}}" min="0" step="1" class="big">{{else}}<b class="big">{{families.value}}</b>{{/if}}
+      <small>жильё на {{families.housing}} · свободны {{families.free}}</small>
+    </div>
+    <div class="sv-plaque sv-approval tone-{{approval.tone}}">
+      <span class="sv-ring" style="--arc: {{approval.arc}}deg"><b>{{approval.value}}</b></span>
+      <div class="sv-approval-text">
+        <span class="cap">Одобрение</span>
+        <small>{{#if forecastNote}}{{forecastNote}}{{else}}семьи не придут и не уйдут{{/if}}</small>
+      </div>
+    </div>
+    <div class="sv-plaque">
+      <span class="cap">Казна · {{cur.label}}</span>
+      {{#if gm}}<input type="number" name="treasury" value="{{treasury.value}}" min="0" step="1" class="big">{{else}}<b class="big">{{treasury.label}}</b>{{/if}}
+      <small>{{#if treasury.income}}за неделю {{treasury.income}} {{cur.abbr}}{{else}}дохода нет{{/if}}</small>
+      {{#if editable}}<div class="sv-mini-acts" role="group" aria-label="Казна и кошелёк">
+        <a data-action="money" data-mode="deposit" data-tooltip="Из кошелька {{#if treasury.hero}}{{treasury.hero}}{{else}}своего персонажа{{/if}}">Внести</a>
+        <a data-action="money" data-mode="withdraw" data-tooltip="В кошелёк {{#if treasury.hero}}{{treasury.hero}}{{else}}своего персонажа{{/if}}">Взять</a>
+      </div>{{/if}}
+    </div>
+    <div class="sv-plaque">
+      <span class="cap">Налог</span>
+      <select name="system.taxes" {{#unless editable}}disabled{{/unless}}>
+        {{#each taxes}}<option value="{{key}}" {{#if selected}}selected{{/if}} title="{{hint}}">{{label}}</option>{{/each}}
+      </select>
+      <small>{{#if taxNote}}{{taxNote}}{{else}}{{#each taxes}}{{#if selected}}{{hint}}{{/if}}{{/each}}{{/if}}</small>
+    </div>
+  </section>
+
+  <nav class="sv-tabs">
+    {{#each tabs}}<a class="{{#if active}}active{{/if}}" data-action="tab" data-tab="{{id}}">{{label}}</a>{{/each}}
+  </nav>
+
+  <div class="sv-scroll">
+  {{#if (eq tab "economy")}}
+    <section class="sv-block">
+      <h3><span class="sv-tag">Склад</span><small>за неделю — по нынешней работе</small></h3>
+      <ul class="sv-res">
+        {{#each resources}}
+        <li class="{{#if full}}full{{/if}}">
+          <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
+          <div class="sv-res-main">
+            <span class="nm">{{label}}</span>
+            {{#if ../gm}}<input type="number" name="system.stock.{{key}}" value="{{raw}}" min="0" step="1">{{else}}<b>{{value}}</b>{{/if}}
+            <span class="cap-of">/ {{cap}}</span>
+            {{#if net}}<em class="{{#if up}}up{{/if}}{{#if down}}down{{/if}}">{{net}}</em>{{/if}}
+            <span class="sv-bar"><i style="width: {{pct}}%"></i></span>
+          </div>
+          {{#if ../trade}}{{#if ../editable}}
+          <div class="sv-trade">
+            <a data-action="trade" data-key="{{key}}" data-mode="sell" data-tooltip="Продать: {{sell}} за штуку">Продать</a>
+            <a data-action="trade" data-key="{{key}}" data-mode="buy" data-tooltip="Купить: {{buy}} за штуку">Купить</a>
+          </div>
+          {{/if}}{{/if}}
+        </li>
+        {{/each}}
+      </ul>
+      {{#if trade}}{{#if editable}}<label class="sv-qty">Торговать по <input class="sv-trade-qty" type="number" min="1" step="1" value="{{tradeQty}}"> шт.</label>{{/if}}
+      {{else}}<p class="sv-hint">Торговли нет: купцы заезжают только к торговому посту.</p>{{/if}}
+    </section>
+
+    <div class="sv-cols">
+      <section class="sv-block">
+        <h3><span class="sv-tag">Нужды семей</span><small>в неделю</small></h3>
+        <ul class="sv-needs">
+          {{#each needs}}
+          <li class="{{#if ok}}ok{{else}}short{{/if}}"><span>{{label}}</span><b>{{got}} / {{need}}</b><span class="sv-bar"><i style="width: {{pct}}%"></i></span></li>
+          {{/each}}
+        </ul>
+      </section>
+      <section class="sv-block">
+        <h3><span class="sv-tag">Откуда одобрение</span></h3>
+        <ul class="sv-parts">
+          {{#each approval.parts}}<li><span>{{label}}</span><b class="{{#if up}}up{{/if}}{{#if down}}down{{/if}}">{{value}}</b></li>{{/each}}
+          <li class="total"><span>Итого</span><b>{{approval.value}}</b></li>
+        </ul>
+      </section>
+    </div>
+  {{/if}}
+
+  {{#if (eq tab "buildings")}}
+    {{#if editable}}
+    <div class="sv-build-bar">
+      <a class="sv-btn {{#if showCatalog}}on{{/if}}" data-action="catalog">{{#if showCatalog}}Скрыть каталог{{else}}Построить…{{/if}}</a>
+      <span class="sv-hint">Строят свободные семьи: одна семья — одна стройка в неделю. Свободно: {{families.free}}.</span>
+    </div>
+    {{#if showCatalog}}
+    <ul class="sv-catalog">
+      {{#each catalog}}
+      <li class="{{#unless ok}}off{{/unless}}">
+        <span class="sv-sock"><img src="{{img}}" alt=""></span>
+        <div><b>{{label}}</b><small>{{hint}}</small><span class="sv-cost">{{cost}} · {{weeks}} нед.{{#if (gt levels 1)}} · уровней: {{levels}}{{/if}}</span></div>
+        <button type="button" data-action="build" data-key="{{key}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{#if taken}}Есть{{else}}Заложить{{/if}}</button>
+      </li>
+      {{/each}}
+    </ul>
+    {{/if}}
+    {{/if}}
+
+    {{#each groups}}
+    <section class="sv-block">
+      <h3><span class="sv-tag">{{label}}</span></h3>
+      <ul class="sv-cards">
+        {{#each cards}}
+        <li class="sv-card {{#if constructing}}building{{/if}}" data-id="{{id}}">
+          <span class="sv-sock" data-tooltip="{{hint}}"><img src="{{img}}" alt=""></span>
+          <div class="sv-card-main">
+            <div class="sv-card-head">
+              <b>{{name}}</b>
+              <span class="sv-pips">{{#each pips}}<i class="{{#if on}}on{{/if}}{{#if next}} next{{/if}}"></i>{{/each}}</span>
+            </div>
+            {{#if progress}}
+            <div class="sv-progress {{#if stalled}}stalled{{/if}}"><span class="sv-bar"><i style="width: {{progress.pct}}%"></i></span>
+              <small>{{#if firstBuild}}Строится{{else}}Улучшается{{/if}}: {{progress.done}} из {{progress.weeks}} нед.{{#if stalled}} — нет свободных рук{{/if}}</small></div>
+            {{/if}}
+            {{#if gives}}<small class="sv-gives">{{gives}}{{#if offSeason}} · <span class="warn">не сезон: работы нет</span>{{/if}}</small>{{/if}}
+            <div class="sv-card-acts">
+              {{#if max}}
+              <span class="sv-workers" data-tooltip="Работники: семьи на этой постройке">
+                {{#if ../../editable}}<a data-action="workers" data-delta="-1" class="{{#unless canLess}}off{{/unless}}">−</a>{{/if}}
+                <b>{{workers}}</b>/{{max}}
+                {{#if ../../editable}}<a data-action="workers" data-delta="1" class="{{#unless canMore}}off{{/unless}}">+</a>{{/if}}
+              </span>
+              {{/if}}
+              {{#if ../../editable}}
+              {{#if upgrade}}<button type="button" data-action="upgrade" {{#unless upgrade.ok}}disabled{{/unless}} data-tooltip="{{upgrade.cost}} · {{upgrade.weeks}} нед.">Улучшить</button>{{/if}}
+              <a class="sv-demolish" data-action="demolish" data-tooltip="{{#if firstBuild}}Бросить стройку{{else}}Снести{{/if}}">×</a>
+              {{/if}}
+            </div>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
+    </section>
+    {{else}}
+    <p class="sv-hint">Пока ничего не построено. Начните с жилого двора и лесорубов.</p>
+    {{/each}}
+  {{/if}}
+
+  {{#if (eq tab "chronicle")}}
+    <ol class="sv-chronicle">
+      {{#each chronicle}}
+      <li>
+        <header><b>Неделя {{week}}</b><span>{{season}}, год {{year}}</span><em>одобрение {{approval}}</em>{{#if families}}<em>{{families}}</em>{{/if}}</header>
+        {{#if lines}}<p>{{lines}}</p>{{/if}}
+        {{#if income}}<p>В казну: {{income}}</p>{{/if}}
+        {{#if built}}<p>Достроено: {{built}}</p>{{/if}}
+        {{#if reason}}<p class="dim">{{reason}}</p>{{/if}}
+      </li>
+      {{else}}
+      <li class="sv-hint">Недели ещё не проходили.</li>
+      {{/each}}
+    </ol>
+  {{/if}}
+
+  {{#if (eq tab "notes")}}
+    <section class="sv-block sv-notes">
+      {{#if editable}}
+      {{formInput systemFields.description value=sys.description enriched=enrichedDescription toggled=true}}
+      {{else}}{{{enrichedDescription}}}{{/if}}
+    </section>
+  {{/if}}
+  </div>
+</div>

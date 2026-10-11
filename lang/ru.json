@@ -3,7 +3,8 @@
     "Actor": {
       "character": "Персонаж",
       "monster": "Чудовище",
-      "loot": "Хранилище"
+      "loot": "Хранилище",
+      "settlement": "Поселение"
     },
     "Item": {
       "weapon": "Оружие",
@@ -23,6 +24,7 @@
     "SheetCharacter": "Лист персонажа «Ведьмак»",
     "SheetMonster": "Лист чудовища «Ведьмак»",
     "SheetLoot": "Хранилище «Ведьмак»",
+    "SheetSettlement": "Поселение «Ведьмак»",
     "SheetItem": "Лист предмета «Ведьмак»",
     "SheetEffect": "Эффект «Ведьмак»"
   }

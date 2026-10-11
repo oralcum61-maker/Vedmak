@@ -1,0 +1,201 @@
+/* ============================== Лист поселения (PLAN 4.183) ==============================
+   Шапка — герб в кованой раме, название гравюрным шрифтом и календарь недели; плашки семей, одобрения, казны и
+   налога — выпуклые пластины; склад — утопленные ячейки с полосой вместимости; постройки — карточки с ромбами
+   уровней и рабочими. Цвет по смыслу: прибыль — зелень, убыль и нехватка — киноварь. */
+
+.vedmak.settlement .window-content { padding: 0; }
+.sv { --sv-ink: #e2ddd0; --sv-silver: #f1ece0; --sv-ash: #a8a296; --sv-dim: #7a766d; --sv-blood: #b8432c; --sv-blood-lite: #e0937f;
+  --sv-green: #8fb07a; display: flex; flex-direction: column; height: 100%; color: var(--sv-ink);
+  font: 400 13px/1.4 var(--vd-font-body); font-variant-numeric: tabular-nums; }
+.sv .up { color: var(--sv-green); } .sv .down, .sv .warn { color: var(--sv-blood-lite); }
+.sv input[type="number"], .sv select { background: rgba(0, 0, 0, .45); border: 0; border-radius: 4px; color: var(--sv-ink); box-shadow: var(--vd-sink-sm); }
+
+/* ─── Шапка ─── */
+.sv-head { display: flex; align-items: center; gap: 16px; padding: 16px 20px 12px;
+  background: radial-gradient(120% 120% at 20% 0%, rgba(255, 240, 215, .07), transparent 60%),
+    url("../assets/textures/leather.webp") center / 260px, #241f1b; background-blend-mode: normal, overlay, normal;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .7), 0 1px 0 rgba(255, 240, 215, .05); }
+.sv-arms { cursor: var(--cursor-pointer, pointer); }
+
+/* ─── Гнездо: кованый обод на четырёх заклёпках, как у худа; картинка — приглушённой гравюрой ─── */
+.sv-sock { --s: 64px; position: relative; flex: none; width: var(--s); height: var(--s); border-radius: 50%;
+  background: conic-gradient(from 210deg, #f3eee2, #6f6a60 12%, #d8d1c2 25%, #47443d 38%, #e9e3d5 52%, #6a655c 66%, #cdc6b6 80%, #514d45 90%, #f3eee2);
+  box-shadow: 0 0 0 1px #060708, inset 0 0 0 1px rgba(0, 0, 0, .5), 0 5px 10px rgba(0, 0, 0, .6); }
+.sv-sock::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3a3c42, #121316 75%);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, .95), inset 0 0 0 1px #050506; }
+.sv-sock::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 50% 2.4px, #fbf7ec 0, #8e887c 1.4px, #2a2824 2.2px, transparent 2.7px),
+    radial-gradient(circle at 50% calc(100% - 2.4px), #fbf7ec 0, #8e887c 1.4px, #2a2824 2.2px, transparent 2.7px),
+    radial-gradient(circle at 2.4px 50%, #fbf7ec 0, #8e887c 1.4px, #2a2824 2.2px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 2.4px) 50%, #fbf7ec 0, #8e887c 1.4px, #2a2824 2.2px, transparent 2.7px); }
+.sv .sv-sock img { position: absolute; inset: 7px; z-index: 1; width: calc(100% - 14px); height: calc(100% - 14px); border: 0; border-radius: 50%;
+  object-fit: cover; filter: sepia(.55) saturate(.65) contrast(1.12) brightness(.88); transition: filter .25s; }
+.sv .sv-sock:hover img, .sv .sv-card:hover .sv-sock img { filter: sepia(.15) saturate(.95) contrast(1.05) brightness(1); }
+.sv-sock.big { --s: 84px; }
+.sv .sv-sock.big img { inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); }
+.sv-sock.sm { --s: 44px; }
+.sv .sv-sock.sm img { inset: 5px; width: calc(100% - 10px); height: calc(100% - 10px); }
+
+/* Заголовок раздела — кожаный ярлык с заклёпкой, как папки нексуса */
+.sv-tag { position: relative; display: inline-block; padding: 6px 13px 6px 22px; border-radius: 3px 9px 9px 3px; font: 400 17px/1 var(--vd-font-head); color: var(--sv-silver);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .9);
+  background: url("../assets/textures/leather.webp") center / 140px, #2f2722; background-blend-mode: overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 230, 200, .12), inset 0 -2px 3px rgba(0, 0, 0, .5), 0 0 0 1px #070605, 0 3px 7px rgba(0, 0, 0, .55); }
+.sv-tag::before { content: ""; position: absolute; inset: 3px 3px 3px 15px; border: 1px dashed rgba(214, 190, 150, .28); border-radius: 2px 7px 7px 2px; pointer-events: none; }
+.sv-tag::after { content: ""; position: absolute; left: 7px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6f1e4, #a29b8d 45%, #3b3832 80%); box-shadow: 0 1px 1px rgba(0, 0, 0, .9), 0 0 0 1px #0b0a09; }
+.sv-title { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.sv input.sv-name, .sv h1.sv-name { margin: 0; height: auto; padding: 0; border: 0; background: none; box-shadow: none;
+  font: 400 32px/1.1 var(--vd-font-head); color: var(--sv-silver); text-shadow: 0 2px 0 rgba(0, 0, 0, .8); }
+.sv input.sv-name:focus { outline: 1px dashed rgba(241, 236, 224, .3); }
+.sv-cal { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: #c7b99f; letter-spacing: .04em; }
+.sv-cal i { width: 5px; height: 5px; transform: rotate(45deg); background: #8f7f62; }
+.sv-week { font: 600 11px/1 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #e7d9bd; }
+.sv .sv-next { flex: none; width: auto; height: auto; margin: 0; padding: 12px 18px; border: 0; border-radius: 5px; cursor: var(--cursor-pointer, pointer);
+  font: 600 12px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: #fff4ec;
+  background: linear-gradient(#c24a32, #8f321d); box-shadow: inset 0 1px 0 rgba(255, 220, 200, .3), 0 0 0 1px #2a0e07, 0 6px 12px -4px rgba(0, 0, 0, .8); }
+.sv .sv-next:hover { filter: brightness(1.12); }
+
+/* ─── Плашки ─── */
+.sv-plaques { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 12px 16px; background: #17181b;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .6); }
+.sv-plaque { position: relative; display: grid; align-content: start; gap: 3px; padding: 10px 14px 11px; border-radius: 5px;
+  background: url("../assets/textures/steel-plate.webp") center / 260px, linear-gradient(#26272c, #1d1e22); background-blend-mode: overlay, normal;
+  box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.sv-plaque .cap, .sv-block h3 small, .sv .cap { font: 600 9.5px/1.2 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: var(--sv-dim); }
+.sv-plaque .big { font: 400 28px/1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-plaque input.big { width: 90px; height: 32px; padding: 0 6px; font: 400 24px/1 var(--vd-font-head); }
+.sv-plaque small { font-size: 11px; color: var(--sv-ash); }
+.sv-plaque select { height: 28px; font-size: 13px; }
+/* Заклёпки по углам пластин */
+.sv-plaque::after { content: ""; position: absolute; inset: 0; border-radius: 5px; pointer-events: none;
+  background: radial-gradient(circle at 6px 6px, #fbf7ec 0, #8e887c 1.2px, #2a2824 2px, transparent 2.4px),
+    radial-gradient(circle at calc(100% - 6px) 6px, #fbf7ec 0, #8e887c 1.2px, #2a2824 2px, transparent 2.4px),
+    radial-gradient(circle at 6px calc(100% - 6px), #fbf7ec 0, #8e887c 1.2px, #2a2824 2px, transparent 2.4px),
+    radial-gradient(circle at calc(100% - 6px) calc(100% - 6px), #fbf7ec 0, #8e887c 1.2px, #2a2824 2px, transparent 2.4px); }
+.sv-mini-acts { display: flex; gap: 4px; margin-top: 3px; }
+.sv-mini-acts a { font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; padding: 4px 6px; border-radius: 3px;
+  background: rgba(0, 0, 0, .4); color: var(--sv-ash); }
+.sv-mini-acts a:hover { color: var(--sv-silver); }
+/* Одобрение — кольцо с дугой, цвет по тону */
+.sv-approval { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; }
+.sv-approval-text { display: grid; gap: 3px; min-width: 0; }
+/* Кольцо одобрения — дуга на кованом ободе, как ПЗ на медальоне худа */
+.sv-ring { --tone: #bdb6a6; position: relative; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center;
+  background: conic-gradient(var(--tone) var(--arc), rgba(0, 0, 0, .55) 0);
+  box-shadow: 0 0 0 2px #0a0a0b, 0 0 0 3.5px #bdb6a6, 0 0 0 5px #0a0a0b, 0 4px 10px rgba(0, 0, 0, .7); }
+.sv-ring::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle at 50% 38%, #34353b, #101114 72%);
+  box-shadow: inset 0 3px 6px #000, 0 0 0 1px #050506; }
+.sv-ring b { position: relative; font: 400 22px/1 var(--vd-font-head); background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .9)); }
+.tone-high .sv-ring { --tone: #8fb07a; } .tone-ok .sv-ring { --tone: #d6cba8; } .tone-low .sv-ring { --tone: #d0905a; } .tone-bad .sv-ring { --tone: #b8432c; }
+
+/* ─── Вкладки ─── */
+.sv-tabs { display: flex; gap: 2px; padding: 0 16px; background: #141518; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .7); }
+.sv-tabs a { padding: 10px 14px 9px; font: 400 16px/1 var(--vd-font-head); color: var(--sv-ash); border-bottom: 2px solid transparent; }
+.sv-tabs a:hover { color: var(--sv-silver); }
+.sv-tabs a.active { color: var(--sv-silver); border-bottom-color: var(--sv-blood); }
+
+.sv-scroll { flex: 1; overflow-y: auto; padding: 14px 16px 20px; display: grid; align-content: start; gap: 16px; scrollbar-width: thin; }
+.sv-block { display: grid; gap: 9px; align-content: start; }
+.sv-block h3 { margin: 0; border: 0; display: flex; align-items: baseline; gap: 10px; font: 400 19px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-hint { margin: 0; font-size: 12px; color: var(--sv-dim); font-style: italic; }
+.sv-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.sv-bar { display: block; height: 4px; border-radius: 2px; background: rgba(0, 0, 0, .55); overflow: hidden; box-shadow: inset 0 1px 1px #000; }
+.sv-bar i { display: block; height: 100%; background: linear-gradient(90deg, #8f8676, #d6cfbf); }
+
+/* ─── Склад ─── */
+.sv-res { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sv-res li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 5px;
+  background: rgba(10, 10, 12, .5); box-shadow: var(--vd-sink-sm); }
+.sv-res-main { display: grid; grid-template-columns: auto auto 1fr auto; align-items: baseline; gap: 2px 6px; }
+.sv-res-main .nm { grid-column: 1 / -1; font: 600 10px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--sv-ash); }
+.sv-res-main b { font: 400 22px/1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-res-main input { width: 58px; height: 24px; padding: 0 4px; font: 400 18px/1 var(--vd-font-head); }
+.sv-res-main .cap-of { font-size: 11px; color: var(--sv-dim); }
+.sv-res-main em { font-style: normal; font-weight: 600; font-size: 12px; justify-self: end; grid-column: 4; }
+.sv-res-main .sv-bar { grid-column: 1 / -1; }
+.sv-res li.full .sv-bar i { background: linear-gradient(90deg, #a0532f, #e0937f); }
+.sv-trade { grid-column: 1 / -1; display: flex; gap: 6px; }
+.sv-trade a, .sv-btn { flex: 1; text-align: center; padding: 5px 6px; border-radius: 3px; font: 600 10px/1 var(--vd-font-body); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--sv-ink); background: linear-gradient(#34353b, #26272c); box-shadow: var(--vd-lift-sm); }
+.sv-trade a:hover, .sv-btn:hover { color: #fff; filter: brightness(1.12); }
+.sv-qty { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sv-ash); }
+.sv-qty input { width: 56px; height: 24px; }
+
+/* ─── Нужды и одобрение ─── */
+.sv-needs, .sv-parts { list-style: none; margin: 0; padding: 10px 12px; display: grid; gap: 7px; border-radius: 5px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); }
+.sv-needs li { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; }
+.sv-needs li .sv-bar { grid-column: 1 / -1; }
+.sv-needs li.short b { color: var(--sv-blood-lite); }
+.sv-needs li.short .sv-bar i { background: linear-gradient(90deg, #6d2416, #b8432c); }
+.sv-parts li { display: flex; justify-content: space-between; gap: 8px; }
+.sv-parts li.total { padding-top: 6px; border-top: 1px solid rgba(189, 182, 166, .2); font-weight: 600; color: var(--sv-silver); }
+
+/* ─── Постройки ─── */
+.sv-build-bar { display: flex; align-items: center; gap: 12px; }
+.sv-build-bar .sv-btn { flex: none; padding: 9px 16px; font-size: 11px; }
+.sv-build-bar .sv-btn.on { color: var(--sv-blood-lite); }
+.sv-catalog { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.sv-catalog li { display: grid; grid-template-columns: 56px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 5px;
+  background: linear-gradient(#26272c, #1d1e22); box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.sv-catalog li.off { opacity: .55; }
+.sv-catalog .sv-sock { --s: 56px; }
+.sv-catalog b { display: block; font: 400 16px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-catalog small { display: block; font-size: 11px; color: var(--sv-ash); line-height: 1.3; }
+.sv-cost { display: block; margin-top: 3px; font-size: 11px; color: #d6c9a8; }
+.sv .sv-catalog button, .sv .sv-card-acts button { width: auto; height: auto; margin: 0; padding: 7px 10px; border: 0; border-radius: 3px;
+  font: 600 10px/1 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: #fff4ec;
+  background: linear-gradient(#c24a32, #8f321d); box-shadow: var(--vd-lift-sm); cursor: var(--cursor-pointer, pointer); }
+.sv .sv-catalog button:disabled, .sv .sv-card-acts button:disabled { color: var(--sv-dim); background: linear-gradient(#2c2d32, #222327); cursor: default; }
+
+.sv-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.sv-card { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 10px; border-radius: 6px;
+  background: url("../assets/textures/steel-plate.webp") center / 260px, linear-gradient(#26272c, #1b1c20); background-blend-mode: overlay, normal;
+  box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.sv .sv-card.building .sv-sock img { filter: grayscale(.85) brightness(.6) contrast(1.1); }
+/* Стройка — леса: штриховка в гнезде */
+.sv-card.building .sv-sock::before { background: repeating-linear-gradient(45deg, transparent 0 6px, rgba(184, 67, 44, .2) 6px 8px), radial-gradient(circle at 50% 40%, #3a3c42, #121316 75%); }
+.sv-card-main { min-width: 0; display: grid; gap: 5px; align-content: start; }
+.sv-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sv-card-head b { font: 400 17px/1.1 var(--vd-font-head); color: var(--sv-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sv-pips { display: flex; gap: 4px; flex: none; }
+.sv-pips i { width: 8px; height: 8px; transform: rotate(45deg); background: rgba(0, 0, 0, .5); box-shadow: 0 0 0 1px rgba(189, 182, 166, .4); }
+.sv-pips i.on { background: linear-gradient(135deg, #fdf9ef, #9b958a); box-shadow: 0 0 0 1px #050506; }
+.sv-pips i.next { background: rgba(184, 67, 44, .55); animation: sv-blink 1.6s ease-in-out infinite alternate; }
+@keyframes sv-blink { to { opacity: .4; } }
+.sv-progress { display: grid; gap: 3px; }
+.sv-progress small { font-size: 11px; color: #d6c9a8; }
+.sv-progress .sv-bar i { background: linear-gradient(90deg, #8f321d, #e0937f); }
+.sv-progress.stalled small { color: var(--sv-blood-lite); }
+.sv-gives { font-size: 11px; color: var(--sv-ash); line-height: 1.35; }
+.sv-card-acts { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+.sv-workers { display: inline-flex; align-items: center; gap: 6px; padding: 2px 4px; border-radius: 999px; background: rgba(0, 0, 0, .45); box-shadow: var(--vd-sink-sm);
+  font-size: 12px; color: var(--sv-ash); }
+.sv-workers b { font: 400 16px/1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-workers a { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; line-height: 1;
+  background: linear-gradient(#3a3b41, #26272c); color: var(--sv-silver); box-shadow: var(--vd-lift-sm); }
+.sv-workers a.off { opacity: .3; pointer-events: none; }
+.sv-demolish { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; color: var(--sv-dim); }
+.sv-demolish:hover { color: var(--sv-blood-lite); background: rgba(0, 0, 0, .4); }
+
+/* ─── Летопись ─── */
+.sv-chronicle { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sv-chronicle > li:not(.sv-hint) { padding: 9px 12px; border-radius: 5px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); display: grid; gap: 3px; }
+.sv-chronicle header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+.sv-chronicle header b { font: 400 17px/1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-chronicle header span { font-size: 12px; color: #c7b99f; }
+.sv-chronicle header em { font-style: normal; font-size: 11px; color: var(--sv-ash); }
+.sv-chronicle p { margin: 0; font-size: 12px; }
+.sv-chronicle p.dim { color: var(--sv-dim); }
+.sv-notes { min-height: 300px; }
+
+/* ─── Карточка недели в чате ─── */
+.vedmak-card.settlement-week .sw-res { list-style: none; margin: 0 0 6px; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
+.vedmak-card.settlement-week .sw-res li { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 6px; font-size: 12px; }
+.vedmak-card.settlement-week .sw-res img { width: 20px; height: 20px; border: 0; border-radius: 3px; }
+.vedmak-card.settlement-week .sw-res b.up { color: #8fb07a; } .vedmak-card.settlement-week .sw-res b.down { color: #e0937f; }
+.vedmak-card.settlement-week .note.warn { color: #e0937f; }
+
+@media (max-width: 760px) { .sv-plaques { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sv-res, .sv-cards, .sv-catalog, .sv-cols { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .sv-pips i.next { animation: none; } }

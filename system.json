@@ -31,7 +31,8 @@
     "styles/sheet.css",
     "styles/hud.css",
     "styles/nexus.css",
-    "styles/pause.css"
+    "styles/pause.css",
+    "styles/settlement.css"
   ],
   "languages": [
     {
@@ -54,6 +55,11 @@
         ]
       },
       "loot": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "settlement": {
         "htmlFields": [
           "description"
         ]

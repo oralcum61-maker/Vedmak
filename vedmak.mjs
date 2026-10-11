@@ -17,6 +17,8 @@ import { VedmakItem } from "./module/documents/item.mjs";
 import { CharacterSheet } from "./module/sheets/character-sheet.mjs";
 import { MonsterSheet } from "./module/sheets/monster-sheet.mjs";
 import { LootSheet } from "./module/sheets/loot-sheet.mjs";
+import { SettlementSheet } from "./module/sheets/settlement-sheet.mjs";
+import * as settlement from "./module/settlement/settlement.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
@@ -266,6 +268,9 @@ Hooks.once("init", () => {
   DSC.registerSheet(Actor, SYSTEM_ID, LootSheet, {
     types: ["loot"], makeDefault: true, label: "VEDMAK.SheetLoot"
   });
+  DSC.registerSheet(Actor, SYSTEM_ID, SettlementSheet, {
+    types: ["settlement"], makeDefault: true, label: "VEDMAK.SheetSettlement"
+  });
   DSC.registerSheet(Item, SYSTEM_ID, VedmakItemSheet, {
     makeDefault: true, label: "VEDMAK.SheetItem"
   });
@@ -306,6 +311,7 @@ Hooks.once("init", () => {
     profileSheet,
     hud: CombatHud,
     nexus: SceneNexus,
+    settlement,
     investigation: { ...investigation, open: () => InvestigationApp.open() },
     tavern: { open: () => TavernApp.open() },
     config: CONFIG.VEDMAK
@@ -465,6 +471,18 @@ Hooks.on("preCreateActor", (actor, data) => {
   // Новое чудовище получает трофейный значок вместо человечка Foundry
   if (actor.type === "monster" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
     actor.updateSource({ img: "systems/vedmak/assets/fan/monsters/mons-wraith.webp" });
+  }
+  // Поселение (PLAN 4.183): герб — усадьба; для начала — жилой двор, лесорубы и собиратели, уже готовые
+  if (actor.type === "settlement") {
+    if (!data.img || data.img === Actor.DEFAULT_ICON) actor.updateSource({ img: "icons/environment/settlement/house-manor.webp" });
+    if (!foundry.utils.hasProperty(data, "system.buildings")) {
+      const id = () => foundry.utils.randomID();
+      actor.updateSource({ "system.buildings": [
+        { id: id(), key: "burgage", name: "Жилой двор", level: 1, workers: 0 },
+        { id: id(), key: "logging", name: "Лесорубы", level: 1, workers: 1 },
+        { id: id(), key: "forager", name: "Собиратели", level: 1, workers: 1 }
+      ] });
+    }
   }
   // Токен персонажа привязан к актору, дружелюбен и видит — если создатель не задал этого сам:
   // копия, импорт или враждебный НИП-персонаж сохраняют свои настройки токена

@@ -22,8 +22,11 @@ export const DEFAULT_CURRENCIES = {
   bizants: { label: "Бизанты", abbr: "биз.", region: "Ковир и Повисс",        rate: 4,   grams: 5 }
 };
 
-/** Значение настройки по умолчанию: валюты и комиссия менялы в процентах. */
-export const DEFAULT_MONEY_SETTING = { fee: 0, list: DEFAULT_CURRENCIES };
+/**
+ * Значение настройки по умолчанию: валюты, комиссия менялы в процентах и валюта мира — та, что ходит там, где идёт
+ * кампания (в ней считается казна поселений, PLAN 4.183).
+ */
+export const DEFAULT_MONEY_SETTING = { fee: 0, world: "crowns", list: DEFAULT_CURRENCIES };
 
 /** Настройка мира с подстановкой умолчаний (неверные числа не ломают расчёты). Считается заново, только когда
     настройку поменяли (worldSetting отдаёт тот же объект); результат общий — не менять. */
@@ -46,8 +49,18 @@ const normalizeMoney = memoBySource(raw => {
     };
   }
   const fee = Number(saved.fee);
-  return { fee: Number.isFinite(fee) ? Math.min(100, Math.max(0, fee)) : 0, list };
+  const world = CURRENCY_KEYS.includes(saved.world) ? saved.world : "crowns";
+  return { fee: Number.isFinite(fee) ? Math.min(100, Math.max(0, fee)) : 0, world, list };
 });
+
+/** Валюта мира: { key, label, abbr, rate, … }. */
+export const worldCurrency = () => { const s = moneySetting(); return s.list[s.world]; };
+
+/** Сколько это в валюте мира (из крон), до десятых. */
+export const crownsToWorld = crowns => Math.round(((Number(crowns) || 0) / worldCurrency().rate) * 10) / 10;
+
+/** Подпись суммы в кронах — в валюте мира: «12 ор.». */
+export const worldLabel = crowns => `${crownsToWorld(crowns).toLocaleString("ru-RU")} ${worldCurrency().abbr}`;
 
 /** Валюты списком в порядке ключей. */
 export const currencies = () => Object.values(moneySetting().list);

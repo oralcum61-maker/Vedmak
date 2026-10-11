@@ -3,7 +3,7 @@
   <p class="hint">Цены в книгах — в кронах. Курс валюты — сколько крон стоит одна её монета. Курсы по умолчанию —
     из корника (стр. 71); марок в книге нет, их курс домашний. Поправьте под свою кампанию.</p>
   <table class="vd-table currency-table">
-    <thead><tr><th>Название</th><th>Сокр.</th><th>Где ходит</th><th>Курс, кр.</th><th>Вес, г</th></tr></thead>
+    <thead><tr><th>Название</th><th>Сокр.</th><th>Где ходит</th><th>Курс, кр.</th><th>Вес, г</th><th data-tooltip="Валюта мира: в ней ведётся казна поселений">Мир</th></tr></thead>
     <tbody>
     {{#each rows as |c|}}
       <tr>
@@ -13,10 +13,13 @@
         <td class="num">{{#if c.base}}<b>1</b><input type="hidden" name="list.{{c.key}}.rate" value="1">
           {{else}}<input type="number" name="list.{{c.key}}.rate" value="{{c.rate}}" min="0.001" step="any">{{/if}}</td>
         <td class="num"><input type="number" name="list.{{c.key}}.grams" value="{{c.grams}}" min="0" step="0.5"></td>
+        <td class="num"><input type="radio" name="world" value="{{c.key}}" {{#if c.world}}checked{{/if}} aria-label="Валюта мира: {{c.label}}"></td>
       </tr>
     {{/each}}
     </tbody>
   </table>
+  <p class="hint">«Мир» — валюта, которая ходит там, где идёт кампания: в ней ведётся казна поселений, налоги и торговля
+    поселения. Цены книг по-прежнему в кронах и пересчитываются по курсу.</p>
   <div class="dlg-row">
     <label class="num"><span class="cap">Комиссия менялы, %</span><input type="number" name="fee" value="{{fee}}" min="0" max="100" step="1"></label>
     <span class="hint grow">Подставляется в окно обмена; там её можно поменять под конкретную лавку.</span>

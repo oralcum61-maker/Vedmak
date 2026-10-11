@@ -23,8 +23,8 @@ export class CurrencyConfig extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   async _prepareContext() {
-    const { fee, list } = moneySetting();
-    return { fee, rows: CURRENCY_KEYS.map(k => ({ ...list[k], base: k === "crowns" })) };
+    const { fee, world, list } = moneySetting();
+    return { fee, rows: CURRENCY_KEYS.map(k => ({ ...list[k], base: k === "crowns", world: k === world })) };
   }
 
   static async #onSubmit(event, form, formData) {
@@ -37,7 +37,8 @@ export class CurrencyConfig extends HandlebarsApplicationMixin(ApplicationV2) {
         rate: key === "crowns" ? 1 : Number(row.rate) || 0, grams: Math.max(0, Number(row.grams) || 0)
       };
     }
-    await game.settings.set("vedmak", "currencies", { fee: Math.max(0, Math.min(100, Number(data.fee) || 0)), list });
+    const world = CURRENCY_KEYS.includes(data.world) ? data.world : "crowns";
+    await game.settings.set("vedmak", "currencies", { fee: Math.max(0, Math.min(100, Number(data.fee) || 0)), world, list });
   }
 
   static async #onReset() {
