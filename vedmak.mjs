@@ -69,6 +69,7 @@ import { TavernApp, registerTavernUi } from "./module/apps/tavern-app.mjs";
 import { registerImplantHooks, implantDialog } from "./module/crafting/implant.mjs";
 import { touchDimeritium, endDimeritium } from "./module/magic/dimeritium.mjs";
 import { registerZoneEffectHooks } from "./module/magic/zone-effects.mjs";
+import { registerVisionSpeedups, setVisionSpeedups } from "./module/fx/vision-speed.mjs";
 import * as investigation from "./module/investigation/investigation.mjs";
 
 Hooks.once("init", () => {
@@ -291,6 +292,7 @@ Hooks.once("init", () => {
   registerCombatAutomation();
   registerZoneHooks();
   registerZoneEffectHooks();
+  registerVisionSpeedups();
   registerAlchemyHooks();
   registerBuffHooks();
   registerRaceHooks();
@@ -318,6 +320,7 @@ Hooks.once("init", () => {
     profileSheet,
     hud: CombatHud,
     nexus: SceneNexus,
+    setVisionSpeedups,
     settlement,
     army: { ...ARMY, battle: units => BattleApp.open(units) },
     investigation: { ...investigation, open: () => InvestigationApp.open() },
