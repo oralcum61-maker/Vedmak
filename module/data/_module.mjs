@@ -4,6 +4,7 @@ import { LootData } from "./actor/loot.mjs";
 import { SettlementData } from "./actor/settlement.mjs";
 import { WeaponData, ArmorData, GearData, SpellData, ProfessionData, RaceData, CritWoundData, ComponentData, RecipeData,
   AlchemicalData, EnhancementData } from "./item/items.mjs";
+import { BuildingData } from "./item/building.mjs";
 
 export const ACTOR_MODELS = {
   character: CharacterData,
@@ -23,5 +24,6 @@ export const ITEM_MODELS = {
   component: ComponentData,
   recipe: RecipeData,
   alchemical: AlchemicalData,
-  enhancement: EnhancementData
+  enhancement: EnhancementData,
+  building: BuildingData
 };

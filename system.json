@@ -129,6 +129,11 @@
         "htmlFields": [
           "description"
         ]
+      },
+      "building": {
+        "htmlFields": [
+          "description"
+        ]
       }
     }
   },

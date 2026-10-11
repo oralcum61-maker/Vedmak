@@ -57,7 +57,7 @@
 .sv .sv-next:hover { filter: brightness(1.12); }
 
 /* ─── Плашки ─── */
-.sv-plaques { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 12px 16px; background: #17181b;
+.sv-plaques { display: grid; grid-template-columns: 1fr 1.25fr 1.1fr 1fr 1fr; gap: 10px; padding: 12px 16px; background: #17181b;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .6); }
 .sv-plaque { position: relative; display: grid; align-content: start; gap: 3px; padding: 10px 14px 11px; border-radius: 5px;
   background: url("../assets/textures/steel-plate.webp") center / 260px, linear-gradient(#26272c, #1d1e22); background-blend-mode: overlay, normal;
@@ -176,6 +176,10 @@
 .sv-workers a { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; line-height: 1;
   background: linear-gradient(#3a3b41, #26272c); color: var(--sv-silver); box-shadow: var(--vd-lift-sm); }
 .sv-workers a.off { opacity: .3; pointer-events: none; }
+.sv-edit { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; color: var(--sv-dim); }
+.sv-edit:hover { color: var(--sv-silver); background: rgba(0, 0, 0, .4); }
+.sv-edit + .sv-demolish { margin-left: 0; }
+.sv-mine { font: italic 400 11px/1 var(--vd-font-body); color: #d6c9a8; }
 .sv-demolish { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; color: var(--sv-dim); }
 .sv-demolish:hover { color: var(--sv-blood-lite); background: rgba(0, 0, 0, .4); }
 
@@ -199,3 +203,51 @@
 
 @media (max-width: 760px) { .sv-plaques { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sv-res, .sv-cards, .sv-catalog, .sv-cols { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .sv-pips i.next { animation: none; } }
+
+/* ─── Лист предмета «Постройка» (PLAN 4.185): уровни с таблицей ресурсов ─── */
+.building-details .bl-checks { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 6px 0; }
+.building-details .bl-level { position: relative; }
+.building-details .bl-del { position: absolute; top: 4px; right: 8px; color: var(--vd-text-dim, #bab4a8); }
+.building-details .bl-del:hover { color: #e0937f; }
+.building-details .bl-table { overflow-x: auto; margin-top: 6px; }
+.building-details .bl-table table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.building-details .bl-table th { font-weight: 600; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--vd-text-dim, #bab4a8); padding: 2px 3px; text-align: center; }
+.building-details .bl-table tbody th { text-align: left; white-space: nowrap; }
+.building-details .bl-table td { padding: 2px; }
+.building-details .bl-table input { width: 100%; min-width: 38px; height: 24px; padding: 0 3px; text-align: center; }
+.building-details .bl-add { width: 100%; margin-top: 4px; }
+
+/* ─── Журнал мира (PLAN 4.185): календарь, Ополчение и Контроль, склад со своими ресурсами, конец месяца ─── */
+.sv-week { display: inline-flex; align-items: center; gap: 4px; }
+.sv .sv-week select { width: auto; }
+.sv-week select, .sv-week input, .sv-year { height: 22px; padding: 0 4px; font: 600 11px/1 var(--vd-font-body); letter-spacing: .08em; }
+.sv-week select { text-transform: uppercase; }
+.sv-week input { width: 34px; text-align: center; }
+.sv .sv-year { width: 44px; text-align: center; }
+.sv-duo { grid-template-columns: 1fr 1fr; gap: 8px; }
+.sv-duo label { display: grid; gap: 4px; align-content: start; }
+.sv-duo input { width: 100%; height: 30px; font: 400 22px/1 var(--vd-font-head); text-align: center; }
+.sv-duo b { font: 400 26px/1 var(--vd-font-head); color: var(--sv-silver); }
+.sv-mini-acts a.off { opacity: .3; pointer-events: none; }
+.sv-res li { position: relative; }
+.sv-res-x { position: absolute; top: 4px; right: 6px; font-size: 13px; color: var(--sv-dim); }
+.sv-res-x:hover { color: var(--sv-blood-lite); }
+.sv-res-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.sv-add-res { display: flex; align-items: center; gap: 6px; }
+.sv-add-res input[type="text"] { width: 160px; height: 26px; background: rgba(0, 0, 0, .45); border: 0; border-radius: 4px; color: var(--sv-ink); box-shadow: var(--vd-sink-sm); padding: 0 8px; }
+.sv-add-res input[type="number"] { width: 60px; height: 26px; }
+.sv-add-res .sv-btn { flex: none; padding: 7px 12px; }
+.sv-month li { display: block; line-height: 1.35; }
+.sv-month li.warn { color: var(--sv-blood-lite); }
+.sv-month li.up { color: var(--sv-green); }
+.building-details .bl-list { display: grid; gap: 4px; margin-top: 8px; }
+.building-details .bl-cost { display: grid; grid-template-columns: 1fr 70px 20px; gap: 6px; align-items: center; }
+.building-details .bl-rows { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.building-details .bl-rows th { font-weight: 600; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--vd-text-dim, #bab4a8); padding: 2px; text-align: left; }
+.building-details .bl-rows td { padding: 2px; }
+.building-details .bl-rows td.c { text-align: center; }
+.building-details .bl-rows input[type="text"], .building-details .bl-rows input[type="number"], .building-details .bl-rows select { width: 100%; height: 24px; }
+.building-details .bl-rows input[type="number"] { max-width: 50px; }
+.building-details .bl-formula { max-width: 70px; }
+.building-details .bl-plus { justify-self: start; font-size: 11px; color: var(--vd-text-dim, #bab4a8); }
+.building-details .bl-plus:hover { color: var(--vd-silver, #f1ece0); }

@@ -11,6 +11,8 @@ import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 import { animateTab } from "../fx/sheet-motion.mjs";
 import { isProstheticItem, prostheticStats, prostheticWeaponCfg } from "../combat/prosthetics.mjs";
+import { BUILDING_GROUPS, PERIODS, RESOURCE_ICONS, WEALTH, fullRow } from "../config/settlement.mjs";
+import { worldCurrency } from "../config/money.mjs";
 
 /**
  * Ключи рас для выпадающих списков: корник (RACES) и все расы компендиумов (дополнения, фанатские книги).
@@ -35,7 +37,7 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 /** Поля-массивы объектов, которые на форме идут как name="system.x.0.key". */
-const OBJECT_ARRAYS = ["effects", "traits", "automation.statuses", "mods", "skillChoices", "branches", "components"];
+const OBJECT_ARRAYS = ["effects", "traits", "automation.statuses", "mods", "skillChoices", "branches", "components", "levels"];
 
 /** Без права правки: что работает (вкладки, просмотр эффекта, в чат) и что видно, но не нажимается. */
 const VIEW_ACTIONS = new Set(["tab", "effectEdit", "post"]);
@@ -69,7 +71,11 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       effectEdit: VedmakItemSheet.#onEffectEdit,
       effectDelete: VedmakItemSheet.#onEffectDelete,
       effectToggle: VedmakItemSheet.#onEffectToggle,
-      post: VedmakItemSheet.#onPost
+      post: VedmakItemSheet.#onPost,
+      blAdd: VedmakItemSheet.#onBlAdd,
+      blDelete: VedmakItemSheet.#onBlDelete,
+      blLevelAdd: VedmakItemSheet.#onBlLevelAdd,
+      blLevelDelete: VedmakItemSheet.#onBlLevelDelete
     }
   };
 
@@ -213,6 +219,7 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       })) : [];
       context.levelInfo = lvl ? { ...lvl } : null;
     }
+    if (item.type === "building") context.building = buildingContext(item);
     if (item.type === "spell") {
       const kind = system.kind;
       const levels = ["sign", "gift"].includes(kind) ? ["novice", "journeyman"]
@@ -315,6 +322,37 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.item.update({ [`system.${field}`]: rows });
   }
 
+  /* Постройка (PLAN 4.185): строки цены, выработки и содержания внутри уровня; уровни целиком */
+  static async #onBlAdd(event, target) {
+    const levels = foundry.utils.deepClone(this.item._source.system.levels ?? []);
+    const lv = levels[Number(target.dataset.level)];
+    if (!lv) return;
+    const list = target.dataset.list;
+    (lv[list] ??= []).push(list === "cost" ? { resource: "", qty: 1 } : fullRow({ resource: "" }));
+    await this.item.update({ "system.levels": levels });
+  }
+
+  static async #onBlDelete(event, target) {
+    const levels = foundry.utils.deepClone(this.item._source.system.levels ?? []);
+    const lv = levels[Number(target.dataset.level)];
+    lv?.[target.dataset.list]?.splice(Number(target.dataset.index), 1);
+    await this.item.update({ "system.levels": levels });
+  }
+
+  static async #onBlLevelAdd() {
+    const levels = foundry.utils.deepClone(this.item._source.system.levels ?? []);
+    // Новый уровень — копия последнего: обычно улучшение меняет пару чисел
+    levels.push(foundry.utils.deepClone(levels.at(-1) ?? {}));
+    await this.item.update({ "system.levels": levels });
+  }
+
+  static async #onBlLevelDelete(event, target) {
+    const levels = foundry.utils.deepClone(this.item._source.system.levels ?? []);
+    if (levels.length <= 1) return;
+    levels.splice(Number(target.dataset.level), 1);
+    await this.item.update({ "system.levels": levels });
+  }
+
   static async #onRowDelete(event, target) {
     const field = target.dataset.field;
     const index = Number(target.closest("[data-index]").dataset.index);
@@ -382,4 +420,43 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static async #onPost() {
     await this.item.toChat();
   }
+}
+
+/**
+ * Лист постройки (PLAN 4.185): уровни — поля, цена, строки выработки и содержания; имена полей формы готовые, чтобы
+ * в шаблоне не было путей через ../.
+ */
+function buildingContext(item) {
+  const sys = item.system;
+  const FIELDS = [
+    ["weeks", "Стройка, нед.", "Сколько недель строится уровень (одна семья без дела — неделя); 0 — сразу"],
+    ["families", "Работают, семей", "Сколько семей можно поставить работать"],
+    ["housing", "Живут, семей", "Сколько семей здесь живёт (дома)"],
+    ["control", "Контроль", "Прибавка к Контролю поселения (каждый уровень — −5% к шансу бунта)"],
+    ["taxes", "Налоги ×", "Без постройки с налогами (усадьба) налог не собрать: 1 — обычный, 1,5 — в полтора раза больше"],
+    ["storage", "Склад +", "Прибавка к вместимости склада по каждому ресурсу"]
+  ];
+  const rows = (i, list, arr) => arr.map((r, j) => {
+    const p = `system.levels.${i}.${list}.${j}`;
+    return { j, list, level: i, resource: { name: `${p}.resource`, value: r.resource }, formula: { name: `${p}.formula`, value: r.formula },
+      per: { name: `${p}.per`, value: r.per }, period: { name: `${p}.period`, value: r.period },
+      minFamilies: { name: `${p}.minFamilies`, value: r.minFamilies }, noWinter: { name: `${p}.noWinter`, value: r.noWinter },
+      same: { name: `${p}.same`, value: r.same } };
+  });
+  const levels = sys.levels.map((l, i) => ({
+    index: i, n: i + 1,
+    fields: FIELDS.map(([k, label, hint]) => ({ label, hint, name: `system.levels.${i}.${k}`, value: l[k], step: k === "taxes" ? 0.5 : 1 })),
+    cost: l.cost.map((c, j) => ({ j, level: i, resource: { name: `system.levels.${i}.cost.${j}.resource`, value: c.resource },
+      qty: { name: `system.levels.${i}.cost.${j}.qty`, value: c.qty } })),
+    lists: [{ list: "produce", label: "Выработка", same: true, rows: rows(i, "produce", l.produce) },
+      { list: "upkeep", label: "Содержание", same: false, rows: rows(i, "upkeep", l.upkeep) }]
+  }));
+  const parent = item.parent;
+  return {
+    groups: BUILDING_GROUPS, levels, canDelete: sys.levels.length > 1,
+    perOptions: { building: "за постройку", family: "за семью" }, periodOptions: PERIODS,
+    resourceNames: [...Object.keys(RESOURCE_ICONS), WEALTH],
+    codePlaceholder: item.name.toLowerCase(),
+    inSettlement: parent?.type === "settlement", settlement: parent?.name ?? "", maxLevel: sys.levels.length
+  };
 }

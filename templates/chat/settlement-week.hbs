@@ -1,24 +1,26 @@
-{{!-- Неделя поселения (PLAN 4.183): итог хода — ресурсы, нужды, кроны, одобрение, семьи, достроенное. --}}
+{{!-- Неделя поселения (PLAN 4.185): броски построек, итог склада, нехватки, события месяца, достроенное. --}}
 <div class="vedmak-card settlement-week">
   <header class="card-head">
     <div class="card-ident">
-      <span class="card-name">{{name}}: неделя {{report.week}}</span>
-      <span class="card-sub">{{report.season}} · год {{report.year}}</span>
+      <span class="card-name">{{name}}</span>
+      <span class="card-sub">{{report.monthLabel}}, {{report.week}}-я неделя · {{report.season}} · год {{report.year}}</span>
     </div>
-    <div class="card-value"><b>{{report.approval}}</b><span class="cap">одобрение</span></div>
   </header>
   <div class="card-body">
     {{#if lines.length}}
-    <ul class="sw-res">
-      {{#each lines}}
-      <li><img src="{{img}}" alt=""><span>{{label}}</span><b class="{{#if plus}}up{{else}}down{{/if}}">{{#if plus}}+{{/if}}{{net}}</b></li>
-      {{/each}}
+    <ul class="sw-lines">
+      {{#each lines}}<li><span>{{building}}: {{resource}}</span><b>+{{amount}}</b><em>{{formula}}{{#if dice}} · {{dice}}{{/if}}</em></li>{{/each}}
     </ul>
     {{/if}}
-    {{#if income}}<p class="note">В казну: <b>{{income}}</b>{{#if taxes}} (налог {{taxes}}){{/if}}.</p>{{/if}}
-    {{#if short}}<p class="note warn">Не хватило: {{short}}.</p>{{/if}}
+    {{#if net.length}}
+    <ul class="sw-res">
+      {{#each net}}<li><img src="{{img}}" alt=""><span>{{label}}</span><b class="{{#if plus}}up{{else}}down{{/if}}">{{#if plus}}+{{/if}}{{net}}</b></li>{{/each}}
+    </ul>
+    {{/if}}
+    {{#if wealth}}<p class="note">Казна: <b>{{wealth}}</b>.</p>{{/if}}
+    {{#if shortages}}<p class="note warn">Не хватило: {{shortages}}.</p>{{/if}}
+    {{#each report.events}}<p class="note{{#if danger}} warn{{/if}}">{{text}}</p>{{/each}}
     {{#if built}}<p class="note"><b>Достроено:</b> {{built}}.</p>{{/if}}
-    {{#if report.families.reason}}<p class="note">{{report.families.reason}} Семей: {{report.families.after}}.</p>{{/if}}
     {{#if overflow}}<p class="note dim">Не влезло на склад и пропало: {{overflow}}.</p>{{/if}}
   </div>
 </div>

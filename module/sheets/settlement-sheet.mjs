@@ -1,27 +1,40 @@
-// Лист поселения (PLAN 4.183): шапка — герб, неделя и сезон, семьи, одобрение, казна, налог; вкладки «Хозяйство»
-// (склад, прогноз недели, нужды, одобрение по частям, торговля), «Постройки» (карточки с уровнями, работниками и стройкой,
-// каталог), «Летопись» (прошедшие недели) и «Описание». Владелец строит и распоряжается, ведущий ещё двигает неделю
-// и правит числа напрямую.
+// Лист поселения (PLAN 4.183, 4.185) по журналу мира manorlords: шапка — герб, месяц и неделя; пластины — семьи,
+// одобрение 0–10 (шансы прихода семей и бунта), казна в Богатстве, налог, Ополчение и Контроль; вкладки «Хозяйство»
+// (склад с вместимостью и прогнозом недели, торговля, нужды, конец месяца), «Постройки» (карточки с уровнями, семьями
+// на работе, стройкой; каталог), «Летопись» и «Описание». Владелец строит, ставит семьи, налог и торгует; ведущий ещё
+// двигает неделю и правит числа.
 
-import { BUILDINGS, BUILDING_GROUPS, RESOURCES, RESOURCE_KEYS, TAXES, BUY_MARKUP } from "../config/settlement.mjs";
-import { levelDef, canAfford } from "../settlement/rules.mjs";
+import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_PER_MONTH, RESOURCE_ORDER, TAXES, BUY_MARKUP, MONTHS,
+  resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
+import { buildingState, levelDef, averageOf, WEALTH } from "../settlement/rules.mjs";
 import * as S from "../settlement/settlement.mjs";
-import { worldCurrency, worldLabel, crownsToWorld } from "../config/money.mjs";
+import { worldCurrency } from "../config/money.mjs";
+import { compareRu } from "../util.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
-const SEASON_KEYS = ["spring", "summer", "autumn", "winter"];
 const TABS = { economy: "Хозяйство", buildings: "Постройки", chronicle: "Летопись", notes: "Описание" };
-const fmt = n => (Math.round(n * 10) / 10).toLocaleString("ru-RU");
+const fmt = n => (Math.round(n * 100) / 100).toLocaleString("ru-RU");
 const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + fmt(Math.abs(n));
+const plain = html => String(html ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+/** Строка выработки подписью: «Древесина 1d6+3», «Древесина 1d6 за семью», «раз в два месяца», «кроме зимы». */
+export function rowLabel(r) {
+  const bits = [`${r.resource} ${r.same ? "столько же" : r.formula}`];
+  if (r.per === "family") bits.push("за семью");
+  if (r.period !== "week") bits.push(PERIODS[r.period]);
+  if (r.minFamilies) bits.push(`от ${r.minFamilies} сем.`);
+  if (r.noWinter) bits.push("кроме зимы");
+  return bits.join(" ");
+}
 
 export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static DEFAULT_OPTIONS = {
     classes: ["vedmak", "sheet", "actor", "settlement"],
-    position: { width: 860, height: 820 },
+    position: { width: 900, height: 860 },
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
@@ -31,9 +44,13 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       upgrade: SettlementSheet.#onUpgrade,
       demolish: SettlementSheet.#onDemolish,
       workers: SettlementSheet.#onWorkers,
+      wealth: SettlementSheet.#onWealth,
       trade: SettlementSheet.#onTrade,
-      money: SettlementSheet.#onMoney,
-      catalog: SettlementSheet.#onCatalog
+      catalog: SettlementSheet.#onCatalog,
+      editBuilding: SettlementSheet.#onEditBuilding,
+      approval: SettlementSheet.#onApproval,
+      addResource: SettlementSheet.#onAddResource,
+      removeResource: SettlementSheet.#onRemoveResource
     }
   };
 
@@ -51,99 +68,121 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const sys = actor.system;
     const sum = sys.summary;
     const fc = sys.forecast;
+    const cal = sys.calendar;
     const gm = game.user.isGM;
     const editable = this.isEditable;
     const cur = worldCurrency();
+    const coins = w => `${Math.round(w * WEALTH_RATE).toLocaleString("ru-RU")} ${cur.abbr}`;
 
-    const resources = RESOURCE_KEYS.map(k => {
-      const cap = sum.storage[k];
-      const value = sys.stock[k];
-      const net = fc.net[k];
-      return {
-        key: k, label: RESOURCES[k].label, img: RESOURCES[k].img, value: fmt(value), raw: value, cap,
-        pct: Math.min(100, Math.round((value / cap) * 100)), full: value >= cap,
-        net: net ? signed(net) : "", up: net > 0, down: net < 0,
-        sell: `${worldLabel(RESOURCES[k].price)}`, buy: `${worldLabel(Math.ceil(RESOURCES[k].price * BUY_MARKUP))}`
-      };
+    // Склад: нужды первыми, затем по алфавиту; то, что будет произведено, — тоже, даже если пока ноль
+    const stock = sys.stockMap;
+    const names = new Set([...RESOURCE_ORDER, ...Object.keys(stock), ...Object.keys(fc.net)]);
+    const order = n => { const i = RESOURCE_ORDER.indexOf(n); return i < 0 ? 99 : i; };
+    const resources = [...names].sort((a, b) => order(a) - order(b) || compareRu(a, b)).map(name => {
+      const net = fc.net[name] ?? 0;
+      const value = stock[name] ?? 0;
+      return { name, img: resourceIcon(name), value: fmt(value), raw: value, cap: sum.storage,
+        pct: Math.min(100, Math.round((value / sum.storage) * 100)), full: value >= sum.storage,
+        net: net ? `≈ ${signed(net)}` : "", up: net > 0, down: net < 0, need: RESOURCE_ORDER.includes(name),
+        sell: `${priceOf(name)} ${cur.abbr}`, buy: `${Math.ceil(priceOf(name) * BUY_MARKUP)} ${cur.abbr}` };
     });
-
     const needs = Object.entries(fc.needs).map(([k, n]) => ({
-      label: RESOURCES[k].label, need: fmt(n.need), got: fmt(n.got), ok: n.ratio >= 1, pct: Math.round(n.ratio * 100)
+      label: k, need: fmt(n.need), got: fmt(n.got), ok: n.short <= 0, pct: n.need ? Math.round((n.got / n.need) * 100) : 100
     }));
 
-    const approval = fc.approval;
+    // Конец месяца
+    const weeksLeft = WEEKS_PER_MONTH - cal.week;
+    const tax = TAXES[sys.taxes] ?? TAXES.low;
+    const month = {
+      when: weeksLeft ? `через ${weeksLeft} нед.` : "в конце этой недели",
+      arrival: sum.arrival ? (sum.homeless ? "Новые семьи не придут, пока есть бездомные."
+        : `Приход семей: шанс ${sum.arrival.chance}%, ${sum.arrival.formula} сем.${sum.freeHouses ? "" : " Домов нет — не больше двух, бездомными."}`)
+        : "Одобрение ниже 6 — новые семьи не придут.",
+      revolt: sum.revolt ? `Шанс бунта ${sum.revolt}%${sum.control ? ` (Контроль ${sum.control} снимает ${sum.control * 5}%)` : ""}.` : "",
+      content: sum.content,
+      taxes: sum.taxMult && tax.approval ? `${tax.label} налог: одобрение ${tax.approval > 0 ? "+" : "−"}${Math.abs(tax.approval)}.` : ""
+    };
+
+    const approval = sys.approval;
     const groups = Object.entries(BUILDING_GROUPS).map(([g, label]) => ({
-      label,
-      cards: sys.buildings.filter(b => BUILDINGS[b.key]?.group === g).map(b => this.#card(b, sum, fc))
+      label, cards: sys.buildings.filter(b => b.group === g).map(b => this.#card(b, sum))
     })).filter(g => g.cards.length);
 
-    const catalog = Object.entries(BUILDINGS).map(([key, def]) => {
-      const lv = def.levels[0];
-      const check = S.canBuild(actor, key);
-      const taken = def.unique && sys.buildings.some(b => b.key === key);
-      return {
-        key, label: def.label, img: def.img, hint: def.hint, cost: S.priceLabel(lv.cost), weeks: lv.weeks,
-        levels: def.levels.length, ok: check.ok, why: check.ok ? "" : check.why, taken, group: BUILDING_GROUPS[def.group]
-      };
-    });
+    // Каталог: свои постройки ведущего (сверху) и встроенные; своя заменяет встроенную с тем же кодом
+    const own = game.items.filter(i => i.type === "building").sort((a, b) => compareRu(a.name, b.name));
+    const ownKeys = new Set(own.map(i => buildingState(i).key));
+    const entry = (data, src, mine) => {
+      const b = buildingState(data);
+      const first = b.levels[0] ?? { cost: [], weeks: 1 };
+      const check = S.canBuild(actor, data);
+      return { src, mine, label: data.name, img: data.img, hint: plain(data.system.description), cost: S.priceLabel(first.cost),
+        weeks: first.weeks, levels: b.levels.length, ok: check.ok, why: check.ok ? "" : check.why,
+        taken: b.unique && sys.buildings.some(x => x.key === b.key) };
+    };
+    const catalog = [
+      ...own.map(i => entry(i.toObject(), i.uuid, true)),
+      ...Object.keys(BUILDINGS).filter(k => !ownKeys.has(k)).map(k => entry(buildingItemData(k), k, false))
+    ];
 
     const chronicle = [...sys.log].reverse().map(r => ({
-      week: r.week, season: r.season, year: r.year, approval: r.approval,
-      families: r.families?.change ? `${r.families.change > 0 ? "+" : "−"}${Math.abs(r.families.change)} сем.` : "",
-      lines: RESOURCE_KEYS.filter(k => r.net?.[k]).map(k => `${RESOURCES[k].label} ${signed(r.net[k])}`).join(" · "),
-      income: r.income ? worldLabel(r.income) : "", built: (r.built ?? []).map(b => b.name).join(", "), reason: r.families?.reason ?? ""
+      when: `${r.monthLabel ?? ""}, ${r.week}-я неделя`, year: r.year, season: r.season,
+      lines: Object.entries(r.net ?? {}).filter(([, v]) => v).map(([k, v]) => `${k} ${signed(v)}`).join(" · "),
+      wealth: r.wealthGain ? `${signed(r.wealthGain)} Богатства` : "",
+      events: (r.events ?? []).map(e => e.text), built: (r.built ?? []).map(b => b.name ?? b).join(", "),
+      shortages: (r.shortages ?? []).map(s => `${s.resource.toLowerCase()} ${s.got} из ${s.need}`).join(", ")
     }));
 
     Object.assign(context, {
-      actor, sys, systemFields: sys.schema.fields, gm, editable, tab: this.tab, showCatalog: this.showCatalog || !sys.buildings.length, tradeQty: this.tradeQty,
+      actor, sys, systemFields: sys.schema.fields, gm, editable, tab: this.tab, tradeQty: this.tradeQty,
+      showCatalog: this.showCatalog || !sys.buildings.length,
       tabs: Object.entries(TABS).map(([id, label]) => ({ id, label, active: id === this.tab })),
-      cal: sys.calendar, cur,
-      families: { value: sys.families, housing: sum.housing, free: sum.free, builders: sum.builders, assigned: sum.assigned },
-      approval: { value: approval, parts: fc.approvalParts.map(p => ({ label: p.label, value: signed(p.value), up: p.value > 0, down: p.value < 0 })),
-        tone: approval >= 75 ? "high" : approval >= 50 ? "ok" : approval >= 25 ? "low" : "bad",
-        arc: Math.round(approval * 3.6) },
-      treasury: { label: worldLabel(sys.money), value: crownsToWorld(sys.money), income: fc.income ? signed(crownsToWorld(fc.income)) : "",
-        hero: game.user.character?.name ?? "" },
-      taxes: Object.entries(TAXES).map(([k, t]) => ({ key: k, label: t.label, selected: k === sys.taxes,
-        hint: `${worldLabel(t.perFamily)} с семьи, одобрение ${signed(t.approval)}` })),
-      taxNote: sum.taxMult ? "" : "Без усадьбы налог не собрать",
-      resources, needs, groups, catalog, chronicle, trade: sum.trade,
-      forecastNote: fc.families.reason,
+      cal: { ...cal, months: MONTHS.map((label, i) => ({ n: i + 1, label, on: i + 1 === cal.month })) },
+      families: { value: sys.families, ...sum },
+      approval: {
+        value: approval, max: APPROVAL_MAX, arc: Math.round((approval / APPROVAL_MAX) * 360),
+        tone: approval >= 7 ? "high" : approval >= 4 ? "ok" : approval >= 1 ? "low" : "bad",
+        note: sum.revolt ? `бунт: ${sum.revolt}%` : sum.arrival ? `приход семей: ${sum.arrival.chance}%` : approval >= 4 ? "спокойно" : "",
+        canUp: editable && gm && approval < APPROVAL_MAX, canDown: editable && gm && approval > 0
+      },
+      wealth: { value: fmt(sys.wealth), raw: sys.wealth, coins: `≈ ${coins(sys.wealth)}`, rate: `1 Богатство = ${WEALTH_RATE} ${cur.abbr}`,
+        gain: fc.wealthGain ? `${signed(fc.wealthGain)} в неделю` : "", hero: game.user.character?.name ?? "" },
+      taxes: Object.entries(TAXES).map(([k, t]) => ({ key: k, label: t.label, selected: k === sys.taxes })),
+      taxNote: sum.taxMult ? (sum.taxCoins ? `${sum.taxCoins} ${cur.abbr} в неделю` : "налог не берётся") : "без усадьбы налог не собрать",
+      resources, needs, month, groups, catalog, chronicle, trade: sum.trade, storage: sum.storage,
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
     return context;
   }
 
-  /** Карточка постройки: уровень, работа, стройка, что даёт. */
-  #card(b, sum, fc) {
-    const def = BUILDINGS[b.key];
-    const lv = levelDef(b.key, b.level);
-    const next = levelDef(b.key, b.level + 1);
-    const max = lv?.workers ?? 0;
+  /** Карточка постройки: уровень, что даёт, семьи на работе, стройка, улучшение. */
+  #card(b, sum) {
+    const lv = levelDef(b, b.level);
+    const next = levelDef(b, b.level + 1);
     const workers = sum.workers[b.id] ?? 0;
+    const item = this.actor.items.get(b.id);
     const gives = [];
     if (lv) {
-      const n = workers;
-      for (const [k, per] of Object.entries(lv.produce ?? {})) if (n) gives.push(`+${fmt(per * n)} ${RESOURCES[k].label.toLowerCase()}`);
-      for (const [k, per] of Object.entries(lv.consume ?? {})) if (n) gives.push(`−${fmt(per * n)} ${RESOURCES[k].label.toLowerCase()}`);
-      if (lv.income && n) gives.push(`+${worldLabel(lv.income * n)}`);
-      if (lv.housing) gives.push(`жильё на ${lv.housing} сем.`);
-      if (lv.approval) gives.push(`одобрение +${lv.approval}`);
-      for (const [k, v] of Object.entries(lv.storage ?? {})) if (k === "food" || k === "wood") gives.push(`склад: ${RESOURCES[k].label.toLowerCase()} +${v}`);
+      if (lv.housing) gives.push(`дом на ${lv.housing} сем.`);
+      for (const r of lv.produce) gives.push(rowLabel(r));
+      for (const r of lv.upkeep) gives.push(`содержание: ${rowLabel(r)}`);
+      if (lv.control) gives.push(`Контроль +${lv.control}`);
+      if (lv.storage) gives.push(`склад +${lv.storage}`);
       if (lv.taxes) gives.push(lv.taxes > 1 ? `налог ×${lv.taxes}` : "налоги");
-      for (const [k, v] of Object.entries(lv.boost ?? {})) gives.push(`${BUILDINGS[k].label.toLowerCase()} +${Math.round(v * 100)}%`);
+      if (b.trade) gives.push("торговля");
     }
-    const target = b.constructing ? levelDef(b.key, b.level + 1) : null;
+    const target = b.constructing ? next : null;
+    const cost = next?.cost ?? [];
+    const canPay = cost.every(c => (c.resource === WEALTH ? this.actor.system.wealth : this.actor.system.stockMap[c.resource] ?? 0) >= c.qty);
     return {
-      id: b.id, name: b.name || def.label, img: def.img, hint: def.hint, level: b.level, maxLevel: def.levels.length,
-      pips: def.levels.map((_, i) => ({ on: i < b.level, next: b.constructing && i === b.level })),
-      constructing: b.constructing, firstBuild: b.constructing && b.level === 0,
-      progress: target ? { done: b.progress, weeks: target.weeks, pct: Math.round((b.progress / target.weeks) * 100) } : null,
-      stalled: b.constructing && sum.builders < sum.constructing && !this.#hasBuilder(b, sum),
-      max, workers, canMore: max && workers < max && sum.free > 0, canLess: workers > 0,
+      id: b.id, name: b.name, img: b.img, hint: plain(item?.system.description), level: b.level,
+      pips: b.levels.map((_, i) => ({ on: i < b.level, next: b.constructing && i === b.level })),
+      constructing: b.constructing, firstBuild: b.constructing && !b.level,
+      progress: target ? { done: b.progress, weeks: target.weeks, pct: target.weeks ? Math.round((b.progress / target.weeks) * 100) : 0 } : null,
+      stalled: b.constructing && !this.#hasBuilder(b, sum),
+      max: lv?.families ?? 0, workers, canMore: workers < (lv?.families ?? 0) && sum.idle > 0, canLess: workers > 0,
       gives: gives.join(" · "),
-      offSeason: !!def.season && workers > 0 && def.season[SEASON_KEYS.indexOf(this.actor.system.calendar.season.key)] === 0,
-      upgrade: !b.constructing && next ? { cost: S.priceLabel(next.cost), weeks: next.weeks, ok: canAfford(this.actor.system, next.cost) } : null
+      idle: !!lv?.families && !workers && lv.produce.some(r => r.per === "family" || r.minFamilies),
+      upgrade: !b.constructing && next && b.level >= 1 && b.level < b.levels.length ? { cost: S.priceLabel(next.cost), weeks: next.weeks, ok: canPay } : null
     };
   }
 
@@ -151,17 +190,6 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   #hasBuilder(b, sum) {
     const queue = this.actor.system.buildings.filter(x => x.constructing);
     return queue.findIndex(x => x.id === b.id) < sum.builders;
-  }
-
-  /** Казна в листе правится в валюте мира — в данных она в кронах. */
-  _prepareSubmitData(event, form, formData, updateData) {
-    const data = super._prepareSubmitData(event, form, formData, updateData);
-    if ("treasury" in data) {
-      data.system ??= {};
-      data.system.money = Math.max(0, (Number(data.treasury) || 0) * worldCurrency().rate);
-      delete data.treasury;
-    }
-    return data;
   }
 
   _onRender(context, options) {
@@ -175,26 +203,44 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }
   static #onCatalog() { this.showCatalog = !this.showCatalog; this.render(); }
   static async #onWeek() { await S.advanceWeek(this.actor); }
-  static async #onBuild(event, target) { await S.build(this.actor, target.dataset.key); this.showCatalog = false; this.render(); }
+  static async #onBuild(event, target) { if (await S.build(this.actor, target.dataset.src)) { this.showCatalog = false; this.render(); } }
   static async #onUpgrade(event, target) { await S.upgrade(this.actor, target.closest("[data-id]").dataset.id); }
   static async #onDemolish(event, target) { await S.demolish(this.actor, target.closest("[data-id]").dataset.id); }
+  static #onEditBuilding(event, target) { this.actor.items.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
   static async #onWorkers(event, target) {
     const id = target.closest("[data-id]").dataset.id;
-    const now = this.actor.system.summary.workers[id] ?? 0;
-    await S.setWorkers(this.actor, id, now + Number(target.dataset.delta));
+    await S.setWorkers(this.actor, id, (this.actor.system.summary.workers[id] ?? 0) + Number(target.dataset.delta));
   }
-  static async #onTrade(event, target) { await S.trade(this.actor, target.dataset.key, this.tradeQty, target.dataset.mode); }
-  static async #onMoney(event, target) {
+  static async #onTrade(event, target) { await S.trade(this.actor, target.dataset.name, this.tradeQty, target.dataset.mode); }
+  static async #onApproval(event, target) {
+    const v = Math.max(0, Math.min(APPROVAL_MAX, this.actor.system.approval + Number(target.dataset.delta)));
+    await this.actor.update({ "system.approval": v });
+  }
+  static async #onAddResource() {
+    const name = this.element.querySelector(".sv-new-res")?.value.trim();
+    const qty = this.element.querySelector(".sv-new-qty")?.valueAsNumber || 0;
+    if (name) await S.setStock(this.actor, name, qty);
+  }
+  static async #onRemoveResource(event, target) { await S.setStock(this.actor, target.dataset.name, null); }
+  static async #onWealth(event, target) {
     const mode = target.dataset.mode;
     const cur = worldCurrency();
-    const amount = await foundry.applications.api.DialogV2.prompt({
+    const units = await foundry.applications.api.DialogV2.prompt({
       window: { title: mode === "deposit" ? "Внести в казну" : "Взять из казны" },
-      content: `<div class="vedmak-roll-dialog"><label class="num"><span class="cap">Сколько, ${cur.abbr}</span>
-        <input type="number" name="amount" min="1" step="1" value="10" autofocus></label>
-        <p class="hint">${mode === "deposit" ? "Из кошелька" : "В кошелёк"}: ${game.user.character?.name ?? "персонаж не назначен"}.</p></div>`,
-      ok: { label: mode === "deposit" ? "Внести" : "Взять", callback: (ev, button) => button.form.elements.amount.valueAsNumber },
+      content: `<div class="vedmak-roll-dialog"><label class="num"><span class="cap">Сколько Богатства</span>
+        <input type="number" name="units" min="1" step="1" value="1" autofocus></label>
+        <p class="hint">1 Богатство = ${WEALTH_RATE} ${cur.abbr}. ${mode === "deposit" ? "Из кошелька" : "В кошелёк"}: ${game.user.character?.name ?? "персонаж не назначен"}.</p></div>`,
+      ok: { label: mode === "deposit" ? "Внести" : "Взять", callback: (ev, button) => button.form.elements.units.valueAsNumber },
       rejectClose: false
     });
-    if (amount) await S.moveMoney(this.actor, amount, mode);
+    if (units) await S.moveWealth(this.actor, units, mode);
+  }
+
+  /** Перетащенный на лист предмет «Постройка» закладывается (со списанием цены); прочие предметы поселению не нужны. */
+  async _onDropItem(event, item) {
+    if (!this.actor.isOwner) return null;
+    if (item.type !== "building") { ui.notifications.warn("Поселению можно передать только постройку."); return null; }
+    if (item.parent === this.actor) return super._onDropItem(event, item);
+    return S.build(this.actor, item.toObject());
   }
 }

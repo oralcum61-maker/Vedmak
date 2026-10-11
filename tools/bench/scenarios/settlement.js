@@ -1,54 +1,77 @@
-// Поселение (PLAN 4.183): лист, стройка, работники, неделя, налоги, торговля, казна в валюте мира.
+// Поселение (PLAN 4.183, 4.185): правила журнала мира manorlords, уровни построек, налог, склад, торговля, своя постройка.
 const S = game.vedmak.settlement;
 const R = await import("/systems/vedmak/module/settlement/rules.mjs");
+const SC = await import("/systems/vedmak/module/config/settlement.mjs");
+const tpl = (key, extra) => { const d = SC.buildingItemData(key); Object.assign(d.system, extra); return R.buildingState({ ...d, id: key }); };
 
-stepName("правила недели");
-const base = { week: 14, families: 4, money: 50, taxes: "low", stock: { food: 10, fuel: 5, wood: 10, stone: 0, iron: 0, goods: 0 },
-  buildings: [{ id: "a", key: "burgage", level: 2 }, { id: "f", key: "farm", level: 1, workers: 2 }, { id: "w", key: "well", level: 1 }] };
-const { report } = R.simulateWeek(base);
-ok(report.produced.food === 8, `ферма летом: 2 работника × 4 = 8 еды (${report.produced.food})`);
-ok(report.needs.food.need === 4 && report.needs.food.got === 4, "четыре семьи съели 4 еды");
-ok(report.approvalParts.some(p => p.label === "Колодец" && p.value === 5), "колодец даёт +5 к одобрению");
-ok(report.taxes === 0, "без усадьбы налогов нет");
-const winter = R.simulateWeek({ ...base, week: 45 }).report;
-ok(winter.produced.food === 0 && winter.needs.fuel.need === 8, "зимой поля пусты, дров нужно вдвое");
+stepName("формулы и правила журнала");
+ok(R.averageOf("1d6+3") === 6.5 && R.averageOf("1d4+1") === 3.5 && R.parseFormula("абв").length === 0, "формулы: среднее 1d6+3 — 6,5, неверная — 0");
+ok(SC.revoltChance(3) === 25 && SC.revoltChance(0) === 100 && SC.revoltChance(2, 2) === 40 && SC.revoltChance(5) === 0, "бунт: 3 — 25%, 0 — 100%, Контроль 2 снимает 10%");
+const base = { year: 1, month: 4, week: 1, families: 3, approval: 5, control: 0, wealth: 0, taxes: "low",
+  stock: { "Еда": 10, "Топливо": 10, "Древесина": 0 },
+  buildings: [tpl("house", { level: 1 }), tpl("house", { level: 1 }), tpl("house", { level: 1 }), tpl("lumber", { level: 1, workers: 2 }), tpl("hunters", { level: 1, workers: 1 })] };
+const fc = R.simulateWeek(base, { forecast: true }).report;
+ok(fc.produced["Древесина"] === 13.5, `лесорубы: 1d6+3 и 1d6 за каждую из 2 семей — в среднем 13,5 (${fc.produced["Древесина"]})`);
+ok(fc.produced["Шкуры"] === fc.produced["Еда"] && fc.produced["Кости"] === 3.5, "охотники: шкур и костей столько же, сколько еды");
+ok(fc.needs["Еда"].need === 3 && fc.needs["Топливо"].need === 3, "три семьи: 3 еды и 3 топлива в неделю");
+const winter = R.simulateWeek({ ...base, month: 1 }, { forecast: true }).report;
+ok(winter.needs["Топливо"].need === 6, "зимой топлива вдвое");
+const homeless = R.summarize({ ...base, families: 5, approval: 8 });
+ok(homeless.homeless === 2 && homeless.arrival.chance === 40, "5 семей на 3 дома — 2 бездомных; одобрение 8 — шанс прихода 40%");
+const monthEnd = R.simulateWeek({ ...base, families: 5, approval: 8, week: 4 }).report;
+ok(monthEnd.events.some(e => e.text.includes("пока есть бездомные")) && monthEnd.arrived === 0, "пока есть бездомные, новые семьи не приходят");
 
 stepName("лист и стройка");
 const town = await Actor.create({ name: "Прогон: Липов", type: "settlement", folder: folder.id });
-ok(town.system.buildings.length === 3 && town.img.includes("house-manor"), "новое поселение: три постройки и герб");
+ok(town.itemTypes.building.length === 3 && town.img.includes("house-manor"), "новое поселение: два дома и лесорубы — предметы «Постройка»");
 const sheet = town.sheet; await sheet.render({ force: true }); await wait(500);
-ok(!!sheet.element.querySelector(".sv-plaques .sv-ring"), "лист открылся: плашки и кольцо одобрения");
-await town.update({ "system.stock.wood": 20, "system.stock.stone": 20, "system.money": 200 });
+ok(!!sheet.element.querySelector(".sv-plaques .sv-ring") && !!sheet.element.querySelector(".sv-res"), "лист открылся: пластины, кольцо одобрения, склад");
+await town.update({ "system.stock.Древесина": 40, "system.stock.Камень": 30 });
 await S.build(town, "manor");
-const manor = town.system.buildings.find(b => b.key === "manor");
-ok(manor?.constructing && town.system.stock.wood === 10 && town.system.money === 100, "усадьба заложена, цена списана");
+const manor = town.items.find(i => i.system.key === "manor");
+ok(manor?.system.constructing && town.system.stock["Древесина"] === 25 && town.system.stock["Камень"] === 20, "усадьба заложена, древесина и камень списаны");
 await S.build(town, "manor");
-ok(town.system.buildings.filter(b => b.key === "manor").length === 1, "вторую усадьбу не заложить");
+ok(town.itemTypes.building.filter(i => i.system.key === "manor").length === 1, "вторую усадьбу не заложить");
+ok(town.system.summary.taxMult === 0 && town.system.forecast.taxWealth === 0, "пока усадьба строится, налога нет");
+await manor.update({ "system.level": 1, "system.constructing": false });
+await town.update({ "system.taxes": "normal" });
+ok(town.system.summary.taxCoins === town.system.families * 10, `с усадьбой обычный налог — 10 монет с семьи (${town.system.summary.taxCoins})`);
 
-stepName("работники и неделя");
-const logging = town.system.buildings.find(b => b.key === "logging");
-await S.setWorkers(town, logging.id, 5);
-ok(town.system.summary.workers[logging.id] === 1, `работников не больше свободных семей: 2 семьи, одна у собирателей (${town.system.summary.workers[logging.id]})`);
-await S.setWorkers(town, logging.id, 1);
-const before = town.system.week;
-const r1 = await S.advanceWeek(town); await wait(300);
-ok(town.system.week === before + 1 && town.system.log.length === 1, "неделя прошла, в летописи запись");
-ok(r1.builders >= 0 && game.messages.contents.at(-1)?.content.includes("settlement-week"), "карточка недели в чате");
-await town.update({ "system.buildings": town.system.toObject().buildings.map(b => b.key === "manor" ? { ...b, level: 1, constructing: false } : b), "system.taxes": "normal" });
-ok(town.system.summary.taxMult === 1 && town.system.forecast.taxes === town.system.families * 2, "с усадьбой обычный налог — 2 кроны с семьи");
+stepName("уровни, семьи, склад");
+const lumber = town.items.find(i => i.system.key === "lumber");
+await S.setWorkers(town, lumber.id, 9);
+ok(town.system.summary.workers[lumber.id] === Math.min(3, town.system.families), "семей на работе не больше мест и семей");
+await S.upgrade(town, lumber.id);
+ok(lumber.system.constructing && town.system.stock["Камень"] === 18, "лесорубы улучшаются: цена второго уровня списана");
+await S.build(town, "storehouse");
+const store = town.items.find(i => i.system.key === "storehouse");
+await store.update({ "system.level": 1, "system.constructing": false });
+ok(town.system.summary.storage === SC.BASE_STORAGE + 60, `склад: вместимость ${town.system.summary.storage}`);
+const before = town.system.year * 100 + town.system.month * 10 + town.system.week;
+await S.advanceWeek(town); await wait(300);
+ok(town.system.year * 100 + town.system.month * 10 + town.system.week > before && town.system.log.length === 1, "неделя прошла, в летописи запись");
+ok(game.messages.contents.at(-1)?.content.includes("settlement-week"), "карточка недели в чате");
 
-stepName("торговля и казна");
-await S.trade(town, "wood", 5, "sell");
-ok(town.system.money === 100, "без торгового поста торговли нет");
-await town.update({ "system.buildings": [...town.system.toObject().buildings, { id: "tp", key: "tradepost", name: "Торговый пост", level: 1 }] });
-const money0 = town.system.money, wood0 = town.system.stock.wood;
-await S.trade(town, "wood", 5, "sell");
-ok(town.system.money === money0 + 10 && town.system.stock.wood === wood0 - 5, "продано 5 дерева по 2 кроны");
-const old = foundry.utils.deepClone(game.settings.get("vedmak", "currencies"));
-await game.settings.set("vedmak", "currencies", { ...old, world: "florens" });
-const { worldLabel } = await import("/systems/vedmak/module/config/money.mjs");
-ok(worldLabel(30) === "10 фл.", `казна в валюте мира: 30 крон — ${worldLabel(30)}`);
-await game.settings.set("vedmak", "currencies", old);
+stepName("торговля и своя постройка");
+const w0 = town.system.wealth;
+await S.trade(town, "Древесина", 5, "sell");
+ok(town.system.wealth === w0, "без торгового поста торговли нет");
+{ const d = SC.buildingItemData("tradepost"); d.system.level = 1; await town.createEmbeddedDocuments("Item", [d]); }
+const wood0 = town.system.stock["Древесина"];
+await S.trade(town, "Древесина", 5, "sell");
+ok(town.system.stock["Древесина"] === wood0 - 5 && Math.abs(town.system.wealth - w0 - 15 / SC.WEALTH_RATE) < 1e-6, "продано 5 древесины: 15 монет — в Богатство по курсу");
+const herb = await Item.create({ name: "Прогон: хата травника", type: "building", system: { group: "food",
+  levels: [{ cost: [{ resource: "Древесина", qty: 2 }], weeks: 0, families: 1,
+    produce: [{ resource: "Мандрагора", formula: "1d6", per: "family", noWinter: true }] }] } });
+await herb.sheet.render({ force: true }); await wait(400);
+ok(!!herb.sheet.element.querySelector(".building-details .bl-rows input[name='system.levels.0.produce.0.formula']"), "лист постройки: строки выработки уровня");
+await herb.sheet.close();
+await town.update({ "system.families": 12 });
+const hut = await S.build(town, herb.uuid);
+ok(hut?.system.level === 1 && !hut.system.constructing, "своя постройка без срока стройки готова сразу");
+await S.setWorkers(town, hut.id, 1);
+ok(town.system.forecast.produced["Мандрагора"] === 3.5, `своя постройка даёт свой ресурс: Мандрагора ≈ ${town.system.forecast.produced["Мандрагора"]}`);
+await herb.delete();
 
 await sheet.close();
 await town.delete();

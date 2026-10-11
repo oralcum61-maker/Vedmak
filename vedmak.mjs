@@ -19,6 +19,7 @@ import { MonsterSheet } from "./module/sheets/monster-sheet.mjs";
 import { LootSheet } from "./module/sheets/loot-sheet.mjs";
 import { SettlementSheet } from "./module/sheets/settlement-sheet.mjs";
 import * as settlement from "./module/settlement/settlement.mjs";
+import * as SETTLEMENT_CFG from "./module/config/settlement.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
@@ -457,7 +458,8 @@ const DEFAULT_ICONS = {
   component: "icons/commodities/materials/bowl-powder-teal.webp",
   recipe: "icons/sundries/documents/document-sealed-brown-red.webp",
   alchemical: "icons/consumables/potions/bottle-round-corked-green.webp",
-  enhancement: "icons/commodities/gems/gem-rough-cushion-violet.webp"
+  enhancement: "icons/commodities/gems/gem-rough-cushion-violet.webp",
+  building: "icons/environment/settlement/house-construction.webp"
 };
 
 Hooks.on("preCreateItem", (item, data) => {
@@ -472,16 +474,17 @@ Hooks.on("preCreateActor", (actor, data) => {
   if (actor.type === "monster" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
     actor.updateSource({ img: "systems/vedmak/assets/fan/monsters/mons-wraith.webp" });
   }
-  // Поселение (PLAN 4.183): герб — усадьба; для начала — жилой двор, лесорубы и собиратели, уже готовые
+  // Поселение (PLAN 4.183, 4.185): герб — усадьба; для начала — два жилых дома и лагерь лесорубов, уже готовые
   if (actor.type === "settlement") {
     if (!data.img || data.img === Actor.DEFAULT_ICON) actor.updateSource({ img: "icons/environment/settlement/house-manor.webp" });
-    if (!foundry.utils.hasProperty(data, "system.buildings")) {
-      const id = () => foundry.utils.randomID();
-      actor.updateSource({ "system.buildings": [
-        { id: id(), key: "burgage", name: "Жилой двор", level: 1, workers: 0 },
-        { id: id(), key: "logging", name: "Лесорубы", level: 1, workers: 1 },
-        { id: id(), key: "forager", name: "Собиратели", level: 1, workers: 1 }
-      ] });
+    // Постройки — предметы «Постройка» (PLAN 4.185); готовые, без стройки
+    if (!data.items?.length) {
+      const start = [["house", 0], ["house", 0], ["lumber", 1]].map(([key, workers]) => {
+        const item = SETTLEMENT_CFG.buildingItemData(key);
+        Object.assign(item.system, { level: 1, workers });
+        return item;
+      });
+      actor.updateSource({ items: start });
     }
   }
   // Токен персонажа привязан к актору, дружелюбен и видит — если создатель не задал этого сам:
