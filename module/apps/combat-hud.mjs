@@ -218,7 +218,38 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     // Клавиши и щелчок мимо — на документе, один раз: список закрывается, гримуар слушает «/» и 1–5
     document.addEventListener("pointerdown", event => CombatHud.#instance?.#onOutside(event), true);
     document.addEventListener("keydown", event => CombatHud.#instance?.#onKey(event));
+    // Узкий экран (PLAN 4.177): места между панелями стало меньше — худ ужимается, медальон остаётся по центру
+    let resizeTimer = null;
+    const refit = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => CombatHud.#instance?.fit(), 120); };
+    window.addEventListener("resize", refit);
+    Hooks.on("collapseSidebar", refit);
   }
+
+  /** Наименьший масштаб худа на узком экране: меньше — бирки и числа уже не читаются. */
+  static MIN_SCALE = 0.6;
+
+  /**
+   * Уместить худ между панелями интерфейса. Он стоит по центру экрана, поэтому места хватает на два одинаковых
+   * полукрыла: до правого края инструментов сцены и списка игроков слева и до левого края боковой панели справа.
+   * Не хватает — весь худ уменьшается (zoom: вместе с ним сжимается и его место), но не меньше MIN_SCALE.
+   */
+  fit() {
+    const hm = this.element?.querySelector(".hm");
+    if (!hm) return;
+    const center = window.innerWidth / 2;
+    const leftEdge = Math.max(0, ...["scene-controls", "players"].map(id => document.getElementById(id)?.getBoundingClientRect().right ?? 0));
+    const sidebar = document.getElementById("sidebar")?.getBoundingClientRect();
+    const rightEdge = sidebar?.width ? sidebar.left : window.innerWidth;
+    const room = 2 * (Math.min(center - leftEdge, rightEdge - center) - 12);
+    // Сначала — полный вид; не влез — плотнее (бирки, промежутки), и только остаток — масштабом
+    hm.style.zoom = "";
+    hm.classList.remove("hm-squeezed");
+    if (hm.offsetWidth <= room) return;
+    hm.classList.add("hm-squeezed");
+    const scale = Math.max(CombatHud.MIN_SCALE, Math.min(1, room / hm.offsetWidth));
+    if (scale < 0.999) hm.style.zoom = scale.toFixed(3);
+  }
+
 
   /** Актор, показанный в последней отрисовке. */
   actor = null;
@@ -457,6 +488,7 @@ export class CombatHud extends HandlebarsApplicationMixin(ApplicationV2) {
     // Класс на body вместо :has() в стилях: :has() перепроверялся при каждой правке внутри худа
     document.body.classList.add("vd-hud");
     document.body.classList.toggle("vd-hud-open", !this.collapsed);
+    this.fit();
     const justOpened = this.popIn ? this.pop : null;
     this.popIn = false;
     if (this.actor) hudMotion(this, root, {

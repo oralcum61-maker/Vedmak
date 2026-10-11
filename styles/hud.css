@@ -337,6 +337,12 @@
 .hm-gcard dd.warn { color: #e8c56f; }
 .hm-gcard p { margin: 0; font: 600 8.5px/1.45 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--hm-dim); }
 
+/* Мало места между панелями (fit в combat-hud.mjs): плотнее — меньше разрядка и поля бирок, уже промежутки */
+.hm-squeezed .hm-wing { gap: 7px; }
+.hm-squeezed .hm-chip { letter-spacing: .1em; padding: 8px 9px 8px 19px; }
+.hm-squeezed .hm-chip::before { left: 13px; }
+.hm-squeezed .hm-medal { margin: 0 -24px; }
+
 /* Свёрнутый худ — только медальон */
 .hm.collapsed .hm-medal { margin: 0; }
 

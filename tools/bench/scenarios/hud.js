@@ -36,6 +36,20 @@ for (const state of ["expand", "collapse"]) {
   ui.sidebar?.[state]?.(); await settle(700);
   ok(Math.abs(offCenter()) <= 2, `боковая панель ${state === "expand" ? "развёрнута" : "свёрнута"}: сдвиг медальона ${offCenter()} px`);
 }
+// Узкий экран (PLAN 4.177): места до панелей меньше худа — худ ужимается, не заходит под панели, медальон по центру
+ok(!hudEl().style.zoom, "на широком экране худ не ужат");
+ui.sidebar?.expand?.(); await settle(500);
+const sb = document.getElementById("sidebar"), sbWidth = sb.style.width;
+sb.style.width = `${Math.round(window.innerWidth / 2 - 300)}px`;   // правая панель почти до центра
+window.dispatchEvent(new Event("resize")); await settle(500);
+const hr = hudEl().getBoundingClientRect(), sr = sb.getBoundingClientRect();
+const zoom = Number(hudEl().style.zoom || 1);
+ok(zoom < 1 && zoom >= 0.6, `узко: худ ужат до ${zoom}`);
+ok(hr.right * zoom <= sr.left + 1 || hr.right <= sr.left + 1, `узко: худ не заходит под боковую панель (правый край ${Math.round(hr.right)}, панель с ${Math.round(sr.left)})`);
+ok(Math.abs(offCenter()) <= 3, `узко: медальон по центру (сдвиг ${offCenter()} px)`);
+sb.style.width = sbWidth; window.dispatchEvent(new Event("resize")); await settle(500);
+ok(!hudEl().style.zoom, "панель вернулась — худ снова в полный размер");
+ui.sidebar?.collapse?.(); await settle(500);
 const beast = await Actor.create({ ...(await game.packs.get("vedmak.bestiary").getDocuments()).find(d => d.type === "monster").toObject(), folder: folder.id });
 const tB = await placeToken(beast, 1600, 1000);
 tB.object.control({ releaseOthers: true }); await settle(700);
