@@ -123,6 +123,7 @@ class Builder {
       statMods: {},        // постоянные поправки параметров (эффектом)
       skillMods: {},       // постоянные штрафы навыков (эффектом)
       definingBonus: 0,    // «Глубокое изучение»: +1 к Подготовке ведьмака
+      huntClasses: [],     // «Охота»: классы чудовищ, против которых +2 к Подготовке ведьмака
       items: [],           // названия предметов
       addictions: [],
       notes: [],
@@ -477,6 +478,7 @@ function buildWitcher(b, { age = 80 }) {
       const target = b.table(sec, `${base}.hunt.target`, "wHuntTarget");
       target.detail = "+2 к Подготовке ведьмака против этого класса чудовищ.";
       fx.notes.push(`Охота: ${target.text} (+2 к Подготовке ведьмака против них)`);
+      if (target.text) fx.huntClasses.push(target.text);
       b.table(sec, `${base}.hunt.place`, "wHuntPlace");
       b.table(sec, `${base}.hunt.end`, "wHuntEnd");
       const twist = b.plain(sec, `${base}.hunt.twist`, "Был ли поворот", v => (v <= 4 ? "Да" : "Нет"));
@@ -1171,6 +1173,17 @@ export function writeLifepath({ rolls, witcher = false, age = 25, region = "nort
 export function savedOpts(data) {
   return { witcher: !!data.witcher, age: data.age, region: data.region, race: data.race, kind: data.kind || "", gender: data.gender || "",
     notes: data.notes ?? null };
+}
+
+/**
+ * Классы чудовищ из охот ведьмака (стр. 245) — по сохранённому жизненному пути, так что работает и у старых персонажей.
+ * Названия совпадают с MONSTER_CLASSES (data/actor/monster.mjs).
+ */
+export function huntClasses(actor) {
+  let data;
+  try { data = JSON.parse(actor?.system?.lifepath || "null"); } catch { return []; }
+  if (!data?.witcher || !data.rolls) return [];
+  return [...new Set(buildFromSaved({ ...data, rolls: { ...data.rolls } }).effects.huntClasses)];
 }
 
 /** Собрать сохранённый жизненный путь пошагово: недостающие броски не делаются, `next` — следующий. */

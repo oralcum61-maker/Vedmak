@@ -6,7 +6,8 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
-import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS, MAX_ENHANCEMENT_SLOTS } from "../config/crafting.mjs";
+import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS, MAX_ENHANCEMENT_SLOTS, glyphFx } from "../config/crafting.mjs";
+import { spPlus } from "./glyphs.mjs";
 import { ARMOR_LOCATIONS } from "../config/items.mjs";
 import { dialogCheck } from "../dice/check.mjs";
 import { postCard, spendOne } from "../util.mjs";
@@ -222,9 +223,13 @@ async function attachGlyph(actor, item) {
     { hint: "Глиф нельзя снять; камень расходуется." });
   if (!chosen) return null;
   const armor = chosen[0].item;
+  // «Глиф укрепления» прибавляет ПБ брони сразу, как набор усиления (PLAN 4.179); прочие эффекты — из справочника
+  const sp = glyphFx(item.name)?.sp ?? 0;
   const enhancements = [...armor.system.toObject().enhancements,
-    { name: item.name, kind: "glyph", sp: 0, resist: [], effect: item.system.effect, element: item.system.element }];
-  await armor.update({ "system.enhancements": enhancements });
+    { name: item.name, kind: "glyph", sp, resist: [], effect: item.system.effect, element: item.system.element }];
+  const update = { "system.enhancements": enhancements };
+  if (sp) update["system.sp"] = spPlus(armor.system.toObject().sp, sp);
+  await armor.update(update);
   await spendOne(item);
   return postCard(actor, "Глиф нанесён", `<p><b>${item.name}</b> → «${armor.name}»: ${item.system.effect}</p>`, { icon: "fa-solid fa-gem" });
 }
@@ -339,10 +344,16 @@ async function attachEnchantment(actor, item) {
     effects.push({ key: "rune", value: s.effect, source: item.name, slots });
     await target.update({ "system.effects": effects });
   } else {
-    const kept = target.system.toObject().enhancements.filter(e => e.kind === "armor");
-    kept.push({ name: item.name, kind: "glyph", sp: 0, resist: [], effect: s.effect,
+    const all = target.system.toObject().enhancements;
+    const kept = all.filter(e => e.kind === "armor");
+    // Сгоревшие глифы уносят свою ПБ («Глиф укрепления»), слово «Вес» приносит свою (PLAN 4.179)
+    const burnt = all.filter(e => e.kind !== "armor").reduce((n, e) => n + (e.sp || 0), 0);
+    const sp = glyphFx(item.name)?.sp ?? 0;
+    kept.push({ name: item.name, kind: "glyph", sp, resist: [], effect: s.effect,
                 element: s.element, slots });
-    await target.update({ "system.enhancements": kept });
+    const update = { "system.enhancements": kept };
+    if (sp - burnt) update["system.sp"] = spPlus(target.system.toObject().sp, sp - burnt);
+    await target.update(update);
   }
   await spendOne(item);
   return postCard(actor, "Зачарование наложено",

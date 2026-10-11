@@ -16,5 +16,7 @@
       {{#if success}}<div class="outcome success">Успех · на {{margin}}</div>
       {{else}}<div class="outcome failure">Провал</div>{{/if}}
     {{/if}}
+    {{#if stubbornUsed}}<p class="card-note">Упрямство: {{stubbornUsed.first}} и {{stubbornUsed.second}} — берётся {{stubbornUsed.kept}}.</p>{{/if}}
+    {{#if stubborn}}{{#unless success}}<div class="card-buttons"><button type="button" data-vedmak="stubborn" data-tooltip="Черта людей: перебросить проваленную проверку, из двух — больший. Партия — игровой день">Упрямство · осталось {{stubborn.left}} из {{stubborn.limit}}</button></div>{{/unless}}{{/if}}
   </div>
 </div>

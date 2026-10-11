@@ -69,6 +69,17 @@
     </label>
     {{/unless}}
 
+    {{#if glyph}}
+    {{!-- Глиф стихии на надетой броне (PLAN 4.179): на выбор СЛ +3 или урон +1d6 --}}
+    <div class="dlg-group">
+      <span class="dlg-label">{{glyph.name}} <span class="dim">· на надетой броне</span></span>
+      <div class="opt-row">
+        <label class="chip"><input type="radio" name="glyph" value="dc" {{#if (eq glyph.pick "dc")}}checked{{/if}}><span>СЛ заклинания +3</span></label>
+        {{#if glyph.damage}}<label class="chip"><input type="radio" name="glyph" value="damage" {{#if (eq glyph.pick "damage")}}checked{{/if}}><span>Урон +1d6</span></label>{{/if}}
+      </div>
+    </div>
+    {{/if}}
+
     {{#unless vampire}}
     <div class="dlg-row">
       <label class="num"><span class="cap">двимерит в 5 м</span>

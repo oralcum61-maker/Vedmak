@@ -3,6 +3,7 @@
 import { worldSetting } from "../../util.mjs";
 import { int, str, html, moneySchema } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
+import { glyphFx } from "../../config/crafting.mjs";
 import { SOCIAL_TABLE, REGIONS, witcherSchools, abilityBonus, socialLabel } from "../../config/character.mjs";
 
 const { SchemaField, BooleanField, ArrayField } = foundry.data.fields;
@@ -78,6 +79,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       else if (item.type === "gear" && s.tattoo?.applied) itemMods.push(...s.mods);
       // Протезы и их модификации («Лавка Клауса и Нострадамуса»): поправки — пока надеты
       else if (item.type === "gear" && s.equipped && ["prosthetic", "prostheticMod"].includes(s.category)) itemMods.push(...s.mods);
+    }
+    // Глифовы слова на надетой броне («Заблуждение», «Защита») — поправки как у самой брони (PLAN 4.179)
+    for (const armor of this.parent.itemTypes.armor) {
+      if (!armor.system.equipped) continue;
+      for (const e of armor.system.enhancements) if (e.kind === "glyph") itemMods.push(...(glyphFx(e.name)?.mods ?? []));
     }
     this.derived ??= {};
     // Вживлённые руны и глифы — отдельно: гнёзд мутагенов они не занимают (автор, 07.10)

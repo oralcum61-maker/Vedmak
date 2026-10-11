@@ -13,6 +13,7 @@ import { currentTargets, actorToken, combatantFor, postCard, targetInfo, resolve
 import { parseArea, parseZoneDuration, zonesAvailable, placeZone, createZone, zoneTokens, removeZones, zonesOf, pointInZone, ZONE_COLORS } from "../combat/zones.mjs";
 import { spellAuto, spellAutomation } from "../config/spell-auto.mjs";
 import { buffDuration, buffData, applyBuff, buffLine } from "./buffs.mjs";
+import { spellGlyph } from "../crafting/glyphs.mjs";
 
 /** Сколько Энергии уже израсходовано в текущем раунде боя. */
 export function vigorUsed(actor) {
@@ -112,7 +113,9 @@ export async function castSpell(actor, item, opts = {}) {
     mod: opts.mod ?? 0,
     damageMod: opts.damageMod ?? 0,
     luck: 0,
-    messageMode: opts.messageMode
+    messageMode: opts.messageMode,
+    // Глиф стихии на надетой броне (PLAN 4.179): «dc» — СЛ +3, «damage» — урон +1d6
+    glyph: opts.glyph ?? (s.defense && s.defense !== "none" ? "dc" : "damage")
   };
   if (!opts.skipDialog) {
     cfg = await castDialog(actor, item, cfg, targets);
@@ -245,12 +248,14 @@ async function castDialog(actor, item, cfg, targets) {
       }))
     : [];
   const damage = resolveSta(auto.damage, cfg.cost);
+  const glyphName = spellGlyph(actor, s);
+  const glyph = glyphName ? { name: glyphName, damage: !!auto.damage, pick: auto.damage ? cfg.glyph : "dc" } : null;
 
   // Бафф или лечение на другого, а цели не выделены — союзники жетонами прямо в окне
   const helpful = !!(spellAuto(item.name)?.target || auto.regen?.hp);
   const allies = !targets.length && helpful && targetingFor(s.range) === "direct" ? allyChoices(actor) : [];
   const content = await renderTemplate("systems/vedmak/templates/dialog/cast.hbs", {
-    item, s, cfg, targets, allies,
+    item, s, cfg, targets, allies, glyph,
     head: {
       title: item.name, img: item.img, base, baseHint: vb ? `${vb.name} (уровень навыка роли)` : `Воля + ${SKILLS[skillKey].label}`,
       subtitle: [CONFIG.VEDMAK.MAGIC_KINDS[s.kind], vb ? CONFIG.VEDMAK.MAGIC_BRANCHES[s.branch] : "", levelLabel(s.kind, s.level),
@@ -317,6 +322,7 @@ async function castDialog(actor, item, cfg, targets) {
           dimeritium: Math.max(0, Number(f.dimeritium?.value) || 0),
           dc: f.dc?.value ?? cfg.dc,
           helpers: Math.max(0, Math.min(4, Number(f.helpers?.value) || 0)),
+          glyph: button.form.querySelector('[name="glyph"]:checked')?.value ?? cfg.glyph,
           allies: [...button.form.querySelectorAll('[name="ally"]:checked')].map(i => i.value)
         };
       }
@@ -486,8 +492,22 @@ export async function performCast(actor, item, cfg, targets) {
     }
   }
 
+  // Глиф стихии на надетой броне: СЛ +3 (против неё защищаются цели) или урон +1d6 (PLAN 4.179)
+  const castTotal = roll.total;
+  const glyphName = works ? spellGlyph(actor, s) : "";
+  const glyphPick = glyphName ? (a.damage ? cfg.glyph : "dc") : "";
+  if (glyphPick === "dc") {
+    roll.total += 3;
+    if (Array.isArray(roll.parts)) roll.parts.push({ label: glyphName, value: 3 });
+    notes.push(`${glyphName}: СЛ заклинания +3 — защищаться против ${roll.total}.`);
+  }
+
   // Урон по целям с учётом ручной правки из окна
   let damageFormula = resolveSta(a.damage, cost);
+  if (damageFormula && glyphPick === "damage") {
+    damageFormula = `${damageFormula} + 1d6`;
+    notes.push(`${glyphName}: урон +1d6.`);
+  }
   if (damageFormula && cfg.damageMod) {
     damageFormula = `${damageFormula} ${cfg.damageMod > 0 ? "+" : "-"} ${Math.abs(cfg.damageMod)}`;
     notes.push(`Правка урона: ${cfg.damageMod > 0 ? "+" : "−"}${Math.abs(cfg.damageMod)}.`);
@@ -508,7 +528,7 @@ export async function performCast(actor, item, cfg, targets) {
     statusRounds: a.statusRounds,
     regen,
     hex: s.kind === "hex",
-    buff: reg?.target ? { ...buffData(item, actor, reg.target, buffTime), cast: { total: roll.total, cost } } : null,
+    buff: reg?.target ? { ...buffData(item, actor, reg.target, buffTime), cast: { total: castTotal, cost } } : null,
     allLocations: a.location === "all",
     works, targeting
   };

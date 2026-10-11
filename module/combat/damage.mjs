@@ -15,6 +15,7 @@ import { markDead } from "./saves.mjs";
 import { implantStatusBonus, implantBurnVulnerability } from "../config/crafting.mjs";
 import { wallCover } from "./cover.mjs";
 import { isIncorporeal, flightAfterDamage, dropInvisibility } from "./monster-traits.mjs";
+import { glyphSum } from "../crafting/glyphs.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
 
@@ -222,6 +223,8 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const runeBonus = !spell && attackerActor ? implantStatusBonus(attackerActor.items) : {};
   // Цель с мутацией глифа Игни горит легче
   const burnVuln = implantBurnVulnerability(target);
+  // «Глиф связывания» на надетой броне цели: шанс кровотечения ниже на 30 % (PLAN 4.179)
+  const bleedGlyph = glyphSum(target, "bleed");
 
   // Часть тела
   let locRoll = null;
@@ -394,6 +397,11 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     if (!chance || ghost) continue;
     if (ELEMENTAL.includes(status)) chance = Math.min(100, chance + elementalBonus);
     if (status === "burning") chance = Math.min(100, chance + burnVuln);
+    if (key === "bleeding" && bleedGlyph.value) {
+      chance = Math.max(0, chance + bleedGlyph.value);
+      notes.push(`${bleedGlyph.names.join(", ")}: шанс кровотечения ${bleedGlyph.value} %.`);
+      if (!chance) continue;
+    }
     const needsWound = key === "bleeding" || key === "poison";
     const resistKey = EFFECT_RESIST_KEY[key];
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
@@ -489,6 +497,18 @@ function woundLocationFor(zone, hitLocation, table) {
 /* -------------------------------------------------------------------------- */
 /*  Применение (на стороне ведущего)                                          */
 /* -------------------------------------------------------------------------- */
+
+/** Глифово слово «Возмездие» (PLAN 4.179): атака ранила носителя — атакующему урон по туловищу, броня его не держит. */
+async function retaliateGlyph(attacker, target, dealt) {
+  if (!attacker || attacker === target || dealt <= 0) return [];
+  const { value, names } = glyphSum(target, "retaliate");
+  if (!value) return [];
+  const report = await serialByActor(attacker, () => applyDamageToActor(attacker, {
+    final: value, location: "torso", nonLethal: false, blockable: false, ablate: false, penetrated: false,
+    crit: null, effects: [], staLoss: 0, stunSave: false, wear: null
+  }));
+  return [`${names[0]}: ${attacker.name} получает ${value} урона по туловищу (броня не держит).`, ...(report?.lines ?? [])];
+}
 
 /**
  * Применить рассчитанный урон к актору.
@@ -681,6 +701,7 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
     const bite = dmg.drain > 0 || /укус|клык/i.test(dmg.attackLabel ?? "");
     report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell, bite }));
     report.lines.push(...await flightAfterDamage(actor, dealt));
+    report.lines.push(...await retaliateGlyph(attacker, actor, dealt));
     report.lines.push(...await dropInvisibility(actor, "hit"));
     if (dmg.dimeritium && !actor.effects.some(e => e.flags?.vedmak?.dimeritium)) {
       report.dimeritium = true;

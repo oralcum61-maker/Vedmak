@@ -66,7 +66,9 @@ export async function performCheck(cfg) {
     crit: d10.crit, fumble: d10.fumble, critValue: d10.crit ? d10.rollValue - 10 : 0,
     fumbleValue: d10.fumbleValue,
     dc, success: dc === null ? null : total > dc,
-    margin: dc === null ? null : total - dc
+    margin: dc === null ? null : total - dc,
+    // «Упрямство» людей: кнопка переброса на карточке (character/stubborn.mjs)
+    stubborn: cfg.stubborn ?? null
   };
 
   // Броски — неперечисляемым свойством, чтобы не попадать во флаги сообщений

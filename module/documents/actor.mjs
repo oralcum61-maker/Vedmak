@@ -10,6 +10,7 @@ import { rollStunSave, deathSaveDialog } from "../combat/saves.mjs";
 import { castSpell } from "../magic/cast.mjs";
 import { socialModifier } from "../config/character.mjs";
 import { postCard } from "../util.mjs";
+import { stubbornOffer } from "../character/stubborn.mjs";
 
 export class VedmakActor extends Actor {
 
@@ -36,7 +37,8 @@ export class VedmakActor extends Actor {
     if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
     if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
     parts.push(...statusRollMods(this, "skill", { skill: key }), ...(opts.extraParts ?? []));
-    return this.#check({ title: def.label, subtitle: this.#stateNote(), parts, optional: this.socialParts(key), ...opts });
+    return this.#check({ title: def.label, subtitle: this.#stateNote(), parts, optional: this.socialParts(key),
+      stubborn: stubbornOffer(this, key), ...opts });
   }
 
   /**
@@ -70,7 +72,21 @@ export class VedmakActor extends Actor {
     ];
     if (this.system.derived?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: this.system.derived.actionMod });
     parts.push(...statusRollMods(this, "skill"));
-    return this.#check({ title: ds.name, subtitle: `Определяющий навык · ${prof.name}`, parts, ...opts });
+    return this.#check({ title: ds.name, subtitle: `Определяющий навык · ${prof.name}`, parts, optional: await this.#huntParts(ds.name), ...opts });
+  }
+
+  /**
+   * «Охота» жизненного пути ведьмака: +2 к Подготовке ведьмака против выпавшего класса чудовищ. Цель такого класса —
+   * слагаемое отмечено само; без цели каждый класс — галочкой в окне.
+   */
+  async #huntParts(skillName) {
+    if (skillName !== "Подготовка ведьмака" || this.type !== "character") return [];
+    const { huntClasses } = await import("../character/lifepath.mjs");
+    const classes = huntClasses(this);
+    if (!classes.length) return [];
+    const { MONSTER_CLASSES } = await import("../data/actor/monster.mjs");
+    const targeted = new Set([...game.user.targets].map(t => MONSTER_CLASSES[t.actor?.system?.monsterClass]).filter(Boolean));
+    return classes.map(cls => ({ label: `Охота: против класса «${cls}»`, value: 2, checked: targeted.has(cls) }));
   }
 
   /** Проверка способности древа профессии (параметр + значение способности). */
@@ -177,7 +193,7 @@ export class VedmakActor extends Actor {
     return deathSaveDialog(this);
   }
 
-  async #check({ title, subtitle, parts, dc = null, mod = 0, skipDialog = false, flags, optional = [] }) {
+  async #check({ title, subtitle, parts, dc = null, mod = 0, skipDialog = false, flags, optional = [], stubborn = null }) {
     let luck = 0, messageMode;
     if (!skipDialog) {
       const choice = await rollDialog({ title, parts, luckMax: this.luckAvailable, dc, optional });
@@ -189,7 +205,7 @@ export class VedmakActor extends Actor {
       parts.push(...optional.filter(o => o.checked));
     }
     if (mod) parts.push({ label: "Модификатор", value: mod });
-    return performCheck({ actor: this, title, subtitle, parts, dc, luck, messageMode, flags });
+    return performCheck({ actor: this, title, subtitle, parts, dc, luck, messageMode, flags, stubborn });
   }
 
   /** Пометка о состоянии, влияющем на параметры. */

@@ -3,6 +3,7 @@
 import { int, num, str, html, source } from "../fields.mjs";
 import { ARMOR_LOCATIONS } from "../../config/items.mjs";
 import { alchemyAuto } from "../../config/alchemy-auto.mjs";
+import { glyphFx } from "../../config/crafting.mjs";
 
 const { SchemaField, BooleanField, ArrayField, StringField } = foundry.data.fields;
 
@@ -187,11 +188,26 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
   get usedSlots() { return this.enhancements.reduce((n, e) => n + (e.slots || 1), 0); }
   get freeSlots() { return Math.max(0, this.enhancementSlots - this.usedSlots); }
 
-  /** Сопротивления с учётом усилений. */
+  /** Сопротивления с учётом усилений и глифов (глиф сопротивления — из справочника, работает и у старых глифов). */
   get allResistances() {
     const out = new Set(Object.entries(this.resistances).filter(([, v]) => v).map(([k]) => k));
-    for (const e of this.enhancements) for (const r of e.resist) out.add(r);
+    for (const e of this.enhancements) {
+      for (const r of e.resist) out.add(r);
+      if (e.kind === "glyph") for (const r of glyphFx(e.name)?.resist ?? []) out.add(r);
+    }
     return [...out];
+  }
+
+  /** Скованность движений с глифовыми словами «Баланс» (−1) и «Вес» (вдвое; 0 остаётся 0). */
+  get effectiveEncumbrance() {
+    let ev = this.encumbrance || 0;
+    for (const e of this.enhancements) {
+      const fx = e.kind === "glyph" ? glyphFx(e.name) : null;
+      if (!fx) continue;
+      if (fx.ev) ev += fx.ev;
+      if (fx.evMult) ev *= fx.evMult;
+    }
+    return Math.max(0, ev);
   }
 
   /** Какие части тела закрывает (есть ненулевая прочность). */

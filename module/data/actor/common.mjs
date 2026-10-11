@@ -149,7 +149,7 @@ export function computeArmor(actor, { natural = 0, innate = 0, bodyType = "human
       outer: active.at(-1) ?? null
     };
   }
-  const encumbrance = armors.reduce((s, i) => s + (i.system.encumbrance || 0), 0);
+  const encumbrance = armors.reduce((s, i) => s + (i.system.effectiveEncumbrance ?? i.system.encumbrance ?? 0), 0);
   return { locations: result, encumbrance, shields };
 }
 

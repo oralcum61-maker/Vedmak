@@ -6,8 +6,14 @@ import { damageFromDefense, requestApplyDamage, explodeAmmo } from "./damage.mjs
 import { rollStunSave, deathSaveDialog } from "./saves.mjs";
 import { resolveActor, asGM, doneKey, sourceOfResult } from "./common.mjs";
 import { requestSpellEffects, ritualFocus } from "../magic/effects.mjs";
+import { stubbornReroll } from "../character/stubborn.mjs";
 
 const ACTIONS = {
+  // «Упрямство» людей: переброс проваленной проверки (character/stubborn.mjs)
+  async stubborn(message) {
+    return stubbornReroll(message);
+  },
+
   async defend(message, button, event) {
     const row = button.closest(".target-row");
     const target = { tokenUuid: row?.dataset.targetToken || null, actorUuid: row?.dataset.targetActor || null };

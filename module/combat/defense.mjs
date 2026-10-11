@@ -15,6 +15,14 @@ import {
   isReadyWeapon
 } from "./common.mjs";
 import { prostheticStrike, equippedProstheses, wearProsthesis, wearLine } from "./prosthetics.mjs";
+import { glyphFlag } from "../crafting/glyphs.mjs";
+
+/** Обстоятельство защиты с учётом глифов защищающегося: «Вращение» снимает штраф «вне конуса зрения» (PLAN 4.179). */
+function situationFor(actor, key) {
+  const sit = DEFENSE_SITUATIONS[key];
+  const glyph = key === "unseen" ? glyphFlag(actor, "noUnseen") : "";
+  return glyph ? { ...sit, mod: 0, label: `${sit.label} — ${glyph}: без штрафа` } : sit;
+}
 
 /** Снимает ли школа ведьмака штраф парирования щитом («Мастер щита» Мантикоры, своя школа с этим waive). */
 function shieldParryWaived(actor) {
@@ -253,7 +261,7 @@ async function defenseDialog(actor, attack, cfg, items) {
       subtitle: `${attack.typeLabel} · результат атаки ${attack.roll.total}${attack.aimLabel ? ` · ${attack.aimLabel}` : ""}`,
       note: attack.isRanged ? "Дистанционная атака" : ""
     },
-    situations: Object.entries(DEFENSE_SITUATIONS).map(([key, s]) => ({ key, ...s })),
+    situations: Object.keys(DEFENSE_SITUATIONS).map(key => ({ key, ...situationFor(actor, key) })),
     foldSituations: foldState("defenseSituations", false),
     // Штраф ран руки — в той же строке «уже в основе»: основа окна пересчитывается по выбранной защите
     statusMods: [...statusRollMods(actor, "defense"),
@@ -323,7 +331,7 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
     parts.push({ label: `${type.label} щитом: ${school.label} — без штрафа`, value: 0, always: true });
   } else if (type.mod) parts.push({ label: type.label, value: type.mod });
   if (cfg.outnumbered > 1) parts.push({ label: `Противников в ближнем бою: ${cfg.outnumbered}`, value: -(cfg.outnumbered - 1) });
-  for (const key of cfg.situations) parts.push({ label: DEFENSE_SITUATIONS[key].label, value: DEFENSE_SITUATIONS[key].mod });
+  for (const key of cfg.situations) { const sit = situationFor(actor, key); parts.push({ label: sit.label, value: sit.mod, always: !sit.mod }); }
   parts.push(...statusRollMods(actor, "defense"));
   // Атакует невидимое чудовище (обычная невидимость): −3 к защите даже заметившему. Атакой невидимость спадает,
   // поэтому сначала — признак из данных атаки, сделанной из невидимости

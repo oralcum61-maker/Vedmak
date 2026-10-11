@@ -54,6 +54,7 @@ import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { CleanupApp } from "./module/apps/cleanup.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
 import { startWarmup } from "./module/apps/warmup.mjs";
+import { healGlyphOnUpdate } from "./module/crafting/glyphs.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
 import { TavernApp, registerTavernUi } from "./module/apps/tavern-app.mjs";
@@ -381,6 +382,9 @@ function watchBusyCursor() {
   sync();
 }
 Hooks.once("ready", watchBusyCursor);
+
+// «Глиф восстановления» на надетой броне: каждое восстановление ПЗ — на 1 больше (PLAN 4.179)
+Hooks.on("preUpdateActor", (actor, changes, options) => healGlyphOnUpdate(actor, changes, options));
 
 /**
  * Разложить компендиумы по папкам из манифеста.
