@@ -38,3 +38,5 @@ Almeida Peres, Jonas Åkerlund, Marta Dettlaff, Ala Kapustka и др.); прав
 
 Токены заготовок (tokens/token-*: 30 героев, у Мильвы два) сделаны автором системы в Token Stamp (rolladvantage.com/tokenstamp,
 обводка «Classic 5e Medium (Greyscale)», © RollAdvantage) из тех же артов «Гвинта» (у Трисс — арт корника).
+Токены Талера и шести магов «Тома Хаоса» (tokens/token-thaler, -sheala, -brovin, -cadfan, -dormyn, -elgan, -drystan) — та же
+обводка Token Stamp (© RollAdvantage), наложенная на портреты сборщиком _tools/pregens/make_tokens.py.
