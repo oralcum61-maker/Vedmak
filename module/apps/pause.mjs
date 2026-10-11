@@ -28,7 +28,7 @@ function dialSvg() {
     const x = c + Math.sin(a) * 140, y = c - Math.cos(a) * 140;
     return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" transform="rotate(${i * 30} ${x.toFixed(1)} ${y.toFixed(1)})">${n}</text>`;
   }).join("");
-  return `<svg class="vp-dial" viewBox="-6 -6 312 312" aria-hidden="true">
+  return `<svg class="gp-dial" viewBox="-6 -6 312 312" aria-hidden="true">
     <circle cx="${c}" cy="${c}" r="129" class="rim"/><circle cx="${c}" cy="${c}" r="108" class="rim in"/>
     <g class="ticks">${ticks.join("")}</g><g class="num">${numerals}</g></svg>`;
 }
@@ -40,20 +40,20 @@ export class VedmakPause extends foundry.applications.ui.GamePause {
   async _renderHTML(context) {
     const wrap = document.createElement("div");
     wrap.innerHTML = `
-      <div class="vp-veil"></div>
-      <div class="vp-hang">
-        <div class="vp-swing">
-          <span class="vp-chain"></span>
-          <div class="vp-medal">
+      <div class="gp-veil"></div>
+      <div class="gp-hang">
+        <div class="gp-swing">
+          <span class="gp-chain"></span>
+          <div class="gp-medal">
             ${dialSvg()}
-            <span class="vp-ring"></span>
-            <img class="vp-sign" src="${medallionSrc()}" alt="">
+            <span class="gp-ring"></span>
+            <img class="gp-sign" src="${medallionSrc()}" alt="">
           </div>
         </div>
       </div>
-      <figcaption class="vp-cap">
+      <figcaption class="gp-cap">
         <b>Пауза</b>
-        <i class="vp-rule"></i>
+        <i class="gp-rule"></i>
         <span>Время остановилось</span>
       </figcaption>`;
     return [...wrap.children];

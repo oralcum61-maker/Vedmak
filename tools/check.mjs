@@ -399,12 +399,21 @@ async function checkPacks() {
  * - «body, затем `*`» (`body.system-vedmak *`, PLAN 4.168): предок, который есть у всего, не отбрасывается фильтром
  *   Блума — правило сопоставляется с каждым элементом; в трассе селекторов (tools/bench/freeze.mjs) — самое дорогое у системы.
  *   Нужно правило на всё — `*` без предка; вес, если нужен, — `:not(.vd-x)` (класс) и `:not(vd-x)` (тег).
+ * - префикс классов раздела (худ, нексус, пауза, поселение, армия) в общих стилях листа или наоборот (PLAN 4.197):
+ *   пауза описала `.vp-chain` — так же называлась колонка веток профессии в листе, и дерево навыков сплющилось.
  */
+const FEATURE_STYLES = new Set(["hud.css", "nexus.css", "pause.css", "settlement.css", "army.css"]);
 function checkStyles() {
   const S = SECTIONS.styles;
   let rules = 0;
+  const prefixes = new Map();
   for (const file of fs.readdirSync(path.join(ROOT, "styles")).filter(f => f.endsWith(".css"))) {
     const css = fs.readFileSync(path.join(ROOT, "styles", file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const m of css.replace(/url\([^)]*\)/g, "").matchAll(/\.([a-z]{2,3})-[a-z0-9-]+/g)) {
+      if (m[1] === "vd") continue; // общий префикс системы
+      if (!prefixes.has(m[1])) prefixes.set(m[1], new Map());
+      if (!prefixes.get(m[1]).has(file)) prefixes.get(m[1]).set(file, m[0]);
+    }
     for (const m of css.matchAll(/([^{}]+)\{/g)) {
       const head = m[1].trim();
       if (!head || head.startsWith("@")) continue;
@@ -418,6 +427,11 @@ function checkStyles() {
         if (/^(html|body)((\.(system-vedmak|vedmak-cursor|game|vd-hud))*)\s+\*(\s*$|::?[\w-]+$)/.test(sel)) err(S, `${file}: «${sel}» — «${sel.split(/\s/)[0]} *» сопоставляется с каждым элементом страницы; нужно «*» без предка или точные теги`);
       }
     }
+  }
+  // Префикс раздела — только в стилях разделов: иначе правило одного окна ложится на другое
+  for (const [prefix, files] of prefixes) {
+    const own = [...files.keys()].filter(f => FEATURE_STYLES.has(f)), common = [...files.keys()].filter(f => !FEATURE_STYLES.has(f));
+    if (own.length && common.length) err(S, `классы «${prefix}-» есть и в ${own.join(", ")} (${files.get(own[0])}), и в ${common.join(", ")} (${files.get(common[0])}) — у раздела должен быть свой префикс`);
   }
   return `${rules} правил`;
 }
