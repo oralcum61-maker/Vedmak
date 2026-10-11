@@ -1,0 +1,162 @@
+/* ============================== «Нексус» — навигация сцен (PLAN 4.181) ==============================
+   Вместо полосы сцен Foundry: кожаная бирка в левой колонке («где вы и где игроки») и доска мест — кованая пластина
+   на заклёпках, папки — кожаными ярлыками, сцены — оттисками-гравюрами с подписью, вложенные папки — бусинами.
+   Активная сцена — сургучной печатью, закрытая от игроков — выцветшим оттиском. */
+
+body.vd-nexus-on #scene-navigation { display: none !important; }
+/* Раскрытая доска — над нижней панелью (у колонок одинаковый слой, иначе ячейки панели ложатся поверх) */
+body.vd-nexus-open #ui-left { z-index: calc(var(--z-index-app) + 1); }
+
+#vedmak-nexus { --nx-ink: #e2ddd0; --nx-silver: #f1ece0; --nx-ash: #a8a296; --nx-dim: #7a766d; --nx-blood: #b8432c; --nx-blood-lite: #e0937f;
+  position: relative; flex: none; color: var(--nx-ink); font: 400 13px/1.35 var(--vd-font-body); font-variant-numeric: tabular-nums; pointer-events: none; }
+#vedmak-nexus [hidden] { display: none !important; }
+#vedmak-nexus a { color: inherit; text-decoration: none; cursor: var(--cursor-pointer, pointer); }
+#vedmak-nexus ul, #vedmak-nexus ol { list-style: none; margin: 0; padding: 0; }
+#vedmak-nexus .nx-tab, #vedmak-nexus .nx-board { pointer-events: auto; }
+
+/* ─── Бирка: кожа со строчкой, медальон с миниатюрой текущей сцены ─── */
+.nx-tab { display: grid; gap: 6px; width: 200px; }
+.nx-here { position: relative; display: flex; align-items: center; gap: 10px; padding: 7px 30px 7px 7px; border-radius: 6px 12px 12px 6px;
+  background: radial-gradient(120% 90% at 40% 0%, rgba(255, 225, 190, .10), transparent 60%), url("../assets/textures/leather.webp") center / 160px, #2b2420;
+  background-blend-mode: normal, overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 230, 200, .12), inset 0 -2px 3px rgba(0, 0, 0, .55), 0 0 0 1px #070605, 0 6px 14px rgba(0, 0, 0, .6); }
+.nx-here::before { content: ""; position: absolute; inset: 3px; border: 1px dashed rgba(214, 190, 150, .3); border-radius: 4px 10px 10px 4px; pointer-events: none; }
+.nx-medal { position: relative; flex: none; width: 38px; height: 38px; border-radius: 50%; overflow: hidden; display: grid; place-items: center;
+  background: #15161a; box-shadow: 0 0 0 2px #0a0a0b, 0 0 0 3.5px #bdb6a6, 0 0 0 5px #0a0a0b, 0 3px 6px rgba(0, 0, 0, .7); }
+.nx-medal img { width: 100%; height: 100%; object-fit: cover; border: 0; filter: sepia(.35) contrast(1.1) brightness(.95); }
+.nx-medal b { font: 20px/1 var(--vd-font-head); color: var(--nx-silver); }
+.nx-here-text { display: grid; min-width: 0; }
+.nx-here-text small, .nx-live small { font: 600 9px/1.2 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #a8987d; }
+.nx-here-text b, .nx-live b { font: 400 16px/1.15 var(--vd-font-head); color: var(--nx-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .8); }
+.nx-caret { position: absolute; right: 11px; top: 50%; width: 8px; height: 8px; margin-top: -5px; border: solid #cfc6b4; border-width: 0 2px 2px 0; transform: rotate(-45deg); transition: transform .2s; }
+.nx.open .nx-caret { transform: rotate(135deg); margin-left: -3px; }
+.nx-here:hover .nx-here-text b { color: #fff; }
+.nx-live { display: grid; margin-left: 14px; padding: 5px 10px; border-left: 2px solid var(--nx-blood); background: linear-gradient(90deg, rgba(20, 20, 23, .92), rgba(20, 20, 23, .55));
+  border-radius: 0 6px 6px 0; box-shadow: 0 3px 8px rgba(0, 0, 0, .5); }
+.nx-live b { font-size: 14px; }
+.nx-live:hover b { color: var(--nx-blood-lite); }
+.nx-pips { display: flex; flex-wrap: wrap; gap: 3px; }
+.nx-tab > .nx-pips { margin-left: 14px; }
+.nx-pips li { width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font: 600 9px/1 var(--vd-font-body); color: #fff;
+  background: color-mix(in srgb, var(--pip) 55%, #111); box-shadow: 0 0 0 1.5px var(--pip), 0 1px 2px rgba(0, 0, 0, .8); text-shadow: 0 1px 1px #000; }
+
+/* ─── Доска: кованая пластина на заклёпках ─── */
+.nx-board { position: absolute; left: calc(100% + 14px); top: 0; width: 680px; max-height: min(860px, calc(100vh / var(--ui-scale, 1) - 40px));
+  display: flex; flex-direction: column; border-radius: 8px; animation: nx-in .18s ease-out;
+  background: radial-gradient(130% 70% at 30% 0%, rgba(255, 240, 215, .06), transparent 55%),
+    url("../assets/textures/steel-plate.webp") center / 360px, var(--vd-grain), linear-gradient(#202126, #17181b);
+  background-blend-mode: normal, overlay, overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .12), inset 0 0 0 1px rgba(0, 0, 0, .5), 0 0 0 1px #050506, 0 18px 40px rgba(0, 0, 0, .75); }
+/* Худ внизу экрана — доска кончается над ним */
+body.vd-hud .nx-board { max-height: min(860px, calc(100vh / var(--ui-scale, 1) - 230px)); }
+@keyframes nx-in { from { opacity: 0; transform: translateX(-8px); } }
+.nx-board::before { content: ""; position: absolute; inset: 0; border-radius: 8px; pointer-events: none;
+  background: radial-gradient(circle at 9px 9px, #fbf7ec 0, #8e887c 1.6px, #2a2824 2.5px, transparent 3px),
+    radial-gradient(circle at calc(100% - 9px) 9px, #fbf7ec 0, #8e887c 1.6px, #2a2824 2.5px, transparent 3px),
+    radial-gradient(circle at 9px calc(100% - 9px), #fbf7ec 0, #8e887c 1.6px, #2a2824 2.5px, transparent 3px),
+    radial-gradient(circle at calc(100% - 9px) calc(100% - 9px), #fbf7ec 0, #8e887c 1.6px, #2a2824 2.5px, transparent 3px); }
+.nx-head { display: flex; align-items: center; gap: 12px; padding: 12px 18px 10px 22px; border-bottom: 1px solid rgba(0, 0, 0, .6);
+  box-shadow: 0 1px 0 rgba(255, 240, 215, .06); }
+.nx-head h2 { margin: 0; border: 0; font: 400 26px/1 var(--vd-font-head); letter-spacing: .02em;
+  background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .9)); }
+.nx-total { font: 600 10px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--nx-dim); }
+#vedmak-nexus .nx-search { flex: 1; height: 28px; min-width: 0; padding: 0 10px; border: 0; border-radius: 4px; background: rgba(0, 0, 0, .45); color: var(--nx-ink);
+  font: 13px var(--vd-font-body); box-shadow: var(--vd-sink-sm); }
+#vedmak-nexus .nx-search:focus { outline: 1px solid rgba(241, 236, 224, .5); }
+.nx-x { font-size: 22px; line-height: 1; color: var(--nx-ash); padding: 0 2px; }
+.nx-x:hover { color: var(--nx-silver); }
+
+.nx-groups { overflow-y: auto; padding: 12px 16px 16px; scrollbar-width: thin; }
+.nx-empty { column-span: all; margin: 18px 6px; color: var(--nx-ash); font-style: italic; }
+.nx-group { margin-bottom: 18px; display: grid; gap: 9px; }
+
+/* Ярлык папки: кожаная бирка с заклёпкой; цвет папки Foundry — нитью снизу */
+.nx-group-h { display: flex; align-items: center; gap: 6px; }
+.nx-tag { position: relative; padding: 6px 12px 6px 21px; border-radius: 3px 8px 8px 3px; font: 400 17px/1 var(--vd-font-head); color: var(--nx-silver);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .9);
+  background: url("../assets/textures/leather.webp") center / 140px, #2f2722; background-blend-mode: overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 230, 200, .12), inset 0 -2px 0 var(--folder, rgba(0, 0, 0, .5)), 0 0 0 1px #070605, 0 3px 7px rgba(0, 0, 0, .55); }
+.nx-tag::after { content: ""; position: absolute; left: 7px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6f1e4, #a29b8d 45%, #3b3832 80%); box-shadow: 0 1px 1px rgba(0, 0, 0, .9), 0 0 0 1px #0b0a09; }
+.nx-group-h sup { font: 600 10px/1 var(--vd-font-body); color: var(--nx-dim); letter-spacing: .06em; }
+.nx-fold { width: 6px; height: 6px; margin-left: auto; margin-right: 4px; border: solid var(--nx-dim); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform .2s; }
+.nx-group.folded .nx-fold { transform: rotate(-45deg); }
+.nx-group.folded:not(.searching) .nx-cards, .nx-group.folded:not(.searching) .nx-sub { display: none; }
+.nx-group-h:hover .nx-tag { color: #fff; }
+
+/* Место — карточка: оттиск сцены в кованой рамке, под ним подпись на тёмной планке; по две в ряд, вложенные — по три */
+.nx-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.nx-cards.sm { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.nx-card { position: relative; display: grid; border-radius: 5px; cursor: var(--cursor-pointer, pointer); overflow: hidden;
+  background: linear-gradient(#26272c, #1b1c20);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .1), 0 0 0 1px #050506, 0 0 0 2px rgba(189, 182, 166, .18), 0 6px 12px -4px rgba(0, 0, 0, .8);
+  transition: transform .18s, box-shadow .18s; }
+.nx-card:hover { transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .14), 0 0 0 1px #050506, 0 0 0 2px rgba(189, 182, 166, .45), 0 12px 18px -6px rgba(0, 0, 0, .9); }
+.nx-print { position: relative; display: grid; place-items: center; aspect-ratio: 300 / 112; background: #2a2723; overflow: hidden; }
+.nx-print img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0;
+  filter: sepia(.35) saturate(.8) contrast(1.1) brightness(.9); transition: filter .25s, transform .4s; }
+.nx-print::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, .7), inset 0 -1px 0 rgba(0, 0, 0, .8); background: linear-gradient(transparent 55%, rgba(0, 0, 0, .35)); }
+.nx-print > b { font: 30px/1 var(--vd-font-head); color: #8d8475; }
+.nx-card:hover .nx-print img { filter: sepia(.05) saturate(1) contrast(1.04) brightness(1); transform: scale(1.04); }
+.nx-name { display: grid; gap: 1px; padding: 6px 9px 7px; font: 400 16px/1.15 var(--vd-font-head); color: var(--nx-ink);
+  border-top: 1px solid rgba(0, 0, 0, .7); box-shadow: inset 0 1px 0 rgba(255, 240, 215, .06);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nx-name small { font: 400 10.5px/1.25 var(--vd-font-body); color: var(--nx-dim); overflow: hidden; text-overflow: ellipsis; }
+.nx-cards.sm .nx-name { font-size: 13.5px; padding: 4px 7px 5px; }
+.nx-live-mark { font-style: normal; color: var(--nx-blood-lite); }
+.nx-card.view { box-shadow: inset 0 1px 0 rgba(255, 240, 215, .1), 0 0 0 1px #050506, 0 0 0 2px rgba(241, 236, 224, .7), 0 6px 12px -4px rgba(0, 0, 0, .8); }
+.nx-card.active { box-shadow: inset 0 1px 0 rgba(255, 240, 215, .1), 0 0 0 1px #050506, 0 0 0 2px rgba(184, 67, 44, .85), 0 6px 14px -4px rgba(0, 0, 0, .8); }
+.nx-card.picked .nx-name { background: linear-gradient(rgba(70, 62, 52, .7), rgba(40, 36, 32, .5)); color: #fff; }
+.nx-card.closed .nx-print img { filter: grayscale(1) brightness(.45) contrast(1.15); }
+.nx-card.closed .nx-name { color: var(--nx-ash); }
+/* Закрытая от игроков — лента поперёк угла */
+.nx-closed { position: absolute; top: 9px; right: -26px; width: 100px; transform: rotate(35deg); text-align: center; z-index: 1;
+  font: 600 8.5px/1.6 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #d8d0c0;
+  background: linear-gradient(#3b3a3f, #26262a); box-shadow: 0 2px 4px rgba(0, 0, 0, .7); }
+.nx-cards.sm .nx-closed { top: 5px; right: -32px; font-size: 7.5px; }
+.nx-print > .nx-pips { position: absolute; left: 6px; bottom: 5px; z-index: 1; }
+
+/* Сургучная печать активной сцены */
+.nx-seal { position: absolute; top: 6px; left: 6px; z-index: 1; width: 22px; height: 22px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e0937f, #b8432c 45%, #6d2416 85%);
+  box-shadow: 0 0 0 1.5px #3d130b, 0 2px 4px rgba(0, 0, 0, .8), inset 0 0 0 4px rgba(0, 0, 0, .15); }
+.nx-seal::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1px solid rgba(255, 220, 205, .45); }
+
+/* Вложенные папки */
+.nx-sub { display: grid; gap: 6px; padding-top: 4px; }
+.nx-sub-h { font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: var(--nx-dim); padding-left: 2px;
+  display: flex; align-items: center; gap: 8px; }
+.nx-sub-h::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(189, 182, 166, .25), transparent); }
+
+/* ─── Окно места: справа от доски, вровень с выбранным местом ─── */
+.nx-pop { position: absolute; left: calc(100% + 10px); top: 0; width: 310px; border-radius: 6px; overflow: hidden; animation: nx-in .15s ease-out;
+  background: url("../assets/textures/steel-plate.webp") center / 300px, linear-gradient(#25262b, #1b1c20); background-blend-mode: overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .12), 0 0 0 1px #050506, 0 16px 34px rgba(0, 0, 0, .8); }
+.nx-pop-x { position: absolute; z-index: 1; top: 6px; right: 8px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 16px; line-height: 1; background: rgba(0, 0, 0, .65); color: var(--nx-silver); }
+.nx-pop-print { height: 96px; background: #2a2723; }
+.nx-pop-print img { width: 100%; height: 100%; object-fit: cover; border: 0; display: block; filter: sepia(.25) contrast(1.08);
+  -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
+.nx-pop-body { display: grid; gap: 9px; padding: 0 14px 14px; margin-top: -18px; position: relative; }
+.nx-pop h3 { margin: 0; border: 0; font: 400 22px/1.1 var(--vd-font-head); color: var(--nx-silver); text-shadow: 0 1px 2px #000; }
+.nx-pop-meta { margin: -4px 0 0; font-size: 11.5px; color: var(--nx-ash); }
+.nx-cap { font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--nx-dim); margin-bottom: 6px; }
+.nx-carry ul { display: flex; flex-wrap: wrap; gap: 6px; }
+.nx-carry li { width: 36px; height: 36px; border-radius: 50%; cursor: var(--cursor-pointer, pointer); opacity: .35; filter: grayscale(1); transition: opacity .15s, filter .15s;
+  box-shadow: 0 0 0 1px #050506; }
+.nx-carry li.on { opacity: 1; filter: none; box-shadow: 0 0 0 1px #050506, 0 0 0 2.5px #bdb6a6; }
+.nx-carry img { width: 100%; height: 100%; border: 0; border-radius: 50%; object-fit: cover; }
+.nx-acts { display: grid; gap: 5px; }
+#vedmak-nexus .nx-acts button { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 8px; margin: 0; height: auto; min-height: 34px; padding: 8px 11px;
+  border: 0; border-radius: 4px; text-align: left; font: 600 11px/1.1 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--nx-ink);
+  background: linear-gradient(#34353b, #26272c); box-shadow: var(--vd-lift-sm); }
+#vedmak-nexus .nx-acts button small { font: 400 10.5px/1.1 var(--vd-font-body); letter-spacing: 0; text-transform: none; color: var(--nx-ash); }
+#vedmak-nexus .nx-acts button:hover { color: #fff; filter: brightness(1.12); }
+#vedmak-nexus .nx-acts .nx-go { background: linear-gradient(#c24a32, #96351f); color: #fff4ec; }
+#vedmak-nexus .nx-acts .nx-go small { color: #f5c9bb; }
+#vedmak-nexus .nx-acts .nx-access.on small { color: var(--nx-blood-lite); }
+.nx-hint { margin: 0; font-size: 11px; color: var(--nx-dim); }
+@media (prefers-reduced-motion: reduce) { .nx-board, .nx-pop { animation: none; } .nx-card, .nx-print img { transition: none; } }

@@ -46,6 +46,7 @@ import "./module/magic/effects.mjs";
 import { CharacterWizard } from "./module/character/wizard.mjs";
 import * as advancement from "./module/character/advancement.mjs";
 import { CombatHud } from "./module/apps/combat-hud.mjs";
+import { SceneNexus } from "./module/apps/scene-nexus.mjs";
 import { registerTokenFlip, flipToken } from "./module/apps/token-flip.mjs";
 import { registerFxSettings, registerFx } from "./module/fx/fx.mjs";
 import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
@@ -121,6 +122,14 @@ Hooks.once("init", () => {
     scope: "client", config: true, type: Boolean, default: true,
     onChange: () => CombatHud.refresh()
   });
+  game.settings.register(SYSTEM_ID, "sceneNexus", {
+    name: "Нексус вместо навигации сцен",
+    hint: "Слева сверху — бирка «где вы и где игроки» и доска всех мест по папкам с миниатюрами. Выключите, чтобы вернуть полосу сцен Foundry.",
+    scope: "client", config: true, type: Boolean, default: true,
+    onChange: () => SceneNexus.refresh()
+  });
+  game.settings.register(SYSTEM_ID, "sceneNexusOpen", { scope: "client", config: false, type: Boolean, default: false, onChange: () => SceneNexus.refresh() });
+  game.settings.register(SYSTEM_ID, "sceneNexusFolded", { scope: "client", config: false, type: Array, default: [] });
   game.settings.register(SYSTEM_ID, "combatHudCollapsed", {
     scope: "client", config: false, type: Boolean, default: false
   });
@@ -273,6 +282,7 @@ Hooks.once("init", () => {
   registerTrueFormHooks();
   registerBearFormHooks();
   CombatHud.registerHooks();
+  SceneNexus.registerHooks();
   registerTokenFlip();
   registerFxSettings();
   registerFx();
@@ -292,6 +302,7 @@ Hooks.once("init", () => {
     openWizard: actor => new CharacterWizard({ actor }).render(true),
     profileSheet,
     hud: CombatHud,
+    nexus: SceneNexus,
     investigation: { ...investigation, open: () => InvestigationApp.open() },
     tavern: { open: () => TavernApp.open() },
     config: CONFIG.VEDMAK

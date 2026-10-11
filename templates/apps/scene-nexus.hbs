@@ -1,0 +1,99 @@
+<nav class="nx {{#if open}}open{{/if}}">
+  {{!-- Бирка в колонке слева: где вы и где игроки; щелчок раскрывает доску --}}
+  <div class="nx-tab">
+    <a class="nx-here" data-action="toggle" data-tooltip="{{#if open}}Свернуть нексус{{else}}Нексус: все места{{/if}}">
+      <span class="nx-medal">{{#if here.thumb}}<img src="{{here.thumb}}" alt="">{{else}}<b>{{here.initial}}</b>{{/if}}</span>
+      <span class="nx-here-text"><small>{{#if gm}}Вы смотрите{{else}}Вы здесь{{/if}}</small><b>{{#if here}}{{here.name}}{{else}}Сцены нет{{/if}}</b></span>
+      <i class="nx-caret"></i>
+    </a>
+    {{#if users.length}}<ul class="nx-pips">{{#each users}}<li style="--pip: {{color}}" data-tooltip="{{name}}">{{letter}}</li>{{/each}}</ul>{{/if}}
+    {{#if live}}
+    <a class="nx-live" data-action="view" data-scene-id="{{live.id}}" data-tooltip="Перейти к игрокам">
+      <small>Игроки</small><b>{{live.name}}</b>
+    </a>
+    {{/if}}
+  </div>
+
+  {{#if open}}
+  <section class="nx-board">
+    <header class="nx-head">
+      <h2>Нексус</h2>
+      <span class="nx-total">{{total}} мест</span>
+      <input class="nx-search" type="search" value="{{query}}" placeholder="Найти место…" aria-label="Найти место">
+      <a class="nx-x" data-action="toggle" data-tooltip="Свернуть" aria-label="Свернуть">×</a>
+    </header>
+
+    <div class="nx-groups">
+      {{#each groups}}
+      <article class="nx-group {{#if folded}}folded{{/if}}" data-folder-id="{{id}}">
+        <a class="nx-group-h" data-action="fold" {{#if color}}style="--folder: {{color}}"{{/if}}>
+          <span class="nx-tag">{{name}}</span><sup>{{count}}</sup><i class="nx-fold"></i>
+        </a>
+        <ol class="nx-cards">
+          {{#each scenes}}{{> nxCard}}{{/each}}
+        </ol>
+        {{#each subs}}
+        <div class="nx-sub">
+          <div class="nx-sub-h">{{name}}</div>
+          <ol class="nx-cards sm">
+            {{#each scenes}}{{> nxCard}}{{/each}}
+          </ol>
+        </div>
+        {{/each}}
+      </article>
+      {{else}}
+      <p class="nx-empty">{{#if gm}}Сцен пока нет: создайте сцену в боковой панели — она появится здесь сама.{{else}}Ведущий ещё не открыл вам ни одной сцены.{{/if}}</p>
+      {{/each}}
+    </div>
+
+    {{#if pop}}
+    <aside class="nx-pop">
+      <a class="nx-pop-x" data-action="closePop" aria-label="Закрыть">×</a>
+      <div class="nx-pop-print">{{#if pop.thumb}}<img src="{{pop.thumb}}" alt="">{{/if}}</div>
+      <div class="nx-pop-body">
+        <h3>{{pop.name}}</h3>
+        <p class="nx-pop-meta">{{#if pop.folder}}{{pop.folder}}{{/if}}{{#if pop.active}} · игроки здесь{{/if}}{{#if pop.view}} · вы смотрите{{/if}}</p>
+
+        {{#if pop.tokens.length}}
+        <div class="nx-carry">
+          <div class="nx-cap">{{#if gm}}Перевести с «{{pop.source}}»{{else}}С собой{{/if}}</div>
+          <ul>
+            {{#each pop.tokens}}
+            <li class="{{#if on}}on{{/if}}" data-action="carry" data-uuid="{{uuid}}" data-tooltip="{{name}}"><img src="{{img}}" alt="{{name}}"></li>
+            {{/each}}
+          </ul>
+        </div>
+        {{/if}}
+
+        <div class="nx-acts">
+          {{#if gm}}
+          <button type="button" class="nx-go" data-action="travel">Перевести отряд <small>{{#if pop.carrying}}жетонов: {{pop.carrying}} и все игроки{{else}}все игроки, без жетонов{{/if}}</small></button>
+          {{#unless pop.active}}<button type="button" data-action="activate">Сделать активной <small>игроки без жетонов</small></button>{{/unless}}
+          {{#unless pop.view}}<button type="button" data-action="view">Посмотреть самому</button>{{/unless}}
+          <button type="button" class="nx-access {{#if pop.open}}on{{/if}}" data-action="access">{{#if pop.open}}Открыта игрокам{{else}}Закрыта от игроков{{/if}} <small>{{#if pop.open}}закрыть{{else}}открыть{{/if}}</small></button>
+          <button type="button" data-action="configure">Настройки сцены</button>
+          {{else}}
+          {{#if pop.tokens.length}}<button type="button" class="nx-go" data-action="travel">Перейти с персонажем <small>жетон переносит ведущий</small></button>{{/if}}
+          {{#unless pop.view}}<button type="button" data-action="view">Перейти посмотреть</button>{{/unless}}
+          {{/if}}
+        </div>
+        {{#if gm}}<p class="nx-hint">{{#if pop.entry}}Жетоны встанут в область «{{pop.entry}}».{{else}}Жетоны встанут в середину сцены. Область с названием «Вход» задаёт место прибытия.{{/if}}</p>{{/if}}
+      </div>
+    </aside>
+    {{/if}}
+  </section>
+  {{/if}}
+</nav>
+
+{{!-- Карточка места: оттиск сцены сверху, подпись снизу; печать активной сцены и кто где смотрит — на оттиске --}}
+{{#*inline "nxCard"}}
+<li class="nx-place nx-card {{css}}" data-scene-id="{{id}}" data-search="{{search}}" data-action="pick" {{#if full}}data-tooltip="{{full}}"{{/if}}>
+  <span class="nx-print">
+    {{#if thumb}}<img src="{{thumb}}" alt="" loading="lazy">{{else}}<b>{{initial}}</b>{{/if}}
+    {{#if users.length}}<ul class="nx-pips">{{#each users}}<li style="--pip: {{color}}" data-tooltip="{{name}}">{{letter}}</li>{{/each}}</ul>{{/if}}
+    {{#if active}}<span class="nx-seal" data-tooltip="Активная сцена — игроки здесь"></span>{{/if}}
+    {{#if @root.gm}}{{#unless open}}<span class="nx-closed" data-tooltip="Закрыта от игроков">закрыта</span>{{/unless}}{{/if}}
+  </span>
+  <span class="nx-name">{{name}}{{#if active}}<small><em class="nx-live-mark">игроки здесь</em>{{#if party}} · жетонов {{party}}{{/if}}</small>{{else}}{{#if party}}<small>жетонов {{party}}</small>{{/if}}{{/if}}</span>
+</li>
+{{/inline}}
