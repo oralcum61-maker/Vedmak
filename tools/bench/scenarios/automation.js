@@ -8,6 +8,13 @@ const setAbility = async (actor, values) => {
   const prof = actor.system.profession;
   await prof.update({ "system.branches": prof.toObject().system.branches.map(b => ({ ...b, abilities: b.abilities.map(a => ({ ...a, value: values[a.name] ?? a.value })) })) });
 };
+// Способности берсерка — проверки против СЛ самоконтроля (≈ 23) при основе ≈ 15: случайные попытки подряд проваливались
+// примерно в каждом четвёртом прогоне. Кости заданы: d10 = ceil((1 − u)·10) — 10 со взрывом и 5 (итог основа + 15)
+const surely = async fn => {
+  const orig = CONFIG.Dice.randomUniform, q = [0.05, 0.55];
+  CONFIG.Dice.randomUniform = () => q.length ? q.shift() : orig();
+  try { return await fn(); } finally { CONFIG.Dice.randomUniform = orig; }
+};
 const abilityIndex = (actor, name) => {
   const br = actor.system.profession.system.branches;
   for (let b = 0; b < br.length; b++) for (let i = 0; i < br[b].abilities.length; i++) if (br[b].abilities[i].name === name) return [b, i];
@@ -22,12 +29,12 @@ await bear.system.profession.update({ "system.definingSkill.value": 4 });
 await setAbility(bear, { "Медвежья шкура": 10, "Спячка": 10, "Медвежьи чувства": 10, "Удар сверху": 6, "Большой медведь": 5 });
 const sp0 = bear.system.derived.armor?.torso?.sp ?? 0;
 let res = null;
-for (let i = 0; i < 6 && !bear.effects.some(e => e.flags?.vedmak?.bearHide); i++) res = await bear.rollAbility(...abilityIndex(bear, "Медвежья шкура"), { skipDialog: true });
+res = await surely(() => bear.rollAbility(...abilityIndex(bear, "Медвежья шкура"), { skipDialog: true }));
 const hide = bear.effects.find(e => e.flags?.vedmak?.bearHide);
 ok(!!hide, `«Медвежья шкура»: проверка против СЛ самоконтроля ${BF.controlDc(bear)}+, успех — эффект`);
 ok((bear.system.derived.armor?.torso?.sp ?? 0) === sp0 + 10, `ПБ +10 (${sp0} → ${bear.system.derived.armor?.torso?.sp})`);
 ok(bear.system.derived.hideResist.includes("bludgeoning"), "на 10-м уровне — сопротивление дробящему");
-for (let i = 0; i < 6 && !bear.effects.some(e => e.flags?.vedmak?.bearHibernate); i++) await bear.rollAbility(...abilityIndex(bear, "Спячка"), { skipDialog: true });
+await surely(() => bear.rollAbility(...abilityIndex(bear, "Спячка"), { skipDialog: true }));
 ok(bear.effects.some(e => e.flags?.vedmak?.bearHibernate), "«Спячка»: успех — эффект на день");
 await bear.update({ "system.hp.value": 1 });
 const rec = bear.system.derived.rec;
@@ -61,7 +68,9 @@ const blocker = await Actor.create({ name: "Прогон: блокирующий
 const knife = (await game.packs.get("vedmak.weapons").getDocuments()).find(w => w.name === "Кинжал").toObject();
 await blocker.createEmbeddedDocuments("Item", [{ ...knife, _id: undefined, system: { ...knife.system, equipped: true } }]);
 const slamAtk = { label: "Удар сверху", weapon: { name: "Удар сверху", damage: "6d6", bearSlam: true, isRanged: false }, isRanged: false,
-  attackType: "slam", roll: { total: 1, rolls: [] }, attacker: { name: bear.name, actorUuid: bear.uuid } };
+  // Итог атаки — заведомо ниже любой защиты: при итоге 1 критический провал блокирующего (d10 = 1, вычет ≥ 5) опускал
+  // защиту до 0, удар проходил и заметок о блоке не было — сценарий падал примерно в одном прогоне из трёх
+  attackType: "slam", roll: { total: -50, rolls: [] }, attacker: { name: bear.name, actorUuid: bear.uuid } };
 const smsg = await ChatMessage.create({ content: "проба", flags: { vedmak: { attack: slamAtk } } });
 await D.defend(smsg, { actorUuid: blocker.uuid }, "block", { skipDialog: true });
 const bnote = (lastMine().flags.vedmak.defense.notes ?? []).join(" ");
@@ -70,8 +79,9 @@ ok(/отбрасывает берсерка/.test(bnote) ? !blocker.statuses.has
   "проиграл встречную Силу — сбит и обездвижен, выиграл — нет");
 await smsg.delete();
 await BF.bearRevert(bear); await wait(600);
-for (let i = 0; i < 6 && !bear.effects.some(e => e.flags?.vedmak?.bearSenses); i++) await bear.rollAbility(...abilityIndex(bear, "Медвежьи чувства"), { skipDialog: true });
-await wait(600);
+await surely(() => bear.rollAbility(...abilityIndex(bear, "Медвежьи чувства"), { skipDialog: true }));
+// Ночное зрение токен получает после применения эффекта — ждать состояния, а не фиксированные 600 мс
+for (let i = 0; i < 40 && bTok.sight.visionMode !== "darkvision"; i++) await wait(100);
 ok(bear.effects.some(e => e.flags?.vedmak?.bearSenses) && bTok.sight.visionMode === "darkvision", `«Медвежьи чувства»: эффект и ночное зрение токена (${bTok.sight.visionMode})`);
 
 stepName("школа Улитки");

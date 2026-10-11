@@ -4,12 +4,14 @@
 // («undefined id … does not exist in the EmbeddedCollection», PLAN 4.165). Окно броска нажимается с задержкой.
 const a = await Actor.create({ name: "Прогон: переработка", type: "character", folder: folder.id });
 const ORE = "Прогонная руда";
-const [recipe] = await a.createEmbeddedDocuments("Item", [
+// Порядок созданных документов не гарантирован (рецепт приходил не первым — сценарий падал раз в несколько прогонов)
+const created = await a.createEmbeddedDocuments("Item", [
   { name: "Чертёж: прогонный слиток", type: "recipe",
     system: { dc: 50, components: [{ name: ORE, quantity: 4 }], result: { name: "Прогонный слиток", type: "gear", quantity: 1 } } },
   { name: "Инструменты ремесленника", type: "gear", system: { tool: "craftsman" } },
   { name: ORE, type: "component", system: { quantity: 4 } }
 ]);
+const recipe = created.find(d => d.type === "recipe");
 const CR = await import("/systems/vedmak/module/crafting/craft.mjs");
 const rnd = CONFIG.Dice.randomUniform;
 CONFIG.Dice.randomUniform = () => 0.5;

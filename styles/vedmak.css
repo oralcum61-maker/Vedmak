@@ -516,7 +516,8 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 }
 .vedmak.sheet section.tab:not(.active) { display: none; }
 /* Клик по значку или подписи должен попадать в саму вкладку */
-.vedmak.sheet nav.sheet-tabs > a > * { pointer-events: none; }
+.vedmak.sheet nav.sheet-tabs > a > i, .vedmak.sheet nav.sheet-tabs > a > span, .vedmak.sheet nav.sheet-tabs > a > img,
+.vedmak.sheet nav.sheet-tabs > a > svg { pointer-events: none; }
 
 
 /* -------------------------- Материалы вкладок -------------------------- */
@@ -825,7 +826,7 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
   color: var(--vd-text-dim); border: 1px solid transparent; border-radius: 2px;
 }
 /* Клик по значку, подписи или счётчику должен попадать в саму кнопку: Foundry берёт event.target */
-.vedmak nav.pane-switch > a > * { pointer-events: none; }
+.vedmak nav.pane-switch > a > span { pointer-events: none; }
 .vedmak nav.pane-switch > a:hover { color: var(--vd-silver); }
 .vedmak nav.pane-switch > a.active {
   color: var(--vd-gold-lite); background: #292b30;
@@ -2351,16 +2352,40 @@ body.vedmak-cursor {
    делает body «нажатым», а курсор наследуется, и браузер пересчитывал стили всей страницы на каждое нажатие
    и отпускание (лаги при перемещении сцены, PLAN 4.164). Над сценой «нажатый» курсор ставит сам холст Foundry. */
 /* Кнопки и ссылки, у которых указатель задан словом pointer, а не переменной; зажатая — «нажимаю» */
-body.vedmak-cursor :is(a, button, summary, select, label, [role="button"], [data-action], [data-tab], .rollable,
-  .content-link, .inline-roll, input[type="checkbox"], input[type="radio"], input[type="range"]):not(:disabled):not([disabled]) {
+body.vedmak-cursor a:not(.vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor button:not(.vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor summary:not(.vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor select:not(.vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor label:not(.vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor [role="button"]:not(vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor [data-action]:not(vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor [data-tab]:not(vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor .rollable:not(vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor .content-link:not(vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor .inline-roll:not(vd-x):not(:disabled):not([disabled]),
+body.vedmak-cursor input[type="checkbox"]:not(:disabled):not([disabled]),
+body.vedmak-cursor input[type="radio"]:not(:disabled):not([disabled]),
+body.vedmak-cursor input[type="range"]:not(:disabled):not([disabled]) {
   cursor: var(--cursor-pointer);
 }
-body.vedmak-cursor :is(a, button, summary, [role="button"], [data-action], [data-tab], .rollable):not(:disabled):not([disabled]):active {
+body.vedmak-cursor a:not(.vd-x):not(:disabled):not([disabled]):active,
+body.vedmak-cursor button:not(.vd-x):not(:disabled):not([disabled]):active,
+body.vedmak-cursor summary:not(.vd-x):not(:disabled):not([disabled]):active,
+body.vedmak-cursor [role="button"]:not(vd-x):not(:disabled):not([disabled]):active,
+body.vedmak-cursor [data-action]:not(vd-x):not(:disabled):not([disabled]):active,
+body.vedmak-cursor [data-tab]:not(vd-x):not(:disabled):not([disabled]):active,
+body.vedmak-cursor .rollable:not(vd-x):not(:disabled):not([disabled]):active {
   cursor: var(--cursor-pointer-down);
 }
-body.vedmak-cursor :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, [contenteditable="true"], .ProseMirror) { cursor: var(--cursor-text); }
+body.vedmak-cursor input:not([type="checkbox"], [type="radio"], [type="range"]), body.vedmak-cursor textarea:not(.vd-x),
+body.vedmak-cursor [contenteditable="true"]:not(vd-x), body.vedmak-cursor .ProseMirror:not(vd-x) { cursor: var(--cursor-text); }
 /* Запертое — «нельзя»: выключенные кнопки и поля, недоступные карточки мастера, сломанное оружие */
-body.vedmak-cursor :is(button, input, select, textarea, a, [data-action]):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor button:not(.vd-x):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor input:not(.vd-x):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor select:not(.vd-x):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor textarea:not(.vd-x):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor a:not(.vd-x):is(:disabled, [disabled], .disabled),
+body.vedmak-cursor [data-action]:is(:disabled, [disabled], .disabled),
 body.vedmak-cursor .vedmak :is(.locked, .pick-card.disabled) { cursor: var(--cursor-not-allowed); }
 /* Подсказка без действия — «справка»: строки производных, сокращения, значки правил */
 body.vedmak-cursor .vedmak [data-tooltip]:not(a, button, input, select, label, [data-action], .rollable, [data-tab]),
@@ -2433,7 +2458,7 @@ body.system-vedmak, .vedmak, .vedmak-card, .chat-message.vedmak-message, body.sy
 }
 
 /* Заголовки, имена и числа — Forum */
-.vedmak :is(h1, h2, h3, h4, legend), .vedmak .window-title, .vedmak input.name,
+.vedmak h1, .vedmak h2, .vedmak h3, .vedmak h4, .vedmak legend, .vedmak .window-title, .vedmak input.name,
 .vedmak-card .card-name, .vedmak .vd-limited .name {
   font-family: var(--vd-font-head) !important; font-weight: 400;
 }
@@ -4562,8 +4587,18 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 .vedmak .atk-row, .vedmak .atk-row.off, .vedmak .combat-block > .atk-row:last-of-type,
 .vedmak .gear-item, .vedmak .gear-item:last-of-type,
 .vedmak .gear-tile,
-.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card),
-.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card):last-child,
+.vedmak .craft-tab .recipe-card,
+.vedmak .craft-tab .spell-card,
+.vedmak .craft-tab .enh-card,
+.vedmak .magic-tab .recipe-card,
+.vedmak .magic-tab .spell-card,
+.vedmak .magic-tab .enh-card,
+.vedmak .craft-tab .recipe-card:last-child,
+.vedmak .craft-tab .spell-card:last-child,
+.vedmak .craft-tab .enh-card:last-child,
+.vedmak .magic-tab .recipe-card:last-child,
+.vedmak .magic-tab .spell-card:last-child,
+.vedmak .magic-tab .enh-card:last-child,
 .vedmak .bio-tab .lp-era-body {
   background-color: rgba(8, 9, 10, .44); background-image: none;
   border: 1px solid rgba(0, 0, 0, .72); border-radius: 2px;
@@ -4597,9 +4632,24 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
   content: ""; flex: 1; height: 0; border-top: 1px solid #050607; border-bottom: 1px solid rgba(255, 240, 215, .07);
 }
 
-.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card),
-.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card):last-child { margin-bottom: 6px; padding: .65rem .75rem .65rem .65rem; }
-.vedmak :is(.craft-tab, .magic-tab) :is(.recipe-card, .spell-card, .enh-card):last-child { margin-bottom: .2rem; }
+.vedmak .craft-tab .recipe-card,
+.vedmak .craft-tab .spell-card,
+.vedmak .craft-tab .enh-card,
+.vedmak .magic-tab .recipe-card,
+.vedmak .magic-tab .spell-card,
+.vedmak .magic-tab .enh-card,
+.vedmak .craft-tab .recipe-card:last-child,
+.vedmak .craft-tab .spell-card:last-child,
+.vedmak .craft-tab .enh-card:last-child,
+.vedmak .magic-tab .recipe-card:last-child,
+.vedmak .magic-tab .spell-card:last-child,
+.vedmak .magic-tab .enh-card:last-child { margin-bottom: 6px; padding: .65rem .75rem .65rem .65rem; }
+.vedmak .craft-tab .recipe-card:last-child,
+.vedmak .craft-tab .spell-card:last-child,
+.vedmak .craft-tab .enh-card:last-child,
+.vedmak .magic-tab .recipe-card:last-child,
+.vedmak .magic-tab .spell-card:last-child,
+.vedmak .magic-tab .enh-card:last-child { margin-bottom: .2rem; }
 
 /* Летопись: каждое десятилетие — в лотке, события внутри — через борозду, свойства — бирками, строки не шире чтения */
 .vedmak .bio-tab .lp-era-body { gap: .55rem; padding: .55rem .75rem .65rem; }
@@ -4909,15 +4959,18 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
    пряжка на двух заклёпках с тремя насечками под палец. Во всём интерфейсе, пока активна система. Foundry ставит всем
    элементам scrollbar-color, а при нём Chromium не рисует ::-webkit-scrollbar — там свойство снимается. Firefox
    псевдоэлементов не знает: ему остаются цвета пряжки и ремня. */
-body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
+/* Скорость (PLAN 4.168): «*» без предка, а не «body.system-vedmak *» — предка, который есть у всего, фильтр Блума не
+   отбрасывает, и правило сверялось с каждым элементом. :not(.vd-x) и :not(vd-x) — всегда истинны и лишь возвращают
+   прежний вес (класс + тег), чтобы каскад не поменялся; так же раскрыты списки :is() в курсорах и полях ниже. */
+*:not(.vd-x):not(vd-x) { scrollbar-color: #9a968e #26211c; }
 @supports selector(::-webkit-scrollbar) {
-  body.system-vedmak * { scrollbar-color: auto !important; scrollbar-width: auto !important; }
+  *:not(.vd-x):not(vd-x) { scrollbar-color: auto !important; scrollbar-width: auto !important; }
   /* Где Foundry ползунок прячет (переполнение уведомлений чата) — прячем и мы */
   body.system-vedmak #chat-notifications .overflow { scrollbar-width: none !important; }
-  body.system-vedmak ::-webkit-scrollbar { width: 14px; height: 14px; }
-  body.system-vedmak ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
-  body.system-vedmak ::-webkit-scrollbar-corner { background: #1a1714; }
-  body.system-vedmak ::-webkit-scrollbar-track {
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar { width: 14px; height: 14px; }
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-corner { background: #1a1714; }
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-track {
     background-color: #26211c;
     background-image: linear-gradient(90deg, transparent 2px, rgba(214,206,190,.38) 2px 3px, transparent 3px calc(100% - 3px), rgba(214,206,190,.38) calc(100% - 3px) calc(100% - 2px), transparent calc(100% - 2px)),
       repeating-linear-gradient(180deg, #26211c 0 2px, transparent 2px 5px),
@@ -4927,14 +4980,14 @@ body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
     border-left: 1px solid #060708;
     box-shadow: inset 1px 0 0 rgba(255,240,215,.06), inset 0 0 6px rgba(0,0,0,.7);
   }
-  body.system-vedmak ::-webkit-scrollbar-track:horizontal {
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-track:horizontal {
     background-image: linear-gradient(180deg, transparent 2px, rgba(214,206,190,.38) 2px 3px, transparent 3px calc(100% - 3px), rgba(214,206,190,.38) calc(100% - 3px) calc(100% - 2px), transparent calc(100% - 2px)),
       repeating-linear-gradient(90deg, #26211c 0 2px, transparent 2px 5px),
       url("../assets/textures/baked/strap.webp");
     border-left: 0; border-top: 1px solid #060708;
     box-shadow: inset 0 1px 0 rgba(255,240,215,.06), inset 0 0 6px rgba(0,0,0,.7);
   }
-  body.system-vedmak ::-webkit-scrollbar-thumb {
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-thumb {
     min-height: 28px;
     background-color: #8e8b85;
     background-image: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
@@ -4949,7 +5002,7 @@ body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
     border: 1px solid #060708; border-radius: 2px;
     box-shadow: inset 0 1px 0 rgba(255,250,240,.45), inset 0 -1px 0 rgba(0,0,0,.4), 0 2px 3px rgba(0,0,0,.8);
   }
-  body.system-vedmak ::-webkit-scrollbar-thumb:horizontal {
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-thumb:horizontal {
     min-width: 28px;
     background-image: radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
       radial-gradient(circle at 40% 35%, #f6f1e6 0, #aaa498 1.1px, #3c3b38 2.2px, #050607 2.8px, transparent 3.2px),
@@ -4959,10 +5012,10 @@ body.system-vedmak * { scrollbar-color: #9a968e #26211c; }
       linear-gradient(180deg, #d6d1c6 0%, #a5a197 55%, #5e5b55 100%);
     background-position: 4px center, calc(100% - 4px) center, 0 0, 0 0;
   }
-  body.system-vedmak ::-webkit-scrollbar-thumb:hover {
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-thumb:hover {
     box-shadow: inset 0 0 0 30px rgba(255,250,240,.14), inset 0 1px 0 rgba(255,250,240,.5), 0 2px 3px rgba(0,0,0,.8);
   }
-  body.system-vedmak ::-webkit-scrollbar-thumb:active {
+  :not(.vd-x):not(vd-x)::-webkit-scrollbar-thumb:active {
     box-shadow: inset 0 0 0 30px rgba(0,0,0,.08), inset 0 1px 3px rgba(0,0,0,.6), 0 1px 1px rgba(0,0,0,.8);
   }
 }
@@ -5699,7 +5752,7 @@ body.vd-lite :is(.vedmak, .chat-message.vedmak-message) :is(b, span, strong, .me
    и переменными кнопок и полей на самих элементах; слой системы в каскаде идёт после слоёв ядра, поэтому здесь они
    перекрываются целиком, а свои правила модулей (слой modules) остаются за модулями. */
 
-body.system-vedmak, body.system-vedmak .themed, body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) {
+body.system-vedmak, body.system-vedmak .themed, body.system-vedmak .application:not(.vedmak, .vedmak-hud):has(> .window-header), body.system-vedmak .app.window-app:not(.vedmak) {
   /* Палитра ядра — в тона системы: холодная сталь вместо фиолетовой ночи, серебро вместо охры, киноварь вместо оранжевого */
   --color-cool-5: #111215; --color-cool-5-25: rgba(17, 18, 21, .25); --color-cool-5-50: rgba(17, 18, 21, .5);
   --color-cool-5-75: rgba(17, 18, 21, .75); --color-cool-5-90: rgba(17, 18, 21, .92);
@@ -5731,7 +5784,7 @@ body.system-vedmak, body.system-vedmak .themed, body.system-vedmak :is(.applicat
   --font-sans: var(--vd-font-body); --font-body: var(--vd-font-body);
   --font-h1: var(--vd-font-head); --font-h2: var(--vd-font-head); --font-h3: var(--vd-font-head); --font-h4: var(--vd-font-head);
 }
-body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-header), .app.window-app:not(.vedmak)) {
+body.system-vedmak .application:not(.vedmak, .vedmak-hud):has(> .window-header), body.system-vedmak .app.window-app:not(.vedmak) {
   font-family: var(--vd-font-body);
   color: var(--color-text-primary);
   /* Рамка (её цвет — --color-border), скругление и тень остаются от ядра — такие же у окон системы */
@@ -5764,12 +5817,29 @@ body.system-vedmak :is(.application:not(.vedmak, .vedmak-hud):has(> .window-head
 }
 
 /* Поля — утопленные колодцы, как на листе (переменные — на всех полях: окна, боковая панель, чат) */
-body.system-vedmak :is(input, select, textarea, code-mirror, formula-input, color-picker, file-picker, document-tags, string-tags, label.icon) {
+body.system-vedmak input:not(.vd-x),
+body.system-vedmak select:not(.vd-x),
+body.system-vedmak textarea:not(.vd-x),
+body.system-vedmak code-mirror:not(.vd-x),
+body.system-vedmak formula-input:not(.vd-x),
+body.system-vedmak color-picker:not(.vd-x),
+body.system-vedmak file-picker:not(.vd-x),
+body.system-vedmak document-tags:not(.vd-x),
+body.system-vedmak string-tags:not(.vd-x),
+body.system-vedmak label.icon {
   --input-background-color: var(--vd-input); --input-border-color: #2a2c31; --input-text-color: var(--vd-text);
   --input-focus-outline-color: #8a8578; --input-placeholder-color: #6f6b62;
 }
 body.system-vedmak :is(input, select, textarea, formula-input, color-picker, file-picker, document-tags, string-tags):focus { --input-text-color: var(--vd-silver); }
-body.system-vedmak :is(input, select, textarea, code-mirror, formula-input, color-picker, file-picker, document-tags, string-tags):disabled,
+body.system-vedmak input:disabled,
+body.system-vedmak select:disabled,
+body.system-vedmak textarea:disabled,
+body.system-vedmak code-mirror:disabled,
+body.system-vedmak formula-input:disabled,
+body.system-vedmak color-picker:disabled,
+body.system-vedmak file-picker:disabled,
+body.system-vedmak document-tags:disabled,
+body.system-vedmak string-tags:disabled,
 body.system-vedmak input[readonly] {
   --input-background-color: #141518; --input-border-color: #222428; --input-text-color: #8c867b;
 }
