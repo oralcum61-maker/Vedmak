@@ -52,6 +52,17 @@ document.querySelector(`#vedmak-nexus .nx-place[data-scene-id="${from.id}"]`).cl
 document.querySelector("#vedmak-nexus .nx-pop [data-action=access]").click(); await tick();
 ok(openToPlayers(from), "кнопка открыла сцену игрокам");
 
+stepName("закрытая — не видна игроку");
+// Глазами игрока: подменяем пользователя только для сборки данных доски
+const ctxFor = async user => { const real = game.user; Object.defineProperty(game, "user", { value: user, configurable: true });
+  try { return await SceneNexus.instance._prepareContext(); } finally { Object.defineProperty(game, "user", { value: real, configurable: true }); } };
+await from.update({ ownership: { default: 0 } });
+await from.activate(); await wait(800);
+const pc = await ctxFor(player);
+const ids = pc.groups.flatMap(g => [...g.scenes, ...g.subs.flatMap(s => s.scenes)]).map(s => s.id);
+ok(!ids.includes(from.id) && ids.includes(to.id), "закрытой активной сцены у игрока на доске нет, открытая — есть");
+ok(pc.here?.name === "Неизвестное место" || pc.here?.id !== from.id, "в бирке — без названия закрытой сцены");
+
 await game.settings.set("vedmak", "sceneNexusOpen", false);
 if (startActive) await startActive.activate();
 await wait(600);

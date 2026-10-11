@@ -58,7 +58,7 @@ async function travelForUser({ sceneId, tokenUuids }, userId) {
   const user = game.users.get(userId);
   const scene = game.scenes.get(sceneId);
   if (!user || !scene) return;
-  if (!user.isGM && !scene.active && scene.getUserLevel(user) < LIMITED) {
+  if (!user.isGM && scene.getUserLevel(user) < LIMITED) {
     return console.warn(`vedmak | нексус: у ${user.name} нет доступа к сцене ${scene.name}`);
   }
   const tokens = (tokenUuids ?? []).map(u => fromUuidSync(u))
@@ -189,7 +189,8 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     const gm = game.user.isGM;
     const pips = this.#pips();
     const folded = this.folded;
-    const shown = game.scenes.filter(s => gm || s.active || s.visible);
+    // Закрытая сцена игроку не видна вовсе — даже активная, на которой стоит отряд
+    const shown = game.scenes.filter(s => gm || s.visible);
     const bySort = (a, b) => (a.sort - b.sort) || compareRu(a.name, b.name);
     const scenesIn = (id, prefixes = []) => shown.filter(s => (s.folder?.id ?? null) === id).sort(bySort)
       .map(s => this.#item(s, pips, gm, prefixes));
@@ -215,10 +216,12 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     const here = canvas.scene;
     const live = game.scenes.active;
     const label = s => gm ? s.name : (s.navName || s.name);
+    const known = s => gm || s.visible;
     return {
       gm, open: this.open, query: this.query,
-      here: here ? { id: here.id, name: label(here), thumb: here.thumb, initial: label(here)[0] } : null,
-      live: live && live !== here ? { id: live.id, name: label(live) } : null,
+      here: here ? (known(here) ? { id: here.id, name: label(here), thumb: here.thumb, initial: label(here)[0] }
+        : { id: here.id, name: "Неизвестное место", thumb: "", initial: "?" }) : null,
+      live: live && live !== here && known(live) ? { id: live.id, name: label(live) } : null,
       users: here ? pips[here.id] ?? [] : [],
       groups, total: shown.length,
       pop: this.open && this.pop ? this.#popContext(game.scenes.get(this.pop), gm) : null
@@ -341,9 +344,11 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       ui.notifications.info(`Отряд на сцене «${scene.name}»${moved ? `: перенесено жетонов — ${moved}` : ""}.`);
       return;
     }
+    // Игрок переходит сам, без вопроса ведущему. Создавать жетоны на другой сцене Foundry разрешает только ведущему
+    // и помощнику, поэтому сам перенос молча делает открытый клиент ведущего; игрок попадает на сцену сразу
     if (uuids.length) {
-      if (!game.users.activeGM) return ui.notifications.warn("Перенести жетон может только ведущий — его сейчас нет в игре. Можно перейти посмотреть.");
-      await asGM("nexusTravel", { sceneId: scene.id, tokenUuids: uuids });
+      if (game.users.activeGM) await asGM("nexusTravel", { sceneId: scene.id, tokenUuids: uuids });
+      else ui.notifications.warn("Ведущего нет в игре — Foundry не даёт игрокам переносить жетоны между сценами. Вы перешли без жетона.");
     }
     await scene.view();
   }

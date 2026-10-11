@@ -73,7 +73,7 @@
           <button type="button" class="nx-access {{#if pop.open}}on{{/if}}" data-action="access">{{#if pop.open}}Открыта игрокам{{else}}Закрыта от игроков{{/if}} <small>{{#if pop.open}}закрыть{{else}}открыть{{/if}}</small></button>
           <button type="button" data-action="configure">Настройки сцены</button>
           {{else}}
-          {{#if pop.tokens.length}}<button type="button" class="nx-go" data-action="travel">Перейти с персонажем <small>жетон переносит ведущий</small></button>{{/if}}
+          {{#if pop.tokens.length}}<button type="button" class="nx-go" data-action="travel">Перейти с персонажем <small>сразу, вместе с жетоном</small></button>{{/if}}
           {{#unless pop.view}}<button type="button" data-action="view">Перейти посмотреть</button>{{/unless}}
           {{/if}}
         </div>
