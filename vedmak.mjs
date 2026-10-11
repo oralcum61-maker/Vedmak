@@ -53,6 +53,7 @@ import { CurrencyConfig } from "./module/apps/currency-config.mjs";
 import { SchoolConfig } from "./module/apps/school-config.mjs";
 import { CleanupApp } from "./module/apps/cleanup.mjs";
 import { profileSheet } from "./module/apps/perf.mjs";
+import { startWarmup } from "./module/apps/warmup.mjs";
 import { DEFAULT_MONEY_SETTING } from "./module/config/money.mjs";
 import { InvestigationApp, registerInvestigationUi } from "./module/apps/investigation-app.mjs";
 import { TavernApp, registerTavernUi } from "./module/apps/tavern-app.mjs";
@@ -301,6 +302,7 @@ Hooks.once("ready", () => {
   sortCompendiaIntoFolders();
   injectMetalDefs();
   runMigrations();
+  startWarmup();
 });
 
 /**

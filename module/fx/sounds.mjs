@@ -2,6 +2,7 @@
 // сами по себе (хуки срабатывают везде), поэтому без рассылки: громкость у каждого своя.
 
 import { setting } from "../util.mjs";
+import { idle } from "../apps/warmup.mjs";
 
 const PATH = "systems/vedmak/assets/sounds/";
 
@@ -42,10 +43,14 @@ export function playSound(key, { volume = 1, delay = 0 } = {}) {
   else go();
 }
 
-/** Заранее подгрузить звуки боя, чтобы первый удар не молчал, пока файл качается. */
-export function preloadSounds() {
+/** Заранее подгрузить звуки боя, чтобы первый удар не молчал, пока файл качается. Звук грузится только после
+ *  первого щелчка игрока (до него браузер не даёт звука) — и раньше все ~50 файлов грузились и раскодировались
+ *  разом на этом щелчке: первый сдвиг сцены давал кадр 160+ мс (PLAN 4.174). Теперь по одному в простое. */
+export async function preloadSounds() {
   if (!setting("fxSound", true)) return;
+  await game.audio?.unlock;
   for (const key of Object.keys(SOUNDS)) {
-    foundry.audio.AudioHelper.preloadSound?.(`${PATH}${key}.ogg`)?.catch?.(() => {});
+    await idle();
+    await foundry.audio.AudioHelper.preloadSound?.(`${PATH}${key}.ogg`)?.catch?.(() => {});
   }
 }

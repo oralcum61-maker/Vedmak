@@ -17,6 +17,7 @@ import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
+import { syncSystem } from "./lib/sync.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const env = (k, d) => process.env[k] || d;
@@ -180,13 +181,54 @@ function profileByFile(profile) {
   return { systemShare: Math.round(100 * sys / total), top: [...self].sort((a, c) => c[1] - a[1]).slice(0, 5).map(([k, v]) => `${k} ${Math.round(v)} мс`) };
 }
 
-async function measure(b, action, { profile = false } = {}) {
+// Трасса холодного замера: собственное время событий главного потока страницы (стили, раскладка, отрисовка, разбор,
+// декодирование картинок, скрипты) и что страница впервые загружала — из чего состоит «первый раз»
+const TRACE_NAMES = { UpdateLayoutTree: "стили", RecalculateStyles: "стили", Layout: "раскладка", Paint: "отрисовка", PrePaint: "отрисовка",
+  Layerize: "отрисовка", "Decode Image": "картинки", "Decode LazyPixelRef": "картинки", ImageDecodeTask: "картинки", ParseHTML: "разбор HTML",
+  ParseAuthorStyleSheet: "разбор CSS", FunctionCall: "скрипты", EvaluateScript: "скрипты", "v8.compile": "компиляция JS",
+  "v8.compileModule": "компиляция JS", TimerFire: "скрипты", EventDispatch: "скрипты", FireAnimationFrame: "скрипты", MajorGC: "сборка мусора",
+  MinorGC: "сборка мусора", "V8.GC_SCAVENGER": "сборка мусора", CommitLoad: "прочее" };
+async function traceStart(b) {
+  const events = []; const on = m => { if (m.method === "Tracing.dataCollected") events.push(...m.params.value); };
+  b.on(on);
+  await b.send("Tracing.start", { categories: "devtools.timeline,v8,disabled-by-default-devtools.timeline", transferMode: "ReportEvents" });
+  return async () => {
+    const done = new Promise(r => { const f = m => { if (m.method === "Tracing.tracingComplete") { b.off(f); r(); } }; b.on(f); });
+    await b.send("Tracing.end"); await done; b.off(on);
+    return traceSummary(events);
+  };
+}
+function traceSummary(events) {
+  const threads = new Map();
+  for (const e of events) if (e.ph === "M" && e.name === "thread_name" && e.args?.name === "CrRendererMain") threads.set(`${e.pid}:${e.tid}`, 0);
+  for (const e of events) { const k = `${e.pid}:${e.tid}`; if (threads.has(k)) threads.set(k, threads.get(k) + 1); }
+  const main = [...threads].sort((a, c) => c[1] - a[1])[0]?.[0];
+  const xs = events.filter(e => `${e.pid}:${e.tid}` === main && e.ph === "X" && e.dur > 0).sort((a, c) => a.ts - c.ts || c.dur - a.dur);
+  const self = new Map(), stack = [];
+  const add = (e, v) => { const k = TRACE_NAMES[e.name]; if (k) self.set(k, (self.get(k) ?? 0) + v); };
+  // Собственное время = длительность минус вложенные (знакомые) события; незнакомые обёртки (RunTask) не считаются
+  for (const e of xs) {
+    while (stack.length && stack.at(-1).ts + stack.at(-1).dur <= e.ts) stack.pop();
+    if (!TRACE_NAMES[e.name]) continue;
+    const parent = stack.at(-1); if (parent) add(parent, -Math.min(e.dur, parent.ts + parent.dur - e.ts));
+    add(e, e.dur); stack.push(e);
+  }
+  const fetched = new Map();
+  for (const e of events) if (e.name === "ResourceSendRequest") { const u = (e.args?.data?.url ?? "").replace(/^https?:\/\/[^/]+\//, "").split("?")[0];
+    const kind = /\.(webp|png|jpe?g|svg|gif)$/i.test(u) ? "картинки" : /\.(woff2?|ttf|otf)$/i.test(u) ? "шрифты" : /\.(hbs|html)$/i.test(u) ? "шаблоны" : /\.css$/i.test(u) ? "стили" : "прочее";
+    if (!fetched.has(kind)) fetched.set(kind, []); fetched.get(kind).push(u); }
+  return { work: [...self].filter(([, v]) => v > 1000).sort((a, c) => c[1] - a[1]).map(([k, v]) => [k, Math.round(v / 1000)]),
+    fetched: Object.fromEntries([...fetched].map(([k, v]) => [k, v])) };
+}
+
+async function measure(b, action, { profile = false, trace = false } = {}) {
   const m = mouse(b);
   const runPrep = () => b.ev(`(async () => await window.__vf.${action.prep.replace(/\(\)$/, "")}())()`);
   // Подготовка — вне замера; у «измеряемой подготовки» (открытие листа) она и есть действие
   const prepVal = action.measurePrep ? null : await runPrep();
   // Профилировщик включается до замера и выключается после: его запуск и остановка сами дают кадр ~200 мс
   if (profile) { await b.send("Profiler.enable"); await b.send("Profiler.setSamplingInterval", { interval: 200 }); await b.send("Profiler.start"); }
+  const traceStop = trace ? await traceStart(b) : null;
   await sleep(400);
   await b.ev("window.__loaf.length = 0; performance.now()");
   const m0 = await metrics(b); const t0 = Date.now();
@@ -195,6 +237,7 @@ async function measure(b, action, { profile = false } = {}) {
   const m1 = await metrics(b); const wall = Date.now() - t0 - 500;
   const loaf = await b.ev("window.__loaf.slice()");
   const prof = profile ? profileByFile((await b.send("Profiler.stop")).result.profile) : null;
+  const tr = traceStop ? await traceStop() : null;
   const perTab = action.perTab ? await b.ev("window.__vfTabs") : null;
   if (action.after) await b.ev(`(async () => await window.__vf.${action.after.replace(/\(\)$/, "")}())()`);
   const d = k => (m1[k] ?? 0) - (m0[k] ?? 0);
@@ -208,7 +251,7 @@ async function measure(b, action, { profile = false } = {}) {
     worstFrame: Math.round(worst?.d ?? 0), blocking: Math.round(loaf.reduce((a, e) => a + (e.b ?? 0), 0)), longFrames: loaf.length,
     worstStyle: Math.round(worst?.st ?? 0),
     topScripts: [...scripts].sort((a, c) => c[1] - a[1]).slice(0, 3).map(([k, v]) => `${k} ${v} мс`),
-    profile: prof, perTab
+    profile: prof, trace: tr, perTab
   };
 }
 
@@ -239,7 +282,9 @@ async function selectorStats(b, action) {
 
 // ───────────── Прогон ─────────────
 let foundry = null;
-if (!(await serverUp())) {
+const up = await serverUp();
+syncSystem(CFG.data, { packs: !up });
+if (!up) {
   if (!args.includes("--start")) { console.error(`Тестовый Foundry не отвечает на ${URL}. Запустите его или добавьте --start.`); process.exit(2); }
   console.log("Поднимаю тестовый Foundry…");
   rmSync(join(CFG.data, "Config/options.json.lock"), { recursive: true, force: true });
@@ -270,14 +315,14 @@ try {
     // (то, что повторяется при каждом действии). Вердикт — по прогретому; холодный фриз — отдельной пометкой.
     try {
       if (a.needs) await b.ev(`(async () => await window.__vf.${a.needs}())()`);
-      cold = await measure(b, a, { profile: true });
+      cold = await measure(b, a, { profile: true, trace: true });
       // Прогретое — трижды, берётся медиана по худшему кадру: одиночный кадр (сборка мусора, программная отрисовка
       // холста) иначе даёт ложный «фриз» то в одном прогоне, то в другом
       const warm = []; for (let k = 0; k < 3; k++) warm.push(await measure(b, a));
       r = warm.sort((x, y) => x.worstFrame - y.worstFrame)[1];
       r.warmFrames = warm.map(w => w.worstFrame);
     } catch (e) { console.log(`ошибка: ${e.message.slice(0, 160)}`); continue; }
-    r.cold = { worstFrame: cold.worstFrame, styleMs: cold.styleMs, topScripts: cold.topScripts, profile: cold.profile, perTab: cold.perTab };
+    r.cold = { worstFrame: cold.worstFrame, styleMs: cold.styleMs, topScripts: cold.topScripts, profile: cold.profile, trace: cold.trace, perTab: cold.perTab };
     const lim = a.freezeMs ?? FREEZE_MS; // разовое (открыть окно) — свой порог
     r.verdict = r.worstFrame > lim ? "ФРИЗ" : r.worstFrame > Math.max(JANK_MS, lim / 2) || r.styleMs / r.events > STYLE_PER_EVENT ? "подтормаживает" : "ок";
     if (r.verdict === "ок" && cold.worstFrame > lim) r.verdict = "фриз в первый раз";
@@ -310,6 +355,9 @@ const md = [
   "| Действие | Кадр в первый раз, мс | Доля кода системы | Больше всего времени |", "|---|---|---|---|",
   ...rows.map(r => `| ${r.name} | ${r.cold.worstFrame} | ${r.cold.profile ? r.cold.profile.systemShare + "%" : "—"} | ${r.cold.profile?.top.join("; ") ?? "—"} |`),
   ...rows.filter(r => r.perTab?.length).map(r => `\nПервое открытие вкладок (худший кадр, мс): ${r.perTab.join(", ")}.`),
+  "", "## Первый раз — из чего состоит (трасса холодного замера: собственное время главного потока, мс; что загружалось впервые)", "",
+  "| Действие | Работа браузера | Загружено впервые |", "|---|---|---|",
+  ...rows.filter(r => r.cold.trace).map(r => `| ${r.name} | ${r.cold.trace.work.map(([k, v]) => `${k} ${v}`).join("; ") || "—"} | ${Object.entries(r.cold.trace.fetched).map(([k, v]) => `${k} ${v.length}`).join(", ") || "—"} |`),
   "", sel ? `## Дорогие селекторы — «${sel.action}» (событий трассы: ${sel.events})` : "", "",
   ...(sel?.top?.length ? ["| Селектор | Время, мкс | Попыток | Совпадений |", "|---|---|---|---|", ...sel.top.map(s => `| \`${s.selector.replace(/\|/g, "\\|")}\` | ${Math.round(s.us)} | ${s.attempts} | ${s.matches} |`)]
     : ["Трасса SelectorStats пуста (браузер не отдал статистику селекторов)."])

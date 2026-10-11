@@ -17,8 +17,8 @@ export function syncSystem(dataPath, { packs = true } = {}) {
   // Старое подключение ссылкой: снять его — дело человека (rmdir без /s снимает только ссылку), копировать в ссылку нельзя
   if (st?.isSymbolicLink()) throw new Error(`${target} — ссылка на репозиторий. Снимите её (cmd /c rmdir "${target}") и запустите снова.`);
   mkdirSync(target, { recursive: true });
-  // Как tools/sync-to-foundry.ps1: без .git, node_modules, исходников пакетов и служебных файлов открытой базы
-  const xd = [".git", "node_modules", "packs-src", join(REPO, ".claude"), join(REPO, "tools/bench/results")];
+  // Как tools/sync-to-foundry.ps1: без .git, node_modules, исходников пакетов, сборки выпуска (dist) и служебных файлов открытой базы
+  const xd = [".git", "node_modules", "packs-src", join(REPO, "dist"), join(REPO, ".claude"), join(REPO, "tools/bench/results")];
   if (!packs) xd.push(join(REPO, "packs"));
   const r = spawnSync("robocopy", [REPO, target, "/MIR", "/XD", ...xd, "/XF", "LOCK", "LOG", "LOG.old", "/R:2", "/W:1", "/NFL", "/NDL", "/NJH", "/NJS", "/NP"], { encoding: "utf8" });
   // Коды robocopy 0–7 — успех, 8+ — ошибка
