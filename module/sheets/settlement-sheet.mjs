@@ -163,9 +163,11 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const gives = [];
     if (lv) {
       if (lv.housing) gives.push(`дом на ${lv.housing} сем.`);
+      for (const r of lv.consume) gives.push(`сырьё: ${rowLabel(r)}`);
       for (const r of lv.produce) gives.push(rowLabel(r));
       for (const r of lv.upkeep) gives.push(`содержание: ${rowLabel(r)}`);
       if (lv.control) gives.push(`Контроль +${lv.control}`);
+      if (lv.controlPerFamily) gives.push(`Контроль +${lv.controlPerFamily} за семью`);
       if (lv.storage) gives.push(`склад +${lv.storage}`);
       if (lv.taxes) gives.push(lv.taxes > 1 ? `налог ×${lv.taxes}` : "налоги");
       if (b.trade) gives.push("торговля");

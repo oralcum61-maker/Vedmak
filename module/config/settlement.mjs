@@ -23,7 +23,19 @@ export const RESOURCE_ICONS = {
   "Шкуры": "icons/commodities/leather/fur-brown.webp",
   "Кости": "icons/commodities/bones/bone-simple-white.webp",
   "Лесные травы": "icons/commodities/flowers/clover.webp",
-  "Травы": "icons/commodities/flowers/clover.webp"
+  "Травы": "icons/commodities/flowers/clover.webp",
+  "Зерно": "icons/consumables/grains/wheat-yellow.webp",
+  "Мука": "icons/consumables/grains/sack-rice-flour-brown.webp",
+  "Пиво": "icons/consumables/drinks/alcohol-beer-stein-wooden-brown.webp",
+  "Водка": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "Мёд": "icons/consumables/food/honey-beehive-brown.webp",
+  "Шерсть": "icons/commodities/leather/fur-pelt-off-white.webp",
+  "Ткань": "icons/commodities/cloth/cloth-bolt-tan.webp",
+  "Кожа": "icons/commodities/leather/leather-bolt-brown.webp",
+  "Доски": "icons/commodities/wood/lumber-plank-brown.webp",
+  "Железо": "icons/commodities/metal/barstock-heated-steel.webp",
+  "Инструменты": "icons/tools/smithing/anvil.webp",
+  "Снадобья": "icons/consumables/potions/bottle-bulb-corked-green.webp"
 };
 export const RESOURCE_ICON = "icons/containers/bags/sack-simple-leather-brown.webp";
 export const resourceIcon = name => RESOURCE_ICONS[name] ?? RESOURCE_ICON;
@@ -31,7 +43,9 @@ export const resourceIcon = name => RESOURCE_ICONS[name] ?? RESOURCE_ICON;
 /** Цена продажи на торговом посту — монет валюты мира за единицу; покупка — ×1,5. Прочее — по умолчанию. */
 export const RESOURCE_PRICES = {
   "Еда": 2, "Топливо": 2, "Древесина": 3, "Камень": 4, "Глина": 2, "Железная руда": 8, "Серебряная руда": 30,
-  "Шкуры": 6, "Кости": 1, "Лесные травы": 5, "Травы": 5
+  "Шкуры": 6, "Кости": 1, "Лесные травы": 5, "Травы": 5,
+  "Зерно": 2, "Мука": 3, "Пиво": 4, "Водка": 12, "Мёд": 6, "Шерсть": 4, "Ткань": 10, "Кожа": 10, "Доски": 5,
+  "Железо": 15, "Инструменты": 30, "Снадобья": 20
 };
 export const DEFAULT_PRICE = 5;
 export const BUY_MARKUP = 1.5;
@@ -96,6 +110,7 @@ export const BUILDING_GROUPS = {
   raw:     "Добыча",
   craft:   "Ремесло",
   service: "Торговля и службы",
+  defense: "Оборона и вера",
   storage: "Хранение"
 };
 
@@ -106,8 +121,9 @@ export const PERIODS = { week: "в неделю", month: "в месяц", bimont
  * Встроенные постройки: первый уровень — по журналу мира manorlords, следующие — улучшения. В поселение постройка
  * попадает предметом «Постройка» (buildingItemData); ведущий правит её или делает свои.
  * Уровень: cost — цена [{resource, qty}] (ресурс «Богатство» берётся из казны), weeks — недели стройки, families —
- * сколько семей работает, housing — сколько живёт, control — к Контролю, taxes — множитель налога, storage —
- * прибавка вместимости склада к каждому ресурсу, produce и upkeep — строки выработки и содержания: resource, formula,
+ * сколько семей работает, housing — сколько живёт, control — к Контролю (controlPerFamily — за каждую семью на работе),
+ * taxes — множитель налога, storage — прибавка вместимости склада к каждому ресурсу, consume — сырьё (без него
+ * постройка работает частью), produce и upkeep — строки выработки и содержания: resource, formula,
  * per (за семью или за постройку), period, noWinter, minFamilies, same (столько же, сколько выпало строкой выше).
  */
 export const BUILDINGS = {
@@ -190,6 +206,1227 @@ export const BUILDINGS = {
     hint: "Купцы заезжают каждую неделю: без поста ресурсы не продать и не купить.",
     levels: [{ cost: [{ resource: "Древесина", qty: 8 }], weeks: 2 }]
   },
+  farm: {
+    label: "Ферма",
+    group: "food",
+    img: "icons/environment/settlement/house-farmland.webp",
+    hint: "Поля с зерном: 2d6 зерна с каждой семьи в неделю, кроме зимы. Зерно идёт на мельницу, в пивоварню и винокурню.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 2,
+        families: 3,
+        produce: [
+          {
+            resource: "Зерно",
+            formula: "2d6",
+            per: "family",
+            noWinter: true
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 5,
+        produce: [
+          {
+            resource: "Зерно",
+            formula: "2d6",
+            per: "family",
+            noWinter: true
+          }
+        ]
+      }
+    ]
+  },
+  windmill: {
+    label: "Мельница",
+    group: "food",
+    img: "icons/environment/settlement/farm-silo-windmill.webp",
+    unique: true,
+    hint: "Мелет зерно: 4 зерна с семьи — 1d6+2 муки.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 10
+          },
+          {
+            resource: "Камень",
+            qty: 6
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        consume: [
+          {
+            resource: "Зерно",
+            formula: "4",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Мука",
+            formula: "1d6+2",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 8
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        consume: [
+          {
+            resource: "Зерно",
+            formula: "4",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Мука",
+            formula: "1d6+2",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  bakery: {
+    label: "Пекарня",
+    group: "food",
+    img: "icons/environment/settlement/house-two-stories-small.webp",
+    hint: "Хлеб: 2 муки и 1 топливо с семьи — 2d6 еды.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 2
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        consume: [
+          {
+            resource: "Мука",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: FOOD,
+            formula: "2d6",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 4
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Мука",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: FOOD,
+            formula: "2d6",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  fishery: {
+    label: "Рыбацкая хижина",
+    group: "food",
+    img: "icons/environment/settlement/abandoned-pier.webp",
+    hint: "Рыба из реки: 1d6 еды с семьи в неделю.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 4
+          }
+        ],
+        weeks: 1,
+        families: 2,
+        produce: [
+          {
+            resource: FOOD,
+            formula: "1d6",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 4
+          },
+          {
+            resource: "Доски",
+            qty: 2
+          }
+        ],
+        weeks: 1,
+        families: 3,
+        produce: [
+          {
+            resource: FOOD,
+            formula: "1d6",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  apiary: {
+    label: "Пасека",
+    group: "food",
+    img: "icons/environment/settlement/gazebo.webp",
+    hint: "Ульи: 1d4 мёда с семьи в неделю, кроме зимы.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 3
+          }
+        ],
+        weeks: 1,
+        families: 1,
+        produce: [
+          {
+            resource: "Мёд",
+            formula: "1d4",
+            per: "family",
+            noWinter: true
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 3
+          }
+        ],
+        weeks: 1,
+        families: 2,
+        produce: [
+          {
+            resource: "Мёд",
+            formula: "1d4",
+            per: "family",
+            noWinter: true
+          }
+        ]
+      }
+    ]
+  },
+  sheepfold: {
+    label: "Овчарня",
+    group: "food",
+    img: "icons/environment/settlement/stable.webp",
+    hint: "Овцы: 1d4 шерсти и 1 еда с семьи в неделю.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        produce: [
+          {
+            resource: "Шерсть",
+            formula: "1d4",
+            per: "family"
+          },
+          {
+            resource: FOOD,
+            formula: "1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 4
+          },
+          {
+            resource: "Доски",
+            qty: 2
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        produce: [
+          {
+            resource: "Шерсть",
+            formula: "1d4",
+            per: "family"
+          },
+          {
+            resource: FOOD,
+            formula: "1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  brewery: {
+    label: "Пивоварня",
+    group: "craft",
+    img: "icons/environment/settlement/tavern-tan.webp",
+    hint: "Варит пиво: 3 зерна и 1 топливо с семьи — 1d6+1 пива.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 8
+          },
+          {
+            resource: "Камень",
+            qty: 2
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        consume: [
+          {
+            resource: "Зерно",
+            formula: "3",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Пиво",
+            formula: "1d6+1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 4
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Зерно",
+            formula: "3",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Пиво",
+            formula: "1d6+1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  distillery: {
+    label: "Винокурня",
+    group: "craft",
+    img: "icons/environment/settlement/house-shelter-stone.webp",
+    hint: "Гонит водку: 4 зерна и 2 топлива с семьи — 1d4 водки. Водка дорога на торговом посту.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 8
+          },
+          {
+            resource: "Камень",
+            qty: 6
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        consume: [
+          {
+            resource: "Зерно",
+            formula: "4",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Водка",
+            formula: "1d4",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Железо",
+            qty: 2
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        consume: [
+          {
+            resource: "Зерно",
+            formula: "4",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Водка",
+            formula: "1d4",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  sawmill: {
+    label: "Лесопилка",
+    group: "craft",
+    img: "icons/environment/settlement/sawmill-shed-red.webp",
+    hint: "Распиливает брёвна: 2 древесины с семьи — 1d4+1 досок.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Древесина",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Доски",
+            formula: "1d4+1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Железо",
+            qty: 1
+          }
+        ],
+        weeks: 2,
+        families: 3,
+        consume: [
+          {
+            resource: "Древесина",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Доски",
+            formula: "1d4+1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  charcoal: {
+    label: "Углежог",
+    group: "craft",
+    img: "icons/environment/settlement/hut.webp",
+    hint: "Жжёт уголь: 2 древесины с семьи — 1d6+2 топлива. Без топлива зимой семьи мёрзнут.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 3
+          }
+        ],
+        weeks: 1,
+        families: 2,
+        consume: [
+          {
+            resource: "Древесина",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: FUEL,
+            formula: "1d6+2",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 4
+          },
+          {
+            resource: "Камень",
+            qty: 2
+          }
+        ],
+        weeks: 1,
+        families: 3,
+        consume: [
+          {
+            resource: "Древесина",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: FUEL,
+            formula: "1d6+2",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  tannery: {
+    label: "Дубильня",
+    group: "craft",
+    img: "icons/environment/settlement/house-poles.webp",
+    hint: "Выделывает шкуры: 2 шкуры с семьи — 1d3+1 кожи.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        consume: [
+          {
+            resource: "Шкуры",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Кожа",
+            formula: "1d3+1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Шкуры",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Кожа",
+            formula: "1d3+1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  weaver: {
+    label: "Ткацкая мастерская",
+    group: "craft",
+    img: "icons/environment/settlement/house-two-stories.webp",
+    hint: "Прядёт и ткёт: 2 шерсти с семьи — 1d3+1 ткани.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Доски",
+            qty: 2
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        consume: [
+          {
+            resource: "Шерсть",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Ткань",
+            formula: "1d3+1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Шерсть",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Ткань",
+            formula: "1d3+1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  bloomery: {
+    label: "Плавильня",
+    group: "craft",
+    img: "icons/environment/settlement/watchtower-lit-orange.webp",
+    unique: true,
+    hint: "Плавит руду: 2 железной руды и 2 топлива с семьи — 1d3 железа.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 8
+          },
+          {
+            resource: "Древесина",
+            qty: 4
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        consume: [
+          {
+            resource: "Железная руда",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Железо",
+            formula: "1d3",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 10
+          },
+          {
+            resource: "Железо",
+            qty: 2
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        consume: [
+          {
+            resource: "Железная руда",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Железо",
+            formula: "1d3",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  smithy: {
+    label: "Кузница",
+    group: "craft",
+    img: "icons/environment/settlement/blacksmith.webp",
+    hint: "Куёт инструменты: 2 железа и 1 топливо с семьи — 1d2 инструментов.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        consume: [
+          {
+            resource: "Железо",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Инструменты",
+            formula: "1d2",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Железо",
+            qty: 3
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        consume: [
+          {
+            resource: "Железо",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: FUEL,
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Инструменты",
+            formula: "1d2",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  alchemist: {
+    label: "Алхимическая лавка",
+    group: "craft",
+    img: "icons/environment/settlement/pottery-shop-shed-red.webp",
+    unique: true,
+    hint: "Травник-алхимик: 3 лесные травы с семьи — 1d3 снадобий.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 2
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        consume: [
+          {
+            resource: "Лесные травы",
+            formula: "3",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Снадобья",
+            formula: "1d3",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 4
+          },
+          {
+            resource: WEALTH,
+            qty: 1
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Лесные травы",
+            formula: "3",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Снадобья",
+            formula: "1d3",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  quarry: {
+    label: "Каменоломня",
+    group: "raw",
+    img: "icons/environment/settlement/quarry.webp",
+    hint: "Камень для стен и домов: 1d6+1 камня с семьи в неделю.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 2,
+        families: 3,
+        produce: [
+          {
+            resource: "Камень",
+            formula: "1d6+1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          },
+          {
+            resource: "Инструменты",
+            qty: 1
+          }
+        ],
+        weeks: 2,
+        families: 4,
+        produce: [
+          {
+            resource: "Камень",
+            formula: "1d6+1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  claypit: {
+    label: "Глиняный карьер",
+    group: "raw",
+    img: "icons/environment/settlement/building-rubble.webp",
+    hint: "Глина для кирпича и посуды: 1d6 глины с семьи, кроме зимы.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 3
+          }
+        ],
+        weeks: 1,
+        families: 2,
+        produce: [
+          {
+            resource: "Глина",
+            formula: "1d6",
+            per: "family",
+            noWinter: true
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 2
+          }
+        ],
+        weeks: 1,
+        families: 3,
+        produce: [
+          {
+            resource: "Глина",
+            formula: "1d6",
+            per: "family",
+            noWinter: true
+          }
+        ]
+      }
+    ]
+  },
+  tavern: {
+    label: "Таверна",
+    group: "service",
+    img: "icons/environment/settlement/tavern.webp",
+    unique: true,
+    hint: "Пиво и сплетни: 2 пива в неделю — 0,1 Богатства (50 оренов). Второй уровень — ещё и водка, доход вдвое.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 10
+          },
+          {
+            resource: "Камень",
+            qty: 2
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Пиво",
+            formula: "2"
+          }
+        ],
+        produce: [
+          {
+            resource: WEALTH,
+            formula: "0.1",
+            minFamilies: 1
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 3,
+        consume: [
+          {
+            resource: "Пиво",
+            formula: "3"
+          },
+          {
+            resource: "Водка",
+            formula: "1"
+          }
+        ],
+        produce: [
+          {
+            resource: WEALTH,
+            formula: "0.2",
+            minFamilies: 1
+          }
+        ]
+      }
+    ]
+  },
+  temple: {
+    label: "Храм",
+    group: "defense",
+    img: "icons/environment/settlement/church.webp",
+    unique: true,
+    hint: "Храм Вечного Огня или Мелитэле: +1 к Контролю (каменный — +2). Жрецы кормятся с общины — 1 еда в неделю.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 10
+          },
+          {
+            resource: "Камень",
+            qty: 6
+          }
+        ],
+        weeks: 4,
+        families: 1,
+        control: 1,
+        upkeep: [
+          {
+            resource: FOOD,
+            formula: "1"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 15
+          },
+          {
+            resource: WEALTH,
+            qty: 1
+          }
+        ],
+        weeks: 4,
+        families: 1,
+        control: 2,
+        upkeep: [
+          {
+            resource: FOOD,
+            formula: "1"
+          }
+        ]
+      }
+    ]
+  },
+  barracks: {
+    label: "Казарма стражи",
+    group: "defense",
+    img: "icons/environment/settlement/watchtower-wood-tan.webp",
+    unique: true,
+    hint: "Стража: +1 к Контролю за каждую семью стражников; каждая ест 1 еду в неделю.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 10
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 3,
+        families: 3,
+        controlPerFamily: 1,
+        upkeep: [
+          {
+            resource: FOOD,
+            formula: "1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 10
+          },
+          {
+            resource: "Железо",
+            qty: 2
+          }
+        ],
+        weeks: 3,
+        families: 5,
+        controlPerFamily: 1,
+        upkeep: [
+          {
+            resource: FOOD,
+            formula: "1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  palisade: {
+    label: "Частокол",
+    group: "defense",
+    img: "icons/environment/settlement/fence-wooden-picket.webp",
+    unique: true,
+    hint: "Стена вокруг поселения: +1 к Контролю; каменная — +2.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 20
+          }
+        ],
+        weeks: 3,
+        control: 1
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 30
+          }
+        ],
+        weeks: 6,
+        control: 2
+      }
+    ]
+  },
   storehouse: {
     label: "Склад", group: "storage", img: "icons/environment/settlement/warehouse-crates.webp",
     hint: "Здесь можно хранить огромное количество ресурсов; хорошее место для еды и всего, что портится.",
@@ -207,8 +1444,8 @@ export const fullRow = r => ({ resource: r.resource ?? "", formula: r.formula ??
 /** Уровень со всеми полями. */
 export const fullLevel = l => ({
   cost: (l.cost ?? []).map(c => ({ ...c })), weeks: l.weeks ?? 1, families: l.families ?? 0, housing: l.housing ?? 0,
-  control: l.control ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0,
-  produce: (l.produce ?? []).map(fullRow), upkeep: (l.upkeep ?? []).map(fullRow)
+  control: l.control ?? 0, controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0,
+  consume: (l.consume ?? []).map(fullRow), produce: (l.produce ?? []).map(fullRow), upkeep: (l.upkeep ?? []).map(fullRow)
 });
 
 /** Данные предмета «Постройка» для встроенной постройки (ещё не заложенной). */

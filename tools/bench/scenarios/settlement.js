@@ -21,6 +21,16 @@ ok(homeless.homeless === 2 && homeless.arrival.chance === 40, "5 семей на
 const monthEnd = R.simulateWeek({ ...base, families: 5, approval: 8, week: 4 }).report;
 ok(monthEnd.events.some(e => e.text.includes("пока есть бездомные")) && monthEnd.arrived === 0, "пока есть бездомные, новые семьи не приходят");
 
+stepName("сырьё и цепочки");
+const dist = { ...base, families: 5, stock: { "Еда": 10, "Топливо": 10 }, buildings: [tpl("distillery", { level: 1, workers: 1 })] };
+ok(!R.simulateWeek(dist, { forecast: true }).report.produced["Водка"], "без зерна винокурня стоит");
+const chain = { ...dist, buildings: [tpl("farm", { level: 1, workers: 2 }), tpl("distillery", { level: 1, workers: 1 }), tpl("brewery", { level: 1, workers: 1 }), tpl("tavern", { level: 1, workers: 1 })] };
+const cr = R.simulateWeek(chain, { forecast: true }).report;
+ok(cr.produced["Водка"] === 2.5 && cr.consumed["Зерно"] === 7, `зерно фермы этой же недели идёт в винокурню и пивоварню (водка ${cr.produced["Водка"]}, зерна взято ${cr.consumed["Зерно"]})`);
+ok(cr.produced["Богатство"] === 0.1, "таверна: 2 пива — 0,1 Богатства");
+ok(R.summarize({ ...base, buildings: [tpl("barracks", { level: 1, workers: 2 })] }).control === 2, "казарма: Контроль за каждую семью стражи");
+ok(Object.keys(SC.BUILDINGS).length >= 30 && SC.BUILDINGS.distillery, `в справочнике ${Object.keys(SC.BUILDINGS).length} построек, есть винокурня`);
+
 stepName("лист и стройка");
 const town = await Actor.create({ name: "Прогон: Липов", type: "settlement", folder: folder.id });
 ok(town.itemTypes.building.length === 3 && town.img.includes("house-manor"), "новое поселение: два дома и лесорубы — предметы «Постройка»");

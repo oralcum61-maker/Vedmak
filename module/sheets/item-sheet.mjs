@@ -433,6 +433,7 @@ function buildingContext(item) {
     ["families", "Работают, семей", "Сколько семей можно поставить работать"],
     ["housing", "Живут, семей", "Сколько семей здесь живёт (дома)"],
     ["control", "Контроль", "Прибавка к Контролю поселения (каждый уровень — −5% к шансу бунта)"],
+    ["controlPerFamily", "Контроль за семью", "Прибавка к Контролю за каждую семью на работе (стража)"],
     ["taxes", "Налоги ×", "Без постройки с налогами (усадьба) налог не собрать: 1 — обычный, 1,5 — в полтора раза больше"],
     ["storage", "Склад +", "Прибавка к вместимости склада по каждому ресурсу"]
   ];
@@ -448,7 +449,8 @@ function buildingContext(item) {
     fields: FIELDS.map(([k, label, hint]) => ({ label, hint, name: `system.levels.${i}.${k}`, value: l[k], step: k === "taxes" ? 0.5 : 1 })),
     cost: l.cost.map((c, j) => ({ j, level: i, resource: { name: `system.levels.${i}.cost.${j}.resource`, value: c.resource },
       qty: { name: `system.levels.${i}.cost.${j}.qty`, value: c.qty } })),
-    lists: [{ list: "produce", label: "Выработка", same: true, rows: rows(i, "produce", l.produce) },
+    lists: [{ list: "consume", label: "Сырьё — без него постройка работает частью", same: false, rows: rows(i, "consume", l.consume) },
+      { list: "produce", label: "Выработка", same: true, rows: rows(i, "produce", l.produce) },
       { list: "upkeep", label: "Содержание", same: false, rows: rows(i, "upkeep", l.upkeep) }]
   }));
   const parent = item.parent;

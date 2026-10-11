@@ -17,13 +17,14 @@ export function parseFormula(formula) {
   const terms = [];
   const src = String(formula ?? "").replace(/\s+/g, "").replace(/[дД]/g, "d");
   if (!src) return terms;
-  const re = /([+-]?)(\d*)(?:d(\d+))?/gy;
+  const re = /([+-]?)(\d*(?:[.,]\d+)?)(?:d(\d+))?/gy;
   let m, pos = 0;
   while (pos < src.length && (m = re.exec(src)) && m[0]) {
     pos = re.lastIndex;
     const sign = m[1] === "-" ? -1 : 1;
-    if (m[3]) terms.push({ sign, n: m[2] ? Number(m[2]) : 1, d: Number(m[3]) });
-    else if (m[2]) terms.push({ sign, n: Number(m[2]), d: 0 });
+    const n = m[2] ? Number(m[2].replace(",", ".")) : 1;
+    if (m[3]) terms.push({ sign, n: Math.max(1, Math.floor(n)), d: Number(m[3]) });
+    else if (m[2]) terms.push({ sign, n, d: 0 });
   }
   return pos === src.length ? terms : [];
 }
@@ -55,7 +56,8 @@ const normRow = r => ({ resource: String(r.resource ?? "").trim(), formula: r.fo
 const normLevel = (l = {}) => ({
   cost: (l.cost ?? []).filter(c => c.resource && c.qty > 0).map(c => ({ resource: String(c.resource).trim(), qty: c.qty })),
   weeks: l.weeks ?? 1, families: l.families ?? 0, housing: l.housing ?? 0, control: l.control ?? 0,
-  taxes: l.taxes ?? 0, storage: l.storage ?? 0,
+  controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0,
+  consume: (l.consume ?? []).map(normRow).filter(r => r.resource),
   produce: (l.produce ?? []).map(normRow).filter(r => r.resource),
   upkeep: (l.upkeep ?? []).map(normRow).filter(r => r.resource)
 });
@@ -103,6 +105,12 @@ export function summarize(state) {
   const families = Math.max(0, state.families ?? 0);
   let left = families;
   for (const j of jobs) { j.workers = Math.min(j.workers, left); left -= j.workers; assigned += j.workers; }
+  // Контроль за семью на работе (стража в казарме)
+  for (const b of state.buildings ?? []) {
+    const lv = levelDef(b, b.level);
+    const j = jobs.find(x => x.id === b.id);
+    if (lv?.controlPerFamily && j) control += lv.controlPerFamily * j.workers;
+  }
   const constructing = (state.buildings ?? []).filter(b => b.constructing).length;
   const idle = families - assigned;
   const approval = Math.max(0, Math.min(APPROVAL_MAX, state.approval ?? 5));
@@ -145,11 +153,33 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
   const active = (r, workers) => (r.period === "week" || (r.period === "month" && monthEnd) || (r.period === "bimonth" && bimonth))
     && !(r.noWinter && cal.winter) && workers >= r.minFamilies && !(r.per === "family" && workers <= 0);
 
-  // Выработка
-  for (const b of state.buildings ?? []) {
-    const lv = levelDef(b, b.level);
-    if (!lv) continue;
+  // Выработка: сначала постройки без сырья, потом те, что его берут (мельница — зерно с фермы этой же недели);
+  // сырья не хватает — постройка работает частью: выработка во столько же раз меньше
+  const order = (state.buildings ?? []).map(b => ({ b, lv: levelDef(b, b.level) })).filter(x => x.lv);
+  const takes = x => x.lv.consume.length > 0;
+  for (const { b, lv } of [...order.filter(x => !takes(x)), ...order.filter(takes)]) {
     const workers = sum.workers[b.id] ?? 0;
+    let ratio = 1;
+    const inputs = [];
+    for (const r of lv.consume) {
+      if (!active(r, workers)) continue;
+      const need = round1(Math.max(0, averageOf(r.formula)) * (r.per === "family" ? workers : 1));
+      if (need <= 0) continue;
+      const have = r.resource === WEALTH ? wealth : stock[r.resource] ?? 0;
+      ratio = Math.min(ratio, have / need);
+      inputs.push({ resource: r.resource, need });
+    }
+    ratio = Math.max(0, Math.min(1, ratio));
+    if (inputs.length) {
+      for (const x of inputs) {
+        const used = round1(x.need * ratio);
+        if (!used) continue;
+        if (x.resource === WEALTH) wealth = round3(wealth - used);
+        else { add(x.resource, -used); consumed[x.resource] = round1((consumed[x.resource] ?? 0) + used); }
+      }
+      if (ratio < 1) shortages.push({ building: b.name, resource: inputs.map(x => x.resource).join(", "), need: 100, got: Math.round(ratio * 100), input: true });
+      if (ratio <= 0) continue;
+    }
     let last = null;
     for (const r of lv.produce) {
       if (!active(r, workers)) { last = null; continue; }
@@ -159,11 +189,11 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       if (r.same && last !== null) amount = last;
       else for (let i = 0; i < times; i++) { const x = roll(r.formula); amount += x.total; dice.push(...x.dice); }
       last = amount;
-      amount = round1(Math.max(0, amount));
+      amount = r.resource === WEALTH ? round3(Math.max(0, amount * ratio)) : round1(Math.max(0, amount * ratio));
       if (!amount) continue;
       if (r.resource === WEALTH) wealth = round3(wealth + amount);
       else add(r.resource, amount);
-      produced[r.resource] = round1((produced[r.resource] ?? 0) + amount);
+      produced[r.resource] = r.resource === WEALTH ? round3((produced[r.resource] ?? 0) + amount) : round1((produced[r.resource] ?? 0) + amount);
       lines.push({ building: b.name, resource: r.resource, amount, formula: r.same ? "столько же" : (times > 1 ? `${r.formula} ×${times}` : r.formula), dice });
     }
   }

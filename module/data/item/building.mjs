@@ -25,8 +25,10 @@ export const buildingLevel = () => new SchemaField({
   families: int(0, { min: 0 }),
   housing: int(0, { min: 0 }),
   control: int(0, { min: 0 }),
+  controlPerFamily: num(0, { min: 0 }),
   taxes: num(0, { min: 0 }),
   storage: int(0, { min: 0 }),
+  consume: new ArrayField(productionRow()),
   produce: new ArrayField(productionRow()),
   upkeep: new ArrayField(productionRow())
 });
