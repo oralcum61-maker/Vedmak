@@ -84,7 +84,11 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       travel: SceneNexus.#onTravel,
       access: SceneNexus.#onAccess,
       configure: SceneNexus.#onConfigure,
-      viewLevel: SceneNexus.#onViewLevel
+      viewLevel: SceneNexus.#onViewLevel,
+      closeLevelMenu: SceneNexus.#onCloseLevelMenu,
+      levelUp: SceneNexus.#onLevelUp,
+      levelDown: SceneNexus.#onLevelDown,
+      levelConfig: SceneNexus.#onLevelConfig
     }
   };
 
@@ -125,6 +129,14 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     // Выделение жетонов — кого переносить; перерисовка только при открытом окне места
     Hooks.on("controlToken", () => { if (SceneNexus.#instance?.pop) again(); });
     Hooks.on("updateUser", (user, changes) => { if ("viewedScene" in changes || "viewedLevel" in changes || "role" in changes) again(); });
+    // Панель этажа закрывается щелчком мимо неё и клавишей Esc
+    document.addEventListener("pointerdown", ev => {
+      const nx = SceneNexus.#instance;
+      if (nx?.levelMenu && !ev.target.closest?.(".nx-lvlmenu, .nx-level")) nx.#closeLevelMenu();
+    }, true);
+    document.addEventListener("keydown", ev => {
+      if (ev.key === "Escape" && SceneNexus.#instance?.levelMenu) SceneNexus.#instance.#closeLevelMenu();
+    });
     Hooks.once("ready", () => SceneNexus.refresh());
     registerGMHandler("nexusTravel", travelForUser);
   }
@@ -155,6 +167,8 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
 
   /** Сцена во всплывающем окне. */
   pop = null;
+  /** Этаж в панели правой кнопки (только у ведущего). */
+  levelMenu = null;
   query = "";
 
   _insertElement(element) {
@@ -185,7 +199,7 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     if (available.length < 2) return null;
     const current = canvas.scene === scene ? canvas.level?.id : null;
     return available.toReversed().map(level => ({
-      id: level.id, name: level.name || "Этаж", view: level.id === current,
+      id: level.id, name: level.name || "Этаж", view: level.id === current, menu: level.id === this.levelMenu,
       users: game.users.filter(u => u.active && u.viewedScene === scene.id && u.viewedLevel === level.id)
         .map(u => ({ name: u.name, letter: u.name[0], color: u.color.css }))
     }));
@@ -242,6 +256,7 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       live: live && live !== here && known(live) ? { id: live.id, name: label(live) } : null,
       users: here ? pips[here.id] ?? [] : [],
       levels: here && known(here) ? this.#levels(here) : null,
+      levelMenu: gm && here ? this.#levelMenuContext(here) : null,
       groups, total: shown.length,
       pop: this.open && this.pop ? this.#popContext(game.scenes.get(this.pop), gm) : null
     };
@@ -265,6 +280,23 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     };
   }
 
+  /**
+   * Панель этажа: высота (низ и верх; пусто — без границы), место среди этажей и окно настроек ядра.
+   * «Выше» и «Ниже» — соседи по списку под биркой (он идёт сверху вниз).
+   */
+  #levelMenuContext(scene) {
+    const level = this.levelMenu && scene.levels.get(this.levelMenu);
+    if (!level) return null;
+    const sorted = scene.levels.sorted;
+    const i = sorted.indexOf(level);
+    const { bottom, top } = level._source.elevation;
+    return {
+      id: level.id, name: level.name || "Этаж", bottom: bottom ?? "", top: top ?? "",
+      units: scene.grid.units || "", up: i < sorted.length - 1, down: i > 0,
+      step: scene.grid.distance || 1
+    };
+  }
+
   /* ------------------------------ Отрисовка ------------------------------ */
 
   _onRender(context, options) {
@@ -281,6 +313,68 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
       game.scenes.get(p.dataset.sceneId)?.view();
     }));
     this.#placePop();
+    // Правая кнопка по этажу — панель этажа (ведущему)
+    el.querySelectorAll(".nx-level[data-level-id]").forEach(li => li.addEventListener("contextmenu", ev => {
+      ev.preventDefault();
+      if (!game.user.isGM) return;
+      this.levelMenu = this.levelMenu === li.dataset.levelId ? null : li.dataset.levelId;
+      this.render();
+    }));
+    const menu = el.querySelector(".nx-lvlmenu");
+    if (menu) {
+      const row = el.querySelector(`.nx-level[data-level-id="${menu.dataset.levelId}"]`);
+      if (row) menu.style.top = `${row.offsetTop}px`;
+      menu.querySelectorAll("input[name]").forEach(input => input.addEventListener("change", () => this.#setElevation(menu)));
+    }
+  }
+
+  #closeLevelMenu() {
+    this.levelMenu = null;
+    this.render();
+  }
+
+  /** Высота этажа из полей панели: пустое поле — без границы; низ выше верха Foundry не примет. */
+  async #setElevation(menu) {
+    const level = canvas.scene?.levels.get(menu.dataset.levelId);
+    if (!level || !game.user.isGM) return;
+    const read = name => {
+      const v = menu.querySelector(`input[name="${name}"]`).value.trim();
+      return v === "" ? null : Number(v);
+    };
+    const bottom = read("bottom"), top = read("top");
+    if ([bottom, top].some(v => v !== null && !Number.isFinite(v))) return this.render();
+    if ((bottom ?? -Infinity) > (top ?? Infinity)) {
+      ui.notifications.warn("Низ этажа выше верха — высота не изменена.");
+      return this.render();
+    }
+    await level.update({ elevation: { bottom, top } });
+  }
+
+  /**
+   * Поменять этаж местами с соседним: обмениваются местом в порядке и высотой, жетоны этажа переезжают по высоте
+   * вместе с ним (иначе стояли бы вне своего этажа). Порядок переписывается заново — у этажей бывает одинаковый sort.
+   * @param {Scene} scene
+   * @param {string} levelId
+   * @param {1|-1} dir — 1 выше, −1 ниже
+   */
+  static async swapLevels(scene, levelId, dir) {
+    const sorted = [...scene.levels.sorted];
+    const i = sorted.findIndex(l => l.id === levelId);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= sorted.length) return false;
+    const a = sorted[i], b = sorted[j];
+    const elev = l => ({ bottom: l._source.elevation.bottom, top: l._source.elevation.top });
+    const base = e => Number.isFinite(e.bottom) ? e.bottom : Math.min(e.top ?? 0, 0);
+    const ea = elev(a), eb = elev(b);
+    [sorted[i], sorted[j]] = [b, a];
+    const updates = sorted.map((l, k) => ({ _id: l.id, sort: (k + 1) * CONST.SORT_INTEGER_DENSITY }));
+    updates.find(u => u._id === a.id).elevation = eb;
+    updates.find(u => u._id === b.id).elevation = ea;
+    await scene.updateEmbeddedDocuments("Level", updates);
+    const shift = { [a.id]: base(eb) - base(ea), [b.id]: base(ea) - base(eb) };
+    const tokens = scene.tokens.filter(t => shift[t.level]).map(t => ({ _id: t.id, elevation: t.elevation + shift[t.level] }));
+    if (tokens.length) await scene.updateEmbeddedDocuments("Token", tokens, { animate: false });
+    return true;
   }
 
   /** Поиск по названию: прячет места и пустые папки без перерисовки. */
@@ -342,6 +436,24 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
   static #onViewLevel(event, target) {
     const levelId = target.closest("[data-level-id]")?.dataset.levelId;
     if (levelId && levelId !== canvas.level?.id) canvas.scene?.view({ level: levelId });
+  }
+
+  static #onCloseLevelMenu() { this.#closeLevelMenu(); }
+
+  static async #onLevelUp() {
+    if (game.user.isGM && canvas.scene) await SceneNexus.swapLevels(canvas.scene, this.levelMenu, 1);
+  }
+
+  static async #onLevelDown() {
+    if (game.user.isGM && canvas.scene) await SceneNexus.swapLevels(canvas.scene, this.levelMenu, -1);
+  }
+
+  /** Полное окно этажа Foundry: фон, передний план, туман, видимость. */
+  static #onLevelConfig() {
+    const level = canvas.scene?.levels.get(this.levelMenu);
+    this.levelMenu = null;
+    this.render();
+    level?.sheet.render(true);
   }
 
   static async #onView(event, target) {

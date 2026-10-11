@@ -16,12 +16,29 @@
     {{!-- Этажи текущей сцены (Scene Levels): сверху вниз, щелчок — показать этаж --}}
     <ol class="nx-levels" aria-label="Этажи">
       {{#each levels}}
-      <li class="nx-level {{#if view}}view{{/if}}" data-level-id="{{id}}">
-        <a data-action="viewLevel" data-tooltip="{{#if view}}Вы смотрите этот этаж{{else}}Показать этаж{{/if}}">{{name}}</a>
+      <li class="nx-level {{#if view}}view{{/if}} {{#if menu}}menu{{/if}}" data-level-id="{{id}}">
+        <a data-action="viewLevel" data-tooltip="{{#if view}}Вы смотрите этот этаж{{else}}Показать этаж{{/if}}{{#if @root.gm}}. Правая кнопка — настройки{{/if}}">{{name}}</a>
         {{#if users.length}}<ul class="nx-pips">{{#each users}}<li style="--pip: {{color}}" data-tooltip="{{name}}">{{letter}}</li>{{/each}}</ul>{{/if}}
       </li>
       {{/each}}
     </ol>
+    {{#if levelMenu}}
+    {{!-- Панель этажа по правой кнопке (ведущему): высота, место среди этажей, настройки ядра --}}
+    <div class="nx-lvlmenu" data-level-id="{{levelMenu.id}}">
+      <header><small>Этаж</small><b>{{levelMenu.name}}</b><a class="nx-x" data-action="closeLevelMenu" data-tooltip="Закрыть" aria-label="Закрыть">×</a></header>
+      <div class="nx-lvl-elev">
+        <label><small>Низ</small><input type="number" name="bottom" value="{{levelMenu.bottom}}" step="{{levelMenu.step}}" placeholder="−∞"></label>
+        <i></i>
+        <label><small>Верх</small><input type="number" name="top" value="{{levelMenu.top}}" step="{{levelMenu.step}}" placeholder="+∞"></label>
+      </div>
+      <p class="nx-lvl-hint">Высота{{#if levelMenu.units}} в {{levelMenu.units}}{{/if}}. Пустое поле — без границы.</p>
+      <div class="nx-lvl-move">
+        <button type="button" data-action="levelUp" {{#unless levelMenu.up}}disabled{{/unless}} data-tooltip="Поменять местами с этажом выше">▲ Выше</button>
+        <button type="button" data-action="levelDown" {{#unless levelMenu.down}}disabled{{/unless}} data-tooltip="Поменять местами с этажом ниже">▼ Ниже</button>
+      </div>
+      <a class="nx-lvl-config" data-action="levelConfig">Все настройки этажа…</a>
+    </div>
+    {{/if}}
     {{/if}}
   </div>
 

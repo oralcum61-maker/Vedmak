@@ -82,6 +82,36 @@ ok(rows().find(r => r.classList.contains("view"))?.dataset.levelId === canvas.le
 rows().find(r => r.dataset.levelId === lv.attic)?.querySelector("a").click(); await wait(1500);
 ok(canvas.level?.id === lv.attic, "щелчок по «Чердак» показывает чердак");
 ok(rows().find(r => r.classList.contains("view"))?.dataset.levelId === lv.attic, "отметка переехала на чердак");
+
+// Панель этажа по правой кнопке: высота, места этажей, окно ядра
+const nexusEl = () => document.querySelector("#vedmak-nexus");
+const menu = () => nexusEl().querySelector(".nx-lvlmenu");
+const rmb = id => rows().find(r => r.dataset.levelId === id)?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
+rmb(lv.ground); await wait(500);
+ok(menu()?.dataset.levelId === lv.ground, "правая кнопка по «Первый этаж» открыла панель этажа");
+ok(menu()?.querySelector("input[name=bottom]").value === "0" && menu()?.querySelector("input[name=top]").value === "20", "в панели — высота этажа 0–20");
+{ const top = menu().querySelector("input[name=top]"); top.value = "25"; top.dispatchEvent(new Event("change")); }
+await wait(700);
+ok(tower.levels.get(lv.ground).elevation.top === 25, "верх этажа поднят до 25 из панели");
+{ const bottom = menu().querySelector("input[name=bottom]"); bottom.value = "30"; bottom.dispatchEvent(new Event("change")); }
+await wait(500);
+ok(tower.levels.get(lv.ground).elevation.bottom === 0, "низ выше верха — высота не меняется");
+const [tk] = await tower.createEmbeddedDocuments("Token", [{ name: "Прогон: жилец", x: 100, y: 100, level: lv.ground, elevation: 5 }]);
+menu().querySelector("[data-action=levelUp]").click(); await wait(900);
+ok(rows().map(r => r.dataset.levelId).join() === [lv.ground, lv.attic, lv.cellar].join(), `«Выше»: первый этаж поменялся местами с чердаком (${rows().map(r => r.textContent.trim()).join(", ")})`);
+const g = tower.levels.get(lv.ground).elevation, at = tower.levels.get(lv.attic).elevation;
+ok(g.bottom === 20 && g.top === 40 && at.bottom === 0 && at.top === 25, "высоты остались за местами: верхний 20–40, средний 0–25");
+ok(tower.tokens.get(tk.id).elevation === 25, `жетон этажа переехал вместе с ним: высота ${tower.tokens.get(tk.id).elevation}`);
+ok(menu()?.querySelector("[data-action=levelUp]").disabled, "верхнему этажу «Выше» недоступно");
+menu().querySelector("[data-action=levelDown]").click(); await wait(900);
+ok(rows().map(r => r.dataset.levelId).join() === [lv.attic, lv.ground, lv.cellar].join(), "«Ниже» вернул порядок");
+menu().querySelector("[data-action=levelConfig]").click(); await wait(700);
+const lvSheet = tower.levels.get(lv.ground).sheet;
+ok(lvSheet.rendered && !menu(), "«Все настройки этажа» открыли окно этажа Foundry, панель закрылась");
+await lvSheet.close();
+rmb(lv.cellar); await wait(400);
+document.body.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true })); await wait(400);
+ok(!menu(), "щелчок мимо панели закрывает её");
 if (startView) await startView.view();
 await wait(800);
 ok(!document.querySelector("#vedmak-nexus .nx-levels") || (canvas.scene?.availableLevels?.size ?? 0) > 1, "на сцене с одним этажом списка нет");

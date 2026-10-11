@@ -51,6 +51,38 @@ body.vd-nexus-open #ui-left { z-index: calc(var(--z-index-app) + 1); }
 .nx-level.view { border-left-color: var(--nx-silver); background: linear-gradient(90deg, rgba(48, 44, 40, .95), rgba(20, 20, 23, .6)); }
 .nx-level.view > a { color: var(--nx-silver); }
 .nx-level .nx-pips li { width: 14px; height: 14px; font-size: 8px; }
+.nx-level.menu { box-shadow: 0 2px 5px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(241, 236, 224, .35); }
+
+/* ─── Панель этажа (правая кнопка, ведущему): стальная пластина справа от ступени ─── */
+.nx-tab { position: relative; }
+.nx-lvlmenu { position: absolute; z-index: 2; left: calc(100% + 10px); top: 0; width: 236px; display: grid; gap: 9px; padding: 10px 12px 12px;
+  border-radius: 6px; animation: nx-in .15s ease-out;
+  background: radial-gradient(circle at 7px 7px, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    url("../assets/textures/steel-plate.webp") center / 300px, linear-gradient(#25262b, #1b1c20);
+  background-blend-mode: normal, normal, overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .12), 0 0 0 1px #050506, 0 16px 34px rgba(0, 0, 0, .8); }
+.nx-lvlmenu header { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 8px; }
+.nx-lvlmenu header small { grid-column: 1; font: 600 9px/1.2 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #a8987d; }
+.nx-lvlmenu header b { grid-column: 1; font: 400 19px/1.1 var(--vd-font-head); background: var(--vd-metal); -webkit-background-clip: text; background-clip: text;
+  color: transparent; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .9)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nx-lvlmenu header .nx-x { grid-column: 2; grid-row: 1 / span 2; }
+.nx-lvl-elev { display: grid; grid-template-columns: 1fr 14px 1fr; align-items: end; gap: 4px; }
+.nx-lvl-elev label { display: grid; gap: 3px; }
+.nx-lvl-elev small { font: 600 9px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--nx-dim); }
+.nx-lvl-elev i { height: 2px; margin-bottom: 14px; background: linear-gradient(90deg, transparent, #6b655b, transparent); }
+#vedmak-nexus .nx-lvl-elev input { width: 100%; height: 30px; margin: 0; padding: 0 8px; border: 0; border-radius: 4px; text-align: center;
+  font: 400 18px/1 var(--vd-font-head); color: var(--nx-silver); background: rgba(0, 0, 0, .45); box-shadow: var(--vd-sink-sm); }
+#vedmak-nexus .nx-lvl-elev input:focus { outline: none; box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(241, 236, 224, .5); }
+.nx-lvl-hint { margin: -3px 0 0; font-size: 11px; color: var(--nx-dim); }
+.nx-lvl-move { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+#vedmak-nexus .nx-lvl-move button { margin: 0; height: 30px; padding: 0 8px; border: 0; border-radius: 4px; font: 600 10.5px/1 var(--vd-font-body);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--nx-ink); background: linear-gradient(#34353b, #26272c); box-shadow: var(--vd-lift-sm); }
+#vedmak-nexus .nx-lvl-move button:hover:not(:disabled) { color: #fff; filter: brightness(1.12); }
+#vedmak-nexus .nx-lvl-move button:disabled { opacity: .4; cursor: default; }
+.nx-lvl-config { justify-self: start; font-size: 12px; color: var(--nx-ash) !important; border-bottom: 1px dotted rgba(168, 162, 150, .5); }
+.nx-lvl-config:hover { color: var(--nx-silver) !important; }
+@media (prefers-reduced-motion: reduce) { .nx-lvlmenu { animation: none; } }
 
 /* ─── Доска: кованая пластина на заклёпках ─── */
 .nx-board { position: absolute; left: calc(100% + 14px); top: 0; width: 680px; max-height: min(860px, calc(100vh / var(--ui-scale, 1) - 40px));
