@@ -148,6 +148,7 @@
               <small>{{#if firstBuild}}Строится{{else}}Улучшается{{/if}}: {{progress.done}} из {{progress.weeks}} нед.{{#if stalled}} — нет свободных семей{{/if}}</small></div>
             {{/if}}
             {{#if gives}}<small class="sv-gives">{{gives}}{{#if idle}} · <span class="warn">никто не работает</span>{{/if}}</small>{{/if}}
+            {{#if tree}}<small class="sv-tree" data-tooltip="Обустройство — на листе постройки"><i class="fa-solid fa-sitemap"></i> {{tree.done}} из {{tree.total}}{{#if tree.working}} · строится «{{tree.working.name}}»: {{tree.working.done}} из {{tree.working.weeks}} нед.{{#if tree.stalled}} — <span class="warn">нет свободных семей</span>{{/if}}{{/if}}</small>{{/if}}
             <div class="sv-card-acts">
               {{#if max}}
               <span class="sv-workers" data-tooltip="Семьи на работе">

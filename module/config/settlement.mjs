@@ -4,6 +4,8 @@
 // Еда и топливо — нужды семей. Выработка — броски кубиков. Казна — Богатство (1 = 500 монет валюты мира).
 // Правила хода — module/settlement/rules.mjs, модели — data/actor/settlement.mjs и data/item/building.mjs.
 
+import { buildingTree } from "./building-upgrades.mjs";
+
 /** Нужды семьи в неделю: еда 1, топливо 1 (зимой 2). Ресурсы-нужды называются так. */
 export const FOOD = "Еда";
 export const FUEL = "Топливо";
@@ -1759,6 +1761,7 @@ export function buildingItemData(key) {
   if (!d) return null;
   return {
     name: d.label, type: "building", img: d.img,
-    system: { key, group: d.group, unique: !!d.unique, trade: !!d.trade, levels: d.levels.map(fullLevel), description: `<p>${d.hint}</p>` }
+    system: { key, group: d.group, unique: !!d.unique, trade: !!d.trade, levels: d.levels.map(fullLevel),
+      branches: buildingTree(key, d.levels.length), description: `<p>${d.hint}</p>` }
   };
 }

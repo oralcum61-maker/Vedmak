@@ -2,17 +2,20 @@
 // (значками ресурсов с бросками), под ней — содержание и что постройка даёт поселению. Ниже — лестница уровней: каждая
 // ступень — цена значками, срок, семьи; пройденные посеребрены, текущая выделена, следующая подсвечена. Ведущий правит
 // ступень кнопкой «Править» — под лестницей раскрывается её чертёж (поля, цена, строки выработки); так же делаются свои
-// типы сооружений. Облик — общий с листом поселения (styles/settlement.css), своё — раздел «Лист постройки».
+// типы сооружений. Вкладка «Обустройство» (кусок Б): ветки колонками, ступени цепочкой — взята, строится, доступна («Взять»),
+// закрыта (почему); ведущий правит дерево на месте и выдаёт ступени даром. Облик — общий с листом поселения
+// (styles/settlement.css), своё — раздел «Лист постройки».
 
 import { BUILDING_GROUPS, PERIODS, RESOURCE_ICONS, fullRow, resourceIcon } from "../config/settlement.mjs";
 import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
+import { BUILDING_EFFECTS } from "../config/building-upgrades.mjs";
+import * as S from "../settlement/settlement.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
-const TABS = { overview: "Обзор", notes: "Описание" };
-const LISTS = ["cost", "consume", "produce", "upkeep"];
+const TABS = { overview: "Обзор", tree: "Обустройство", notes: "Описание" };
 
 /** Числовые поля ступени: ключ, подпись, подсказка. */
 const LEVEL_FIELDS = [
@@ -50,6 +53,47 @@ function tagsOf(lv, trade) {
   return out;
 }
 
+/** Эффект ступени подписью: «+20% выработки: древесина», «Топливо 1d2 за семью», «−10% к бунту». */
+export function effectLabel(e) {
+  const res = String(e.resource ?? "").trim().toLowerCase();
+  const v = Number(e.value) || 0;
+  switch (e.type) {
+    case "produce": return `+${v}% ${res ? `выработки: ${res}` : "всей выработки"}`;
+    case "produceAdd": return `${e.resource || "?"} ${e.formula}${e.per === "family" ? " за семью" : ""}${e.period !== "week" ? ` ${PERIODS[e.period]?.toLowerCase() ?? ""}` : ""}`;
+    case "consume": return `−${v}% сырья${res ? `: ${res}` : ""}`;
+    case "upkeep": return `−${v}% содержания${res ? `: ${res}` : ""}`;
+    case "families": return `+${v} рабочих мест`;
+    case "housing": return `+${v} жилья`;
+    case "control": return `Контроль +${v}`;
+    case "storage": return `склад +${v}`;
+    case "drill": return `тренировка +${v}`;
+    case "taxes": return `налог +${v}`;
+    case "approval": return `+${v} одобрения в месяц`;
+    case "revolt": return `−${v}% к бунту`;
+    case "arrival": return `+${v}% к приходу семей`;
+    case "trade": return "торговля";
+    default: return `${BUILDING_EFFECTS[e.type]?.label ?? e.type} ${v}`;
+  }
+}
+
+/** Поверх сохранённого массива объектов — правка формы с номерами (name="…levels.1.cost.0.qty"), вглубь. */
+function patchArray(src = [], patch = {}) {
+  const out = foundry.utils.deepClone(src);
+  for (const [k, val] of Object.entries(patch)) {
+    const i = Number(k);
+    if (!Number.isInteger(i)) continue;
+    out[i] = patchValue(out[i], val);
+  }
+  return out;
+}
+function patchValue(cur, val) {
+  if (!val || typeof val !== "object" || Array.isArray(val)) return val;
+  if (Array.isArray(cur)) return patchArray(cur, val);
+  const out = { ...(cur ?? {}) };
+  for (const [k, v] of Object.entries(val)) out[k] = Array.isArray(out[k]) ? patchArray(out[k], v) : patchValue(out[k], v);
+  return out;
+}
+
 /** Чертёж ступени для правки: имена полей формы готовые, чтобы в шаблоне не было путей через ../. */
 function blueprint(lv, i) {
   const rows = (list, arr) => arr.map((r, j) => {
@@ -79,6 +123,12 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       buildingTab: BuildingSheet.#onTab,
+      research: BuildingSheet.#onResearch,
+      cancelResearch: BuildingSheet.#onCancelResearch,
+      grant: BuildingSheet.#onGrant,
+      treeEdit: BuildingSheet.#onTreeEdit,
+      treeAdd: BuildingSheet.#onTreeAdd,
+      treeDel: BuildingSheet.#onTreeDel,
       openActor: BuildingSheet.#onOpenActor,
       editLevel: BuildingSheet.#onEditLevel,
       blAdd: BuildingSheet.#onBlAdd,
@@ -95,6 +145,8 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   tab = "overview";
   /** Ступень, чертёж которой открыт (ведущий); null — ни одной. */
   editing = null;
+  /** Правка дерева обустройства (ведущий). */
+  treeEdit = false;
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -140,9 +192,39 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       edit: gm && this.editing !== null ? blueprint(b.levels[this.editing], this.editing) : null,
       perOptions: { building: "за постройку", family: "за семью" }, periodOptions: PERIODS,
       resourceNames: [...Object.keys(RESOURCE_ICONS), WEALTH], codePlaceholder: actor.name.toLowerCase(),
+      tree: this.#tree(town, stock, have), treeEdit: gm && this.treeEdit,
+      effectTypes: Object.fromEntries(Object.entries(BUILDING_EFFECTS).map(([k, v]) => [k, v.label])),
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
     return context;
+  }
+
+  /** Ветки обустройства: ступени с состоянием, ценой значками, эффектами подписью; для правки — пути полей. */
+  #tree(town, stock, have) {
+    const actor = this.actor;
+    const sys = actor.system;
+    const all = sys.branches.flatMap(br => br.nodes);
+    return sys.branches.map((br, bi) => {
+      const path = `system.branches.${bi}`;
+      const nodes = br.nodes.map((nd, ni) => {
+        const bought = sys.upgrades.includes(nd.id);
+        const working = sys.research.node === nd.id;
+        const check = bought || working ? null : S.canResearch(town, actor, nd.id);
+        const npath = `${path}.nodes.${ni}`;
+        return {
+          index: ni, id: nd.id, name: nd.name, description: nd.description, level: nd.level, weeks: nd.weeks, path: npath,
+          state: bought ? "bought" : working ? "working" : check?.ok ? "open" : "locked", why: check?.ok ? "" : check?.why ?? "",
+          progress: working ? { done: sys.research.progress, weeks: nd.weeks, pct: nd.weeks ? Math.round((sys.research.progress / nd.weeks) * 100) : 0 } : null,
+          requires: nd.requires ? all.find(x => x.id === nd.requires)?.name ?? "" : "",
+          cost: nd.cost.map((c, ci) => ({ index: ci, path: `${npath}.cost.${ci}`, resource: c.resource, qty: c.qty, img: resourceIcon(c.resource),
+            short: town && !bought && !working && !have(c) })),
+          effects: nd.effects.map((e, ei) => ({ index: ei, path: `${npath}.effects.${ei}`, ...e, label: effectLabel(e),
+            row: e.type === "produceAdd", pct: BUILDING_EFFECTS[e.type]?.kind === "pct", res: !!BUILDING_EFFECTS[e.type]?.resource }))
+        };
+      });
+      return { index: bi, id: br.id, name: br.name, icon: br.icon, path, nodes,
+        done: nodes.filter(x => x.state === "bought").length, total: nodes.length };
+    });
   }
 
   /**
@@ -151,21 +233,62 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    */
   _processFormData(event, form, formData) {
     const data = super._processFormData(event, form, formData);
-    const v = data.system?.levels;
-    if (!v || typeof v !== "object") return data;
-    const levels = foundry.utils.deepClone(this.actor._source.system.levels ?? []);
-    for (const [k, patch] of Object.entries(v)) {
-      const lv = levels[Number(k)];
-      if (!lv || !patch) continue;
-      for (const [field, val] of Object.entries(patch)) {
-        if (!LISTS.includes(field)) { lv[field] = val; continue; }
-        const rows = lv[field] ?? [];
-        for (const [j, row] of Object.entries(val ?? {})) rows[Number(j)] = { ...(rows[Number(j)] ?? {}), ...row };
-        lv[field] = rows;
-      }
+    for (const key of ["levels", "branches"]) {
+      const v = data.system?.[key];
+      if (v && typeof v === "object" && !Array.isArray(v)) data.system[key] = patchArray(this.actor._source.system[key] ?? [], v);
     }
-    data.system.levels = levels;
     return data;
+  }
+
+  /* ------------------------------ Обустройство ------------------------------ */
+
+  static async #onResearch(event, target) {
+    const town = this.actor.system.settlementActor;
+    if (town) await S.research(town, this.actor.id, target.closest("[data-node]").dataset.node);
+  }
+  static async #onCancelResearch() {
+    const town = this.actor.system.settlementActor;
+    if (town) await S.cancelResearch(town, this.actor.id);
+  }
+  /** Ведущий: выдать ступень даром или забрать. */
+  static async #onGrant(event, target) {
+    if (!game.user.isGM) return;
+    const id = target.closest("[data-node]").dataset.node;
+    const ups = new Set(this.actor.system.upgrades);
+    if (ups.has(id)) ups.delete(id); else ups.add(id);
+    const update = { "system.upgrades": [...ups] };
+    if (this.actor.system.research.node === id) update["system.research"] = { node: "", progress: 0 };
+    await this.actor.update(update);
+  }
+  static #onTreeEdit() { this.treeEdit = !this.treeEdit; this.render(); }
+
+  /** Ведущий: добавить ветку, ступень, эффект или ресурс цены (data-kind, data-path — путь к массиву: «system.branches.0.nodes»). */
+  static async #onTreeAdd(event, target) {
+    const { kind, path } = target.dataset;
+    const sys = foundry.utils.deepClone(this.actor._source.system);
+    const id = () => foundry.utils.randomID(8);
+    if (kind === "branch") sys.branches.push({ id: id(), name: "Новая ветка", icon: "fa-star", nodes: [] });
+    else {
+      const list = foundry.utils.getProperty(sys, path.replace(/^system\./, ""));
+      if (!Array.isArray(list)) return;
+      if (kind === "node") list.push({ id: id(), name: "Новая ступень", description: "", level: 1, weeks: 1,
+        requires: list.at(-1)?.id ?? "", cost: [], effects: [] });
+      else if (kind === "effect") list.push({ type: "produce", resource: "", value: 10, formula: "1", per: "building", period: "week" });
+      else if (kind === "cost") list.push({ resource: "", qty: 1 });
+    }
+    await this.actor.update({ "system.branches": sys.branches });
+  }
+
+  /** Ведущий: убрать элемент массива (data-path — путь к массиву, data-index); у удалённой ступени снимается связь. */
+  static async #onTreeDel(event, target) {
+    const { path, index } = target.dataset;
+    const sys = foundry.utils.deepClone(this.actor._source.system);
+    const list = foundry.utils.getProperty(sys, path.replace(/^system\./, ""));
+    if (!Array.isArray(list)) return;
+    const [gone] = list.splice(Number(index), 1);
+    const ids = new Set(gone?.id ? [gone.id, ...(gone.nodes ?? []).map(x => x.id)] : []);
+    for (const br of sys.branches) for (const nd of br.nodes) if (ids.has(nd.requires)) nd.requires = "";
+    await this.actor.update({ "system.branches": sys.branches, "system.upgrades": sys.upgrades.filter(x => !ids.has(x)) });
   }
 
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }

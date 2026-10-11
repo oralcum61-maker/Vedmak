@@ -5,7 +5,7 @@
 // только ведущему — это делает его клиент (asGM). Неделю двигает ведущий, он же правит одобрение, Контроль и склад.
 
 import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
-import { simulateWeek, canAfford, costLabel, buildingState, levelDef, WEALTH } from "./rules.mjs";
+import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "./rules.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { unitsWeek } from "../army/army.mjs";
@@ -18,7 +18,7 @@ const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
 export const priceLabel = cost => costLabel(cost);
 
 /** Состояние в поселении — не часть образца: копия закладывается заново. */
-const STATE_KEYS = ["level", "constructing", "progress", "workers", "settlement"];
+const STATE_KEYS = ["level", "constructing", "progress", "workers", "settlement", "upgrades", "research"];
 
 /**
  * Данные постройки для стройки: ключ встроенной, uuid образца (актёр-постройка или старый предмет «Постройка») или
@@ -37,6 +37,9 @@ export async function buildingSource(src) {
   data.type = "building";
   for (const k of ["_id", "folder", "ownership", "sort", "_stats", "items", "effects"]) delete data[k];
   for (const k of STATE_KEYS) delete data.system?.[k];
+  // Старый образец без дерева — дерево встроенной постройки с тем же кодом
+  const key = data.system?.key;
+  if (data.system && !data.system.branches?.length && BUILDINGS[key]) data.system.branches = buildingItemData(key).system.branches;
   return data;
 }
 
@@ -153,6 +156,46 @@ export async function upgrade(actor, id) {
 }
 
 /**
+ * Можно ли взять ступень прокачки: постройка готова и не строится, другой ступени в работе нет, уровень постройки
+ * достаточен, предыдущая ступень ветки взята; хватает ли склада и казны поселения.
+ * @returns {{ok: boolean, why?: string, node?: object}}
+ */
+export function canResearch(settlement, building, nodeId) {
+  const b = buildingState(building);
+  const node = upgradeNodes(b).find(x => x.id === nodeId);
+  if (!node) return { ok: false, why: "Нет такой ступени." };
+  if (b.upgrades.includes(node.id)) return { ok: false, why: "Уже взята." };
+  if (!b.level) return { ok: false, why: "Сначала постройте." };
+  if (b.constructing) return { ok: false, why: "Идёт стройка уровня." };
+  if (b.level < node.level) return { ok: false, why: `Нужен ${node.level}-й уровень постройки.` };
+  if (node.requires && !b.upgrades.includes(node.requires)) {
+    const prev = upgradeNodes(b).find(x => x.id === node.requires);
+    return { ok: false, why: `Сначала — «${prev?.name ?? "предыдущая ступень"}».` };
+  }
+  if (b.research.node) return { ok: false, why: "Другая ступень уже строится." };
+  if (!settlement) return { ok: false, why: "Постройка не в поселении." };
+  return affordable(settlement, node.cost) ?? { ok: true, node };
+}
+
+/** Взять ступень прокачки: цена со склада поселения сразу; недели строят семьи без дела (0 — готова сразу). */
+export async function research(settlement, buildingId, nodeId) {
+  const building = buildingOf(settlement, buildingId);
+  if (!building) return;
+  const check = canResearch(settlement, building, nodeId);
+  if (!check.ok) return ui.notifications.warn(check.why);
+  await pay(settlement, check.node.cost);
+  if (!check.node.weeks) await building.update({ "system.upgrades": [...building.system.upgrades, nodeId] });
+  else await building.update({ "system.research": { node: nodeId, progress: 0 } });
+  return check.node;
+}
+
+/** Бросить ступень в работе (потраченное не возвращается). */
+export async function cancelResearch(settlement, buildingId) {
+  const building = buildingOf(settlement, buildingId);
+  if (building?.system.research.node) await building.update({ "system.research": { node: "", progress: 0 } });
+}
+
+/**
  * Торговый пост: продать или купить ресурс. Цена — монет валюты мира за единицу (config/settlement.mjs), покупка
  * ×1,5; в казне это Богатство по курсу.
  */
@@ -192,7 +235,7 @@ export async function demolish(actor, id) {
 /** Поставить семьи на работу: не больше мест и свободных семей. */
 export async function setWorkers(actor, id, value) {
   const item = buildingOf(actor, id);
-  const max = item ? levelDef(buildingState(item), item.system.level)?.families ?? 0 : 0;
+  const max = item ? activeLevel(buildingState(item))?.families ?? 0 : 0;
   if (!max) return;
   const others = Object.entries(actor.system.summary.workers).filter(([k]) => k !== id).reduce((s, [, n]) => s + n, 0);
   await item.update({ "system.workers": Math.max(0, Math.min(max, value, actor.system.families - others)) });
@@ -241,8 +284,10 @@ export async function advanceWeek(actor) {
   const before = new Map(actor.system.buildings.map(b => [b.id, b]));
   const changes = next.buildings.filter(b => {
     const was = before.get(b.id);
-    return was && (was.level !== b.level || was.constructing !== b.constructing || was.progress !== b.progress);
-  }).map(b => ({ _id: b.id, "system.level": b.level, "system.constructing": b.constructing, "system.progress": b.progress }));
+    return was && (was.level !== b.level || was.constructing !== b.constructing || was.progress !== b.progress
+      || was.research.node !== b.research.node || was.research.progress !== b.research.progress || was.upgrades.length !== b.upgrades.length);
+  }).map(b => ({ _id: b.id, "system.level": b.level, "system.constructing": b.constructing, "system.progress": b.progress,
+    "system.research": b.research, "system.upgrades": b.upgrades }));
   await actor.update({
     "system.year": next.year, "system.month": next.month, "system.week": next.week,
     "system.families": next.families, "system.approval": next.approval, "system.wealth": next.wealth, "system.stock": next.stock,

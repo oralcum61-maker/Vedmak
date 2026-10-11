@@ -1,7 +1,7 @@
 // Постройки-актёры (PLAN 4.198): пересчёт поселений, когда постройки меняются; права построек — как у поселения;
 // стартовые постройки нового поселения; перенос старых предметов «Постройка» в актёров.
 
-import { buildingItemData } from "../config/settlement.mjs";
+import { BUILDINGS, buildingItemData } from "../config/settlement.mjs";
 import { createBuildings, buildingSource } from "./settlement.mjs";
 
 const SYS = "vedmak";
@@ -70,11 +70,20 @@ export async function migrateBuildingItems() {
   return moved;
 }
 
+/** Постройкам со встроенным кодом, но без дерева прокачки (созданы до куска Б) — дерево из справочника (ведущий). */
+export async function fillBuildingTrees() {
+  if (!game.user.isGM || game.users.activeGM !== game.user) return 0;
+  const updates = game.actors.filter(a => a.type === "building" && !a.system.branches.length && BUILDINGS[a.system.key])
+    .map(a => ({ _id: a.id, "system.branches": buildingItemData(a.system.key).system.branches }));
+  if (updates.length) await Actor.implementation.updateDocuments(updates);
+  return updates.length;
+}
+
 export function registerBuildingHooks() {
   // Пока мир загружается, поселения считаются без построек — пересчёт после загрузки, затем перенос старых предметов
   Hooks.once("ready", async () => {
     refreshSettlements();
-    try { await migrateBuildingItems(); } catch (err) { console.error("vedmak | перенос построек", err); }
+    try { await migrateBuildingItems(); await fillBuildingTrees(); } catch (err) { console.error("vedmak | перенос построек", err); }
   });
   // Постройку перенесли в другое поселение — пересчитать и прежнее
   const was = new Map();

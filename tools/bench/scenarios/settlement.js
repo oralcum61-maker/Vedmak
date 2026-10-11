@@ -110,7 +110,9 @@ stepName("перенос старых предметов");
 // Поселение со старыми вложенными предметами «Постройка» и образец-предмет мира — перенос делает ведущий при загрузке
 const old = await Actor.create({ name: "Прогон: Старое поселение", type: "settlement", folder: folder.id }, { vedmakStarter: false });
 const mk = (key, st) => { const d = SC.buildingItemData(key); Object.assign(d.system, st); return d; };
-await old.createEmbeddedDocuments("Item", [mk("house", { level: 2 }), mk("lumber", { level: 1, workers: 2 }), mk("manor", { level: 0, constructing: true, progress: 3 })]);
+// Порядок на листе задаёт sort (у созданных одним вызовом он одинаковый — порядок коллекции не определён)
+await old.createEmbeddedDocuments("Item", [mk("house", { level: 2 }), mk("lumber", { level: 1, workers: 2 }), mk("manor", { level: 0, constructing: true, progress: 3 })]
+  .map((d, i) => ({ ...d, sort: (i + 1) * CONST.SORT_INTEGER_DENSITY })));
 const oldItem = await Item.create({ name: "Прогон: старый образец", type: "building", system: { group: "food", levels: [{ weeks: 2, families: 1 }] } });
 const moved = await BM.migrateBuildingItems();
 const ob = old.system.buildingActors;

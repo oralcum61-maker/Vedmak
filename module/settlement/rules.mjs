@@ -3,6 +3,9 @@
 // прогноз берёт среднее. Постройка — предмет «Постройка», правила получают её простым объектом (buildingState).
 // Неделя: выработка построек → содержание → нужды семей (еда 1, топливо 1, зимой 2) → налог в казну → склад по
 // вместимости → в конце месяца приход семей, бунт, довольство и одобрение от налога → стройка → календарь.
+// Прокачка (PLAN 4.198, кусок Б): купленные ступени постройки сводятся в upgradeMods; activeLevel — её уровень с ними
+// (проценты выработки, сырья и содержания — множителем строки mult); налоги, одобрение, бунт, приход и торговля —
+// в сводке поселения. Ступень в стройке занимает строителя, как уровень.
 
 import { FOOD, FUEL, WEALTH, NEEDS, WINTER_FUEL, ARRIVALS, HOMELESS_CAP, CONTENT_LEVEL, WEEKS_PER_MONTH, BASE_STORAGE,
   APPROVAL_MAX, TAXES, WEALTH_RATE, revoltChance, calendar } from "../config/settlement.mjs";
@@ -63,7 +66,37 @@ const normLevel = (l = {}) => ({
 });
 
 /**
- * Постройка для правил из данных предмета «Постройка».
+ * Сводка эффектов купленных ступеней (config/building-upgrades.mjs). Проценты — по ресурсу, «*» — всем.
+ * @param {object[]} branches — ветки постройки
+ * @param {string[]} upgrades — id купленных ступеней
+ */
+export function upgradeMods(branches = [], upgrades = []) {
+  const bought = new Set(upgrades);
+  const m = { produce: {}, consume: {}, upkeep: {}, produceAdd: [], families: 0, housing: 0, control: 0, storage: 0, drill: 0,
+    taxes: 0, approval: 0, revolt: 0, arrival: 0, trade: false };
+  for (const br of branches) for (const nd of br.nodes ?? []) {
+    if (!bought.has(nd.id)) continue;
+    for (const e of nd.effects ?? []) {
+      const v = Number(e.value) || 0;
+      if (e.type === "produce" || e.type === "consume" || e.type === "upkeep") {
+        const k = String(e.resource ?? "").trim() || "*";
+        m[e.type][k] = (m[e.type][k] ?? 0) + v;
+      } else if (e.type === "produceAdd") {
+        if (String(e.resource ?? "").trim()) m.produceAdd.push(normRow({ resource: e.resource, formula: e.formula, per: e.per, period: e.period }));
+      } else if (e.type === "trade") m.trade = true;
+      else if (e.type in m) m[e.type] += v;
+    }
+  }
+  return m;
+}
+
+/** Ступени постройки списком (по веткам). */
+export function upgradeNodes(b) {
+  return (b?.branches ?? []).flatMap(br => (br.nodes ?? []).map(nd => ({ ...nd, branch: br.id })));
+}
+
+/**
+ * Постройка для правил из данных актёра «Постройка» (или прежнего предмета).
  * @param {{id?: string, _id?: string, name: string, img?: string, system: object}} item
  */
 export function buildingState(item) {
@@ -71,7 +104,32 @@ export function buildingState(item) {
   return {
     id: item.id ?? item._id, name: item.name, img: item.img, key: s.key || item.name?.toLowerCase().trim() || "",
     group: s.group ?? "craft", unique: !!s.unique, trade: !!s.trade, levels: (s.levels ?? []).map(normLevel),
-    level: s.level ?? 0, constructing: !!s.constructing, progress: s.progress ?? 0, workers: s.workers ?? 0
+    level: s.level ?? 0, constructing: !!s.constructing, progress: s.progress ?? 0, workers: s.workers ?? 0,
+    branches: s.branches ?? [], upgrades: [...(s.upgrades ?? [])],
+    research: { node: s.research?.node ?? "", progress: s.research?.progress ?? 0 },
+    mods: upgradeMods(s.branches ?? [], s.upgrades ?? [])
+  };
+}
+
+/**
+ * Действующий уровень постройки — с купленными ступенями: прибавки мест, жилья, Контроля, склада, тренировки;
+ * строкам выработки, сырья и содержания — множитель mult; новые строки выработки — в конец. null — не построена.
+ */
+export function activeLevel(b) {
+  const lv = levelDef(b, b?.level ?? 0);
+  if (!lv) return null;
+  const m = b.mods;
+  if (!m) return lv;
+  const pct = (map, res) => (map[res] ?? 0) + (map["*"] ?? 0);
+  const more = (map, r) => ({ ...r, mult: Math.max(0, 1 + pct(map, r.resource) / 100) });
+  const less = (map, r) => ({ ...r, mult: Math.max(0, 1 - pct(map, r.resource) / 100) });
+  return {
+    ...lv,
+    families: lv.families + m.families, housing: lv.housing + m.housing, control: lv.control + m.control,
+    storage: lv.storage + m.storage, drill: lv.drill ? lv.drill + m.drill : m.drill,
+    consume: lv.consume.map(r => less(m.consume, r)),
+    produce: [...lv.produce, ...m.produceAdd].map(r => more(m.produce, r)),
+    upkeep: lv.upkeep.map(r => less(m.upkeep, r))
   };
 }
 
@@ -91,16 +149,18 @@ export function canAfford(state, cost = []) {
 /** Что есть у поселения без хода: дома, бездомные, работа, строители, вместимость, налоги, Контроль, шансы месяца. */
 export function summarize(state) {
   let houses = 0, control = state.control ?? 0, assigned = 0, storage = BASE_STORAGE, taxMult = 0, trade = false, drill = 0;
+  let taxBonus = 0, approvalBonus = 0, revoltMinus = 0, arrivalPlus = 0;
   const jobs = [];
   for (const b of state.buildings ?? []) {
-    const lv = levelDef(b, b.level);
+    const lv = activeLevel(b);
     if (!lv) continue;
     houses += lv.housing;
     control += lv.control;
     storage += lv.storage;
     taxMult = Math.max(taxMult, lv.taxes);
     drill = Math.max(drill, lv.drill);
-    if (b.trade) trade = true;
+    if (b.trade || b.mods?.trade) trade = true;
+    if (b.mods) { taxBonus += b.mods.taxes; approvalBonus += b.mods.approval; revoltMinus += b.mods.revolt; arrivalPlus += b.mods.arrival; }
     if (lv.families) jobs.push({ id: b.id, max: lv.families, workers: Math.min(Math.max(0, b.workers), lv.families) });
   }
   const families = Math.max(0, state.families ?? 0);
@@ -108,11 +168,13 @@ export function summarize(state) {
   for (const j of jobs) { j.workers = Math.min(j.workers, left); left -= j.workers; assigned += j.workers; }
   // Контроль за семью на работе (стража в казарме)
   for (const b of state.buildings ?? []) {
-    const lv = levelDef(b, b.level);
+    const lv = activeLevel(b);
     const j = jobs.find(x => x.id === b.id);
     if (lv?.controlPerFamily && j) control += lv.controlPerFamily * j.workers;
   }
-  const constructing = (state.buildings ?? []).filter(b => b.constructing).length;
+  // Стройка: уровни и ступени прокачки — каждой нужна свободная семья
+  const constructing = (state.buildings ?? []).filter(b => b.constructing || b.research?.node).length;
+  // Налог без постройки с налогами (усадьбы) не собрать — прибавки ступеней только поверх
   const idle = families - assigned;
   const approval = Math.max(0, Math.min(APPROVAL_MAX, state.approval ?? 5));
   const arrival = ARRIVALS[approval] ?? null;
@@ -120,10 +182,11 @@ export function summarize(state) {
   return {
     houses, homeless: Math.max(0, families - houses), freeHouses: Math.max(0, houses - families),
     assigned, idle, constructing, builders: Math.min(idle, constructing), control, storage, trade, drill,
-    taxMult, taxCoins: families * tax.perFamily * taxMult,
+    taxMult: taxMult ? taxMult + taxBonus : 0, taxCoins: families * tax.perFamily * (taxMult ? taxMult + taxBonus : 0),
+    approvalBonus, arrivalPlus, revoltMinus,
     workers: Object.fromEntries(jobs.map(j => [j.id, j.workers])),
-    revolt: revoltChance(approval, control),
-    arrival: arrival ? { chance: arrival[0], formula: arrival[1] } : null,
+    revolt: Math.max(0, revoltChance(approval, control) - (revoltChance(approval, control) ? revoltMinus : 0)),
+    arrival: arrival ? { chance: Math.min(100, arrival[0] + arrivalPlus), formula: arrival[1] } : null,
     content: approval >= CONTENT_LEVEL
   };
 }
@@ -156,7 +219,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
 
   // Выработка: сначала постройки без сырья, потом те, что его берут (мельница — зерно с фермы этой же недели);
   // сырья не хватает — постройка работает частью: выработка во столько же раз меньше
-  const order = (state.buildings ?? []).map(b => ({ b, lv: levelDef(b, b.level) })).filter(x => x.lv);
+  const order = (state.buildings ?? []).map(b => ({ b, lv: activeLevel(b) })).filter(x => x.lv);
   const takes = x => x.lv.consume.length > 0;
   for (const { b, lv } of [...order.filter(x => !takes(x)), ...order.filter(takes)]) {
     const workers = sum.workers[b.id] ?? 0;
@@ -164,7 +227,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     const inputs = [];
     for (const r of lv.consume) {
       if (!active(r, workers)) continue;
-      const need = round1(Math.max(0, averageOf(r.formula)) * (r.per === "family" ? workers : 1));
+      const need = round1(Math.max(0, averageOf(r.formula)) * (r.per === "family" ? workers : 1) * (r.mult ?? 1));
       if (need <= 0) continue;
       const have = r.resource === WEALTH ? wealth : stock[r.resource] ?? 0;
       ratio = Math.min(ratio, have / need);
@@ -190,6 +253,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       if (r.same && last !== null) amount = last;
       else for (let i = 0; i < times; i++) { const x = roll(r.formula); amount += x.total; dice.push(...x.dice); }
       last = amount;
+      amount *= r.mult ?? 1;
       amount = r.resource === WEALTH ? round3(Math.max(0, amount * ratio)) : round1(Math.max(0, amount * ratio));
       if (!amount) continue;
       if (r.resource === WEALTH) wealth = round3(wealth + amount);
@@ -201,7 +265,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
 
   // Содержание построек
   for (const b of state.buildings ?? []) {
-    const lv = levelDef(b, b.level);
+    const lv = activeLevel(b);
     if (!lv) continue;
     const workers = sum.workers[b.id] ?? 0;
     for (const r of lv.upkeep) {
@@ -209,7 +273,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       const times = r.per === "family" ? workers : 1;
       let need = 0;
       for (let i = 0; i < times; i++) need += roll(r.formula).total;
-      need = round1(Math.max(0, need));
+      need = round1(Math.max(0, need) * (r.mult ?? 1));
       if (r.resource === WEALTH) {
         const got = Math.min(wealth, need);
         wealth = round3(wealth - got);
@@ -272,6 +336,11 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
         ? { kind: "revolt", text: `Бунт! Народ поднялся против правителя (бросок ${d}, шанс ${sum.revolt}%).`, danger: true }
         : { kind: "revolt", text: `Ропот без бунта (бросок ${d}, шанс ${sum.revolt}%).` });
     }
+    if (sum.approvalBonus) {
+      const was = approval;
+      approval = Math.max(0, Math.min(APPROVAL_MAX, approval + sum.approvalBonus));
+      if (approval !== was) events.push({ kind: "approval", text: `Постройки радуют народ: одобрение ${approval > was ? "растёт" : "падает"} до ${approval}.` });
+    }
     if (sum.content) events.push({ kind: "content", text: "Народ доволен правителем: в конце месяца возможны дополнительные ресурсы — решает ведущий." });
   }
 
@@ -280,7 +349,18 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
   const buildings = (state.buildings ?? []).map(b => ({ ...b }));
   const built = [];
   for (const b of buildings) {
-    if (!b.constructing || builders <= 0) continue;
+    if (builders <= 0) break;
+    if (!b.constructing && b.research?.node) {
+      const node = upgradeNodes(b).find(x => x.id === b.research.node);
+      builders--;
+      b.research = { node: b.research.node, progress: b.research.progress + 1 };
+      if (!node || b.research.progress >= node.weeks) {
+        if (node) { b.upgrades = [...b.upgrades, node.id]; built.push({ name: `${b.name}: ${node.name}`, upgrade: true }); }
+        b.research = { node: "", progress: 0 };
+      }
+      continue;
+    }
+    if (!b.constructing) continue;
     builders--;
     b.progress += 1;
     const target = levelDef(b, b.level + 1);

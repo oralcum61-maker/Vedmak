@@ -6,7 +6,7 @@
 
 import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_PER_MONTH, RESOURCE_ORDER, TAXES, BUY_MARKUP, MONTHS,
   resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
-import { buildingState, levelDef, averageOf, WEALTH } from "../settlement/rules.mjs";
+import { buildingState, levelDef, activeLevel, upgradeNodes, averageOf, WEALTH } from "../settlement/rules.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { compareRu } from "../util.mjs";
@@ -179,7 +179,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /** Карточка постройки: уровень, что даёт, семьи на работе, стройка, улучшение. */
   #card(b, sum) {
-    const lv = levelDef(b, b.level);
+    const lv = activeLevel(b);
     const next = levelDef(b, b.level + 1);
     const workers = sum.workers[b.id] ?? 0;
     const item = game.actors.get(b.id);
@@ -196,6 +196,11 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (lv.taxes) gives.push(lv.taxes > 1 ? `налог ×${lv.taxes}` : "налоги");
       if (b.trade) gives.push("торговля");
     }
+    // Обустройство (PLAN 4.198): взято ступеней и какая строится
+    const all = upgradeNodes(b);
+    const working = b.research?.node ? all.find(x => x.id === b.research.node) : null;
+    const tree = all.length ? { done: b.upgrades.length, total: all.length, stalled: !!working && !this.#hasBuilder(b, sum),
+      working: working ? { name: working.name, done: b.research.progress, weeks: working.weeks } : null } : null;
     const target = b.constructing ? next : null;
     const cost = next?.cost ?? [];
     const canPay = cost.every(c => (c.resource === WEALTH ? this.actor.system.wealth : this.actor.system.stockMap[c.resource] ?? 0) >= c.qty);
@@ -206,7 +211,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       progress: target ? { done: b.progress, weeks: target.weeks, pct: target.weeks ? Math.round((b.progress / target.weeks) * 100) : 0 } : null,
       stalled: b.constructing && !this.#hasBuilder(b, sum),
       max: lv?.families ?? 0, workers, canMore: workers < (lv?.families ?? 0) && sum.idle > 0, canLess: workers > 0,
-      gives: gives.join(" · "),
+      gives: gives.join(" · "), tree,
       idle: !!lv?.families && !workers && lv.produce.some(r => r.per === "family" || r.minFamilies),
       upgrade: !b.constructing && next && b.level >= 1 && b.level < b.levels.length ? { cost: S.priceLabel(next.cost), weeks: next.weeks, ok: canPay } : null
     };
@@ -214,7 +219,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /** Достанется ли строящейся постройке строитель на этой неделе (по очереди списка). */
   #hasBuilder(b, sum) {
-    const queue = this.actor.system.buildings.filter(x => x.constructing);
+    const queue = this.actor.system.buildings.filter(x => x.constructing || x.research?.node);
     return queue.findIndex(x => x.id === b.id) < sum.builders;
   }
 

@@ -2,13 +2,37 @@
 // Контроль, налоги, склад, строки выработки и содержания с бросками) и его состояние в поселении (уровень, стройка,
 // семьи на работе). `settlement` — uuid поселения; пусто — образец ведущего в каталоге (свой тип сооружения).
 // Уровни — те же, что у прежнего предмета «Постройка» (data/item/building.mjs); правила недели получают постройку
-// через buildingState (settlement/rules.mjs).
+// через buildingState (settlement/rules.mjs). Прокачка (кусок Б): ветки ступеней с эффектами (config/building-upgrades.mjs),
+// купленные ступени и ступень в работе.
 
-import { int, str, html } from "../fields.mjs";
-import { BUILDING_GROUPS } from "../../config/settlement.mjs";
+import { int, num, str, html } from "../fields.mjs";
+import { BUILDING_GROUPS, PERIODS } from "../../config/settlement.mjs";
+import { BUILDING_EFFECTS } from "../../config/building-upgrades.mjs";
 import { buildingLevel } from "../item/building.mjs";
 
-const { ArrayField, BooleanField } = foundry.data.fields;
+const { ArrayField, BooleanField, SchemaField } = foundry.data.fields;
+
+/** Эффект ступени: тип из общего набора; ресурс, число; у новой строки выработки — бросок, кому, как часто. */
+export const upgradeEffect = () => new SchemaField({
+  type: str("produce", { choices: Object.keys(BUILDING_EFFECTS) }),
+  resource: str(""),
+  value: num(0),
+  formula: str("1"),
+  per: str("building", { choices: ["building", "family"] }),
+  period: str("week", { choices: Object.keys(PERIODS) })
+});
+
+/** Ступень ветки: нужный уровень постройки, предыдущая ступень, цена, недели стройки, эффекты. */
+export const upgradeNode = () => new SchemaField({
+  id: str(""),
+  name: str("Ступень"),
+  description: str(""),
+  level: int(1, { min: 0 }),
+  requires: str(""),
+  cost: new ArrayField(new SchemaField({ resource: str(""), qty: num(0, { min: 0 }) })),
+  weeks: int(1, { min: 0 }),
+  effects: new ArrayField(upgradeEffect())
+});
 
 export class BuildingActorData extends foundry.abstract.TypeDataModel {
 
@@ -26,6 +50,10 @@ export class BuildingActorData extends foundry.abstract.TypeDataModel {
       progress: int(0, { min: 0 }),
       workers: int(0, { min: 0 }),
       settlement: str(""),
+      // Прокачка: ветки, купленные ступени (id), ступень в стройке
+      branches: new ArrayField(new SchemaField({ id: str(""), name: str("Ветка"), icon: str("fa-star"), nodes: new ArrayField(upgradeNode()) })),
+      upgrades: new ArrayField(str("")),
+      research: new SchemaField({ node: str(""), progress: int(0, { min: 0 }) }),
       description: html()
     };
   }

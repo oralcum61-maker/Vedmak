@@ -172,6 +172,96 @@
     {{/if}}
   {{/if}}
 
+  {{#if (eq tab "tree")}}
+    {{!-- Обустройство (кусок Б): ветки колонками, ступени цепочкой --}}
+    <div class="bl-tree-bar">
+      <span class="sv-hint">Ступень — цена со склада поселения сразу, недели строят семьи без дела (как уровень). Ветки открыты все: со временем можно взять всё.</span>
+      {{#if gm}}<a class="sv-btn {{#if treeEdit}}on{{/if}}" data-action="treeEdit">{{#if treeEdit}}Готово{{else}}Править дерево{{/if}}</a>{{/if}}
+    </div>
+    {{#if tree.length}}
+    <div class="bl-branches">
+      {{#each tree as |br|}}
+      <section class="bl-branch">
+        <header>
+          <span class="bl-branch-icon"><i class="fa-solid {{br.icon}}"></i></span>
+          {{#if @root.treeEdit}}
+          <input type="text" name="{{br.path}}.name" value="{{br.name}}" aria-label="Название ветки">
+          <input type="text" name="{{br.path}}.icon" value="{{br.icon}}" class="bl-icon-in" data-tooltip="Значок Font Awesome: fa-hammer, fa-wheat-awn…" aria-label="Значок">
+          <a class="bl-x" data-action="treeDel" data-path="branches" data-index="{{br.index}}" data-tooltip="Убрать ветку"><i class="fa-solid fa-trash"></i></a>
+          {{else}}<b>{{br.name}}</b><small>{{br.done}} из {{br.total}}</small>{{/if}}
+        </header>
+        <ol class="bl-nodes">
+          {{#each br.nodes as |nd|}}
+          <li class="bl-node {{nd.state}}" data-node="{{nd.id}}">
+            {{#if @root.treeEdit}}
+            <div class="bl-node-edit">
+              <input type="text" name="{{nd.path}}.name" value="{{nd.name}}" class="bl-node-name-in" aria-label="Название ступени">
+              <div class="bl-node-nums">
+                <label data-tooltip="Нужный уровень постройки">ур. <input type="number" name="{{nd.path}}.level" value="{{nd.level}}" min="0" step="1"></label>
+                <label data-tooltip="Недель стройки; 0 — сразу">нед. <input type="number" name="{{nd.path}}.weeks" value="{{nd.weeks}}" min="0" step="1"></label>
+                <a class="bl-x" data-action="treeDel" data-path="system.branches.{{br.index}}.nodes" data-index="{{nd.index}}" data-tooltip="Убрать ступень"><i class="fa-solid fa-trash"></i></a>
+              </div>
+              <textarea name="{{nd.path}}.description" rows="2" placeholder="Что это">{{nd.description}}</textarea>
+              <div class="bl-node-list">
+                <span class="cap">Цена</span>
+                {{#each nd.cost}}<span class="bl-cost-row">
+                  <input type="text" name="{{path}}.resource" value="{{resource}}" list="bl-res-{{@root.actor.id}}" placeholder="Ресурс">
+                  <input type="number" name="{{path}}.qty" value="{{qty}}" min="0" step="any">
+                  <a data-action="treeDel" data-path="{{nd.path}}.cost" data-index="{{index}}" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a></span>{{/each}}
+                <a class="bl-plus" data-action="treeAdd" data-kind="cost" data-path="{{nd.path}}.cost"><i class="fa-solid fa-plus"></i> ресурс</a>
+              </div>
+              <div class="bl-node-list">
+                <span class="cap">Эффекты</span>
+                {{#each nd.effects}}
+                <div class="bl-eff-row">
+                  <select name="{{path}}.type">{{selectOptions @root.effectTypes selected=type}}</select>
+                  {{#if res}}<input type="text" name="{{path}}.resource" value="{{resource}}" list="bl-res-{{@root.actor.id}}" placeholder="{{#if row}}Ресурс{{else}}все ресурсы{{/if}}">{{/if}}
+                  {{#if row}}
+                  <input type="text" name="{{path}}.formula" value="{{formula}}" class="bl-formula" aria-label="Бросок">
+                  <select name="{{path}}.per">{{selectOptions @root.perOptions selected=per}}</select>
+                  <select name="{{path}}.period">{{selectOptions @root.periodOptions selected=period}}</select>
+                  {{else}}<label class="bl-eff-val"><input type="number" name="{{path}}.value" value="{{value}}" step="any">{{#if pct}}%{{/if}}</label>{{/if}}
+                  <a data-action="treeDel" data-path="{{nd.path}}.effects" data-index="{{index}}" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>
+                </div>
+                {{/each}}
+                <a class="bl-plus" data-action="treeAdd" data-kind="effect" data-path="{{nd.path}}.effects"><i class="fa-solid fa-plus"></i> эффект</a>
+              </div>
+            </div>
+            {{else}}
+            <div class="bl-node-head">
+              <b>{{nd.name}}</b>
+              {{#if @root.gm}}<a class="bl-grant" data-action="grant" data-tooltip="{{#if (eq nd.state "bought")}}Забрать ступень{{else}}Выдать даром{{/if}}"><i class="fa-solid {{#if (eq nd.state "bought")}}fa-rotate-left{{else}}fa-gift{{/if}}"></i></a>{{/if}}
+            </div>
+            {{#if nd.description}}<p class="bl-node-desc">{{nd.description}}</p>{{/if}}
+            <ul class="bl-effects">{{#each nd.effects}}<li>{{label}}</li>{{else}}<li class="none">без эффекта</li>{{/each}}</ul>
+            <div class="bl-node-foot">
+              {{#if (eq nd.state "bought")}}<span class="bl-done"><i class="fa-solid fa-check"></i> взята</span>
+              {{else if (eq nd.state "working")}}
+                <span class="bl-work"><span class="sv-bar"><i style="width: {{nd.progress.pct}}%"></i></span><small>{{nd.progress.done}} из {{nd.progress.weeks}} нед.</small></span>
+                {{#if @root.editable}}<a class="bl-cancel" data-action="cancelResearch" data-tooltip="Бросить (потраченное не вернётся)"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+              {{else}}
+                <span class="bl-cost">{{#each nd.cost}}<span class="bl-chip xs {{#if short}}short{{/if}}" data-tooltip="{{resource}}"><img src="{{img}}" alt=""><b>{{qty}}</b></span>{{else}}<span class="bl-none">даром</span>{{/each}}</span>
+                <small class="bl-weeks"><i class="fa-solid fa-hammer"></i> {{#if nd.weeks}}{{nd.weeks}} нед.{{else}}сразу{{/if}}</small>
+                {{#if (eq nd.state "open")}}{{#if @root.editable}}<a class="sv-btn bl-take" data-action="research">Взять</a>{{/if}}
+                {{else}}<small class="bl-why"><i class="fa-solid fa-lock"></i> {{nd.why}}</small>{{/if}}
+              {{/if}}
+            </div>
+            {{/if}}
+          </li>
+          {{/each}}
+          {{#if @root.treeEdit}}<li class="bl-node add"><a data-action="treeAdd" data-kind="node" data-path="system.branches.{{br.index}}.nodes"><i class="fa-solid fa-plus"></i> ступень</a></li>{{/if}}
+        </ol>
+      </section>
+      {{/each}}
+      {{#if treeEdit}}<section class="bl-branch add"><a data-action="treeAdd" data-kind="branch"><i class="fa-solid fa-plus"></i><span>Ветка</span></a></section>{{/if}}
+    </div>
+    {{else}}
+    <p class="sv-hint">У постройки нет веток обустройства.{{#if gm}} Нажмите «Править дерево», чтобы добавить.{{/if}}</p>
+    {{#if treeEdit}}<div class="bl-branches"><section class="bl-branch add"><a data-action="treeAdd" data-kind="branch"><i class="fa-solid fa-plus"></i><span>Ветка</span></a></section></div>{{/if}}
+    {{/if}}
+    {{#if treeEdit}}<datalist id="bl-res-{{actor.id}}">{{#each resourceNames}}<option value="{{this}}"></option>{{/each}}</datalist>{{/if}}
+  {{/if}}
+
   {{#if (eq tab "notes")}}
     <section class="sv-block sv-notes">
       {{#if editable}}
