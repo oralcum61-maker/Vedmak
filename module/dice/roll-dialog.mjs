@@ -18,35 +18,44 @@ function partText(part) {
  * @param {number|null} [cfg.dc]
  * @param {{label: string, value: number, checked?: boolean, hint?: string}[]} [cfg.optional] — слагаемые с галочкой
  * @param {string} [cfg.damage] — формула урона: окно покажет её в подвале и поле правки урона
+ * @param {string} [cfg.intro] — HTML над полями: что тратится, откуда Сложность (починка) — вместо отдельного окна
+ * @param {boolean} [cfg.editDc] — Сложность правится в окне (назначает ведущий: починка протеза без чертежа)
  * @returns {Promise<{mod: number, dc: number|null, luck: number, messageMode: string, optional: object[]}|null>}
  */
-export async function rollDialog({ title, parts, luckMax = 0, dc = null, optional = [], damage = "" }) {
+export async function rollDialog({ title, parts, luckMax = 0, dc = null, optional = [], damage = "", intro = "", editDc = false }) {
   const base = parts.reduce((s, p) => s + (Number(p.value) || 0), 0);
   const content = await renderTemplate("systems/vedmak/templates/dialog/roll.hbs", {
     head: {
-      title, base: Math.max(0, base),
+      title, base,
       subtitle: parts.filter(p => p.value || p.always).map(partText).join(" · "),
       note: dc === null ? "" : `Нужно больше ${dc}`
     },
     optional: optional.map((o, i) => ({ ...o, index: i })),
-    total: { base: Math.max(0, base), damage, hint: "Shift — бросить сразу, без окна" },
+    intro, editDc, dc,
+    total: { base, damage, hint: "Shift — бросить сразу, без окна" },
     ...commonFields({ luckMax, damage })
   });
 
   return foundry.applications.api.DialogV2.wait({
-    window: { title: `Проверка: ${title}`, icon: "fa-solid fa-certificate" },
+    window: { title: `Проверка: ${title}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 440 },
     content,
-    render: (event, dialog) => bindDialog(dialog),
+    render: (event, dialog) => {
+      bindDialog(dialog);
+      // Сложность правят в окне — подпись «Нужно больше N» в шапке следует за полем
+      const dcInput = editDc ? dialog.element.querySelector('[name="dc"]') : null;
+      const note = dialog.element.querySelector(".dlg-note");
+      dcInput?.addEventListener("input", () => { if (note) note.textContent = `Нужно больше ${Number(dcInput.value) || 0}`; });
+    },
     buttons: [{
-      action: "roll", label: "Бросить", icon: "fa-solid fa-certificate", default: true,
+      action: "roll", label: "Бросить", default: true,
       callback: (event, button) => ({
         ...readCommon(button.form.elements, luckMax),
-        dc,
+        dc: editDc ? (Number(button.form.elements.dc?.value) || 0) : dc,
         optional: optional.filter((o, i) => button.form.querySelector(`[name="optional.${i}"]`)?.checked)
       })
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   }).then(r => (r === "cancel" ? null : r));
 }

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Дневник</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--ts:url(/_blob/e91804a6889c91a09ad16182ed1514a8)}
+a{color:#e2ddd0}a:hover{color:#fffaf0}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.ibtn{width:30px;height:30px;padding:0;display:grid;place-items:center;color:#a29d92}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.tab{padding:0 15px;height:40px;display:flex;align-items:center;font-family:Forum,serif;font-size:17px;color:#8e897e;text-decoration:none;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.tab-on{color:#f3eee2;height:42px;margin-bottom:-1px;background-color:#17181b;background-image:var(--tl),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-bottom:0;box-shadow:inset 0 2px 0 #b8432c,inset 0 3px 0 rgba(255,240,215,.08)}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.line{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.6);box-shadow:0 1px 0 rgba(255,240,215,.045)}
+.line input{flex-grow:1;min-width:0;height:24px;padding:0 2px;font-family:Forum,serif;font-size:17px;color:#f1ece0;background:transparent;border:0;border-bottom:1px dashed transparent}
+.line input:hover{border-bottom-color:#3a3c42}
+.medal{position:relative;border-radius:50%;display:grid;place-items:center;background:#0b0c0e radial-gradient(circle at 50% 38%,rgba(255,245,225,.1),transparent 68%);border:1px solid #040405;box-shadow:inset 0 3px 10px rgba(0,0,0,.9),inset 0 0 0 4px #141518,inset 0 0 0 5px rgba(226,221,208,.16),0 1px 0 rgba(255,240,215,.08)}
+.feat{display:flex;flex-direction:column;gap:5px;padding:11px 13px 12px}
+.feat h4{margin:0;font-family:Forum,serif;font-weight:400;font-size:17px;line-height:1.15;color:#f1ece0}
+.feat p{margin:0;font-size:12px;line-height:1.45;color:#a29d92}
+.boon{font-size:11.5px;color:#e0c98f}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;font-size:11.5px;border-radius:2px;white-space:nowrap;color:#d6d0c2;background:#25262b linear-gradient(180deg,rgba(255,245,225,.08),rgba(0,0,0,.25));border:1px solid #060708}
+.chip.bad{color:#f0b3a5;background:#2a1512;border-color:#5a2019}
+.era{display:grid;grid-template-columns:62px minmax(0,1fr);gap:14px;position:relative}
+.ev{display:flex;flex-direction:column;gap:4px;padding:2px 0 14px}
+.ev h5{margin:0;font-family:Forum,serif;font-weight:400;font-size:16px;color:#f1ece0}
+.ev p{margin:0;font-size:12px;line-height:1.45;color:#a29d92}
+.ev .k{font-size:11px;color:#8e897e}
+.tally{display:inline-block;width:3px;height:22px;background:linear-gradient(180deg,#f2ece0,#8e897e);box-shadow:0 1px 0 rgba(0,0,0,.8)}
+</style>
+</helmet>
+<div class="mat" style="width: 820px; height: 1900px; box-sizing: border-box; display: flex; flex-direction: column; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums">
+  <nav class="well" style="display: flex; gap: 2px; padding: 0 18px; height: 56px; align-items: flex-end; border-width: 0 0 1px; border-radius: 0; flex-shrink: 0" aria-label="Вкладки листа">
+    <a href="#" class="tab">Параметры</a>
+    <a href="#" class="tab">Бой</a>
+    <a href="#" class="tab">Навыки</a>
+    <a href="#" class="tab">Снаряжение</a>
+    <a href="#" class="tab">Ремесло</a>
+    <a href="#" class="tab">Магия</a>
+    <a href="#" class="tab tab-on">Дневник</a>
+  </nav>
+
+  <div style="flex-grow: 1; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+
+    <section class="plate" style="padding: 12px 16px 14px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 0 24px">
+      <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin-bottom: 4px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Кто он</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <sc-for list="{{facts}}" as="f" hint-placeholder-count="5">
+          <label class="line"><span class="cap" style="width: 96px">{{f.k}}</span><input value="{{f.v}}" aria-label="{{f.k}}"></label>
+        </sc-for>
+        <div class="line" style="align-items: center; border-bottom: 0; box-shadow: none">
+          <span class="cap" style="width: 96px">Школа</span>
+          <span class="medal" style="width: 44px; height: 44px"><img src="/_blob/b1e2c8c8259170d26264cc8a89b62c60" alt="" style="width: 34px; height: 34px; object-fit: contain"></span>
+          <span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: Forum, serif; font-size: 17px; color: #f1ece0">Школа Волка</span><span style="font-size: 11px; color: #e0c98f">сильная атака без штрафа</span></span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 6px">
+        <sc-for list="{{quotes}}" as="q" hint-placeholder-count="3">
+          <div class="well" style="padding: 9px 12px 10px; display: flex; flex-direction: column; gap: 4px">
+            <span class="cap">{{q.k}}</span>
+            <span style="font-family: Forum, serif; font-size: 16px; line-height: 1.35; color: #e2ddd0">{{q.v}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Летопись</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+        <span style="font-size: 11.5px; color: #6c685f">по таблицам ведьмака, стр. 238–245</span>
+        <button type="button" class="btn" style="height: 28px; padding: 0 11px; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase">Править</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <sc-for list="{{origin}}" as="o" hint-placeholder-count="3">
+          <div class="well feat">
+            <span class="cap">{{o.k}}</span>
+            <h4>{{o.head}}</h4>
+            <p>{{o.body}}</p>
+            <span class="boon">{{o.boon}}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="well feat" style="flex-direction: row; gap: 14px; align-items: flex-start">
+        <div class="stamp" style="width: 54px; height: 54px; flex-shrink: 0"><span class="cap" style="font-size: 8px; color: #a29d92">главное</span><svg width="22" height="22" viewBox="0 0 24 24" stroke-linejoin="miter"><path d="M12 2l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7L12 16.3 6.1 20l1.7-6.7-5.3-4.4 6.9-.5z" fill="#b8432c" stroke="#050607" stroke-width="1.2"></path></svg></div>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span class="cap">Самое важное событие</span>
+          <h4>Нападение разумного чудовища</h4>
+          <p>В ходе охоты ситуация обернулась против вас. Разумные чудовища вроде кладбищенских баб и катаканов очень опасны, и добычей чуть не стали вы сами.</p>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; position: relative; padding-top: 4px">
+        <span style="position: absolute; left: 30px; top: 8px; bottom: 18px; width: 0; border-left: 1px solid #050607; box-shadow: 1px 0 0 rgba(255,240,215,.07)"></span>
+        <span class="cap" style="padding-left: 76px; margin-bottom: 10px">Десятилетия странствий</span>
+        <sc-for list="{{eras}}" as="e" hint-placeholder-count="5">
+          <div class="era">
+            <div class="stamp" style="width: 58px; height: 46px; z-index: 1">
+              <span class="metal" style="font-family: Forum, serif; font-size: 21px; line-height: 1">{{e.age}}</span>
+              <span class="cap" style="font-size: 7.5px; color: #a29d92">лет</span>
+            </div>
+            <div class="ev" style="opacity: {{e.op}}">
+              <span class="k">{{e.kind}}</span>
+              <h5>{{e.head}}</h5>
+              <p>{{e.body}}</p>
+              <sc-if value="{{e.hasWound}}" hint-placeholder-val="{{false}}">
+                <span style="display: flex; gap: 6px; align-items: center"><span class="chip bad">{{e.wound}}</span><span style="font-size: 11.5px; color: #8e897e">{{e.woundNote}}</span></span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="well" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 9px 12px">
+        <span class="cap" style="margin-right: 4px">Итоги пути</span>
+        <span class="chip bad">−1 к Скор · колено</span>
+        <span class="chip bad">−1 к зрительному Вниманию</span>
+        <span class="chip bad">долг 400 кр.</span>
+        <span class="chip">союзник: маг</span>
+        <span class="chip">враг: дворянин</span>
+        <span class="chip">тяга: гвинт</span>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px">
+      <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span class="gem"></span>
+          <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Облик и нрав</h2>
+          <div class="groove" style="flex-grow: 1"></div>
+        </div>
+        <sc-for list="{{looks}}" as="l" hint-placeholder-count="5">
+          <div style="display: flex; gap: 10px; align-items: baseline; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,.6); box-shadow: 0 1px 0 rgba(255,240,215,.045)">
+            <span class="cap" style="width: 92px">{{l.k}}</span><span style="font-size: 13px; color: #e2ddd0">{{l.v}}</span>
+          </div>
+        </sc-for>
+      </section>
+      <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span class="gem"></span>
+          <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Тяга</h2>
+          <div class="groove" style="flex-grow: 1"></div>
+          <button type="button" class="btn" style="height: 26px; padding: 0 10px; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase">+ Добавить</button>
+        </div>
+        <div class="well" style="padding: 10px 12px; display: flex; flex-direction: column; gap: 9px">
+          <div style="display: flex; align-items: baseline; gap: 10px">
+            <span style="font-family: Forum, serif; font-size: 19px; color: #f1ece0">Гвинт</span>
+            <span style="font-size: 11.5px; color: #8e897e">без дозы</span>
+            <span style="flex-grow: 1"></span>
+            <span style="display: inline-flex; gap: 3px; align-items: center" title="2 дня без дозы">
+              <span class="tally"></span><span class="tally"></span>
+            </span>
+            <span style="font-family: Forum, serif; font-size: 16px; color: #e2ddd0">2 дн.</span>
+          </div>
+          <span style="font-size: 12px; color: #a29d92">Проверка: d10 меньше Воли 9 − 2 дня, то есть меньше 7</span>
+          <div style="display: flex; gap: 6px">
+            <button type="button" class="btn" style="height: 30px; padding: 0 11px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase">Проверка</button>
+            <button type="button" class="btn" style="height: 30px; padding: 0 11px; font-size: 11px">+ день</button>
+            <button type="button" class="btn" style="height: 30px; padding: 0 11px; font-size: 11px">Доза</button>
+            <span style="flex-grow: 1"></span>
+            <button type="button" class="btn ibtn" aria-label="Убрать" title="Убрать"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10h7.4l.8-10"/></svg></button>
+          </div>
+        </div>
+        <span style="font-size: 11.5px; line-height: 1.4; color: #6c685f">Доза нужна каждый день. Избавиться — три недели без доступа к объекту тяги (стр. 32).</span>
+      </section>
+    </div>
+
+    <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Ведьмак · особенности</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <sc-for list="{{traits}}" as="t" hint-placeholder-count="4">
+          <div class="well feat" style="padding: 9px 12px 10px"><h4 style="font-size: 16px">{{t.name}}</h4><p>{{t.text}}</p></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px">
+      <sc-for list="{{notes}}" as="n" hint-placeholder-count="2">
+        <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span class="gem"></span>
+            <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">{{n.title}}</h2>
+            <div class="groove" style="flex-grow: 1"></div>
+            <button type="button" class="btn ibtn" aria-label="Править" title="Править"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M13.5 3.5l3 3L7 16H4v-3z"/></svg></button>
+          </div>
+          <div class="well" style="padding: 12px 14px; font-size: 13px; line-height: 1.6; color: #c9c3b6; min-height: 120px; white-space: pre-line">{{n.text}}</div>
+        </section>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      facts: [
+        { k: 'Возраст', v: '92' }, { k: 'Пол', v: 'мужской' }, { k: 'Родина', v: 'Каэдвен' },
+        { k: 'Родной язык', v: 'всеобщий' }, { k: 'Слава', v: 'Ведьмак со шрамом' }
+      ],
+      quotes: [
+        { k: 'Внешность', v: 'Шрам через всё лицо, потёртая волчья куртка, два меча за спиной.' },
+        { k: 'Характер', v: 'Немногословен, терпелив, к людям добрее, чем они к нему.' },
+        { k: 'Ценит', v: 'Братьев из Каэр Морхена и честную плату за честную работу.' }
+      ],
+      origin: [
+        { k: 'Когда стал ведьмаком', head: 'Раннее детство', body: 'Забрали в школу в 4–6 лет. Остались воспоминания о нормальной жизни — они помогли при Испытании.', boon: 'без модификаторов' },
+        { k: 'Ведьмачья школа', head: 'Школа Волка', body: 'Каэр Морхен в Синих горах: трудное, сбалансированное обучение — бить сильно и точно.', boon: 'нет штрафов при сильной атаке' },
+        { k: 'Испытание травами', head: 'Приемлемые мутации', body: 'Испытание прошло успешно, без тяжёлых последствий — если не считать памяти об ужасной боли.', boon: 'без модификаторов' }
+      ],
+      eras: [
+        { age: 20, kind: 'Событие и рана', head: 'Долг', body: 'Из-за сломанного снаряжения и игры в гвинт задолжал заведению 1d10 × 100 крон — вышло 400.', hasWound: true, wound: 'Плохо гнётся колено', woundNote: '−1 к Скор', op: 1 },
+        { age: 30, kind: 'Союзник', head: 'Маг, встреченный в таверне', body: 'Мужчина · маг · встретились в таверне. Жив и, кажется, всё ещё должен за выпивку.', hasWound: false, op: 1 },
+        { age: 40, kind: 'Враг', head: 'Дворянин, оклеветавший его', body: 'Мужчина · дворянин · оклеветал · сила — социальное положение · вражда почти забыта.', hasWound: false, op: 1 },
+        { age: 50, kind: 'Событие и рана', head: 'Разумное чудовище сбежало', body: 'Катакан, на которого он охотился, ушёл и бродит на свободе. Возможно, однажды придёт сам.', hasWound: true, wound: 'Повреждённый глаз', woundNote: '−1 к зрительному Вниманию', op: 1 },
+        { age: 60, kind: 'Событие', head: 'Зависимость', body: 'Пришлось несладко — пристрастился к гвинту. Тяга ведётся ниже.', hasWound: false, op: 1 },
+        { age: 70, kind: 'Тихо', head: 'Ничего примечательного', body: 'Охота, дорога, зима в Каэр Морхене.', hasWound: false, op: .55 }
+      ],
+      looks: [
+        { k: 'Одежда', v: 'дорожная кожа, вытертая до блеска' }, { k: 'Причёска', v: 'короткие тёмные волосы' },
+        { k: 'Приметы', v: 'шрам через лицо, кошачьи глаза' }, { k: 'Нрав', v: 'спокойный, упрямый' }, { k: 'Ценит', v: 'братство школы' }
+      ],
+      traits: [
+        { name: 'Обострённые чувства', text: 'Не получает штрафов за слабый свет и получает +1 к Вниманию. Может выслеживать по запаху.' },
+        { name: 'Притупление эмоций', text: 'Проверки Храбрости против Запугивания не нужны, но −4 к Эмп (не ниже 1); Эмп ведьмака не выше 6.' },
+        { name: 'Стойкость мутанта', text: 'Невосприимчивость к болезням; может принимать мутагены.' },
+        { name: 'Молниеносная реакция', text: '+1 к Реа и +1 к Лвк; эти значения могут превышать 10.' }
+      ],
+      notes: [
+        { title: 'История', text: 'Сорок зим подряд возвращался в Каэр Морхен.\nВ последний раз уходил на юг, в Велен — там, говорят, катакан снова охотится по ночам.' },
+        { title: 'Заметки', text: 'Долг корчмарю в Ард Каррайге — 400 кр.\nСпросить мага про руны.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

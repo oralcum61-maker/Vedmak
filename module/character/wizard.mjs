@@ -10,29 +10,50 @@ import {
 import { levelLabel } from "../config/magic.mjs";
 import {
   buildLifepath, clearRoll, dependents, choiceSkillOptions, rollDie, lifepathCards, setDecadeRisk, writeLifepath,
-  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls
+  rollLifepathStep, rollLifepathSection, rollLifepathRest, postLifepathRolls, editLifepathNote, findEntry, VAMPIRE_RACE, LIFEPATH_KINDS
 } from "./lifepath.mjs";
 import { chooseDetailSkills, removeRaceExtras } from "./race.mjs";
-import { compareRu } from "../util.mjs";
+import { compareRu, plainText, normName, plural } from "../util.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
 const STEPS = [
-  { id: "race",       label: "Раса",            icon: "fa-solid fa-people-group" },
-  { id: "origin",     label: "Происхождение",   icon: "fa-solid fa-map-location-dot" },
-  { id: "lifepath",   label: "Жизненный путь",  icon: "fa-solid fa-dice" },
-  { id: "profession", label: "Профессия",       icon: "fa-solid fa-sitemap" },
-  { id: "stats",      label: "Параметры",       icon: "fa-solid fa-user-shield" },
-  { id: "skills",     label: "Навыки",          icon: "fa-solid fa-list-check" },
-  { id: "magic",      label: "Магия",           icon: "fa-solid fa-hand-sparkles" },
-  { id: "gear",       label: "Снаряжение",      icon: "fa-solid fa-sack" },
-  { id: "summary",    label: "Итог",            icon: "fa-solid fa-scroll" }
+  { id: "race",       label: "Раса",           eyebrow: "кем родился" },
+  { id: "origin",     label: "Происхождение",  eyebrow: "откуда родом" },
+  { id: "lifepath",   label: "Жизненный путь", eyebrow: "что было до" },
+  { id: "profession", label: "Профессия",      eyebrow: "ремесло жизни" },
+  { id: "stats",      label: "Параметры",      eyebrow: "чем силён" },
+  { id: "skills",     label: "Навыки",         eyebrow: "чему обучен" },
+  { id: "magic",      label: "Магия",          eyebrow: "что подвластно" },
+  { id: "gear",       label: "Снаряжение",     eyebrow: "что с собой" },
+  { id: "summary",    label: "Итог",           eyebrow: "перед дорогой" }
 ];
 
 const STAT_KEYS = Object.keys(STATS);
 
 /** Горные народы: родина по умолчанию — Махакам (краснолюды — корник, гномы, враны, боболаки — «Книга сказаний»). */
 const MOUNTAIN_RACES = ["dwarf", "gnome", "vran", "bobolak"];
+
+const signedNum = v => `${v > 0 ? "+" : "−"}${Math.abs(v)}`;
+
+/** Поправка расы словами — биркой у героя: «+1 Реа», «Эмп не выше 6», «броня 4». */
+function raceModLabel({ target, value }) {
+  const [g, k] = String(target).split(".");
+  if (g === "stats") return `${signedNum(value)} ${STATS[k]?.abbr ?? k}`;
+  if (g === "skills") return `${signedNum(value)} ${SKILLS[k]?.label ?? k}`;
+  if (g === "cap") return `${STATS[k]?.abbr ?? k} не выше ${value}`;
+  if (g === "floor") return `${STATS[k]?.abbr ?? k} не ниже ${value}`;
+  if (g === "armor") return `броня ${value}`;
+  if (target === "bonus.enc") return `${signedNum(value)} к весу`;
+  if (target === "melee.body") return `рукопашная: Тел ${signedNum(value)}`;
+  return "";
+}
+
+/** Стартовая магия профессии словами: «5 заклинаний», «все базовые знаки». */
+const QUOTA_WORDS = {
+  spell: ["заклинание", "заклинания", "заклинаний"], invocation: ["инвокация", "инвокации", "инвокаций"],
+  ritual: ["ритуал", "ритуала", "ритуалов"], hex: ["порча", "порчи", "порч"], sign: ["знак", "знака", "знаков"]
+};
 
 export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
@@ -44,14 +65,19 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       step: "race",
       name: actor.name, gender: d.gender ?? "", age: Number.parseInt(d.age) || 25,
       raceUuid: "", origin: "", homeland: "", homelandRoll: null, vassalRoll: null, language: "",
-      lifepath: true, rolls: {},
+      // notes — свои описания событий жизненного пути (путь броска → {was, text})
+      lifepath: true, rolls: {}, notes: {}, lifepathKind: "",
+      // Возраст 80 выставила раса «ведьмак», а не игрок: при смене расы вернём прежний (ageAuto — признак, ageBefore — прежний)
+      ageAuto: false, ageBefore: null,
       professionUuid: "", skillChoices: {},
       statMode: "points", level: "average",
       stats: Object.fromEntries(STAT_KEYS.map(k => [k, 5])),
       pool: [], assign: {},
       profSkills: {}, defining: 1, pickup: {},
       magic: [],
-      money: null, gear: []
+      money: null, gear: [],
+      // Покупки в лавке шага «Снаряжение» (PLAN 4.100): [{uuid, name, img, type, cost, qty}]
+      shop: []
     };
     this.data = null;
   }
@@ -60,8 +86,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "vedmak-character-wizard-{id}",
     classes: ["vedmak", "sheet", "vedmak-wizard"],
     tag: "div",
-    window: { title: "Мастер создания персонажа", icon: "fa-solid fa-wand-magic-sparkles", resizable: true },
-    position: { width: 900, height: 780 },
+    window: { title: "Мастер создания персонажа", resizable: true },
+    position: { width: 1180, height: 820 },
     actions: {
       step: CharacterWizard.#onStep,
       next: CharacterWizard.#onNext,
@@ -74,8 +100,13 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       lpStep: CharacterWizard.#onLifepathStep,
       lpSection: CharacterWizard.#onLifepathSection,
       lpRest: CharacterWizard.#onLifepathRest,
+      lpNote: CharacterWizard.#onLifepathNote,
       rollStats: CharacterWizard.#onRollStats,
       rollMoney: CharacterWizard.#onRollMoney,
+      setField: CharacterWizard.#onSetField,
+      shopAdd: CharacterWizard.#onShopAdd,
+      shopQty: CharacterWizard.#onShopQty,
+      fieldStep: CharacterWizard.#onFieldStep,
       apply: CharacterWizard.#onApply
     }
   };
@@ -106,7 +137,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     };
     const magic = [];
     for (const pack of game.packs.filter(p => p.documentName === "Item")) {
-      const index = await pack.getIndex({ fields: ["type", "system.kind", "system.level", "system.danger", "system.branch", "system.staCost"] });
+      const index = await pack.getIndex({ fields: ["type", "system.kind", "system.level", "system.danger", "system.branch", "system.staCost", "system.source.book"] });
       for (const e of index) if (e.type === "spell") magic.push({ ...e, uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}` });
     }
     for (const i of game.items.filter(i => i.type === "spell")) {
@@ -117,15 +148,45 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     return this.data;
   }
 
+  /** Товары лавки: всё с ценой из компендиумов снаряжения, кроме уникального; один раз на окно. */
+  #shopCache = null;
+  async #shopIndex() {
+    if (this.#shopCache) return this.#shopCache;
+    const out = [];
+    for (const pack of game.packs.filter(p => p.documentName === "Item")) {
+      const index = await pack.getIndex({ fields: ["type", "system.cost", "system.availability", "system.kind"] });
+      for (const e of index) {
+        if (!SHOP_TYPES[e.type] || !(Number(e.system?.cost) > 0) || e.system?.availability === "unique") continue;
+        if (e.type === "alchemical" && e.system?.kind === "mutagen") continue;
+        out.push({ uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}`, name: e.name, img: e.img, type: e.type,
+          cost: Number(e.system.cost), cat: SHOP_TYPES[e.type] });
+      }
+    }
+    out.sort((a, b) => compareRu(a.name, b.name));
+    this.#shopCache = out;
+    return out;
+  }
+
+  /** Капитал и покупки: бросок профессии + кроны жизненного пути, потрачено в лавке, осталось. */
+  #shopTotals(lp) {
+    const s = this.wiz;
+    const budget = (s.money?.total ?? 0) + (lp.effects?.crowns ?? 0);
+    const spent = s.shop.reduce((sum, x) => sum + x.cost * x.qty, 0);
+    return { budget, spent, left: budget - spent };
+  }
+
   get race() { return this.data?.races.find(r => r.uuid === this.wiz.raceUuid) ?? null; }
   get profession() { return this.data?.professions.find(p => p.uuid === this.wiz.professionUuid) ?? null; }
   get raceKey() { return this.race?.system.key ?? ""; }
   get isWitcher() { return this.raceKey === "witcher"; }
+  /** Высший вампир: свой жизненный путь («Высший вампир. Вторая редакция»). */
+  get isVampire() { return this.raceKey === VAMPIRE_RACE; }
 
-  /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса. */
+  /** От чего зависит жизненный путь: ведьмак ли, возраст, регион, раса и выбранный путь из книг. */
   get #lifepathOpts() {
     const s = this.wiz;
-    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey };
+    return { witcher: this.isWitcher, age: s.age, region: s.origin || "north", race: this.raceKey, kind: s.lifepathKind || "", gender: s.gender,
+      notes: s.notes };
   }
 
   /**
@@ -239,18 +300,45 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const stepIndex = STEPS.findIndex(x => x.id === s.step);
     const validation = this.#validate(lp);
 
+    // Тракт: под каждым шагом — что выбрано или что не так
+    const noteFor = id => {
+      if (id === "race" && race) return race.name;
+      if (id === "origin" && this.isWitcher) return "ведьмачья школа";
+      if (id === "origin" && HOMELANDS[s.homeland]) return HOMELANDS[s.homeland].label;
+      if (id === "lifepath") return !s.lifepath ? "без жизненного пути" : !race ? "сначала раса" : lp.next ? "брошен не до конца" : "брошен";
+      if (id === "profession" && prof) return prof.name;
+      if (id === "magic" && prof && !this.#magicGroups().length) return "у профессии нет";
+      return validation[id] ?? "готово";
+    };
+    // Путь без расы ещё не брошен — вешка не светлеет, хотя шаг и не помечен ошибкой
+    const steps = STEPS.map((x, i) => ({ ...x, n: i + 1, active: x.id === s.step, problem: validation[x.id], note: noteFor(x.id),
+      done: !validation[x.id] && !(x.id === "lifepath" && s.lifepath && !race) }));
+    // Следующий шаг — подписью на кнопке «Далее» (магию без стартовой магии пропускаем)
+    let nextStep = STEPS[stepIndex + 1];
+    if (nextStep?.id === "magic" && !this.#magicGroups().length) nextStep = STEPS[stepIndex + 2];
+
     Object.assign(context, {
       state: s, stepIndex, isFirst: stepIndex === 0, isLast: stepIndex === STEPS.length - 1,
-      steps: STEPS.map((x, i) => ({ ...x, active: x.id === s.step, done: !validation[x.id], problem: validation[x.id] })),
+      steps, doneCount: steps.filter(x => x.done).length, step: { ...STEPS[stepIndex], n: stepIndex + 1 }, nextLabel: nextStep?.label ?? "",
       stepId: s.step, problem: validation[s.step], [`is_${s.step}`]: true,
-      race, profession: prof, isWitcher: this.isWitcher
+      race, profession: prof, isWitcher: this.isWitcher, isVampire: this.isVampire,
+      // Дополнительные пути из книг — выбором на шаге жизненного пути (ведьмак и вампир пути не выбирают)
+      lifepathKinds: [{ key: "", label: "Обычный путь (корник)" }, ...Object.entries(LIFEPATH_KINDS).map(([key, k]) => ({ key, label: k.label }))],
+      hero: this.#hero(lp, stepIndex)
     });
 
     if (s.step === "race") {
-      context.races = this.data.races.map(r => ({
-        uuid: r.uuid, name: r.name, img: r.img, selected: r.uuid === s.raceUuid,
-        description: r.system.description, traits: r.system.traits
-      }));
+      // Чем раса ограничивает выбор профессии — строкой под карточкой
+      const others = this.data.professions.filter(p => p.system.key !== "witcher");
+      context.races = this.data.races.map(r => {
+        const key = r.system.key;
+        const barred = others.filter(p => p.system.allowedRaces.length && !p.system.allowedRaces.includes(key)).map(p => p.name.toLowerCase());
+        const limits = key === "witcher" ? "только профессия «Ведьмак»" : barred.length ? `не может быть: ${barred.join(", ")}` : "любая профессия";
+        return {
+          uuid: r.uuid, name: r.name, img: r.img, selected: r.uuid === s.raceUuid,
+          blurb: plainText(r.system.description), traits: r.system.traits, limits, limitBad: key === "witcher" || !!barred.length
+        };
+      });
     }
 
     if (s.step === "origin") {
@@ -269,7 +357,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     if (s.step === "lifepath") {
-      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep", sectionAction: "lpSection" });
+      context.lifepathCards = lifepathCards(lp.sections, { editable: true, action: "reroll", nextAction: "lpStep", sectionAction: "lpSection", noteAction: "lpNote" });
       context.lifepathNext = lp.next;
       context.lifeChoices = (lp.effects?.skillChoices ?? []).map(c => ({
         ...c, options: choiceSkillOptions(c).map(o => ({ ...o, selected: s.rolls[c.path] === o.value }))
@@ -279,19 +367,32 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
     if (s.step === "profession") {
       context.professions = this.data.professions.map(p => {
-        const allowed = !p.system.allowedRaces.length || !this.raceKey || p.system.allowedRaces.includes(this.raceKey);
+        // Ведьмаку — только профессия «Ведьмак» (PLAN 4.79): запрет в обе стороны, как при переносе на лист
+        const allowed = (!p.system.allowedRaces.length || !this.raceKey || p.system.allowedRaces.includes(this.raceKey))
+          && (this.raceKey !== "witcher" || p.system.key === "witcher");
         return { uuid: p.uuid, name: p.name, img: p.img, selected: p.uuid === s.professionUuid, allowed,
-          vigor: p.system.vigor, defining: p.system.definingSkill.name };
+          vigor: p.system.vigor, vigorSegs: Array.from({ length: Math.min(p.system.vigor, 8) }, () => ({})),
+          defining: p.system.definingSkill.name, money: `${p.system.startingMoney} × 2d6`,
+          lock: allowed ? "" : this.raceKey === "witcher" && p.system.key !== "witcher" ? "ведьмаку — только «Ведьмак»"
+            : p.system.allowedRaces.length === 1 ? "только ведьмаку" : "недоступно расе" };
       });
       if (prof) {
+        const q = prof.system.magicQuota ?? {};
         context.profInfo = {
           description: prof.system.description,
           defining: prof.system.definingSkill,
           definingStat: STATS[prof.system.definingSkill.stat]?.label,
+          definingAbbr: STATS[prof.system.definingSkill.stat]?.abbr,
           skills: prof.system.skills.map(k => SKILLS[k]?.label ?? k).join(", "),
+          skillList: prof.system.skills.map(k => SKILLS[k]?.label ?? k),
           money: prof.system.startingMoney,
           magic: prof.system.magicAbilities,
-          branches: prof.system.branches.map(b => ({ name: b.name, abilities: b.abilities.map(a => a.name).join(" → ") })),
+          quota: [
+            ...(q.allBasicSigns ? [{ n: "все", label: "базовые знаки" }] : []),
+            ...Object.entries(QUOTA_WORDS).filter(([k]) => q[k] > 0).map(([k, w]) => ({ n: q[k], label: plural(q[k], ...w) }))
+          ],
+          branches: prof.system.branches.map(b => ({ name: b.name, abilities: b.abilities.map(a => a.name).join(" → "),
+            list: b.abilities.map(a => a.name) })),
           choices: prof.system.skillChoices.map((c, i) => ({
             label: c.label, count: c.count, index: i,
             options: c.options.filter(k => k !== this.nativeLanguageKey).map(k => ({
@@ -309,20 +410,21 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const final = this.#finalStats(lp);
       const budget = STAT_POINT_BUY[s.level]?.points ?? 60;
       const spent = STAT_KEYS.reduce((sum, k) => sum + (s.stats[k] || 0), 0);
-      context.levels = Object.entries(STAT_POINT_BUY).map(([k, v]) => ({ key: k, label: `${v.label} (${v.points})`, selected: k === s.level }));
-      context.statRows = STAT_KEYS.map(k => ({
-        key: k, label: STATS[k].label, abbr: STATS[k].abbr, base: base[k], race: rm[k] ?? 0, life: life[k] ?? 0, final: final[k],
-        poolOptions: s.pool.map((v, i) => ({ index: i, value: v, selected: s.assign[k] === i,
-          used: Object.entries(s.assign).some(([sk, idx]) => idx === i && sk !== k) }))
-      }));
+      context.levels = Object.entries(STAT_POINT_BUY).map(([k, v]) => ({ key: k, label: `${v.label} (${v.points})`, short: v.label,
+        points: v.points, selected: k === s.level }));
+      context.isPoints = s.statMode === "points";
+      context.statRows = STAT_KEYS.map(k => {
+        const mods = [rm[k] ? `раса ${signedNum(rm[k])}` : "", life[k] ? `путь ${signedNum(life[k])}` : ""].filter(Boolean).join(" · ");
+        return {
+          key: k, label: STATS[k].label, abbr: STATS[k].abbr, about: STATS[k].about, base: base[k], race: rm[k] ?? 0, life: life[k] ?? 0,
+          final: s.statMode === "random" && s.assign[k] === undefined ? "·" : final[k], mods,
+          minOff: base[k] <= CREATION.statMin, maxOff: !this.#canRaise(`stats.${k}`),
+          poolOptions: s.pool.map((v, i) => ({ index: i, value: v, selected: s.assign[k] === i,
+            used: Object.entries(s.assign).some(([sk, idx]) => idx === i && sk !== k) }))
+        };
+      });
       context.budget = budget; context.spent = spent; context.remaining = budget - spent;
-      const bw = Math.floor((final.body + final.will) / 2);
-      context.preview = [
-        { label: "ПЗ", value: bw * 5 + (lp.effects?.hpBonus ?? 0) }, { label: "Вын", value: bw * 5 + (lp.effects?.staBonus ?? 0) },
-        { label: "Уст", value: Math.min(10, bw) }, { label: "Отдых", value: bw },
-        { label: "Бег", value: final.spd * 3 }, { label: "Вес", value: final.body * 10 },
-        { label: "Реш", value: Math.floor((final.will + final.int) / 2) * 5 }
-      ];
+      context.preview = this.#derivedPreview(final, lp);
       context.witcherNote = this.isWitcher ? "Ведьмак: −4 к Эмп (не ниже 1, не выше 6), +1 к Реа и Лвк (могут быть больше 10)." : "";
     }
 
@@ -335,14 +437,17 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const pickupBudget = final.int + final.ref;
       const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, SKILLS[k]?.difficult), 0);
       const finalSkills = this.#finalSkills(lp);
-      context.definingSkill = prof ? { name: prof.system.definingSkill.name, stat: STATS[prof.system.definingSkill.stat]?.abbr, value: s.defining } : null;
+      context.definingSkill = prof ? { name: prof.system.definingSkill.name, stat: STATS[prof.system.definingSkill.stat]?.abbr, value: s.defining,
+        minOff: s.defining <= 1, maxOff: !this.#canRaise("defining") } : null;
       context.profSkillRows = profKeys.map(k => ({
         key: k, label: SKILLS[k].label, stat: STATS[SKILLS[k].stat].abbr, difficult: SKILLS[k].difficult,
-        value: s.profSkills[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native
+        value: s.profSkills[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native,
+        minOff: (s.profSkills[k] ?? 0) <= 1, maxOff: !this.#canRaise(`profSkills.${k}`)
       }));
       context.pickupRows = Object.entries(SKILLS).filter(([k]) => !profKeys.includes(k)).map(([k, def]) => ({
         key: k, label: def.label, stat: STATS[def.stat].abbr, difficult: def.difficult,
-        value: s.pickup[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native
+        value: s.pickup[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native,
+        minOff: !(s.pickup[k] > 0), maxOff: !this.#canRaise(`pickup.${k}`)
       }));
       Object.assign(context, {
         profSpent, profBudget: CREATION.professionSkillPoints, profRemaining: CREATION.professionSkillPoints - profSpent,
@@ -364,6 +469,11 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       context.gearFixed = prof.system.gearFixed;
       context.lifeItems = lp.effects?.items ?? [];
       context.moneyBase = prof.system.startingMoney;
+      // Лавка: корзина — шаблоном, поиск товаров — без перерисовки (_onRender)
+      this.#shopItems = await this.#shopIndex();
+      const t = this.#shopTotals(lp);
+      context.shop = { ...t, over: t.left < 0, cats: Object.entries(SHOP_CATS).map(([key, label]) => ({ key, label })),
+        basket: s.shop.map(x => ({ ...x, sum: x.cost * x.qty })), query: this.#shopQuery, cat: this.#shopCat };
     }
 
     if (s.step === "summary") {
@@ -379,30 +489,56 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   #magicGroups() {
     const prof = this.profession;
     if (!prof) return [];
-    if (this.#magicCache?.prof === prof) return this.#magicCache.groups;
-    const groups = this.#buildMagicGroups(prof);
-    this.#magicCache = { prof, groups };
+    const extra = this.wiz.lifepath ? this.#lifepath().effects?.spells : null;
+    const key = JSON.stringify(extra ?? null);
+    if (this.#magicCache?.prof === prof && this.#magicCache.key === key) return this.#magicCache.groups;
+    const groups = this.#buildMagicGroups(prof, extra);
+    this.#magicCache = { prof, key, groups };
     return groups;
   }
 
-  #buildMagicGroups(prof) {
+  #buildMagicGroups(prof, extra = null) {
     const q = prof.system.magicQuota;
     const all = this.data.magic;
-    const novice = e => {
+    const levelOf = e => {
       const sys = e.system ?? {};
-      if (sys.kind === "hex") return (HEX_DANGER_LEVEL[String(sys.danger ?? "").toLowerCase()] ?? sys.level) === "novice";
-      return sys.level === "novice";
+      if (sys.kind === "hex") return HEX_DANGER_LEVEL[String(sys.danger ?? "").toLowerCase()] ?? sys.level;
+      return sys.level;
     };
-    const pick = kind => all.filter(e => e.system?.kind === kind && novice(e))
-      .map(e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(kind, e.system.level), cost: e.system.staCost }))
-      .sort((a, b) => compareRu(a.name, b.name));
+    const row = e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(e.system.kind, e.system.level), cost: e.system.staCost });
+    const pick = (kind, level = "novice") => all.filter(e => e.system?.kind === kind && levelOf(e) === level)
+      .map(row).sort((a, b) => compareRu(a.name, b.name));
     const groups = [];
-    if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true, items: pick("sign") });
+    // «Все базовые знаки» ведьмака — пять знаков корника, а не знаки фанатских книг того же уровня
+    if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true,
+      items: pick("sign").filter(i => all.find(e => e.uuid === i.uuid)?.system?.source?.book === "Корник") });
     const labels = { spell: "Заклинания новичка", invocation: "Инвокации новичка", ritual: "Ритуалы новичка", hex: "Порча низкой опасности", sign: "Знаки" };
     for (const kind of ["spell", "invocation", "ritual", "hex", "sign"]) {
       if (q[kind] > 0) groups.push({ kind, label: labels[kind], count: q[kind], auto: false, items: pick(kind) });
     }
+    // Путь мага «Тома Хаоса»: заклинания сверх квоты (lifepath.mjs, effects.spells)
+    if (extra) {
+      if (extra.novice) {
+        const g = groups.find(x => x.kind === "spell");
+        if (g) { g.count += extra.novice; g.label = `${g.label} (+${extra.novice} из жизненного пути)`; }
+        else groups.push({ kind: "spell", label: "Заклинания новичка (жизненный путь)", count: extra.novice, auto: false, items: pick("spell") });
+      }
+      if (extra.journeyman) groups.push({ kind: "spell", key: "lpJourneyman", label: "Заклинание подмастерья (жизненный путь)",
+        count: extra.journeyman, auto: false, items: pick("spell", "journeyman") });
+      const named = extra.named.map(n => all.find(e => e.name === n && e.system?.kind)).filter(Boolean).map(row);
+      if (named.length) groups.push({ kind: "lifepath", label: "Из жизненного пути", count: 0, auto: true, items: named });
+      for (const c of extra.choice) {
+        const items = c.names.map(n => all.find(e => e.name === n && e.system?.kind)).filter(Boolean).map(row);
+        if (items.length) groups.push({ kind: "lifepath", label: c.label, count: Math.min(c.count, items.length), auto: false, items });
+      }
+    }
     return groups;
+  }
+
+  /** Выбранная магия без повторов: заклинание из пути может стоять и в группе профессии. */
+  #chosenMagic() {
+    const list = this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || this.wiz.magic.includes(i.uuid)));
+    return [...new Map(list.map(i => [i.uuid, i])).values()];
   }
 
   /** Что не так на каждом шаге (пусто — всё в порядке). */
@@ -416,6 +552,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     else {
       const allowed = prof.system.allowedRaces;
       if (race && allowed.length && !allowed.includes(race.system.key)) out.profession = `${prof.name} недоступен для расы «${race.name}».`;
+      else if (race?.system.key === "witcher" && prof.system.key !== "witcher") out.profession = "Ведьмаку доступна только профессия «Ведьмак».";
       prof.system.skillChoices.forEach((c, i) => {
         if ((s.skillChoices[i] ?? []).length !== c.count) out.profession ??= `${c.label}: выбрано ${(s.skillChoices[i] ?? []).length} из ${c.count}.`;
       });
@@ -425,16 +562,23 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const budget = STAT_POINT_BUY[s.level]?.points ?? 60;
       if (spent !== budget) out.stats = `Распределено ${spent} очков из ${budget}.`;
       if (STAT_KEYS.some(k => s.stats[k] < CREATION.statMin || s.stats[k] > CREATION.statCap)) out.stats = "Параметр — от 1 до 10.";
-    } else {
-      if (s.pool.length !== 9) out.stats = "Бросьте кости параметров.";
-      else if (STAT_KEYS.some(k => s.assign[k] === undefined)) out.stats = "Распределите все результаты бросков.";
-      else if (new Set(Object.values(s.assign)).size !== 9) out.stats = "Каждый результат можно использовать один раз.";
-    }
+    } else if (s.pool.length !== 9) out.stats = "Бросьте кости параметров.";
+    else if (STAT_KEYS.some(k => s.assign[k] === undefined)) out.stats = "Распределите все результаты бросков.";
+    else if (new Set(Object.values(s.assign)).size !== 9) out.stats = "Каждый результат можно использовать один раз.";
     if (prof) {
       const keys = this.#professionSkillKeys();
       const spent = keys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0) + (s.defining || 0);
+      // Профессия без списка навыков (из модуля, где книги нет — «Крестьянин», «Аристократ»): все очки в один навык
+      // не вложить, так что проверяется только определяющий; остальное ведущий доберёт по книге
+      const listed = prof.system.skills.length || prof.system.skillChoices.length;
+      // Навыков так мало, что бюджет не вместить даже на максимуме («Тайный агент»: остальное даёт его «легенда»
+      // по книге) — как без списка: не больше бюджета, остальное ведущий доберёт по книге
+      const cap = CREATION.skillCapCreation ?? 6;
+      const reachable = keys.reduce((sum, k) => sum + creationSkillCost(cap, SKILLS[k]?.difficult), 0) + cap;
+      const exact = listed && reachable >= CREATION.professionSkillPoints;
       if (keys.some(k => (s.profSkills[k] ?? 0) < 1) || s.defining < 1) out.skills = "В каждый навык профессии — хотя бы 1 очко.";
-      else if (spent !== CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
+      else if (exact && spent !== CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
+      else if (!exact && spent > CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
       const final = this.#finalStats(lp);
       const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, SKILLS[k]?.difficult), 0);
       if (!out.skills && pickupSpent > final.int + final.ref) out.skills = `Освоенные навыки: потрачено ${pickupSpent} из ${final.int + final.ref}.`;
@@ -444,6 +588,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         if (n !== g.count) { out.magic = `${g.label}: выбрано ${n} из ${g.count}.`; break; }
       }
       if (s.money === null) out.gear = "Бросьте начальный капитал.";
+      else if (this.#shopTotals(lp).left < 0) out.gear = `Покупки дороже капитала на ${-this.#shopTotals(lp).left} крон.`;
       else if (s.gear.length !== prof.system.gearChoice.count && prof.system.gearChoice.options.length) {
         out.gear = `Снаряжение: выбрано ${s.gear.length} из ${prof.system.gearChoice.count}.`;
       }
@@ -472,10 +617,40 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const [k, v] of Object.entries(fx.skills)) lines.push(`+${v} к навыку «${SKILLS[k].label}»`);
     for (const [k, v] of Object.entries(fx.skillMods)) lines.push(`${v} к навыку «${SKILLS[k].label}»`);
     if (fx.school) lines.push(witcherSchools()[fx.school]?.label ?? fx.school);
+    if (fx.vampireRole) lines.push(`роль: ${this.race?.system.roles?.find(r => r.key === fx.vampireRole)?.name ?? fx.vampireRole}`);
     if (fx.addictions.length) lines.push(`зависимость (${fx.addictions.length})`);
     for (const i of fx.items) lines.push(`предмет: ${i}`);
     for (const n of fx.notes) lines.push(n);
     return lines;
+  }
+
+  /** Производные по итоговым параметрам: ПЗ, Вын, Уст, Отдых, Бег, Вес, Реш. */
+  #derivedPreview(final, lp) {
+    const bw = Math.floor((final.body + final.will) / 2);
+    return [
+      { label: "ПЗ", value: bw * 5 + (lp.effects?.hpBonus ?? 0) }, { label: "Вын", value: bw * 5 + (lp.effects?.staBonus ?? 0) },
+      { label: "Уст", value: Math.min(10, bw) }, { label: "Отдых", value: bw },
+      { label: "Бег", value: final.spd * 3 }, { label: "Вес", value: final.body * 10 },
+      { label: "Реш", value: Math.floor((final.will + final.int) / 2) * 5 }
+    ];
+  }
+
+  /** Герой справа от шагов: арт профессии или расы, имя, кто он, девять параметров клеймами, поправки расы. */
+  #hero(lp, stepIndex) {
+    const s = this.wiz;
+    const race = this.race, prof = this.profession;
+    const final = this.#finalStats(lp);
+    const unset = k => s.statMode === "random" && s.assign[k] === undefined;
+    const statsStep = STEPS.findIndex(x => x.id === "stats");
+    return {
+      art: prof?.img || race?.img || "",
+      name: s.name || "Без имени",
+      line: race ? `${race.name} · ${prof?.name ?? "профессия не выбрана"}` : "раса не выбрана",
+      sub: [s.gender, s.age ? `${s.age} ${plural(s.age, "год", "года", "лет")}` : ""].filter(Boolean).join(" · "),
+      stats: STAT_KEYS.map(k => ({ k: STATS[k].abbr, title: STATS[k].label, v: unset(k) ? "·" : final[k], dim: unset(k) || stepIndex < statsStep })),
+      note: stepIndex < statsStep ? "Параметры — на пятом шаге; поправки расы уже учтены." : "",
+      mods: (race?.system.mods ?? []).map(raceModLabel).filter(Boolean)
+    };
   }
 
   #summary(lp) {
@@ -483,8 +658,19 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const prof = this.profession;
     const final = this.#finalStats(lp);
     const skills = this.#finalSkills(lp);
-    const money = (s.money?.total ?? 0) + (lp.effects?.crowns ?? 0);
+    const money = this.#shopTotals(lp).left;
+    const magicChosen = this.#chosenMagic();
     return {
+      art: prof?.img || this.race?.img || "",
+      line: [this.race?.name, prof?.name, s.gender, s.age ? `${s.age} ${plural(s.age, "год", "года", "лет")}` : "",
+        HOMELANDS[s.homeland]?.label].filter(Boolean).join(" · "),
+      derived: this.#derivedPreview(final, lp),
+      skillList: Object.entries(skills).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1] || compareRu(SKILLS[a[0]].label, SKILLS[b[0]].label))
+        .map(([k, v]) => ({ n: SKILLS[k].label, v })),
+      magicList: magicChosen.map(i => ({ n: i.name, img: i.img })),
+      gearList: [...(prof?.system.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? []), ...s.shop.map(x => x.qty > 1 ? `${x.name} ×${x.qty}` : x.name)],
+      definingName: prof?.system.definingSkill.name ?? "", definingValue: prof ? s.defining + (lp.effects?.definingBonus ?? 0) : 0,
+      moneyRoll: s.money ? `${prof?.system.startingMoney ?? 0} × ${s.money.sum}` : "",
       name: s.name, race: this.race?.name, profession: prof?.name, age: s.age, gender: s.gender,
       homeland: HOMELANDS[s.homeland]?.label ?? "—",
       stats: STAT_KEYS.map(k => ({ abbr: STATS[k].abbr, value: final[k] })),
@@ -492,7 +678,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       defining: prof ? `${prof.system.definingSkill.name} ${s.defining + (lp.effects?.definingBonus ?? 0)}` : "",
       money,
       gear: [...(prof?.system.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? [])].join(", "),
-      magic: this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || s.magic.includes(i.uuid)).map(i => i.name)).join(", "),
+      magic: this.#chosenMagic().map(i => i.name).join(", "),
       effects: this.#effectsSummary(lp.effects)
     };
   }
@@ -502,6 +688,19 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     const s = this.wiz;
+    // Лавка: поиск и разделы фильтруют товары без перерисовки окна (фокус остаётся в поле)
+    const shopSearch = this.element.querySelector("[data-shop-search]");
+    if (shopSearch) {
+      shopSearch.addEventListener("input", () => { this.#shopQuery = shopSearch.value; this.#renderShopResults(); });
+      for (const el of this.element.querySelectorAll("[data-shop-cat]")) {
+        el.addEventListener("click", () => {
+          this.#shopCat = this.#shopCat === el.dataset.shopCat ? "" : el.dataset.shopCat;
+          for (const c of this.element.querySelectorAll("[data-shop-cat]")) c.classList.toggle("on", c.dataset.shopCat === this.#shopCat);
+          this.#renderShopResults();
+        });
+      }
+      this.#renderShopResults();
+    }
     for (const el of this.element.querySelectorAll("[data-field]")) {
       el.addEventListener("change", event => {
         const field = el.dataset.field;
@@ -517,9 +716,10 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         this.render();
       });
     }
-    // Своё значение броска из списка
+    // Своё значение броска из списка — и следующего, не бросая
     for (const el of this.element.querySelectorAll("select[data-roll-path]")) {
       el.addEventListener("change", () => {
+        if (el.value === "") return;
         const path = el.dataset.rollPath;
         const mod = Number(el.dataset.mod) || 0;
         this.#clearDependents(path);
@@ -560,15 +760,38 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       s.rolls[el.dataset.path] = value;
     } else if (field === "origin") {
       s.origin = value;
-      if (HOMELANDS[s.homeland]?.region !== value) s.homeland = "";
+      if (HOMELANDS[s.homeland]?.region !== value) { s.homeland = ""; s.language = ""; }
+      this.#pruneChoices();
     } else if (field === "homeland") {
       s.homeland = value;
       s.language = "";
+      this.#pruneChoices();
     } else if (field === "age") {
       s.age = clamp(value, 0, 1000);
+      // Возраст вписал игрок — расе «ведьмак» его уже не менять
+      s.ageAuto = false; s.ageBefore = null;
     } else if (field === "lifepath" || field === "statMode" || field === "level" || field === "name" || field === "gender" || field === "language") {
       s[field] = value;
+      if (field === "language") this.#pruneChoices();
+    } else if (field === "lifepathKind") {
+      // Путь из книги: броски прежнего пути не подходят — начинаем заново
+      if (s.lifepathKind !== value) { s.lifepathKind = value; s.rolls = {}; s.notes = {}; }
     }
+  }
+
+  /**
+   * Выбор навыков профессии, которых уже нет среди предлагаемых: родной язык (его в списке нет, он и так на 8) после
+   * смены расы, родины или языка. Лишний выбор уносит свои очки через `#pruneSkills`.
+   */
+  #pruneChoices() {
+    const s = this.wiz;
+    const native = this.nativeLanguageKey;
+    const prof = this.profession;
+    for (const [idx, list] of Object.entries(s.skillChoices)) {
+      const offered = prof?.system.skillChoices[idx]?.options;
+      s.skillChoices[idx] = list.filter(k => k !== native && (!offered || offered.includes(k)));
+    }
+    this.#pruneSkills();
   }
 
   /**
@@ -632,10 +855,11 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (s.raceUuid === target.dataset.uuid) return;
     s.raceUuid = target.dataset.uuid;
     s.rolls = {};
+    s.notes = {};
     const key = this.race?.system.key;
     if (key === "witcher") {
       s.origin = ""; s.homeland = ""; s.language = "langCommon";
-      if (s.age < 50) s.age = 80;
+      if (s.age < 50) { s.ageBefore = s.age; s.age = 80; s.ageAuto = true; }
       // Профессия ведьмака — так же, как выбором на шаге «Профессия»: капитал, очки и снаряжение прежней не остаются
       const witcher = this.data.professions.find(p => p.system.key === "witcher");
       if (witcher) this.#setProfession(witcher.uuid);
@@ -645,7 +869,12 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       else if (s.origin === "elder") { s.origin = ""; s.homeland = ""; }
       s.language = "";
       if (this.profession?.system.key === "witcher") this.#setProfession("");
+      // Возраст 80 поставила раса «ведьмак»: при уходе от неё возвращаем прежний, если игрок не вписал свой
+      if (s.ageAuto && s.ageBefore !== null) s.age = s.ageBefore;
+      s.ageAuto = false; s.ageBefore = null;
     }
+    // Родной язык и родина сменились: выбор навыка, которого теперь нет в списке, не должен остаться и считаться
+    this.#pruneChoices();
     this.render();
   }
 
@@ -674,6 +903,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       ui.notifications.info(`Регион: d10 = ${regionRoll} → ${ORIGIN_REGIONS[s.origin].label}; родина: ${HOMELANDS[s.homeland].label}.`);
     }
     s.language = "";
+    this.#pruneChoices();
     this.render();
   }
 
@@ -714,6 +944,12 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
+  /** Своё описание события: окно с текстом книги и полем для своего. */
+  static async #onLifepathNote(event, target) {
+    const entry = findEntry(this.#lifepath(), target.dataset.path);
+    if (entry && await editLifepathNote(entry, this.wiz.notes)) this.render();
+  }
+
   /** Добросить остаток пути разом — все броски одной карточкой в чат. */
   static async #onLifepathRest() {
     const res = rollLifepathRest(this.wiz.rolls, this.#lifepathOpts);
@@ -732,6 +968,95 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     pool.sort((a, b) => b - a);
     this.wiz.pool = pool;
     this.wiz.assign = {};
+    this.render();
+  }
+
+  /** Переключатель кнопками (способ параметров, уровень игры): поле и значение — в data-field / data-value. */
+  static #onSetField(event, target) {
+    this.#setField(target.dataset.field, target.dataset.value, target);
+    this.render();
+  }
+
+  /** Ступенька «− / +» у числа: параметр, навык профессии, освоенный или определяющий навык. */
+  /**
+   * Можно ли поднять поле на 1: предел значения и оставшиеся очки (параметры по очкам, навыки профессии
+   * с определяющим, освоенные — Инт + Реа). Сложный навык стоит 2 очка за уровень.
+   */
+  #canRaise(field) {
+    const s = this.wiz;
+    const [group, key] = field.split(".");
+    const cap = CREATION.skillCapCreation;
+    const next = (k, v) => creationSkillCost(v + 1, SKILLS[k]?.difficult) - creationSkillCost(v, SKILLS[k]?.difficult);
+    if (group === "stats") {
+      if ((s.stats[key] ?? 0) >= CREATION.statCap) return false;
+      if (s.statMode !== "points") return true;
+      const spent = STAT_KEYS.reduce((sum, k) => sum + (s.stats[k] || 0), 0);
+      return spent < (STAT_POINT_BUY[s.level]?.points ?? 60);
+    }
+    if (group === "profSkills" || field === "defining") {
+      const v = field === "defining" ? s.defining : s.profSkills[key] ?? 0;
+      if (v >= cap) return false;
+      const spent = this.#professionSkillKeys().reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0)
+        + (s.defining || 0);
+      return spent + (field === "defining" ? 1 : next(key, v)) <= CREATION.professionSkillPoints;
+    }
+    if (group === "pickup") {
+      const v = s.pickup[key] ?? 0;
+      if (v >= cap) return false;
+      const final = this.#finalStats(this.#lifepath());
+      const spent = Object.entries(s.pickup).reduce((sum, [k, x]) => sum + creationSkillCost(x || 0, SKILLS[k]?.difficult), 0);
+      return spent + next(key, v) <= final.int + final.ref;
+    }
+    return true;
+  }
+
+  static #onFieldStep(event, target) {
+    const s = this.wiz;
+    const field = target.dataset.field;
+    // Очки кончились — «+» не срабатывает (кнопка уже погашена, но двойной клик успевает до перерисовки)
+    if (Number(target.dataset.step) > 0 && !this.#canRaise(field)) return;
+    const [group, key] = field.split(".");
+    const current = field === "defining" ? s.defining
+      : group === "stats" ? s.stats[key] : group === "profSkills" ? s.profSkills[key] ?? 0 : group === "pickup" ? s.pickup[key] ?? 0 : 0;
+    this.#setField(field, current + Number(target.dataset.step), target);
+    this.render();
+  }
+
+  /** Лавка: поиск и раздел помнятся окном, товары — списком без перерисовки. */
+  #shopItems = [];
+  #shopQuery = "";
+  #shopCat = "";
+
+  #renderShopResults() {
+    const box = this.element.querySelector("[data-shop-results]");
+    if (!box) return;
+    const q = this.#shopQuery.trim().toLowerCase().replace(/ё/g, "е");
+    const left = this.#shopTotals(this.#lifepath()).left;
+    const hits = this.#shopItems.filter(x => (!this.#shopCat || x.cat === this.#shopCat)
+      && (!q || x.name.toLowerCase().replace(/ё/g, "е").includes(q))).slice(0, 60);
+    const esc = v => foundry.utils.escapeHTML(String(v ?? ""));
+    box.innerHTML = hits.length ? hits.map(x => `<button type="button" class="shop-item${x.cost > left ? " dear" : ""}" data-action="shopAdd" data-uuid="${esc(x.uuid)}"
+        data-tooltip="${esc(x.name)} — ${x.cost} крон${x.cost > left ? " (не хватает крон)" : ""}">
+        <img src="${esc(x.img)}" alt=""><span class="nm">${esc(x.name)}</span><b>${x.cost}</b></button>`).join("")
+      : `<p class="hint">${q ? "Ничего не нашлось." : "Начните вводить название."}</p>`;
+  }
+
+  static #onShopAdd(event, target) {
+    const item = this.#shopItems.find(x => x.uuid === target.dataset.uuid);
+    if (!item) return;
+    const s = this.wiz;
+    const have = s.shop.find(x => x.uuid === item.uuid);
+    if (have) have.qty += 1;
+    else s.shop.push({ uuid: item.uuid, name: item.name, img: item.img, type: item.type, cost: item.cost, qty: 1 });
+    this.render();
+  }
+
+  static #onShopQty(event, target) {
+    const s = this.wiz;
+    const have = s.shop.find(x => x.uuid === target.dataset.uuid);
+    if (!have) return;
+    have.qty += Number(target.dataset.step) || 0;
+    if (have.qty <= 0) s.shop = s.shop.filter(x => x !== have);
     this.render();
   }
 
@@ -795,7 +1120,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     return {
       state: this.wiz, race: this.race, profession: this.profession, lifepath: lp,
       stats: this.#baseStats(), statParts: this.#statParts(lp), skills: this.#finalSkills(lp),
-      profKeys: this.#professionSkillKeys(), magic: this.#magicGroups().flatMap(g => g.items.filter(i => g.auto || this.wiz.magic.includes(i.uuid))),
+      profKeys: this.#professionSkillKeys(), magic: this.#chosenMagic(),
       native: this.nativeLanguageKey
     };
   }
@@ -814,29 +1139,80 @@ const GEAR_ALIASES = {
   "дневник": [["Дневник/гроссбух", 1]],
   "свечи": [["Свечи (х5)", q => Math.ceil(q / 5)]],
   "небольшой сундук": [["Деревянный сундук", 1]],
+  "фляга с выпивкой": [["Бурдюк", 1]],
+  "одеяло": [["Походная постель", 1]],
   "арбалет и арбалетные болты": [["Арбалет", 1], ["Стандартные боеприпасы", null]],
   "мул и повозка с товарами на 1000 крон": [["Мул", 1], ["Повозка", 1]],
   "формула эликсира": [["Формула эликсира (на выбор)", null]],
   "формула масла": [["Формула масла (на выбор)", null]],
-  "формула отвара": [["Формула отвара (на выбор)", null]]
+  "формула отвара": [["Формула отвара (на выбор)", null]],
+  // Профессии дополнений и фанатских книг: другое написание того же предмета или два предмета в одной строке
+  "короткий лук и стрелы": [["Короткий лук", 1], ["Стандартные боеприпасы", 10]],
+  "длинный лук и стрелы": [["Длинный лук", 1], ["Стандартные боеприпасы", 10]],
+  "арбалет и 20 болтов": [["Арбалет", 1], ["Стандартные боеприпасы", 20]],
+  "арбалет и 10 болтов": [["Арбалет", 1], ["Стандартные боеприпасы", 10]],
+  "лошадь и седло": [["Лошадь", 1], ["Седло", 1]],
+  "лошадь с седлом": [["Лошадь", 1], ["Седло", 1]],
+  "10 серебряных боеприпасов": [["Серебряный боеприпас", 10]],
+  "капюшон верденского лучника": [["Лёгкий подшлемник", 1]],
+  "капюшон вердэнского лучника": [["Лёгкий подшлемник", 1]],
+  "тонфхельм": [["Салад с бувигером", 1]],
+  "топфхельм": [["Салад с бувигером", 1]],
+  "усиленный гамбезон": [["Укреплённый гамбезон", 1]],
+  "эльфийский мессер": [["Эльфский мессер", 1]],
+  "перемётная сумка": [["Перемётная сума", null]],
+  "заплечная сумка": [["Наплечная сумка", null]],
+  "песочные часы": [["Песочные часы (час)", null]],
+  "колода гвинта": [["Колода для гвинта", null]],
+  "святой символ": [["Священный символ", null]],
+  "бурдюк с водой": [["Бурдюк", null]],
+  "факелы": [["Факел", null]],
+  "кровесвёртывающий порошок": [["Кровосвёртывающий порошок", null]],
+  // Табака отдельным предметом в таблицах нет; «Ещё одно пиво» — шутка «Крестьянина», второе пиво
+  "трубка и табак": [["Трубка", 1]],
+  "ещё одно пиво": [["Пиво", 1]],
+  "спальник": [["Походная постель", 1]],
+  "журнал": [["Дневник/гроссбух", 1]],
+  "набор алхимика": [["Инструменты алхимика", 1]],
+  "маленький сундук": [["Деревянный сундук", 1]],
+  "фляжка со спиртным": [["Бурдюк", 1]],
+  "лампа": [["Фонарь", 1]],
+  // Формула «Эликсир живучести» и в компендиуме даёт «Зелье живучести» («Фургончик Родольфа»)
+  "эликсир живучести": [["Зелье живучести", null]]
 };
+
+/** Имя для сравнения: без регистра, «ё» как «е». */
+const ALIASES_NORM = Object.fromEntries(Object.entries(GEAR_ALIASES).map(([k, v]) => [normName(k), v]));
 
 export async function itemsForLabel(label) {
   const qty = Number(label.match(/[×x]\s*(\d+)\s*$/)?.[1] ?? 1);
   const name = label.replace(/\s*[×x]\s*\d+\s*$/, "").trim();
-  const alias = GEAR_ALIASES[name.toLowerCase()];
-  if (!alias) return [await itemByName(name, qty)];
+  const alias = ALIASES_NORM[normName(name)];
+  if (!alias) {
+    const found = await itemByName(name, qty, { strict: true });
+    if (found) return [found];
+    // «Эсбода (меч)» — пояснение в скобках; «Нож и точильный камень» — два предмета в одной строке
+    const bare = name.replace(/\s*\([^)]*\)\s*$/, "");
+    if (bare !== name) { const b = await itemByName(bare, qty, { strict: true }); if (b) return [b]; }
+    const pair = name.split(/\s+и\s+/);
+    if (pair.length === 2) {
+      const both = await Promise.all(pair.map(n => itemByName(n.charAt(0).toUpperCase() + n.slice(1), 1, { strict: true })));
+      if (both.every(Boolean)) return both;
+    }
+    return [await itemByName(name, qty)];
+  }
   const out = [];
   for (const [n, q] of alias) out.push(await itemByName(n, typeof q === "function" ? q(qty) : q ?? qty));
   return out;
 }
 
-async function itemByName(name, qty = 1) {
-  const lower = name.toLowerCase();
+/** Предмет по имени из компендиумов или мира; strict — null вместо простого предмета-заглушки. */
+async function itemByName(name, qty = 1, { strict = false } = {}) {
+  const lower = normName(name);
   const physical = ["weapon", "armor", "gear", "alchemical", "component", "enhancement"];
   for (const pack of game.packs.filter(p => p.documentName === "Item")) {
     const index = await pack.getIndex({ fields: ["type"] });
-    const e = index.find(i => i.name.toLowerCase() === lower && physical.includes(i.type));
+    const e = index.find(i => normName(i.name) === lower && physical.includes(i.type));
     if (e) {
       const data = (await pack.getDocument(e._id)).toObject();
       delete data._id;
@@ -845,13 +1221,14 @@ async function itemByName(name, qty = 1) {
       return data;
     }
   }
-  const world = game.items.find(i => i.name.toLowerCase() === lower && physical.includes(i.type));
+  const world = game.items.find(i => normName(i.name) === lower && physical.includes(i.type));
   if (world) {
     const data = world.toObject();
     delete data._id;
     if (qty > 1) data.system.quantity = qty;
     return data;
   }
+  if (strict) return null;
   return { name, type: "gear", system: { quantity: qty, category: "general" } };
 }
 
@@ -871,6 +1248,15 @@ function replaceWarning(actor) {
   lines.push("постоянные бонусы ПЗ, Вын и Энергии, поправки эффекта «Жизненный путь»");
   const oldMagic = actor.itemTypes.spell?.filter(i => i.getFlag("vedmak", "wizardMagic")) ?? [];
   if (oldMagic.length) lines.push(`стартовая магия прежней профессии: ${oldMagic.map(i => esc(i.name)).join(", ")}`);
+  // Магия без метки мастера (стартовая, добавленная до метки, или изученная позже) не удаляется: если среди неё есть
+  // стартовая магия прежней профессии, её придётся убрать самим. Одноимённая магия новой профессии получит метку.
+  if (actor.itemTypes.profession?.length) {
+    const kept = actor.itemTypes.spell?.filter(i => !i.getFlag("vedmak", "wizardMagic")) ?? [];
+    if (kept.length) {
+      const names = kept.slice(0, 12).map(i => esc(i.name)).join(", ") + (kept.length > 12 ? ` и ещё ${kept.length - 12}` : "");
+      lines.push(`магия без метки мастера останутся: ${names} (если это стартовая магия прежней профессии, уберите её сами; одноимённая магия новой профессии получит метку и уйдёт при следующем запуске мастера)`);
+    }
+  }
   return `<p>У персонажа «${esc(actor.name)}» мастер заменит:</p><ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul>`
     + "<p>Остальные предметы останутся. Стартовое снаряжение, которое у персонажа уже есть (то же название и тип),"
     + " второй раз не добавится. Продолжить?</p>";
@@ -879,8 +1265,15 @@ function replaceWarning(actor) {
 /** Биография, которую прежний мастер создания собирал из жизненного пути. */
 const GENERATED_BIO = /^<h3>(Семья|Школа и испытания)(<\/h3>| — )/;
 
+/** Лавка мастера: какие типы предметов продаются и под каким разделом. */
+const SHOP_CATS = { weapon: "Оружие", armor: "Броня", gear: "Снаряжение", alchemical: "Алхимия", component: "Компоненты", enhancement: "Усиления" };
+const SHOP_TYPES = { weapon: "weapon", armor: "armor", gear: "gear", alchemical: "alchemical", component: "component", enhancement: "enhancement" };
+
+/** Предметы, у которых есть число штук: докладываются до нужного (остальные при повторе пропускаются). */
+const STACKABLE_TYPES = ["gear", "component", "alchemical"];
+
 async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
-  const { state: s, race, profession, stats, skills, profKeys, magic, native, statParts } = wizard.applyData;
+  const { state: s, race, profession, stats, skills, profKeys, magic, native } = wizard.applyData;
   const actor = wizard.actor;
   const fx = lp.effects ?? { crowns: 0, reputation: 0, luck: 0, hpBonus: 0, staBonus: 0, vigorBonus: 0, feared: false,
     skills: {}, skillChoices: [], statMods: {}, skillMods: {}, definingBonus: 0, items: [], addictions: [], notes: [], school: "" };
@@ -896,12 +1289,17 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   if (oldEffects.length) await actor.deleteEmbeddedDocuments("ActiveEffect", oldEffects);
 
   // Жизненный путь в биографию
-  const style = lp.sections.find(x => x.title === "Личный стиль")?.entries ?? [];
-  const values = lp.sections.find(x => x.title === "Ценности")?.entries ?? [];
+  // У высшего вампира вместо стиля и ценностей — «Характер»: черта характера и что он ценит, ненавидит, как пьёт кровь
+  const vampChar = lp.sections.find(x => x.title === "Характер")?.entries ?? [];
+  const style = lp.sections.find(x => x.title === "Личный стиль")?.entries
+    ?? (vampChar.length ? [{ text: "" }, vampChar[0]] : []);
+  const values = lp.sections.find(x => x.title === "Ценности")?.entries
+    ?? vampChar.slice(1).map(e => ({ text: `${e.label.toLowerCase()}: ${e.text}` }));
   const styleText = i => style[i]?.text ?? "";
   // Жизненный путь хранится бросками и показывается карточками в «Дневнике»; биография остаётся свободным текстом.
   const lifepath = s.lifepath && lp.sections.length
-    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "" })
+    ? writeLifepath({ rolls: s.rolls, witcher: race?.system.key === "witcher", age: s.age, region: s.origin || "north", race: race?.system.key ?? "",
+      kind: s.lifepathKind || "", gender: s.gender, notes: s.notes })
     : "";
 
   const update = {
@@ -918,7 +1316,7 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
     "system.details.school": fx.school || (race?.system.key === "witcher" ? actor.system.details.school : ""),
     "system.social.feared": !!fx.feared,
     "system.social.region": "",
-    "system.money.crowns": (s.money?.total ?? 0) + fx.crowns,
+    "system.money.crowns": (s.money?.total ?? 0) + fx.crowns - s.shop.reduce((sum, x) => sum + x.cost * x.qty, 0),
     "system.reputation.value": fx.reputation,
     "system.bonus.hp": fx.hpBonus,
     "system.bonus.sta": fx.staBonus,
@@ -942,28 +1340,69 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
 
   // Раса, профессия, магия, снаряжение
   const items = [];
-  if (race) items.push(race.toObject());
+  if (race) {
+    const r = race.toObject();
+    // Роль высшего вампира выпала в жизненном пути — сразу на расу (на листе её потом не сменить)
+    if (fx.vampireRole && r.system.roles?.some(x => x.key === fx.vampireRole)) r.system.role = fx.vampireRole;
+    items.push(r);
+  }
   if (profession) {
     const p = profession.toObject();
     p.system.definingSkill.value = s.defining + fx.definingBonus;
     items.push(p);
   }
+  const flagUpdates = [];
   for (const m of magic) {
     const doc = await fromUuid(m.uuid);
-    if (!doc || actor.items.some(i => i.type === "spell" && i.name === doc.name)) continue;
+    if (!doc) continue;
+    // Заклинание с таким именем уже есть (старая стартовая магия без флага мастера): не задваиваем, но метим, чтобы
+    // следующий запуск мастера смог убрать его вместе со стартовой магией профессии
+    const same = actor.items.find(i => i.type === "spell" && i.name === doc.name);
+    if (same) {
+      if (!same.getFlag("vedmak", "wizardMagic")) flagUpdates.push({ _id: same.id, "flags.vedmak.wizardMagic": true });
+      continue;
+    }
     // Флаг — чтобы повторный мастер мог убрать стартовую магию этой профессии
     const data = doc.toObject();
     foundry.utils.setProperty(data, "flags.vedmak.wizardMagic", true);
     items.push(data);
   }
-  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает
-  const owned = new Set(actor.items.map(i => `${i.type}\u0000${i.name}`));
+  // Снаряжение, которое у персонажа уже есть (то же название и тип), повторный мастер не задваивает.
+  // Исчисляемое (снаряжение, компоненты, алхимия, боеприпасы) докладывается до нужного числа: «болты ×20» при одном
+  // болте в колчане — ещё 19; оружие, броня и усиления (по одной штуке) пропускаются.
+  const key = i => `${i.type}\u0000${i.name}`;
+  const owned = new Map();
+  for (const i of actor.items) owned.set(key(i), [...(owned.get(key(i)) ?? []), i]);
+  const topUps = new Map();
   const gearNames = [...(race?.system.grants ?? []), ...(profession?.system.gearFixed ?? []), ...s.gear, ...fx.items];
   for (const name of gearNames) {
-    for (const data of await itemsForLabel(name)) if (!owned.has(`${data.type}\u0000${data.name}`)) items.push(data);
+    for (const data of await itemsForLabel(name)) {
+      const have = owned.get(key(data));
+      if (!have) { items.push(data); continue; }
+      if (!STACKABLE_TYPES.includes(data.type)) continue;
+      const want = Number(data.system.quantity) || 1;
+      const had = have.reduce((sum, i) => sum + (Number(i.system.quantity) || 0), 0);
+      // Новое число в первой из одноимённых стопок; повтор того же названия в списке не складывается, берётся большее
+      const total = Math.max(topUps.get(have[0].id) ?? 0, want - had + (Number(have[0].system.quantity) || 0));
+      if (want > had) topUps.set(have[0].id, total);
+    }
+  }
+  // Покупки в лавке мастера: исчисляемое — стопкой, оружие и броня — по штуке
+  for (const buy of s.shop ?? []) {
+    const doc = await fromUuid(buy.uuid);
+    if (!doc) continue;
+    const data = doc.toObject();
+    if (STACKABLE_TYPES.includes(data.type)) {
+      data.system.quantity = (Number(data.system.quantity) || 1) * buy.qty;
+      items.push(data);
+    } else {
+      for (let n = 0; n < buy.qty; n++) items.push(foundry.utils.deepClone(data));
+    }
   }
   for (const data of items) delete data._id;
   await actor.createEmbeddedDocuments("Item", items);
+  const updates = [...flagUpdates, ...[...topUps].map(([_id, quantity]) => ({ _id, "system.quantity": quantity }))];
+  if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
 
   // Постоянные поправки жизненного пути — эффектом, чтобы их было видно
   const changes = [];
@@ -980,7 +1419,9 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   await actor.update({
     "system.hp.value": actor.system.hp.max,
     "system.sta.value": actor.system.sta.max,
-    "system.luck.value": actor.system.luck.max
+    "system.luck.value": actor.system.luck.max,
+    // Высший вампир начинает с половиной максимума Очков Крови (третья редакция)
+    ...(actor.system.blood?.enabled ? { "system.blood.value": Math.floor(actor.system.blood.max / 2) } : {})
   });
 
   // «Внимание к деталям» гнома: три навыка Ремесла на выбор

@@ -11,7 +11,8 @@ const startNow = () => ({ time: game.time.worldTime, combat: null, combatant: nu
 export function isMagicTimed(effect) {
   const f = effect.flags?.vedmak ?? {};
   const key = String(f.timed?.key ?? "");
-  return key === "shield" || key.startsWith("regen:") || f.statusRounds !== undefined;
+  // Истинная форма высшего вампира (character/true-form.mjs) живёт по тем же срокам
+  return key === "shield" || key === "trueForm" || key.startsWith("regen:") || f.statusRounds !== undefined;
 }
 
 /** Эффект-метка щита (Квен, «Активный щит») или поддержание щита. */
@@ -31,6 +32,15 @@ export function timeIsUp(effect) {
 export async function zeroShield(actor) {
   const shield = actor?.system.shield;
   if (shield?.value || shield?.max) await actor.update({ "system.shield.value": 0, "system.shield.max": 0 });
+}
+
+/**
+ * Обнулить щит, только если не осталось другого эффекта щита (например, поддерживаемый «Активный щит» и Квен
+ * делят одно поле `system.shield`). `removing` — id эффектов, которые снимаются прямо сейчас.
+ */
+export async function zeroShieldIfFree(actor, removing = []) {
+  if (actor?.effects.some(e => isShieldEffect(e) && !removing.includes(e.id))) return;
+  await zeroShield(actor);
 }
 
 /** Бой кончился: остаток раундов щитов, регенерации и статусов становится временем, иначе они вечны. */
@@ -79,7 +89,8 @@ export function registerTimedHooks() {
       return;
     }
     const rounds = foundry.utils.getProperty(changes, "flags.vedmak.statusRounds");
-    if (rounds > 0) statusRoundsChanged(effect, rounds).catch(err => console.warn("vedmak | срок статуса", err));
+    // Отравление от токсичности держится порогом, а не сроком (alchemy.mjs): срок статуса на него не вешаем
+    if (rounds > 0 && !effect.flags?.vedmak?.toxicPoison) statusRoundsChanged(effect, rounds).catch(err => console.warn("vedmak | срок статуса", err));
   });
   // Щит снят (срок, «прекратить», конец поддержания) — он больше не поглощает урон. Обнуляет тот, кто снял;
   // `vedmakKeepShield` — замена эффекта при новом сотворении, новый щит уже поставлен

@@ -11,11 +11,37 @@
 //            в инвентаре существ бестиария
 //   remove — {pack, name}: удалить документ и чертёж, который его делает
 //   copy   — {pack, from, name, set}: новый документ по образцу (id — из имени, как у build-packs)
+//   each   — {pack, set}: одно и то же поле всем документам пакета
+//   loot   — {pack, where(doc), row: {name, quantity, uuid}}: строка добычи существам, подходящим под where, —
+//            дописывается к их добыче, если такой строки ещё нет
+
+import { createHash } from "node:crypto";
 
 const W = "systems/vedmak/assets/fan/weapons/";
 const A = "systems/vedmak/assets/fan/armor/";
 const H = "icons/equipment/head/";
 const p = text => `<p>${text}</p>`;
+
+/** Сохранённые части «Тома Хаоса»: [имя, значок (icons/commodities/…), что это]. */
+const PRESERVED = [
+  ["Сохранённая голова", "bones/skull-canine-beige.webp", "Голова чудовища, сохранённая алхимически: мозг и железы годны для пересадки."],
+  ["Сохранённые крылья", "biological/wing-lizard-brown.webp", "Пара крыльев чудовища с костями и мышцами, сохранённая алхимически."],
+  ["Сохранённая конечность", "biological/hand-clawed-brown.webp", "Лапа, щупальце или хвост чудовища с костью и мышцами, сохранённые алхимически."]
+];
+/** Классы чудовищ с телом, с которого можно что-то срезать (люди, призраки и элементали — нет). */
+const BODILY = ["beast", "hybrid", "vampire", "cursed", "relict", "ogroid", "necrophage", "insectoid", "draconid"];
+/** Строка добычи — ссылка на компонент: id тот же, что даёт build-packs (stableId «пакет:тип:имя»). */
+function preservedRow(name) {
+  return { name, quantity: "1", uuid: `Compendium.vedmak.components.Item.${stableId(`components:component:${name}`)}` };
+}
+/** Тот же стабильный id, что у build-packs.mjs. */
+function stableId(key) {
+  const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  let n = BigInt("0x" + createHash("sha1").update(key).digest("hex"));
+  let out = "";
+  while (out.length < 16) { out += alphabet[Number(n % 62n)]; n /= 62n; }
+  return out;
+}
 
 export const OVERRIDES = [
   /* ---------------------------- Оружие (30.09) ---------------------------- */
@@ -33,6 +59,8 @@ export const OVERRIDES = [
   // Кинжал и стилет меняются картинками
   { op: "set", pack: "weapons", name: "Кинжал", set: { img: `${W}t3-knife-ritual.webp` } },
   { op: "set", pack: "weapons", name: "Стилет", set: { img: `${W}t3-knife-assassin.webp` } },
+  // Эльфский зефар (стр. 83) — лук на 350 м, а генератор записал его посохом: атака шла бы без Лвк и без дистанций
+  { op: "set", pack: "weapons", name: "Эльфский зефар", set: { "system.category": "bow", "system.skill": "archery" } },
   // Орион — метательная звезда, а не меч
   { op: "set", pack: "weapons", name: "Орион", set: { img: "icons/weapons/thrown/throwing-star-quad-steel.webp" } },
   // Ловушки и бомбы в «Оружии» были копиями алхимических из-за ошибки bs_items.py — исправлено в генераторе,
@@ -88,18 +116,126 @@ export const OVERRIDES = [
     img: `${A}c-hv-ab-lvl2-1.webp`,
     "system.description": p("Стальная кираса с наплечниками и защитой рук поверх кольчуги. Ноги остаются в стёганых штанах, поэтому полулаты заметно легче полного доспеха.")
   } },
-  { op: "set", pack: "armor", name: "Хиндарсфьяльский тяжёлый доспех", set: { img: `${A}c-hv-ab-lvl4.webp` } },
-  // Туссентские латы — сине-золотые
-  { op: "set", pack: "armor", name: "Латный доспех", set: { img: "icons/equipment/chest/breastplate-layered-steel-blue-gold.webp" } },
+  // Картинки из «Ведьмака 3», выбранные автором (09.10): инвентарный вид, по центру прозрачного квадрата
+  { op: "set", pack: "armor", name: "Хиндарсфьяльский тяжёлый доспех", set: { img: `${A}c-hindarsfjall-heavy-w3.webp` } },
+  { op: "set", pack: "armor", name: "Нильфгаардский латный доспех", set: { img: `${A}c-nilf-plate-w3.webp` } },
+  { op: "set", pack: "armor", name: "Броня реданского алебардщика", set: { img: `${A}c-redanian-halberdier-w3.webp` } },
+  { op: "set", pack: "armor", name: "Латный доспех", set: { img: `${A}c-plate-w3.webp` } },
+  { op: "set", pack: "armor", name: "Кольчуга гномьей работы", set: { img: `${A}c-dwarven-chainmail-w3.webp` } },
 
   /* ------------------------------ Броня: ноги ------------------------------ */
   { op: "rename", pack: "armor", from: "Кожаные штаны из Лирии", to: "Шинные поножи" },
-  // Латы Туссента — сине-стальные набедренники и наколенники; реданские — кожа со сталью в красном цвете Редании
-  { op: "set", pack: "armor", name: "Латные поножи", set: { img: "icons/equipment/leg/cuisses-plate-reticulated-steel-blue.webp" } },
-  { op: "set", pack: "armor", name: "Реданские поножи", set: { img: "icons/equipment/leg/pants-tasset-leather-steel-red.webp" } },
+  { op: "set", pack: "armor", name: "Латные поножи", set: { img: `${A}lg-plate-w3.webp` } },
+  { op: "set", pack: "armor", name: "Реданские поножи", set: { img: `${A}lg-redanian-w3.webp` } },
   { op: "set", pack: "armor", name: "Шинные поножи", set: {
+    img: `${A}lg-lyria-w3.webp`,
     "system.description": p("Поножи из продольных стальных полос-шин, нашитых на кожаную или стёганую основу. Прикрывают голени и бёдра, не сковывая шага.")
-  } }
+  } },
+
+  /* ------------------------- Бестиарий: Энергия НИП (03.10) ------------------------- */
+  // В исходном компендиуме BS & Tobi Энергия у магов и ведьмаков лежит в derivedStats.vigor.value, а max пуст —
+  // генератор брал max и ставил 0: знаки и заклинания шли с перегрузкой. Генератор исправлен (bs_bestiary.py),
+  // правки ниже — для уже собранного packs-src; после пересборки генератором они пропускаются как внесённые.
+  { op: "set", pack: "bestiary", name: "Адепт из Бан-Арда", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Волка", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Грифона", set: { "system.vigor": 9 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Змеи", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Кота", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Мантикоры", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Ведьмак школы Медведя", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Имлерих", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Карантир", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Мастер Пиромант", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Навигатор дикой охоты", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Волка", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Грифона", set: { "system.vigor": 9 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Змеи", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Кота", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Мантикоры", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Наемник - Ведьмак школы Медведя", set: { "system.vigor": 7 } },
+  { op: "set", pack: "bestiary", name: "Некромант", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Нитраль", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Ученица из аретузы", set: { "system.vigor": 10 } },
+  { op: "set", pack: "bestiary", name: "Чародей", set: { "system.vigor": 25 } },
+  { op: "set", pack: "bestiary", name: "Эредин Бреакк Глас", set: { "system.vigor": 25 } },
+
+  /* ------------------------- Бестиарий: токены можно вращать (03.10) ------------------------- */
+  // Генератор ставил всем существам «запретить вращение» — жетоны сверху тогда не повернуть; исправлен и он
+  { op: "each", pack: "bestiary", set: { "prototypeToken.lockRotation": false } },
+
+  /* --------------------- Магия: неполные дары «Тома Хаоса» (04.10) --------------------- */
+  // У «Укрепления» и «Зелёного ростка» при переносе из книги потерялся основной эффект (остался только
+  // побочный), а «Зелёный росток» — неточный перевод «Green Thumb». Данные генератора исправлены
+  // (D:\Witcher\_tools\data\tome_spells.json), правки ниже — для уже собранного packs-src;
+  // после полной пересборки генератором они пропускаются как внесённые.
+  { op: "rename", pack: "magic", from: "Зелёный росток", to: "Зелёный Палец" },
+  { op: "set", pack: "magic", name: "Зелёный Палец", set: { "system.description":
+    p("В качестве действия вы можете вырастить маленькое растение от семени до взрослого. Это позволяет вам выращивать травы и алхимические растения, но не более крупные растения, такие как деревья.")
+    + p("Побочный эффект: любая алхимическая смесь, которую вы создаете с веществом растительного происхождения в качестве одного из ее ингредиентов, дает вам состояние отравления, а также ожидаемый эффект при ее использовании.") } },
+  { op: "set", pack: "magic", name: "Укрепление", set: { "system.description":
+    p("В качестве действия полного раунда вы можете увеличить Надёжность или ПБ предмета, к которому можно прикоснуться, на 1. Предмет может получить выгоду от Укрепления только один раз.")
+    + p("Побочный эффект: если вы подходите ближе чем на 4 м к любому количеству двимерита, вы теряете весь порог энергии и должны сделать бросок Стойкости со штрафом -3 против таблицы эффектов димерита.") } },
+
+  /* ------------------------ Проверка на ошибки (05.10) ------------------------ */
+  // Эликсиры слоя BS & Tobi без действия: кнопка давала только карточку в чат, без питья, токсичности и эффекта
+  // (их автоматизация в config/alchemy-auto.mjs была недостижима). Источник — bs_items.py
+  { op: "set", pack: "alchemy", name: "Церебральный эликсир", set: { "system.use.action": "drink" } },
+  { op: "set", pack: "alchemy", name: "Эликсир Мец", set: { "system.use.action": "drink" } },
+  { op: "set", pack: "alchemy", name: "Зелье берсерка", set: { "system.use.action": "drink" } },
+  // Опечатки данных модуля BS & Tobi и извлечения из PDF
+  { op: "set", pack: "recipes", name: "Чертеж: Краснолюдские пробивные боеприпасы (x5)", set: { "system.dc": 18 } },
+  { op: "set", pack: "recipes", name: "Чертёж: Скеллигский шлем", set: { "system.time": "6 часов" } },
+  { op: "rename", pack: "recipes", from: "Улучшенное ествественное оружее", to: "Улучшенное естественное оружие" },
+  // «Ламия» («Лорды и земли», стр. 14): урон в модуле пуст — кровотечение 100 % срабатывало только от бонуса Тел
+  { op: "set", pack: "weapons", name: "Ламия", set: {
+    "system.damage": "3d6+1", "system.accuracy": -1, "system.damageTypes": ["slashing"],
+    "system.reliability": { value: 5, max: 5 } } },
+  // Мутагены-«цвета» модуля — добыча чудовищ (вид не назван): цвет по названию (у синего и зелёного стоял красный)
+  // и понятный текст вместо «N/A»; какой именно мутаген — решает ведущий
+  ...[["Красный мутаген", "red"], ["Синий мутаген", "blue"], ["Зеленый мутаген", "green"]].map(([name, color]) => ({
+    op: "set", pack: "alchemy", name, set: {
+      "system.mutagen.color": color, "system.mutagen.minor": "",
+      "system.effect": "Мутаген этого цвета, вид не назван: какой именно и что он даёт, решает ведущий (корник, стр. 251).",
+      "system.description": p("Мутаген из добычи чудовища. Какой именно мутаген этого цвета и что он даёт, решает ведущий.") } })),
+  // Знаки ведьмака — значками автора (07.10): заклинания вживлённых глифов показывают те же знаки
+  ...[["Аард", "aard"], ["Квен", "quen"], ["Игни", "igni"], ["Ирден", "yrden"], ["Аксий", "axii"]].map(([sign, file]) => ({
+    op: "set", pack: "magic", name: `Вживлённый глиф: ${sign}`, set: { img: `systems/vedmak/assets/fan/magic/sg-${file}.webp` } })),
+
+  /* ---------------- «Том Хаоса»: сохранённые части и слот зачарования (09.10) ---------------- */
+  // Чертежи мутаций требуют сохранённых голову, крылья и конечность — это части чудовищ, их срезают с туши
+  ...PRESERVED.map(([name, img, text]) => ({
+    op: "copy", pack: "components", from: "Кости животных", name, set: {
+      img: `icons/commodities/${img}`, "system.cost": 150, "system.weight": 2, "system.availability": "rare",
+      "system.source": { book: "Том Хаоса", page: "" }, "system.substance": "", "system.forage": { where: "", quantity: "", dc: 0 },
+      "system.description": p(`${text} Компонент чертежей мутаций «Тома Хаоса»; часть срезают с туши чудовища и сохраняют до работы.`)
+    } })),
+  // Голова и конечность — у всех телесных чудовищ (не люди, не призраки и не элементали), крылья — у летающих
+  { op: "loot", pack: "bestiary", where: m => BODILY.includes(m.system?.monsterClass), row: preservedRow("Сохранённая голова") },
+  { op: "loot", pack: "bestiary", where: m => BODILY.includes(m.system?.monsterClass), row: preservedRow("Сохранённая конечность") },
+  { op: "loot", pack: "bestiary", where: m => (m.system?.abilities ?? []).some(a => /^Пол[её]т/i.test(a.name ?? "")), row: preservedRow("Сохранённые крылья") },
+  // Медвежья форма берсерка («Новые профессии», «Том магии Альзура», стр. 35): оружие выдаётся на время формы
+  // (character/bear-form.mjs). «Сокрушающая сила» — свойство книги, в автоматике боя её нет: пометка в описании
+  { op: "copy", pack: "weapons", from: "Когти (Истинная форма)", name: "Удар когтями (Медвежья форма)", set: {
+    img: "icons/creatures/claws/claw-bear-paw-swipe-brown.webp", "system.damage": "4d6+5", "system.damageTypes": ["slashing"],
+    "system.effects": [], "system.attackSpeed": 2, "system.source": { book: "Новые профессии", page: "" },
+    "system.description": p("Берсерк в медвежьей форме: 4d6+5, Сокрушающая сила, 2 атаки за действие. «Острые когти» прибавляют половину уровня к урону и кровопускание.")
+  } },
+  { op: "copy", pack: "weapons", from: "Укус (Истинная форма)", name: "Укус (Медвежья форма)", set: {
+    img: "icons/creatures/abilities/bear-roar-bite-brown-green.webp", "system.damage": "8d6", "system.damageTypes": ["piercing"],
+    "system.effects": [{ key: "bleeding", value: "75%", source: "" }], "system.attackSpeed": 1,
+    "system.source": { book: "Новые профессии", page: "" },
+    "system.description": p("Берсерк в медвежьей форме: 8d6, Сокрушающая сила, кровопускание 75%.")
+  } },
+  // Чертёж «Слот зачарования» (стр. 115): изделие — пустая ячейка усиления для предмета (crafting/enhancements.mjs, вид «slot»)
+  { op: "copy", pack: "enhancements", from: "Руна «Чернобог»", name: "Слот зачарования", set: {
+    img: "icons/magic/symbols/rune-sigil-green-purple.webp", "system.kind": "slot", "system.cost": 1368, "system.weight": 0,
+    "system.availability": "rare", "system.source": { book: "Том Хаоса", page: "115" }, "system.weaponEffect": { key: "", value: "" },
+    "system.effect": "Добавляет оружию или броне пустую ячейку усиления — для рун и глифов. Нужны полная надёжность (у брони — полная ПБ); больше трёх ячеек у предмета не бывает.",
+    "system.description": p("Метеоритная сталь и дымная пыль, вплавленные в предмет: четыре часа работы и проверка Ремесла (СЛ 25) дают ему пустую ячейку усиления. В неё войдут только руны и глифы. У предмета должны быть полная надёжность или ПБ; больше трёх ячеек не бывает.")
+  } },
+  // «Маг огня» («Офир и Зеррикания», стр. 26–27): «Магические способности: 0» — опечатка книги (Энергия 5, ветви
+  // магические); стартовая магия как у «Мага воды» той же книги — 6 заклинаний и 2 ритуала (решение 10.10)
+  { op: "set", pack: "professions", name: "Маг огня", set: { "system.magicQuota.spell": 6, "system.magicQuota.ritual": 2 } }
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -160,6 +296,9 @@ export function applyOverrides(packs) {
         }
       }
       applied++;
+    } else if (o.op === "each") {
+      for (const doc of packs[o.pack] ?? []) for (const [key, value] of Object.entries(o.set)) setPath(doc, key, structuredClone(value));
+      applied++;
     } else if (o.op === "remove") {
       const i = docs.findIndex(d => d.name === o.name);
       if (i < 0) continue;
@@ -167,6 +306,13 @@ export function applyOverrides(packs) {
       // Чертёж, который делает удалённый предмет
       const recipes = packs.recipes ?? [];
       for (let j = recipes.length - 1; j >= 0; j--) if (recipes[j].system?.result?.name === o.name) recipes.splice(j, 1);
+      applied++;
+    } else if (o.op === "loot") {
+      for (const doc of docs) {
+        if (!o.where(doc)) continue;
+        const loot = doc.system.loot ??= [];
+        if (!loot.some(l => l.name === o.row.name)) loot.push(structuredClone(o.row));
+      }
       applied++;
     } else if (o.op === "copy") {
       if (find(o.pack, o.name)) continue;

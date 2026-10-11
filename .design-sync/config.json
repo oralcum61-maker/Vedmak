@@ -1,0 +1,9 @@
+{
+  "projectId": "cb2bf640-aef2-4216-aeca-0db444e28140",
+  "shape": "package",
+  "pkg": "vedmak-gravure",
+  "globalName": "VedmakGravure",
+  "cssEntry": "gravure.css",
+  "readmeHeader": ".design-sync/conventions.md",
+  "guidelinesGlob": "../.design-sync/guidelines/*.md"
+}

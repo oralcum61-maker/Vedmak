@@ -2,9 +2,9 @@
 
 import { defend } from "./defense.mjs";
 import { repeatAttack } from "./attack.mjs";
-import { damageFromDefense, requestApplyDamage } from "./damage.mjs";
+import { damageFromDefense, requestApplyDamage, explodeAmmo } from "./damage.mjs";
 import { rollStunSave, deathSaveDialog } from "./saves.mjs";
-import { resolveActor, asGM, doneKey } from "./common.mjs";
+import { resolveActor, asGM, doneKey, sourceOfResult } from "./common.mjs";
 import { requestSpellEffects, ritualFocus } from "../magic/effects.mjs";
 
 const ACTIONS = {
@@ -20,6 +20,9 @@ const ACTIONS = {
 
   applyDamage: message => requestApplyDamage(message),
 
+  // Взрывной боеприпас: урон всем в радиусе от цели
+  ammoExplode: message => explodeAmmo(message),
+
   applySpellEffects: message => requestSpellEffects(message),
 
   ritualFocus: message => ritualFocus(message),
@@ -29,7 +32,10 @@ const ACTIONS = {
     if (!def?.hit || !def.attack.hitStatus) return;
     const attacker = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
     if (!game.user.isGM && !attacker?.isOwner) return ui.notifications.warn("Применить эффект может атакующий или ведущий.");
-    return asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status: def.attack.hitStatus, active: true });
+    // messageId — карточка защиты: по ней ведущий проверяет, что просит атакующий, а цель — из этой карточки
+    for (const status of [def.attack.hitStatus, def.attack.hitStatus2].filter(Boolean)) {
+      await asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status, active: true, messageId: message.id });
+    }
   },
 
   async stunSave(message, button) {
@@ -42,6 +48,14 @@ const ACTIONS = {
     const actor = actorFrom(button);
     if (!actor) return;
     return deathSaveDialog(actor);
+  },
+
+  // Удар двимеритовым протезом (prosthetics.mjs): касание двимерита у цели, бросает её владелец
+  async dimeritiumTouch(message, button) {
+    const actor = actorFrom(button);
+    if (!actor) return;
+    const { touchDimeritium } = await import("../magic/dimeritium.mjs");
+    return touchDimeritium(actor);
   }
 };
 
@@ -49,6 +63,14 @@ const ACTIONS = {
 export function registerChatAction(name, fn) {
   ACTIONS[name] = fn;
 }
+
+/**
+ * Сколько действий кнопок карточек ещё идёт. Действие часто правит флаги своей карточки до конца работы
+ * (переработка ставит «переработано» до броска) — карточка перерисовывается, кнопка отцепляется, и по ней уже
+ * не понять, что действие закончилось. Обход карточек в автотестах ждёт, пока счётчик не обнулится.
+ */
+let running = 0;
+export const chatActionsRunning = () => running;
 
 function actorFrom(button) {
   const actor = resolveActor(button.dataset.actor) ?? resolveActor(button.dataset.fallback);
@@ -68,11 +90,14 @@ function markDoneButtons(message, html) {
     if (game.user.isGM) button.style.opacity = "0.5";
     else button.disabled = true;
   };
+  if (flags?.fumbleApplied) {
+    for (const button of html.querySelectorAll("[data-vedmak='applyFumble']")) done(button, "Последствия уже применены");
+  }
   if (flags?.defended) {
     for (const row of html.querySelectorAll(".target-row[data-target-token], .target-row[data-target-actor]")) {
       const id = flags.defended[doneKey(row.dataset.targetToken || row.dataset.targetActor)];
       if (!id || !game.messages.has(id)) continue;
-      for (const b of row.querySelectorAll('[data-vedmak="defend"]')) done(b, "Защита уже брошена");
+      for (const b of row.querySelectorAll('[data-vedmak="defend"], [data-vedmak="verbalDefend"]')) done(b, "Защита уже брошена");
     }
   }
   if (flags?.damaged && game.messages.has(flags.damaged)) {
@@ -81,10 +106,24 @@ function markDoneButtons(message, html) {
 }
 
 export function registerChatListeners() {
+  // Ведущий удалил карточку результата (защиту, урон, исход дуэли) — кнопка на карточке-источнике должна вернуться.
+  // Погасла она при отрисовке источника, а при удалении результата источник сам не перерисовывается
+  Hooks.on("deleteChatMessage", message => {
+    const source = sourceOfResult(message);
+    if (source) ui.chat?.updateMessage(source)?.catch?.(err => console.error("vedmak | перерисовка карточки", err));
+  });
   Hooks.on("renderChatMessageHTML", (message, html) => {
     // Сообщение с карточкой системы — отдельный класс: раньше CSS искал её селектором :has(),
-    // и браузер перепроверял его на каждое изменение в чате
-    if (html.querySelector(".vedmak-card")) html.classList.add("vedmak-message");
+    // и браузер перепроверял его на каждое изменение в чате. Прочие (текст, речь, действие, шёпот, броски ядра) —
+    // своим классом: та же рамка, что у карточек, вместо светлого пергамента ядра
+    html.classList.add(html.querySelector(".vedmak-card") ? "vedmak-message" : "vedmak-plain");
+    // Цвет автора ядро ставит рамке прямо в style — рамка остаётся стальной, цвет уходит нитью по верху шапки
+    const author = html.style.borderColor;
+    if (author) {
+      html.style.removeProperty("border-color");
+      html.style.setProperty("--vd-author", author);
+      html.classList.add("vd-authored");
+    }
     markDoneButtons(message, html);
     for (const button of html.querySelectorAll("[data-vedmak]")) {
       button.addEventListener("click", async event => {
@@ -92,12 +131,14 @@ export function registerChatListeners() {
         const action = ACTIONS[button.dataset.vedmak];
         if (!action) return;
         button.disabled = true;
+        running++;
         try {
           await action(message, button, event);
         } catch (err) {
           console.error("vedmak |", err);
           ui.notifications.error(err.message);
         } finally {
+          running--;
           button.disabled = false;
         }
       });

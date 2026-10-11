@@ -2,9 +2,9 @@
 
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, HEALING_DAYS } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
-import { renderTemplate } from "../util.mjs";
-import { postCard, rollFormula, asGM, registerGMHandler, resolveActor } from "./common.mjs";
-import { applyDamageToActor } from "./damage.mjs";
+import { renderTemplate, ringHtml } from "../util.mjs";
+import { postCard, rollFormula, asGM, registerGMHandler, resolveActor, userOwnsAny, doneKey } from "./common.mjs";
+import { applyDamageToActor, serialByActor } from "./damage.mjs";
 import { STATUS_EFFECTS } from "./statuses.mjs";
 
 const DAMAGE_STATUSES = ["burning", "poisoned", "bleeding", "frozen", "disoriented", "blind", "prone", "suffocating", "nauseated", "intoxicated", "hallucinating"];
@@ -32,12 +32,12 @@ export async function manualDamage(actors, preset = {}) {
     ...commonFields()
   });
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: "Урон без атаки", icon: "fa-solid fa-burst" },
+    window: { title: "Урон без атаки" },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "damage-dialog"],
     position: { width: 520 },
     content,
     buttons: [{
-      action: "apply", label: "Нанести", icon: "fa-solid fa-burst", default: true,
+      action: "apply", label: "Нанести", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -47,7 +47,7 @@ export async function manualDamage(actors, preset = {}) {
           statusRounds: f.statusRounds.value.trim(), messageMode: f.messageMode?.value || "public"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!cfg || cfg === "cancel" || (!cfg.formula && !cfg.status)) return null;
@@ -55,21 +55,31 @@ export async function manualDamage(actors, preset = {}) {
   // Один бросок на всех: бомба или ловушка бьёт всех в зоне одинаково
   const { roll, total } = await rollFormula(cfg.formula);
   const results = [];
+  const applies = [];
   for (const actor of actors) {
     const data = await computeManual(actor, { ...cfg, total });
     results.push(data);
-    await asGM("applyManualDamage", { uuid: actor.token?.uuid ?? actor.uuid, data });
+    applies.push({ uuid: actor.token?.uuid ?? actor.uuid, data });
   }
-  return postCard({
+  // Параметры урона — во флаг карточки: по чужой цели ведущий пересчитает урон сам по ним, а не по запросу
+  const params = { formula: cfg.formula, damageType: cfg.damageType, ignoreArmor: cfg.ignoreArmor, nonLethal: cfg.nonLethal };
+  const per = Object.fromEntries(applies.map(a => [doneKey(a.uuid), { where: a.data.where, effects: a.data.effects }]));
+  // Сначала карточка, потом применение: по карточке ведущий проверяет, что игрок вправе бить именно эти цели
+  // (бомбу бросает игрок, а цели — чужие токены). Автор карточки — настоящий отправитель, от сервера Foundry
+  const card = await postCard({
     template: "systems/vedmak/templates/chat/manual-damage.hbs",
     data: { ...cfg, total, results, statusLabel: CONFIG.statusEffects[cfg.status]?.name ?? "" },
-    actor: null, rolls: roll ? [roll] : [], messageMode: cfg.messageMode,
-    flags: { manualDamage: { total } }
+    // «Себе» у игрока спрятало бы карточку и от ведущего, а он по ней проверяет запрос: игроку — «Ведущему»
+    actor: null, rolls: roll ? [roll] : [], messageMode: !game.user.isGM && cfg.messageMode === "self" ? "gm" : cfg.messageMode,
+    flags: { manualDamage: { total, targets: applies.map(a => a.uuid), params, per } }
   });
+  if (!card) return null;
+  for (const a of applies) await asGM("applyManualDamage", { ...a, messageId: card.id });
+  return card;
 }
 
 /** Урон по одной или всем частям тела с бронёй, сопротивлениями и множителями. */
-async function computeManual(actor, { total, damageType, where, ignoreArmor, nonLethal, status, statusChance = 100, statusRounds = "" }) {
+export async function computeManual(actor, { total, damageType, where, ignoreArmor, nonLethal, status, statusChance = 100, statusRounds = "", presetEffects = null }) {
   const sys = actor.system;
   const d = sys.derived;
   const table = d.bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
@@ -83,6 +93,8 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
   const rows = [];
   const wear = [];
   let final = 0;
+  // Куда пришёлся урон — для пересчёта ведущим той же части тела (applyManualDamage)
+  const resolvedWhere = keys.length > 1 ? "all" : keys[0];
   for (const key of keys) {
     const loc = d.armor?.[key] ?? { sp: 0, resist: [] };
     const sp = ignoreArmor ? 0 : loc.sp;
@@ -97,8 +109,9 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
     if (after > 0 && loc.sp > 0 && !ignoreArmor) wear.push({ location: key, amount: 1 });
     rows.push({ label: table[key].label, sp, locMult, mult, value });
   }
-  const effects = [];
-  if (status) {
+  let effects = [];
+  if (Array.isArray(presetEffects)) effects = presetEffects;
+  else if (status) {
     const label = CONFIG.statusEffects[status]?.name ?? status;
     if (statusChance >= 100) effects.push({ success: true, status, label, rounds: statusRounds });
     else {
@@ -107,12 +120,48 @@ async function computeManual(actor, { total, damageType, where, ignoreArmor, non
         label: `${label}: ${r.total} ${r.total <= statusChance ? "≤" : ">"} ${statusChance}%` });
     }
   }
-  return { name: actor.name, rows, final, nonLethal, wear, effects, crit: null, stunSave: null };
+  return { name: actor.name, rows, final, nonLethal, wear, effects, crit: null, stunSave: null, where: resolvedWhere };
 }
 
-registerGMHandler("applyManualDamage", async ({ uuid, data }) => {
+/** Применения, которые идут прямо сейчас (по карточке и цели): второй такой же запрос не должен ударить ещё раз. */
+const applyingManual = new Set();
+
+registerGMHandler("applyManualDamage", async ({ uuid, data, messageId }, userId) => {
   const actor = resolveActor(uuid);
-  if (actor) await applyDamageToActor(actor, data);
+  if (!actor || !data || typeof data !== "object") return;
+  let key = null;
+  if (!userOwnsAny(userId, actor)) {
+    // Цифры урона из запроса для чужой цели не берём: ведущий считает их сам по карточке (ниже)
+    // Чужая цель (бомба, ловушка): только по карточке, которую создал сам отправитель, с этой целью в списке,
+    // и один раз на цель
+    const card = game.messages.get(messageId);
+    const flag = card?.flags.vedmak?.manualDamage;
+    key = `${messageId}|${uuid}`;
+    if (!flag?.targets?.includes(uuid) || card.author?.id !== userId
+      || flag.applied?.[doneKey(uuid)] || applyingManual.has(key)) {
+      return console.warn(`vedmak | отклонён урон без атаки от ${game.users.get(userId)?.name ?? userId}`);
+    }
+    // Итог броска не больше максимума формулы из карточки — иначе «бросок» вписан руками
+    const p = flag.params ?? {};
+    const max = p.formula && Roll.validate(p.formula) ? (await new Roll(p.formula).evaluate({ maximize: true })).total : 0;
+    if (!(Number(flag.total) >= 0) || Number(flag.total) > max) {
+      return console.warn(`vedmak | отклонён урон без атаки от ${game.users.get(userId)?.name ?? userId}: итог вне формулы`);
+    }
+    const per = flag.per?.[doneKey(uuid)] ?? {};
+    data = await computeManual(actor, { ...p, total: Number(flag.total), where: per.where ?? "torso", presetEffects: per.effects ?? [] });
+    applyingManual.add(key);
+    try {
+      await card.update({ [`flags.vedmak.manualDamage.applied.${doneKey(uuid)}`]: true });
+    } catch (err) {
+      applyingManual.delete(key);
+      throw err;
+    }
+  }
+  try {
+    await serialByActor(actor, () => applyDamageToActor(actor, data));
+  } finally {
+    if (key) applyingManual.delete(key);
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -128,9 +177,54 @@ export async function restTurn(actor) {
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="vedmak-card turn"><header class="card-head"><span class="card-glyph"><i class="fa-solid fa-lungs"></i></span>`
       + `<div class="card-ident"><span class="card-name">Отдых</span><span class="card-sub">полный ход</span></div>`
-      + `<div class="card-value"><b>+${value - sys.sta.value}</b><span class="cap">Вын</span></div></header>`
+      + `<div class="card-value">${ringHtml()}<b>+${value - sys.sta.value}</b><span class="cap">Вын</span></div></header>`
       + `<div class="card-body"><p class="note">${actor.name} переводит дух: Вын ${sys.sta.value} → ${value}.</p></div></div>`
   });
+}
+
+/**
+ * Прицеливание (полный ход, стр. 151): +1 к следующей атаке по той же цели за каждый ход, не больше +3.
+ * Счёт — флаг актора `aim` {rounds, target (uuid токена или null), combatId, round}; сбрасывает его любая атака
+ * (rollAttack) и конец боя. Другая цель — счёт заново.
+ */
+export const AIM_MAX = 3;
+
+/** Сколько набрано прицеливания против этой цели (0 — нет или цель другая). */
+export function aimBonus(actor, targetUuid) {
+  const aim = actor?.getFlag("vedmak", "aim");
+  if (!aim?.rounds) return 0;
+  // Бой, в котором целились, кончился — прицеливание пропало
+  if (aim.combatId && !game.combats.has(aim.combatId)) return 0;
+  if (aim.target && targetUuid && aim.target !== targetUuid) return 0;
+  return Math.min(AIM_MAX, aim.rounds);
+}
+
+export async function aimTurn(actor) {
+  const target = game.user.targets.first() ?? null;
+  const targetUuid = target?.document.uuid ?? null;
+  const prev = actor.getFlag("vedmak", "aim");
+  const combat = game.combat?.started ? game.combat : null;
+  if (combat && prev?.combatId === combat.id && prev.round === combat.round) {
+    ui.notifications.warn(`${actor.name} уже целится в этом раунде: прицеливание — полный ход.`);
+    return null;
+  }
+  const same = aimBonus(actor, targetUuid) > 0 && (prev.target ?? null) === targetUuid;
+  const rounds = Math.min(AIM_MAX, same ? prev.rounds + 1 : 1);
+  await actor.setFlag("vedmak", "aim", { rounds, target: targetUuid, combatId: combat?.id ?? null, round: combat?.round ?? null });
+  const who = target ? ` в ${target.name}` : "";
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="vedmak-card turn"><header class="card-head"><span class="card-glyph"><i class="fa-solid fa-crosshairs"></i></span>`
+      + `<div class="card-ident"><span class="card-name">Прицеливание</span><span class="card-sub">полный ход</span></div>`
+      + `<div class="card-value">${ringHtml()}<b>+${rounds}</b><span class="cap">к атаке</span></div></header>`
+      + `<div class="card-body"><p class="note">${actor.name} целится${who}: +${rounds} к следующей атаке${target ? " по этой цели" : ""}`
+      + `${rounds >= AIM_MAX ? " (больше не набрать)" : ""}. Любая атака сбрасывает прицеливание.</p></div></div>`
+  });
+}
+
+/** Сбросить прицеливание (после атаки или в конце боя). */
+export async function clearAim(actor) {
+  if (actor?.getFlag("vedmak", "aim")) await actor.unsetFlag("vedmak", "aim");
 }
 
 /**
@@ -159,7 +253,7 @@ export async function restDays(actor) {
         <span class="plate-text">Нагрузка: бег, работа, бой</span><b class="plate-value">½ Отдыха</b></label>
     </div></div>`;
   const cfg = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Отдых: ${actor.name}`, icon: "fa-solid fa-bed" },
+    window: { title: `Отдых: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog"],
     position: { width: 460 },
     content,
@@ -169,7 +263,7 @@ export async function restDays(actor) {
         if (out) out.textContent = String(Math.max(1, Number(form.elements.days.value) || 1));
       }
     }),
-    buttons: [{ action: "ok", label: "Отдохнуть", icon: "fa-solid fa-bed", default: true,
+    buttons: [{ action: "ok", label: "Отдохнуть", default: true,
       callback: (e, b) => {
         const f = b.form.elements;
         return { days: Math.max(1, Number(f.days.value) || 1), care: f.care.checked, touch: f.touch.checked, exertion: f.exertion.checked };
@@ -181,14 +275,23 @@ export async function restDays(actor) {
 
   const sys = actor.system;
   const lines = [];
+  // Обеззараживающая жидкость: +2 к естественному заживлению и −2 дня каждому ранению (по разу на рану)
+  const disinfected = actor.effects.find(e => e.flags?.vedmak?.disinfected);
+  // «Спячка» берсерка: день сна — ПЗ вдвое против обычного, лечение критов на 2 дня короче; тратится этим отдыхом
+  const hibernate = actor.effects.find(e => e.active && e.flags?.vedmak?.bearHibernate);
   let perDay = 0;
   if (cfg.care) {
     perDay = cfg.exertion ? Math.floor(sys.derived.rec / 2) : sys.derived.rec;
     if (cfg.touch) perDay += 3;
+    if (disinfected) perDay += 2;
   }
-  const hp = Math.min(sys.hp.max, sys.hp.value + perDay * cfg.days);
+  // Проспанный день — вдвое против обычного (без ухода «обычное» — Восстановление), остальные дни — как обычно
+  const sleepDay = hibernate ? 2 * (perDay || sys.derived.rec) : 0;
+  const healed = hibernate ? sleepDay + perDay * (cfg.days - 1) : perDay * cfg.days;
+  const hp = Math.min(sys.hp.max, sys.hp.value + healed);
   await actor.update({ "system.hp.value": hp, "system.sta.value": sys.sta.max });
-  lines.push(cfg.care ? `ПЗ ${sys.hp.value} → ${hp} (${perDay} в день × ${cfg.days}).` : "Без ухода ПЗ не восстановились.");
+  if (hibernate) lines.push(`ПЗ ${sys.hp.value} → ${hp} (спячка: ${sleepDay} за проспанный день${cfg.days > 1 ? `, далее ${perDay} в день` : ""}).`);
+  else lines.push(cfg.care ? `ПЗ ${sys.hp.value} → ${hp} (${perDay} в день × ${cfg.days}).` : "Без ухода ПЗ не восстановились.");
   lines.push(`Вын восстановлена: ${sys.sta.max}.`);
 
   // Вылеченные ранения: дни до снятия штрафов (смертельные — навсегда)
@@ -200,6 +303,11 @@ export async function restDays(actor) {
       const body = Math.max(3, Math.min(13, sys.stats.body.raw));
       days = HEALING_DAYS[body][["simple", "complex", "difficult"].indexOf(wound.system.level)] ?? 0;
     }
+    if (disinfected && !wound.flags?.vedmak?.disinfected) {
+      days = Math.max(0, days - 2);
+      await wound.setFlag("vedmak", "disinfected", true);
+    }
+    if (hibernate) days = Math.max(0, days - 2);
     const left = days - cfg.days;
     if (left <= 0) done.push(wound);
     else {
@@ -210,6 +318,12 @@ export async function restDays(actor) {
   if (done.length) {
     await actor.deleteEmbeddedDocuments("Item", done.map(w => w.id));
     lines.push(`Зажили: ${done.map(w => w.name).join(", ")}.`);
+  }
+  if (hibernate) { await hibernate.delete(); lines.push("Спячка: проспал весь день."); }
+  // Обработка держится, пока есть что заживлять
+  if (disinfected && !(actor.itemTypes.critWound ?? []).length && actor.system.hp.value >= actor.system.hp.max) {
+    await disinfected.delete();
+    lines.push("Раны зажили — обработка больше не нужна.");
   }
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),

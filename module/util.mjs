@@ -13,6 +13,42 @@ const RU_COLLATOR = new Intl.Collator("ru");
 export const compareRu = (a, b) => RU_COLLATOR.compare(a ?? "", b ?? "");
 
 /**
+ * Настройка мира системы с запоминанием до её изменения (PLAN 4.54). `game.settings.get` разбирает и глубоко копирует
+ * значение на каждый вызов, а настройки валют, школ, веса монет и региона читаются на каждого актёра при пересчёте
+ * и на каждую перерисовку листа. Возвращённое значение общее — не менять его. Только для настроек scope: "world":
+ * их изменение приходит хуком документа Setting на всех клиентах; клиентские настройки хранятся иначе.
+ * @param {string} key — ключ без префикса системы
+ * @param {*} [fallback] — до регистрации настроек (значение тогда не запоминается)
+ */
+const SETTING_CACHE = new Map();
+export function worldSetting(key, fallback) {
+  if (SETTING_CACHE.has(key)) return SETTING_CACHE.get(key);
+  let value;
+  try { value = game.settings.get(SYSTEM_ID, key); } catch { return fallback; }
+  SETTING_CACHE.set(key, value);
+  return value;
+}
+/** Забыть запомненное значение настройки (её onChange — vedmak.mjs, init). */
+export const forgetSetting = key => SETTING_CACHE.delete(key);
+const dropSetting = setting => {
+  const key = setting?.key ?? "";
+  if (key.startsWith(`${SYSTEM_ID}.`)) forgetSetting(key.slice(SYSTEM_ID.length + 1));
+};
+for (const hook of ["createSetting", "updateSetting", "deleteSetting"]) Hooks.on(hook, dropSetting);
+
+/**
+ * Запомнить результат, пока не изменился исходный объект: f(source) считается заново, только если source другой.
+ * Пара к worldSetting — значение настройки остаётся тем же объектом, пока её не поменяют.
+ */
+export function memoBySource(f) {
+  let lastSource, lastResult, filled = false;
+  return source => {
+    if (!filled || source !== lastSource) { lastResult = f(source); lastSource = source; filled = true; }
+    return lastResult;
+  };
+}
+
+/**
  * Разложить блоки по двум колонкам примерно равной высоты, не меняя порядка: первая колонка — начало
  * списка, вторая — конец. Заменяет CSS-колонки (`columns`): их браузер уравнивает, перекладывая всё
  * содержимое по нескольку раз, и вкладка навыков открывалась с фризом (PLAN 4.36).
@@ -46,14 +82,48 @@ export function inCombat(actor) {
 /**
  * Срок в раундах, но временем: вне боя раунды отсчитывать некому (свой счётчик `flags.vedmak.timed` убывает
  * в начале хода), а время мира Foundry переводит в срок эффекта сама. Раунд — `CONFIG.time.roundTime` секунд.
+ * `expiry: null` — явно: схема v14 для числового срока подставляет «turnStart», и такой эффект Foundry снимает
+ * по времени мира только у актора вне боя (даже нестартовавшего), а у участника боя — лишь в начале его хода.
+ * При null (`isExpiryEvent`: «срок определяется одной длительностью») эффект истекает на любом сдвиге времени.
  */
 export function roundsAsTime(rounds) {
-  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds" };
+  return { value: Math.max(1, Math.round(rounds * (CONFIG.time.roundTime || 3))), units: "seconds", expiry: null };
 }
 
-/** Словарь {key: label|{label}} → массив опций для selectOptions. */
-export function toOptions(map) {
-  return Object.fromEntries(Object.entries(map).map(([k, v]) => [k, typeof v === "string" ? v : v.label]));
+/** Настройка системы без запоминания (клиентские и те, что читаются редко); до регистрации — запасное значение. */
+export function setting(key, fallback) {
+  try { return game.settings.get(SYSTEM_ID, key); } catch { return fallback; }
+}
+
+/** Текст для вставки в HTML. */
+export const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
+
+/** HTML → строка без тегов; описаний немного, а читаются они на каждую перерисовку — с запоминанием. */
+const PLAIN_CACHE = new Map();
+export function plainText(html) {
+  const src = String(html ?? "");
+  let out = PLAIN_CACHE.get(src);
+  if (out === undefined) {
+    out = src.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+    if (PLAIN_CACHE.size > 1000) PLAIN_CACHE.clear();
+    PLAIN_CACHE.set(src, out);
+  }
+  return out;
+}
+
+/** Название для сравнения: без регистра, ё = е, пробелы схлопнуты. */
+export const normName = s => String(s ?? "").trim().toLowerCase().replaceAll("ё", "е").replace(/\s+/g, " ");
+
+/** Склонение по числу: plural(3, "раунд", "раунда", "раундов"). */
+export function plural(n, one, few, many) {
+  const a = Math.abs(n) % 10, b = Math.abs(n) % 100;
+  return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+}
+
+/** Потратить одну штуку предмета: последняя — предмет удаляется. */
+export function spendOne(item) {
+  const q = item.system.quantity ?? 1;
+  return q > 1 ? item.update({ "system.quantity": q - 1 }) : item.delete();
 }
 
 /**
@@ -61,13 +131,33 @@ export function toOptions(map) {
  * @param {Actor|null} actor
  * @param {string} title
  * @param {string} body — HTML
- * @param {object} [opts] — {subtitle, icon, cls, rolls, flags}
+ * @param {object} [opts] — {subtitle, icon, cls, rolls, flags, messageMode}
+ *   messageMode — режим чата; по умолчанию — режим того, кто бросает («в роли» и пустой — «всем»): без явного
+ *   режима v14 отдаёт карточку всем, и тайный бросок (репутация, зависимость, отдых) уходил в общий чат
  */
-export function postCard(actor, title, body, { subtitle = "", icon = "", cls = "", rolls, flags } = {}) {
+export function postCard(actor, title, body, { subtitle = "", icon = "", cls = "", rolls, flags, messageMode } = {}) {
   const content = `<div class="vedmak-card ${cls}"><header class="card-head">`
     + `${icon ? `<span class="card-glyph"><i class="${icon}"></i></span>` : ""}`
     + `<div class="card-ident"><span class="card-name">${title}</span>`
     + `${subtitle ? `<span class="card-sub">${subtitle}</span>` : ""}</div></header>`
     + `<div class="card-body">${body}</div></div>`;
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls, flags });
+  const own = game.settings.get("core", "messageMode");
+  messageMode ??= !own || own === "ic" ? "public" : own;
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, rolls, flags }, { messageMode });
+}
+
+/**
+ * Разметка кольца медальона карточки чата (см. хелпер vedmakRing). dice — число, массив граней d10 или ничего.
+ * plain — без крита и провала (инициатива): десятка и единица светятся, как прочие грани.
+ */
+export function ringHtml(dice, { plain = false } = {}) {
+  const arr = Array.isArray(dice) ? dice : (typeof dice === "number" || typeof dice === "string") ? [dice] : [];
+  const lit = {};
+  arr.forEach((raw, i) => {
+    const v = Number(raw);
+    if (!(v >= 1 && v <= 10) || lit[v]) return;
+    lit[v] = plain ? " on" : v === 10 ? " on hot" : v === 1 && i === 0 ? " on low" : " on";
+  });
+  const notches = Array.from({ length: 10 }, (_, k) => `<i class="n${k}${lit[k || 10] ?? ""}"></i>`).join("");
+  return `<span class="vd-ring" aria-hidden="true">${notches}</span>`;
 }

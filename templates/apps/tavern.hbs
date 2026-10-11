@@ -1,0 +1,200 @@
+{{!-- Игры в таверне (PLAN 4.100; module/apps/tavern-app.mjs). Облик — холст «Игры в таверне: новый облик», вариант
+      «Стол» (PLAN 4.122): слева полоса игр, в середине стол с бортом — у каждой игры своя раскладка, справа ход игры. --}}
+{{#*inline "tvWho"}}
+<span class="tv2-ring"><img src="{{img}}" alt=""></span>
+<span class="tv2-whotext"><span class="who">{{name}}</span>{{#if status}}<span class="stat">{{status}}</span>{{/if}}</span>
+{{/inline}}
+{{#*inline "tvChips"}}
+<span class="tv2-chips">
+  {{#if bank}}
+  {{#if hoard}}<span class="tv2-chip gold" data-tooltip="Каждый вносит в кучу {{stake}} крон"><i class="tv2-mc"></i>{{stake}} <small>кр.</small></span>
+  {{else if started}}{{#if stake}}<span class="tv2-chip gold" data-tooltip="Ставка в банке"><i class="tv2-mc"></i>{{stake}} <small>кр.</small></span>{{/if}}
+  {{else}}<label class="tv2-chip gold" data-tooltip="Ставка в кронах: с первым ходом уходит в банк"><i class="tv2-mc"></i><input type="number" data-bet="{{uuid}}" value="{{bet}}" min="0" aria-label="Ставка"><small>кр.</small></label>{{/if}}
+  {{/if}}
+  <label class="tv2-chip" data-tooltip="Поправка: допинг, приём, шулерство, колода гвинта">±<input type="number" data-mod="{{uuid}}" value="{{mod}}" aria-label="Поправка"></label>
+  {{#if canRemove}}<a class="tv2-x" data-action="removePlayer" data-uuid="{{uuid}}" data-tooltip="Убрать из-за стола" aria-label="Убрать из-за стола"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+</span>
+{{/inline}}
+{{#*inline "tvPot"}}
+{{#if pot}}<div class="tv2-pot">
+  <span class="tv2-stacks" aria-hidden="true">{{#each coins}}<span class="stack">{{#each coins}}<i class="coin"></i>{{/each}}</span>{{/each}}</span>
+  <span class="tv2-potline"><span class="cap">банк</span><b>{{pot}} крон</b>{{#if potSettled}}<small>роздан</small>{{/if}}</span>
+</div>{{/if}}
+{{/inline}}
+{{#*inline "tvDice"}}
+<div class="tv2-dice">
+  {{#each dice}}<a class="{{cls}}" style="--rot: {{rot}}deg" data-action="pokerDie" data-uuid="{{../uuid}}" data-i="{{i}}" data-tooltip="Отметить к перебросу" aria-label="Кость {{v}}">{{#each cells}}<i class="{{#if this}}on{{/if}}"></i>{{/each}}</a>{{/each}}
+</div>
+<div class="tv2-rankline">
+  {{#if rank}}<span class="tv2-rank">{{rank}}</span>{{/if}}
+  {{#if canReroll}}<button type="button" class="tv2-btn sm" data-action="pokerReroll" data-uuid="{{uuid}}" {{#unless selCount}}disabled{{/unless}}>Перебросить{{#if selCount}} {{selCount}}{{/if}}</button>
+  {{else if rerolled}}<span class="stat">перебросил</span>{{/if}}
+</div>
+{{/inline}}
+{{#*inline "tvGwent"}}
+<div class="tv2-gseat{{#if out}} gone{{/if}}">
+  {{#if card}}
+  <span class="tv2-gcard" data-tooltip="d10 = {{card.roll}}: {{card.label}}"><span class="mod {{#if cardPlus}}plus{{else}}minus{{/if}}">{{#if cardPlus}}+{{/if}}{{card.mod}}</span><span class="d">d10 · {{card.roll}}</span><span class="t">{{card.label}}</span></span>
+  {{else}}<span class="tv2-gcard blank"><span class="t">карта раунда</span></span>{{/if}}
+  <div class="tv2-ginfo">
+    <div class="tv2-seatline">{{> tvWho}}</div>
+    <div class="tv2-seatline">
+      <select data-gwent-skill="{{uuid}}" aria-label="Навык для гвинта">
+        <option value="" {{#unless skill}}selected{{/unless}}>лучший навык</option>
+        <option value="gambling" {{#if (eq skill "gambling")}}selected{{/if}}>Азартные игры</option>
+        <option value="tactics" {{#if (eq skill "tactics")}}selected{{/if}}>Тактика</option>
+      </select>
+      {{> tvChips}}
+    </div>
+  </div>
+  <div class="tv2-gscore">
+    <span class="gems" data-tooltip="Выигранные раунды">{{#each gems}}<i class="gem{{#if on}} on{{/if}}"></i>{{/each}}</span>
+    {{#if total}}<b class="metal">{{total}}</b>{{/if}}
+  </div>
+</div>
+{{/inline}}
+<section class="tv2">
+  <nav class="tv2-rail" aria-label="Игры">
+    {{#each games}}
+    <a class="tv2-game{{#if active}} on{{/if}}" data-action="pickGame" data-game="{{key}}" data-tooltip="{{label}} · {{size}}"><i class="{{icon}}" aria-hidden="true"></i><span>{{short}}</span></a>
+    {{/each}}
+  </nav>
+
+  <div class="tv2-center">
+    <header class="tv2-head">
+      <div class="tv2-title"><h2>{{game.label}}</h2><p>{{game.hint}}</p></div>
+      <div class="tv2-add">
+        <button type="button" class="tv2-addbtn" data-action="addSelected" data-tooltip="Посадить за стол выделенные токены"><i class="fa-solid fa-user-plus"></i> Выделенные</button>
+        <button type="button" class="tv2-addbtn" data-action="addPlayers" data-tooltip="Посадить за стол персонажей игроков"><i class="fa-solid fa-users"></i> Игроки</button>
+      </div>
+    </header>
+
+    <div class="tv2-rim"><div class="tv2-felt tv2-{{game.key}}">
+      {{#if empty}}
+      <p class="tv2-empty">Посадите игроков за стол: выделите токены и нажмите «Выделенные» или добавьте «Игроки». {{#unless brawl}}Нужно участников: {{need}}.{{/unless}}</p>
+
+      {{else if poker}}
+      {{#with top}}<div class="tv2-seat top{{#if out}} gone{{/if}}">{{> tvWho}}{{> tvChips}}</div>{{> tvDice}}{{/with}}
+      {{> tvPot}}
+      {{#with bottom}}{{> tvDice}}<div class="tv2-seat bottom{{#if out}} gone{{/if}}">{{> tvWho}}{{> tvChips}}</div>{{/with}}
+
+      {{else if (eq game.key "armwrestle")}}
+      <div class="tv2-arm">
+        {{#with left}}<div class="tv2-side{{#if out}} gone{{/if}}">
+          <span class="tv2-ring big"><img src="{{img}}" alt=""></span><span class="who">{{name}}</span>{{#if status}}<span class="stat">{{status}}</span>{{/if}}
+          {{#if sta}}<div class="tv2-sta" data-tooltip="Выносливость: на пороге ранения — проигрыш"><div class="tube"><span class="f" style="width: {{sta.pct}}%"></span><b style="left: {{sta.woundPct}}%"></b></div><span class="row"><span>Вын {{sta.value}}</span><span>порог {{sta.wound}}</span></span></div>{{/if}}
+          {{> tvChips}}
+        </div>{{/with}}
+        <div class="tv2-armmid">
+          <span class="cap">{{#if round}}раунд {{round}} · сила{{else}}сила · первый раунд впереди{{/if}}</span>
+          <div class="tv2-score"><b class="metal">{{left.last}}</b><span>:</span><b class="metal">{{right.last}}</b></div>
+          {{#if lastWinner}}<span class="stat">раунд за {{lastWinner}}</span>{{/if}}
+          <div class="tv2-track" data-tooltip="Серия: победа — два раунда подряд"><span class="line"></span><i class="goal" style="left: 0%"></i><i class="stop" style="left: 25%"></i><i class="stop" style="left: 50%"></i><i class="stop" style="left: 75%"></i><i class="goal" style="left: 100%"></i><i class="knot" style="left: {{knot}}%"></i></div>
+          <div class="tv2-ends"><span class="cap">победа</span><span class="cap">победа</span></div>
+          {{#if streakNote}}<span class="stat">{{streakNote}}</span>{{/if}}
+        </div>
+        {{#with right}}<div class="tv2-side{{#if out}} gone{{/if}}">
+          <span class="tv2-ring big"><img src="{{img}}" alt=""></span><span class="who">{{name}}</span>{{#if status}}<span class="stat">{{status}}</span>{{/if}}
+          {{#if sta}}<div class="tv2-sta" data-tooltip="Выносливость: на пороге ранения — проигрыш"><div class="tube"><span class="f" style="width: {{sta.pct}}%"></span><b style="left: {{sta.woundPct}}%"></b></div><span class="row"><span>Вын {{sta.value}}</span><span>порог {{sta.wound}}</span></span></div>{{/if}}
+          {{> tvChips}}
+        </div>{{/with}}
+      </div>
+      {{> tvPot}}
+
+      {{else if (eq game.key "drinking")}}
+      <div class="tv2-row">{{#each topRow}}<div class="tv2-card{{#if out}} gone{{/if}}"><div class="tv2-seatline">{{> tvWho}}</div>
+        <div class="tv2-seatline"><span class="tv2-mugs">{{#each cups}}<i class="fa-solid fa-beer-mug-empty {{cls}}"></i>{{else}}<em>ещё не пил</em>{{/each}}</span>{{#if out}}<span class="tv2-pill out">тошнота · выбыл</span>{{else if drunk}}<span class="tv2-pill drunk">опьянение</span>{{/if}}</div>{{> tvChips}}</div>{{/each}}</div>
+      <div class="tv2-centerbox">
+        <span class="cap">порция {{portion}} · стойкость</span>
+        <span class="tv2-dc"><small>СЛ</small><b class="metal">{{nextDc}}</b></span>
+        <span class="stat">в игре {{inGame}} из {{count}}</span>
+        {{> tvPot}}
+      </div>
+      <div class="tv2-row">{{#each bottomRow}}<div class="tv2-card{{#if out}} gone{{/if}}"><div class="tv2-seatline">{{> tvWho}}</div>
+        <div class="tv2-seatline"><span class="tv2-mugs">{{#each cups}}<i class="fa-solid fa-beer-mug-empty {{cls}}"></i>{{else}}<em>ещё не пил</em>{{/each}}</span>{{#if out}}<span class="tv2-pill out">тошнота · выбыл</span>{{else if drunk}}<span class="tv2-pill drunk">опьянение</span>{{/if}}</div>{{> tvChips}}</div>{{/each}}</div>
+
+      {{else if (eq game.key "hoard")}}
+      <div class="tv2-row">{{#each topRow}}<div class="tv2-card"><div class="tv2-seatline">{{> tvWho}}</div>
+        <div class="tv2-seatline"><span class="tv2-loot" data-tooltip="Стащил из кучи"><i class="tv2-mc"></i>{{loot}} <small>кр.</small></span>{{#if poisoned}}<span class="tv2-pill poison">яд</span>{{/if}}{{> tvChips}}</div></div>{{/each}}</div>
+      <div class="tv2-hoardmid">
+        <div class="tv2-heap" aria-label="Куча монет под охраной змеи">
+          <span class="tv2-stacks">{{#each heap}}<span class="stack">{{#each coins}}<i class="coin"></i>{{/each}}</span>{{/each}}</span>
+          <svg class="tv2-snake" viewBox="0 0 250 70" aria-hidden="true"><defs><linearGradient id="tv2-snk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fa86c"/><stop offset=".5" stop-color="#4f6b35"/><stop offset="1" stop-color="#26361a"/></linearGradient></defs>
+            <path d="M14 44 C 44 18, 74 64, 108 42 S 166 16, 196 36" fill="none" stroke="#0b1407" stroke-width="15" stroke-linecap="round"/>
+            <path d="M14 44 C 44 18, 74 64, 108 42 S 166 16, 196 36" fill="none" stroke="url(#tv2-snk)" stroke-width="12" stroke-linecap="round"/>
+            <path d="M14 44 C 44 18, 74 64, 108 42 S 166 16, 196 36" fill="none" stroke="rgba(11,20,7,.45)" stroke-width="12" stroke-dasharray="2 8"/>
+            <ellipse cx="207" cy="33" rx="17" ry="10" transform="rotate(-18 207 33)" fill="url(#tv2-snk)" stroke="#0b1407" stroke-width="1.5"/>
+            <circle cx="213" cy="29" r="2.8" fill="#f0d68f"/><ellipse cx="213" cy="29" rx=".9" ry="2.2" fill="#0b0c0e"/>
+            <path d="M222 34 L234 37 M230 36 L237 33 M230 36 L236 40" stroke="#c0533f" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+          <span class="tv2-potline"><span class="cap">в куче</span><b>{{pile}} крон</b><small>из {{pileOf}}</small></span>
+        </div>
+        <div class="tv2-watch" data-tooltip="Внимание змеи в этом раунде: перебить Ловкостью рук">
+          <i class="fa-solid fa-eye"></i><span class="cap">змея следит</span><b class="metal">{{#if snake}}{{snake}}{{else}}—{{/if}}</b><span class="stat">Внимание</span>
+        </div>
+      </div>
+      <div class="tv2-row">{{#each bottomRow}}<div class="tv2-card"><div class="tv2-seatline">{{> tvWho}}</div>
+        <div class="tv2-seatline"><span class="tv2-loot" data-tooltip="Стащил из кучи"><i class="tv2-mc"></i>{{loot}} <small>кр.</small></span>{{#if poisoned}}<span class="tv2-pill poison">яд</span>{{/if}}{{> tvChips}}</div></div>{{/each}}</div>
+
+      {{else if (eq game.key "fillet")}}
+      <div class="tv2-tempo">
+        <span class="cap">темп</span>
+        <div class="steps">{{#each steps}}<span class="step {{cls}}">{{dc}}<small>{{label}}</small></span>{{#unless @last}}<i class="sep"></i>{{/unless}}{{/each}}</div>
+        <span class="stat">{{speedNote}}</span>
+      </div>
+      <div class="tv2-hand">{{> "systems/vedmak/templates/apps/tavern-hand.hbs"}}</div>
+      {{#with solo}}<div class="tv2-seat bottom">{{> tvWho}}{{> tvChips}}
+        {{#if last}}<span class="tv2-last{{#unless last.ok}} bad{{/unless}}" data-tooltip="Последний удар"><b class="metal">{{last.total}}</b><span class="stat">против СЛ {{last.dc}}{{#if hits}} · без промаха {{hits}}{{/if}}</span></span>{{/if}}
+      </div>{{/with}}
+      <div class="tv2-spectators">
+        <span class="cap">зрители ставят против{{#if spectatorSum}} · всего {{spectatorSum}} кр.{{/if}}</span>
+        {{#each spectators}}<div class="tv2-spectator">{{> tvWho}}
+          <label class="tv2-chip gold" data-tooltip="Ставка против игрока; предел — Азартные игры ({{limit}} кр.)"><i class="tv2-mc"></i><input type="number" data-spectator-bet="{{uuid}}" value="{{bet}}" min="0" max="{{limit}}" {{#if locked}}disabled{{/if}} aria-label="Ставка зрителя"><small>/ {{limit}} кр.</small></label>
+          {{#unless locked}}<a class="tv2-x" data-action="removeSpectator" data-uuid="{{uuid}}" data-tooltip="Убрать зрителя" aria-label="Убрать зрителя"><i class="fa-solid fa-xmark"></i></a>{{/unless}}
+        </div>{{else}}<span class="stat">Выделите токены зрителей и нажмите «Зрители».</span>{{/each}}
+        <button type="button" class="tv2-addbtn" data-action="addSpectators" data-tooltip="Зрители — выделенные токены"><i class="fa-solid fa-user-plus"></i> Зрители</button>
+      </div>
+
+      {{else if (eq game.key "gwent")}}
+      {{#with top}}{{> tvGwent}}{{/with}}
+      <div class="tv2-rounds">
+        {{#each rounds}}<div class="r"><span class="rnd {{cls}}">{{label}}</span><span class="stat">{{note}}</span></div>{{#unless @last}}<span class="dash"></span>{{/unless}}{{/each}}
+        {{> tvPot}}
+      </div>
+      {{#with bottom}}{{> tvGwent}}{{/with}}
+
+      {{else if brawl}}
+      <div class="tv2-brawl">
+        <div class="tv2-fighters">{{#each fighters}}<div class="tv2-fighter"><span class="tv2-ring big"><img src="{{img}}" alt=""></span><span class="who">{{name}}</span>
+          {{#if hp}}<div class="tv2-sta hp"><div class="tube"><span class="f" style="width: {{hp.pct}}%"></span></div><span class="row"><span>ПЗ {{hp.value}} / {{hp.max}}</span></span></div>{{/if}}
+          {{#if canRemove}}<a class="tv2-x" data-action="removePlayer" data-uuid="{{uuid}}" data-tooltip="Убрать" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>{{/if}}</div>{{/each}}</div>
+        <div class="tv2-paper">
+          <h3>Правила драки</h3>
+          <p>По пояс, без доспехов.</p>
+          <p>Без кастетов и спрятанного оружия.</p>
+          <p>Победил тот, кто остался в сознании, или тот, кому сдались.</p>
+          <p class="cheat"><b>Шулерство:</b> «Скрытый вес» в кулаке. Заметить — Внимание СЛ 18.</p>
+        </div>
+      </div>
+      {{/if}}
+    </div></div>
+
+    <footer class="tv2-foot">
+      <span class="note">{{footNote}}</span>
+      {{#if brawl}}
+      <button type="button" class="tv2-btn" data-action="brawlNotes">Памятка</button>
+      <button type="button" class="tv2-go" data-action="brawlStart" data-tooltip="Участники со стола — в трекер боя, инициатива сама">Начать бой</button>
+      {{else}}
+      <button type="button" class="tv2-btn" data-action="reset">Заново</button>
+      {{#if (eq game.key "fillet")}}<button type="button" class="tv2-btn" data-action="filletSpeed" {{#if done}}disabled{{/if}}>Ускорить</button>
+      <button type="button" class="tv2-btn" data-action="filletStop" {{#unless canStop}}disabled{{/unless}} data-tooltip="После двух ускорений: закончить и забрать ставки зрителей">Закончить</button>{{/if}}
+      {{#if showReveal}}<button type="button" class="tv2-go" data-action="pokerShow" {{#if done}}disabled{{/if}}>Вскрыться</button>{{/if}}
+      {{#if showTurn}}<button type="button" class="tv2-go" data-action="turn" {{#unless ready}}disabled{{/unless}} {{#if done}}disabled{{/if}}>{{turnLabel}}</button>{{/if}}
+      {{/if}}
+    </footer>
+  </div>
+
+  <aside class="tv2-log">
+    <span class="cap">ход игры</span>
+    <div class="tv2-lines">{{#each log}}<p>{{{this}}}</p>{{else}}<p class="dim">Здесь будет ход игры; каждый раунд уходит и в чат.</p>{{/each}}</div>
+  </aside>
+</section>

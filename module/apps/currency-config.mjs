@@ -10,7 +10,7 @@ export class CurrencyConfig extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "vedmak-currencies",
     tag: "form",
     classes: ["vedmak", "vedmak-dialog", "currency-config"],
-    window: { title: "Валюты и обмен", icon: "fa-solid fa-coins" },
+    window: { title: "Валюты и обмен" },
     position: { width: 680 },
     form: { handler: CurrencyConfig.#onSubmit, closeOnSubmit: true },
     actions: { reset: CurrencyConfig.#onReset }

@@ -2,7 +2,7 @@
   "id": "vedmak",
   "title": "Ведьмак: НРИ",
   "description": "Система для настольной ролевой игры «Ведьмак» (R. Talsorian Games) под Foundry VTT v14. Полностью на русском: парамеры персонажа, враги, предметы, магия, алхимия и многое другое.",
-  "version": "0.3.0",
+  "version": "2.9.0",
   "url": "https://github.com/oralcum61-maker/Vedmak",
   "manifest": "https://github.com/oralcum61-maker/Vedmak/releases/latest/download/system.json",
   "download": "https://github.com/oralcum61-maker/Vedmak/releases/latest/download/vedmak.zip",
@@ -27,7 +27,9 @@
     "vedmak.mjs"
   ],
   "styles": [
-    "styles/vedmak.css"
+    "styles/vedmak.css",
+    "styles/sheet.css",
+    "styles/hud.css"
   ],
   "languages": [
     {
@@ -49,12 +51,18 @@
           "notes"
         ]
       },
+      "loot": {
+        "htmlFields": [
+          "description"
+        ]
+      },
       "monster": {
         "htmlFields": [
           "description",
           "commonKnowledge",
           "witcherKnowledge",
-          "notes"
+          "notes",
+          "playerNotes"
         ]
       }
     },
@@ -155,6 +163,19 @@
       "label": "Профессии",
       "path": "packs/professions",
       "type": "Item",
+      "system": "vedmak",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {},
+      "banner": "systems/vedmak/assets/banners/professions.webp"
+    },
+    {
+      "name": "pregens",
+      "label": "Заготовки персонажей",
+      "path": "packs/pregens",
+      "type": "Actor",
       "system": "vedmak",
       "ownership": {
         "PLAYER": "OBSERVER",
@@ -328,7 +349,8 @@
           "color": "#8a6a3a",
           "packs": [
             "races",
-            "professions"
+            "professions",
+            "pregens"
           ]
         },
         {

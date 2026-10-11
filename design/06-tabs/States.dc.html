@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Состояния строк и символы</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d)}
+button{font-family:'IBM Plex Sans',system-ui,sans-serif}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;background-image:radial-gradient(circle at 50% 42%,rgba(255,245,225,.09),transparent 66%);border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08)}
+.frame::after{content:"";position:absolute;inset:4px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.frame.on{box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 0 0 1px rgba(196,69,47,.55),0 1px 0 rgba(255,240,215,.08)}
+.frame.off img{filter:grayscale(.65) brightness(.72)}
+.frame.broken img{filter:grayscale(.4) brightness(.6) sepia(.3)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.ribbon{position:absolute;left:-1px;top:-1px;z-index:2;padding:2px 6px 2px 5px;font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff3ea;background:#b8432c linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.25));border:1px solid #2a0c06;box-shadow:0 2px 4px rgba(0,0,0,.7)}
+.ribbon.steel{color:#f1ece0;background:#3a3c42 linear-gradient(180deg,rgba(255,255,255,.18),rgba(0,0,0,.25));border-color:#060708}
+.seg{width:4px;height:9px;border-radius:1px}
+.glyph{width:44px;height:44px;flex-shrink:0;display:grid;place-items:center;color:#d6d0c2}
+.lg{display:flex;align-items:center;gap:12px}
+.lg b{display:block;font-weight:500;font-size:13.5px;color:#ece7db}
+.lg span.d{display:block;font-size:11.5px;color:#8e897e;line-height:1.35}
+.qty{position:absolute;right:-6px;bottom:-6px;min-width:22px;height:20px;padding:0 5px;box-sizing:border-box;display:grid;place-items:center;font-family:Forum,serif;font-size:14px;color:#f1ece0;background:#25262b linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.3));border:1px solid #060708;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,.8)}
+</style>
+</helmet>
+<div class="mat" style="width: 1040px; height: 760px; box-sizing: border-box; padding: 24px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px">
+
+  <div style="display: flex; flex-direction: column; gap: 18px">
+    <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Состояния предмета</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px">
+        <div class="lg">
+          <div class="frame on" style="width: 64px; height: 64px"><span class="ribbon">в руках</span><img src="/_blob/d760875a683677eb6b3f8af66d46d776" alt="" style="width: 54px; height: 54px; object-fit: contain"></div>
+          <div><b>В руках / надето</b><span class="d">Лента киновари и кромка рамки. Главная кнопка — «Атака».</span></div>
+        </div>
+        <div class="lg">
+          <div class="frame off" style="width: 64px; height: 64px"><img src="/_blob/20e82cef01300cbd32301e42ba0dc43b" alt="" style="width: 54px; height: 54px; object-fit: contain"></div>
+          <div><b>В мешке</b><span class="d">Значок приглушён, имя тише. Главная кнопка — «В руки».</span></div>
+        </div>
+        <div class="lg">
+          <div class="frame broken" style="width: 64px; height: 64px"><span class="ribbon steel">сломано</span><img src="/_blob/6c28ce171c5882e69ce1faa96090194c" alt="" style="width: 54px; height: 54px; object-fit: contain"></div>
+          <div><b>Сломано</b><span class="d">Надёжность 0: насечки пусты, атака заперта — над ней курсор «нельзя».</span></div>
+        </div>
+        <div class="lg">
+          <div class="frame on" style="width: 64px; height: 64px"><span class="ribbon">в руке</span><img src="/_blob/e569f6757ed801db523ee90880acb3fe" alt="" style="width: 54px; height: 54px; object-fit: contain"></div>
+          <div><b>Щит в руке</b><span class="d">Вместо частей тела — щит и насечки надёжности блока.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Что закрывает броня</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+      </div>
+      <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+        <defs>
+          <linearGradient id="vdOk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f2ea"></stop><stop offset=".45" stop-color="#b3ada2"></stop><stop offset=".7" stop-color="#74706a"></stop><stop offset="1" stop-color="#3e3d3a"></stop></linearGradient>
+          <linearGradient id="vdWorn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9b4aa"></stop><stop offset=".45" stop-color="#7d7972"></stop><stop offset=".7" stop-color="#4f4d49"></stop><stop offset="1" stop-color="#2c2b29"></stop></linearGradient>
+          <linearGradient id="vdBroken" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f08a72"></stop><stop offset=".45" stop-color="#c4452f"></stop><stop offset=".7" stop-color="#7a2414"></stop><stop offset="1" stop-color="#3a120a"></stop></linearGradient>
+        </defs>
+      </svg>
+      <div style="display: grid; grid-template-columns: 96px repeat(4, minmax(0, 1fr)); gap: 6px 8px; align-items: center">
+        <span></span>
+        <span class="cap" style="text-align: center">цела</span>
+        <span class="cap" style="text-align: center">изношена</span>
+        <span class="cap" style="text-align: center">разбита</span>
+        <span class="cap" style="text-align: center">не закрыта</span>
+        <sc-for list="{{kinds}}" as="k" hint-placeholder-count="4">
+          <span style="display: flex; flex-direction: column; gap: 1px"><b style="font-weight: 500; font-size: 13px; color: #ece7db">{{k.name}}</b><span style="font-size: 10.5px; color: #8e897e">{{k.was}}</span></span>
+          <sc-for list="{{k.states}}" as="p" hint-placeholder-count="4">
+            <div class="well" style="height: 50px; display: grid; place-items: center">
+              <sc-if value="{{p.head}}" hint-placeholder-val="{{false}}"><svg width="40" height="40" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4">
+                <path d="M4.5 21.5V9L6.8 4.6L12 2.6L17.2 4.6L19.5 9V21.5H14.6L13.4 19.2H10.6L9.4 21.5Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                <path d="M12 2.8V19" stroke="{{p.ink}}" stroke-width=".9" fill="none"></path>
+                <path d="M6.4 10.4H11.1V12.2H6.4ZM12.9 10.4H17.6V12.2H12.9ZM14.5 14.6h1v1.5h-1zM16.4 14.6h1v1.5h-1zM14.5 16.9h1v1.4h-1zM16.4 16.9h1v1.4h-1z" fill="{{p.ink}}"></path>
+                <path d="M6.2 9.6V20.4" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                <path d="M7.4 14.6L10.4 16.4M14 6.4L16.4 8" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                <path d="M9.4 3.8L11 7.4L9.2 9.8L10.8 13.6L9.6 17" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+              </svg></sc-if>
+              <sc-if value="{{p.torso}}" hint-placeholder-val="{{false}}"><svg width="40" height="40" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4">
+                <path d="M3 7L6.5 3L10 4.6L12 6.2L14 4.6L17.5 3L21 7L18.8 10.2V16.2L16.6 21.5H7.4L5.2 16.2V10.2Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                <path d="M12 6.4V21.3M5.3 15.6H18.7M3.3 7.2L6.4 9.4M20.7 7.2L17.6 9.4" stroke="{{p.ink}}" stroke-width=".9" fill="none"></path>
+                <circle cx="8.2" cy="12.2" r=".8" fill="{{p.rivet}}"></circle><circle cx="15.8" cy="12.2" r=".8" fill="{{p.rivet}}"></circle><circle cx="8.8" cy="18.4" r=".8" fill="{{p.rivet}}"></circle><circle cx="15.2" cy="18.4" r=".8" fill="{{p.rivet}}"></circle>
+                <path d="M6 10.8V15" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                <path d="M7.6 8.6L10.6 10.8M13.4 16.8L16.6 15.4" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                <path d="M13.6 6.6L12.8 10L14.6 12.6L13 16.4L14 20.6" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+              </svg></sc-if>
+              <sc-if value="{{p.arm}}" hint-placeholder-val="{{false}}"><svg width="40" height="40" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4">
+                <path d="M5 2H15L16.4 8.6H4.6Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                <path d="M16.4 9.4L20.4 11.2L19.8 15L16.8 14.4Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.2"></path>
+                <path d="M4.6 8.6H16.4L17.2 14.2H5.2Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                <path d="M5.2 14.2H17.2L18.4 16.6L17.6 19.8L15.2 21.8H8.4L6 19.6Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                <path d="M6.6 14.2L7.6 12.1L8.6 14.2ZM10.4 14.2L11.4 12.1L12.4 14.2ZM14.2 14.2L15.2 12.1L16.2 14.2Z" fill="{{p.edge}}"></path>
+                <path d="M9.2 14.6V21.4M12.2 14.6V21.8M15 14.6V21.2M5.1 5.2H15.7" stroke="{{p.ink}}" stroke-width=".85" fill="none"></path>
+                <circle cx="7.2" cy="3.6" r=".8" fill="{{p.rivet}}"></circle><circle cx="12.8" cy="3.6" r=".8" fill="{{p.rivet}}"></circle>
+                <path d="M5.8 9.6V13.4" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                <path d="M7.4 10.2L10.4 12.2M11.6 3.2L14 6.2" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                <path d="M10.6 2.4L9.8 6L11.6 9L10.2 13L11.4 17.4" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+              </svg></sc-if>
+              <sc-if value="{{p.leg}}" hint-placeholder-val="{{false}}"><svg width="40" height="40" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4">
+                <path d="M7.2 1.6H13.4L14 11.4L13.2 16.4L19.4 18.4L21.4 21.8H7.6L6.6 16.4L6.2 11.4Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                <path d="M5.4 8L7 5.6H13.8L15.2 8L13.8 10.4H7Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.1"></path>
+                <path d="M10.3 10.6V16.4M13.6 17L14.2 21.6M16 17.8L16.6 21.6M18.2 18.6L18.8 21.6M6.8 16.4H13.2" stroke="{{p.ink}}" stroke-width=".85" fill="none"></path>
+                <circle cx="10.3" cy="8" r=".9" fill="{{p.rivet}}"></circle>
+                <path d="M7.4 11.6V15.8" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                <path d="M8.2 2.8L11.4 4.4M8 12.6L9.8 14.6" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                <path d="M11.6 1.8L10.6 5.4M11.4 10.8L12.6 13.6L11.6 16.2" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+              </svg></sc-if>
+            </div>
+          </sc-for>
+        </sc-for>
+      </div>
+      <p style="margin: 0; font-size: 11.5px; line-height: 1.45; color: #8e897e">Один ряд заменяет две колонки — «Закрывает» и «ПБ / Н»: символ части тела, под ним её прочность. Число и полное название — в подсказке при наведении.</p>
+    </section>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 18px">
+    <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Символы вместо букв</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px">
+        <div class="lg"><div class="well glyph"><svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3.5 15.5L14.5 4.5M7.5 17L17 7.5"/></svg></div><div><b>Режущий</b><span class="d">два следа клинка · было «Р»</span></div></div>
+        <div class="lg"><div class="well glyph"><svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 16.5L15 5M10 4.2h6v6"/></svg></div><div><b>Колющий</b><span class="d">остриё · было «К»</span></div></div>
+        <div class="lg"><div class="well glyph"><svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5l6.5-6.5M9 3.5l7.5 7.5 2-2L11 1.5z"/></svg></div><div><b>Дробящий</b><span class="d">молот · было «Д»</span></div></div>
+        <div class="lg"><div class="well glyph"><svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 2.5c3 3.8 5 6.2 5 9.3a5 5 0 0 1-10 0c0-2.4 1.5-3.8 2.6-5.6.2 2.3 1 3.4 2.4 3.6-.6-2.6-.4-4.8 0-7.3z"/></svg></div><div><b>Стихийный</b><span class="d">пламя · было «С»</span></div></div>
+        <div class="lg"><div class="well glyph" style="gap: 0; grid-auto-flow: column"><svg width="17" height="19" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 17.5V9.5C5 8.3 7 8.3 7 9.5V5.8C7 4.6 9 4.6 9 5.8V5C9 3.8 11 3.8 11 5V6C11 4.8 13 4.8 13 6V12.5C13 15.5 11.4 17.5 9 17.5Z"/></svg><svg width="17" height="19" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 17.5V9.5C5 8.3 7 8.3 7 9.5V5.8C7 4.6 9 4.6 9 5.8V5C9 3.8 11 3.8 11 5V6C11 4.8 13 4.8 13 6V12.5C13 15.5 11.4 17.5 9 17.5Z"/></svg></div><div><b>Хват</b><span class="d">одна или две перчатки · было «Х 2»</span></div></div>
+        <div class="lg"><div class="well glyph"><span style="display: flex; gap: 2px"><span style="width: 9px; height: 11px; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%); background: #d9d3c6"></span><span style="width: 9px; height: 11px; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%); background: #d9d3c6"></span><span style="width: 9px; height: 11px; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%); background: #2a2c31"></span></span></div><div><b>Класс брони</b><span class="d">1–3 щитка: лёгкая, средняя, тяжёлая</span></div></div>
+        <div class="lg"><div class="well glyph" style="color: #e0937f"><svg width="22" height="18" viewBox="0 0 20 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="4" width="9" height="8" rx="4"></rect><rect x="9.5" y="4" width="9" height="8" rx="4"></rect></svg></div><div><b>Скованность</b><span class="d">звенья цепи и штраф · было «СД»</span></div></div>
+        <div class="lg"><div class="well glyph" style="width: 72px"><span style="display: flex; gap: 2px"><sc-for list="{{segDemo}}" as="g" hint-placeholder-count="8"><span class="seg" style="background: {{g.bg}}; box-shadow: {{g.sh}}"></span></sc-for></span></div><div><b>Надёжность</b><span class="d">насечка за единицу · было «Н 6/10»</span></div></div>
+      </div>
+    </section>
+
+    <section class="plate" style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Ячейка снаряжения</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 7px">
+          <div class="frame" style="width: 70px; height: 70px"><img src="/_blob/601bc499c558363f39d7f151857a9a5a" alt="" style="width: 58px; height: 58px; object-fit: contain"></div>
+          <b style="font-weight: 500; font-size: 12.5px; color: #ece7db">Обычная</b><span style="font-size: 11px; color: #8e897e; text-align: center">вес и цена под именем</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 7px">
+          <div class="frame" style="width: 70px; height: 70px"><img src="/_blob/8048b1d7782d3b1ed5c0dbd608839d93" alt="" style="width: 58px; height: 58px; object-fit: contain"><span class="qty">×4</span></div>
+          <b style="font-weight: 500; font-size: 12.5px; color: #ece7db">Несколько</b><span style="font-size: 11px; color: #8e897e; text-align: center">число — жетоном; щелчок — правка</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 7px">
+          <div class="frame on" style="width: 70px; height: 70px"><span class="ribbon">в руках</span><img src="/_blob/6e4a02eff5848e16d433de94f946bb45" alt="" style="width: 58px; height: 58px; object-fit: contain"></div>
+          <b style="font-weight: 500; font-size: 12.5px; color: #ece7db">В руках</b><span style="font-size: 11px; color: #8e897e; text-align: center">фонарь, фокус, инструмент</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 0 0 4px; background: rgba(255,245,225,.035); border: 1px solid rgba(0,0,0,.5); border-radius: 2px">
+          <div class="frame" style="width: 70px; height: 70px; margin-top: 6px"><img src="/_blob/5e26f3827cc268103086eecdd55689a3" alt="" style="width: 58px; height: 58px; object-fit: contain"></div>
+          <span style="display: flex; gap: 4px">
+            <button type="button" class="btn" style="width: 28px; height: 26px; padding: 0; display: grid; place-items: center; color: #a29d92" aria-label="Взять в руки"><svg width="14" height="15" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 17.5V9.5C5 8.3 7 8.3 7 9.5V5.8C7 4.6 9 4.6 9 5.8V5C9 3.8 11 3.8 11 5V6C11 4.8 13 4.8 13 6V12.5C13 15.5 11.4 17.5 9 17.5Z"/></svg></button>
+            <button type="button" class="btn" style="width: 28px; height: 26px; padding: 0; display: grid; place-items: center; color: #a29d92" aria-label="В чат"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 4.5h13v8.5h-7l-3.5 3v-3H3.5z"/></svg></button>
+            <button type="button" class="btn" style="width: 28px; height: 26px; padding: 0; display: grid; place-items: center; color: #a29d92" aria-label="Удалить"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10h7.4l.8-10"/></svg></button>
+          </span>
+          <b style="font-weight: 500; font-size: 12.5px; color: #ece7db">Наведение</b>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1040,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const METAL = {
+      ok:     { fill: 'url(#vdOk)', edge: '#050607', ink: '#050607', hi: 'rgba(255,255,255,.55)', rivet: '#f1ece0', scratch: 'none', crack: 'none' },
+      worn:   { fill: 'url(#vdWorn)', edge: '#050607', ink: '#050607', hi: 'rgba(255,255,255,.28)', rivet: '#c9c3b6', scratch: 'rgba(255,255,255,.4)', crack: 'none' },
+      broken: { fill: 'url(#vdBroken)', edge: '#1a0603', ink: '#1a0603', hi: 'rgba(255,220,200,.45)', rivet: '#ffd9cf', scratch: 'none', crack: '#140402' },
+      none:   { fill: '#17181b', edge: '#34363c', ink: '#2a2c31', hi: 'none', rivet: '#2a2c31', scratch: 'none', crack: 'none' }
+    };
+    const kinds = [
+      { k: 'head', name: 'Шлем', was: 'голова · было «Гол»' },
+      { k: 'torso', name: 'Кираса', was: 'туловище · было «Тул»' },
+      { k: 'arm', name: 'Рукавица', was: 'рука · «ПРк», «ЛРк»' },
+      { k: 'leg', name: 'Поножь', was: 'нога · «ПНг», «ЛНг»' }
+    ].map(x => ({
+      ...x,
+      states: ['ok', 'worn', 'broken', 'none'].map(s => ({
+        ...METAL[s], head: x.k === 'head', torso: x.k === 'torso', arm: x.k === 'arm', leg: x.k === 'leg'
+      }))
+    }));
+    return {
+      kinds,
+      segDemo: Array.from({ length: 10 }, (_, i) => ({
+        bg: i < 6 ? '#d9d3c6' : '#25272b', sh: i < 6 ? 'inset 0 1px 0 rgba(255,255,255,.5)' : 'inset 0 1px 1px rgba(0,0,0,.8)'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

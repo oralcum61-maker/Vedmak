@@ -1,5 +1,7 @@
 // Статусы «Ведьмака» (эффекты стр. 161, состояния боя стр. 153–163) и их влияние на броски.
 
+import { invisibilityParts } from "./monster-traits.mjs";
+
 const change = (key, value) => ({ key, type: "add", value, phase: "initial" });
 
 /** Статусы для HUD токена. Механика без `changes` учитывается при бросках (см. statusRollMods). */
@@ -25,7 +27,13 @@ export const STATUS_EFFECTS = [
   { id: "immobilized",  name: "Обездвижен",          img: "systems/vedmak/assets/fan/status/st-immobilized.webp" },
   { id: "activeDodge",  name: "Активное уклонение",  img: "systems/vedmak/assets/fan/status/st-activeDodge.webp" },
   { id: "invisible",    name: "Невидимость",         img: "systems/vedmak/assets/fan/status/st-invisible.webp" },
-  { id: "withdrawal",   name: "Ломка",               img: "systems/vedmak/assets/fan/status/st-withdrawal.webp" }
+  { id: "withdrawal",   name: "Ломка",               img: "systems/vedmak/assets/fan/status/st-withdrawal.webp" },
+  // Ужас Истинной формы высшего вампира, «Парализующий ужас» Монарха
+  { id: "frightened",   name: "Страх",               img: "icons/svg/terror.svg" },
+  // Летающие чудовища (способность «Полёт»): сбивает урон выше порога и дезориентация (combat/monster-traits.mjs)
+  { id: "flying",       name: "В полёте",            img: "icons/svg/wing.svg" },
+  // Временная бесплотность: «Ускользание» призрака и покаянника, Скрытый в облике дыма (combat/monster-traits.mjs)
+  { id: "incorporeal",  name: "Бесплотен",           img: "icons/svg/aura.svg" }
 ];
 
 /** Описания статусов для подсказок и листа. */
@@ -47,7 +55,10 @@ export const STATUS_HINTS = {
   grappled: "Не может отойти, −2 к физическим действиям. Освобождение — Уклонение против Борьбы.",
   immobilized: "Не может двигаться и действовать. Атаки по нему +4.",
   activeDodge: "Полный ход: атакующие в ближнем бою −2, доп. защиты без затрат Вын.",
-  withdrawal: "Зависимость без дозы: −5 ко всем действиям, не связанным с получением объекта зависимости (стр. 32)."
+  withdrawal: "Зависимость без дозы: −5 ко всем действиям, не связанным с получением объекта зависимости (стр. 32).",
+  flying: "В воздухе: сбивает урон одной атакой больше порога из «Полёта» (у птиц — любой) или дезориентация — падает и сбит с ног.",
+  incorporeal: "Бесплотен: оружие и физические эффекты не действуют, магия — как обычно. Круг Ирдена и облако лунной пыли делают материальным.",
+  frightened: "Напуган: не может добровольно приблизиться к источнику страха, −3 к атакам против него; атаковать его в ближнем бою — только после проверки Храбрости."
 };
 
 export function registerStatusEffects() {
@@ -57,6 +68,9 @@ export function registerStatusEffects() {
   CONFIG.specialStatusEffects.BLIND = "blind";
   CONFIG.specialStatusEffects.INVISIBLE = "invisible";
 }
+
+/** Невидимость, которую Ирден и лунная пыль ослабляют: предел бонуса атаки и защиты и поправка Скрытности. */
+const PARTIAL_REVEAL = { "Покров": { attack: 3, defense: 3, stealth: -5 } };
 
 /**
  * Модификаторы бросков от статусов.
@@ -84,12 +98,26 @@ export function statusRollMods(actor, kind, { skill } = {}) {
     const sight = actor?.system?.derived?.sightMod;
     if (sight) parts.push({ label: "Ранение глаза (зрение)", value: sight });
   }
+  // Проявлен: стоит в круге Ирдена или облаке лунной пыли (аура зоны с `reveals`, magic/zone-effects.mjs)
+  const revealed = (actor?.effects ?? []).some(e => e.active && e.flags?.vedmak?.reveals);
   // Модификаторы бросков от эффектов («Покров» +5 к атаке и защите, «Чемпион реки» +5 ко всему)
   for (const effect of actor?.effects ?? []) {
     // active: истёкший эффект v14 не удаляет, а помечает — его правки к броскам уже не действуют
     const mods = effect.active && effect.flags?.vedmak?.rollMods;
-    const value = mods ? (mods[kind] ?? 0) + (mods.all ?? 0) : 0;
-    if (value) parts.push({ label: effect.name, value });
+    let value = mods ? (mods[kind] ?? 0) + (mods.all ?? 0) : 0;
+    // «Покров» у проявленного — лишь частичная невидимость: +3 вместо +5 к атаке и защите (стр. 108)
+    const partial = revealed && PARTIAL_REVEAL[effect.flags?.vedmak?.spellBuff?.name];
+    if (partial && value > partial[kind]) value = partial[kind] ?? value;
+    if (value) parts.push({ label: partial ? `${effect.name}: частично виден` : effect.name, value });
   }
+  // …и Скрытность +5 вместо +10
+  if (skill === "stealth" && revealed) {
+    for (const effect of actor?.effects ?? []) {
+      const partial = effect.active && PARTIAL_REVEAL[effect.flags?.vedmak?.spellBuff?.name];
+      if (partial?.stealth) parts.push({ label: `${effect.name}: частично виден`, value: partial.stealth });
+    }
+  }
+  // Невидимость чудовищ («Превосходная невидимость», «Невидимость») — по статусу и способности
+  parts.push(...invisibilityParts(actor, kind, skill));
   return parts;
 }

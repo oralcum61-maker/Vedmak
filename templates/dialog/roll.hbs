@@ -2,6 +2,13 @@
   {{> "systems/vedmak/templates/dialog/parts/head.hbs" head}}
 
   <div class="dlg-body">
+    {{#if intro}}<div class="dlg-intro">{{{intro}}}</div>{{/if}}
+    {{#if editDc}}
+    <div class="dlg-row">
+      <label class="num"><span class="cap">СЛ</span><input type="number" name="dc" value="{{dc}}" min="0" max="40"></label>
+      <span class="hint grow">Сложность назначает ведущий; успех — итог больше СЛ.</span>
+    </div>
+    {{/if}}
     {{#if optional.length}}
     <div class="dlg-group">
       <span class="dlg-label">ОБСТОЯТЕЛЬСТВА</span>
@@ -9,7 +16,7 @@
         {{#each optional}}
         <label class="chip" {{#if hint}}data-tooltip="{{hint}}"{{/if}}>
           <input type="checkbox" name="optional.{{index}}" data-mod="{{value}}" {{checked checked}}>
-          <span>{{label}} <b>{{vedmakSigned value}}</b></span>
+          <span>{{label}} <b class="{{#if (lt value 0)}}neg{{else}}pos{{/if}}">{{vedmakSigned value}}</b></span>
         </label>
         {{/each}}
       </div>

@@ -20,7 +20,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FOUNDRY_APP = process.env.FOUNDRY_APP ?? "D:/FoundryVTT-WindowsPortable-14.365/App/resources/app";
 const HAS_FOUNDRY = fs.existsSync(path.join(FOUNDRY_APP, "package.json"));
 
-const SECTIONS = { code: "код", templates: "шаблоны", packs: "компендиумы" };
+const SECTIONS = { code: "код", templates: "шаблоны", styles: "стили", packs: "компендиумы" };
 const selected = process.argv.slice(2).filter(a => a in SECTIONS);
 const run = key => !selected.length || selected.includes(key);
 
@@ -35,7 +35,9 @@ const rel = f => path.relative(ROOT, f).split(path.sep).join("/");
 
 /** Файлы с расширением, без служебных папок, макетов и собранных пакетов. */
 function listFiles(dir, ext) {
-  const skip = new Set([".git", "node_modules", "dist", "design", "packs", "packs-src", "assets", "fonts"]);
+  const skip = new Set([".git", "node_modules", "dist", "design", "packs", "packs-src", "assets", "fonts",
+    // перенос облика в Claude Design (.design-sync/NOTES.md): чужие скрипты и сборка
+    ".ds-sync", ".ds-src", "ds-bundle", ".design-sync"]);
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) { if (!skip.has(entry.name)) out.push(...listFiles(path.join(dir, entry.name), ext)); }
@@ -288,6 +290,16 @@ async function checkPacks() {
   };
   const schemaIssues = new Map(); // суть → { count, examples }
   let docs = 0;
+  // Внутри компендиума Foundry показывает не больше трёх уровней папок (maxFolderDepth = FOLDER_MAX_DEPTH − 1):
+  // запись в папке глубже просто не видна
+  const deep = new Map();
+  for (const [pack, list] of Object.entries(packs)) {
+    for (const d of list) if (Array.isArray(d.folder) && d.folder.length > 3) {
+      const key = `${pack}: ${d.folder.slice(0, 2).join(" / ")}`;
+      deep.set(key, (deep.get(key) ?? 0) + 1);
+    }
+  }
+  for (const [key, n] of deep) err(S, `${key}: записи глубже трёх уровней папок (${n}) — Foundry их не покажет`);
   for (const [pack, list] of Object.entries(packs)) {
     for (const d of list) {
       for (const [doc, where] of [[d, `${pack}: ${d.name}`], ...(d.items ?? []).map(i => [i, `${pack}: ${d.name} → ${i.name}`])]) {
@@ -339,7 +351,13 @@ async function checkPacks() {
           if (!ok) err(S, `${where}: битая ссылка ${m[0]}`);
         }
         for (const m of s.matchAll(imgRe)) {
-          if (!fs.existsSync(path.join(ROOT, m[0].slice("systems/vedmak/".length)))) err(S, `${where}: нет картинки ${m[0]}`);
+          const file = path.join(ROOT, m[0].slice("systems/vedmak/".length));
+          // Маска токена Foundry (randomImg): «token-milva*.webp» — нужен хотя бы один подходящий файл
+          const found = m[0].includes("*")
+            ? (() => { const re = new RegExp(`^${path.basename(file).replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`);
+                return fs.existsSync(path.dirname(file)) && fs.readdirSync(path.dirname(file)).some(f => re.test(f)); })()
+            : fs.existsSync(file);
+          if (!found) err(S, `${where}: нет картинки ${m[0]}`);
         }
         for (const m of s.matchAll(coreRe)) {
           if (!HAS_FOUNDRY) coreUnchecked.add(m[0]);
@@ -355,7 +373,7 @@ async function checkPacks() {
   // Повторы значков: одна картинка на разные предметы (чертежи и формулы — намеренно по роду бумаги)
   const byImg = new Map();
   for (const [pack, list] of Object.entries(packs)) {
-    if (["bestiary", "tables", "generators", "chargen", "rules", "recipes"].includes(pack)) continue;
+    if (["bestiary", "pregens", "tables", "generators", "chargen", "rules", "recipes"].includes(pack)) continue;
     for (const d of list) {
       if (!d.img) continue;
       if (!byImg.has(d.img)) byImg.set(d.img, new Set());
@@ -368,11 +386,43 @@ async function checkPacks() {
   return `${docs} документов, ${links} ссылок, повторов значков — ${dups.length}`;
 }
 
+/**
+ * Стили: селекторы, из-за которых браузер пересчитывает стили всей страницы.
+ * - `:active` у body или html (PLAN 4.163): кнопка мыши, зажатая где угодно, делает body «нажатым»; правило
+ *   с наследуемым свойством (курсор) пересчитывало всю страницу на каждое нажатие и отпускание — лаги при сдвиге сцены.
+ * - атрибут style с потомками (`[style*=…] *`, PLAN 4.155): любое изменение style (сдвиг окна) пересчитывало поддерево.
+ * - «body, затем `*`» (`body.system-vedmak *`, PLAN 4.168): предок, который есть у всего, не отбрасывается фильтром
+ *   Блума — правило сопоставляется с каждым элементом; в трассе селекторов (tools/bench/freeze.mjs) — самое дорогое у системы.
+ *   Нужно правило на всё — `*` без предка; вес, если нужен, — `:not(.vd-x)` (класс) и `:not(vd-x)` (тег).
+ */
+function checkStyles() {
+  const S = SECTIONS.styles;
+  let rules = 0;
+  for (const file of fs.readdirSync(path.join(ROOT, "styles")).filter(f => f.endsWith(".css"))) {
+    const css = fs.readFileSync(path.join(ROOT, "styles", file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const m of css.matchAll(/([^{}]+)\{/g)) {
+      const head = m[1].trim();
+      if (!head || head.startsWith("@")) continue;
+      rules++;
+      for (const sel of head.split(",").map(x => x.trim())) {
+        if (/^(html|body)\b[^\s>+~]*:active/.test(sel)) err(S, `${file}: «${sel}» — :active у ${sel.split(/[.:#[]/)[0]} пересчитывает всю страницу на каждый щелчок`);
+        if (/\[style[*^$~|]?=[^\]]*\][^,]*[\s>+~]\S/.test(sel)) err(S, `${file}: «${sel}» — селектор по атрибуту style с потомками пересчитывает поддерево при каждом сдвиге`);
+        // Предок, который есть почти у всего (body/html без условий или с классами, что висят всегда): фильтр Блума
+        // по предкам такое правило не отбрасывает — оно сопоставляется с каждым элементом. `.hm *` и `body.vd-wait *` —
+        // дешёвые: у большинства элементов нужного предка нет, и они отбрасываются сразу.
+        if (/^(html|body)((\.(system-vedmak|vedmak-cursor|game|vd-hud))*)\s+\*(\s*$|::?[\w-]+$)/.test(sel)) err(S, `${file}: «${sel}» — «${sel.split(/\s/)[0]} *» сопоставляется с каждым элементом страницы; нужно «*» без предка или точные теги`);
+      }
+    }
+  }
+  return `${rules} правил`;
+}
+
 /* -------------------------------------------------------------------------- */
 
 const summary = [];
 if (run("code")) summary.push(`${SECTIONS.code}: ${checkCode()}`);
 if (run("templates")) summary.push(`${SECTIONS.templates}: ${checkTemplates()}`);
+if (run("styles")) summary.push(`${SECTIONS.styles}: ${checkStyles()}`);
 if (run("packs")) summary.push(`${SECTIONS.packs}: ${await checkPacks()}`);
 
 const print = (title, map, limit) => {

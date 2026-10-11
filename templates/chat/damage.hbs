@@ -5,7 +5,7 @@
       <span class="card-name">Урон: {{target.name}}</span>
       <span class="card-sub">{{attackLabel}} · {{locationLabel}}{{#if locRoll}} (d10 {{locRoll}}){{/if}} · {{damageTypeLabel}}{{#if nonLethal}} · несмертельный{{/if}}</span>
     </div>
-    <div class="card-value blood">
+    <div class="card-value blood">{{vedmakRing}}
       <b>{{final}}</b>
       <span class="cap">{{#if nonLethal}}Вын{{else}}ПЗ{{/if}}</span>
     </div>
@@ -53,12 +53,15 @@
 
   {{#if applied}}
   <div class="card-buttons">
-    {{#if report.stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}" data-mod="{{report.stunSave.mod}}" data-reason="{{report.stunSave.reason}}"><i class="fa-solid fa-face-dizzy"></i> Испытание Уст{{#if report.stunSave.mod}} ({{report.stunSave.mod}}){{/if}}</button>{{/if}}
-    {{#if report.deathSave}}<button type="button" class="primary" data-vedmak="deathSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}"><i class="fa-solid fa-skull"></i> Испытание против смерти</button>{{/if}}
+    {{#if report.stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}" data-mod="{{report.stunSave.mod}}" data-reason="{{report.stunSave.reason}}">Испытание Уст{{#if report.stunSave.mod}} ({{report.stunSave.mod}}){{/if}}</button>{{/if}}
+    {{#if explode}}<button type="button" data-vedmak="ammoExplode" data-tooltip="{{explode.formula}} по всем частям тела всем в {{explode.radius}} м от цели">Взрыв {{explode.formula}}</button>{{/if}}
+    {{#if report.dimeritium}}<button type="button" data-vedmak="dimeritiumTouch" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}">Касание двимерита</button>{{/if}}
+    {{#if report.deathSave}}<button type="button" class="primary" data-vedmak="deathSave" data-actor="{{target.tokenUuid}}" data-fallback="{{target.actorUuid}}">Испытание против смерти</button>{{/if}}
   </div>
   {{else}}
   <div class="card-buttons">
-    <button type="button" class="primary" data-vedmak="applyDamage"><i class="fa-solid fa-check"></i> Применить</button>
+    <button type="button" class="primary" data-vedmak="applyDamage">Применить</button>
+    {{#if explode}}<button type="button" data-vedmak="ammoExplode" data-tooltip="{{explode.formula}} по всем частям тела всем в {{explode.radius}} м от цели">Взрыв {{explode.formula}}</button>{{/if}}
   </div>
   {{/if}}
 </div>

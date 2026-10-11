@@ -86,7 +86,35 @@ export class VedmakActor extends Actor {
     ];
     if (this.system.derived?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: this.system.derived.actionMod });
     parts.push(...statusRollMods(this, "skill"));
-    return this.#check({ title: ab.name, subtitle: `${prof.system.branches[branch].name} · ${prof.name}`, parts, ...opts });
+    const subtitle = `${prof.system.branches[branch].name} · ${prof.name}`;
+    // Берсерк в облике человека: «Медвежьи чувства», «Спячка», «Медвежья шкура» — против СЛ самоконтроля, успех — эффект
+    const BF = await import("../character/bear-form.mjs");
+    if (BF.BEAR_HUMAN_ABILITIES.includes(ab.name) && BF.isBerserk(this)) {
+      if (BF.inBearForm(this)) return ui.notifications.warn(`«${ab.name}» — только в облике человека.`);
+      const bigBear = ab.name === "Медвежья шкура" && await BF.askBigBear(this);
+      const res = await this.#check({ title: ab.name, subtitle, parts, ...opts, dc: BF.controlDc(this) + (bigBear ? 5 : 0) });
+      if (res?.success) await BF.bearAbilitySuccess(this, ab.name, ab.value, { bigBear });
+      return res;
+    }
+    return this.#check({ title: ab.name, subtitle, parts, ...opts });
+  }
+
+  /**
+   * Проверка расового навыка (высший вампир): уровень + d10, у навыка за опыт — ещё параметр
+   * («Сопротивление Жажде крови»: Воля + уровень — это и Сопротивление Зверю).
+   */
+  async rollRacePower(key, opts = {}) {
+    const race = this.system.race;
+    const power = race?.system.power(key);
+    if (!power) return null;
+    if (!power.roll) return ui.notifications.info(`«${power.name}» — без проверки.`);
+    const parts = [];
+    if (power.stat) parts.push({ label: STATS[power.stat]?.label ?? power.stat, value: this.system.stats[power.stat]?.effective ?? 0, always: true });
+    parts.push({ label: power.name, value: power.value, always: true });
+    if (this.system.derived?.actionMod) parts.push({ label: "Ранения: ко всем действиям", value: this.system.derived.actionMod });
+    parts.push(...statusRollMods(this, "skill"));
+    const group = race.system.roles.find(r => r.key === power.group)?.name ?? race.name;
+    return this.#check({ title: power.name, subtitle: `${group} · расовый навык`, parts, dc: power.dc || null, ...opts });
   }
 
   /** Узнают ли персонажа: d10 не больше репутации (стр. 60). */

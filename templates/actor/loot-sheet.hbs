@@ -1,0 +1,96 @@
+{{!-- Лист хранилища (сундук, сумка, повозка, склад, лавка) — module/sheets/loot-sheet.mjs. Один корневой элемент. --}}
+<section class="storage-sheet{{#if shop}} is-shop{{/if}}">
+  <header class="st-head vd-panel">
+    <img class="st-portrait" src="{{actor.img}}" alt="" {{#if editable}}data-action="editImage" data-edit="img"{{/if}}>
+    <div class="st-ident">
+      {{#if editable}}
+      <input class="name st-name" type="text" name="name" value="{{actor.name}}" placeholder="Название">
+      {{else}}
+      <h1 class="st-name">{{actor.name}}</h1>
+      {{/if}}
+      <div class="st-kind">
+        <i class="fa-solid {{kind.icon}}"></i>
+        {{#if editable}}
+        <select name="system.kind" data-tooltip="Вид хранилища: лавка продаёт по цене с наценкой, из остальных берут даром">
+          {{#each kinds}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        {{#if shop}}
+        <label class="st-field" data-tooltip="Цена в лавке — цена по книге с этой наценкой">наценка
+          <input type="number" name="system.markup" value="{{system.markup}}" min="0" step="5"> %</label>
+        {{/if}}
+        <label class="st-field" data-tooltip="Сколько килограммов вмещает; 0 — без предела">вмещает
+          <input type="number" name="system.capacity" value="{{system.capacity}}" min="0" step="any"> кг</label>
+        {{else}}
+        <span>{{kind.label}}</span>
+        {{/if}}
+      </div>
+    </div>
+  </header>
+
+  {{#if limited}}
+  <p class="hint st-locked"><i class="fa-solid fa-lock"></i> Что внутри, не видно.</p>
+  {{else}}
+  <div class="st-scroll">
+    <div class="st-load{{#if load.over}} over{{/if}}">
+      <span class="cap">Вес</span>
+      <b>{{load.weight}}</b>{{#if load.capacity}}<span class="of">из {{load.capacity}}</span>{{/if}}
+      {{#if load.capacity}}<span class="st-bar"><i style="width: {{load.pct}}%"></i></span>{{else}}<span class="grow"></span>{{/if}}
+      {{#if load.value}}<span class="cap">{{#if shop}}Товара на{{else}}Стоит{{/if}}</span><b>{{load.value}}</b>{{/if}}
+    </div>
+
+    {{#if money.length}}
+    <div class="st-purse">
+      <span class="cap">{{#if shop}}Касса{{else}}Деньги{{/if}}</span>
+      <div class="st-coins">
+        {{#each money}}
+        <label class="st-coin" data-tooltip="{{label}}">
+          {{#if ../editable}}<input type="number" name="system.money.{{key}}" value="{{value}}" min="0">{{else}}<b>{{value}}</b>{{/if}}
+          <span>{{abbr}}</span>
+        </label>
+        {{/each}}
+      </div>
+      {{#if canTakeMoney}}<button type="button" class="go-btn steel" data-action="takeMoney" data-tooltip="Все деньги — в кошелёк персонажа">Забрать</button>{{/if}}
+    </div>
+    {{/if}}
+
+    {{#each groups as |g|}}
+    <div class="st-group">
+      <div class="group-head"><span class="bronze-tag">{{g.label}}</span><span class="rule"></span><span class="st-count">{{g.count}}</span></div>
+      <ol class="st-list">
+        {{#each g.items as |it|}}
+        <li class="st-row draggable" data-item-id="{{it.id}}">
+          <img src="{{it.img}}" alt="">
+          <a class="st-item-name" data-action="itemEdit" data-tooltip="Открыть">{{it.name}}</a>
+          <span class="st-meta">
+            {{#if it.qty}}{{#if (gt it.qty 1)}}<span class="st-qty">×{{it.qty}}</span>{{/if}}{{/if}}
+            {{#if it.weight}}<span>{{it.weight}}</span>{{/if}}
+            {{#if it.price}}<span class="st-price">{{it.price}}</span>{{/if}}
+          </span>
+          <span class="st-ctl">
+            {{#if ../../canTake}}<button type="button" class="st-take" data-action="take"
+              data-tooltip="{{#if ../../shop}}Купить: цена — с кошелька персонажа (Shift — одну без вопроса){{else}}В инвентарь персонажа (Shift — все сразу){{/if}}">{{it.takeLabel}}</button>{{/if}}
+            <a data-action="itemPost" data-tooltip="Показать в чате"><i class="fa-solid fa-comment"></i></a>
+            {{#if ../../editable}}<a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>{{/if}}
+          </span>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+    {{/each}}
+
+    {{#if empty}}
+    <p class="hint st-empty">Пусто. Вещи кладут сюда перетаскиванием — со своего листа (вещь переносится), из компендиума
+      или списка предметов.</p>
+    {{/if}}
+
+    <div class="st-group st-notes">
+      <div class="group-head"><span class="bronze-tag">Описание</span><span class="rule"></span></div>
+      {{#if editable}}
+      {{formInput systemFields.description value=system.description enriched=enrichedDescription toggled=true}}
+      {{else}}
+      <div class="st-desc">{{{enrichedDescription}}}</div>
+      {{/if}}
+    </div>
+  </div>
+  {{/if}}
+</section>

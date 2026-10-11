@@ -2,6 +2,7 @@
 
 import { int, num, str, html, source } from "../fields.mjs";
 import { ARMOR_LOCATIONS } from "../../config/items.mjs";
+import { alchemyAuto } from "../../config/alchemy-auto.mjs";
 
 const { SchemaField, BooleanField, ArrayField, StringField } = foundry.data.fields;
 
@@ -20,6 +21,8 @@ function physical() {
     availability: str("common"),
     concealment: str("none"),
     equipped: new BooleanField({ initial: false }),
+    // Не при себе: лежит в повозке, на лошади, дома — в переносимый вес не идёт
+    stored: new BooleanField({ initial: false }),
     source: source()
   };
 }
@@ -206,7 +209,14 @@ export class GearData extends foundry.abstract.TypeDataModel {
       // Фокусирующий предмет (амулет): −N к затратам Вын на магию, минимум 1 (стр. 92, 167)
       focus: int(0, { min: 0 }),
       // Набор инструментов: алхимика, ремесленника, кузница… (стр. 92)
-      tool: str("")
+      tool: str(""),
+      // Поправки, пока предмет действует (у татуировки — нанесена): как у реликвий
+      mods: modsField(),
+      // Татуировка «Офира и Зеррикании» (стр. 78–81): ступень, подвиг, размер, СЛ нанесения, место на теле
+      tattoo: new SchemaField({
+        tier: str(""), achievement: str(""), size: new foundry.data.fields.NumberField({ initial: 0, min: 0 }),
+        dc: int(0, { min: 0 }), location: str(""), applied: new BooleanField({ initial: false }), tries: int(0, { min: 0 })
+      })
     };
   }
 }
@@ -263,6 +273,8 @@ export class AlchemicalData extends foundry.abstract.TypeDataModel {
       kind: str("preparation"),
       effect: str(""),
       toxicity: int(0, { min: 0 }),
+      // СЛ Стойкости не-мутанта против ведьмачьего эликсира; 0 — обычная (CRAFTING.toxicitySaveDc), «Адаптация» снижает
+      poisonDc: int(0, { min: 0 }),
       duration: str(""),
       durationRounds: int(0, { min: 0 }),
       durationMinutes: int(0, { min: 0 }),
@@ -292,6 +304,11 @@ export class AlchemicalData extends foundry.abstract.TypeDataModel {
   }
 
   get isMutagen() { return this.kind === "mutagen"; }
+
+  prepareDerivedData() {
+    // Составы без действия в данных (пепельная мазь, яд аконита…): действие — из справочника автоматики
+    if (!this.use.action) this.use.action = alchemyAuto(this.parent?.name)?.action ?? "";
+  }
 }
 
 /** Усиление брони, руна или глиф (стр. 90, 256). */
@@ -323,6 +340,8 @@ export class SpellData extends foundry.abstract.TypeDataModel {
       branch: str(""),
       god: str(""),
       staCost: int(1, { min: 0 }),
+      // Чем платят: "" — Выносливость (и Энергия), "blood" — Очки Крови (при нехватке — Вын), "sta" — только Вын
+      resource: str(""),
       variableCost: new BooleanField({ initial: false }),
       maxCost: int(0, { min: 0 }),
       maintainCost: int(0, { min: 0 }),
@@ -360,6 +379,8 @@ export class SpellData extends foundry.abstract.TypeDataModel {
   }
 
   get isRitual() { return this.kind === "ritual"; }
+  /** Вампирская магия высшего вампира: проверка — базовый навык роли, оплата — Очки Крови. */
+  get isVampire() { return this.kind === "vampire"; }
   get isHex() { return this.kind === "hex"; }
   get skill() { return CONFIG.VEDMAK.MAGIC_SKILL[this.kind] ?? "spellCasting"; }
   get targeting() { return CONFIG.VEDMAK.targetingFor(this.range); }
@@ -368,10 +389,19 @@ export class SpellData extends foundry.abstract.TypeDataModel {
     return !!(a.damage || a.staDamage || a.statuses.length || Object.keys(a.statusesByCost ?? {}).length || a.regen.hp || a.shieldPerSta);
   }
 
-  /** Стоимость поддержания за раунд при вложенной Вын. */
+  /**
+   * Поддержание по желанию: у заклинания свой срок («2d6 раундов», «на 5 раундов»), а Вын за раунд лишь продлевает
+   * его («Вы можете тратить по 5 Вын в раунд на их поддержание», «Офир и Зеррикания»). Само не списывается.
+   */
+  get maintainOptional() {
+    return this.maintainCost > 0 && !this.maintainMode && !!this.duration && !/активн/i.test(this.duration);
+  }
+
+  /** Стоимость поддержания за раунд при вложенной Вын (0 — заклинание само не поддерживается). */
   maintainFor(spent) {
     if (this.maintainMode === "full") return spent;
     if (this.maintainMode === "half") return Math.max(1, Math.ceil(spent / 2));
+    if (this.maintainOptional) return 0;
     return this.maintainCost;
   }
 }
@@ -397,7 +427,9 @@ export class ProfessionData extends foundry.abstract.TypeDataModel {
       key: str(""),
       description: html(),
       definingSkill: new SchemaField({
-        name: str(""), stat: str("int"), value: int(0, { min: 0 }), effect: str("")
+        name: str(""), stat: str("int"), value: int(0, { min: 0 }), effect: str(""),
+        // Как и у способностей древа: Энергия по уровню («Том Альзура»: Провидец, Псионик)
+        mechanic: str("")
       }),
       vigor: int(0, { min: 0 }),
       magicAbilities: str(""),
@@ -420,6 +452,15 @@ export class ProfessionData extends foundry.abstract.TypeDataModel {
       allowedRaces: new ArrayField(new StringField()),
       branches: new ArrayField(new SchemaField({
         name: str(""),
+        // Таблицы и пояснения ветви, взятой из дополнительных («Доп. навыки для профессий»), и её книга —
+        // чтобы при обратном обмене ветвь вернулась в «Другие ветви» со своим источником
+        extra: str(""),
+        source: str(""),
+        abilities: new ArrayField(abilityField())
+      })),
+      // Дополнительные ветви из книг: игрок может взять любую вместо одной из трёх (лист, вкладка «Профессия»)
+      altBranches: new ArrayField(new SchemaField({
+        name: str(""), source: str(""), extra: str(""),
         abilities: new ArrayField(abilityField())
       })),
       source: source()
@@ -452,7 +493,37 @@ export class RaceData extends foundry.abstract.TypeDataModel {
       // Что раса даёт предметом: естественное оружие врана и боболака (названия из компендиума)
       grants: new ArrayField(new StringField()),
       canUseMagic: new BooleanField({ initial: true }),
+      // Свой ресурс расы: "blood" — Очки Крови высшего вампира (максимум — максимум ПЗ) и Шкала Зверя
+      resource: str(""),
+      // Роли — ветки расовых навыков (Монарх, Заклинатель крови, Повелитель Теней); основная и вторая — после
+      // полной прокачки древа основной (стр. 11)
+      roles: new ArrayField(new SchemaField({ key: str(""), name: str(""), base: str(""), description: str("") })),
+      role: str(""),
+      role2: str(""),
+      // Расовые навыки: база роли, ступени древа (открываются за ОК), навыки за опыт, уровни, стадии
+      powers: new ArrayField(new SchemaField({
+        key: str(""), name: str(""), group: str("core"), kind: str("tree"), stat: str(""),
+        roll: new BooleanField({ initial: false }), dc: int(0), max: int(10, { min: 1 }),
+        unlockCost: int(0, { min: 0 }), levelCost: int(0, { min: 0 }),
+        stageCosts: new ArrayField(int(0)),
+        requires: str(""), cost: str(""), range: str(""), duration: str(""), defense: str(""), page: str(""),
+        description: str(""), value: int(0, { min: 0 })
+      })),
       source: source()
     };
+  }
+
+  power(key) { return this.powers.find(p => p.key === key) ?? null; }
+
+  /** Роли персонажа: основная и (после полной прокачки основной) вторая. */
+  get activeRoles() { return [this.role, this.role2].filter(Boolean); }
+
+  /** Базовый навык роли — проверка её заклинаний. */
+  roleBase(role) { return this.power(this.roles.find(r => r.key === role)?.base ?? ""); }
+
+  /** Открыта ли ступень: предыдущая (`requires`) изучена. */
+  isUnlockable(power) {
+    if (!power.requires) return true;
+    return (this.power(power.requires)?.value ?? 0) > 0;
   }
 }

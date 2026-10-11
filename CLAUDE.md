@@ -44,6 +44,13 @@
    и почему.
 2. **После правок** — `node tools/check.mjs` (навык `/check`). С ошибками не коммитить. Если правка влияет на игру,
    скажи пользователю, что открыть в Foundry для проверки: проверка не видит поведения в игре.
+   На компьютере автора поведение проверяют автотесты в настоящем Foundry: `node tools/bench/run.mjs --start`
+   (быстрый набор `tools/bench/scenarios`, ~3 мин; `полный` — обходы `tools/bench/sweeps`, долго). Новая возможность —
+   новый сценарий с проверками `ok(условие, текст)`. После прогона — `git checkout -- packs`.
+   Жалоба на фризы или правка, которая может их дать (CSS с широкими селекторами, обработчики мыши, перерисовка окон), —
+   `node tools/bench/freeze.mjs --start`: настоящие движения мыши и клавиатуры, длинные кадры, пересчёт стилей, А/Б без
+   стилей системы и самые дорогие селекторы; отчёт — `tools/bench/results/freeze.md`. Переписывая селекторы ради
+   скорости, сверяйте отпечаток стилей до и после: `tools/bench/style-snapshot.js` и `tools/bench/style-diff.mjs`.
 3. **Записывай в `docs/PLAN.md` по ходу работы**, а не в самом конце: сессия переноса BS & Tobi оборвалась
    на лимите, и её итоги пришлось восстанавливать. Сделанное — разделом этапа, отложенное — в «Не сделано».
 4. **Коммит по-русски**, затем отправка. Облачная сессия отправляет и в `main`: автор так попросил.
@@ -80,20 +87,36 @@
   `_preparePartContext`. Сортировка по-русски — `compareRu` из `util.mjs`, не `localeCompare`.
 - `module/dice/` — проверка d10 и окна бросков. Общая часть окон — `dialog-ui.mjs`: живой пересчёт по `data-base`/`data-mod`/`data-dc`.
 - `module/combat/` — атака, защита, урон, испытания, состояния, ход, словесная дуэль, верховой бой.
-- `module/magic/`, `module/character/` (развитие, жизненный путь, мастер создания), `module/crafting/`, `module/apps/combat-hud.mjs`.
+- `module/magic/`, `module/character/` (развитие, жизненный путь, мастер создания), `module/crafting/`, `module/apps/combat-hud.mjs`
+  (худ «Медальон на цепи», стили — `styles/hud.css`, движение — `module/fx/hud-motion.mjs`).
 - `templates/` — Handlebars; `styles/vedmak.css` — все стили; `lang/ru.json`. Подшаблон (`{{> …}}`)
   работает, только если его путь есть в `TEMPLATE_PATHS` в `module/helpers.mjs`.
 - `module/character/race.mjs` — черты расы при появлении на листе: естественное оружие, выбор навыков гнома.
 - `tools/build-packs.mjs` — сборка компендиумов; `tools/check.mjs` — статические проверки;
   `tools/sync-to-foundry.ps1` — выгрузка в Foundry; `tools/release.mjs` — сборка выпуска в `dist/`;
   `tools/pack-overrides.mjs` — правки компендиумов поверх генераторов; `tools/square-icons.py` — значки из игры в квадрат.
+- `module/fx/` — анимации и звуки (`fx.mjs` — хуки, `scene.mjs` — свои эффекты на PIXI, `jb2a.mjs` — Sequencer и JB2A,
+  `sounds.mjs`); звуки синтезирует `tools/make-sounds.py` (numpy, scipy, ffmpeg) в `assets/sounds/` — свои, их можно раздавать.
 
 ## Дизайн
-Лист оформлен в стиле «кожа и железо» (PLAN 4.9, 4.15):
-- **Шрифты:** Forum — заголовки и числа, PT Serif — текст. Оба лежат локально в `fonts/`.
-- **Палитра:** переменные `--vd-*` в начале `styles/vedmak.css`: зола `#16120d`, кость `#ded3bb`, золото `#b4914e`, кровь `#8e2b22`.
-- **Фактуры:** 14 штук в `assets/textures/`, накладываются режимом `overlay`. У каждой вкладки свой материал — переменные `--vd-material` и `--vd-panel`.
-- **Цвет по смыслу** (`--vd-accent`, `--vd-btn-*`): золото — проверка, кровь — атака, фиолет — магия.
+Лист оформлен в стиле «Гравюра» (PLAN 4.45; до него «тёмная сталь и золото» — 4.44, «кожа и железо» — 4.9, 4.15):
+- **Шрифты:** Forum — имена, вкладки, разделы и числа (клейма, итоги, производные); IBM Plex Sans (вариативный) — текст, подписи, поля, кнопки (кнопки действий — 600 заглавными с разрядкой), цифры моноширинные. Оба лежат локально в `fonts/` подмножествами WOFF2 под именами «Vedmak Display» и «Vedmak Sans» (так требует OFL для изменённой версии); собирает их `tools/make-fonts.py` из исходных TTF google/fonts.
+- **Палитра:** токены `--vd-*` в начале `styles/vedmak.css`: фон `#17181b`, пластина `#1f2024`, текст `#e2ddd0`, серебро `#f1ece0`, киноварь `#b8432c`. Акцент держится светлотой, а не цветом; латунь `--vd-brass` — только Удача.
+- **Материал и свет** — слой «Гравюра» в конце `styles/vedmak.css`: выпуклое нажимают (пластины `--vd-lift`, кнопки, клейма), в утопленное вводят или читают (колодцы `--vd-sink`, поля, шкалы). Цифры клейм отлиты металлом (`--vd-metal` через `background-clip: text` — число должно быть отдельным `<b>` внутри клейма).
+- **Фактуры** — серые плитки `assets/textures/*.webp` (ambientCG, CC0) со средним 50 % серого и зерно `--vd-grain`, всегда `background-blend-mode: overlay`: меняют светлоту, не цвет. Новую плитку собирать `_tools/textures.sh`, не подкрашивать.
+- **Цвет по смыслу** (`--vd-accent`, `--vd-go`): сталь — проверка, киноварь — атака, фиолет — магия. Кромок слева у карточек и строк нет: исход — нитью по верху шапки, состояние — цветом клейма.
+- Значок — только там, где он сам кнопка; рядом с подписью значков нет.
+- **Символы вместо текста** (PLAN 4.46): части брони — коваными значками (`parts/armor-part.hbs`), тип урона, хват,
+  надёжность насечками, инструменты, уровень ромбами, стихии — алхимическими треугольниками (`ELEMENT_GLYPHS`),
+  субстанции — знаками автора (`assets/substances`). Металл значков — градиенты `#vd-metal-ok/worn/broken`: их один раз
+  на страницу ставит `injectMetalDefs` (vedmak.mjs), в шаблоны их не копировать.
+- **Окна проверок и чат вычищают встроенный `<svg>`** (DialogV2 и ChatMessage чистят разметку): значки там — файлы
+  `assets/glyphs/*.svg` фоном через CSS (`node tools/make-glyphs.mjs`), а не подшаблон со `<svg>`.
+- **Курсоры** — 18 своих рисунков в `assets/cursors`; таблица `CURSORS` в vedmak.mjs ставит их переменными на body и
+  в стили холста. Новый курсор — файл, строка в `CURSORS` и правило в разделе «Курсоры» стилей.
+- Общие мелочи вкладок «Ремесло», «Магия», «Дневник» и мастера (`.cap`, `.go-btn`, `.mini`, `.lvl`) собраны правилами
+  `:is(.craft-tab, .magic-tab, .bio-tab, .wizard)`; выбор без перерисовки (отбор субстанций, знак и его Вын) живёт
+  свойством окна и `_listen`, а не флагом документа.
 
 Макеты с холстов claude.ai лежат в `design/`. Всё по ним **уже сделано** в коде:
 
@@ -103,6 +126,14 @@
 | `design/02-roll-dialogs` | [Окно проверки — Ведьмак](https://claude.ai/artifact/4uWVPXr3warkVtZi6iEoR7) | 4.17 |
 | `design/03-params-and-rail` | [Параметры и колонка листа](https://claude.ai/artifact/PSGQjMb9bbnqwcoMCjvkD6) | 4.18 |
 | `design/04-combat-tab` | [Вкладка «Бой»](https://claude.ai/artifact/639jmEa5tfgT32WAjFasGA) | 4.19 |
+| `design/05-gravure` | [Ведьмак: новый облик листа](https://claude.ai/artifact/U4C9XoLqYACmyGrUAsZLyX) | 4.45 |
+| `design/06-tabs` | [Снаряжение, ремесло, магия, дневник, мастер и курсоры](https://claude.ai/artifact/LEfcJsPuVxDbDGDQ7oYe8a) | 4.46 |
+| `design/07-dialogs` | [Окна проверок и карточки чата](https://claude.ai/artifact/5TmpWK5jDLiXMc6DMLgjPP) | 4.47 |
+| `design/08-chat-medal` | [Карточки чата в духе листа: «Медальон»](https://claude.ai/artifact/6r5nKNduXpwfgnZBvmViKZ) | 4.51 |
+| `design/09-scrollbar` | [Ползунок прокрутки: «Ремень»](https://claude.ai/artifact/H62zqvKRcHe4G9DhjyZn7X) | 4.52 |
+| `design/10-sheet` | [Лист: колонка и вкладки одним языком](https://claude.ai/artifact/CEYi5Yk5nGp34vzELs25a8) | 4.55 |
+| `design/11-hud-and-sheets` | [Худ, профессия, чудовище, окна и предмет](https://claude.ai/artifact/XKwhutWYDAHwktTe2sfHrz) | 4.58–4.62 |
+| `design/12-hud-medallion` | [Худ «Медальон на цепи»](https://claude.ai/artifact/59X3SZGhChsbhRSNeiJ2nN) — живой макет, `build-artifact.mjs` | 4.163 |
 
 В каждой папке `canvas.json` хранит раскладку холста и заметки «что было — что стало».
 Файлы `*.dc.html` — артборды в формате холста: сами по себе они не открываются, им нужен `support.js` холста.

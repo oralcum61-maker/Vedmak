@@ -2,13 +2,12 @@
 // Каждый шаг включается своей настройкой мира (по умолчанию все выключены). Шаг выполняет один клиент — тот, кто отвечает
 // за актора, — поэтому карточки не дублируются, даже если у всех открыт чат.
 
-import { defend, bestDefense } from "./defense.mjs";
+import { defend, bestDefense, knowsDispel } from "./defense.mjs";
 import { damageFromDefense } from "./damage.mjs";
-import { resolveActor, asGM } from "./common.mjs";
+import { resolveActor, asGM, proxyMessageMode, defaultMessageMode } from "./common.mjs";
 import { requestSpellEffects } from "../magic/effects.mjs";
 import { verbalDefend, bestVerbalDefense } from "./verbal.mjs";
-
-const setting = key => game.settings.get("vedmak", key);
+import { setting } from "../util.mjs";
 
 /** Кто бросает за актора: его игрок в сети, иначе ведущий. */
 function responsibleUser(actor) {
@@ -25,15 +24,20 @@ async function onAttack(message, attack) {
   if (!game.users.activeGM?.isSelf) return;
   if (attack.spell && !attack.spell.works) return;
   const onlyAuto = attack.spell?.defenses?.length === 1 && attack.spell.defenses[0] === "auto";
+  // Карточки защиты создаёт клиент ведущего: его режим чата («Ведущему») спрятал бы их от игрока-атакующего,
+  // поэтому берём режим карточки атаки, а для атаки игрока — «всем»
+  const messageMode = proxyMessageMode(actorOf(attack.attacker), attack.config?.messageMode);
   for (const target of attack.targets ?? []) {
     const actor = actorOf(target);
     if (!actor) continue;
     if (onlyAuto) {
-      if (setting("autoApply")) await defend(message, target, "auto", { skipDialog: true });
+      // Цель игрока, знающая «Рассеивание», может рассеять и магию без защиты — решает сама кнопкой
+      const canDispel = actor.hasPlayerOwner && knowsDispel(actor);
+      if (setting("autoApply") && !canDispel) await defend(message, target, "auto", { skipDialog: true, messageMode });
       continue;
     }
     if (!setting("autoDefense") || actor.hasPlayerOwner) continue;
-    await defend(message, target, bestDefense(actor, attack), { skipDialog: true });
+    await defend(message, target, bestDefense(actor, attack), { skipDialog: true, messageMode });
   }
 }
 
@@ -41,22 +45,26 @@ async function onAttack(message, attack) {
 async function onDefense(message, def) {
   const attacker = actorOf(def.attack.attacker);
   if (def.canDamage && setting("autoDamage") && isMine(attacker)) {
-    await damageFromDefense(message, { skipDialog: true });
+    // Если за атакующего-игрока бросает ведущий (игрока нет в сети), карточка урона не должна стать «Ведущему»
+    await damageFromDefense(message, { skipDialog: true, messageMode: game.user.isGM ? proxyMessageMode(attacker, defaultMessageMode()) : undefined });
   }
   if (!setting("autoApply")) return;
   if (def.canApplyEffects && isMine(attacker)) await requestSpellEffects(message);
   if (def.hit && def.attack.hitStatus && game.users.activeGM?.isSelf) {
-    await asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status: def.attack.hitStatus, active: true });
+    for (const status of [def.attack.hitStatus, def.attack.hitStatus2].filter(Boolean)) {
+      await asGM("setStatus", { uuid: def.defender.tokenUuid ?? def.defender.actorUuid, status, active: true, messageId: message.id });
+    }
   }
 }
 
 /** Словесная дуэль: цели ведущего отвечают сами — Игнорировать или Сменой темы, что выше. */
 async function onVerbalAttack(message, atk) {
   if (!setting("autoDefense") || !game.users.activeGM?.isSelf) return;
+  const messageMode = proxyMessageMode(actorOf(atk.attacker), atk.messageMode);
   for (const target of atk.targets ?? []) {
     const actor = actorOf(target);
     if (!actor || actor.hasPlayerOwner) continue;
-    await verbalDefend(message, target, bestVerbalDefense(actor), { skipDialog: true });
+    await verbalDefend(message, target, bestVerbalDefense(actor), { skipDialog: true, messageMode });
   }
 }
 

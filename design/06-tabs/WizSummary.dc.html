@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Мастер создания — итог</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--tb:url(/_blob/b037b57d4e5b684c7960b22211c4d384);--ts:url(/_blob/e91804a6889c91a09ad16182ed1514a8)}
+button{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.rail{background-color:#121316;background-image:var(--tb),radial-gradient(140% 50% at 50% 0%,rgba(255,240,215,.06),transparent 60%);background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.enamel:hover{filter:brightness(1.1)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.wp{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 10px 7px 0;text-decoration:none;border-radius:2px}
+.node{position:relative;z-index:1;flex-shrink:0;width:26px;height:26px;display:grid;place-items:center;margin-top:1px}
+.node i{display:block;width:14px;height:14px;transform:rotate(45deg)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;font-size:11.5px;color:#d6d0c2;background:#141518;border:1px solid #060708;border-radius:2px;white-space:nowrap}
+.chip b{font-family:Forum,serif;font-weight:400;font-size:14px;color:#f1ece0}
+.sp{display:flex;align-items:center;gap:7px;padding:3px 8px 3px 3px;font-size:11.5px;color:#d6ccf3;background:#2b2438;border:1px solid #17102a;border-radius:2px;white-space:nowrap}
+.sp img{width:22px;height:22px;object-fit:cover;border-radius:1px}
+.ok{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:12.5px;color:#d6d0c2;border-bottom:1px solid rgba(0,0,0,.55);box-shadow:0 1px 0 rgba(255,240,215,.04)}
+.ok i{width:10px;height:10px;transform:rotate(45deg);flex-shrink:0;background:linear-gradient(135deg,#eef5e2,#7f9a6c);box-shadow:0 0 0 1px #050607}
+</style>
+</helmet>
+<div style="width: 1200px; height: 860px; box-sizing: border-box; display: flex; flex-direction: column; background: #0b0c0e; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums; border: 1px solid #040405">
+  <header class="rail" style="height: 34px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 12px; border-bottom: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.08)">
+    <span style="font-family: Forum, serif; font-size: 15px; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95); flex-grow: 1">Мастер создания персонажа: Мирра из Вызимы</span>
+    <span aria-hidden="true" style="color: #8e897e">×</span>
+  </header>
+
+  <div style="flex-grow: 1; min-height: 0; display: flex">
+    <nav class="rail" aria-label="Шаги мастера" style="width: 214px; flex-shrink: 0; box-sizing: border-box; padding: 16px 12px 16px 16px; display: flex; flex-direction: column; border-right: 1px solid #060708; box-shadow: 8px 0 22px -8px rgba(0,0,0,.9); position: relative; z-index: 1">
+      <span class="cap" style="margin-bottom: 10px">Тракт · 8 из 9</span>
+      <div style="position: relative; display: flex; flex-direction: column">
+        <span style="position: absolute; left: 12px; top: 14px; bottom: 14px; border-left: 1px solid #050607; box-shadow: 1px 0 0 rgba(255,240,215,.07)"></span>
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="9">
+          <a href="#" class="wp">
+            <span class="node"><i style="background: {{s.nodeBg}}; box-shadow: {{s.nodeSh}}"></i></span>
+            <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+              <span style="font-family: Forum, serif; font-size: 17px; line-height: 1.15; color: {{s.color}}; text-shadow: 0 1px 0 rgba(0,0,0,.9)">{{s.label}}</span>
+              <span style="font-size: 11px; color: {{s.noteColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.note}}</span>
+            </span>
+          </a>
+        </sc-for>
+      </div>
+    </nav>
+
+    <main class="mat" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column">
+      <div style="flex-grow: 1; min-height: 0; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: flex-end; gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span class="cap">Шаг 9 · перед дорогой</span>
+            <h1 style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 30px; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Итог</h1>
+          </div>
+          <div class="groove" style="flex-grow: 1; margin-bottom: 8px"></div>
+        </div>
+
+        <section class="plate" style="padding: 14px; display: flex; gap: 16px">
+          <div class="well" style="position: relative; width: 170px; height: 226px; flex-shrink: 0; overflow: hidden">
+            <img src="/_blob/37e56d783807304e86b687e121e3341a" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block">
+            <span style="position: absolute; inset: 5px; border: 1px solid rgba(226,221,208,.2); box-shadow: inset 0 0 30px rgba(0,0,0,.7); pointer-events: none"></span>
+          </div>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; flex-direction: column; gap: 3px">
+              <span class="metal" style="font-family: Forum, serif; font-size: 34px; line-height: 1; align-self: flex-start">Мирра из Вызимы</span>
+              <span style="font-size: 12.5px; color: #a29d92">Человек · Маг · женский · 27 лет · Темерия, Север</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px">
+              <sc-for list="{{stats}}" as="t" hint-placeholder-count="9">
+                <span style="display: flex; flex-direction: column; align-items: center; gap: 3px"><span class="stamp" style="width: 44px; height: 44px"><span class="metal" style="font-family: Forum, serif; font-size: 22px; line-height: 1">{{t.v}}</span></span><span class="cap" style="font-size: 8.5px; letter-spacing: .1em">{{t.k}}</span></span>
+              </sc-for>
+            </div>
+            <div class="well" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding: 0">
+              <sc-for list="{{derived}}" as="d" hint-placeholder-count="6">
+                <span style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 2px; border-left: {{d.edge}}"><span class="metal" style="font-family: Forum, serif; font-size: 19px; line-height: 1">{{d.v}}</span><span style="font-size: 10px; color: #8e897e">{{d.k}}</span></span>
+              </sc-for>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+              <span class="cap">Определяющий</span><span class="chip" style="color: #d6ccf3; background: #2b2438; border-color: #17102a">Магические познания <b style="color: #f2edff">6</b></span>
+              <span class="cap" style="margin-left: 8px">Кроны</span><span class="chip">200 × 2d6 = 200 × 7 <b>1 400</b></span>
+            </div>
+          </div>
+        </section>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; flex-grow: 1; min-height: 0">
+          <section class="plate" style="padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; align-items: center; gap: 10px"><span class="gem"></span><h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 13px; letter-spacing: .24em; text-transform: uppercase">Навыки</h2><div class="groove" style="flex-grow: 1"></div><span style="font-size: 11px; color: #6c685f">44 профессии · 15 освоенных</span></div>
+            <span style="display: flex; flex-wrap: wrap; gap: 4px">
+              <sc-for list="{{skills}}" as="k" hint-placeholder-count="14"><span class="chip" style="opacity: {{k.op}}">{{k.n}} <b>{{k.v}}</b></span></sc-for>
+            </span>
+          </section>
+          <div style="display: flex; flex-direction: column; gap: 12px; min-height: 0">
+            <section class="plate" style="padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px">
+              <div style="display: flex; align-items: center; gap: 10px"><span class="gem"></span><h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 13px; letter-spacing: .24em; text-transform: uppercase">Магия</h2><div class="groove" style="flex-grow: 1"></div></div>
+              <span style="display: flex; flex-wrap: wrap; gap: 4px">
+                <sc-for list="{{magic}}" as="m" hint-placeholder-count="7"><span class="sp"><img src="{{m.img}}" alt="">{{m.n}}</span></sc-for>
+              </span>
+            </section>
+            <section class="plate" style="padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px">
+              <div style="display: flex; align-items: center; gap: 10px"><span class="gem"></span><h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 13px; letter-spacing: .24em; text-transform: uppercase">С собой</h2><div class="groove" style="flex-grow: 1"></div></div>
+              <span style="display: flex; flex-wrap: wrap; gap: 4px">
+                <sc-for list="{{gear}}" as="g" hint-placeholder-count="5"><span class="chip">{{g}}</span></sc-for>
+                <span class="chip" style="color: #e0c98f">+1 Этикет</span><span class="chip" style="color: #e0c98f">+1 Образование</span><span class="chip">союзник: торговец</span>
+              </span>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <footer class="rail" style="height: 64px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-top: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.07)">
+        <span style="font-size: 12.5px; color: #b4c79c">Всё готово — героя можно создавать</span>
+        <span style="flex-grow: 1"></span>
+        <button type="button" class="btn" style="height: 40px; padding: 0 16px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase">Назад</button>
+        <button type="button" class="enamel" style="height: 44px; padding: 0 28px; font-size: 13px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase">Создать персонажа</button>
+      </footer>
+    </main>
+
+    <aside class="rail" aria-label="Готовность" style="width: 256px; flex-shrink: 0; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 8px; border-left: 1px solid #060708; box-shadow: -8px 0 22px -8px rgba(0,0,0,.9)">
+      <span class="cap">Проверка перед дорогой</span>
+      <sc-for list="{{checks}}" as="c" hint-placeholder-count="8">
+        <div class="ok"><i></i><span style="flex-grow: 1">{{c.k}}</span><span style="font-size: 11px; color: #8e897e">{{c.v}}</span></div>
+      </sc-for>
+      <span style="font-size: 11.5px; line-height: 1.45; color: #6c685f; margin-top: 6px">Предметы ищутся по названию в компендиумах; чего там нет — создаётся простым снаряжением с этим именем.</span>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":860}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const STEP = [['Раса', 'Человек'], ['Происхождение', 'Север · Темерия'], ['Жизненный путь', 'брошен · 2 события'], ['Профессия', 'Маг'],
+      ['Параметры', 'всё распределено'], ['Навыки', '44 + 15'], ['Магия', '5 · 1 · 1'], ['Снаряжение', '5 из 5 · 1 400 кр.'], ['Итог', 'проверено']];
+    const steps = STEP.map(([label, note], i) => {
+      const cur = i === 8;
+      return {
+        label, note,
+        nodeBg: cur ? 'linear-gradient(135deg, #ff9a7e, #b8432c)' : 'linear-gradient(135deg, #f6f2ea, #8e897e)',
+        nodeSh: cur ? '0 0 0 1px #2a0c06, 0 0 10px rgba(224,96,74,.6)' : '0 0 0 1px #050607, 0 2px 4px rgba(0,0,0,.8)',
+        color: cur ? '#f3eee2' : '#d6d0c2', noteColor: cur ? '#e0937f' : '#a29d92'
+      };
+    });
+    const stats = [['Инт', 9], ['Реа', 6], ['Лвк', 5], ['Тел', 5], ['Скор', 5], ['Эмп', 7], ['Рем', 5], ['Воля', 9], ['Удача', 9]].map(([k, v]) => ({ k, v }));
+    const derived = [['ПЗ', 35], ['Вын', 35], ['Уст', 7], ['Отдых', 7], ['Бег', '15 м'], ['Энергия', 5]].map(([k, v], i) => ({ k, v, edge: i ? '1px solid rgba(0,0,0,.6)' : '0' }));
+    const skills = [
+      ['Сотворение заклинаний', 6], ['Образование', 6], ['Сопротивление магии', 5], ['Внешний вид', 5], ['Понимание людей', 4], ['Владение древковым оружием', 4],
+      ['Проведение ритуалов', 4], ['Этикет', 4], ['Наведение порчи', 3], ['Соблазнение', 3],
+      ['Внимание', 4], ['Старшая Речь', 4], ['Харизма', 4], ['Дедукция', 3]
+    ].map(([n, v], i) => ({ n, v, op: i < 10 ? 1 : .8 }));
+    const magic = [
+      ['Адэнидд', '1088c840fcf9b95ff8b705ebbc5ab1fb'], ['Айна Версеос', '127101f89ea406d0c50311fa7dc4c069'], ['Воздушный пузырь', '750fa00824340759527c42e74880c53f'],
+      ['Волна огня', '46fc8caa007e13dafb3996fb44c93abc'], ['Гололёд', '3453d43f4390538a07fb33b7a7ab0d0f'], ['Гидромантия', '2ba0f55b1d99454a6cbbc5ede324259f'], ['Вечный зуд', 'e77e70edd069698fae3e41d5dee747a7']
+    ].map(([n, id]) => ({ n, img: '/_blob/' + id }));
+    const checks = [['Раса и имя', 'Человек'], ['Происхождение', 'Темерия'], ['Жизненный путь', '2 события'], ['Профессия', 'Маг'],
+      ['Параметры', '60 из 60'], ['Навыки', '44 · 15'], ['Магия', '5 · 1 · 1'], ['Снаряжение', '5 из 5']].map(([k, v]) => ({ k, v }));
+    return { steps, stats, derived, skills, magic, checks, gear: ['Посох', 'Кинжал', 'Поясная сумка', 'Письменные принадлежности', 'Дневник'] };
+  }
+}
+</script>
+</body>
+</html>

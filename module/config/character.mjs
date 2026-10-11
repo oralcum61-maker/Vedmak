@@ -1,5 +1,7 @@
 // Персонаж: расы, социальный статус, родина, ведьмачьи школы, развитие за О.У (корник стр. 20–60, 124, 237–245).
 
+import { worldSetting, memoBySource } from "../util.mjs";
+
 /** Ключи рас: механика черт завязана на ключ, а не на название предмета. */
 export const RACES = {
   human:   { label: "Человек" },
@@ -138,20 +140,26 @@ export const WITCHER_SCHOOLS = {
   griffin: { label: "Школа Грифона", hint: "+2 к Энергии.", vigor: 2 },
   cat:     { label: "Школа Кота",    hint: "Невосприимчивость ко всем немагическим попыткам обольщения." },
   viper:   { label: "Школа Змеи",    hint: "Нет штрафа за парное оружие.", waive: ["dual"] },
-  bear:    { label: "Школа Медведя", hint: "−2 к скованности движений (СД).", ev: -2 }
+  bear:    { label: "Школа Медведя", hint: "−2 к скованности движений (СД).", ev: -2 },
+  // «Школа Мантикоры» (фанатская): «Мастер щита»
+  manticore: { label: "Школа Мантикоры", waive: ["shieldParry"],
+    hint: "Мастер щита: выхватить и убрать щит — без действия, нет штрафа при парировании щитом, рука со щитом свободна для знаков, бомб и эликсиров." },
+  // «Школа Улитки» — неканоничная первоапрельская школа R. Talsorian (2022): «Выделения»
+  snail: { label: "Школа Улитки",
+    hint: "Выделения: в бою ведьмак покрыт скользкой слизью — тот, кто пытается его схватить или удержать, получает −3 (считается само). За 1 Вын и действие можно закрепить слизь Игни на руках (кнопка в худе): +3 к защите от разоружения, но минуту нельзя бросить оружие. Снаряжение школы — в компендиуме (вместо мечей и гамбезона)." }
 };
 
 /** Виды атаки со штрафом, который школа может снимать. */
-export const SCHOOL_WAIVABLE = { strong: "Сильная атака", charge: "Атака с разбега", dual: "Парное оружие" };
+export const SCHOOL_WAIVABLE = { strong: "Сильная атака", charge: "Атака с разбега", dual: "Парное оружие", shieldParry: "Парирование щитом" };
 
 /** Все школы: корника и свои (настройка мира «Ведьмачьи школы», module/apps/school-config.mjs). */
-export function witcherSchools() {
-  let custom = [];
-  try { custom = game.settings.get("vedmak", "witcherSchools")?.list ?? []; } catch { /* до регистрации настроек */ }
+export const witcherSchools = () => mergeSchools(worldSetting("witcherSchools", null));
+// Пересобирается, только когда настройку поменяли; результат общий — не менять
+const mergeSchools = memoBySource(raw => {
   const out = { ...WITCHER_SCHOOLS };
-  for (const s of custom) if (s?.key && s.label && !(s.key in WITCHER_SCHOOLS)) out[s.key] = { ...s, custom: true };
+  for (const s of raw?.list ?? []) if (s?.key && s.label && !(s.key in WITCHER_SCHOOLS)) out[s.key] = { ...s, custom: true };
   return out;
-}
+});
 
 /**
  * Механика школы словами: «+2 к Энергии · СД −2 · без штрафа: сильная атака · Навык: Внимание +1».
@@ -233,7 +241,9 @@ export const ABILITY_MECHANICS = {
   vigorPer2:     { label: "+1 Энергии за каждые 2 очка" },
   vigorPer1:     { label: "+1 Энергии за очко" },
   vigorDouble:   { label: "+2 Энергии за очко" },
-  toxicityPer1:  { label: "+5% порога токсичности за очко" }
+  toxicityPer1:  { label: "+5% порога токсичности за очко" },
+  // «Том Хаоса»: Божественная сила, Единение с природой — +1 за уровень до 9-го, на 10-м Энергия 16 (2 профессии + 14)
+  vigorPeak16:   { label: "+1 Энергии за очко, на 10-м уровне — до 16" }
 };
 
 export function abilityBonus(mechanic, value) {
@@ -242,6 +252,7 @@ export function abilityBonus(mechanic, value) {
     case "vigorPer1": return { vigor: value };
     case "vigorDouble": return { vigor: value * 2 };
     case "toxicityPer1": return { toxicity: value * 5 };
+    case "vigorPeak16": return { vigor: value >= 10 ? 14 : value };
     default: return {};
   }
 }

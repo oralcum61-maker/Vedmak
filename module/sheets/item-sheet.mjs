@@ -9,6 +9,26 @@ import { RACES, ABILITY_MECHANICS, modTargets } from "../config/character.mjs";
 import { SUBSTANCES } from "../config/crafting.mjs";
 import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
+import { animateTab } from "../fx/sheet-motion.mjs";
+import { isProstheticItem, prostheticStats, prostheticWeaponCfg } from "../combat/prosthetics.mjs";
+
+/**
+ * Ключи рас для выпадающих списков: корник (RACES) и все расы компендиумов (дополнения, фанатские книги).
+ * Без них лист расы из книги сбрасывал бы её ключ, а лист профессии терял бы такие расы из «Разрешённых рас».
+ */
+let raceKeyCache = null;
+// Своя раса, созданная или удалённая в мире, — в списках сразу, без перезагрузки
+for (const hook of ["createItem", "updateItem", "deleteItem"]) Hooks.on(hook, item => { if (item.type === "race") raceKeyCache = null; });
+async function raceKeyLabels() {
+  if (raceKeyCache) return raceKeyCache;
+  const out = Object.fromEntries(Object.entries(RACES).map(([k, v]) => [k, v.label]));
+  for (const pack of game.packs.filter(p => p.documentName === "Item")) {
+    const index = await pack.getIndex({ fields: ["system.key"] });
+    for (const e of index) if (e.type === "race" && e.system?.key && !(e.system.key in out)) out[e.system.key] = e.name;
+  }
+  for (const i of game.items) if (i.type === "race" && i.system.key && !(i.system.key in out)) out[i.system.key] = i.name;
+  return raceKeyCache = out;
+}
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -64,9 +84,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static TABS = {
     primary: {
       tabs: [
-        { id: "details",     label: "Свойства", icon: "fa-solid fa-list" },
-        { id: "description", label: "Описание", icon: "fa-solid fa-book-open" },
-        { id: "effects",     label: "Эффекты",  icon: "fa-solid fa-bolt" }
+        { id: "details",     label: "Свойства" },
+        { id: "description", label: "Описание" },
+        { id: "effects",     label: "Эффекты" }
       ],
       initial: "details"
     }
@@ -89,6 +109,9 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       editable: this.isEditable,
       config: V,
       typeLabel: game.i18n.localize(`TYPES.Item.${item.type}`),
+      headerSub: item.type === "weapon"
+        ? [V.WEAPON_CATEGORIES[system.category], V.WEAPON_SKILLS[system.skill]].filter(Boolean).join(" · ").toLowerCase()
+        : "",
       enrichedDescription: await TextEditor.enrichHTML(system.description ?? "", {
         secrets: item.isOwner, relativeTo: item
       }),
@@ -98,11 +121,32 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
 
     if (item.type === "race" || item.type === "profession") {
-      context.raceKeyOptions = { "": "—", ...Object.fromEntries(Object.entries(RACES).map(([k, v]) => [k, v.label])) };
+      context.raceKeyOptions = { "": "—", ...await raceKeyLabels() };
+      // Свой ключ, которого нет ни в корнике, ни в компендиумах, тоже остаётся в списке
+      for (const k of [system.key, ...(system.allowedRaces ?? [])]) {
+        if (k && !(k in context.raceKeyOptions)) context.raceKeyOptions[k] = item.type === "race" ? item.name : k;
+      }
     }
     if (["race", "weapon", "armor", "alchemical"].includes(item.type)) {
       context.modTargets = modTargets(STATS, SKILLS);
     }
+    // Протезы у персонажа: модификация — на каком протезе стоит, протез — Надёжность покрытия
+    const owner = item.parent?.documentName === "Actor" ? item.parent : null;
+    if (owner && item.type === "gear" && system.category === "prostheticMod") {
+      // На одну конечность — одна модификация: занятые протезы подписаны
+      const busy = id => owner.itemTypes.gear.filter(m => m !== item && m.system.category === "prostheticMod" && m.flags?.vedmak?.prosthesis === id).map(m => m.name);
+      context.prosthesisOptions = { "": "На всех надетых", ...Object.fromEntries(owner.itemTypes.gear.filter(isProstheticItem)
+        .map(i => [i.id, busy(i.id).length ? `${i.name} (уже: ${busy(i.id).join(", ")})` : i.name])) };
+      context.prosthesisId = item.flags?.vedmak?.prosthesis ?? "";
+      // Ручной арбалет и скрытый клинок: какое оружие стоит в протезе
+      const wcfg = prostheticWeaponCfg(item);
+      if (wcfg) {
+        context.mountLabel = wcfg.label;
+        context.mountOptions = { "": "—", ...Object.fromEntries(owner.itemTypes.weapon.filter(wcfg.fits).map(w => [w.id, w.name])) };
+        context.mountId = item.flags?.vedmak?.weapon ?? "";
+      }
+    }
+    if (owner && isProstheticItem(item)) context.prostheticRel = prostheticStats(owner, item).reliability;
     if (item.type === "component") {
       context.substanceOptions = { "": "—", ...Object.fromEntries(Object.entries(SUBSTANCES).map(([k, v]) => [k, v.label])) };
       context.substance = SUBSTANCES[system.substance] ?? null;
@@ -142,6 +186,14 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
     if (item.type === "weapon") {
       context.damageTypeOptions = Object.fromEntries(Object.entries(V.DAMAGE_TYPES).map(([k, v]) => [k, v.label]));
+      // Строка главных чисел (холст design/11): точность, урон с типами, надёжность насечками
+      const rel = system.reliability ?? {};
+      context.weaponKey = {
+        accuracy: `${(system.accuracy ?? 0) > 0 ? "+" : ""}${system.accuracy ?? 0}`,
+        damage: system.damage || "—",
+        types: (system.damageTypes ?? []).map(t => V.DAMAGE_TYPES[t]?.label?.toLowerCase()).filter(Boolean).join(", "),
+        relValue: rel.value ?? 0, relMax: rel.max ?? 0
+      };
       // Строки — из исходных данных: эффекты модификаций арбалета добавляются при подготовке и в данные не пишутся
       context.weaponEffects = item._source.system.effects.map((e, i) => ({ ...e, index: i, hasParam: !!V.WEAPON_EFFECTS[e.key]?.param, paramHint: V.WEAPON_EFFECTS[e.key]?.param }));
     }
@@ -168,17 +220,22 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       context.levelOptions = Object.fromEntries(levels.map(l => [l, levelLabel(kind, l)]));
       context.showElement = kind === "spell" || kind === "sign";
       // ветвь есть у инвокаций и у запретных школ «Тома Хаоса» — они бывают и заклинанием, и ритуалом
-      context.showBranch = kind === "invocation" || ["necromancy", "goetia"].includes(system.branch);
+      context.showBranch = kind === "invocation" || kind === "vampire" || ["necromancy", "goetia"].includes(system.branch);
+      context.isVampire = kind === "vampire";
+      context.resourceOptions = { blood: "Очки Крови (при нехватке — Вын)", sta: "Только Выносливость" };
       context.showGod = system.level === "archPriest" || !!system.god;
       // у магического дара своя сложность сотворения («Том Хаоса», стр. 74)
       context.showCastDc = kind === "gift";
       context.maintainModes = { "": "Фиксированное", half: "½ вложенной Вын", full: "Вся вложенная Вын" };
       context.damageTypeOptions = Object.fromEntries(Object.entries(V.DAMAGE_TYPES).map(([k, v]) => [k, v.label]));
-      context.locationOptions = { "": "Бросок d10", torso: "Туловище", all: "Все части тела" };
+      context.locationOptions = { "": "Бросок d10", head: "Голова", torso: "Туловище", all: "Все части тела" };
       context.statusOptions = Object.fromEntries(STATUS_EFFECTS.map(s => [s.id, s.name]));
       context.statusRows = system.automation.statuses.map((row, index) => ({ ...row, index }));
       context.targetingLabel = { self: "на себя", area: "зона", direct: "прямое воздействие" }[targetingFor(system.range)];
       context.skillLabel = SKILLS[MAGIC_SKILL[kind] ?? "spellCasting"].label;
+      context.checkLabel = kind === "vampire"
+        ? `уровень базового навыка роли «${CONFIG.VEDMAK.MAGIC_BRANCHES[system.branch] ?? "—"}» + d10`
+        : `Воля + ${context.skillLabel}`;
       context.byCost = Object.entries(system.automation.statusesByCost ?? {})
         .map(([cost, status]) => `${cost} Вын — ${CONFIG.statusEffects[status]?.name ?? status}`).join(", ");
     }
@@ -201,6 +258,12 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
   }
 
+  /** Смена вкладки — новая проявляется (PLAN 4.67). */
+  changeTab(tab, group, options = {}) {
+    super.changeTab(tab, group, options);
+    animateTab(this.element, group, tab);
+  }
+
   _attachFrameListeners() {
     super._attachFrameListeners();
     guardLockedActions(this, VIEW_ACTIONS);
@@ -216,7 +279,14 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       if (v && !Array.isArray(v) && typeof v === "object") foundry.utils.setProperty(data.system, key, toArray(v));
     }
     if (Array.isArray(data.system?.branches)) {
-      for (const b of data.system.branches) if (b) b.abilities = toArray(b.abilities) ?? [];
+      // Массив ветвей заменяется целиком: поля, которых нет в форме (таблицы и пояснения ветви из книги — `extra`),
+      // берём из сохранённой ветви, иначе правка любого поля листа их стирала бы
+      const saved = this.document._source.system?.branches ?? [];
+      data.system.branches.forEach((b, i) => {
+        if (!b) return;
+        b.abilities = toArray(b.abilities) ?? [];
+        for (const [k, v] of Object.entries(saved[i] ?? {})) if (!(k in b)) b[k] = foundry.utils.deepClone(v);
+      });
     }
     // Изменения эффекта алхимии — JSON в текстовом поле
     if (typeof data.system?.changes === "string") {

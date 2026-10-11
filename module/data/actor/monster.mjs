@@ -1,5 +1,6 @@
 // Чудовище / НИП бестиария (корник стр. 267–313).
 
+import { worldSetting } from "../../util.mjs";
 import { int, str, html, source } from "../fields.mjs";
 import { statsSchema, skillsSchema, resourcesSchema, prepareCommonDerived } from "./common.mjs";
 import { BOOK_METEORITE_CLASSES, BOOK_SILVER_CLASSES } from "../../config/combat.mjs";
@@ -76,14 +77,17 @@ export class MonsterData extends foundry.abstract.TypeDataModel {
       abilities: new ArrayField(new SchemaField({
         name: str(""), kind: str("ability"), description: str("")
       })),
-      // Добыча: количество — формулой из книги («1d6/2»), uuid — ссылка на предмет компендиума
+      // Добыча: количество — формулой из книги («1d6/2»), uuid — ссылка на предмет компендиума,
+      // taken — монеты уже взяты (отмечает ведущий по сокету, «вернуть» снимает отметку)
       loot: new ArrayField(new SchemaField({
-        name: str(""), quantity: str("1"), uuid: str("")
+        name: str(""), quantity: str("1"), uuid: str(""), taken: new BooleanField({ initial: false })
       })),
       description: html(),
       commonKnowledge: html(),
       witcherKnowledge: html(),
       notes: html(),
+      // Что ведущий открыл игрокам: видно и наблюдателю, и на коротком листе («Ограниченный»)
+      playerNotes: html(),
       source: source()
     };
   }
@@ -97,7 +101,7 @@ export class MonsterData extends foundry.abstract.TypeDataModel {
     if (this.materialWeakness !== "auto") return this.materialWeakness;
     const cls = this.monsterClass;
     if (cls === "humanoid") return null;
-    if (game.settings.settings.has("vedmak.booksMonsters") && game.settings.get("vedmak", "booksMonsters")) {
+    if (worldSetting("booksMonsters", false)) {
       if (BOOK_SILVER_CLASSES.includes(cls)) return "silver";
       if (BOOK_METEORITE_CLASSES.includes(cls)) return "meteorite";
       return null;

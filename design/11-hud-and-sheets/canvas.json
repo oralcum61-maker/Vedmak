@@ -1,0 +1,106 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-03T11:40:00Z"
+  },
+  "title": "Ведьмак: профессия, чудовище, окна и худ",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 800,
+      "h": 1180,
+      "title": "Профессия"
+    },
+    "Monster.dc.html": {
+      "x": 880,
+      "y": 0,
+      "w": 1000,
+      "h": 860,
+      "title": "Лист чудовища"
+    },
+    "Attack.dc.html": {
+      "x": 1960,
+      "y": 0,
+      "w": 560,
+      "h": 900,
+      "title": "Окно атаки"
+    },
+    "Item.dc.html": {
+      "x": 2600,
+      "y": 0,
+      "w": 560,
+      "h": 900,
+      "title": "Лист предмета"
+    },
+    "Hud.dc.html": {
+      "x": 3240,
+      "y": 0,
+      "w": 980,
+      "h": 230,
+      "title": "Боевой худ"
+    },
+    "NowProf.dc.html": {
+      "x": 0,
+      "y": 1300,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: Профессия"
+    },
+    "NowMonster.dc.html": {
+      "x": 880,
+      "y": 1300,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: лист чудовища"
+    },
+    "NowAttack.dc.html": {
+      "x": 1760,
+      "y": 1300,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: окно атаки"
+    },
+    "NowItem.dc.html": {
+      "x": 2640,
+      "y": 1300,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: лист предмета"
+    },
+    "NowHud.dc.html": {
+      "x": 3520,
+      "y": 1300,
+      "w": 800,
+      "h": 600,
+      "title": "Сейчас: боевой худ"
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Monster.dc.html",
+    "Attack.dc.html",
+    "Item.dc.html",
+    "Hud.dc.html",
+    "NowProf.dc.html",
+    "NowMonster.dc.html",
+    "NowAttack.dc.html",
+    "NowItem.dc.html",
+    "NowHud.dc.html"
+  ],
+  "notes": {
+    "head": {
+      "x": 0,
+      "y": -300,
+      "text": "Профессия, лист чудовища, окна и худ — языком нового листа",
+      "kind": "title1",
+      "maxW": 4220
+    }
+  },
+  "designSystems": []
+}

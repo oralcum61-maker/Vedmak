@@ -2,14 +2,16 @@
 // регенерация, щиты, поддержание активных заклинаний, порча.
 
 import { STATUS_RESIST_KEY } from "../config/combat.mjs";
-import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny } from "../combat/common.mjs";
+import { resolveActor, registerGMHandler, asGM, postCard, userOwnsAny, proxyMessageMode } from "../combat/common.mjs";
 import { applyStatus, removeShieldEffects, applyingMessages } from "../combat/damage.mjs";
 import { applyRegen, applyHex, addVigorUsed } from "./cast.mjs";
-import { applyBuff, buffLine } from "./buffs.mjs";
-import { isMagicTimed, timeIsUp, zeroShield } from "./timed.mjs";
+import { applyBuff, buffLine, deleteEffectsClamped } from "./buffs.mjs";
+import { isMagicTimed, timeIsUp, zeroShield, zeroShieldIfFree } from "./timed.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { RITUAL_INTERRUPTIONS as INTERRUPTIONS } from "../config/magic.mjs";
 import { SKILLS } from "../config/skills.mjs";
+import { immuneStatuses } from "../crafting/alchemy-triggers.mjs";
+import { implantBurnVulnerability } from "../config/crafting.mjs";
 
 /** Кнопка «Применить эффекты» в карточке защиты от магии без урона. */
 export async function requestSpellEffects(message) {
@@ -48,15 +50,17 @@ async function applySpellEffectsNow(messageId, userId) {
   }
   const lines = [];
   const rolls = [];
+  // Невосприимчивость к состояниям от эликсиров и отваров («Иволга», «Кровь горы») — как у урона (damage.mjs)
+  const buffImmune = immuneStatuses(actor);
 
   for (const st of spell.statuses ?? []) {
     const resistKey = STATUS_RESIST_KEY[st.status];
     const label = CONFIG.statusEffects[st.status]?.name ?? st.status;
-    if (resistKey && actor.system.immunities?.includes?.(resistKey)) { lines.push(`${label}: невосприимчив.`); continue; }
+    if ((resistKey && actor.system.immunities?.includes?.(resistKey)) || buffImmune.has(st.status)) { lines.push(`${label}: невосприимчив.`); continue; }
     let ok = true, rollText = "";
     // «Буря» у заклинателя: +10% поджечь, заморозить, сбить с ног
-    const chance = ["burning", "frozen", "prone"].includes(st.status)
-      ? Math.min(100, st.chance + (caster?.system.fx?.statusChance ?? 0)) : st.chance;
+    const chance = Math.min(100, (["burning", "frozen", "prone"].includes(st.status)
+      ? st.chance + (caster?.system.fx?.statusChance ?? 0) : st.chance) + (st.status === "burning" ? implantBurnVulnerability(actor) : 0));
     if (chance < 100) {
       const r = await new Roll("1d100").evaluate();
       rolls.push(r);
@@ -67,12 +71,13 @@ async function applySpellEffectsNow(messageId, userId) {
     lines.push(`${label}${rollText}: ${ok ? "да" : "нет"}.`);
   }
   if (spell.regen) {
-    const { term } = await applyRegen(actor, { ...spell.regen, name: def.attack.label, img: def.attack.img });
+    const { term } = await applyRegen(actor, { ...spell.regen, name: def.attack.label, img: def.attack.img,
+      cast: { total: def.attack.total, cost: spell.cost } });
     lines.push(`Регенерация: +${spell.regen.hp} ПЗ за ход${term}.`);
   }
   if (spell.hex) {
     const item = caster?.items.get(spell.itemId);
-    if (item) { await applyHex(actor, item); lines.push(`Наложена порча «${item.name}».`); }
+    if (item) { await applyHex(actor, item, { total: def.attack.total, cost: spell.cost }); lines.push(`Наложена порча «${item.name}».`); }
   }
   if (spell.buff) {
     await applyBuff(actor, spell.buff);
@@ -83,7 +88,9 @@ async function applySpellEffectsNow(messageId, userId) {
   await postCard({
     template: "systems/vedmak/templates/chat/turn.hbs",
     data: { title: `${def.attack.label} → ${actor.name}`, img: def.attack.img, round: null, lines, buttons: [] },
-    actor, rolls, flags: { spellEffects: { messageId } }
+    actor, rolls, flags: { spellEffects: { messageId } },
+    // Отчёт пишет клиент ведущего: режим — как у сотворения (тайное заклинание НИП не уходит всем), у игрока — всем
+    messageMode: proxyMessageMode(caster, game.messages.get(def.attackMessageId)?.flags.vedmak?.attack?.config?.messageMode)
   });
 }
 
@@ -99,6 +106,8 @@ export async function magicStartOfTurn(actor) {
   const lines = [];
   const toDelete = [];
   const sys = actor.system;
+  // Щит кончился у одного из снимаемых эффектов: обнуляем после снятия и только если другого щита не осталось
+  let shieldEnded = false;
 
   // Поддержание активных заклинаний
   let sta = sys.sta.value;
@@ -113,7 +122,18 @@ export async function magicStartOfTurn(actor) {
       toDelete.push(effect.id);
       ended.add(effect.flags.vedmak.maintain.itemId);
       lines.push(`${effect.name}: не хватает Вын — заклинание прекращено.`);
-      if (effect.flags.vedmak.maintain.shield) await zeroShield(actor);
+      if (effect.flags.vedmak.maintain.shield) {
+        shieldEnded = true;
+        // Метка щита этого заклинания («Щит: …») уходит вместе с поддержанием: иначе zeroShieldIfFree примет
+        // её за другой щит, и щит продолжит поглощать урон
+        const spell = actor.items.get(effect.flags.vedmak.maintain.itemId)?.name ?? effect.name.replace(/^Поддержание:\s*/, "");
+        for (const e of actor.effects) if (e.flags?.vedmak?.timed?.key === "shield" && e.name === `Щит: ${spell}`) toDelete.push(e.id);
+      }
+      // Свои баффы этого заклинания снимаем здесь же, с урезанием ПЗ до конца хода (хук снял бы их позже)
+      for (const e of actor.effects) {
+        const b = e.flags?.vedmak?.spellBuff;
+        if (b?.maintain && b.casterUuid === actor.uuid && b.itemId === effect.flags.vedmak.maintain.itemId) toDelete.push(e.id);
+      }
     }
   }
   if (sta !== sys.sta.value) await actor.update({ "system.sta.value": sta });
@@ -123,11 +143,13 @@ export async function magicStartOfTurn(actor) {
   for (const effect of actor.effects.filter(e => isMagicTimed(e) && timeIsUp(e))) {
     toDelete.push(effect.id);
     lines.push(`${effect.name}: ${effect.flags.vedmak.statusRounds !== undefined ? "прошло" : "действие закончилось"}.`);
-    if (effect.flags.vedmak.timed?.key === "shield") await zeroShield(actor);
+    if (effect.flags.vedmak.timed?.key === "shield") shieldEnded = true;
   }
 
-  // Регенерация и щиты с отсчётом раундов
+  // Регенерация и щиты с отсчётом раундов; счётчики раундов всех эффектов — одним запросом в конце
   let hp = actor.system.hp.value;
+  const counters = new Map();
+  const count = (effect, path, left) => counters.set(effect.id, { ...counters.get(effect.id), _id: effect.id, [path]: left });
   for (const effect of actor.effects.filter(e => e.flags?.vedmak?.timed)) {
     const timed = effect.flags.vedmak.timed;
     // Снятое выше, выключенное и истёкшее (в том числе зелья — их снимает expireAlchemy) не лечит
@@ -140,7 +162,10 @@ export async function magicStartOfTurn(actor) {
       continue;
     }
     if (effect.flags.vedmak.regen) {
-      const heal = Math.min(effect.flags.vedmak.regen, Math.max(0, actor.system.hp.max - hp));
+      // Число или формула («Фонтан жизни» — 1d6 за раунд)
+      const per = Number(effect.flags.vedmak.regen);
+      const amount = Number.isFinite(per) ? per : (await new Roll(String(effect.flags.vedmak.regen)).evaluate()).total;
+      const heal = Math.min(amount, Math.max(0, actor.system.hp.max - hp));
       if (heal) { hp += heal; lines.push(`${effect.name}: +${heal} ПЗ.`); }
     }
     if (timed.key === "shield" && !actor.system.shield.value) {
@@ -152,27 +177,39 @@ export async function magicStartOfTurn(actor) {
       if (left <= 0) {
         toDelete.push(effect.id);
         lines.push(`${effect.name}: действие закончилось.`);
-        if (timed.key === "shield") await zeroShield(actor);
+        if (timed.key === "shield") shieldEnded = true;
       } else {
-        await effect.update({ "flags.vedmak.timed.rounds": left });
+        count(effect, "flags.vedmak.timed.rounds", left);
       }
     }
   }
-  if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
 
   // Статусы с длительностью в раундах
-  for (const effect of actor.effects.filter(e => e.flags?.vedmak?.statusRounds > 0 && !toDelete.includes(e.id))) {
+  // (отравление от токсичности — отдельный эффект без срока, его держит порог, alchemy.mjs)
+  for (const effect of actor.effects.filter(e => e.flags?.vedmak?.statusRounds > 0 && !e.flags.vedmak.toxicPoison && !toDelete.includes(e.id))) {
     const left = effect.flags.vedmak.statusRounds - 1;
     if (left <= 0) {
       toDelete.push(effect.id);
       lines.push(`${effect.name}: прошло.`);
     } else {
-      await effect.update({ "flags.vedmak.statusRounds": left });
+      count(effect, "flags.vedmak.statusRounds", left);
     }
   }
+  const updates = [...counters.values()].filter(u => !toDelete.includes(u._id));
+  if (updates.length) await actor.updateEmbeddedDocuments("ActiveEffect", updates);
+  if (hp !== actor.system.hp.value) await actor.update({ "system.hp.value": hp });
 
   const unique = [...new Set(toDelete)].filter(id => actor.effects.has(id));
-  if (unique.length) await actor.deleteEmbeddedDocuments("ActiveEffect", unique);
+  // ПЗ после баффа с бонусом к максимуму урезаются тут же и с ожиданием: следом начало хода читает ПЗ
+  // для урона за ход (clampHpNow в buffs.mjs). Токсичность проверяем сами — ниже, с записью в отчёт
+  if (unique.length) await deleteEffectsClamped(actor, unique, { vedmakToxicityChecked: true });
+  if (shieldEnded) await zeroShieldIfFree(actor, unique);
+
+  // Снятые выше эликсиры и отвары могли опустить токсичность до порога — отравление от неё проходит (стр. 247)
+  // Лениво: alchemy.mjs при загрузке регистрирует действия чата, а chat.mjs импортирует этот файл — прямой импорт
+  // замыкал цикл, и система не запускалась (ACTIONS ещё не объявлен)
+  const { clearToxicPoison } = await import("../crafting/alchemy.mjs");
+  if (await clearToxicPoison(actor)) lines.push("Токсичность ниже порога — отравление прошло.");
   return lines;
 }
 
@@ -205,7 +242,7 @@ export async function ritualFocus(message) {
   if (!actor?.isOwner) return ui.notifications.warn("Концентрацию проверяет проводящий ритуал.");
   const options = Object.entries(INTERRUPTIONS).map(([k, v]) => `<option value="${k}">${v.label} (СЛ ${v.dc})</option>`).join("");
   const key = await foundry.applications.api.DialogV2.wait({
-    window: { title: "Прерывание ритуала", icon: "fa-solid fa-circle-notch" },
+    window: { title: "Прерывание ритуала" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Что случилось</label><select name="kind">${options}</select></div></div>`,
     buttons: [{ action: "ok", label: "Проверка", default: true, callback: (e, b) => b.form.elements.kind.value },

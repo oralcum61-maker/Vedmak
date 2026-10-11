@@ -1,0 +1,18 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-02T17:20:00Z" },
+  "title": "Ведьмак: карточки чата в духе листа",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Now.dc.html": { "x": 0, "y": 0, "w": 800, "h": 704, "title": "Сейчас: стальной лист и пергаментный чат" },
+    "Main.dc.html": { "x": 880, "y": 0, "w": 320, "h": 1600, "title": "А · Клеймо" },
+    "Medal.dc.html": { "x": 1280, "y": 0, "w": 320, "h": 1660, "title": "Б · Медальон" },
+    "Slip.dc.html": { "x": 1680, "y": 0, "w": 320, "h": 1720, "title": "В · Вкладыш" }
+  },
+  "order": ["Now.dc.html", "Main.dc.html", "Medal.dc.html", "Slip.dc.html"],
+  "notes": {
+    "head": { "x": 0, "y": -300, "text": "Карточки чата из той же мастерской, что и лист: три пути", "kind": "title1", "maxW": 2000 }
+  },
+  "designSystems": []
+}

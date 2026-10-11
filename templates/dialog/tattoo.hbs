@@ -1,0 +1,48 @@
+{{!-- Нанесение татуировки («Офир и Зеррикания», стр. 78–81; module/crafting/tattoo.mjs; облик — холст
+      «Вживление рун и татуировки», PLAN 4.121): карточка татуировки с СЛ и шансом; слева фигура спереди и сзади
+      (её рисует окно после показа — DialogV2 вычищает встроенный SVG), справа места списком; снизу мастер. --}}
+<div class="tat2" data-dc="{{dc}}">
+  <header class="tat2-card tat2-well">
+    <span class="tat2-frame"><img src="{{img}}" alt=""></span>
+    <div class="tat2-text">
+      <span class="cap">татуировка{{#if tier}} · {{tier}}{{/if}}{{#if size}} · размер {{size}}{{/if}}</span>
+      <b>{{title}}</b>
+      {{#if achievement}}<span class="deed">Подвиг: {{achievement}}</span>{{/if}}
+      <span class="gives">Даст: {{gives}}</span>
+    </div>
+    <span class="tat2-medal" data-tooltip="Сложность{{#if tries}}: книжная {{baseDc}}, +{{tries}} за прежние неудачи{{/if}}"><b>{{dc}}</b></span>
+    <div class="tat2-chance">
+      <span class="cap">шанс · СЛ {{dc}}</span>
+      <b data-tat-chance>—</b>
+      {{#if tries}}<span class="warn">была неудача: СЛ +{{tries}}</span>{{else}}<span data-tat-need></span>{{/if}}
+    </div>
+  </header>
+
+  <div class="tat2-main">
+    <div class="tat2-body">
+      <div class="tat2-figure" data-tat-figure></div>
+      <div class="tat2-sides"><span class="cap">спереди</span><span class="cap">сзади</span></div>
+    </div>
+    <div class="tat2-places">
+      <span class="cap">место на теле · занято из мест</span>
+      {{#each places}}
+      <label class="tat2-place{{#if full}} full{{/if}}" data-tooltip="{{label}}: {{used}} из {{max}}{{#if full}} — места нет{{/if}}">
+        <input type="radio" name="location" value="{{key}}" {{#if full}}disabled{{/if}} {{checked selected}}>
+        <span><span class="nm">{{label}}</span><span class="pips">{{#each pips}}<i class="{{#if this}}u{{/if}}"></i>{{/each}}</span><span class="c">{{#if full}}места нет{{else}}{{used}} / {{max}}{{/if}}</span></span>
+      </label>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="tat2-artists">
+    <span class="cap">кто наносит</span>
+    {{#each artists}}
+    <label class="tat2-artist" data-tooltip="Ремесло + Искусство">
+      <input type="radio" name="artist" value="{{id}}" data-base="{{base}}" data-name="{{name}}" {{checked selected}}>
+      <span><img src="{{img}}" alt="">{{name}}<b>{{base}}</b></span>
+    </label>
+    {{/each}}
+  </div>
+
+  <p class="tat2-foot" data-tat-hint></p>
+</div>

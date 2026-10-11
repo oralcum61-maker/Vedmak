@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Растянуть по ширине: двойной стальной наконечник. Точка — (16, 16). -->
+  <defs>
+    <linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f2ea"/>
+      <stop offset=".55" stop-color="#a9a49a"/>
+      <stop offset="1" stop-color="#4a4845"/>
+    </linearGradient>
+  </defs>
+  <path d="M2.5 16 L9 9.6 V13.8 H23 V9.6 L29.5 16 L23 22.4 V18.2 H9 V22.4 Z"
+        fill="url(#s)" stroke="#050607" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke"/>
+  <path d="M10 14.8 H22" stroke="#ffffff" stroke-opacity=".6" stroke-width=".7" stroke-linecap="round"/>
+</svg>

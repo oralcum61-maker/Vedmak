@@ -4,6 +4,8 @@ import { VedmakActorSheet } from "./actor-sheet-base.mjs";
 import { MONSTER_CLASSES, THREAT_COMPLEXITY, THREAT_DIFFICULTY, MATERIAL_WEAKNESS, ABILITY_KINDS } from "../data/actor/monster.mjs";
 import { BODY_TYPES, RESIST_KEYS, SIZE_MODS } from "../config/combat.mjs";
 import { currencyForName, lootCoins } from "../character/money.mjs";
+import { asGM } from "../combat/common.mjs";
+import { traitSummary } from "../combat/monster-traits.mjs";
 
 /** Списки объектов на форме (name="system.abilities.0.name") — собираются обратно в массивы. */
 const OBJECT_ARRAYS = ["abilities", "loot"];
@@ -24,7 +26,7 @@ function contentLink(uuid, name) {
 
 const ROW_TEMPLATES = {
   abilities: { name: "Новая способность", kind: "ability", description: "" },
-  loot: { name: "", quantity: "1", uuid: "" }
+  loot: { name: "", quantity: "1", uuid: "", taken: false }
 };
 
 export class MonsterSheet extends VedmakActorSheet {
@@ -37,7 +39,8 @@ export class MonsterSheet extends VedmakActorSheet {
       rowDelete: MonsterSheet.#onRowDelete,
       toggleAbilityEdit: MonsterSheet.#onToggleAbilityEdit,
       abilityPost: MonsterSheet.#onAbilityPost,
-      lootCoins: MonsterSheet.#onLootCoins
+      lootCoins: MonsterSheet.#onLootCoins,
+      lootReset: MonsterSheet.#onLootReset
     }
   };
 
@@ -59,21 +62,21 @@ export class MonsterSheet extends VedmakActorSheet {
   static TABS = {
     primary: {
       tabs: [
-        { id: "stats",   label: "Параметры",  icon: "fa-solid fa-dragon" },
-        { id: "combat",  label: "Бой",        icon: "fa-solid fa-swords" },
-        { id: "skills",  label: "Навыки",     icon: "fa-solid fa-list-check" },
-        { id: "gear",    label: "Атаки",      icon: "fa-solid fa-khanda" },
-        { id: "magic",   label: "Магия",      icon: "fa-solid fa-hand-sparkles" },
-        { id: "lore",    label: "Знания",     icon: "fa-solid fa-book-skull" },
-        { id: "effects", label: "Эффекты",    icon: "fa-solid fa-bolt" }
+        { id: "stats",   label: "Параметры" },
+        { id: "combat",  label: "Бой" },
+        { id: "skills",  label: "Навыки" },
+        { id: "gear",    label: "Атаки" },
+        { id: "magic",   label: "Магия" },
+        { id: "lore",    label: "Знания" },
+        { id: "effects", label: "Эффекты" }
       ],
       initial: "stats"
     },
     // Подвкладки «Боя»: обычный бой и словесная дуэль — как у персонажа
     combat: {
       tabs: [
-        { id: "fight",  label: "Бой",             icon: "fa-solid fa-swords" },
-        { id: "social", label: "Социальный бой",  icon: "fa-solid fa-comments" }
+        { id: "fight",  label: "Бой" },
+        { id: "social", label: "Социальный бой" }
       ],
       initial: "fight"
     }
@@ -91,6 +94,8 @@ export class MonsterSheet extends VedmakActorSheet {
       context.limitedFacts = [["Рост", system.info.height], ["Вес", system.info.weight]]
         .filter(([, value]) => value).map(([label, value]) => ({ label, value }));
       context.limitedHint = "Что известно о таком существе, ведущий расскажет после проверки знаний.";
+      // Заметки для игроков — то, что ведущий уже открыл
+      if (system.playerNotes) context.limitedNotes = await this.enrich(system.playerNotes);
       return context;
     }
     // Две группы вкладок (с 4.42 — ещё подвкладки «Боя»): Foundry сам готовит вкладки, только когда группа одна
@@ -128,11 +133,14 @@ export class MonsterSheet extends VedmakActorSheet {
         .map(([kind, label]) => ({ kind, label, rows: rows.filter(r => (ABILITY_KINDS[r.kind] ? r.kind : "ability") === kind) }))
         .filter(g => g.rows.length);
       context.abilityRows = rows;
+      // Что из способностей система делает сама: регенерация, бесплотность, полёт
+      context.autoTraits = traitSummary(this.actor);
     }
     if (partId === "lore") {
-      const [description, common, witcher, notes] = await Promise.all([system.description, system.commonKnowledge,
-        system.witcherKnowledge, system.notes].map(html => this.enrich(html)));
-      Object.assign(context, { enrichedDescription: description, enrichedCommon: common, enrichedWitcher: witcher, enrichedNotes: notes });
+      const [description, common, witcher, notes, playerNotes] = await Promise.all([system.description, system.commonKnowledge,
+        system.witcherKnowledge, this.actor.isOwner ? system.notes : "", system.playerNotes].map(html => this.enrich(html)));
+      Object.assign(context, { enrichedDescription: description, enrichedCommon: common, enrichedWitcher: witcher, enrichedNotes: notes,
+        enrichedPlayerNotes: playerNotes });
       // Добыча: ссылка на предмет компендиума тянется мышью на лист героя. Ссылку строим сами —
       // без обогащения HTML на каждую строку
       context.loot = system.loot.map((l, index) => ({
@@ -150,6 +158,11 @@ export class MonsterSheet extends VedmakActorSheet {
       if (v && !Array.isArray(v) && typeof v === "object") {
         data.system[key] = Object.keys(v).sort((a, b) => a - b).map(k => v[k]);
       }
+    }
+    // Отметка «монеты взяты» — не поле формы: без этого правка добычи сбрасывала бы её у всех строк
+    if (Array.isArray(data.system?.loot)) {
+      const old = this.actor.system.loot;
+      data.system.loot.forEach((row, i) => { row.taken = !!old[i]?.taken; });
     }
     return data;
   }
@@ -182,6 +195,14 @@ export class MonsterSheet extends VedmakActorSheet {
   static async #onLootCoins(event, target) {
     const row = this.actor.system.loot[Number(target.closest("[data-index]").dataset.index)];
     if (row) await lootCoins(this.actor, row);
+  }
+
+  /** Ведущий возвращает монеты в добычу: их снова можно взять. */
+  static async #onLootReset(event, target) {
+    if (!game.user.isGM) return;
+    const index = Number(target.closest("[data-index]").dataset.index);
+    const row = this.actor.system.loot[index];
+    if (row) await asGM("lootTaken", { uuid: this.actor.uuid, index, name: row.name, taken: false });
   }
 
   static async #onAbilityPost(event, target) {

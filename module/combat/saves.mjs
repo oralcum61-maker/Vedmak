@@ -22,9 +22,16 @@ async function saveCard(actor, data) {
  * @param {number} [opts.mod=0] — штраф/бонус к порогу (оружие «Дезориентирующее (−2)», бросок −1)
  * @param {string} [opts.reason]
  * @param {boolean} [opts.applyStatus=true]
+ * @param {{ok?: string, fail?: string}} [opts.outcomes] — свои подписи итога (без дезориентации)
  */
-export async function rollStunSave(actor, { mod = 0, reason = "", applyStatus = true } = {}) {
+export async function rollStunSave(actor, { mod = 0, reason = "", applyStatus = true, outcomes = {} } = {}) {
   if (!actor) return null;
+  // Опиат: испытаний Устойчивости нет — проходят сами
+  const numb = actor.effects.find(e => e.active && e.flags?.vedmak?.noStunSave);
+  if (numb) {
+    return saveCard(actor, { kind: "stun", title: "Испытание Устойчивости", reason: [reason, `${numb.name}: проверки нет`].filter(Boolean).join(" · "),
+      immune: true, success: true });
+  }
   if (actor.system.immunities?.includes?.("stun")) {
     return saveCard(actor, { kind: "stun", title: "Испытание Устойчивости", reason, immune: true, success: true });
   }
@@ -39,7 +46,7 @@ export async function rollStunSave(actor, { mod = 0, reason = "", applyStatus = 
   if (!success && applyStatus) await actor.toggleStatusEffect("disoriented", { active: true });
   return saveCard(actor, {
     kind: "stun", title: "Испытание Устойчивости", reason, parts, threshold, die: roll.total, success,
-    rolls: [roll], outcome: success ? "Держится на ногах" : "Дезориентирован"
+    rolls: [roll], outcome: success ? outcomes.ok ?? "Держится на ногах" : outcomes.fail ?? "Дезориентирован"
   });
 }
 
@@ -58,7 +65,10 @@ export async function rollDeathSave(actor, { luck = 0, reason = "" } = {}) {
   const penalty = sys.deathSaves?.penalty ?? 0;
   luck = Math.max(0, Math.min(luck, sys.luck?.value ?? 0));
   const threshold = sys.derived.stun - penalty + luck;
-  const success = roll.total < threshold;
+  // Адреналиновый эликсир: испытание удаётся само, штраф всё равно растёт
+  const adrenaline = actor.effects.find(e => e.active && e.flags?.vedmak?.autoDeathSave);
+  const success = roll.total < threshold || !!adrenaline;
+  if (adrenaline) reason = [reason, `${adrenaline.name}: удаётся само`].filter(Boolean).join(" · ");
   const parts = [{ label: "Устойчивость", value: sys.derived.stun }];
   if (penalty) parts.push({ label: "Накопленный штраф", value: -penalty });
   if (luck) parts.push({ label: "Удача", value: luck });
@@ -78,11 +88,10 @@ export async function rollDeathSave(actor, { luck = 0, reason = "" } = {}) {
 export async function markDead(actor) {
   await actor.toggleStatusEffect("dead", { active: true, overlay: true });
   if (actor.statuses.has("dying")) await actor.toggleStatusEffect("dying", { active: false });
-  for (const combat of game.combats) {
-    for (const c of combat.combatants) {
-      if (c.actor === actor && !c.defeated) await c.update({ defeated: true });
-    }
-  }
+  await Promise.all(game.combats.map(combat => {
+    const ids = combat.combatants.filter(c => c.actor === actor && !c.defeated).map(c => ({ _id: c.id, defeated: true }));
+    return ids.length ? combat.updateEmbeddedDocuments("Combatant", ids) : null;
+  }));
 }
 
 /** Окно выбора Удачи перед испытанием против смерти. */
@@ -102,7 +111,7 @@ export async function deathSaveDialog(actor) {
     hint: "После каждого испытания штраф растёт на 1. Потраченная Удача не возвращается."
   });
   const luck = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Испытание против смерти: ${actor.name}`, icon: "fa-solid fa-skull" },
+    window: { title: `Испытание против смерти: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "death-dialog"],
     position: { width: 440 },
     content,
@@ -115,9 +124,9 @@ export async function deathSaveDialog(actor) {
         if (box) box.textContent = String(threshold + spent);
       }
     }),
-    buttons: [{ action: "roll", label: "Бросить", icon: "fa-solid fa-skull", default: true,
+    buttons: [{ action: "roll", label: "Бросить", default: true,
       callback: (event, button) => Number(button.form.elements.luck.value) || 0 },
-      { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+      { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (luck === "cancel" || luck === null) return null;

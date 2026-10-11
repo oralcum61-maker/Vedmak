@@ -1,50 +1,100 @@
 // Защита от атаки из карточки: уклонение, изменение позиции, блок, парирование, против СЛ (стр. 164).
 
 import { SKILLS } from "../config/skills.mjs";
-import { DEFENSE_TYPES, DEFENSE_SITUATIONS, SIZE_MODS, RANGE_BANDS, CRIT_LEVELS, critLevelFor, fumbleText } from "../config/combat.mjs";
+import { DEFENSE_TYPES, DEFENSE_SITUATIONS, SIZE_MODS, RANGE_BANDS, CRIT_LEVELS, critLevelFor, fumbleText, fumbleEffect } from "../config/combat.mjs";
 import { performCheck } from "../dice/check.mjs";
 import { bindDialog, commonFields, foldState, readCommon } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { statusRollMods } from "./statuses.mjs";
+import { invisibleOpponentPart } from "./monster-traits.mjs";
+import { igniSlime } from "../character/snail-school.mjs";
+import { witcherSchools } from "../config/character.mjs";
+import { magicFumble } from "../config/magic.mjs";
 import {
-  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat
+  resolveActor, fallbackDefender, combatantFor, asGM, postCard, defaultMessageMode, armWoundParts, markDone, allowRepeat,
+  isReadyWeapon
 } from "./common.mjs";
+import { prostheticStrike, equippedProstheses, wearProsthesis, wearLine } from "./prosthetics.mjs";
+
+/** Снимает ли школа ведьмака штраф парирования щитом («Мастер щита» Мантикоры, своя школа с этим waive). */
+function shieldParryWaived(actor) {
+  if (actor.type !== "character") return false;
+  return !!witcherSchools()[actor.system.details?.school]?.waive?.includes("shieldParry");
+}
+
+/** Сломан ли щит или оружие: надёжность кончилась — блок пишет «сломан, больше не защищает». */
+const isBroken = i => { const r = i.system.reliability; return r?.max > 0 && r.value <= 0; };
 
 /** Чем можно блокировать или парировать. */
 function defenseItems(actor, attack, defense) {
   const out = [];
   if (defense === "block" || defense === "parry") {
-    for (const s of actor.itemTypes.armor.filter(i => i.system.isShield && i.system.equipped)) {
+    for (const s of actor.itemTypes.armor.filter(i => i.system.isShield && i.system.equipped && !isBroken(i))) {
       out.push({ id: s.id, label: `${s.name} (щит, Ближний бой)`, skill: "melee", shield: true, item: s });
     }
     if (!(defense === "block" && attack.isRanged)) {
-      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged)
-        .sort((a, b) => b.system.equipped - a.system.equipped);
+      // Блокируют и парируют тем, что в руках
+      const weapons = actor.itemTypes.weapon.filter(w => !w.system.isRanged && isReadyWeapon(actor, w) && !isBroken(w));
       for (const w of weapons) out.push({ id: w.id, label: `${w.name} (${SKILLS[w.system.skill]?.label ?? ""})`, skill: w.system.skill, item: w });
+      // Протез с протезным покрытием — блок и парирование Борьбой («Лавка Клауса и Нострадамуса»)
+      for (const p of equippedProstheses(actor)) {
+        const rel = prostheticStrike(actor, p.id)?.reliability;
+        if (rel?.value > 0) out.push({ id: p.id, label: `${p.name} (протез, Борьба)`, skill: "brawling", item: p, prosthetic: true });
+      }
     }
   }
   return out;
 }
+
+/** Уровень навыка профессии «Отбивание стрел» (ведьмак, ветвь «Убийца»); 0 — навыка нет. */
+export function deflectLevel(actor) {
+  const prof = actor.itemTypes?.profession?.[0];
+  for (const b of prof?.system.branches ?? []) for (const a of b.abilities) if (a.name === "Отбивание стрел") return a.value ?? 0;
+  return 0;
+}
+
+/** Есть ли в руках оружие ближнего боя: отбивать снаряд голыми руками нельзя. */
+const hasMeleeInHand = actor => actor.itemTypes.weapon.some(w => !w.system.isRanged && isReadyWeapon(actor, w) && !isBroken(w));
 
 /** Защиты, которые делаются рукой с оружием или щитом: к ним идёт штраф ран руки. */
 const ARM_DEFENSES = ["block", "parry", "brawlBlock"];
 
 /**
  * Ограничения защиты (стр. 164) — одни и те же для кнопки, окна и итога окна.
- * Стрелы и болты не парируют; дистанционную атаку блокируют только щитом (ни оружием, ни рукой);
+ * Стрелы, болты и метательное не парируют — снаряд отбивает только ведьмак навыком «Отбивание стрел»; без оружия
+ * (щита, протеза) не парируют вовсе (решения автора 10.10); дистанционную атаку блокируют только щитом;
  * «Блокирование» без оружия и щита — блок рукой (Борьба).
  * @returns {{error: string}|{defense: string, items: object[]}}
  */
 function resolveDefense(actor, attack, defense) {
-  if (defense === "parry" && (attack.weapon?.isBow || attack.weapon?.isCrossbow)) return { error: "Стрелы и болты нельзя парировать." };
+  if (defense === "dispel") {
+    if (!attack.spell) return { error: "Рассеять можно только магию." };
+    if (!knowsDispel(actor)) return { error: `${actor.name} не знает заклинания «Рассеивание».` };
+    const cost = dispelCost(attack);
+    if ((actor.system.sta?.value ?? 0) < cost) return { error: `Рассеивание стоит ${cost} Вын — у ${actor.name} столько нет.` };
+    return { defense, items: [] };
+  }
+  if (defense === "parry" && attack.isRanged) return { error: "Снаряд не парируют: стрелу, болт или метательное отбивает только ведьмак «Отбиванием стрел»." };
+  if (defense === "deflect") {
+    if (!attack.isRanged || attack.spell) return { error: "«Отбивание стрел» — только против летящего снаряда." };
+    if (!(deflectLevel(actor) > 0)) return { error: `У ${actor.name} нет навыка «Отбивание стрел».` };
+    if (!hasMeleeInHand(actor)) return { error: "Отбить снаряд можно только оружием в руке." };
+    return { defense, items: [] };
+  }
   if (defense === "brawlBlock" && attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
   const items = defenseItems(actor, attack, defense);
+  if (defense === "parry" && !items.length) return { error: "Без оружия парировать нельзя." };
   if (defense === "block" && !items.length) {
     if (attack.isRanged) return { error: "Дистанционную атаку можно блокировать только щитом." };
     return { defense: "brawlBlock", items: [] };
   }
   return { defense, items };
 }
+
+/** Знает ли защищающийся «Рассеивание» (стр. 102). */
+export const knowsDispel = actor => !!actor?.items?.some(i => i.type === "spell" && i.name === "Рассеивание");
+/** Цена Рассеивания: половина Вын, потраченной на рассеиваемое заклинание (не меньше 1). */
+const dispelCost = attack => Math.max(1, Math.floor((attack.spell?.cost ?? 0) / 2));
 
 /** Есть ли уже карточка защиты этой цели от этой атаки. Поиск по чату, а не отметка: её может не быть без ведущего. */
 function priorDefense(message, defender) {
@@ -60,9 +110,10 @@ function priorDefense(message, defender) {
  * @param {ChatMessage} message — карточка атаки
  * @param {object} target — {tokenUuid, actorUuid, name} или пусто (выделенный токен)
  * @param {string} defense — ключ DEFENSE_TYPES или "none"
- * @param {object} [opts] — {skipDialog}
+ * @param {object} [opts] — {skipDialog, messageMode}; messageMode — когда карточку создаёт клиент ведущего за НИП:
+ *   режим чата ведущего для неё не годится
  */
-export async function defend(message, target, defense, { skipDialog = false } = {}) {
+export async function defend(message, target, defense, { skipDialog = false, messageMode } = {}) {
   const attack = message.flags.vedmak?.attack;
   if (!attack) return null;
   const info = target?.tokenUuid || target?.actorUuid ? target : fallbackDefender();
@@ -74,7 +125,7 @@ export async function defend(message, target, defense, { skipDialog = false } = 
   if (attack.spell && !attack.spell.works) return ui.notifications.warn("Магия не сработала — защищаться не от чего.");
   // Одна защита цели от одной атаки: повторная — только ведущим и с подтверждением
   if (priorDefense(message, defender) && !(await allowRepeat(`${actor.name} уже защищался от этой атаки.`))) return null;
-  const mode = defaultMessageMode();
+  const mode = messageMode ?? defaultMessageMode();
   if (defense === "none") return defendAgainstDC(message, attack, actor, defender, { skipDialog, messageMode: mode });
   if (defense === "auto") return defendAuto(message, attack, actor, defender, { messageMode: mode });
   if (defense === "willx3") {
@@ -113,6 +164,11 @@ function defenseSkillKey(type, item) {
 /** Основа защиты — та же арифметика, что в rollDefense. */
 function defenseBase(actor, typeKey, item) {
   const type = DEFENSE_TYPES[typeKey] ?? DEFENSE_TYPES.dodge;
+  if (type.skill === "deflect") {
+    let base = actor.system.stats.dex.effective + deflectLevel(actor);
+    for (const m of statusRollMods(actor, "defense")) base += Number(m.value) || 0;
+    return base;
+  }
   const skill = actor.system.skills[defenseSkillKey(type, item)];
   const stat = actor.system.stats[SKILLS[defenseSkillKey(type, item)].stat];
   const sum = stat.effective + skill.total + skill.penalty;
@@ -129,6 +185,8 @@ function defenseBase(actor, typeKey, item) {
  * @returns {string} ключ защиты для defend()
  */
 export function bestDefense(actor, attack) {
+  // Без сознания или дезориентирован — беззащитная цель: атака против СЛ (defendAgainstDC), а не уклонение
+  if (["unconscious", "disoriented"].some(s => actor.statuses?.has(s))) return "none";
   const spellDefenses = attack.spell?.defenses;
   if (spellDefenses) {
     const rolled = spellDefenses.filter(k => DEFENSE_TYPES[k]);
@@ -137,7 +195,8 @@ export function bestDefense(actor, attack) {
   let best = { key: "dodge", value: -Infinity };
   for (const [key, type] of Object.entries(DEFENSE_TYPES)) {
     if (spellDefenses ? !spellDefenses.includes(key) : type.magicOnly) continue;
-    if (key === "brawlBlock") continue;
+    // Рассеивание стоит Вын — его выбирает ведущий сам
+    if (key === "brawlBlock" || key === "dispel") continue;
     const check = resolveDefense(actor, attack, key);
     if (check.error) continue;
     let item = null;
@@ -145,7 +204,8 @@ export function bestDefense(actor, attack) {
       item = check.items[0] ?? null;
       if (!item) continue;
     }
-    const value = defenseBase(actor, key, item) + (type.mod ?? 0) - (key === "parry" && attack.weapon?.isThrown ? 5 : 0);
+    const mod = key === "parry" && item?.shield && shieldParryWaived(actor) ? 0 : type.mod ?? 0;
+    const value = defenseBase(actor, key, item) + mod;
     if (value > best.value) best = { key, value };
   }
   return best.key;
@@ -155,7 +215,8 @@ async function defenseDialog(actor, attack, cfg, items) {
   const spellDefenses = attack.spell?.defenses;
   // В списке — только допустимые защиты (стр. 164); «Блокирование» без оружия и щита — это «Блок рукой»
   const allowed = Object.entries(DEFENSE_TYPES).filter(([k, t]) => {
-    if (spellDefenses ? !spellDefenses.includes(k) : t.magicOnly) return false;
+    if (k === "dispel") { if (!attack.spell || !knowsDispel(actor)) return false; }
+    else if (spellDefenses ? !spellDefenses.includes(k) : t.magicOnly) return false;
     const check = resolveDefense(actor, attack, k);
     return !check.error && check.defense === k;
   });
@@ -172,9 +233,16 @@ async function defenseDialog(actor, attack, cfg, items) {
   if (gear.length && !gear.some(g => g.selected)) gear[0].selected = true;
   const pickedItem = () => byId.get(gear.find(g => g.selected)?.id) ?? null;
 
+  // Итог окна — как у броска (defend): щитом у школы с «Парированием щитом» парирование без −3
+  const typeMod = (key, t) => {
+    if (key !== "parry") return t.mod ?? 0;
+    const it = pickedItem();
+    return it?.shield && shieldParryWaived(actor) ? 0 : t.mod ?? 0;
+  };
   const types = allowed.map(([key, t]) => ({
-    key, ...t, mod: t.mod ?? 0, selected: key === cfg.defense,
-    note: [t.mod ? `${t.mod}` : "", SKILLS[defenseSkillKey(t, pickedItem())]?.label ?? ""].filter(Boolean).join(" · ")
+    key, ...t, mod: typeMod(key, t), selected: key === cfg.defense,
+    note: [typeMod(key, t) ? `${typeMod(key, t)}` : "",
+      t.skill === "deflect" ? "Лвк + навык" : SKILLS[defenseSkillKey(t, pickedItem())]?.label ?? ""].filter(Boolean).join(" · ")
   }));
   const base = defenseBase(actor, cfg.defense, pickedItem());
 
@@ -195,7 +263,7 @@ async function defenseDialog(actor, attack, cfg, items) {
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
   });
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Защита: ${actor.name}`, icon: "fa-solid fa-shield-halved" },
+    window: { title: `Защита: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "defense-dialog"],
     position: { width: 520 },
     content,
@@ -204,7 +272,7 @@ async function defenseDialog(actor, attack, cfg, items) {
       mods: form => -(Math.max(1, Number(form.elements.outnumbered?.value) || 1) - 1)
     }),
     buttons: [{
-      action: "defend", label: "Защищаться", icon: "fa-solid fa-shield-halved", default: true,
+      action: "defend", label: "Защищаться", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         const defense = f.defense.value;
@@ -216,7 +284,7 @@ async function defenseDialog(actor, attack, cfg, items) {
           outnumbered: Math.max(1, Number(f.outnumbered.value) || 1)
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -235,31 +303,53 @@ function defenseCostInfo(actor) {
 async function rollDefense(message, attack, actor, defender, cfg, items) {
   const type = DEFENSE_TYPES[cfg.defense] ?? DEFENSE_TYPES.dodge;
   const item = items.find(i => i.id === cfg.itemId) ?? null;
-  const skillKey = type.skill === "weapon" ? (item?.skill ?? "brawling") : type.skill;
-  const skill = actor.system.skills[skillKey];
-  const stat = actor.system.stats[SKILLS[skillKey].stat];
-
-  const parts = [
-    { label: stat.label, value: stat.effective, always: true },
-    { label: skill.label, value: skill.total, always: true }
-  ];
-  const sum = stat.effective + skill.total + skill.penalty;
-  if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
-  if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
-  if (type.mod) parts.push({ label: type.label, value: type.mod });
-  if (cfg.defense === "parry" && attack.weapon?.isThrown) parts.push({ label: "Парирование метательного", value: -5 });
+  const parts = [];
+  if (type.skill === "deflect") {
+    // Навык профессии: Лвк + уровень «Отбивания стрел»
+    const dex = actor.system.stats.dex;
+    parts.push({ label: dex.label, value: dex.effective, always: true }, { label: "Отбивание стрел", value: deflectLevel(actor), always: true });
+  } else {
+    const skillKey = type.skill === "weapon" ? (item?.skill ?? "brawling") : type.skill;
+    const skill = actor.system.skills[skillKey];
+    const stat = actor.system.stats[SKILLS[skillKey].stat];
+    parts.push({ label: stat.label, value: stat.effective, always: true }, { label: skill.label, value: skill.total, always: true });
+    const sum = stat.effective + skill.total + skill.penalty;
+    if (skill.penalty) parts.push({ label: "Ранения и СД", value: skill.penalty });
+    if (skill.base !== Math.max(0, sum)) parts.push({ label: "Ранения (множитель)", value: skill.base - sum });
+  }
+  // Школа Мантикоры и своя школа с «Парированием щитом»: щитом парирует без штрафа
+  const school = actor.type === "character" ? witcherSchools()[actor.system.details?.school] : null;
+  if (type.mod && cfg.defense === "parry" && item?.shield && shieldParryWaived(actor)) {
+    parts.push({ label: `${type.label} щитом: ${school.label} — без штрафа`, value: 0, always: true });
+  } else if (type.mod) parts.push({ label: type.label, value: type.mod });
   if (cfg.outnumbered > 1) parts.push({ label: `Противников в ближнем бою: ${cfg.outnumbered}`, value: -(cfg.outnumbered - 1) });
   for (const key of cfg.situations) parts.push({ label: DEFENSE_SITUATIONS[key].label, value: DEFENSE_SITUATIONS[key].mod });
   parts.push(...statusRollMods(actor, "defense"));
+  // Атакует невидимое чудовище (обычная невидимость): −3 к защите даже заметившему. Атакой невидимость спадает,
+  // поэтому сначала — признак из данных атаки, сделанной из невидимости
+  if (attack.attackerUnseen) parts.push({ label: `${attack.attacker.name}: невидим`, value: -3 });
+  else {
+    const attacker = resolveActor(attack.attacker?.tokenUuid) ?? resolveActor(attack.attacker?.actorUuid);
+    if (attacker) parts.push(...invisibleOpponentPart(attacker));
+  }
   if (ARM_DEFENSES.includes(cfg.defense)) parts.push(...armWoundParts(actor));
+  // Школа Улитки: слизь Игни на руках — +3 к защите от разоружения
+  if (attack.attackType === "disarm" && igniSlime(actor)) parts.push({ label: "Слизь Игни", value: 3 });
   if (cfg.mod) parts.push({ label: "Модификатор", value: cfg.mod });
 
   const label = item ? `${type.label}: ${item.item.name}` : type.label;
   const roll = await performCheck({ actor, title: label, parts, luck: cfg.luck, toChat: false });
   const attackTotal = attack.roll.total;
   const margin = attackTotal - roll.total;
-  const hit = margin > 0;
+  // Рассеивание успешно, только если бросок больше броска заклинателя (стр. 102): ничья — в пользу магии
+  const hit = cfg.defense === "dispel" ? margin >= 0 : margin > 0;
   const notes = [];
+  if (cfg.defense === "dispel") {
+    const cost = dispelCost(attack);
+    await actor.update({ "system.sta.value": Math.max(0, actor.system.sta.value - cost) });
+    notes.push(`Рассеивание: −${cost} Вын (половина от ${attack.spell.cost ?? 0}).`);
+    if (cost > (actor.system.derived?.vigor ?? 0)) notes.push("Цена выше Энергии — перегрузка по правилам сотворения (стр. 167).");
+  }
 
   // Вын за дополнительную защиту
   const cost = defenseCostInfo(actor);
@@ -274,7 +364,9 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
   // Последствия успешной защиты
   let damageOnBlock = false, fixedLocation = "";
   if (!hit) {
-    if (cfg.defense === "block" && item) {
+    if (cfg.defense === "block" && item?.prosthetic) {
+      notes.push(wearLine(item.item, await wearProsthesis(actor, item.item, 1)));
+    } else if (cfg.defense === "block" && item) {
       // Пишем в исходное значение: в system уже прибавлены модификации арбалета («Стремя» +5),
       // и запись посчитанного числа поднимала бы надёжность с каждым блоком
       const src = item.item._source.system.reliability;
@@ -287,23 +379,48 @@ async function rollDefense(message, attack, actor, defender, cfg, items) {
       fixedLocation = Math.random() < 0.5 ? "rightArm" : "leftArm";
       notes.push("Удар принят на руку: урон по подставленной конечности, броня работает.");
     }
-    if (cfg.defense === "parry") {
-      notes.push("Парирование: атака отменена, атакующий ошеломлён.");
-      await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true });
-    }
+    if (cfg.defense === "parry") notes.push("Парирование: атака отменена, атакующий ошеломлён.");
+    if (cfg.defense === "deflect") notes.push(`Снаряд отбит. Его можно направить в цель в пределах 10 м: она защищается против броска ${roll.total} или ошеломлена. Бомба взрывается там, куда отбита; если цель уклонилась — разброс (стр. 152).`);
+    if (cfg.defense === "dispel") notes.push("Магия рассеяна: заклинание не действует на цель.");
     if (cfg.defense === "reposition") notes.push(`Можно сместиться на ${Math.floor(actor.system.stats.spd.effective / 2)} м.`);
     if (attack.attackType === "charge" && cfg.defense === "block") notes.push("Атака с разбега заблокирована: встречная Сила против Силы, чтобы сбить с ног.");
+    if (attack.weapon?.bearSlam && (cfg.defense === "block" || cfg.defense === "brawlBlock")) notes.push(...await bearSlamBlocked(actor, attack));
   }
 
   const fumbleKind = cfg.defense === "brawlBlock" || cfg.defense === "dodge" || cfg.defense === "reposition"
     ? "unarmed" : "weaponDefense";
+  const dispelFumble = cfg.defense === "dispel" && roll.fumble;
   const data = buildOutcome(message, attack, defender, {
     defense: cfg.defense, label, roll, total: roll.total, dc: null, hit, margin, notes,
     damageOnBlock, fixedLocation,
-    fumbleText: roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
-    fumbleLabel: roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : ""
+    fumbleText: dispelFumble ? magicFumble(roll.fumbleValue).text : roll.fumble ? fumbleText(fumbleKind, roll.fumbleValue) : "",
+    fumbleLabel: dispelFumble ? "Магический провал" : roll.fumble ? CONFIG.VEDMAK.FUMBLES[fumbleKind].label : "",
+    fumble: roll.fumble && !dispelFumble ? { kind: fumbleKind, value: roll.fumbleValue, itemId: item?.item?.id ?? null } : null,
+    fumbleAuto: !!(roll.fumble && !dispelFumble && fumbleEffect(fumbleKind, roll.fumbleValue))
   });
-  return postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+  const card = await postDefense(message, data, actor, { rolls: roll.rolls ?? [], messageMode: cfg.messageMode });
+  // Ошеломление атакующего — после карточки: ведущий проверяет по ней, что парирование было и кто парировал
+  if (!hit && cfg.defense === "parry" && card) {
+    await asGM("setStatus", { uuid: attack.attacker.tokenUuid ?? attack.attacker.actorUuid, status: "staggered", active: true, messageId: card.id });
+  }
+  return card;
+}
+
+/**
+ * «Удар сверху» заблокирован: урона нет, но цель сбита с ног и обездвижена, если не победит во встречной проверке
+ * Силы против Силы берсерка; победила — отбрасывает берсерка. Бросок берсерка — здесь же, у защищающегося.
+ */
+async function bearSlamBlocked(defender, attack) {
+  const berserk = resolveActor(attack.attacker?.tokenUuid) ?? resolveActor(attack.attacker?.actorUuid);
+  const strength = a => { const sk = a.system.skills.physique; const st = a.system.stats.body;
+    return [{ label: st.label, value: st.effective, always: true }, { label: sk.label, value: sk.total, always: true }]; };
+  const mine = await performCheck({ actor: defender, title: "Сила против Силы", subtitle: "Блок «Удара сверху»", parts: strength(defender), toChat: false });
+  const his = berserk ? await performCheck({ actor: berserk, title: "Сила против Силы", subtitle: "«Удар сверху»", parts: strength(berserk), toChat: false }) : null;
+  if (!mine || !his) return ["«Удар сверху» заблокирован: урона нет; встречная Сила против Силы — у ведущего."];
+  if (mine.total > his.total) return [`«Удар сверху» заблокирован: Сила ${mine.total} против ${his.total} — ${defender.name} отбрасывает берсерка, урона нет.`];
+  // Свои статусы защищающийся ставит себе сам — это его актор
+  for (const status of ["prone", "immobilized"]) await defender.toggleStatusEffect(status, { active: true });
+  return [`«Удар сверху» заблокирован: урона нет, но Сила ${mine.total} против ${his.total} — ${defender.name} сбит с ног и обездвижен.`];
 }
 
 /** Карточка защиты в чат и отметка на карточке атаки (погасить кнопки этой цели). */
@@ -347,7 +464,7 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
         <span class="tot-hint">Попадание, если атака больше итоговой СЛ</span>
       </footer></div>`;
     const res = await foundry.applications.api.DialogV2.wait({
-      window: { title: `Без защиты: ${actor.name}`, icon: "fa-solid fa-bullseye" },
+      window: { title: `Без защиты: ${actor.name}` },
       classes: ["vedmak", "vedmak-dialog", "check-dialog"], position: { width: 460 }, content,
       render: (event, dialog) => bindDialog(dialog, {
         extra: form => {
@@ -356,9 +473,9 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
           if (out) out.textContent = String((Number(form.elements.dc.value) || 0) + (Number(size?.dataset.mod) || 0));
         }
       }),
-      buttons: [{ action: "ok", label: "Сравнить", icon: "fa-solid fa-bullseye", default: true,
+      buttons: [{ action: "ok", label: "Сравнить", default: true,
         callback: (e, b) => ({ dc: Number(b.form.elements.dc.value) || 0, size: b.form.elements.size.value }) },
-        { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+        { action: "cancel", label: "Отмена" }],
       rejectClose: false
     });
     if (!res || res === "cancel") return null;
@@ -382,7 +499,10 @@ async function defendAuto(message, attack, actor, defender, { messageMode } = {}
 
 function buildOutcome(message, attack, defender, r) {
   const critAllowed = !attack.spell || attack.spell.canCrit;
-  const critLevel = r.hit && critAllowed && !r.auto ? critLevelFor(r.margin) : null;
+  // Гавенкарский разбрызгивающий: после попадания +N к результату атаки — для крита (AMMO_PROPS.afterHit)
+  const afterHit = r.hit ? attack.weapon?.ammo?.afterHit ?? 0 : 0;
+  if (afterHit) r.notes = [...(r.notes ?? []), `${attack.weapon.ammo.name}: наконечник раскрылся — +${afterHit} к результату атаки для крита.`];
+  const critLevel = r.hit && critAllowed && !r.auto && !attack.noDamage ? critLevelFor(r.margin + afterHit) : null;
   const canDamage = (r.hit || r.damageOnBlock) && !attack.noDamage;
   const spell = attack.spell ?? null;
   const canApplyEffects = r.hit && !!spell && attack.noDamage && !!(spell.statuses?.length || spell.regen || spell.hex || spell.buff);
@@ -395,8 +515,8 @@ function buildOutcome(message, attack, defender, r) {
       damageFormula: attack.damageFormula, damageMult: attack.damageMult, nonLethal: attack.nonLethal,
       damageMod: attack.damageMod ?? 0, chargeFormula: attack.chargeFormula ?? "",
       noDamage: attack.noDamage, fixedLocation: attack.fixedLocation, hitText: attack.hitText,
-      hitStatus: attack.hitStatus, stunSaveMod: attack.stunSaveMod, total: attack.roll.total,
-      spell
+      hitStatus: attack.hitStatus, hitStatus2: attack.hitStatus2 ?? "", stunSaveMod: attack.stunSaveMod, total: attack.roll.total,
+      spell, drain: attack.drain ?? null
     },
     defender,
     ...r,
@@ -404,7 +524,8 @@ function buildOutcome(message, attack, defender, r) {
     critLevel: r.damageOnBlock ? null : critLevel,
     critLabel: critLevel && !r.damageOnBlock ? CRIT_LEVELS[critLevel].label : "",
     canDamage, canApplyEffects,
-    hitStatusLabel: r.hit && attack.hitStatus ? CONFIG.statusEffects[attack.hitStatus]?.name ?? attack.hitStatus : "",
+    hitStatusLabel: r.hit && attack.hitStatus ? [attack.hitStatus, attack.hitStatus2].filter(Boolean)
+      .map(id => CONFIG.statusEffects.find(s => s.id === id)?.name ?? id).join(" и ") : "",
     showHitText: r.hit && attack.hitText,
     stunSave: r.hit && attack.stunSaveMod !== null && attack.stunSaveMod !== undefined && attack.noDamage
   };

@@ -4,7 +4,7 @@
   "name": "Генератор НПС",
   "img": "icons/environment/people/cleric-grey.webp",
   "description": "",
-  "formula": "1d2",
+  "formula": "1d3",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16,7 +16,7 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -58,8 +58,8 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": "Compendium.vedmak.chargen.RollTable.oQhQ4TBjHnPZJ7DV"
@@ -72,8 +72,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -253,7 +253,7 @@
   "name": "Гетерохромия",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d9",
+  "formula": "1d17",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -265,7 +265,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      9
     ],
     "drawn": false,
@@ -293,8 +293,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     10,
+     10
     ],
     "drawn": false,
     "documentUuid": null
@@ -307,8 +307,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -321,8 +321,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -335,8 +335,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -349,8 +349,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -363,8 +363,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -377,8 +377,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -391,8 +391,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1171,7 +1171,7 @@
   "name": "Мужчина - Одежда торс",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1211,7 +1211,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -1225,8 +1225,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -1239,8 +1239,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -1253,8 +1253,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -1267,8 +1267,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -1281,8 +1281,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -1295,8 +1295,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -1309,8 +1309,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1323,8 +1323,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -1345,7 +1345,7 @@
   "name": "Мужчина - Причёска",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1385,7 +1385,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -1399,8 +1399,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -1413,8 +1413,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -1427,8 +1427,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -1441,8 +1441,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -1455,8 +1455,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -1469,8 +1469,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -1483,8 +1483,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1497,8 +1497,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -1839,7 +1839,7 @@
   "name": "Мужчина - одежда ноги",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -1865,7 +1865,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -1893,8 +1893,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -1907,8 +1907,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -1921,8 +1921,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -1935,8 +1935,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -1949,8 +1949,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -1963,8 +1963,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -1977,8 +1977,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -1991,8 +1991,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -2549,7 +2549,7 @@
   "name": "Мужчина одежда сапоги",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d18",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -2575,7 +2575,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     2,
+     3,
      10
     ],
     "drawn": false,
@@ -2603,8 +2603,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     11,
+     11
     ],
     "drawn": false,
     "documentUuid": null
@@ -2617,8 +2617,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     12,
+     12
     ],
     "drawn": false,
     "documentUuid": null
@@ -2631,8 +2631,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     13,
+     13
     ],
     "drawn": false,
     "documentUuid": null
@@ -2645,8 +2645,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     6,
-     6
+     14,
+     14
     ],
     "drawn": false,
     "documentUuid": null
@@ -2659,8 +2659,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     7,
-     7
+     15,
+     15
     ],
     "drawn": false,
     "documentUuid": null
@@ -2673,8 +2673,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     8,
-     8
+     16,
+     16
     ],
     "drawn": false,
     "documentUuid": null
@@ -2687,8 +2687,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     9,
-     9
+     17,
+     17
     ],
     "drawn": false,
     "documentUuid": null
@@ -2701,8 +2701,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     10,
-     10
+     18,
+     18
     ],
     "drawn": false,
     "documentUuid": null
@@ -3043,7 +3043,7 @@
   "name": "Нпс - Голос",
   "img": "icons/svg/d20-grey.svg",
   "description": "",
-  "formula": "1d5",
+  "formula": "1d9",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -3069,7 +3069,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      5
     ],
     "drawn": false,
@@ -3083,8 +3083,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     6,
+     6
     ],
     "drawn": false,
     "documentUuid": null
@@ -3097,8 +3097,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     3,
-     3
+     7,
+     7
     ],
     "drawn": false,
     "documentUuid": null
@@ -3111,8 +3111,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     4,
-     4
+     8,
+     8
     ],
     "drawn": false,
     "documentUuid": null
@@ -3125,8 +3125,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     5,
-     5
+     9,
+     9
     ],
     "drawn": false,
     "documentUuid": null
@@ -4546,305 +4546,6 @@
   }
  },
  {
-  "_id": "ALdxi8rmNvjs3dcA",
-  "name": "Жизнь в академии - Малая академия",
-  "img": "icons/environment/settlement/watchtower-cliff.webp",
-  "description": "",
-  "formula": "1d10",
-  "replacement": true,
-  "displayRoll": true,
-  "results": [
-   {
-    "_id": "41nHUNsS2Ccwwy1c",
-    "type": "text",
-    "name": "",
-    "description": "Отдача заклинания. Заклинание, которое вы произнесли, имело ужасные неприятные последствия. Порог энергии понижен на 1. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     1,
-     1
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "74JMsiPjpEK9yNSb",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     1,
-     1
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "aWCdgGwei2XsLFix",
-    "type": "text",
-    "name": "",
-    "description": "Занимался темной магией. Вы баловались темной магией и выпустили в мир демона. Ты носишь Люцифуг демона, и они всегда знают, где ты. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     2,
-     2
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "iXqUYeidcMypHwy4",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     2,
-     2
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "ARK4quM5DlUtv8Pa",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     3,
-     3
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "ZWnEVAWUlyeeyVCU",
-    "type": "text",
-    "name": "",
-    "description": "Цель ведьмака. Ваше неконтролируемое использование магии нанесло достаточно ущерба, чтобы ведьмак из школы Кота был нанят, чтобы убить вас. Этот ведьмак все еще ищет тебя. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     3,
-     3
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "FLEk11rG2TSj815p",
-    "type": "text",
-    "name": "",
-    "description": "Аптекарь. Частью вашего обучения была способность диагностировать и лечить болезни людей из вашего сообщества. Получите +2 к первой помощи. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     4,
-     4
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "Nz0CmbGYBOfCJ7bK",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     4,
-     4
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "I1gNYaciecrJjqfQ",
-    "type": "text",
-    "name": "",
-    "description": "Ботаник. Вы ухаживали за школьным садом. Получите +2 к Выживанию в дикой природе. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     5,
-     5
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "iZVnd7lnVr3irUWM",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     5,
-     5
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "7oEtl2Nl1XgpV9tR",
-    "type": "text",
-    "name": "",
-    "description": "Помогал местным жителям с различными проблемами. Вы использовали свою магию, чтобы помочь нуждающемуся региону. Ваше социальное положение Равенство в этой области. Определите с Мастером, что это за область. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     6,
-     6
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "quhAk377cNtVo30h",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     6,
-     6
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "8FyLjsQznMA2rxV1",
-    "type": "text",
-    "name": "",
-    "description": "Проклят. Вы были прокляты либо собственной рукой, либо гневом кого-то из вашей школы. Вместе с Мастером выберите подходящее проклятие из перечисленных. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     7,
-     7
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "yYsEsnZ7X1jvKIXp",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     7,
-     7
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "99JbQJZkEEgQEeiP",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     8,
-     8
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "jLdwCWwvwztT79gH",
-    "type": "text",
-    "name": "",
-    "description": "Защитил деревню от чудовища. Вы использовали свою магию, чтобы отразить атаку монстра из деревни. Получите +1 к знаниям монстров. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     8,
-     8
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "aLKnsFvpXeXmyzem",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     9,
-     9
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   },
-   {
-    "_id": "e2Ex50dCEcYfkBKn",
-    "type": "text",
-    "name": "",
-    "description": "Внешкольное обучение. Вы учились у многих наставников, узнавая столько, сколько могли. Начните с дополнительным заклинания новичка. Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     9,
-     9
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "mm5qvwIV00iok6cd",
-    "type": "text",
-    "name": "",
-    "description": "Сделали собственную фокусировку. Вы создали свой первый предмет фокусировки. Вы получаете Амулет, который считается для вас предметом Фокусировки (2). Вас взял в ученики маг.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     10,
-     10
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "qYijxbQKCA9icx1u",
-    "type": "document",
-    "name": "Каким был ваш настаник?",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     10,
-     10
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.zfAzg51mEWYmAY9B"
-   }
-  ],
-  "folder": [
-   "Генератор мага"
-  ],
-  "flags": {
-   "vedmak": {
-    "origin": "Компендиум BS & Tobi"
-   }
-  }
- },
- {
   "_id": "2TEoNP5MCIzYphiI",
   "name": "Жизнь мага - Магические исследования",
   "img": "icons/sundries/books/book-stack.webp",
@@ -5030,95 +4731,6 @@
   "formula": "1d100",
   "replacement": true,
   "displayRoll": false,
-  "results": [
-   {
-    "_id": "1i6DK6LVKnsCHiQt",
-    "type": "text",
-    "name": "",
-    "description": "Что-то произошло в этой декаде.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     1,
-     50
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "JPSThNVU2VPBfz4S",
-    "type": "document",
-    "name": "Что случилось - полит",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     1,
-     50
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.4J6EtH4Pqn6wuDXh"
-   },
-   {
-    "_id": "3DvTrk57MG0vguZD",
-    "type": "text",
-    "name": "",
-    "description": "Произошло что-то опасное в этой декаде.",
-    "img": "icons/svg/d20-black.svg",
-    "weight": 1,
-    "range": [
-     51,
-     100
-    ],
-    "drawn": false,
-    "documentUuid": null
-   },
-   {
-    "_id": "84qXHJu0ja2TjwYI",
-    "type": "document",
-    "name": "Опасность - полит",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     51,
-     100
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.JBnDSizeUxxgXQ2a"
-   },
-   {
-    "_id": "mVoICtB9K1iQCxU6",
-    "type": "document",
-    "name": "Что случилось - полит",
-    "description": "",
-    "img": "icons/svg/d20-grey.svg",
-    "weight": 1,
-    "range": [
-     51,
-     100
-    ],
-    "drawn": false,
-    "documentUuid": "Compendium.vedmak.chargen.RollTable.4J6EtH4Pqn6wuDXh"
-   }
-  ],
-  "folder": [
-   "Генератор мага"
-  ],
-  "flags": {
-   "vedmak": {
-    "origin": "Компендиум BS & Tobi"
-   }
-  }
- },
- {
-  "_id": "M3JF2ul6zlEBSKZJ",
-  "name": "Жизнь мага - политиканство",
-  "img": "icons/skills/social/diplomacy-handshake.webp",
-  "description": "",
-  "formula": "1d100",
-  "replacement": true,
-  "displayRoll": true,
   "results": [
    {
     "_id": "1i6DK6LVKnsCHiQt",
@@ -9451,7 +9063,7 @@
   "name": "Кто потерпевший",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1D2",
+  "formula": "1d2",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -9659,7 +9271,7 @@
   "name": "Место рождения старших",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1d2",
+  "formula": "1d3",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -9671,7 +9283,7 @@
     "img": "icons/svg/d20-grey.svg",
     "weight": 1,
     "range": [
-     1,
+     2,
      2
     ],
     "drawn": false,
@@ -9699,8 +9311,8 @@
     "img": "icons/svg/d20-black.svg",
     "weight": 1,
     "range": [
-     2,
-     2
+     3,
+     3
     ],
     "drawn": false,
     "documentUuid": null
@@ -11181,7 +10793,7 @@
   "name": "Профессия союзника",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d11",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -12903,7 +12515,7 @@
   "name": "Что случилось - исслед",
   "img": "icons/svg/circle.svg",
   "description": "",
-  "formula": "1d10",
+  "formula": "1d13",
   "replacement": true,
   "displayRoll": true,
   "results": [
@@ -16091,5 +15703,1317 @@
     "origin": "Компендиум BS & Tobi"
    }
   }
+ },
+ {
+  "name": "Высший вампир: клан",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d6",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "pUPcxYzArwnCb5c1",
+    "type": "text",
+    "name": "",
+    "description": "Гхарасхам — основная часть Континента от Туссента и севернее. +1 к Пониманию людей, Харизме, Обману, Убеждению, Соблазнению.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     1,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "FhDDePYb02XgbJ2p",
+    "type": "text",
+    "name": "",
+    "description": "Аммурун — племя за океаном на Западе. +3 к Мореходству, нет штрафов при сражении под водой.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     3,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "7WaHKTy9O4Rigf1I",
+    "type": "text",
+    "name": "",
+    "description": "Тдет — за Синими горами, от Зеррикании до островов Оками. Шанс отравления режется вдвое.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     5,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "Gk1rGYlPhcDnRBGz"
+ },
+ {
+  "name": "Высший вампир: возраст",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "toH4BfRFHVJORTCL",
+    "type": "text",
+    "name": "",
+    "description": "Юный: несколько десятков лет, вырос уже в нынешнем мире. +2 к Ориентированию в городе. Событий — 3.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     1,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "n7bmSUTDbO5s0KKA",
+    "type": "text",
+    "name": "",
+    "description": "Молодой: пара веков, застал смену нескольких королевств. +2 к Этикету. Событий — 3.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 3,
+    "range": [
+     3,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "B4mj5RUIhMFGq3Ys",
+    "type": "text",
+    "name": "",
+    "description": "Взрослый: несколько веков, помнит то, о чём люди пишут в летописях. +2 к Образованию. Событий — 3.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 5,
+    "range": [
+     6,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "0I2txAOlVQ8c437N"
+ },
+ {
+  "name": "Высший вампир: взросление",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "9Aeio2YF2YBGka0e",
+    "type": "text",
+    "name": "",
+    "description": "Рос среди нелюдей, вдали от людей: облик, манеры и отношение к людям — скорее эльфские.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "1QwRE7xBMT99Rbsw",
+    "type": "text",
+    "name": "",
+    "description": "Рос, охотясь на разумных существ: редко пытался походить на окружающих, от вас веет опасностью, в не-вампирах трудно видеть кого-то, кроме добычи.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "xMnJKuYDzaxh3DUk",
+    "type": "text",
+    "name": "",
+    "description": "Рос среди людей, подражая местным обычаям: полностью влился в общество и живёт, ничем не отличаясь от горожан.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 3,
+    "range": [
+     3,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "vllRnDzlyOwRny1T",
+    "type": "text",
+    "name": "",
+    "description": "Вырос среди соплеменников, редко встречал другие расы: неприветлив с не-вампирами, заботы людей вас не волнуют.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 3,
+    "range": [
+     6,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "2TX3EAvKvOD903bI",
+    "type": "text",
+    "name": "",
+    "description": "Вырос в изгнании: запрещено ступать на земли других высших вампиров; из-за переездов и бедственного положения выглядит потрёпанно.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "SW0cf1F3iJKR0RjX",
+    "type": "text",
+    "name": "",
+    "description": "Вырос среди аристократов (вампиров или других рас): любит хорошую одежду, драгоценности и роскошь.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "K25pIClcPUAJ3d2O"
+ },
+ {
+  "name": "Высший вампир: события жизни",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "qdi439RBX7o2z1AF",
+    "type": "text",
+    "name": "",
+    "description": "Усыновил ребёнка: пойдёт на всё, чтобы его защитить. +2 к Пониманию людей.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "0T2eKblG7A5R2UQd",
+    "type": "text",
+    "name": "",
+    "description": "Полюбил представителя другой расы: готов рискнуть жизнью ради любви. +2 к Соблазнению.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "hmOv4bjaf1N2VDr3",
+    "type": "text",
+    "name": "",
+    "description": "На всю жизнь поссорился с другим вампиром: заклятые враги едва удерживаются от кровопролития. +2 к Храбрости.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Ac5Vades7GFCfzRZ",
+    "type": "text",
+    "name": "",
+    "description": "Сразился с ведьмаком: знает их приёмы, годами привыкал к их ядам. +2 к Стойкости (и против «Чёрной крови»).",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "BVVlW9qW4SibhmKJ",
+    "type": "text",
+    "name": "",
+    "description": "Держит дома чудовище: в логове живёт дикое простое чудовище-питомец, в путь не берётся. +2 к Монстрологии.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ukdc3MW02CWhTEoN",
+    "type": "text",
+    "name": "",
+    "description": "Был «убит»: годы в безмолвной темноте научили избегать смерти. +2 к Уклонению/Изворотливости; воскрешение временем вдвое быстрее.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "roK5yM7ARlb1YIdB",
+    "type": "text",
+    "name": "",
+    "description": "Ушёл в запой: уничтожил деревню, сородичи относятся с подозрением. +2 к Запугиванию.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "6rfZpCk4rO5Uy8Ns",
+    "type": "text",
+    "name": "",
+    "description": "Заработал славу: добрая — +2 к репутации, дурная — +2 к Запугиванию (чётное — добрая).",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "pFmf9NKdZa57od5J",
+    "type": "text",
+    "name": "",
+    "description": "Основал секту: последователи могут не знать, что их лидер — вампир. +1 к Убеждению и +1 к Харизме.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "2Cob2zZsmIiDvjtu",
+    "type": "text",
+    "name": "",
+    "description": "Посвящён в рыцари: подвиг по приказу правителя под личиной. +2 к репутации, рыцарь в окрестностях логова.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "Z1r6Jx1myYRzsGNP"
+ },
+ {
+  "name": "Высший вампир: увлечения",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "PDeWPxAd4bd4qmiS",
+    "type": "text",
+    "name": "",
+    "description": "Торговля: небольшое дело, 50 крон в неделю, пока за ним присматривают. +2 к Торговле.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "qU7N68doo3jJl6Um",
+    "type": "text",
+    "name": "",
+    "description": "Алхимия: лаборатория в логове и 2 формулы новичка. +2 к Алхимии.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "vV2PUB8AgWMtx5mu",
+    "type": "text",
+    "name": "",
+    "description": "Искусство: картины для галерей, своя мастерская. +2 к Искусству.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "NX4EwaOa0JHWJjjG",
+    "type": "text",
+    "name": "",
+    "description": "Разгадывание тайн: друг в местной страже. +2 к Дедукции.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "r49qtOoOW2K3Cpcp",
+    "type": "text",
+    "name": "",
+    "description": "«Сельское хозяйство»: двое «домашних» людей — раз в неделю 1d10 ОК без проверки Сопротивления Жажде крови.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "2UOAqeCCGbOjqanQ",
+    "type": "text",
+    "name": "",
+    "description": "Азартные игры: много должников в округе. +2 к Азартным играм.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "OEUkuG3s32ZcR6q2",
+    "type": "text",
+    "name": "",
+    "description": "Мореплавание: парусная лодка для рек и прибрежных вод. +2 к Мореходству.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ZjvwZiydZvEgq5Zb",
+    "type": "text",
+    "name": "",
+    "description": "Верховая езда: лошадь и скаковое седло. +2 к Верховой езде.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "mAu31fphBKYcQ9bV",
+    "type": "text",
+    "name": "",
+    "description": "Виноделие: виноградник, 50 крон в неделю, вход в высший свет. +2 к Этикету.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "DPurxFQqjDjSoNU6",
+    "type": "text",
+    "name": "",
+    "description": "Физическое развитие: любит тренировать тело. +2 к Атлетике.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "A3QgeqjYIxatGKNd"
+ },
+ {
+  "name": "Высший вампир: характер",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "M2mRfz24cxvdpBZb",
+    "type": "text",
+    "name": "",
+    "description": "Скрытный",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "3ITIPv0ZIeRh7Vwu",
+    "type": "text",
+    "name": "",
+    "description": "Непокорный",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "buD8WTlM4FWsCyiU",
+    "type": "text",
+    "name": "",
+    "description": "Вспыльчивый",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "qCviK5NebGQulKrO",
+    "type": "text",
+    "name": "",
+    "description": "Идеалист",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "kvKKYshkoOV4KXNM",
+    "type": "text",
+    "name": "",
+    "description": "Вдумчивый",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "jdKxWAusQ0hPp0Of",
+    "type": "text",
+    "name": "",
+    "description": "Суровый",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "VfqmAtDrzmNVZNWg",
+    "type": "text",
+    "name": "",
+    "description": "Коварный",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "tT8QJsCfPtTIyovJ",
+    "type": "text",
+    "name": "",
+    "description": "Дружелюбный",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "GhCOCxqmFTqnnZJs",
+    "type": "text",
+    "name": "",
+    "description": "Надменный",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "4qb5Ww6J8xMM4OQk",
+    "type": "text",
+    "name": "",
+    "description": "Робкий",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "EdJXJbB1bZOMlhCr"
+ },
+ {
+  "name": "Высший вампир: чем гордится",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "9SfC3rz2gqgsnTaq",
+    "type": "text",
+    "name": "",
+    "description": "Своими манерами",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "5loILIsu01ln3YGK",
+    "type": "text",
+    "name": "",
+    "description": "Физической силой",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "wkT2u7d8657nFDsg",
+    "type": "text",
+    "name": "",
+    "description": "Домом",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ahMGcWHQsrPcIDxt",
+    "type": "text",
+    "name": "",
+    "description": "Предками",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ezHo6o7khBC7EHeR",
+    "type": "text",
+    "name": "",
+    "description": "Знаниями",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "KRjjqjVfXQDu8P2Q",
+    "type": "text",
+    "name": "",
+    "description": "Достижениями",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "Yhgg3Jf6cNa2rFru",
+    "type": "text",
+    "name": "",
+    "description": "Обаянием",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "ormECyDxxpZrftuo",
+    "type": "text",
+    "name": "",
+    "description": "Имуществом",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "YbguJLC6mYAf5LD2",
+    "type": "text",
+    "name": "",
+    "description": "Жизнестойкостью",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "REzR87IARj9ubaQg",
+    "type": "text",
+    "name": "",
+    "description": "Навыками",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "MkWCrEjISY2KWUB9"
+ },
+ {
+  "name": "Высший вампир: что ненавидит",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "cPpUsZhd8WwbY8au",
+    "type": "text",
+    "name": "",
+    "description": "Высокомерие",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "lrmhuX3xMUOKorcA",
+    "type": "text",
+    "name": "",
+    "description": "Общество",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "lrLK5kfnrJGICflk",
+    "type": "text",
+    "name": "",
+    "description": "Дерзкую добычу",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "2jQZkBqyMIgy6J2P",
+    "type": "text",
+    "name": "",
+    "description": "Скучную добычу",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "tCYBoOLQh55yrfb7",
+    "type": "text",
+    "name": "",
+    "description": "Людей",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     5,
+     5
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "bTYhaboPnFh8MChK",
+    "type": "text",
+    "name": "",
+    "description": "Магию",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     6,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "mLLnig1YYAo7vCUT",
+    "type": "text",
+    "name": "",
+    "description": "Домыслы о вампирах",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     7,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "M76FIrLjDm3NpPXZ",
+    "type": "text",
+    "name": "",
+    "description": "Старший народ (любой)",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "LnchtWKHGuxqvD6e",
+    "type": "text",
+    "name": "",
+    "description": "Неуважение",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "b8OkdbxgVs4885PO",
+    "type": "text",
+    "name": "",
+    "description": "Обидчиков друзей",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "lXZfWF52bUhhqE6m"
+ },
+ {
+  "name": "Высший вампир: отношение к крови",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "p9mnk2nuARsWA3ql",
+    "type": "text",
+    "name": "",
+    "description": "Воздерживается",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     1,
+     1
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "fRcXnaHsM1OEi5Ww",
+    "type": "text",
+    "name": "",
+    "description": "Выпьет, если уговорят",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     2,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "O3GZsYEWZwMHNGNA",
+    "type": "text",
+    "name": "",
+    "description": "Раз или два в неделю",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     3,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "WvPIy88w6EOx8MtT",
+    "type": "text",
+    "name": "",
+    "description": "Защищая себя",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     4,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "TBhv58X1yAzXkPZV",
+    "type": "text",
+    "name": "",
+    "description": "За компанию",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 3,
+    "range": [
+     5,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "srFxn0Q3BqZHEMYu",
+    "type": "text",
+    "name": "",
+    "description": "Пьёт на приёмах",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     8,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "tsifvkf4YgWkVx1O",
+    "type": "text",
+    "name": "",
+    "description": "Каждую ночь",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     9,
+     9
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "y0aO5HMKIITpe2G1",
+    "type": "text",
+    "name": "",
+    "description": "Зависимость",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 1,
+    "range": [
+     10,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "khZziqfaOm8mg34w"
+ },
+ {
+  "name": "Высший вампир: особенность питья крови",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "YifSSyzo16craUy3",
+    "type": "text",
+    "name": "",
+    "description": "Кровное благородство: кровь человека благородного рода или сильной родословной — +1d6 к броску ОК.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     1,
+     2
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "DPKG5IK31fIc8U7r",
+    "type": "text",
+    "name": "",
+    "description": "Эхо души: на 12 часов отголосок умений жертвы — воин: +2 к Ближнему бою или Владению мечом; учёный: +2 к Образованию; маг: +2 к Сопротивлению магии.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     3,
+     4
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "jxj0bwuZXBsYtJa3",
+    "type": "text",
+    "name": "",
+    "description": "Симфония памяти: 1d3 фрагмента недавних воспоминаний жертвы и +3 ОК за кормление; воспоминание о стрессе или ужасе — −2 к проверке Сопротивления Жажде крови.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     5,
+     6
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "BcZjSNdt2dXaONbv",
+    "type": "text",
+    "name": "",
+    "description": "Нить крови: повторное питьё от прежнего источника — +3 ОК, жертва ищет встречи; чаще раза в неделю — «кровный откат».",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     7,
+     8
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "3bMIH6pmuDmL72Rm",
+    "type": "text",
+    "name": "",
+    "description": "Сила Изначальных: кровь Старшей крови, мага или Истока — 2d10: 2–7 ничего; 8–17 +1d10 ОК; 18–20 один переброс до конца партии; «1» на кубе — ещё −1 к Сопротивлению магии до конца партии.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 2,
+    "range": [
+     9,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "iUBMDkAMkaJ0f5Ht"
+ },
+ {
+  "name": "Высший вампир: роль",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "",
+  "formula": "1d10",
+  "replacement": true,
+  "displayRoll": true,
+  "folder": [
+   "Высший вампир"
+  ],
+  "results": [
+   {
+    "_id": "HwoWgieUUJU2hP2u",
+    "type": "text",
+    "name": "",
+    "description": "Монарх: вампир-альфа, подчиняет низших вампиров и воздействует на сознание разумных.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 3,
+    "range": [
+     1,
+     3
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "pdWSjjx3ZM7tEtJD",
+    "type": "text",
+    "name": "",
+    "description": "Заклинатель крови: чародей, зачаровывающий свою кровь и кровь врагов.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 4,
+    "range": [
+     4,
+     7
+    ],
+    "drawn": false,
+    "documentUuid": null
+   },
+   {
+    "_id": "b9QQs3pWKbFXeH65",
+    "type": "text",
+    "name": "",
+    "description": "Повелитель Теней: воин из тени, наводит морок и силой мысли управляет оружием.",
+    "img": "icons/svg/d20-black.svg",
+    "weight": 3,
+    "range": [
+     8,
+     10
+    ],
+    "drawn": false,
+    "documentUuid": null
+   }
+  ],
+  "flags": {
+   "vedmak": {
+    "book": "Высший вампир. Третья редакция",
+    "extraLayer": true
+   }
+  },
+  "_id": "Ajko9wrnofUlEckU"
  }
 ]

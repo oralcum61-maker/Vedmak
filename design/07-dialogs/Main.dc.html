@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Окно проверки навыка</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/25612d673b3b274e866a8cf86c3d2833);--tp:url(/_blob/0fd0aebb9a4144aaf6db521a13c98d51);--ts:url(/_blob/156614f725e3402f6b23739d306af141);--tb:url(/_blob/da2f0eb7e517d3ac1b3d1bda263bcf1e)}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button{cursor:pointer}
+button:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.rail{background-color:#121316;background-image:var(--tb),radial-gradient(140% 60% at 50% 0%,rgba(255,240,215,.06),transparent 60%);background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.enamel{background-image:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0) 46%,rgba(0,0,0,.3));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.25),0 5px 12px -4px rgba(0,0,0,.9)}
+.enamel:hover{filter:brightness(1.08)}
+.enamel.steel{color:#16171a;background-color:#cfc8b8;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.head-h{display:flex;align-items:center;gap:10px}
+.tog{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px;font-size:12px;color:#a29d92;background:#141518;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.04)}
+.tog:hover{color:#e2ddd0}
+.tog .box{width:11px;height:11px;flex-shrink:0;background:#0a0b0c;border:1px solid #3a3c42;box-shadow:inset 0 1px 2px rgba(0,0,0,.9)}
+.tog b{font-family:Forum,serif;font-weight:400;font-size:15px}
+.tog .bad{color:#e0937f}.tog .good{color:#b4c79c}
+.tog.on{color:#f1ece0;background-color:#2a2c31;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.22));box-shadow:inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.tog.on .box{background:linear-gradient(135deg,#f2ece0,#77726a);border-color:#050607}
+.step{width:34px;height:34px;padding:0;display:grid;place-items:center;font-size:18px;line-height:1}
+.sw{height:30px;padding:0 13px;font-family:Forum,serif;font-size:15px;color:#8e897e;background:transparent;border:1px solid transparent;border-radius:2px}
+.sw:hover{color:#d6d0c2}
+.sw.on{color:#f3eee2;background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12)}
+.coin{width:22px;height:22px;padding:0;border-radius:50%;background:#16140f;border:1px solid #050607;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,240,215,.06)}
+.coin.on{background:radial-gradient(circle at 35% 30%,#fbe7b0,#c9a052 55%,#6e5121);box-shadow:0 0 0 1px #2a1d08,0 2px 4px rgba(0,0,0,.7),0 0 8px rgba(224,180,90,.35)}
+.coin.zero{display:grid;place-items:center;font-size:13px;color:#6c685f;background:transparent;border-color:transparent;box-shadow:none}
+.coin.zero.on{color:#f1ece0;background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12)}
+</style>
+</helmet>
+<div class="mat" style="width: 480px; min-height: 600px; box-sizing: border-box; display: flex; flex-direction: column; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums; border: 1px solid #040405; box-shadow: 0 24px 60px rgba(0,0,0,.8)">
+  <header class="rail" style="height: 34px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; border-bottom: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.08)">
+    <span style="flex-grow: 1; font-family: Forum, serif; font-size: 15px; color: #d6d0c2; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Проверка: Внимание</span>
+    <button type="button" aria-label="Закрыть" style="width: 28px; height: 28px; padding: 0; display: grid; place-items: center; color: #8e897e; background: transparent; border: 0"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+  </header>
+
+  <section class="plate" style="margin: 14px 14px 0; padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 14px; box-shadow: inset 0 2px 0 #cfc8b8, inset 0 3px 0 rgba(0,0,0,.4), inset 0 -1px 0 rgba(0,0,0,.55), 0 2px 3px rgba(0,0,0,.55)">
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+      <span class="cap">Навык · Интеллект</span>
+      <h1 style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 30px; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Внимание</h1>
+      <span style="display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11.5px; color: #8e897e">
+        <span>Инт <b style="font-family: Forum, serif; font-weight: 400; font-size: 14px; color: #d6d0c2">7</b></span>
+        <span>навык <b style="font-family: Forum, serif; font-weight: 400; font-size: 14px; color: #d6d0c2">4</b></span>
+        <span>Обострённые чувства <b style="font-family: Forum, serif; font-weight: 400; font-size: 14px; color: #b4c79c">+1</b></span>
+      </span>
+    </div>
+    <div class="stamp" style="width: 76px; height: 70px; flex-shrink: 0">
+      <span class="cap" style="font-size: 8px; color: #a29d92">основа</span>
+      <span class="metal" style="font-family: Forum, serif; font-size: 34px; line-height: 1">12</span>
+    </div>
+  </section>
+
+  <div style="flex-grow: 1; padding: 16px 14px 18px; display: flex; flex-direction: column; gap: 18px">
+    <div style="display: flex; flex-direction: column; gap: 9px">
+      <div class="head-h"><span class="gem"></span><span class="cap" style="color: #d6d0c2; letter-spacing: .22em">Обстоятельства</span><div class="groove" style="flex-grow: 1"></div></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <sc-for list="{{sit}}" as="s" hint-placeholder-count="2">
+          <button type="button" class="{{s.cls}}" aria-pressed="{{s.pressed}}" onClick="{{s.toggle}}"><span class="box"></span><span>{{s.label}}</span><b class="{{s.valCls}}">{{s.val}}</b></button>
+        </sc-for>
+      </div>
+      <span style="font-size: 11px; color: #6c685f">Состояния персонажа уже учтены в основе.</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 18px">
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <div class="head-h"><span class="gem"></span><span class="cap" style="color: #d6d0c2; letter-spacing: .22em">Модификатор</span><div class="groove" style="flex-grow: 1"></div></div>
+        <div style="display: flex; align-items: center; gap: 4px">
+          <button type="button" class="btn step" aria-label="Меньше" onClick="{{minus}}">−</button>
+          <span class="well" style="width: 54px; height: 34px; display: grid; place-items: center; font-family: Forum, serif; font-size: 21px; color: #f1ece0">{{modVal}}</span>
+          <button type="button" class="btn step" aria-label="Больше" onClick="{{plus}}">+</button>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px">
+        <div class="head-h"><span class="gem"></span><span class="cap" style="color: #d6d0c2; letter-spacing: .22em">Удача · 4</span><div class="groove" style="flex-grow: 1"></div></div>
+        <div style="display: flex; align-items: center; gap: 6px; height: 34px">
+          <button type="button" class="{{luckZeroCls}}" aria-label="Не тратить Удачу" onClick="{{luckZero}}">—</button>
+          <sc-for list="{{luck}}" as="l" hint-placeholder-count="4">
+            <button type="button" class="{{l.cls}}" aria-label="{{l.label}}" onClick="{{l.pick}}"></button>
+          </sc-for>
+          <span style="margin-left: 4px; font-size: 11.5px; color: #8e897e">{{luckNote}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px">
+      <div class="head-h"><span class="gem"></span><span class="cap" style="color: #d6d0c2; letter-spacing: .22em">Кому видно</span><div class="groove" style="flex-grow: 1"></div></div>
+      <div class="well" style="display: inline-flex; align-self: flex-start; gap: 2px; padding: 2px">
+        <sc-for list="{{vis}}" as="v" hint-placeholder-count="4">
+          <button type="button" class="{{v.cls}}" aria-pressed="{{v.pressed}}" onClick="{{v.pick}}">{{v.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <footer class="rail" style="flex-shrink: 0; display: flex; align-items: center; gap: 12px; padding: 14px 14px 14px 16px; border-top: 1px solid #060708; box-shadow: inset 0 1px 0 rgba(255,240,215,.07)">
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+      <span class="cap">Бросок</span>
+      <span style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: Forum, serif; font-size: 19px; color: #8e897e">d10 +</span><span class="metal" style="font-family: Forum, serif; font-size: 34px; line-height: 1">{{sum}}</span></span>
+      <span style="font-size: 11px; color: #8e897e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{hint}}</span>
+    </div>
+    <button type="button" class="btn" style="height: 42px; padding: 0 16px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase">Отмена</button>
+    <button type="button" class="enamel steel" style="height: 42px; padding: 0 22px; font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase">Бросить</button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":480,"height":600}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sit: { dark: true, sun: false }, mod: 0, luck: 2, vis: 'public' }; }
+  renderVals() {
+    const s = this.state;
+    const BASE = 12;
+    const fmt = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
+    const SIT = [{ k: 'dark', label: 'Темнота', v: -2 }, { k: 'sun', label: 'Против яркого солнца', v: -3 }];
+    const sit = SIT.map(x => ({
+      label: x.label, val: fmt(x.v), valCls: x.v < 0 ? 'bad' : 'good',
+      cls: s.sit[x.k] ? 'tog on' : 'tog', pressed: s.sit[x.k] ? 'true' : 'false',
+      toggle: () => this.setState({ sit: { ...s.sit, [x.k]: !s.sit[x.k] } })
+    }));
+    const sitSum = SIT.reduce((n, x) => n + (s.sit[x.k] ? x.v : 0), 0);
+    const luck = [1, 2, 3, 4].map(n => ({ cls: n <= s.luck ? 'coin on' : 'coin', label: 'Потратить Удачу: ' + n, pick: () => this.setState({ luck: n }) }));
+    const vis = [['public', 'Всем'], ['gm', 'Ведущему'], ['blind', 'Втёмную'], ['self', 'Себе']].map(([k, l]) => ({
+      label: l, cls: k === s.vis ? 'sw on' : 'sw', pressed: k === s.vis ? 'true' : 'false', pick: () => this.setState({ vis: k })
+    }));
+    const bits = [sitSum ? 'обстоятельства ' + fmt(sitSum) : '', s.mod ? 'правка ' + fmt(s.mod) : '', s.luck ? 'Удача +' + s.luck : ''].filter(Boolean);
+    return {
+      sit, luck, vis,
+      sum: BASE + sitSum + s.mod + s.luck,
+      modVal: s.mod ? fmt(s.mod) : '0',
+      luckNote: s.luck ? 'тратится ' + s.luck : 'не тратить',
+      luckZeroCls: s.luck === 0 ? 'coin zero on' : 'coin zero',
+      luckZero: () => this.setState({ luck: 0 }),
+      minus: () => this.setState({ mod: s.mod - 1 }), plus: () => this.setState({ mod: s.mod + 1 }),
+      hint: ['основа 12', ...bits].join(' · ')
+    };
+  }
+}
+</script>
+</body>
+</html>

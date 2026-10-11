@@ -4,3 +4,16 @@ packs/*/LOG.old
 node_modules/
 dist/
 .claude/worktrees/
+tools/bench/results/
+
+# design-sync (Claude Design)
+.ds-sync/
+.ds-src/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
+design/12-hud-medallion/artifact.html
+# значки ядра Foundry в макете худа — свои лицензии, в публичный репозиторий не кладём
+design/12-hud-medallion/img/sp/
+design/12-hud-medallion/img/st/

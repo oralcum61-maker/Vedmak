@@ -9,12 +9,20 @@
 // остаются, их снимает ведущий.
 
 import { asGM, registerGMHandler, resolveActor, userOwnsAny } from "./common.mjs";
+import { zoneAuraFor } from "../config/magic.mjs";
+import { alchemyAuto } from "../config/alchemy-auto.mjs";
 
 const INSTANT_SECONDS = 15;
 
+/** Цвет зоны (вид — fx/zone-look.mjs): заклинание — по стихии, бомба — пламя, ловушка — сталь. */
+export const ZONE_COLORS = {
+  fire: "#e8742a", air: "#bcd8f0", water: "#5a9ee0", earth: "#c29a5a", mixed: "#a98be8",
+  bomb: "#e8833a", trap: "#b8b2a6"
+};
+
 /**
  * Разбор зоны по тексту дальности: «2-метровый конус», «конус 2 м», «зона радиусом 10 м», «радиус 8 м»,
- * «50 м радиус», «4 м (радиус 2 м)». Мили — не зона на сцене.
+ * «50 м радиус», «4 м (радиус 2 м)», «круг диаметром 50 см». Мили — не зона на сцене.
  * @param {string} text
  * @param {object} [opts] — plainIsRadius: «4 м» у бомб и ловушек — радиус
  * @returns {{type: "cone"|"circle", size: number}|null} размер в метрах
@@ -27,6 +35,8 @@ export function parseArea(text, { plainIsRadius = false } = {}) {
     const size = num(/(\d+(?:\.\d+)?)\s*-?\s*метров\S*\s+конус/) || num(/конус\S*\s*(\d+(?:\.\d+)?)/) || num(/(\d+(?:\.\d+)?)/);
     return size ? { type: "cone", size } : null;
   }
+  const diameter = t.match(/диаметр\S*\s*(\d+(?:\.\d+)?)\s*(см|м)/);
+  if (diameter) return { type: "circle", size: Number(diameter[1]) / (diameter[2] === "см" ? 200 : 2) };
   if (/радиус/.test(t)) {
     const size = num(/радиус\S*\s*(\d+(?:\.\d+)?)/) || num(/(\d+(?:\.\d+)?)\s*м\s*радиус/);
     return size ? { type: "circle", size } : null;
@@ -64,7 +74,9 @@ const pxPerUnit = () => canvas.scene.grid.size / canvas.scene.grid.distance;
 const toRad = deg => deg * Math.PI / 180;
 
 function shapeData(area) {
-  const radius = area.size * pxPerUnit();
+  // Круг меньше клетки (вживлённый Ирден — 50 см) занимает одну клетку: мельче на сетке его не поймать,
+  // а 0,45 клетки не задевает соседей
+  const radius = area.type === "circle" ? Math.max(area.size * pxPerUnit(), canvas.scene.grid.size * 0.45) : area.size * pxPerUnit();
   if (area.type === "cone") {
     return { type: "cone", x: 0, y: 0, rotation: 0, radius, angle: CONFIG.MeasuredTemplate?.defaults?.angle ?? 53.13 };
   }
@@ -85,8 +97,9 @@ export async function placeZone(area, { name = "Зона", color } = {}) {
   try {
     ui.notifications.info(`${name}: поставьте зону на сцене. Колесо мыши поворачивает, правый клик — отмена.`);
     await canvas.regions.placeRegions([{
-      name, color: color ?? game.user.color, displayMeasurements: true, highlightMode: "coverage",
-      shapes: [shapeData(area)], "flags.core.MeasuredTemplate": true
+      // Вид — свой (fx/zone-look.mjs): без штриховки клеток и пунктирной линейки Foundry
+      name, color: color ?? game.user.color, displayMeasurements: false, highlightMode: "shapes",
+      shapes: [shapeData(area)], "flags.core.MeasuredTemplate": true, "flags.vedmak.look": true
     }], {
       create: false,
       preConfirm: ({ document }) => { placed.push(document.toObject().shapes.at(-1)); }
@@ -108,8 +121,8 @@ function regionData(shape, { name, color, zone }) {
     shapes: [shape],
     levels: canvas.level?.id ? [canvas.level.id] : undefined,
     visibility: CONST.REGION_VISIBILITY?.ALWAYS ?? 2,
-    highlightMode: "coverage",
-    displayMeasurements: true,
+    highlightMode: "shapes",
+    displayMeasurements: false,
     // Права на область v14 берёт только отсюда: без владельца игрок не может ни сдвинуть, ни снять свою зону
     ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE, [game.user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     flags: { core: { MeasuredTemplate: true }, vedmak: { zone } }
@@ -130,6 +143,8 @@ export async function createZone(shape, { name, color, actor, itemName = "", dur
     instant: !!duration?.instant,
     combatId: combat?.id ?? null,
     until: duration?.rounds && combat ? combat.round + duration.rounds : null,
+    // Вне боя раунды не считаются — срок временем мира (раунд — 3 с), иначе зона висела бы, пока не снимут вручную
+    expiresAt: duration?.rounds && !combat ? game.time.worldTime + duration.rounds * (CONFIG.time.roundTime || 3) : null,
     rounds: duration?.rounds ?? null,
     maintain: duration?.maintain ? maintainItemId : null
   };
@@ -139,10 +154,24 @@ export async function createZone(shape, { name, color, actor, itemName = "", dur
     if (region && zone.instant && !combat) scheduleRemoval(region);
     return region ?? null;
   } catch (err) {
+    // Игроку область создаёт ведущий; ждём её по метке — по ней цели считаются областью, а карточки (газ «Сна
+    // дракона», снятие зоны несработавшего заклинания) знают, какое облако их
     console.warn("vedmak | зону создаёт ведущий", err);
+    const key = foundry.utils.randomID();
+    data.flags.vedmak.zone.key = key;
+    const created = waitForZone(key);
     await asGM("createZone", { sceneId: canvas.scene.id, data });
-    return null;
+    return created;
   }
+}
+
+/** Область, созданную ведущим по просьбе игрока, — по метке zone.key; null, если не пришла за timeout мс. */
+function waitForZone(key, timeout = 4000) {
+  return new Promise(resolve => {
+    const done = region => { Hooks.off("createRegion", hook); clearTimeout(timer); resolve(region); };
+    const hook = Hooks.on("createRegion", region => { if (region.flags?.vedmak?.zone?.key === key) done(region); });
+    const timer = setTimeout(() => done(null), timeout);
+  });
 }
 
 function scheduleRemoval(region) {
@@ -151,24 +180,129 @@ function scheduleRemoval(region) {
 
 /** Удалить зоны: свои — сразу, чужие (для игрока) — просьбой к ведущему. */
 export async function removeZones(regions) {
-  const list = regions.filter(r => r?.parent?.regions?.has(r.id));
+  // Уже удаляемые не трогаем: время мира, сдвинутое дважды подряд, иначе удаляло бы ту же зону второй раз
+  const list = regions.filter(r => r?.parent?.regions?.has(r.id) && !removingZones.has(r.uuid));
   if (!list.length) return;
-  const byScene = new Map();
-  for (const r of list) byScene.set(r.parent, [...(byScene.get(r.parent) ?? []), r]);
-  for (const [scene, rs] of byScene) {
-    const mine = rs.filter(r => game.user.isGM || r.canUserModify(game.user, "delete"));
-    const others = rs.filter(r => !mine.includes(r));
-    if (mine.length) await scene.deleteEmbeddedDocuments("Region", mine.map(r => r.id));
-    if (others.length) await asGM("deleteZones", { sceneId: scene.id, ids: others.map(r => r.id) });
+  for (const r of list) removingZones.add(r.uuid);
+  try {
+    const byScene = new Map();
+    for (const r of list) byScene.set(r.parent, [...(byScene.get(r.parent) ?? []), r]);
+    for (const [scene, rs] of byScene) {
+      const mine = rs.filter(r => game.user.isGM || r.canUserModify(game.user, "delete"));
+      const others = rs.filter(r => !mine.includes(r));
+      if (mine.length) await scene.deleteEmbeddedDocuments("Region", mine.map(r => r.id));
+      if (others.length) await asGM("deleteZones", { sceneId: scene.id, ids: others.map(r => r.id) });
+    }
+  } finally {
+    for (const r of list) removingZones.delete(r.uuid);
   }
+}
+const removingZones = new Set();
+
+/* ------------------- Область, присланная игроком, — только из белого списка ------------------- */
+
+const finite = (v, { min = -1e6, max = 1e6 } = {}) => Number.isFinite(v) && v >= min && v <= max;
+const text = (v, max = 200) => (typeof v === "string" ? v.slice(0, max) : "");
+const flag = v => (typeof v === "boolean" ? v : undefined);
+
+/** Фигура области: только известные виды и только числовые поля (иначе null). */
+function cleanShape(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const out = { type: raw.type };
+  const nums = (keys, opts) => keys.every(k => finite(raw[k], opts) && (out[k] = raw[k]) !== undefined);
+  const angles = keys => keys.every(k => raw[k] === undefined || (finite(raw[k], { min: -3600, max: 3600 }) && (out[k] = raw[k]) !== undefined));
+  let ok = false;
+  switch (raw.type) {
+    case "circle": ok = nums(["x", "y"]) && nums(["radius"], { min: 0 }); break;
+    case "ellipse": ok = nums(["x", "y"]) && nums(["radiusX", "radiusY"], { min: 0 }) && angles(["rotation"]); break;
+    case "rectangle": ok = nums(["x", "y"]) && nums(["width", "height"], { min: 0 }) && angles(["rotation"])
+      && (raw.anchorX === undefined || nums(["anchorX", "anchorY"], { min: 0, max: 1 })); break;
+    case "cone":
+      ok = nums(["x", "y"]) && nums(["radius"], { min: 0 }) && nums(["angle"], { min: 0, max: 360 }) && angles(["rotation"]);
+      if (ok && ["round", "flat", "semicircle"].includes(raw.curvature)) out.curvature = raw.curvature;
+      break;
+    case "polygon":
+      ok = Array.isArray(raw.points) && raw.points.length >= 4 && raw.points.length <= 400 && raw.points.length % 2 === 0
+        && raw.points.every(n => finite(n));
+      if (ok) out.points = [...raw.points];
+      break;
+  }
+  if (!ok) return null;
+  if (flag(raw.gridBased) !== undefined) out.gridBased = raw.gridBased;
+  if (flag(raw.hole) !== undefined) out.hole = raw.hole;
+  return out;
+}
+
+/**
+ * Область для создания из присланных игроком данных. Создаёт ведущий, а у него права на всё, поэтому берутся
+ * только известные поля (в первую очередь — без поведений: «Выполнить скрипт» исполнился бы с правами ведущего).
+ * @returns {object|null} null — данные негодны
+ */
+/**
+ * Особые свойства зоны от игрока: аура («Ирден», «Лунная пыль» — magic/zone-effects.mjs) и запрет магии
+ * (двимеритовая бомба). Берутся из справочников по названию; из запроса — только Вын ауры и картинка.
+ */
+function trustedZoneExtras(z) {
+  const out = {};
+  const name = text(z.itemName);
+  const aura = zoneAuraFor(name);
+  if (aura && z.aura) {
+    out.aura = { ...aura, value: finite(z.aura.value, { min: 0, max: 100 }) ? z.aura.value : 0, img: text(z.aura.img, 300) };
+  }
+  if (alchemyAuto(name)?.zone?.noMagic) out.noMagic = true;
+  return out;
+}
+
+function cleanRegionData(raw, scene, userId) {
+  if (!raw || typeof raw !== "object") return null;
+  const shapes = (Array.isArray(raw.shapes) ? raw.shapes : []).map(cleanShape);
+  if (!shapes.length || shapes.length > 8 || shapes.some(sh => !sh)) return null;
+  const z = raw.flags?.vedmak?.zone;
+  if (!z || typeof z !== "object") return null;
+  const visibilities = Object.values(CONST.REGION_VISIBILITY ?? {});
+  const levels = (Array.isArray(raw.levels) ? raw.levels : []).filter(id => typeof id === "string" && scene.levels?.has?.(id));
+  // Цвет пользователя по сокету приходит числом (Color — наследник Number), а из окна — строкой «#rrggbb»
+  const asCss = c => /^#[0-9a-f]{6}$/i.test(c) ? c
+    : (Number.isInteger(c) && c >= 0 && c <= 0xffffff ? `#${c.toString(16).padStart(6, "0")}` : null);
+  const color = asCss(raw.color) ?? game.users.get(userId)?.color?.css ?? "#ff6400";
+  return {
+    name: text(raw.name, 100) || "Зона",
+    color,
+    shapes,
+    ...(levels.length ? { levels } : {}),
+    visibility: visibilities.includes(raw.visibility) ? raw.visibility : (CONST.REGION_VISIBILITY?.ALWAYS ?? 2),
+    highlightMode: raw.highlightMode === "shapes" ? "shapes" : "coverage",
+    displayMeasurements: raw.displayMeasurements !== false,
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE, [userId]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+    flags: {
+      core: { MeasuredTemplate: true },
+      vedmak: { zone: {
+        actorUuid: typeof z.actorUuid === "string" ? z.actorUuid : null,
+        itemName: text(z.itemName),
+        instant: !!z.instant,
+        combatId: typeof z.combatId === "string" ? z.combatId : null,
+        until: finite(z.until, { min: 0, max: 1e6 }) ? z.until : null,
+        expiresAt: finite(z.expiresAt, { min: 0, max: 1e12 }) ? z.expiresAt : null,
+        rounds: finite(z.rounds, { min: 0, max: 1e6 }) ? z.rounds : null,
+        maintain: typeof z.maintain === "string" ? z.maintain : null,
+        ...(typeof z.itemId === "string" ? { itemId: z.itemId } : {}),
+        ...(typeof z.repeat === "boolean" ? { repeat: z.repeat } : {}),
+        ...(typeof z.key === "string" ? { key: z.key.slice(0, 32) } : {}),
+        // Аура и запрет магии — из справочников по названию, а не из запроса: игрок не задаёт штрафы сам
+        ...trustedZoneExtras(z)
+      } }
+    }
+  };
 }
 
 registerGMHandler("createZone", async ({ sceneId, data }, userId) => {
   const scene = game.scenes.get(sceneId);
   const actor = resolveActor(data?.flags?.vedmak?.zone?.actorUuid);
   if (!scene || !userOwnsAny(userId, actor)) return;
-  const [region] = await scene.createEmbeddedDocuments("Region", [data]);
-  const zone = data.flags.vedmak.zone;
+  const clean = cleanRegionData(data, scene, userId);
+  if (!clean) return console.warn(`vedmak | отклонена область от ${game.users.get(userId)?.name ?? userId}`);
+  const [region] = await scene.createEmbeddedDocuments("Region", [clean]);
+  const zone = clean.flags.vedmak.zone;
   if (region && zone.instant && !zone.combatId) scheduleRemoval(region);
 });
 
@@ -243,6 +377,12 @@ export function zoneTokens(shape, { region = null, exclude = null, showHidden = 
   return byRegion.length || !own.length ? byRegion : own;
 }
 
+/** Точка в зоне: по области Foundry, если она умеет, иначе своя геометрия. */
+export function pointInZone(region, p) {
+  const shape = region?.shapes?.[0];
+  return !!shape && tester(shape, region)(p);
+}
+
 /* ------------------------------ Срок действия ------------------------------ */
 
 export const zonesOf = scene => (scene?.regions ?? []).filter(r => r.flags?.vedmak?.zone);
@@ -290,5 +430,12 @@ export function registerZoneHooks() {
   Hooks.on("deleteCombat", combat => {
     if (!game.users.activeGM?.isSelf) return;
     expireCombatZones(combat).catch(err => console.error("vedmak | зоны", err));
+  });
+  // Зоны со сроком во времени мира (поставлены вне боя): время мира идёт и раундами боя
+  Hooks.on("updateWorldTime", worldTime => {
+    if (!game.users.activeGM?.isSelf) return;
+    const expired = game.scenes.contents.flatMap(s => zonesOf(s))
+      .filter(r => { const at = r.flags.vedmak.zone.expiresAt; return at !== null && at !== undefined && worldTime >= at; });
+    if (expired.length) removeZones(expired).catch(err => console.error("vedmak | зоны", err));
   });
 }

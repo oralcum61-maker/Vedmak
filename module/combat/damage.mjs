@@ -3,7 +3,7 @@
 
 import {
   LOCATIONS_HUMANOID, LOCATIONS_MONSTER, CRIT_LEVELS, CRIT_WOUNDS, COVER, EFFECT_STATUS, STATUS_RESIST_KEY,
-  critWoundFor, aimedCritWound
+  critWoundFor, aimedCritWound, locationGlyph
 } from "../config/combat.mjs";
 import { bindDialog, commonFields } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
@@ -12,6 +12,9 @@ import {
 } from "./common.mjs";
 import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 import { markDead } from "./saves.mjs";
+import { implantStatusBonus, implantBurnVulnerability } from "../config/crafting.mjs";
+import { wallCover } from "./cover.mjs";
+import { isIncorporeal, flightAfterDamage, dropInvisibility } from "./monster-traits.mjs";
 
 const LEGS = ["rightLeg", "leftLeg"];
 
@@ -19,7 +22,7 @@ const LEGS = ["rightLeg", "leftLeg"];
 const EFFECT_RESIST_KEY = { bleeding: "bleeding", poison: "poison", burning: "fire", freeze: "frost", staggering: null };
 
 /** Урон из карточки защиты. */
-export async function damageFromDefense(message, { skipDialog = false } = {}) {
+export async function damageFromDefense(message, { skipDialog = false, messageMode } = {}) {
   const def = message.flags.vedmak?.defense;
   if (!def?.canDamage) return null;
   const attacker = resolveActor(def.attack.attacker.tokenUuid) ?? resolveActor(def.attack.attacker.actorUuid);
@@ -34,8 +37,14 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
   let cfg = {
     damageType: attack.weapon?.damageTypes?.[0] ?? "bludgeoning",
     location: def.fixedLocation || attack.aim || "",
-    cover: "none", mod: 0, adrenaline: 0, messageMode: defaultMessageMode()
+    cover: "none", mod: 0, adrenaline: 0, messageMode: messageMode ?? defaultMessageMode()
   };
+  // Стена сцены между атакующим и целью — укрытие цели (в окне урона его можно поменять). И в ближнем бою:
+  // удар через ограду, окно или пролом пробивает укрытие так же, как выстрел (стр. 155)
+  {
+    const wc = wallCover(attack.attacker.tokenUuid, def.defender.tokenUuid);
+    if (wc) { cfg.cover = wc.key; cfg.coverAuto = true; }
+  }
   if (!skipDialog) {
     cfg = await damageDialog(attack, target, cfg, attacker);
     if (!cfg) return null;
@@ -49,6 +58,16 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
     });
   }
   const result = await computeDamage({ attack, target, critLevel: def.critLevel, aimed: !!attack.aim && !def.fixedLocation, ...cfg, adrenaline, margin: Math.max(0, def.margin ?? 0) });
+  if (result.coatSpent) {
+    const weapon = attacker.items.get(attack.weapon?.id);
+    if (weapon?.flags?.vedmak?.coat) await weapon.unsetFlag("vedmak", "coat");
+    result.notes.push("Яд с клинка израсходован.");
+  }
+  // Удар двимеритовым протезом: цели — касание двимерита (кнопка в карточке после применения)
+  if (attack.weapon?.dimeritium) result.dimeritium = true;
+  // Взрывной боеприпас: кнопка взрыва по всем в радиусе от цели (ammoExplode)
+  const ammo = attack.weapon?.ammo ?? null;
+  if (ammo?.explode) result.explode = { ...ammo.explode, name: ammo.name };
   const data = {
     kind: "damage",
     defenseMessageId: message.id,
@@ -63,7 +82,35 @@ export async function damageFromDefense(message, { skipDialog = false } = {}) {
     flags: { damage: data }, rolls: result.rolls, messageMode: cfg.messageMode
   });
   await markDone(message, card);
+  // Разделяющийся боеприпас: за каждый пункт свыше защиты (не больше split) — ещё попадание полным уроном
+  // оружия в случайную часть тела; каждое — своей карточкой со своей кнопкой «Применить»
+  const extra = ammo?.split && !def.fixedLocation ? Math.min(ammo.split, Math.max(0, def.margin ?? 0)) : 0;
+  for (let i = 1; i <= extra; i++) {
+    const more = await computeDamage({ attack, target, critLevel: null, aimed: false, ...cfg, location: "", adrenaline: 0, margin: 0 });
+    more.notes.unshift(`${ammo.name}: добавочное попадание ${i} из ${extra}.`);
+    const moreData = { kind: "damage", defenseMessageId: message.id, attacker: attack.attacker, target: def.defender,
+      attackLabel: attack.label, img: attack.img, ...more, applied: false };
+    await postCard({ template: "systems/vedmak/templates/chat/damage.hbs", data: moreData, actor: attacker,
+      flags: { damage: moreData }, rolls: more.rolls, messageMode: cfg.messageMode });
+  }
   return card;
+}
+
+/** Взрыв боеприпаса: урон без атаки по всем частям тела всем в радиусе от цели (и самой цели). */
+export async function explodeAmmo(message) {
+  const dmg = message.flags.vedmak?.damage;
+  const ex = dmg?.explode;
+  if (!ex) return;
+  const attacker = resolveActor(dmg.attacker?.tokenUuid) ?? resolveActor(dmg.attacker?.actorUuid);
+  if (!game.user.isGM && !attacker?.isOwner) return ui.notifications.warn("Взрыв применяет стрелок или ведущий.");
+  const center = (() => { try { return fromUuidSync(dmg.target?.tokenUuid)?.object ?? null; } catch { return null; } })();
+  const victims = center && canvas?.ready
+    ? canvas.tokens.placeables.filter(t => t.actor && Math.hypot(t.center.x - center.center.x, t.center.y - center.center.y)
+      <= ex.radius * canvas.scene.grid.size / canvas.scene.grid.distance + Math.max(t.w, t.h) / 2).map(t => t.actor)
+    : [resolveActor(dmg.target?.actorUuid)].filter(Boolean);
+  // manual.mjs сам импортирует этот модуль — берём его при нажатии
+  const { manualDamage } = await import("./manual.mjs");
+  return manualDamage(victims, { formula: ex.formula, reason: `${ex.name}: взрыв`, damageType: "elemental", where: "all" });
 }
 
 /**
@@ -90,24 +137,26 @@ async function damageDialog(attack, target, cfg, attacker) {
       subtitle: `${attack.label} · ${attack.typeLabel} · урон ${formula}${attack.nonLethal ? " (несмертельный)" : ""}`
     },
     damageTypes: types, manyTypes: types.length > 1, singleType: types[0]?.key ?? "bludgeoning",
-    locations: [{ key: "", label: "Броском", note: "d10", selected: !cfg.location }].concat(
-      Object.entries(table).map(([key, l]) => ({ key, label: l.label, note: l.mult === 0.5 ? "×½" : `×${l.mult}`, selected: key === cfg.location }))
+    locations: [{ key: "", label: "Броском", note: "d10", selected: !cfg.location, glyph: locationGlyph("") }].concat(
+      Object.entries(table).map(([key, l]) => ({ key, label: l.label, note: l.mult === 0.5 ? "×½" : `×${l.mult}`, selected: key === cfg.location,
+        glyph: locationGlyph(key, l) }))
     ),
     covers: Object.entries(COVER).map(([key, c]) => ({ key, label: c.label, sp: c.sp, selected: key === cfg.cover })),
-    coverNote: COVER[cfg.cover]?.label ?? "",
+    coverNote: cfg.coverAuto ? `${COVER[cfg.cover]?.label ?? ""} · стена между атакующим и целью` : COVER[cfg.cover]?.label ?? "",
     adrenalineMax: game.settings.get("vedmak", "adrenaline") ? (attacker.system.adrenaline?.value ?? 0) : 0,
     total: { noRoll: true, damage: formula, hint: "Броня и укрытие вычитаются после броска" },
     ...commonFields()
   });
   const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: `Урон: ${target.name}`, icon: "fa-solid fa-droplet" },
+    window: { title: `Урон: ${target.name}` },
     classes: ["vedmak", "vedmak-dialog", "check-dialog", "damage-dialog"],
     position: { width: 520 },
     content,
     render: (event, dialog) => bindDialog(dialog, {
       extra: form => {
         const note = dialog.element.querySelector("[data-cover-note]");
-        if (note) note.textContent = `· ${COVER[form.elements.cover?.value]?.label ?? ""}`;
+        const cover = form.elements.cover?.value;
+        if (note) note.textContent = `· ${COVER[cover]?.label ?? ""}${cfg.coverAuto && cover === cfg.cover ? " · стена между атакующим и целью" : ""}`;
         const out = dialog.element.querySelector("[data-total-damage]");
         if (!out) return;
         const add = Number(form.elements.mod?.value) || 0;
@@ -116,7 +165,7 @@ async function damageDialog(attack, target, cfg, attacker) {
       }
     }),
     buttons: [{
-      action: "roll", label: "Бросить урон", icon: "fa-solid fa-dice", default: true,
+      action: "roll", label: "Бросить урон", default: true,
       callback: (event, button) => {
         const f = button.form.elements;
         return {
@@ -125,7 +174,7 @@ async function damageDialog(attack, target, cfg, attacker) {
           messageMode: f.messageMode?.value || "public"
         };
       }
-    }, { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    }, { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result === "cancel" ? null : result;
@@ -169,6 +218,10 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const critLocBonus = attackerActor?.system.fx?.critLocation ?? 0;
   const elementalBonus = attackerActor?.system.fx?.statusChance ?? 0;
   const ELEMENTAL = ["burning", "frozen", "prone"];
+  // Вживлённые руны «Офира и Зеррикании» (стр. 86): +5/10/15 % к шансу эффекта атак оружием, даже если у оружия его нет
+  const runeBonus = !spell && attackerActor ? implantStatusBonus(attackerActor.items) : {};
+  // Цель с мутацией глифа Игни горит легче
+  const burnVuln = implantBurnVulnerability(target);
 
   // Часть тела
   let locRoll = null;
@@ -204,7 +257,9 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const weakness = target.type === "monster" && !spell ? tsys.weakness : null;
   const silver = !!w.silverDamage?.trim?.();
   const meteorite = has("meteorite");
-  if (weakness === "silver" && silver) {
+  // Медвежья форма берсерка: восприимчив к серебру (урон серебром прибавляется, как у чудовищ) и к маслу против проклятых
+  const bear = target.type === "character" ? tsys.derived?.bearForm : null;
+  if ((weakness === "silver" || (bear && !spell)) && silver) {
     const s = await rollFormula(w.silverDamage);
     if (s.roll) rolls.push(s.roll);
     dmg += s.total;
@@ -220,7 +275,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   // Масло для меча: +5 урона по своему классу чудовищ; «гуманоиды» — персонажи и чудовища-гуманоиды (стр. 248)
   if (w.oil && !spell) {
     const cls = target.type === "monster" ? tsys.monsterClass : "humanoid";
-    if (w.oil.target === cls) {
+    if (w.oil.target === cls || (bear && w.oil.target === "cursed")) {
       dmg += 5;
       parts.push({ label: w.oil.name || "Масло", value: 5 });
     }
@@ -247,6 +302,7 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const reasons = [];
   if (!ap && armor.resist?.includes(damageType)) reasons.push("броня");
   if (tsys.resistances?.includes?.(damageType)) reasons.push("сопротивление");
+  if (bear?.resist?.includes(damageType) || (!bear && tsys.derived?.hideResist?.includes(damageType))) reasons.push("медвежья шкура");
   if (weakness && damageType !== "elemental") {
     if (weakness === "silver" && !silver) reasons.push("не серебро");
     if (weakness === "meteorite" && !meteorite) reasons.push("не метеоритная сталь");
@@ -260,9 +316,39 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   const locMult = location === "head" ? Math.max(locCfg.mult, d.headMult ?? 3) : locCfg.mult;
   let final = Math.floor(afterArmor * typeMult * locMult);
 
+  // Заклинание по всему телу («Дыхание дракона», «Облако жуков»): урон по каждой части — со своей бронёй и
+  // множителем, как ручной урон «по всем частям» (manual.mjs); износ брони — у каждой пробитой части
+  let wear;
+  if (spell?.allLocations) {
+    wear = [];
+    const rows = [];
+    final = 0;
+    for (const [key, cfg] of Object.entries(table)) {
+      const a = d.armor?.[key] ?? { sp: 0, resist: [] };
+      const after = Math.max(0, dmg - (spell.ignoreArmor ? 0 : a.sp));
+      const halved = reasons.some(r => r !== "броня") || (!spell.ignoreArmor && a.resist?.includes(damageType));
+      const m = immune ? 0 : (halved ? 0.5 : 1) * (susceptible ? 2 : 1);
+      const lm = key === "head" ? Math.max(cfg.mult, d.headMult ?? 3) : cfg.mult;
+      const value = Math.floor(after * m * lm);
+      final += value;
+      if (after > 0 && a.sp > 0 && !spell.ignoreArmor) wear.push({ location: key, amount: 1 });
+      rows.push(`${cfg.label.toLowerCase()} ${value}`);
+    }
+    notes.push(`По всему телу: ${rows.join(", ")}.`);
+  }
+
+  // Бесплотность (полуденница, беанн’ши, полуночница — всегда; призрак после «Ускользания», Скрытый в облике дыма —
+  // статусом): оружие проходит насквозь, пока круг Ирдена или облако лунной пыли не сделают дух материальным.
+  // Магия действует как обычно
+  const ghost = !spell && isIncorporeal(target);
+  if (ghost) {
+    final = 0;
+    notes.push("Бесплотен: оружие проходит насквозь — нужен круг Ирдена или облако лунной пыли.");
+  }
+
   // Критическое ранение
   let crit = null;
-  if (critLevel) {
+  if (critLevel && !ghost) {
     const lvl = CRIT_LEVELS[critLevel];
     const balanced = has("balanced");
     let wound, critRoll;
@@ -291,12 +377,23 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     };
   }
 
+  // Высасывание крови: при уроне укусом цель теряет ещё 2d6 (броня не снижает), вампир получает столько же
+  let drain = 0;
+  if (attack.drain?.ok && final > 0 && !attack.nonLethal) {
+    const r = await new Roll("2d6").evaluate();
+    rolls.push(r);
+    drain = r.total;
+    final += drain;
+    notes.push(`Высасывание крови: +${drain} урона; вампиру +${drain} ${attack.drain.mode === "hp" ? "ПЗ" : "ОК"}.`);
+  }
+
   // Эффекты оружия: шанс в % (стр. 72, 161)
   const effects = [];
   for (const [key, status] of Object.entries(EFFECT_STATUS)) {
-    let chance = effChance(key);
-    if (!chance) continue;
+    let chance = Math.min(100, effChance(key) + (runeBonus[key] ?? 0));
+    if (!chance || ghost) continue;
     if (ELEMENTAL.includes(status)) chance = Math.min(100, chance + elementalBonus);
+    if (status === "burning") chance = Math.min(100, chance + burnVuln);
     const needsWound = key === "bleeding" || key === "poison";
     const resistKey = EFFECT_RESIST_KEY[key];
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
@@ -306,13 +403,37 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
     effects.push({ key, status, label: CONFIG.statusEffects[status]?.name ?? key, chance, roll: r.total, success, immune: !!immuneTo });
   }
 
+  // Яд на клинке (чёрный, трупный): при уроне оружием подходящего типа — его состояния (alchemy.mjs, coatWeapon)
+  let coatSpent = false;
+  const coat = !spell && w.coat && (!w.coat.until || w.coat.until > (game.time.worldTime ?? 0)) ? w.coat : null;
+  if (coat && final > 0 && (!coat.types?.length || coat.types.includes(damageType))) {
+    for (const status of coat.statuses ?? []) {
+      const resistKey = STATUS_RESIST_KEY[status];
+      const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
+      effects.push({ key: "coat", status, label: `${CONFIG.statusEffects[status]?.name ?? status} (${coat.name})`,
+        chance: 100, roll: "яд", success: !immuneTo, immune: !!immuneTo });
+    }
+    coatSpent = !!coat.once;
+  }
+
+  // Шанс дезориентировать сразу (хвост дракона, руна Триглава) — в отличие от «Дезориентирующего» без испытания
+  const disorient = Math.min(100, effChance("disorient") + (runeBonus.disorient ?? 0));
+  if (disorient && !ghost) {
+    const immuneTo = tsys.immunities?.includes?.(STATUS_RESIST_KEY.disoriented);
+    const r = await new Roll("1d100").evaluate();
+    rolls.push(r);
+    effects.push({ key: "disorient", status: "disoriented", label: CONFIG.statusEffects.disoriented?.name ?? "Дезориентация",
+      chance: disorient, roll: r.total, success: !immuneTo && r.total <= disorient, immune: !!immuneTo });
+  }
+
   // Статусы магии: шанс уже посчитан при сотворении (с учётом вложенной Вын)
   for (const st of spell?.statuses ?? []) {
     const resistKey = STATUS_RESIST_KEY[st.status];
     const immuneTo = resistKey && tsys.immunities?.includes?.(resistKey);
     const r = await new Roll("1d100").evaluate();
     rolls.push(r);
-    const chance = ELEMENTAL.includes(st.status) ? Math.min(100, st.chance + elementalBonus) : st.chance;
+    const chance = Math.min(100, (ELEMENTAL.includes(st.status) ? st.chance + elementalBonus : st.chance)
+      + (st.status === "burning" ? burnVuln : 0));
     const success = !immuneTo && r.total <= chance;
     effects.push({ key: st.status, status: st.status, label: CONFIG.statusEffects[st.status]?.name ?? st.status,
       chance, roll: r.total, success, immune: !!immuneTo, rounds: spell.statusRounds });
@@ -344,13 +465,15 @@ export async function computeDamage({ attack, target, critLevel = null, aimed = 
   }
 
   return {
-    location, locationLabel: locCfg.label, locRoll, locMult,
+    location, locationLabel: spell?.allLocations ? "всё тело" : locCfg.label, locRoll, locMult, wear,
     damageType, damageTypeLabel: CONFIG.VEDMAK.DAMAGE_TYPES[damageType]?.label ?? damageType,
     parts, rawDamage, coverSp,
     sp: armor.sp, effectiveSp: sp, ap, improvedAP, afterArmor, penetrated,
     resistReasons: reasons, susceptible, immune, typeMult,
     final, nonLethal: !!attack.nonLethal, crit, effects, stunSave, ablate, notes, staLoss, spell: !!spell,
+    drain, drainMode: attack.drain?.mode ?? "",
     blockable: spell ? spell.defense === "dodgeBlock" : true,
+    coatSpent,
     rolls
   };
 }
@@ -406,7 +529,9 @@ export async function applyDamageToActor(actor, dmg) {
     lines.push(`Урон ${dmg.final}: ПЗ ${sys.hp.value} → ${hp}.`);
     if (hp < 0) {
       deathSave = true;
-      lines.push(wasDying ? "Ранен при смерти: новое испытание против смерти." : "При смерти! Испытание против смерти.");
+      // Новое ранение при смерти: порог испытания падает ещё на 1 (стр. 162 — «за раунд и за каждое новое ранение»)
+      if (wasDying) updates["system.deathSaves.penalty"] = (sys.deathSaves?.penalty ?? 0) + 1;
+      lines.push(wasDying ? "Ранен при смерти: порог испытания −1, новое испытание против смерти." : "При смерти! Испытание против смерти.");
     } else if (hp < sys.derived.woundThreshold && sys.hp.value >= sys.derived.woundThreshold) {
       lines.push("Ниже порога ранения: Реа, Лвк, Инт и Воля ×½.");
     }
@@ -485,11 +610,15 @@ export async function wearArmor(actor, wear) {
       natural = Math.max(natural, amount);
     }
   }
+  // Вся изношенная броня (надетая — предметы самого актора) одним запросом: по отдельности каждый предмет
+  // заново пересчитывал актора и перерисовывал лист
+  const updates = [];
   for (const [item, slots] of byItem) {
-    await item.update(Object.fromEntries(Object.entries(slots).map(([slot, v]) => [`system.sp.${slot}.value`, v])));
+    updates.push({ _id: item.id, ...Object.fromEntries(Object.entries(slots).map(([slot, v]) => [`system.sp.${slot}.value`, v])) });
     const labels = Object.entries(slots).map(([slot, v]) => `${CONFIG.VEDMAK.ARMOR_LOCATIONS[slot] ?? slot} ${v}`);
     lines.push(`${item.name}: ПБ ${labels.join(", ")}.`);
   }
+  if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
   if (natural && actor.type === "monster") {
     const value = Math.max(0, actor.system.armor - natural);
     await actor.update({ "system.armor": value });
@@ -502,10 +631,16 @@ export async function wearArmor(actor, wear) {
  * Наложить статус; с длительностью в раундах (число или формула) — отсчёт в начале хода цели.
  */
 export async function applyStatus(actor, status, rounds = "") {
-  await actor.toggleStatusEffect(status, { active: true });
+  // Отравление от токсичности — свой эффект со статусом «отравлен» (alchemy.mjs). Ядро сочло бы статус уже
+  // наложенным и не создало бы второго: яд оружия слился бы с ним и снялся бы вместе с токсичностью
+  const own = e => e.statuses.has(status) && e.statuses.size === 1 && !e.flags?.vedmak?.toxicPoison;
+  if (actor.effects.some(e => e.statuses.has(status)) && !actor.effects.some(own)) {
+    const data = await ActiveEffect.implementation.fromStatusEffect(status);
+    await actor.createEmbeddedDocuments("ActiveEffect", [data.toObject()]);
+  } else await actor.toggleStatusEffect(status, { active: true });
   if (!rounds) return;
   const n = Number.isFinite(Number(rounds)) ? Number(rounds) : (await new Roll(String(rounds)).evaluate()).total;
-  const effect = actor.effects.find(e => e.statuses.has(status) && e.statuses.size === 1);
+  const effect = actor.effects.find(own);
   if (effect && n > 0) await effect.update({ "flags.vedmak.statusRounds": n });
 }
 
@@ -533,16 +668,42 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   // Запрос игрока: он атакующий или владелец цели (как у кнопки), а карточку урона создал владелец
   // атакующего — иначе карточку с любым уроном по любой цели можно подделать из консоли
   if (!game.users.get(userId)?.isGM
-    && (!userOwnsAny(userId, attacker, actor) || !userOwnsAny(message.author?.id, attacker))) {
+    && (!userOwnsAny(userId, attacker, actor) || !userOwnsAny(message.author?.id, attacker) || !damageChainValid(message, dmg, attacker, actor))) {
     return console.warn(`vedmak | отклонён запрос урона от ${game.users.get(userId)?.name ?? userId}`);
   }
   applyingMessages.add(messageId);
   try {
     const hpBefore = actor.system.hp.value;
-    const report = await applyDamageToActor(actor, dmg);
+    const report = await serialByActor(actor, () => applyDamageToActor(actor, dmg));
     // Алхимия: отвары грифона и виверны, «Молния», убийства
     const dealt = dmg.nonLethal ? 0 : Math.max(0, hpBefore - actor.system.hp.value);
-    report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell }));
+    // Укус или высасывание крови — для «Чёрной крови» ведьмака
+    const bite = dmg.drain > 0 || /укус|клык/i.test(dmg.attackLabel ?? "");
+    report.lines.push(...await alchemyAfterDamage(attacker, actor, { dealt, hpBefore, physical: !dmg.spell, bite }));
+    report.lines.push(...await flightAfterDamage(actor, dealt));
+    report.lines.push(...await dropInvisibility(actor, "hit"));
+    if (dmg.dimeritium && !actor.effects.some(e => e.flags?.vedmak?.dimeritium)) {
+      report.dimeritium = true;
+      report.lines.push("Удар двимеритом: касание двимерита (кнопка ниже).");
+    }
+    // Высасывание крови: вампир восполняет ОК (до максимума ПЗ) или ПЗ
+    if (dmg.drain > 0 && attacker?.system.blood?.enabled) {
+      if (dmg.drainMode === "hp") {
+        const hp = Math.min(attacker.system.hp.max, attacker.system.hp.value + dmg.drain);
+        await attacker.update({ "system.hp.value": hp });
+        report.lines.push(`${attacker.name}: высасывание крови +${dmg.drain} ПЗ (${hp}/${attacker.system.hp.max}).`);
+      } else {
+        const blood = Math.min(attacker.system.blood.max, attacker.system.blood.value + dmg.drain);
+        await attacker.update({ "system.blood.value": blood });
+        report.lines.push(`${attacker.name}: высасывание крови +${dmg.drain} ОК (${blood}/${attacker.system.blood.max}).`);
+      }
+      // После каждого Высасывания — Сопротивление Жажде крови (и в Истинной форме): провал — +1 пункт Шкалы Зверя
+      try {
+        const { drainBeastCheck } = await import("../character/true-form.mjs");
+        const line = await drainBeastCheck(attacker);
+        if (line) report.lines.push(line);
+      } catch (err) { console.error("vedmak | Шкала Зверя после Высасывания", err); }
+    }
     // Адреналин: каждый нанесённый крит — кость d6 («Лес Марибора» — две), не больше Тел атакующего
     if (dmg.crit && game.settings.get("vedmak", "adrenaline")) {
       if (attacker?.type === "character") {
@@ -560,9 +721,72 @@ registerGMHandler("applyDamage", async ({ messageId }, userId) => {
   }
 });
 
-registerGMHandler("setStatus", async ({ uuid, status, active }) => {
+const actorOfRef = ref => resolveActor(ref?.tokenUuid) ?? resolveActor(ref?.actorUuid);
+
+/**
+ * Карточку урона игрок создаёт сам, поэтому ведущий сверяет её цепочку: защита — настоящая карточка, её создал владелец
+ * защитника (или ведущий), в ней те же атакующий и цель и разрешён урон, а по этой защите ещё не применяли другой урон.
+ * Так нельзя ударить того, кто не защищался от этой атаки, и нельзя применить урон дважды разными карточками
+ * (кроме добавочных попаданий разделяющегося боеприпаса).
+ */
+function damageChainValid(message, dmg, attacker, target) {
+  const defMsg = game.messages.get(dmg.defenseMessageId);
+  const def = defMsg?.flags.vedmak?.defense;
+  if (!def?.canDamage) return false;
+  if (actorOfRef(def.defender) !== target || actorOfRef(def.attack?.attacker) !== attacker) return false;
+  if (!(defMsg.author?.isGM || userOwnsAny(defMsg.author?.id, target))) return false;
+  // Разделяющийся боеприпас даёт по одной защите до 1 + min(split, превышение) попаданий — считаем по карточке защиты
+  const split = def.attack?.weapon?.ammo?.split ?? 0;
+  const allowed = 1 + (split ? Math.min(split, Math.max(0, def.margin ?? 0)) : 0);
+  const applied = game.messages.filter(m => m.id !== message.id && m.flags.vedmak?.damage?.defenseMessageId === defMsg.id
+    && m.flags.vedmak.damage.applied).length;
+  return applied < allowed;
+}
+
+/**
+ * Применения урона к одному актору — по очереди: каждое читает ПЗ в начале, а пишет после ответа сервера, и два
+ * одновременных (автоприменение, быстрая атака по одной цели) иначе теряли одно обновление.
+ */
+const actorQueues = new Map();
+export function serialByActor(actor, fn) {
+  const key = actor.uuid;
+  const run = (actorQueues.get(key) ?? Promise.resolve()).then(fn, fn);
+  const tail = run.catch(() => {});
+  actorQueues.set(key, tail);
+  tail.then(() => { if (actorQueues.get(key) === tail) actorQueues.delete(key); });
+  return run;
+}
+
+/**
+ * Может ли отправитель менять статус цели. Ведущий и владелец цели — всегда. Остальным — только по карточке защиты
+ * (messageId), которую можно проверить на стороне ведущего:
+ *  • попадание: статус от приёма атаки (сбить с ног и т.п.) просит владелец атакующего, цель — защитник карточки;
+ *  • успешное парирование: «ошеломлён» на атакующем просит владелец защитника, а атакующий — из настоящей карточки атаки.
+ * Карточку защиты создаёт владелец защитника (или ведущий), поэтому подделать её на чужого защитника нельзя.
+ */
+function canSetStatus(userId, actor, status, active, messageId) {
+  if (userOwnsAny(userId, actor)) return true;
+  const card = game.messages.get(messageId);
+  const def = card?.flags.vedmak?.defense;
+  if (def?.kind !== "defense" || !active) return false;
+  const defender = actorOfRef(def.defender);
+  if (!defender || !userOwnsAny(card.author?.id, defender)) return false;
+  if (def.hit) {
+    return !!status && (status === def.attack?.hitStatus || status === def.attack?.hitStatus2) && defender === actor
+      && userOwnsAny(userId, actorOfRef(def.attack.attacker));
+  }
+  if (def.defense !== "parry" || status !== "staggered" || !userOwnsAny(userId, defender)) return false;
+  const attack = game.messages.get(def.attackMessageId)?.flags.vedmak?.attack;
+  return attack?.kind === "attack" && actorOfRef(attack.attacker) === actor;
+}
+
+registerGMHandler("setStatus", async ({ uuid, status, active, messageId }, userId) => {
   const actor = resolveActor(uuid);
-  if (actor) await actor.toggleStatusEffect(status, { active });
+  if (!actor || !CONFIG.statusEffects.some(s => s.id === status)) return;
+  if (!canSetStatus(userId, actor, status, !!active, messageId)) {
+    return console.warn(`vedmak | отклонена смена статуса от ${game.users.get(userId)?.name ?? userId}`);
+  }
+  await actor.toggleStatusEffect(status, { active: !!active });
 });
 
 /** Кнопка «Применить». */

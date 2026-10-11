@@ -45,26 +45,63 @@ export function hpBonusOf(changes) {
 }
 
 /**
- * Текущие ПЗ после конца бонуса к максимуму: не выше нового максимума, но запас сверх максимума,
+ * Текущие ПЗ после конца бонуса к максимуму. base — ПЗ при наложении (флаг `hpBase`): урон сначала съедает бонус,
+ * и снимается только его непотраченный остаток — раненый, вошедший в форму и не битый, выходит таким же раненым,
+ * а не с полными ПЗ. Без base (эффекты до 09.10) — по-старому: не выше нового максимума, но запас сверх максимума,
  * который был и без бонуса (временные ПЗ зелий), не сгорает. max — максимум уже без бонуса.
  */
-export function hpAfterBonus(hp, max, bonus) {
+export function hpAfterBonus(hp, max, bonus, base = null) {
+  // Не выше нового максимума (прибавка Тел формы тоже уходит), кроме запаса сверх максимума, бывшего при наложении
+  if (Number.isFinite(base)) return Math.min(hp - Math.min(bonus, Math.max(0, hp - base)), Math.max(max, base));
   return Math.min(hp, Math.max(max, hp - bonus));
+}
+
+/** ПЗ при наложении для нескольких снимаемых эффектов: самое раннее; null, если хоть у одного не записано. */
+function hpBaseOf(effects) {
+  const bases = effects.filter(e => e.flags?.vedmak?.hpBonus > 0).map(e => e.flags.vedmak.hpBase);
+  return bases.length && bases.every(Number.isFinite) ? Math.min(...bases) : null;
+}
+
+/**
+ * Урезать текущие ПЗ после конца бонуса к максимуму — сразу и с ожиданием записи. Нужна там, где за снятием
+ * баффа идёт чтение ПЗ (начало хода: кровотечение пишет «ПЗ минус урон» от прочитанного значения), — отложенная
+ * правка `clampHpLater` успевала бы после него и перезаписывала бы результат.
+ */
+export async function clampHpNow(actor, bonus, base = null) {
+  const { value, max } = actor.system.hp;
+  const hp = hpAfterBonus(value, max, bonus, base);
+  if (hp !== value) await actor.update({ "system.hp.value": hp });
+}
+
+/**
+ * Снять эффекты и, если среди них были баффы с бонусом к ПЗ, урезать ПЗ до возврата. Хук удаления такое снятие
+ * пропускает (`vedmakHpHandled`), поэтому ПЗ правятся ровно один раз.
+ */
+export async function deleteEffectsClamped(actor, ids, options = {}) {
+  const list = ids.filter(id => actor.effects.has(id));
+  if (!list.length) return;
+  const bonus = list.reduce((sum, id) => sum + (actor.effects.get(id).flags?.vedmak?.hpBonus ?? 0), 0);
+  const base = hpBaseOf(list.map(id => actor.effects.get(id)));
+  await actor.deleteEmbeddedDocuments("ActiveEffect", list, { ...options, vedmakHpHandled: true });
+  if (bonus > 0) await clampHpNow(actor, bonus, base);
 }
 
 /** Снятые эффекты с бонусом к ПЗ, по акторам: несколько в одном удалении — одна правка. */
 const endedHpBonus = new Map();
 
-function clampHpLater(actor, bonus) {
+/** Урезание ПЗ для ручного удаления (хук): после всех хуков этого удаления, без ожидания. */
+function clampHpLater(actor, effect) {
   const queued = endedHpBonus.has(actor);
-  endedHpBonus.set(actor, (endedHpBonus.get(actor) ?? 0) + bonus);
+  if (!queued) endedHpBonus.set(actor, []);
+  endedHpBonus.get(actor).push(effect);
   if (queued) return;
   // Хуки удаления идут подряд для всех снятых эффектов — правка после них, одна на всех
   queueMicrotask(() => {
-    const total = endedHpBonus.get(actor);
+    const ended = endedHpBonus.get(actor);
     endedHpBonus.delete(actor);
+    const total = ended.reduce((sum, e) => sum + e.flags.vedmak.hpBonus, 0);
     const { value, max } = actor.system.hp;
-    const hp = hpAfterBonus(value, max, total);
+    const hp = hpAfterBonus(value, max, total, hpBaseOf(ended));
     if (hp !== value) actor.update({ "system.hp.value": hp }).catch(err => console.error("vedmak | ПЗ после баффа", err));
   });
 }
@@ -80,15 +117,18 @@ export async function applyBuff(actor, buff) {
   let hp = actor.system.hp.value;
   if (same.length) {
     const oldBonus = same.reduce((sum, e) => sum + (e.flags.vedmak.hpBonus ?? 0), 0);
+    const oldBase = hpBaseOf(same);
     // ПЗ пересчитываются здесь, а не хуком удаления: иначе прибавка ниже прочла бы ещё не урезанные ПЗ
     await actor.deleteEmbeddedDocuments("ActiveEffect", same.map(e => e.id), { vedmakHpHandled: true });
-    if (oldBonus) hp = hpAfterBonus(hp, actor.system.hp.max, oldBonus);
+    if (oldBonus) hp = hpAfterBonus(hp, actor.system.hp.max, oldBonus, oldBase);
   }
   const hpBonus = hpBonusOf(buff.changes);
   const vedmak = { spellBuff: { name: buff.name, casterUuid: buff.casterUuid, itemId: buff.itemId, maintain: !!buff.maintain } };
-  if (hpBonus > 0) vedmak.hpBonus = hpBonus;
+  if (hpBonus > 0) Object.assign(vedmak, { hpBonus, hpBase: hp });
   if (buff.immune?.length) vedmak.immune = buff.immune;
   if (buff.rollMods) vedmak.rollMods = buff.rollMods;
+  // Бросок заклинателя и цена в Вын: по ним Рассеивание решает, снимается ли эффект (стр. 102)
+  if (buff.cast) vedmak.cast = buff.cast;
   // Вне боя раунды не отсчитываются — такой срок ставится временем мира
   const combat = inCombat(actor);
   if (buff.rounds && combat) vedmak.timed = { rounds: buff.rounds, key: `buff:${buff.name}` };
@@ -98,7 +138,8 @@ export async function applyBuff(actor, buff) {
     statuses: buff.statuses ?? [],
     flags: { vedmak }
   };
-  if (buff.minutes) effect.duration = { value: buff.minutes, units: "minutes" };
+  // `expiry: null`: схема v14 для числового срока ставит «turnStart», и эффект участника боя по времени не снимается
+  if (buff.minutes) effect.duration = { value: buff.minutes, units: "minutes", expiry: null };
   else if (buff.rounds && !combat) effect.duration = roundsAsTime(buff.rounds);
   const [created] = await actor.createEmbeddedDocuments("ActiveEffect", [effect]);
   if (created && buff.vision) await applyVision(actor, created, buff.vision);
@@ -121,6 +162,9 @@ export function buffLine(buff) {
   return `${buff.name}: ${bits.filter(Boolean).join(" · ")}${time ? ` (${time})` : ""}.`;
 }
 
+/** Эффекты, которые уже удаляются концом поддержания: второй снятый эффект того же заклинания их не трогает. */
+const endingLinked = new Set();
+
 /**
  * Конец поддержания: снять баффы и регенерацию этого заклинания со всех, на ком они висят (у активного ведущего).
  * Конец эффекта с бонусом к ПЗ: текущие ПЗ не выше нового максимума. Сроки щита, регенерации и статусов — timed.mjs.
@@ -131,19 +175,29 @@ export function registerBuffHooks() {
   Hooks.on("deleteActiveEffect", (effect, options, userId) => {
     const bonus = effect.flags?.vedmak?.hpBonus;
     if (!(bonus > 0) || userId !== game.user.id || options?.vedmakHpHandled) return;
-    if (effect.parent?.documentName === "Actor") clampHpLater(effect.parent, bonus);
+    if (effect.parent?.documentName === "Actor") clampHpLater(effect.parent, effect);
   });
-  Hooks.on("deleteActiveEffect", effect => {
+  Hooks.on("deleteActiveEffect", (effect, options) => {
     const maintain = effect.flags?.vedmak?.maintain;
     const caster = effect.parent;
     if (!maintain || caster?.documentName !== "Actor" || !game.users.activeGM?.isSelf) return;
+    // Эффекты того же пакета удаления (сняли поддержание вместе с баффом) уже удаляются — второй раз их не трогаем
+    const sameBatch = new Set(options?.ids ?? []);
     const actors = new Set([caster, ...game.actors, ...(canvas?.tokens?.placeables ?? []).map(t => t.actor).filter(Boolean)]);
     for (const actor of actors) {
+      if (actor === caster && options?.deleteAll) continue;
       const ids = actor.effects.filter(e => {
+        if (actor === caster && sameBatch.has(e.id)) return false;
+        if (endingLinked.has(e.uuid)) return false;
         const b = e.flags?.vedmak?.spellBuff ?? e.flags?.vedmak?.spellLink;
         return b?.maintain && b.casterUuid === caster.uuid && b.itemId === maintain.itemId;
       }).map(e => e.id);
-      if (ids.length) actor.deleteEmbeddedDocuments("ActiveEffect", ids).catch(err => console.error("vedmak | баффы", err));
+      if (!ids.length) continue;
+      const uuids = ids.map(id => actor.effects.get(id).uuid);
+      for (const u of uuids) endingLinked.add(u);
+      actor.deleteEmbeddedDocuments("ActiveEffect", ids)
+        .catch(err => { if (ids.some(id => actor.effects.has(id))) console.error("vedmak | баффы", err); })
+        .finally(() => { for (const u of uuids) endingLinked.delete(u); });
     }
   });
 }

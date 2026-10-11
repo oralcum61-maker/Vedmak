@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Вкладка «Снаряжение»</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d);--ts:url(/_blob/e91804a6889c91a09ad16182ed1514a8)}
+a{color:#e2ddd0}a:hover{color:#fffaf0}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;background-image:radial-gradient(circle at 50% 42%,rgba(255,245,225,.09),transparent 66%);border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08)}
+.frame::after{content:"";position:absolute;inset:4px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.frame.on{box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 0 0 1px rgba(196,69,47,.55),0 1px 0 rgba(255,240,215,.08)}
+.frame.off img{filter:grayscale(.65) brightness(.72)}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.ibtn{width:34px;height:34px;padding:0;display:grid;place-items:center;color:#a29d92}
+.ibtn:hover{color:#f1ece0}
+.enamel{color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.enamel:hover{filter:brightness(1.1)}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.cell{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:5px 11px;min-width:0}
+.cell+.cell{border-left:1px solid #040405;box-shadow:inset 1px 0 0 rgba(255,240,215,.05)}
+.row{border-bottom:1px solid rgba(0,0,0,.6);box-shadow:0 1px 0 rgba(255,240,215,.045)}
+.ribbon{position:absolute;left:-1px;top:-1px;z-index:2;padding:2px 6px 2px 5px;font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff3ea;background:#b8432c linear-gradient(180deg,rgba(255,255,255,.22),rgba(0,0,0,.25));border:1px solid #2a0c06;box-shadow:0 2px 4px rgba(0,0,0,.7)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;font-size:11px;border-radius:2px;white-space:nowrap}
+.chip-steel{color:#d6d0c2;background:#25262b linear-gradient(180deg,rgba(255,245,225,.08),rgba(0,0,0,.25));border:1px solid #060708}
+.chip-oil{color:#eef3e2;background:#4e5a33 linear-gradient(180deg,rgba(255,255,255,.16),rgba(0,0,0,.25));border:1px solid #1c2210}
+.chip-rune{color:#ece4ff;background:#4c4170 linear-gradient(180deg,rgba(255,255,255,.16),rgba(0,0,0,.25));border:1px solid #17102a}
+.seg{width:4px;height:9px;border-radius:1px}
+.tab{padding:0 15px;height:40px;display:flex;align-items:center;font-family:Forum,serif;font-size:17px;color:#8e897e;text-decoration:none;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.tab-on{color:#f3eee2;height:42px;margin-bottom:-1px;background-color:#17181b;background-image:var(--tl),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-bottom:0;box-shadow:inset 0 2px 0 #b8432c,inset 0 3px 0 rgba(255,240,215,.08)}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 6px 9px;border:1px solid transparent;border-radius:2px}
+.tile:hover{background:rgba(255,245,225,.035);border-color:rgba(0,0,0,.5)}
+.tacts{display:flex;gap:4px;opacity:0;transition:opacity .12s}
+.tile:hover .tacts,.tile:focus-within .tacts{opacity:1}
+.qty{position:absolute;right:-6px;bottom:-6px;min-width:22px;height:20px;padding:0 5px;box-sizing:border-box;display:grid;place-items:center;font-family:Forum,serif;font-size:14px;color:#f1ece0;background:#25262b linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.3));border:1px solid #060708;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,.8)}
+</style>
+</helmet>
+<div class="mat" style="width: 820px; height: 1320px; box-sizing: border-box; display: flex; flex-direction: column; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums">
+
+  <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+    <defs>
+      <linearGradient id="vdOk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f2ea"></stop><stop offset=".45" stop-color="#b3ada2"></stop><stop offset=".7" stop-color="#74706a"></stop><stop offset="1" stop-color="#3e3d3a"></stop></linearGradient>
+      <linearGradient id="vdWorn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9b4aa"></stop><stop offset=".45" stop-color="#7d7972"></stop><stop offset=".7" stop-color="#4f4d49"></stop><stop offset="1" stop-color="#2c2b29"></stop></linearGradient>
+      <linearGradient id="vdBroken" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f08a72"></stop><stop offset=".45" stop-color="#c4452f"></stop><stop offset=".7" stop-color="#7a2414"></stop><stop offset="1" stop-color="#3a120a"></stop></linearGradient>
+    </defs>
+  </svg>
+
+  <nav class="well" style="display: flex; gap: 2px; padding: 0 18px; height: 56px; align-items: flex-end; border-width: 0 0 1px; border-radius: 0; flex-shrink: 0" aria-label="Вкладки листа">
+    <a href="#" class="tab">Параметры</a>
+    <a href="#" class="tab">Бой</a>
+    <a href="#" class="tab">Навыки</a>
+    <a href="#" class="tab tab-on">Снаряжение</a>
+    <a href="#" class="tab">Ремесло</a>
+    <a href="#" class="tab">Магия</a>
+    <a href="#" class="tab">Дневник</a>
+  </nav>
+
+  <div style="flex-grow: 1; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 16px">
+
+    <section class="plate" style="display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 0; padding: 0">
+      <div style="padding: 12px 16px 13px; display: flex; flex-direction: column; gap: 9px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span class="gem"></span>
+          <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Кошелёк</h2>
+          <span style="flex-grow: 1"></span>
+          <span style="font-size: 12px; color: #8e897e">≈ 1 318 кр.</span>
+          <button type="button" class="btn" style="height: 28px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">Обмен</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 18px">
+          <div style="display: flex; align-items: baseline; gap: 7px; flex-shrink: 0; white-space: nowrap">
+            <span class="metal" style="font-family: Forum, serif; font-size: 34px; line-height: 1">1 240</span>
+            <span class="cap" style="color: #cfc8b8">кроны</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; min-width: 0">
+            <sc-for list="{{coins}}" as="c" hint-placeholder-count="5">
+              <label style="display: flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; font-size: 11px; color: {{c.fg}}" class="well">{{c.label}}<input value="{{c.v}}" aria-label="{{c.label}}" style="width: 34px; height: 20px; box-sizing: border-box; text-align: center; font: inherit; font-family: Forum, serif; font-size: 14px; color: {{c.fg}}; background: transparent; border: 0"></label>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 12px 16px 13px; display: flex; flex-direction: column; justify-content: center; gap: 8px; border-left: 1px solid #060708; box-shadow: inset 1px 0 0 rgba(255,240,215,.05)">
+        <div style="display: flex; align-items: baseline; gap: 8px">
+          <span class="cap">Нагрузка</span>
+          <span style="flex-grow: 1"></span>
+          <span class="metal" style="font-family: Forum, serif; font-size: 24px; line-height: 1">18,5</span>
+          <span style="font-size: 12px; color: #6c685f">из 90 кг</span>
+        </div>
+        <div class="well" style="position: relative; height: 10px; border-radius: 1px">
+          <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 21%; background: #b9b3a6 linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 50%, rgba(0,0,0,.3))"></div>
+          <div style="position: absolute; left: 25%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.6)"></div>
+          <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.6)"></div>
+          <div style="position: absolute; left: 75%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.6)"></div>
+        </div>
+        <span style="font-size: 11px; color: #6c685f">Поднять с места — до 270 кг</span>
+      </div>
+    </section>
+
+    <section class="plate" style="padding: 12px 16px 4px; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Оружие</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+        <button type="button" class="btn" style="height: 28px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">+ Добавить</button>
+      </div>
+      <sc-for list="{{weapons}}" as="w" hint-placeholder-count="3">
+        <div class="row" style="display: flex; gap: 14px; padding: 12px 0; border-bottom: {{w.edge}}">
+          <div class="frame {{w.frameCls}}" style="width: 76px; height: 76px">
+            <sc-if value="{{w.eq}}" hint-placeholder-val="{{true}}"><span class="ribbon">в руках</span></sc-if>
+            <img src="{{w.img}}" alt="" style="width: 64px; height: 64px; object-fit: contain">
+          </div>
+          <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; align-items: center; gap: 8px; min-height: 34px">
+              <div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                <a href="#" style="font-family: Forum, serif; font-size: 19px; line-height: 1.1; color: {{w.nameColor}}; text-decoration: none; text-shadow: 0 1px 0 rgba(0,0,0,.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{w.name}}</a>
+                <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap">
+                  <span style="font-size: 11.5px; color: #8e897e">{{w.skill}}</span>
+                  <sc-for list="{{w.chips}}" as="c" hint-placeholder-count="1"><span class="chip {{c.cls}}">{{c.t}}</span></sc-for>
+                </div>
+              </div>
+              <span style="flex-grow: 1"></span>
+              <sc-if value="{{w.eq}}" hint-placeholder-val="{{true}}">
+                <button type="button" class="enamel" style="height: 34px; padding: 0 16px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase">{{w.go}}</button>
+              </sc-if>
+              <sc-if value="{{w.off}}" hint-placeholder-val="{{false}}">
+                <button type="button" class="btn" style="height: 34px; padding: 0 14px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase">В руки</button>
+              </sc-if>
+              <div class="well" style="display: flex; gap: 3px; padding: 2px">
+                <button type="button" class="btn ibtn" aria-label="Починить" title="Починить"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.2a4 4 0 0 0-4.9 5.2L3.4 12.6a1.6 1.6 0 0 0 2.3 2.3l4.2-4.2a4 4 0 0 0 5.2-4.9l-2.4 2.4-2-0.5-0.5-2z"/></svg></button>
+                <button type="button" class="btn ibtn" aria-label="Разобрать на компоненты" title="Разобрать"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5L3.5 12a1.6 1.6 0 0 0 2.3 2.3L11.3 9M8.2 3.6l5.6 5.6 2.4-2.4-5.6-5.6z"/></svg></button>
+                <button type="button" class="btn ibtn" aria-label="В чат" title="В чат"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 4.5h13v8.5h-7l-3.5 3v-3H3.5z"/></svg></button>
+                <button type="button" class="btn ibtn" aria-label="Удалить" title="Удалить"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10h7.4l.8-10M8.5 9v4.5M11.5 9v4.5"/></svg></button>
+              </div>
+            </div>
+            <div class="well" style="display: flex; align-items: stretch; height: 46px">
+              <div class="cell" style="width: 42px"><span class="cap">Точн.</span><span class="engr" style="font-family: Forum, serif; font-size: 17px; line-height: 1">{{w.acc}}</span></div>
+              <div class="cell" style="width: 92px"><span class="cap">Урон</span><span class="metal" style="font-family: Forum, serif; font-size: 19px; line-height: 1; align-self: flex-start">{{w.dmg}}</span></div>
+              <div class="cell"><span class="cap">Тип</span>
+                <span style="display: flex; gap: 5px; color: #d6d0c2">
+                  <sc-if value="{{w.slash}}" hint-placeholder-val="{{true}}"><svg aria-label="Режущий" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3.5 15.5L14.5 4.5M7.5 17L17 7.5"/></svg></sc-if>
+                  <sc-if value="{{w.pierce}}" hint-placeholder-val="{{true}}"><svg aria-label="Колющий" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 16.5L15 5M10 4.2h6v6"/></svg></sc-if>
+                  <sc-if value="{{w.blunt}}" hint-placeholder-val="{{false}}"><svg aria-label="Дробящий" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5l6.5-6.5M9 3.5l7.5 7.5 2-2L11 1.5z"/></svg></sc-if>
+                  <sc-if value="{{w.elem}}" hint-placeholder-val="{{false}}"><svg aria-label="Стихийный" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 2.5c3 3.8 5 6.2 5 9.3a5 5 0 0 1-10 0c0-2.4 1.5-3.8 2.6-5.6.2 2.3 1 3.4 2.4 3.6-.6-2.6-.4-4.8 0-7.3z"/></svg></sc-if>
+                </span>
+              </div>
+              <div class="cell"><span class="cap">Хват</span>
+                <span style="display: flex; gap: 1px; color: #d6d0c2">
+                  <svg aria-label="Рука" width="16" height="17" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 17.5V9.5C5 8.3 7 8.3 7 9.5V5.8C7 4.6 9 4.6 9 5.8V5C9 3.8 11 3.8 11 5V6C11 4.8 13 4.8 13 6V12.5C13 15.5 11.4 17.5 9 17.5Z"/></svg>
+                  <sc-if value="{{w.two}}" hint-placeholder-val="{{true}}"><svg aria-label="Вторая рука" width="16" height="17" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 17.5V9.5C5 8.3 7 8.3 7 9.5V5.8C7 4.6 9 4.6 9 5.8V5C9 3.8 11 3.8 11 5V6C11 4.8 13 4.8 13 6V12.5C13 15.5 11.4 17.5 9 17.5Z"/></svg></sc-if>
+                </span>
+              </div>
+              <div class="cell" style="flex-grow: 1"><span class="cap">Надёжность · {{w.rel}}</span>
+                <span style="display: flex; gap: 2px; align-items: center">
+                  <sc-for list="{{w.segs}}" as="s" hint-placeholder-count="10"><span class="seg" style="background: {{s.bg}}; box-shadow: {{s.sh}}"></span></sc-for>
+                </span>
+              </div>
+              <div class="cell" style="width: 50px"><span class="cap">Дис.</span><span class="engr" style="font-size: 13px">{{w.range}}</span></div>
+              <div class="cell" style="width: 50px"><span class="cap">Вес</span><span class="engr" style="font-size: 13px">{{w.wt}}</span></div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section class="plate" style="padding: 12px 16px 4px; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Броня и щиты</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+        <span style="font-size: 12px; color: #8e897e">Скованность −1</span>
+        <button type="button" class="btn" style="height: 28px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">+ Добавить</button>
+      </div>
+      <div style="display: flex; flex-direction: column">
+          <sc-for list="{{armor}}" as="a" hint-placeholder-count="3">
+            <div class="row" style="display: flex; gap: 14px; padding: 12px 0; border-bottom: {{a.edge}}">
+              <div class="frame {{a.frameCls}}" style="width: 76px; height: 76px">
+                <sc-if value="{{a.eq}}" hint-placeholder-val="{{true}}"><span class="ribbon">{{a.eqLabel}}</span></sc-if>
+                <img src="{{a.img}}" alt="" style="width: 64px; height: 64px; object-fit: contain">
+              </div>
+              <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+                <div style="display: flex; align-items: center; gap: 8px; min-height: 34px">
+                  <div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                    <a href="#" style="font-family: Forum, serif; font-size: 18px; line-height: 1.1; color: #f1ece0; text-decoration: none; text-shadow: 0 1px 0 rgba(0,0,0,.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.name}}</a>
+                    <div style="display: flex; gap: 6px; align-items: center">
+                      <span style="display: flex; gap: 2px" aria-label="{{a.classLabel}}">
+                        <sc-for list="{{a.pips}}" as="p" hint-placeholder-count="3"><span style="width: 9px; height: 11px; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%); background: {{p.bg}}"></span></sc-for>
+                      </span>
+                      <span style="font-size: 11.5px; color: #8e897e">{{a.classLabel}}</span>
+                      <sc-for list="{{a.chips}}" as="c" hint-placeholder-count="1"><span class="chip {{c.cls}}">{{c.t}}</span></sc-for>
+                    </div>
+                  </div>
+                  <span style="flex-grow: 1"></span>
+                  <div class="well" style="display: flex; gap: 3px; padding: 2px">
+                    <button type="button" class="btn ibtn" aria-label="{{a.wearLabel}}" title="{{a.wearLabel}}" style="color: {{a.wearColor}}"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M7 3.5L3 6l1.6 3.4L6.5 8.6V16.5h7V8.6l1.9.8L17 6l-4-2.5c-.5 1.4-1.6 2.1-3 2.1S7.5 4.9 7 3.5z"/></svg></button>
+                    <button type="button" class="btn ibtn" aria-label="Починить" title="Починить"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.2a4 4 0 0 0-4.9 5.2L3.4 12.6a1.6 1.6 0 0 0 2.3 2.3l4.2-4.2a4 4 0 0 0 5.2-4.9l-2.4 2.4-2-0.5-0.5-2z"/></svg></button>
+                    <button type="button" class="btn ibtn" aria-label="В чат" title="В чат"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 4.5h13v8.5h-7l-3.5 3v-3H3.5z"/></svg></button>
+                    <button type="button" class="btn ibtn" aria-label="Удалить" title="Удалить"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10h7.4l.8-10M8.5 9v4.5M11.5 9v4.5"/></svg></button>
+                  </div>
+                </div>
+                <div class="well" style="display: flex; align-items: stretch; height: 60px">
+                  <div class="cell" style="flex-grow: 1; gap: 5px"><span class="cap">{{a.coverCap}}</span>
+                    <sc-if value="{{a.body}}" hint-placeholder-val="{{true}}">
+                      <span style="display: flex; align-items: flex-end">
+                        <sc-for list="{{a.parts}}" as="p" hint-placeholder-count="6">
+                          <span title="{{p.title}}" aria-label="{{p.title}}" style="width: 31px; margin-left: {{p.gap}}; display: flex; flex-direction: column; align-items: center; gap: 1px">
+                            <sc-if value="{{p.head}}" hint-placeholder-val="{{false}}"><svg width="26" height="26" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4">
+                              <path d="M4.5 21.5V9L6.8 4.6L12 2.6L17.2 4.6L19.5 9V21.5H14.6L13.4 19.2H10.6L9.4 21.5Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                              <path d="M12 2.8V19" stroke="{{p.ink}}" stroke-width=".9" fill="none"></path>
+                              <path d="M6.4 10.4H11.1V12.2H6.4ZM12.9 10.4H17.6V12.2H12.9ZM14.5 14.6h1v1.5h-1zM16.4 14.6h1v1.5h-1zM14.5 16.9h1v1.4h-1zM16.4 16.9h1v1.4h-1z" fill="{{p.ink}}"></path>
+                              <path d="M6.2 9.6V20.4" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                              <path d="M7.4 14.6L10.4 16.4M14 6.4L16.4 8" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                              <path d="M9.4 3.8L11 7.4L9.2 9.8L10.8 13.6L9.6 17" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+                            </svg></sc-if>
+                            <sc-if value="{{p.torso}}" hint-placeholder-val="{{false}}"><svg width="26" height="26" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4">
+                              <path d="M3 7L6.5 3L10 4.6L12 6.2L14 4.6L17.5 3L21 7L18.8 10.2V16.2L16.6 21.5H7.4L5.2 16.2V10.2Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                              <path d="M12 6.4V21.3M5.3 15.6H18.7M3.3 7.2L6.4 9.4M20.7 7.2L17.6 9.4" stroke="{{p.ink}}" stroke-width=".9" fill="none"></path>
+                              <circle cx="8.2" cy="12.2" r=".8" fill="{{p.rivet}}"></circle><circle cx="15.8" cy="12.2" r=".8" fill="{{p.rivet}}"></circle><circle cx="8.8" cy="18.4" r=".8" fill="{{p.rivet}}"></circle><circle cx="15.2" cy="18.4" r=".8" fill="{{p.rivet}}"></circle>
+                              <path d="M6 10.8V15" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                              <path d="M7.6 8.6L10.6 10.8M13.4 16.8L16.6 15.4" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                              <path d="M13.6 6.6L12.8 10L14.6 12.6L13 16.4L14 20.6" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+                            </svg></sc-if>
+                            <sc-if value="{{p.arm}}" hint-placeholder-val="{{false}}"><svg width="26" height="26" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4"><g transform="{{p.flip}}">
+                              <path d="M5 2H15L16.4 8.6H4.6Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                              <path d="M16.4 9.4L20.4 11.2L19.8 15L16.8 14.4Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.2"></path>
+                              <path d="M4.6 8.6H16.4L17.2 14.2H5.2Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                              <path d="M5.2 14.2H17.2L18.4 16.6L17.6 19.8L15.2 21.8H8.4L6 19.6Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                              <path d="M6.6 14.2L7.6 12.1L8.6 14.2ZM10.4 14.2L11.4 12.1L12.4 14.2ZM14.2 14.2L15.2 12.1L16.2 14.2Z" fill="{{p.edge}}"></path>
+                              <path d="M9.2 14.6V21.4M12.2 14.6V21.8M15 14.6V21.2M5.1 5.2H15.7" stroke="{{p.ink}}" stroke-width=".85" fill="none"></path>
+                              <circle cx="7.2" cy="3.6" r=".8" fill="{{p.rivet}}"></circle><circle cx="12.8" cy="3.6" r=".8" fill="{{p.rivet}}"></circle>
+                              <path d="M5.8 9.6V13.4" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                              <path d="M7.4 10.2L10.4 12.2M11.6 3.2L14 6.2" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                              <path d="M10.6 2.4L9.8 6L11.6 9L10.2 13L11.4 17.4" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+                            </g></svg></sc-if>
+                            <sc-if value="{{p.leg}}" hint-placeholder-val="{{false}}"><svg width="26" height="26" viewBox="0 0 24 24" stroke-linejoin="miter" stroke-miterlimit="4"><g transform="{{p.flip}}">
+                              <path d="M7.2 1.6H13.4L14 11.4L13.2 16.4L19.4 18.4L21.4 21.8H7.6L6.6 16.4L6.2 11.4Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.3"></path>
+                              <path d="M5.4 8L7 5.6H13.8L15.2 8L13.8 10.4H7Z" fill="{{p.fill}}" stroke="{{p.edge}}" stroke-width="1.1"></path>
+                              <path d="M10.3 10.6V16.4M13.6 17L14.2 21.6M16 17.8L16.6 21.6M18.2 18.6L18.8 21.6M6.8 16.4H13.2" stroke="{{p.ink}}" stroke-width=".85" fill="none"></path>
+                              <circle cx="10.3" cy="8" r=".9" fill="{{p.rivet}}"></circle>
+                              <path d="M7.4 11.6V15.8" stroke="{{p.hi}}" stroke-width=".8" fill="none"></path>
+                              <path d="M8.2 2.8L11.4 4.4M8 12.6L9.8 14.6" stroke="{{p.scratch}}" stroke-width=".6" fill="none"></path>
+                              <path d="M11.6 1.8L10.6 5.4M11.4 10.8L12.6 13.6L11.6 16.2" stroke="{{p.crack}}" stroke-width="1" fill="none"></path>
+                            </g></svg></sc-if>
+                            <span style="font-family: Forum, serif; font-size: 15px; line-height: 1; color: {{p.numColor}}">{{p.sp}}</span>
+                          </span>
+                        </sc-for>
+                      </span>
+                    </sc-if>
+                    <sc-if value="{{a.shield}}" hint-placeholder-val="{{false}}">
+                      <span style="display: flex; align-items: center; gap: 9px">
+                        <svg aria-label="Щит" width="28" height="28" viewBox="0 0 24 24" stroke-linejoin="miter">
+                          <path d="M3.5 2.8H20.5V11C20.5 16.6 12 21.8 12 21.8S3.5 16.6 3.5 11Z" fill="url(#vdOk)" stroke="#050607" stroke-width="1.3"></path>
+                          <path d="M5.6 4.8H18.4V11C18.4 15.2 12 19.4 12 19.4S5.6 15.2 5.6 11Z" fill="none" stroke="#050607" stroke-width=".85"></path>
+                          <circle cx="12" cy="10.6" r="2.4" fill="url(#vdOk)" stroke="#050607" stroke-width="1"></circle>
+                          <circle cx="7.2" cy="6.4" r=".8" fill="#f1ece0"></circle><circle cx="16.8" cy="6.4" r=".8" fill="#f1ece0"></circle><circle cx="12" cy="16.6" r=".8" fill="#f1ece0"></circle>
+                          <path d="M4.9 4.4V11" stroke="rgba(255,255,255,.5)" stroke-width=".8"></path>
+                        </svg>
+                        <span style="display: flex; gap: 2px; align-items: center"><sc-for list="{{a.segs}}" as="s" hint-placeholder-count="8"><span class="seg" style="background: {{s.bg}}; box-shadow: {{s.sh}}"></span></sc-for></span>
+                        <span style="font-family: Forum, serif; font-size: 15px; color: #e2ddd0">{{a.rel}}</span>
+                      </span>
+                    </sc-if>
+                  </div>
+                  <div class="cell" style="width: 74px"><span class="cap">Скованн.</span>
+                    <span style="display: flex; align-items: center; gap: 5px; color: {{a.encColor}}"><svg width="16" height="14" viewBox="0 0 20 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="4" width="9" height="8" rx="4"></rect><rect x="9.5" y="4" width="9" height="8" rx="4"></rect></svg><span style="font-family: Forum, serif; font-size: 16px">{{a.enc}}</span></span>
+                  </div>
+                  <div class="cell" style="width: 50px"><span class="cap">Вес</span><span class="engr" style="font-size: 13px">{{a.wt}}</span></div>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+      </div>
+    </section>
+
+    <section class="plate" style="padding: 12px 16px 12px; display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h2 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 14px; letter-spacing: .26em; text-transform: uppercase">Снаряжение</h2>
+        <div class="groove" style="flex-grow: 1"></div>
+        <button type="button" class="btn" style="height: 28px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">+ Добавить</button>
+      </div>
+      <sc-for list="{{gear}}" as="g" hint-placeholder-count="2">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span class="cap" style="padding: 6px 2px 0">{{g.label}}</span>
+          <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+            <sc-for list="{{g.items}}" as="t" hint-placeholder-count="6">
+              <div class="tile">
+                <div class="frame {{t.frameCls}}" style="width: 70px; height: 70px">
+                  <sc-if value="{{t.eq}}" hint-placeholder-val="{{false}}"><span class="ribbon">в руках</span></sc-if>
+                  <img src="{{t.img}}" alt="" style="width: 58px; height: 58px; object-fit: contain">
+                  <sc-if value="{{t.many}}" hint-placeholder-val="{{false}}"><span class="qty">{{t.q}}</span></sc-if>
+                </div>
+                <a href="#" style="max-width: 100%; text-align: center; font-size: 12.5px; line-height: 1.25; color: #ece7db; text-decoration: none; text-shadow: 0 1px 0 rgba(0,0,0,.8); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 31px">{{t.name}}</a>
+                <span style="font-size: 10.5px; color: #6c685f; white-space: nowrap">{{t.meta}}</span>
+                <div class="tacts">
+                  <button type="button" class="btn ibtn" style="width: 28px; height: 26px" aria-label="Взять в руки" title="Взять в руки"><svg width="14" height="15" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5 17.5V9.5C5 8.3 7 8.3 7 9.5V5.8C7 4.6 9 4.6 9 5.8V5C9 3.8 11 3.8 11 5V6C11 4.8 13 4.8 13 6V12.5C13 15.5 11.4 17.5 9 17.5Z"/></svg></button>
+                  <button type="button" class="btn ibtn" style="width: 28px; height: 26px" aria-label="В чат" title="В чат"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 4.5h13v8.5h-7l-3.5 3v-3H3.5z"/></svg></button>
+                  <button type="button" class="btn ibtn" style="width: 28px; height: 26px" aria-label="Удалить" title="Удалить"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10h7.4l.8-10"/></svg></button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":1320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const segs = (v, max) => Array.from({ length: max }, (_, i) => ({
+      bg: i < v ? '#d9d3c6' : '#25272b', sh: i < v ? 'inset 0 1px 0 rgba(255,255,255,.5)' : 'inset 0 1px 1px rgba(0,0,0,.8)'
+    }));
+    const pips = n => [1, 2, 3].map(i => ({ bg: i <= n ? '#d9d3c6' : '#2a2c31' }));
+    // Шесть частей по таблице попаданий: символ части, под ним прочность; не закрытая — тусклая, без числа
+    const FLIP = 'translate(24 0) scale(-1 1)';
+    const PARTS = [
+      { k: 'head', kind: 'head', title: 'Голова', gap: '0' },
+      { k: 'torso', kind: 'torso', title: 'Туловище', gap: '2px' },
+      { k: 'rarm', kind: 'arm', title: 'Правая рука', gap: '8px', flip: '' },
+      { k: 'larm', kind: 'arm', title: 'Левая рука', gap: '0', flip: FLIP },
+      { k: 'rleg', kind: 'leg', title: 'Правая нога', gap: '8px', flip: '' },
+      { k: 'lleg', kind: 'leg', title: 'Левая нога', gap: '0', flip: FLIP }
+    ];
+    // Металл по состоянию: светлая сталь — цела, тёмная в царапинах — изношена, раскалённая с трещиной — разбита,
+    // чёрное железо — не закрыта
+    const METAL = {
+      ok:     { fill: 'url(#vdOk)', edge: '#050607', ink: '#050607', hi: 'rgba(255,255,255,.55)', rivet: '#f1ece0', scratch: 'none', crack: 'none', num: '#f1ece0' },
+      worn:   { fill: 'url(#vdWorn)', edge: '#050607', ink: '#050607', hi: 'rgba(255,255,255,.28)', rivet: '#c9c3b6', scratch: 'rgba(255,255,255,.4)', crack: 'none', num: '#a29d92' },
+      broken: { fill: 'url(#vdBroken)', edge: '#1a0603', ink: '#1a0603', hi: 'rgba(255,220,200,.45)', rivet: '#ffd9cf', scratch: 'none', crack: '#140402', num: '#e0604a' },
+      none:   { fill: '#17181b', edge: '#34363c', ink: '#2a2c31', hi: 'none', rivet: '#2a2c31', scratch: 'none', crack: 'none', num: '#3a3c42' }
+    };
+    const parts = covers => PARTS.map(p => {
+      const c = covers[p.k];
+      const m = METAL[c ? c.st : 'none'];
+      return {
+        ...p, ...m, flip: p.flip ?? '', head: p.kind === 'head', torso: p.kind === 'torso', arm: p.kind === 'arm', leg: p.kind === 'leg',
+        title: c ? `${p.title}: ${c.v} / ${c.max}` : `${p.title}: не закрыта`,
+        sp: c ? c.v : '·', numColor: m.num
+      };
+    });
+    const armorSrc = [
+      { img: '/_blob/fc31faa149752b68bbf6d4496a138821', name: 'Куртка школы Волка', eq: true, eqLabel: 'надето', cls: 2, classLabel: 'Средняя',
+        chips: [{ t: 'Подклад: +2 ПБ', cls: 'chip-steel' }],
+        covers: { torso: { st: 'ok', v: 12, max: 16 }, rarm: { st: 'ok', v: 8, max: 8 }, larm: { st: 'ok', v: 8, max: 8 } },
+        enc: '−1', encColor: '#e0937f', wt: '6 кг' },
+      { img: '/_blob/72cce5c2064adceb3e9fb38c56f7b341', name: 'Темерские штаны', eq: true, eqLabel: 'надето', cls: 1, classLabel: 'Лёгкая',
+        chips: [], covers: { rleg: { st: 'worn', v: 4, max: 10 }, lleg: { st: 'broken', v: 0, max: 10 } },
+        enc: '0', encColor: '#8e897e', wt: '2 кг' },
+      { img: '/_blob/e569f6757ed801db523ee90880acb3fe', name: 'Темерский щит', eq: true, eqLabel: 'в руке', cls: 2, classLabel: 'Средний', shield: true,
+        chips: [], covers: {}, rel: [7, 8], enc: '0', encColor: '#8e897e', wt: '3 кг' }
+    ];
+    const armor = armorSrc.map((a, i) => ({
+      ...a, body: !a.shield, shield: !!a.shield, pips: pips(a.cls), frameCls: a.eq ? 'on' : 'off',
+      parts: parts(a.covers), coverCap: a.shield ? 'Щит · надёжность блока' : 'Закрывает · прочность',
+      segs: a.rel ? segs(a.rel[0], a.rel[1]) : [], rel: a.rel ? a.rel[0] + ' / ' + a.rel[1] : '',
+      wearLabel: a.eq ? 'Снять' : 'Надеть', wearColor: a.eq ? '#f0b3a5' : '#a29d92',
+      edge: i === armorSrc.length - 1 ? '0' : '1px solid rgba(0,0,0,.6)'
+    }));
+
+    const weaponsSrc = [
+      { img: '/_blob/d760875a683677eb6b3f8af66d46d776', name: 'Стальной меч школы Волка', eq: true, go: 'Атака', skill: 'Владение мечом',
+        chips: [{ t: 'Масло · трупоеды', cls: 'chip-oil' }], acc: '+2', dmg: '4d6+2', slash: true, pierce: true, two: true, rel: [15, 15], range: '—', wt: '3,5 кг' },
+      { img: '/_blob/20e82cef01300cbd32301e42ba0dc43b', name: 'Серебряный меч школы Волка', eq: false, go: 'Атака', skill: 'Владение мечом · серебро',
+        chips: [{ t: 'Руна Чернобога', cls: 'chip-rune' }], acc: '+2', dmg: '3d6+4', slash: true, pierce: true, two: true, rel: [9, 10], range: '—', wt: '2,5 кг' },
+      { img: '/_blob/6c28ce171c5882e69ce1faa96090194c', name: 'Охотничий арбалет', eq: false, go: 'Выстрел', skill: 'Стрельба из арбалета',
+        chips: [], acc: '+1', dmg: '3d6+2', pierce: true, two: true, rel: [4, 10], range: '200 м', wt: '2 кг' }
+    ];
+    const weapons = weaponsSrc.map((w, i) => ({
+      ...w, off: !w.eq, frameCls: w.eq ? 'on' : 'off', nameColor: w.eq ? '#f1ece0' : '#cfc8b8',
+      slash: !!w.slash, pierce: !!w.pierce, blunt: !!w.blunt, elem: !!w.elem,
+      rel: w.rel[0] + ' / ' + w.rel[1], segs: segs(w.rel[0], w.rel[1]),
+      edge: i === weaponsSrc.length - 1 ? '0' : '1px solid rgba(0,0,0,.6)'
+    }));
+
+    const tile = (img, name, q, meta, eq) => ({ img, name, q: '×' + q, many: q > 1, meta, eq: !!eq, frameCls: eq ? 'on' : '' });
+    const gear = [
+      { label: 'Инструменты и дорога', items: [
+        tile('/_blob/5e26f3827cc268103086eecdd55689a3', 'Кузнечные инструменты', 1, '3 кг · 25 кр.'),
+        tile('/_blob/6e4a02eff5848e16d433de94f946bb45', 'Фонарь', 1, '1 кг · 12 кр.', true),
+        tile('/_blob/8048b1d7782d3b1ed5c0dbd608839d93', 'Факел', 4, '2 кг · 4 кр.'),
+        tile('/_blob/601bc499c558363f39d7f151857a9a5a', 'Верёвка, 20 м', 1, '1,5 кг · 6 кр.'),
+        tile('/_blob/2ccd6102a5ab02f18b543cbf8e6d5437', 'Спальный мешок', 1, '2 кг · 8 кр.'),
+        tile('/_blob/0f0bc16c0e48f29c7532b996c4e09e14', 'Карта Велена', 1, '— · 15 кр.')
+      ] },
+      { label: 'Еда и питьё', items: [
+        tile('/_blob/a629204150ce4ddbfe48fd2f891bcb47', 'Хлеб', 3, '1,5 кг · 3 кр.'),
+        tile('/_blob/daa980fcba65d91421c3a5d633b1f434', 'Водка', 2, '1 кг · 10 кр.')
+      ] }
+    ];
+    const coins = [['Орены', 0], ['Флорены', 12], ['Дукаты', 0], ['Марки', 3], ['Бизанты', 0]]
+      .map(([label, v]) => ({ label, v, fg: v ? '#e2ddd0' : '#5c5953' }));
+    return { weapons, armor, gear, coins };
+  }
+}
+</script>
+</body>
+</html>

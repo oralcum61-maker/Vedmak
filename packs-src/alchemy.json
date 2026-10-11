@@ -6209,7 +6209,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6266,7 +6266,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6323,7 +6323,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6361,7 +6361,7 @@
   "type": "alchemical",
   "img": "icons/creatures/invertebrates/leech-attack-green.webp",
   "system": {
-   "description": "",
+   "description": "<p>Рана с сепсисом, подвергнутая лечению пиявками в течение одного часа, затем можно снова лечить с помощью Первой помощи или Лечащего прикосновения (СЛ см.в Недугах). Пиявок можно примененять только один раз в два дня, более частое применение приводит к истощению больного из-за потери крови.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 40.0,
@@ -6380,7 +6380,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6437,7 +6437,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6492,9 +6492,9 @@
    "duration": "30 минут",
    "durationRounds": 0,
    "durationMinutes": 0,
-   "oilTarget": "",
+   "oilTarget": "elementa",
    "use": {
-    "action": "",
+    "action": "oil",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6551,7 +6551,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6610,7 +6610,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6667,7 +6667,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6705,7 +6705,7 @@
   "type": "alchemical",
   "img": "icons/consumables/drinks/clay-jar-glowing-orange-blue.webp",
   "system": {
-   "description": "",
+   "description": "<p>Этот травяной настой одновременно успокаивает и восстанавливает утраченную энергию. Травяной чай снимает БОЛИ В ЖЕЛУДКЕ и УСТАЛОСТЬ на весь оставшийся день.</p>",
    "quantity": 1,
    "weight": 0.0,
    "cost": 27.0,
@@ -6724,7 +6724,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6762,7 +6762,7 @@
   "type": "alchemical",
   "img": "icons/consumables/potions/bottle-round-corked-green.webp",
   "system": {
-   "description": "",
+   "description": "<p>Опиаты - это мощные, но опасные обезболивающие. Прием этого препарата вызывает эйфорию, отменяет все проверки Устойчивости (за исключением испытания против смерти) и устраняет негативные симптомы, от которых в настоящее время страдает больной, на 1d10 раундов. По окончании эффекта, пользователь истощен и должен совершить проверку Стойкости СЛ 17, чтобы избежать зависимости (Книга правил, стр. 32). При критическом провале на 6 или более, побочные эффекты препарата навсегда уменьшают случайную характеристику на 1 (кроме Удачи и минимум до 1). Холщовая дыхательная повязка Прикрытие пропитанной лекарствами тканевой повязкой рта и носа на севере считается верным средством, при попытке уберечься от заражения болезнью. Доктора на собственном горьком опыте познали пользу использования стерилизующих жидкостей много лет назад, и теперь пришло время применить эти знания с пользой.</p>",
    "quantity": 1,
    "weight": 0.0,
    "cost": 125.0,
@@ -6781,7 +6781,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6838,7 +6838,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6876,7 +6876,7 @@
   "type": "alchemical",
   "img": "icons/consumables/food/bowl-stew-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Съеденный горячий суп, снижает СЛ проверки Стойкости на 2 для любого недуга. Этот эффект не суммируется при многократном использовании.</p>",
    "quantity": 1,
    "weight": 0.0,
    "cost": 42.0,
@@ -6895,7 +6895,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -6950,9 +6950,9 @@
    "duration": "30 минут",
    "durationRounds": 0,
    "durationMinutes": 0,
-   "oilTarget": "",
+   "oilTarget": "specter",
    "use": {
-    "action": "",
+    "action": "oil",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7009,7 +7009,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7067,7 +7067,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7124,7 +7124,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7181,7 +7181,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7219,7 +7219,7 @@
   "type": "alchemical",
   "img": "icons/commodities/biological/shell-ribbed-purple.webp",
   "system": {
-   "description": "",
+   "description": "<p>Труднодоступный камень размером с вишенку, который образуется и может быть извлечена из желудка Черта или Беса. Проглатывание безоара излечивает внутренние заболевания, такие как дизентерия.</p>",
    "quantity": 1,
    "weight": 0.0,
    "cost": 0.0,
@@ -7238,7 +7238,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7276,7 +7276,7 @@
   "type": "alchemical",
   "img": "icons/consumables/potions/potion-jar-corked-glowing-blue.webp",
   "system": {
-   "description": "",
+   "description": "<p>Отданные добровольно или взятые силой слезы, собранные с Суккуба, а затем закапанные по капле в каждый глаз, способны излечивать заболевания, передающиеся половым путем, такие как сифилис. Если это лекарство используется на людях, не страдающих венерическими заболеваниями, то они сходят с ума от похоти и необузданной ревности в течение 1d10 часов, влюбляясь в первог, кого увидят, а остальных пытаются убить.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 280.0,
@@ -7295,7 +7295,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7333,7 +7333,7 @@
   "type": "alchemical",
   "img": "systems/vedmak/assets/fan/bs/substance/aether.webp",
   "system": {
-   "description": "",
+   "description": "<p>После употребления, вам начнут мерещиться цветные огни и приятные звуки. Это мешает сосредоточиться и даёт штраф -2 к Вниманию и к любой деятельности, требующей сосредоточения. Действие селестина заканчивается через 2d10 минут, но можно прекратить его и раньше успешной проверкой Стойкости со СЛ 14.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 62.0,
@@ -7352,7 +7352,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7390,7 +7390,7 @@
   "type": "alchemical",
   "img": "systems/vedmak/assets/fan/bs/substance/berserk_potion.webp",
   "system": {
-   "description": "",
+   "description": "<p>Выпив это зелье, цель должна каждый ход совершать проверку Стойкости со СЛ 16. При провале она обязана атаковать ближайшего персонажа. При успехе исступление утихает до следующего хода. Зелье берсерка действует 1d10 раундов.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 105.0,
@@ -7409,7 +7409,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7467,7 +7467,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "apply",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7524,7 +7524,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7562,7 +7562,7 @@
   "type": "alchemical",
   "img": "icons/commodities/wood/kindling-sticks-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Смешав и потушив ингредиенты, Мытые коренья наносятся на лоб и больные места, чтобы снять ГОЛОВНУЮ БОЛЬ и МЫШЕЧНУЮ БОЛЬ на 1-2 дня..</p>",
    "quantity": 1,
    "weight": 0.0,
    "cost": 42.0,
@@ -7581,7 +7581,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7638,7 +7638,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "drink",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7695,7 +7695,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7759,7 +7759,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7823,7 +7823,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7838,7 +7838,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.meleeDamage",
+     "value": 3
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "red",
@@ -7881,7 +7886,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7896,7 +7901,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.intimidation",
+     "value": 1
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "red",
@@ -7940,7 +7950,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -7955,7 +7965,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 10
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -7999,7 +8014,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8058,7 +8073,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8073,7 +8088,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.vigor",
+     "value": 2
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "red",
@@ -8116,7 +8136,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8131,7 +8151,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 10
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -8175,7 +8200,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8190,7 +8215,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "bonus.hp",
+     "value": 5
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -8234,7 +8264,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8249,7 +8279,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "stats.body",
+     "value": 1
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "green",
@@ -8292,7 +8327,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8351,7 +8386,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8410,7 +8445,7 @@
    "durationMinutes": 0,
    "oilTarget": "",
    "use": {
-    "action": "",
+    "action": "mutagen",
     "damage": "",
     "damageType": "elemental",
     "area": "",
@@ -8425,7 +8460,12 @@
     "clearToxicity": false
    },
    "changes": [],
-   "mods": [],
+   "mods": [
+    {
+     "target": "skills.persuasion",
+     "value": 1
+    }
+   ],
    "applied": false,
    "mutagen": {
     "color": "blue",
@@ -8441,6 +8481,71 @@
   "flags": {
    "vedmak": {
     "layer": "bs"
+   }
+  }
+ },
+ {
+  "name": "Дьявольский мускус",
+  "type": "alchemical",
+  "img": "icons/consumables/potions/bottle-bulb-corked-glowing-red.webp",
+  "folder": [
+   "Алхимические составы"
+  ],
+  "system": {
+   "description": "<p>Сила +3 на 5 минут; когда действие кончается — тошнота. Формула: Алхимия СЛ 15, 1 час.</p>",
+   "quantity": 1,
+   "weight": 0.3,
+   "cost": 0,
+   "availability": "rare",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Игры в таверне",
+    "page": "4"
+   },
+   "kind": "preparation",
+   "effect": "Сила +3 на 5 минут; когда действие кончается — тошнота. Формула: Алхимия СЛ 15, 1 час.",
+   "toxicity": 0,
+   "poisonDc": 0,
+   "duration": "5 минут",
+   "durationRounds": 0,
+   "durationMinutes": 5,
+   "oilTarget": "",
+   "use": {
+    "action": "drink",
+    "damage": "",
+    "damageType": "elemental",
+    "area": "",
+    "range": "",
+    "status": "",
+    "statusChance": 100,
+    "statusRounds": "",
+    "removeStatuses": [],
+    "regen": 0,
+    "heal": 0,
+    "charges": 1,
+    "clearToxicity": false
+   },
+   "changes": [
+    {
+     "key": "system.skills.physique.mod",
+     "type": "add",
+     "value": "3",
+     "phase": "initial"
+    }
+   ],
+   "mods": [],
+   "applied": false,
+   "mutagen": {
+    "color": "",
+    "dc": 0,
+    "minor": ""
+   }
+  },
+  "_id": "Fo0W34Dqm7pdQEip",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
    }
   }
  }

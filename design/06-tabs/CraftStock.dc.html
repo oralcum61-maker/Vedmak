@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Ремесло — компоненты</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d)}
+a{color:#e2ddd0}a:hover{color:#fffaf0}
+button,input{font-family:'IBM Plex Sans',system-ui,sans-serif}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;background-image:radial-gradient(circle at 50% 42%,rgba(255,245,225,.09),transparent 66%);border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08)}
+.frame::after{content:"";position:absolute;inset:4px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.btn{color:#e2ddd0;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),inset 0 -1px 0 rgba(0,0,0,.4),0 3px 8px -3px rgba(0,0,0,.85);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.btn:hover{background-color:#2d2f34;color:#f1ece0}
+.ibtn{width:28px;height:26px;padding:0;display:grid;place-items:center;color:#a29d92}
+.ibtn:hover{color:#f1ece0}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.sw{display:flex;align-items:center;gap:8px;height:34px;padding:0 13px;font-family:Forum,serif;font-size:16px;color:#8e897e;text-decoration:none;border:1px solid transparent;border-radius:2px;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.sw b{min-width:20px;height:18px;padding:0 5px;box-sizing:border-box;display:grid;place-items:center;font-family:Forum,serif;font-weight:400;font-size:13px;color:#a29d92;background:#08090a;border:1px solid #040405;border-radius:9px;box-shadow:inset 0 1px 2px rgba(0,0,0,.9)}
+.sw-on{color:#f3eee2;background-color:#2a2c31;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.22));border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.sig{position:relative;border-radius:50%;display:grid;place-items:center;font-family:Forum,serif;line-height:1;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.85);border:1px solid #050607;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.18),inset 0 -3px 6px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.7)}
+.fbtn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px 4px;background:transparent;border:1px solid transparent;border-radius:2px;color:#a29d92}
+.fbtn:hover{background:rgba(255,245,225,.04)}
+.fbtn.on{background:#2a2c31;border-color:#060708;box-shadow:inset 0 1px 0 rgba(255,245,225,.12),0 0 0 1px rgba(241,236,224,.2)}
+.fbtn.off .subwell img{filter:grayscale(.75) brightness(.55)}
+.subwell{display:grid;place-items:center;flex-shrink:0;border-radius:50%;background:#0b0c0e radial-gradient(circle at 50% 35%,rgba(255,245,225,.07),transparent 70%);border:1px solid #040405;box-shadow:inset 0 2px 5px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08)}
+.subwell img{display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.85))}
+.badge.subwell{box-shadow:inset 0 2px 5px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.8)}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 6px 9px;border:1px solid transparent;border-radius:2px}
+.tile:hover{background:rgba(255,245,225,.035);border-color:rgba(0,0,0,.5)}
+.tacts{display:flex;gap:4px;opacity:0;transition:opacity .12s}
+.tile:hover .tacts,.tile:focus-within .tacts{opacity:1}
+.qty{position:absolute;right:-6px;bottom:-6px;min-width:22px;height:20px;padding:0 5px;box-sizing:border-box;display:grid;place-items:center;font-family:Forum,serif;font-size:14px;color:#f1ece0;background:#25262b linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.3));border:1px solid #060708;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,.8)}
+.badge{position:absolute;left:-7px;top:-7px;z-index:2}
+</style>
+</helmet>
+<div class="mat" style="width: 820px; height: 960px; box-sizing: border-box; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums">
+  <div style="display: flex; align-items: center; gap: 10px">
+    <nav class="well" style="display: inline-flex; gap: 3px; padding: 3px" aria-label="Разделы ремесла">
+      <a href="#" class="sw">Алхимия <b>8</b></a>
+      <a href="#" class="sw">Чертежи и формулы <b>4</b></a>
+      <a href="#" class="sw sw-on">Компоненты <b>15</b></a>
+      <a href="#" class="sw">Усиления <b>4</b></a>
+    </nav>
+    <span style="flex-grow: 1"></span>
+    <button type="button" class="btn" style="height: 30px; padding: 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase">+ Добавить</button>
+  </div>
+
+  <section class="well" style="display: flex; align-items: center; gap: 8px; padding: 6px 10px">
+    <div style="display: flex; flex-direction: column; gap: 4px; width: 92px">
+      <span class="cap" style="white-space: normal; line-height: 1.4">Отбор по субстанции</span>
+      <button type="button" class="btn" onClick="{{clear}}" style="height: 24px; padding: 0 8px; font-size: 10.5px; align-self: flex-start; color: {{allColor}}">Все</button>
+    </div>
+    <div style="flex-grow: 1; display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 2px">
+      <sc-for list="{{subs}}" as="s" hint-placeholder-count="9">
+        <button type="button" class="fbtn {{s.cls}}" onClick="{{s.pick}}" title="{{s.label}}: {{s.n}} в запасе" aria-pressed="{{s.pressed}}">
+          <span class="subwell" style="width: 40px; height: 40px"><img src="{{s.img}}" alt="" style="width: 32px; height: 32px"></span>
+          <span style="font-family: Forum, serif; font-size: 14px; line-height: 1; color: #f1ece0">{{s.n}}</span>
+          <span style="font-size: 9.5px; color: #6c685f">{{s.label}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+    <section class="plate" style="padding: 10px 14px 10px; display: flex; flex-direction: column; gap: 4px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="gem"></span>
+        <h3 class="engr" style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 13px; letter-spacing: .24em; text-transform: uppercase">{{g.label}}</h3>
+        <div class="groove" style="flex-grow: 1"></div>
+        <span style="font-size: 11.5px; color: #6c685f">{{g.note}}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{g.items}}" as="t" hint-placeholder-count="6">
+          <div class="tile">
+            <div class="frame" style="width: 70px; height: 70px">
+              <sc-if value="{{t.hasSub}}" hint-placeholder-val="{{false}}"><span class="badge subwell" title="{{t.subLabel}}" style="width: 28px; height: 28px"><img src="{{t.subImg}}" alt="{{t.subLabel}}" style="width: 22px; height: 22px"></span></sc-if>
+              <img src="{{t.img}}" alt="" style="width: 58px; height: 58px; object-fit: contain">
+              <span class="qty">{{t.q}}</span>
+            </div>
+            <a href="#" style="max-width: 100%; text-align: center; font-size: 12.5px; line-height: 1.25; color: #ece7db; text-decoration: none; text-shadow: 0 1px 0 rgba(0,0,0,.8); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 31px">{{t.name}}</a>
+            <span style="font-size: 10.5px; color: #6c685f; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis">{{t.meta}}</span>
+            <div class="tacts">
+              <sc-if value="{{t.forage}}" hint-placeholder-val="{{false}}">
+                <button type="button" class="btn ibtn" aria-label="Собрать: {{t.where}}" title="Собрать: {{t.where}}"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M4 16C4 9 8.5 4 16.5 3.5 16 11.5 11 16 4 16Z"/><path d="M4 16l7-7"/></svg></button>
+              </sc-if>
+              <button type="button" class="btn ibtn" aria-label="В чат" title="В чат"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 4.5h13v8.5h-7l-3.5 3v-3H3.5z"/></svg></button>
+              <button type="button" class="btn ibtn" aria-label="Удалить" title="Удалить"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10h7.4l.8-10"/></svg></button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+
+  <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+    <p style="margin: 0; padding: 18px; text-align: center; font-size: 13px; color: #8e897e" class="well">Ингредиентов с этой субстанцией нет — их можно собрать или купить у травника.</p>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":960}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { f: null }; }
+  renderVals() {
+    const S = {
+      vitriol: ['Купорос', '2d1bdee502dfb3c7676d7711ac6269fe'], rebis: ['Ребис', 'af34d2df79ef0ab1a5b9be14a8706b83'], aether: ['Эфир', '4478b39f82f690f862cfb83e01a3c8c0'],
+      quebrith: ['Квебрит', '0f68862fbe9dc1a448b42d1b256c6143'], hydragenum: ['Гидраген', '5d0e6f687fd2ad52b2822e81439dcf46'], vermilion: ['Киноварь', '1f49b32969ddebb106243b55fbeaedd9'],
+      sol: ['Солнце', '3c5b3ce5891d39fa3404bd3bbeaa8ce4'], caelum: ['Аер', 'cb5468d3805410744ded3d2836d0073c'], fulgur: ['Фульгор', 'c3a53ec3bc1f26f4b6fcad59f6945861']
+    };
+    const t = (img, name, q, sub, meta, where) => {
+      const s = sub ? S[sub] : null;
+      return { img, name, q: '×' + q, n: q, sub, hasSub: !!s, subLabel: s ? s[0] : '', subImg: s ? '/_blob/' + s[1] : '',
+        meta, forage: !!where, where: where || '' };
+    };
+    const herbs = [
+      t('/_blob/add6ed5efc1683a45a62c107b92a909b', 'Вороний глаз', 4, 'vitriol', 'поля и леса · СЛ 15', 'поля и леса, СЛ 15, 1d6'),
+      t('/_blob/e496ebf02c2d6f185f4d6d6ebb8f43c1', 'Ласточкина трава', 3, 'rebis', 'поля и леса · СЛ 12', 'поля и леса, СЛ 12, 1d10'),
+      t('/_blob/35270ea44984004ab867caa19d1ab1ae', 'Корень зарника', 2, 'aether', 'алхимический'),
+      t('/_blob/f7b98aead328c40620bd9f66f1199002', 'Листья балиссы', 1, 'quebrith', 'алхимический'),
+      t('/_blob/4431cb0e12910dc89c50c9b831cbc253', 'Омела', 1, 'hydragenum', 'алхимический'),
+      t('/_blob/1456c0bdeb7f226389508dae4a3b9b31', 'Корень мандрагоры', 1, 'vermilion', 'поля и леса · СЛ 18', 'поля и леса, СЛ 18, 1d6/2'),
+      t('/_blob/e9f54bb09f5ac59b5fa4cfee72dbe4d5', 'Фосфор', 1, 'vermilion', 'горы · СЛ 15', 'горы и под землёй, СЛ 15, 1d6'),
+      t('/_blob/0bdd1006f6823c57fe2220fcc95e10fb', 'Вербена', 2, 'sol', 'поля · СЛ 15', 'поля, СЛ 15, 1d6'),
+      t('/_blob/bb4b33fc2b73a562b302c4a551fe2450', 'Переступень', 1, 'caelum', 'алхимический'),
+      t('/_blob/ae629c8281a2e59575d668fa1d50ed68', 'Собачье сало', 1, 'fulgur', 'собаки и волки')
+    ];
+    const ingots = [
+      t('/_blob/eaa2f00162fdb16bcaa67bb61ad9c5d9', 'Сталь', 3, null, 'покупается'),
+      t('/_blob/e2d811e20ceee03a1f36ec80028d2b64', 'Речная глина', 2, null, 'реки · СЛ 14', 'реки и берега, СЛ 14, 1d6')
+    ];
+    const mats = [
+      t('/_blob/b75d916b16cbed7d7e69f4b4f8841dc4', 'Воск', 1, null, 'лес и поля · СЛ 12', 'лес и поля, СЛ 12, 1d6'),
+      t('/_blob/2a17b361c87b5b46696646f9d3a6a483', 'Уголь', 3, null, 'горы · СЛ 14', 'костёр, горы, под землёй, СЛ 14, 1d10'),
+      t('/_blob/1cb373816b2e911266b96fee032efa5b', 'Кожа', 2, null, 'покупается')
+    ];
+    const f = this.state.f;
+    const shown = f ? herbs.filter(h => h.sub === f) : herbs;
+    const groups = [
+      { label: 'Алхимические ингредиенты', note: f ? `только ${S[f][0].toLowerCase()}` : 'каждый несёт одну субстанцию', items: shown },
+      ...(f ? [] : [
+        { label: 'Слитки и минералы', note: '', items: ingots },
+        { label: 'Ремесленные материалы', note: '', items: mats }
+      ])
+    ].filter(g => g.items.length);
+    const totals = {};
+    for (const h of herbs) totals[h.sub] = (totals[h.sub] || 0) + h.n;
+    const subs = Object.entries(S).map(([k, [label, id]]) => ({
+      label, img: '/_blob/' + id, n: totals[k] || 0, pressed: f === k ? 'true' : 'false',
+      cls: f === k ? 'on' : (f ? 'off' : ''),
+      pick: () => this.setState({ f: f === k ? null : k })
+    }));
+    return { subs, groups, empty: !groups.length, clear: () => this.setState({ f: null }), allColor: f ? '#a29d92' : '#f3eee2' };
+  }
+}
+</script>
+</body>
+</html>

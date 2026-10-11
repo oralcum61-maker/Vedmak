@@ -1,0 +1,21 @@
+<div class="cleanup-body">
+  {{#if total}}
+  <p class="hint">Находки по всем акторам мира и токенам на сценах. Снимается только отмеченное.</p>
+  <div class="cleanup-list">
+    {{#each groups}}
+    <fieldset>
+      <legend>{{label}} — {{rows.length}}</legend>
+      {{#each rows}}
+      <label class="cleanup-row">
+        <input type="checkbox" data-id="{{id}}" {{#if checked}}checked{{/if}}>
+        <span class="name">{{label}}</span>
+        <span class="where">{{where}}</span>
+      </label>
+      {{/each}}
+    </fieldset>
+    {{/each}}
+  </div>
+  {{else}}
+  <p class="hint">Зависших эффектов нет — всё чисто.</p>
+  {{/if}}
+</div>

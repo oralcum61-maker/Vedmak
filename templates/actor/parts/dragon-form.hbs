@@ -1,0 +1,15 @@
+{{!-- Драконья форма Золотого дракона («Офир и Зеррикания», стр. 36–38; module/character/dragon-form.mjs) --}}
+<div class="vd-panel dragon-form{{#if dragon.active}} active{{/if}}">
+  <div class="group-head"><span class="bronze-tag">Драконья форма</span><span class="rule"></span></div>
+  <p class="hint">Метаморфоза против СЛ {{dragon.dc}}. В форме: {{dragon.mods}}{{#if dragon.level}} (с «Чем они больше…» {{dragon.level}}){{/if}};
+    {{dragon.weapons}}; невосприимчивость к горению, пассивная телепатия. Драконья магия — только в этой форме.</p>
+  <div class="vv-form{{#if dragon.active}} active{{/if}}">
+    <span class="vv-form-state">{{#if dragon.active}}В облике дракона{{else}}В человеческом облике{{/if}}</span>
+    {{#if @root.editable}}
+    <span class="vv-form-btns">
+      {{#if dragon.active}}<a class="vv-btn" data-action="dragonRevert" data-tooltip="Вернуть человеческий облик: оружие формы убирается">Вернуть облик</a>
+      {{else}}<a class="vv-btn blood" data-action="dragonTransform" data-tooltip="Метаморфоза против СЛ {{dragon.dc}}">Принять облик дракона</a>{{/if}}
+    </span>
+    {{/if}}
+  </div>
+</div>

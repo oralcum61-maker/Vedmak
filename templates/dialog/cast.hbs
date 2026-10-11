@@ -24,6 +24,22 @@
     </div>
     {{/if}}
 
+    {{#if vampire}}
+    <div class="dlg-group blood-pay">
+      <span class="dlg-label">ОПЛАТА <span class="dim">· {{vampire.cost}} {{#if vampire.staOnly}}Вын{{else}}ОК{{/if}}</span></span>
+      {{#if vampire.staOnly}}
+      <p class="hint">Заклинание стоит Выносливость: есть {{sta}}.</p>
+      {{else}}
+      <div class="opt-row">
+        <label class="chip"><input type="radio" name="payWith" value="blood" {{checked vampire.payBlood}}>
+          Очки Крови <span class="dim">(есть {{vampire.blood}} из {{vampire.bloodMax}})</span></label>
+        <label class="chip"><input type="radio" name="payWith" value="sta" {{checked vampire.paySta}}>
+          Выносливость <span class="dim">({{vampire.staCost}} Вын, есть {{sta}})</span></label>
+      </div>
+      <p class="hint">Выносливостью платят, когда запас ОК истощён (если заклинание это не запрещает): 2 Вын за 1 ОК.</p>
+      {{/if}}
+    </div>
+    {{else}}
     <div class="energy" data-energy>
       <div class="energy-head">
         <span class="cap">ЭНЕРГИЯ ЗА РАУНД</span>
@@ -35,6 +51,7 @@
       </div>
       <span class="energy-warn" data-energy-warn></span>
     </div>
+    {{/if}}
 
     {{#if focus}}
     <label class="plate">
@@ -44,7 +61,7 @@
     </label>
     {{/if}}
 
-    {{#unless isHex}}
+    {{#unless noPlaces}}
     <label class="plate">
       <input type="checkbox" name="placeOfPower" data-mod="2">
       <span class="plate-text">Место силы этой стихии</span>
@@ -52,6 +69,7 @@
     </label>
     {{/unless}}
 
+    {{#unless vampire}}
     <div class="dlg-row">
       <label class="num"><span class="cap">двимерит в 5 м</span>
         <input type="number" name="dimeritium" value="0" min="0" step="1">
@@ -67,6 +85,16 @@
       <span class="hint grow">Каждая единица двимерита — −1 Энергии.</span>
       {{/if}}
     </div>
+    {{/unless}}
+
+    {{#if allies.length}}
+    <div class="dlg-group">
+      <span class="dlg-label">НА КОГО <span class="dim">· цели не выделены — союзники на сцене</span></span>
+      <div class="opt-row">
+        {{#each allies}}<label class="chip"><input type="checkbox" name="ally" value="{{uuid}}"><span>{{name}}</span></label>{{/each}}
+      </div>
+    </div>
+    {{/if}}
 
     {{#if targets.length}}
     <div class="dlg-group">

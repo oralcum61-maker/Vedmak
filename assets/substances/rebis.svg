@@ -1,0 +1,13 @@
+
+<svg version="1.1" id="Layer_1"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+width="16" height="16" viewBox="0 0 16 16"
+xml:space="preserve">
+<g id="ShapeID_2" transform="matrix(1, 0, 0, 1, -4, -4.25)" >
+<path 
+style="fill:#E25B11;fill-opacity:1" d="M16 19.25C14.8 19.9 13.5 20.25 12 20.25C10.3 20.25 8.8 19.8 7.5 18.9L18.7 7.95C19.55 9.2 20 10.65 20 12.25C20 14.45 19.2 16.3 17.6 17.9L16 19.25" />
+<path 
+style="fill:#E25B11;fill-opacity:1" d="M4 12.25C4 10.1 4.75 8.2 6.3 6.6C7.85 5.05 9.75 4.25 12 4.25C13.75 4.25 15.3 4.75 16.6 5.8L5.35 16.8C4.45 15.5 4 13.95 4 12.25" />
+</g>
+</svg>

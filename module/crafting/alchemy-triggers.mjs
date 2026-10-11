@@ -5,7 +5,7 @@ import { inCombat, roundsAsTime } from "../util.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
-const M =(key, value) => ({ key, type: "add", value, phase: "initial" });
+const M = (key, value) => ({ key, type: "add", value, phase: "initial" });
 
 /**
  * Действующие эффекты актора с флагом vedmak.<key>. `active`, а не `!disabled`: истёкший по времени эффект v14
@@ -19,7 +19,7 @@ function withChange(effect, key, value) {
   return value ? [...rest, M(key, value)] : rest;
 }
 
-const statusName = id => CONFIG.statusEffects.find(e => e.id === id)?.name ?? id;
+const statusName = id => CONFIG.statusEffects[id]?.name ?? id;
 
 /* ---------------------------- Невосприимчивость ---------------------------- */
 
@@ -36,18 +36,16 @@ export function immuneStatuses(actor) {
 export async function applyVision(actor, effect, vision) {
   // Список, а не объект по UUID: ключи с точками («Scene.x.Token.y») флаг разворачивает во вложенные объекты
   const prev = [];
+  const updates = [];
   for (const token of actor.getActiveTokens(false, true)) {
     const sight = token.sight ?? {};
     prev.push({ uuid: token.uuid, enabled: sight.enabled, visionMode: sight.visionMode, range: sight.range });
-    try {
-      await token.update({
-        "sight.enabled": true, "sight.visionMode": vision.visionMode,
-        "sight.range": Math.max(Number(sight.range) || 0, vision.range)
-      });
-    } catch (err) {
-      console.warn("vedmak | зрение токена", err);
-    }
+    updates.push(token.update({
+      "sight.enabled": true, "sight.visionMode": vision.visionMode,
+      "sight.range": Math.max(Number(sight.range) || 0, vision.range)
+    }).catch(err => console.warn("vedmak | зрение токена", err)));
   }
+  await Promise.all(updates);
   if (prev.length) await effect.setFlag("vedmak", "visionPrev", prev);
   return prev.length;
 }
@@ -63,11 +61,8 @@ function savedVision(saved) {
 }
 
 async function restoreVision(effect) {
-  for (const { uuid, ...sight } of savedVision(effect.flags.vedmak.visionPrev)) {
-    const token = fromUuidSync(uuid);
-    if (!token) continue;
-    await token.update({ "sight.enabled": sight.enabled, "sight.visionMode": sight.visionMode, "sight.range": sight.range });
-  }
+  await Promise.all(savedVision(effect.flags.vedmak.visionPrev).map(({ uuid, ...sight }) =>
+    fromUuidSync(uuid)?.update({ "sight.enabled": sight.enabled, "sight.visionMode": sight.visionMode, "sight.range": sight.range })));
 }
 
 /* ------------------------------- Лечение крита ------------------------------- */
@@ -78,7 +73,7 @@ export async function healCritDialog(actor) {
   if (!wounds.length) return ["Критических ранений нет — эффекта нет."];
   const options = wounds.map(w => `<option value="${w.id}">${w.name}</option>`).join("");
   const id = await DialogV2.wait({
-    window: { title: "Какое ранение вылечить", icon: "fa-solid fa-kit-medical" },
+    window: { title: "Какое ранение вылечить" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<div class="vedmak-roll-dialog"><select name="wound">${options}</select></div>`,
     buttons: [{ action: "ok", label: "Вылечить", default: true, callback: (e, b) => b.form.elements.wound.value }],
@@ -97,33 +92,47 @@ export async function healCritDialog(actor) {
  * и кладбищенской бабы.
  * @param {Actor|null} attacker
  * @param {Actor} target
- * @param {object} info — dealt: сколько ПЗ снято, hpBefore: ПЗ до удара, physical: не магия
+ * @param {object} info — dealt: сколько ПЗ снято, hpBefore: ПЗ до удара, physical: не магия, bite: укус или кровь
  * @returns {Promise<string[]>}
  */
-export async function alchemyAfterDamage(attacker, target, { dealt, hpBefore, physical }) {
+export async function alchemyAfterDamage(attacker, target, { dealt, hpBefore, physical, bite = false }) {
   const lines = [];
+  // «Чёрная кровь»: укусивший ведьмака отравлен (3 урона за раунд до Стойкости) и отскакивает на 2 м (стр. 247)
+  if (bite && attacker && attacker !== target) {
+    const blood = flagged(target, "blackBlood")[0];
+    if (blood && !attacker.statuses.has("poisoned") && !immuneStatuses(attacker).has("poisoned")
+      && !attacker.system.immunities?.includes?.("poison")) {
+      await attacker.toggleStatusEffect("poisoned", { active: true });
+      lines.push(`${attacker.name}: ${blood.name} — отравлен, пока не пройдёт Стойкость СЛ ${blood.flags.vedmak.blackBlood.dc ?? 20}; отскакивает на 2 м.`);
+    }
+  }
   if (dealt > 0) {
+    // Изменения эффектов цели — одним запросом
+    const updates = [];
     // Отвар из грифона: больше 5 урона — +2 ПБ, складывается
     for (const e of flagged(target, "onDamaged")) {
       const cfg = e.flags.vedmak.onDamaged;
       if (dealt <= cfg.over) continue;
       const stacks = (e.flags.vedmak.stacks ?? 0) + 1;
-      await e.update({ "system.changes": withChange(e, "system.fx.sp", stacks * cfg.sp), "flags.vedmak.stacks": stacks });
+      updates.push({ _id: e.id, "system.changes": withChange(e, "system.fx.sp", stacks * cfg.sp), "flags.vedmak.stacks": stacks });
       lines.push(`${e.name}: ПБ +${stacks * cfg.sp}.`);
     }
     // Отвар из виверны: ранили — накопленное пропадает
     for (const e of flagged(target, "onHit")) {
       if (!e.flags.vedmak.stacks) continue;
-      await e.update({ "system.changes": withChange(e, "system.fx.damage", 0), "flags.vedmak.stacks": 0 });
+      updates.push({ _id: e.id, "system.changes": withChange(e, "system.fx.damage", 0), "flags.vedmak.stacks": 0 });
       lines.push(`${e.name}: накопленный урон пропал.`);
     }
+    if (updates.length) await target.updateEmbeddedDocuments("ActiveEffect", updates);
   }
   if (!attacker || attacker === target || dealt <= 0) return lines;
 
+  // Изменения эффектов нападающего — тоже одним запросом
+  const updates = [];
   // Отвар из виверны: каждое попадание +1 к урону следующего удара
   for (const e of flagged(attacker, "onHit")) {
     const stacks = (e.flags.vedmak.stacks ?? 0) + 1;
-    await e.update({ "system.changes": withChange(e, "system.fx.damage", stacks * e.flags.vedmak.onHit.damage), "flags.vedmak.stacks": stacks });
+    updates.push({ _id: e.id, "system.changes": withChange(e, "system.fx.damage", stacks * e.flags.vedmak.onHit.damage), "flags.vedmak.stacks": stacks });
     lines.push(`${attacker.name}, ${e.name}: +${stacks * e.flags.vedmak.onHit.damage} к урону следующего удара.`);
   }
   // «Молния»: бонус к одной физической атаке
@@ -143,11 +152,15 @@ export async function alchemyAfterDamage(attacker, target, { dealt, hpBefore, ph
       const update = { "flags.vedmak.stacks": stacks + 1 };
       if (cfg.changes) update["system.changes"] = [...(e.system?.changes ?? []), ...cfg.changes];
       if (cfg.regen) update["flags.vedmak.regen"] = (e.flags.vedmak.regen ?? 0) + cfg.regen;
-      await e.update(update);
+      // Виверна и «Пурга» — флаг onHit и onKill разом в одном эффекте не встречаются, но на всякий случай сливаем
+      const same = updates.find(u => u._id === e.id);
+      if (same) Object.assign(same, update);
+      else updates.push({ _id: e.id, ...update });
       lines.push(cfg.regen ? `${attacker.name}, ${e.name}: регенерация ${(e.flags.vedmak.regen ?? 0) + cfg.regen} ПЗ за ход.`
         : `${attacker.name}, ${e.name}: бонус за убийство.`);
     }
   }
+  if (updates.length) await attacker.updateEmbeddedDocuments("ActiveEffect", updates);
   return lines;
 }
 
@@ -156,16 +169,19 @@ export const adrenalinePerCrit = actor => flagged(actor, "doubleAdrenaline").len
 
 /** Конец боя: отвары «до конца боя» теряют накопленное. */
 async function resetCombatStacks(combat) {
-  for (const c of combat.combatants) {
-    for (const e of [...flagged(c.actor, "onHit"), ...flagged(c.actor, "onKill")]) {
+  const actors = new Set(combat.combatants.map(c => c.actor).filter(Boolean));
+  await Promise.all([...actors].map(actor => {
+    const updates = [];
+    for (const e of new Set([...flagged(actor, "onHit"), ...flagged(actor, "onKill")])) {
       if (!e.flags.vedmak.stacks) continue;
-      const update = { "flags.vedmak.stacks": 0 };
+      if (e.flags.vedmak.onKill?.changes) continue; // «Пурга» держится, пока действует эликсир
+      const update = { _id: e.id, "flags.vedmak.stacks": 0 };
       if (e.flags.vedmak.onHit) update["system.changes"] = withChange(e, "system.fx.damage", 0);
       if (e.flags.vedmak.onKill?.regen) update["flags.vedmak.regen"] = 0;
-      if (e.flags.vedmak.onKill?.changes) continue; // «Пурга» держится, пока действует эликсир
-      await e.update(update);
+      updates.push(update);
     }
-  }
+    return updates.length ? actor.updateEmbeddedDocuments("ActiveEffect", updates) : null;
+  }));
 }
 
 export function registerAlchemyHooks() {

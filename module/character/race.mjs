@@ -54,7 +54,7 @@ export async function chooseDetailSkills(actor, race) {
     `<label class="check"><input type="checkbox" name="skill" value="${key}"> ${s.label}${s.difficult ? " *" : ""}</label>`
   ).join("");
   const picked = await DialogV2.wait({
-    window: { title: "Внимание к деталям", icon: "fa-solid fa-magnifying-glass" },
+    window: { title: "Внимание к деталям" },
     classes: ["vedmak", "vedmak-dialog"],
     content: `<p>Гном получает +2 к трём навыкам Ремесла на выбор. Бонус не учитывает удвоенную цену сложного навыка (*).</p>`
       + `<div class="detail-skills">${rows}</div>`,
@@ -68,7 +68,7 @@ export async function chooseDetailSkills(actor, race) {
       for (const b of boxes) b.addEventListener("change", sync);
     },
     buttons: [{
-      action: "ok", label: "Выбрать", icon: "fa-solid fa-check", default: true,
+      action: "ok", label: "Выбрать", default: true,
       callback: (event, button) => [...button.form.querySelectorAll('input[name="skill"]:checked')].map(b => b.value)
     }],
     rejectClose: false

@@ -23,6 +23,9 @@ export const SPELL_AUTO = {
   "свет покаяния": { automation: { staDamage: "2d6" }, note: "У цели с порогом Энергии 1+ — ещё 2d6 Вын." },
   "извлечение айнфры": { automation: { staDamage: "8d6" } },
 
+  // Рассеивание (стр. 102): снимает с целей магию, чей бросок заклинателя ниже (cast.mjs dispelOn)
+  "рассеивание": { dispel: true },
+
   // На себя
   "очарование": { self: { changes: [S("seduction", 3), S("charisma", 3), S("leadership", 3)] } },
   "благословение любви": { self: { changes: [S("charisma", 3), S("seduction", 3)] } },
@@ -40,7 +43,10 @@ export const SPELL_AUTO = {
     note: "Атаки цели нельзя парировать, разрушающий урон ×2 — учитывайте сами." },
   "храбрость фрейи": { self: { changes: [M("system.fx.hp", 25)] }, target: { changes: [M("system.fx.hp", 25)] },
     note: "Невосприимчивость к ужасу; вышедший из зоны сохраняет эффект ещё 1d6 раундов." },
-  "чемпион реки": { target: { rollMods: { all: 5 } }, note: "Сопротивление всем источникам урона — учитывайте сами." }
+  "чемпион реки": { target: { rollMods: { all: 5 } }, note: "Сопротивление всем источникам урона — учитывайте сами." },
+  // Регенерация формулой: бросок каждый ход (magic/effects.mjs)
+  "фонтан жизни": { automation: { regen: { hp: "1d6", rounds: "" } },
+    note: "Лечит тех, кто в фонтане: выберите их целями. Вышедшему из фонтана снимите эффект регенерации." }
 };
 
 export const spellKey = name => String(name ?? "").toLowerCase().replace(/[«»"„“”]/g, "").replace(/\s+/g, " ").trim();

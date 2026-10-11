@@ -34,7 +34,7 @@
       {{#if b.people.length}}
       <ul class="lp-people">
         {{#each b.people as |p|}}
-        <li><i class="fa-solid {{p.icon}}"></i><b>{{p.who}}</b><span class="lp-person">{{#each p.meta}}<span>{{this}}</span>{{/each}}</span></li>
+        <li><b>{{p.who}}</b><span class="lp-person">{{#each p.meta}}<span>{{this}}</span>{{/each}}</span></li>
         {{/each}}
       </ul>
       {{/if}}
@@ -77,13 +77,14 @@
 
   {{#if story.pending}}
   <div class="lp-next-bar">
-    <i class="fa-solid fa-feather"></i>
     <span>Дальше: <b>{{story.pending.label}}</b></span>
     <span class="grow"></span>
-    <a class="roll-btn" data-action="{{story.pending.action}}" data-tooltip="Бросок уйдёт в чат"><i class="fa-solid fa-dice"></i> Бросить d{{story.pending.sides}}</a>
+    <a class="roll-btn" data-action="{{story.pending.action}}" data-tooltip="Бросок уйдёт в чат">Бросить d{{story.pending.sides}}</a>
     {{#if story.pending.sectionAction}}
-    <a class="roll-btn" data-action="{{story.pending.sectionAction}}" data-tooltip="Бросить раздел «{{story.pending.cardTitle}}» — каждый бросок в чат"><i class="fa-solid fa-forward-step"></i> Раздел</a>
+    <a class="roll-btn" data-action="{{story.pending.sectionAction}}" data-tooltip="Бросить раздел «{{story.pending.cardTitle}}» — каждый бросок в чат">Раздел</a>
     {{/if}}
+    {{#if story.pending.options}}<select class="lp-choose" data-roll-path="{{story.pending.path}}" data-mod="{{story.pending.mod}}" data-tooltip="Не бросать — выбрать результат самому">
+          <option value="">или выбрать…</option>{{#each story.pending.options}}<option value="{{value}}">{{label}}</option>{{/each}}</select>{{/if}}
   </div>
   {{/if}}
 </div>

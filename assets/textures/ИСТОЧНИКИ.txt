@@ -1,15 +1,17 @@
-leather-grain.webp     — зерно кожи, сделано из карты рельефа Leather037 (ambientCG.com), CC0.
-iron-grain.webp        — патина по металлу, сделано из карты рельефа Metal063 (ambientCG.com), CC0.
-wood-grain.webp        — доска, сделано из карты рельефа Wood062 (ambientCG.com), CC0.
-paper-grain.webp       — бумага, сделано из карты рельефа Paper003 (ambientCG.com), CC0.
-cloth-grain.webp       — полотно, сделано из карты рельефа Fabric063 (ambientCG.com), CC0.
-stone-grain.webp       — камень, сделано из карты рельефа Rock030 (ambientCG.com), CC0.
-brass-grain.webp       — латунь, сделано из карты рельефа Metal046A (ambientCG.com), CC0.
-parchment-grain.webp   — пергамент, сделано из карты рельефа Cardboard004 (ambientCG.com), CC0.
-leather-tooled.webp    — тиснёная кожа, сделано из карты рельефа Leather026 (ambientCG.com), CC0.
-canvas-weave.webp      — холст, сделано из карты рельефа Fabric004 (ambientCG.com), CC0.
-steel-blued.webp       — вороненая сталь, сделано из карты рельефа Metal009 (ambientCG.com), CC0.
-paper-old.webp         — старая бумага, сделано из карты рельефа Paper004 (ambientCG.com), CC0.
-bronze-cast.webp       — литая бронза, сделано из карты рельефа Metal029 (ambientCG.com), CC0.
-slate-dark.webp        — тёмный сланец, сделано из карты рельефа Rock029 (ambientCG.com), CC0.
-Все картинки — оттенки серого вокруг среднего тона: накладываются поверх цвета.
+Фактуры листа «Гравюра» — из материалов ambientCG (https://ambientcg.com), лицензия CC0 1.0
+(общественное достояние: можно копировать, менять и распространять без указания авторства).
+
+  steel-brushed.webp  ← Metal009, карта Color          шлифованная сталь (колонка, планка окна, подвал окон)
+  steel-plate.webp    ← Metal038, карта Color          сталь с пятнами (пластины, карточки, подсказки)
+  leather.webp        ← Leather026, карта Displacement зерно и складки кожи (основа окон, активная вкладка)
+  scratches.webp      ← Scratches001, карта Opacity    тонкие царапины (клейма)
+  stains.webp         ← SurfaceImperfections001, Opacity  мягкие разводы (основа окон)
+  paper-fiber.webp    ← Paper006, карта Color          волокно и крапины бумаги (пергамент чата)
+  paper-crease.webp   ← Paper003, карта Displacement   складки мятого листа (пергамент чата)
+
+Каждая карта переведена в серый, уменьшена до 512 px и растянута вокруг среднего так, что среднее — ровно
+50 % серого: в режиме наложения overlay такая картинка меняет только светлоту поверхности, а не её цвет.
+Сборка — D:\Witcher\_tools\textures.sh (исходные архивы 1K-JPG с ambientCG).
+
+grain.png — своё зерно: гауссов шум ImageMagick, 128 px, серый со средним 50 % (замена SVG с feTurbulence, PLAN 4.53).
+baked/*.webp — производные: перечисленные выше фактуры, сведённые с цветами интерфейса (tools/bake-surfaces.sh).

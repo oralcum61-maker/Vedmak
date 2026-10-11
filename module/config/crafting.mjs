@@ -74,7 +74,10 @@ export const TOOL_KINDS = {
 };
 
 export const ENHANCEMENT_KINDS = { armor: "Усиление брони", weapon: "Усиление оружия", rune: "Руна (оружие)", glyph: "Глиф (броня)", crossbow: "Модификация арбалета",
-  runeword: "Рунное слово (оружие)", glyphword: "Глифово слово (броня)" };
+  runeword: "Рунное слово (оружие)", glyphword: "Глифово слово (броня)", slot: "Ячейка усиления (оружие, броня)" };
+
+/** Больше трёх ячеек усиления у предмета не бывает («Том Хаоса», стр. 115: слот зачарования). */
+export const MAX_ENHANCEMENT_SLOTS = 3;
 
 /** Зачарование словом занимает две ячейки (малое) или три (большое) и не уживается с другими рунами и глифами. */
 export const ENCHANT_SLOTS = { small: 2, large: 3 };
@@ -106,6 +109,81 @@ export const CRAFTING = {
   toxicitySaveDc: 18,      // отравление токсичностью и эликсир у не-мутанта
   mutagenSaveDc: 18
 };
+
+/**
+ * Вживление рун и глифов в тело («Офир и Зеррикания», стр. 84–86). Камень бывает малым, обычным и большим:
+ * чем крупнее, тем сильнее эффект и выше СЛ (+1 обычный, +2 большой). `mods` — поправки по размеру камня
+ * (как у мутагенов), `text` — эффект, который система не считает сама (шансы состояний), `minor` — малая мутация.
+ */
+export const IMPLANT_TIERS = { small: { label: "Малый", dc: 0 }, normal: { label: "Обычный", dc: 1 }, large: { label: "Большой", dc: 2 } };
+const RUNE_IMG = n => `systems/vedmak/assets/fan/enhancements/rune-${n}.webp`;
+const tiers = (target, a, b, c) => ({ small: [{ target, value: a }], normal: [{ target, value: b }], large: [{ target, value: c }] });
+const chance = label => ({ small: `${label} +5 %`, normal: `${label} +10 %`, large: `${label} +15 %` });
+/** Прибавка к шансу эффекта по размеру камня (руны состояний). */
+export const IMPLANT_CHANCE = { small: 5, normal: 10, large: 15 };
+export const IMPLANT_RUNES = {
+  chernobog: { label: "Чернобог", img: RUNE_IMG("chernobog"), mods: tiers("bonus.meleeDamage", 1, 2, 3), bonus: "к урону в ближнем бою",
+    minor: "Мышцы деформированы, вены светятся ярко-красным" },
+  perun: { label: "Перун", img: RUNE_IMG("perun"), mods: tiers("stats.spd", 1, 2, 3), bonus: "к Скор", minor: "Постоянная трупная худоба" },
+  veles: { label: "Велес", img: RUNE_IMG("veles"), mods: tiers("bonus.vigor", 1, 2, 3), bonus: "к Энергии",
+    minor: "Хаос оставил чёрную дорожку по венам" },
+  dazhbog: { label: "Даждьбог", img: RUNE_IMG("dazhbog"), text: chance("Горение"), effect: "burning", minor: "Тело не остывает ниже 45 °C" },
+  stribog: { label: "Стрибог", img: RUNE_IMG("stribog"), text: chance("Ошеломление"), effect: "staggering",
+    minor: "Тело обрастает густыми волосами, кожа на руках и ногах толстеет, как у слона" },
+  zorya: { label: "Зоря", img: RUNE_IMG("zoria"), text: chance("Замораживание"), effect: "freeze", minor: "Тело не согревается выше 18 °C" },
+  devana: { label: "Девана", img: RUNE_IMG("devana"), text: chance("Кровотечение"), effect: "bleeding",
+    minor: "Руки твёрдые, как камень; сильная тяга к сырому мясу" },
+  marena: { label: "Марена", img: RUNE_IMG("morana"), text: chance("Отравление"), effect: "poison", minor: "Вены и кровь зеленеют" },
+  svarog: { label: "Сварог", img: RUNE_IMG("svarog"), accuracy: { small: 1, normal: 2, large: 3 }, bonus: "к Точности (броски атаки)",
+    minor: "Орлиные глаза с белым третьим веком" },
+  triglav: { label: "Триглав", img: RUNE_IMG("triglav"), text: chance("Дезориентирующее"), effect: "disorient", minor: "Череп странно деформирован" },
+  pirog: { label: "Пирог", img: "icons/magic/symbols/runes-carved-stone-yellow.webp", mods: tiers("bonus.enc", 5, 10, 15), bonus: "к переносимому весу",
+    minor: "Огромные плечи выгибают спину, как у огра" },
+  tvorog: { label: "Творог", img: "icons/magic/symbols/runes-carved-stone-green.webp", mods: tiers("armor", 1, 2, 3), bonus: "ПБ крепости тела (естественная броня)",
+    minor: "Кожа сверкает, как бриллианты, при дневном свете" }
+};
+/** Глифы знаков: носитель получает заклинание «Вживлённый глиф: …» из компендиума магии. */
+export const IMPLANT_GLYPHS = {
+  aard: { label: "Аард", spell: "Вживлённый глиф: Аард", img: "systems/vedmak/assets/fan/magic/sg-aard.webp",
+    minor: "Очень громкое чихание со странным эхом, которое трудно скрыть" },
+  quen: { label: "Квен", spell: "Вживлённый глиф: Квен", img: "systems/vedmak/assets/fan/magic/sg-quen.webp",
+    minor: "Слабое свечение в темноте выдаёт колдовство" },
+  igni: { label: "Игни", spell: "Вживлённый глиф: Игни", img: "systems/vedmak/assets/fan/magic/sg-igni.webp",
+    minor: "Легко воспламеняется: шанс поджечь носителя на +10 %" },
+  yrden: { label: "Ирден", spell: "Вживлённый глиф: Ирден", img: "systems/vedmak/assets/fan/magic/sg-yrden.webp",
+    minor: "Кожа покрывается пурпурными родимыми пятнами" },
+  axii: { label: "Аксий", spell: "Вживлённый глиф: Аксий", img: "systems/vedmak/assets/fan/magic/sg-axii.webp",
+    minor: "Постоянная обильная испарина: −2 к Эмп", mods: [{ target: "stats.emp", value: -2 }] }
+};
+export const IMPLANT_LIMIT = 2;
+
+/**
+ * На сколько % легче поджечь актора: мутация глифа Игни у носителя-не ведьмака +10 («Офир и Зеррикания», стр. 84),
+ * «Быстрый огонь» на нём +50 (эффект с флагом vedmak.burnVuln).
+ */
+export function implantBurnVulnerability(actor) {
+  const glyph = actor?.system?.raceKey !== "witcher" && (actor?.items ?? []).some(i => i.flags?.vedmak?.implant?.kind === "glyph"
+    && i.flags.vedmak.implant.key === "igni" && !i.flags.vedmak.implant.extra) ? 10 : 0;
+  const coated = Math.max(0, ...(actor?.effects ?? []).filter(e => e.active && e.flags?.vedmak?.burnVuln)
+    .map(e => Number(e.flags.vedmak.burnVuln) || 0));
+  return glyph + coated;
+}
+
+/**
+ * Прибавки вживлённых рун к шансам эффектов атак носителя: {burning: 10, …} (ключи — как у эффектов оружия,
+ * `disorient` — дезориентация Триглава). Вторая мутация провала (`extra`) прибавок не даёт.
+ */
+export function implantStatusBonus(items) {
+  const out = {};
+  for (const i of items ?? []) {
+    const imp = i.flags?.vedmak?.implant;
+    if (!imp || imp.extra || imp.kind !== "rune") continue;
+    const rune = IMPLANT_RUNES[imp.key];
+    if (!rune?.effect) continue;
+    out[rune.effect] = (out[rune.effect] ?? 0) + (IMPLANT_CHANCE[imp.tier] ?? 0);
+  }
+  return out;
+}
 
 /** Металлические компоненты — для них нужна кузница (стр. 127). */
 export const METAL_COMPONENTS = ["Сталь", "Железо", "Тёмная сталь", "Тёмное железо", "Махакамская сталь", "Двимерит",

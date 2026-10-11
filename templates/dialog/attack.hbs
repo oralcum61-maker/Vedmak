@@ -18,11 +18,11 @@
 
     <div class="dlg-group">
       <span class="dlg-label">КУДА</span>
-      <div class="opt-grid g4">
+      <div class="loc-row">
         {{#each locations}}
-        <label class="opt">
+        <label class="opt loc">
           <input type="radio" name="aim" value="{{key}}" data-mod="{{mod}}" {{checked selected}}>
-          <span>{{label}}<em class="{{#if mod}}bad{{else}}dim{{/if}}">{{note}}</em></span>
+          <span><span class="loc-glyph {{glyph.kind}}{{#if glyph.flip}} flip{{/if}}" aria-hidden="true"></span><span class="loc-name">{{label}}</span><em class="{{#if mod}}bad{{else}}dim{{/if}}">{{note}}</em></span>
         </label>
         {{/each}}
       </div>
@@ -35,7 +35,7 @@
         {{#each bands}}
         <label class="chip">
           <input type="radio" name="band" value="{{key}}" data-mod="{{mod}}" {{checked selected}}>
-          <span>{{label}} <b>{{vedmakSigned mod}}</b></span>
+          <span>{{label}} <b class="{{#if (lt mod 0)}}neg{{else}}pos{{/if}}">{{vedmakSigned mod}}</b></span>
         </label>
         {{/each}}
       </div>
@@ -49,7 +49,7 @@
         {{#each situations}}
         <label class="chip">
           <input type="checkbox" name="sit.{{key}}" data-mod="{{mod}}" {{checked checked}}>
-          <span>{{label}} <b>{{vedmakSigned mod}}</b></span>
+          <span>{{label}} <b class="{{#if (lt mod 0)}}neg{{else}}pos{{/if}}">{{vedmakSigned mod}}</b></span>
         </label>
         {{/each}}
       </div>
@@ -82,6 +82,15 @@
       <input type="checkbox" name="extraAction" data-mod="-3">
       <span class="plate-text">Дополнительное действие атаки</span>
       <b class="plate-value">3 Вын, −3</b>
+    </label>
+    {{/if}}
+
+    {{#if drain}}
+    <label class="plate cost">
+      <input type="checkbox" name="drain">
+      <span class="plate-text">Высасывание крови{{#unless drain.trueForm}} <span class="dim">(d10, срыв на 1)</span>{{/unless}}</span>
+      <select name="drainMode" aria-label="Что получает вампир"><option value="blood">+ОК</option><option value="hp">+ПЗ</option></select>
+      <b class="plate-value">+2d6</b>
     </label>
     {{/if}}
 

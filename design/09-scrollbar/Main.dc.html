@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Ползунок: Дол</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0c0e}
+:root{--gr:url(/_blob/bbb6258ed38726a38ad02accc79fa7a2);--tl:url(/_blob/0f5aaeba1d4f862d3bf9373127602a75);--tb:url(/_blob/4b29a38dad0f12b6b03a2c2531155496);--ts:url(/_blob/c70a9cdeb4678a8594ad939b4885a84f);--rivet:radial-gradient(circle at 40% 35%,#f6f1e6 0,#aaa498 1.1px,#3c3b38 2.2px,#050607 2.8px,transparent 3.2px)}
+.mat{background-color:#111214;background-image:linear-gradient(rgba(17,18,20,.55),rgba(17,18,20,.55)),var(--gr),var(--tl);background-size:100% 100%,220px 220px,900px 900px;background-blend-mode:normal,overlay,overlay}
+.panel{display:flex;flex-direction:column;background-color:#1f2024;background-image:linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24)),linear-gradient(rgba(31,32,36,.55),rgba(31,32,36,.55)),var(--gr);background-size:100% 100%,100% 100%,220px 220px;background-blend-mode:normal,normal,overlay;border:1px solid #060708;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95);overflow:hidden}
+.shead{display:flex;align-items:center;gap:8px;padding:10px 12px 9px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.9);border-bottom:1px solid #050607;box-shadow:0 1px 0 rgba(255,240,215,.05)}
+.shead::before{content:"";flex-shrink:0;width:5px;height:5px;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607}
+.shead::after{content:"";flex-grow:1;height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.shead b{font-family:Forum,serif;font-weight:400;font-size:15px;letter-spacing:0;color:#f1ece0;order:2}
+.list{overflow-y:auto;padding:4px 8px 6px 10px}
+.row{display:flex;align-items:center;gap:8px;padding:6px 2px;border-bottom:1px solid rgba(0,0,0,.6);box-shadow:0 1px 0 rgba(255,240,215,.04);font-size:12px;color:#e2ddd0}
+.row span{flex-grow:1}
+.row.on span{font-weight:600;color:#f1ece0}
+.num{display:grid;place-items:center;width:24px;height:20px;font-family:Forum,serif;font-size:14px;color:#e2ddd0;background:#0a0b0c;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,240,215,.07)}
+.num.tot{color:#f1ece0;background:#16171a}
+.lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#a8a296;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.zoom{position:relative;width:42px;height:420px}
+.zoom .z{position:absolute;left:0;top:0;width:12px;height:120px;transform:scale(3.5);transform-origin:0 0}
+.trk{position:absolute;inset:0}
+.thb{position:absolute;left:0;right:0}
+.list::-webkit-scrollbar-button{display:none;height:0}
+.list::-webkit-scrollbar-corner{background:transparent}
+
+.list::-webkit-scrollbar{width:12px}
+.list::-webkit-scrollbar-track,.trk{background-color:#08090a;border:4px solid transparent;border-radius:6px;background-clip:padding-box;box-shadow:inset 0 0 0 1px #040405,inset 0 2px 3px rgba(0,0,0,.95)}
+.list::-webkit-scrollbar-thumb,.thb{border:1px solid #050607;border-radius:6px / 18px;background-color:#8e897e;background-image:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 20%,rgba(0,0,0,0) 80%,rgba(0,0,0,.35)),linear-gradient(90deg,#4a4844 0%,#d9d3c6 20%,#b3ada2 40%,#2c2b29 47%,#1a1a1c 50%,#2c2b29 53%,#9b958a 60%,#ece7db 80%,#5e5b55 100%),var(--gr);background-size:100% 100%,100% 100%,160px 160px;background-blend-mode:normal,normal,overlay;box-shadow:0 2px 3px rgba(0,0,0,.85)}
+.list::-webkit-scrollbar-thumb:hover,.thb.hov{background-image:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 20%,rgba(0,0,0,0) 80%,rgba(0,0,0,.3)),linear-gradient(90deg,#5e5b55 0%,#f6f1e6 20%,#cfc9bc 40%,#3a3935 47%,#1c1c1e 50%,#3a3935 53%,#b3ada2 60%,#fbf7ee 80%,#77726a 100%),var(--gr)}
+.list::-webkit-scrollbar-thumb:active,.thb.act{background-image:linear-gradient(180deg,rgba(255,180,100,.25),rgba(255,180,100,0) 30%,rgba(0,0,0,0) 70%,rgba(0,0,0,.35)),linear-gradient(90deg,#5e4a38 0%,#f2d9b0 20%,#c9a87a 40%,#3a2a1c 47%,#1c140e 50%,#3a2a1c 53%,#b39470 60%,#f6e3c4 80%,#6e5a44 100%),var(--gr)}
+</style>
+</helmet>
+<div class="mat" style="width: 600px; height: 620px; box-sizing: border-box; padding: 28px 30px; display: flex; gap: 40px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums">
+  <div class="panel" style="width: 330px; height: 564px; flex-shrink: 0">
+    <div class="shead">Интеллект <b>7</b></div>
+    <div class="list" style="height: 520px; box-sizing: border-box">
+      <div class="row on"><span>Внимание</span><span class="num">5</span><span class="num tot">12</span></div>
+      <div class="row"><span>Выживание в дикой природе</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Дедукция</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row on"><span>Монстрология</span><span class="num">6</span><span class="num tot">13</span></div>
+      <div class="row"><span>Образование</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Ориентирование в городе</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Передача знаний</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Тактика</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Торговля</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Этикет</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Язык: всеобщий</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Язык: Старшая Речь</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Язык: краснолюдский</span><span class="num">0</span><span class="num tot">7</span></div>
+      <div class="row"><span>Ближний бой</span><span class="num">0</span><span class="num tot">9</span></div>
+      <div class="row"><span>Борьба</span><span class="num">0</span><span class="num tot">9</span></div>
+      <div class="row"><span>Верховая езда</span><span class="num">0</span><span class="num tot">9</span></div>
+      <div class="row"><span>Владение древковым</span><span class="num">0</span><span class="num tot">9</span></div>
+      <div class="row"><span>Владение лёгкими клинками</span><span class="num">0</span><span class="num tot">9</span></div>
+      <div class="row on"><span>Владение мечом</span><span class="num">6</span><span class="num tot">15</span></div>
+      <div class="row"><span>Мореходство</span><span class="num">0</span><span class="num tot">9</span></div>
+      <div class="row on"><span>Уклонение/Изворотливость</span><span class="num">5</span><span class="num tot">14</span></div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 14px; padding-top: 4px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <span style="font-family: Forum, serif; font-size: 26px; line-height: 1; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.9)">Дол</span>
+      <span style="font-size: 11px; line-height: 1.4; color: #bab4a8; max-width: 180px">Клинок с долом в узком пазу</span>
+    </div>
+    <div style="display: flex; gap: 22px">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+        <div class="zoom"><div class="z"><div class="trk"></div><div class="thb" style="top: 20px; height: 44px"></div></div></div>
+        <span class="lbl">покой</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+        <div class="zoom"><div class="z"><div class="trk"></div><div class="thb hov" style="top: 44px; height: 44px"></div></div></div>
+        <span class="lbl">наведение</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+        <div class="zoom"><div class="z"><div class="trk"></div><div class="thb act" style="top: 68px; height: 44px"></div></div></div>
+        <span class="lbl">тянут</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":600,"height":620}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

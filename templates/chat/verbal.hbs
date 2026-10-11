@@ -6,7 +6,7 @@
       <span class="card-name">{{label}}</span>
       <span class="card-sub">Словесная дуэль · {{groupLabel}} · {{skillLabel}}</span>
     </div>
-    <div class="card-value">
+    <div class="card-value">{{vedmakRing dice}}
       <b>{{total}}</b>
       <span class="cap">{{#if isAttack}}атака{{else}}{{#if dc}}против {{dc}}{{else}}проверка{{/if}}{{/if}}</span>
     </div>
@@ -38,13 +38,13 @@
     <div class="target-row" data-target-token="{{tokenUuid}}" data-target-actor="{{actorUuid}}">
       <div class="target-name"><img src="{{img}}" alt=""><span class="name">{{name}}</span></div>
       <div class="defense-buttons">
-        {{#each ../defenses}}<button type="button" data-vedmak="verbalDefend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+        {{#each ../defenses}}<button type="button" data-vedmak="verbalDefend" data-defense="{{key}}" data-tooltip="{{label}}"><span>{{short}}</span></button>{{/each}}
       </div>
     </div>
     {{else}}
     <div class="target-row any">
       <div class="defense-buttons">
-        {{#each defenses}}<button type="button" data-vedmak="verbalDefend" data-defense="{{key}}" data-tooltip="{{label}}"><i class="fa-solid {{icon}}"></i><span>{{short}}</span></button>{{/each}}
+        {{#each defenses}}<button type="button" data-vedmak="verbalDefend" data-defense="{{key}}" data-tooltip="{{label}}"><span>{{short}}</span></button>{{/each}}
       </div>
     </div>
     {{/each}}
@@ -52,7 +52,7 @@
   {{else}}{{#if damage}}
   <div class="card-buttons">
     <button type="button" class="primary" data-vedmak="verbalDamage" data-tooltip="Отнять у цели или выделенного токена">
-      <i class="fa-solid fa-comment-slash"></i> −{{damage.total}} Решительности цели
+      −{{damage.total}} Решительности цели
     </button>
   </div>
   {{/if}}{{/if}}

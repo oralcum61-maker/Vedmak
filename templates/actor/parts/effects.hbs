@@ -21,8 +21,8 @@
   <p class="hint">Состояний нет.</p>
   {{/if}}
 
-  <details class="state-fold">
-    <summary><i class="fa-solid fa-plus"></i> Отметить состояние</summary>
+  <details class="state-fold" data-sync="state-fold">
+    <summary>Отметить состояние</summary>
     <div class="status-grid">
       {{#each statusList}}
       <a class="status{{#if active}} active{{/if}}" data-action="toggleStatus" data-status="{{id}}" data-tooltip="{{hint}}">
@@ -37,7 +37,7 @@
   <div class="group-head">
     <span class="glabel">АКТИВНЫЕ ЭФФЕКТЫ</span>
     <span class="rule"></span>
-    <a class="add" data-action="effectCreate" data-tooltip="Создать эффект"><i class="fa-solid fa-plus"></i> создать</a>
+    <a class="add" data-action="effectCreate" data-tooltip="Создать эффект">создать</a>
   </div>
 
   {{#each effects as |e|}}

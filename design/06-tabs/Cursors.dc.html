@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Курсоры: все взаимодействия</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/2d8e2a98d1c58c4f7ae1631148a88143);--tp:url(/_blob/bde7f1abcaebb87ef7a80201f2daf18d)}
+.mat{background-color:#17181b;background-image:var(--tl),radial-gradient(130% 100% at 50% 0%,rgba(255,240,215,.04),transparent 50%,rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.plate{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 35%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,240,215,.1),inset 0 -1px 0 rgba(0,0,0,.55),0 2px 3px rgba(0,0,0,.55),0 14px 24px -14px rgba(0,0,0,.95)}
+.well{background-color:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.4),0 1px 0 rgba(255,240,215,.07)}
+.map{background-color:#c9c0ad;background-image:linear-gradient(rgba(60,50,35,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(60,50,35,.18) 1px,transparent 1px);background-size:14px 14px;border:1px solid #040405;border-radius:2px}
+.engr{color:#d6d0c2;text-shadow:0 1px 0 rgba(0,0,0,.95),0 -1px 0 rgba(255,245,225,.06)}
+.groove{height:0;border-top:1px solid #050607;border-bottom:1px solid rgba(255,240,215,.07)}
+.gem{width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:linear-gradient(135deg,#f2ece0,#77726a);box-shadow:0 0 0 1px #050607,0 1px 2px rgba(0,0,0,.8)}
+.cap{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8e897e;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.hot{position:absolute;width:7px;height:7px;margin:-4px 0 0 -4px;border-radius:50%;border:1px solid #e0604a;box-shadow:0 0 0 1px rgba(0,0,0,.8)}
+</style>
+</helmet>
+<div class="mat" style="width: 1040px; height: 900px; box-sizing: border-box; padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 14px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px">
+  <div style="display: flex; align-items: baseline; gap: 16px">
+    <h1 style="margin: 0; font-family: Forum, serif; font-weight: 400; font-size: 30px; color: #f1ece0; text-shadow: 0 1px 0 rgba(0,0,0,.95)">Курсоры</h1>
+    <span style="font-size: 12.5px; color: #8e897e">Одна кузница: сталь с чёрной кромкой, киноварь — то, что действует, латунь — песок во времени. 32 × 32, точка клика отмечена кольцом.</span>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+    <sc-for list="{{cursors}}" as="c" hint-placeholder-count="18">
+      <section class="plate" style="padding: 9px 9px 10px; display: flex; flex-direction: column; gap: 7px; min-width: 0">
+        <div style="display: flex; gap: 6px">
+          <div class="well" style="position: relative; width: 82px; height: 82px; flex-shrink: 0">
+            <img src="{{c.src}}" alt="" style="position: absolute; left: 9px; top: 9px; width: 64px; height: 64px">
+            <span class="hot" style="left: {{c.hx}}px; top: {{c.hy}}px"></span>
+          </div>
+          <div class="map" style="flex-grow: 1; display: grid; place-items: center; min-width: 0">
+            <img src="{{c.src}}" alt="" style="width: 32px; height: 32px">
+          </div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 6px; min-width: 0">
+          <b style="font-family: Forum, serif; font-weight: 400; font-size: 16px; color: #f1ece0; white-space: nowrap">{{c.name}}</b>
+        </div>
+        <span class="cap" style="color: {{c.kwColor}}">{{c.kw}}</span>
+        <span style="font-size: 11px; line-height: 1.35; color: #8e897e">{{c.where}}</span>
+      </section>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1040,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const C = (src, name, kw, where, hx, hy, own) => ({
+      src, name, kw, where, hx: 9 + hx * 2, hy: 9 + hy * 2, kwColor: own ? '#cfc8b8' : '#8e897e'
+    });
+    return {
+      cursors: [
+        C('/_blob/f967e8d7b8c45a182a5c2b7cbe585236', 'Обычный', 'default', 'Всё, что не нажимается; пустая сцена.', 2, 2, true),
+        C('/_blob/48ec002c17c99c674fc1f0dc2a47008e', 'Зажат', 'default-down', 'Кнопка мыши зажата на пустом месте; рамка выделения на сцене.', 2, 2, true),
+        C('/_blob/70bd1e711e0cb455929ce9f1ba5e4672', 'Можно нажать', 'pointer', 'Кнопки, ссылки, вкладки, клейма бросков, жетон под курсором.', 2, 2, true),
+        C('/_blob/7742c267fc9f9c18a4168bd9aae4ebd1', 'Нажимаю', 'pointer-down', 'Пока кнопка мыши зажата над тем, что нажимается.', 2, 2, true),
+        C('/_blob/751f6a2f24c5ea8f2d77fb11dcc3af66', 'Текст', 'text', 'Поля ввода, чат, редактор описаний и дневника.', 16, 16, true),
+        C('/_blob/104ee9a3df251aaf60b278d677f558b8', 'Подсказка', 'help', 'Сноски правил, значки «?», сокращения с пояснением.', 2, 2, true),
+        C('/_blob/ec95027a01881f1194d0bc19adaa793f', 'Можно взять', 'grab', 'Жетон, предмет в списке, ячейка снаряжения, запись компендиума.', 16, 13, true),
+        C('/_blob/abda4275c77969dffb046f359b3c1ee1', 'Тащу', 'grabbing', 'Во время перетаскивания: предмет на лист, жетон по сцене.', 16, 13, true),
+        C('/_blob/0a2d6bfd3f1199579573c1e772d96343', 'Нельзя', 'not-allowed', 'Выключенные кнопки, сломанное оружие, закрытый шаг мастера.', 2, 2, false),
+        C('/_blob/345ec8809791776cdbed6e9c2ea14ae0', 'Загрузка', 'progress', 'Окно или сцена ещё грузится, но щёлкать уже можно.', 2, 2, false),
+        C('/_blob/1aae1fea70d1a753a2148a6781e4c85e', 'Ожидание', 'wait', 'Foundry занят: сохранение мира, импорт компендиума.', 16, 16, false),
+        C('/_blob/6289eec6b272eaf71324e226febde7d3', 'Прицел', 'crosshair', 'Линейка, шаблоны областей, выбор места на сцене.', 16, 16, false),
+        C('/_blob/f99865555d584d79c78b0871b6a750a7', 'Сдвиг', 'move', 'Окно за планку, шаблон или рисунок на сцене.', 16, 16, false),
+        C('/_blob/4fb3b4621e3363692128e834199ee9ca', 'Рассмотреть', 'zoom-in', 'Портрет персонажа, картинка в дневнике и журнале.', 13, 13, false),
+        C('/_blob/3444b68bc5cd1bbc2f1919cb5e21c5c5', 'Ширина', 'ew-resize', 'Край боковой панели, ширина колонки таблицы.', 16, 16, false),
+        C('/_blob/e78b351f08c0e5d2cb6534696db3b5cd', 'Высота', 'ns-resize', 'Высота панели и поля ввода чата.', 16, 16, false),
+        C('/_blob/9959c04de3c35d772b9a7ed73c899f3d', 'Угол ↘', 'nwse-resize', 'Правый нижний угол окна листа.', 16, 16, false),
+        C('/_blob/d56c512a0d7943a0dde62d594796d71a', 'Угол ↙', 'nesw-resize', 'Левый нижний угол — у панелей, растущих влево.', 16, 16, false)
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

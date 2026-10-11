@@ -6,9 +6,9 @@
       <span class="card-sub">против «{{attack.label}}» · {{attack.attacker.name}} {{attack.total}}</span>
     </div>
     {{#if roll}}
-    <div class="card-value"><b>{{total}}</b><span class="cap">защита</span></div>
+    <div class="card-value">{{vedmakRing roll.dice}}<b>{{total}}</b><span class="cap">защита</span></div>
     {{else}}{{#unless auto}}
-    <div class="card-value"><b>{{dc}}</b><span class="cap">СЛ</span></div>
+    <div class="card-value">{{vedmakRing roll.dice}}<b>{{dc}}</b><span class="cap">СЛ</span></div>
     {{/unless}}{{/if}}
   </header>
 
@@ -21,11 +21,11 @@
       <p class="note dim">Без защиты: атака {{attack.total}} против СЛ {{dc}}.</p>
     {{/if}}{{/if}}
 
-    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}</div>{{/if}}
+    {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}{{#if fumbleAuto}} <button type="button" class="fumble-apply" data-vedmak="applyFumble" data-tooltip="Применить к персонажу: состояние, надёжность, оружие, испытание Уст, удар по себе">Применить</button>{{/if}}</div>{{/if}}
 
     {{#if hit}}
       <div class="outcome failure">Попадание{{#if (gt margin 0)}} · атака выше на {{margin}}{{/if}}</div>
-      {{#if critLevel}}<div class="badge crit"><i class="fa-solid fa-droplet"></i> Критическое ранение: {{critLabel}}</div>{{/if}}
+      {{#if critLevel}}<div class="badge crit">Критическое ранение: {{critLabel}}</div>{{/if}}
     {{else}}
       <div class="outcome success">Защита удалась</div>
     {{/if}}
@@ -35,9 +35,9 @@
   </div>
 
   <div class="card-buttons">
-    {{#if canDamage}}<button type="button" class="primary" data-vedmak="damage"><i class="fa-solid fa-droplet"></i> Урон</button>{{/if}}
-    {{#if canApplyEffects}}<button type="button" class="primary" data-vedmak="applySpellEffects"><i class="fa-solid fa-wand-sparkles"></i> Применить эффекты</button>{{/if}}
-    {{#if hitStatusLabel}}<button type="button" data-vedmak="applyHitStatus"><i class="fa-solid fa-person-falling"></i> {{hitStatusLabel}}</button>{{/if}}
-    {{#if stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{defender.tokenUuid}}" data-fallback="{{defender.actorUuid}}" data-mod="{{attack.stunSaveMod}}"><i class="fa-solid fa-face-dizzy"></i> Испытание Уст</button>{{/if}}
+    {{#if canDamage}}<button type="button" class="primary" data-vedmak="damage">Урон</button>{{/if}}
+    {{#if canApplyEffects}}<button type="button" class="primary" data-vedmak="applySpellEffects">Применить эффекты</button>{{/if}}
+    {{#if hitStatusLabel}}<button type="button" data-vedmak="applyHitStatus">{{hitStatusLabel}}</button>{{/if}}
+    {{#if stunSave}}<button type="button" data-vedmak="stunSave" data-actor="{{defender.tokenUuid}}" data-fallback="{{defender.actorUuid}}" data-mod="{{attack.stunSaveMod}}">Испытание Уст</button>{{/if}}
   </div>
 </div>

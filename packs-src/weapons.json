@@ -4,7 +4,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-noma-lvl2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Полуторный меч. Из железа. Скажу тебе, как краснолюд: от одной мысли об этой дряни мне дурно становится. Им чёрта с два кого прирежешь. Но зато его делать просто и достать можно всюду.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 160,
@@ -47,7 +47,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-knight.webp",
   "system": {
-   "description": "",
+   "description": "<p>Реданский рыцарский меч — это одноручное оружие с простой изогнутой гардой и острой режущей кромкой. Учитывая то, как реданцы расползаются по всему Северу, чтобы нас «защитить», этих мечей хоть жопой жуй.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 270,
@@ -90,7 +90,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-dolblath.webp",
   "system": {
-   "description": "",
+   "description": "<p>Это один из самых тяжёлых и тонких клинков на Континенте. Весь его вес сосредоточен в вычурной гарде и навершии. Но сделать его достаточно просто. Потому-то чёрные его и предпочитают, учитывая, как быстро у них армия множится.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 285,
@@ -133,7 +133,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-falchion.webp",
   "system": {
-   "description": "",
+   "description": "<p>Таким оружием охотники пользуются для разделки подстреленной животины. Если тебе нужен хороший клинок, чтобы и дрова рубить, и конечности, лучше не найдёшь. Оружие такое встречается часто.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 325,
@@ -176,7 +176,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-skel-lvl2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Говаривают, что жители Скеллиге закаляют клинки в крови сирен иутопцев. Скажу так, друже: это правда. Ну, или было правдой. Благодаря закалённой стали и облегчённой конструкции эти клинки бьют невероятно точно.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 570,
@@ -219,7 +219,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-noma-lvl4.webp",
   "system": {
-   "description": "",
+   "description": "<p>Торговцам порой приходится забыть о своих предубеждениях, когда речь заходит о хорошем товаре. Метиннская эсбода — один из самых лёгких и острых кавалерийских клинков, какие мне только доводилось видать. Как гледдиф, только лучше. И чёрные не брезгуют заставить «вассалов» такое оружие для армии ковать.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 650,
@@ -262,7 +262,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-cord.webp",
   "system": {
-   "description": "",
+   "description": "<p>Корды куют для моряков в прибрежном цидарском городе. Крепкий и простой клинок с изогнутым лезвием. Слыхал я, что клинки эти вывозят на Север, а то и вовсе в море выбрасывают, лишь бы чёрные их к рукам не прибрали.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 725,
@@ -311,7 +311,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-toussaint1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такие мечи можно узнать по тяжёлой гарде. Обычно ими дерутся рыцари из Виковаро, но из-за войны их можно найти чуть ли не всюду. Вот что я тебе скажу: видал я, как на эти мечи обрушивались целые замки, и даже после такого этим оружием рубили руки-ноги.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 955,
@@ -360,7 +360,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-torrur.webp",
   "system": {
-   "description": "",
+   "description": "<p>Если на тебя бежит мужик с торруром, притворись мёртвым. Во время последней войны я видел, как здоровяк ростом с небольшую гору попросту отрубил этой штукой башку скачущей лошади. Геммерцы вообще больные на голову сукины дети. Смотрят на тебя так, словно сожрать готовы.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 1075,
@@ -409,7 +409,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-knife-assassin.webp",
   "system": {
-   "description": "",
+   "description": "<p>Кинжалы бывают разной формы и размеров, но обычно они достаточно малы, чтобы влезать в карман. Кинжал при себе носят все, от рыцарей до крестьян.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 50,
@@ -452,7 +452,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-knife-ritual.webp",
   "system": {
-   "description": "",
+   "description": "<p>Вот уж кто-кто, а чёрные могут даже из обычного кинжала сделать ещё более подлое оружие. Длинный тонкий клинок этого кинжала убирается в рукоять, так что спрятать эту дрянь можно где угодно.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 275,
@@ -501,7 +501,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-viper-steel.webp",
   "system": {
-   "description": "",
+   "description": "<p>Оружие старой доброй темерской работы. Длинное, тонкое и лёгкое. В битве под Содденом я с чёрным дрался, а из оружия у меня был лишь этот вот ножик. Нильф мне шесть рёбер переломал, вот только я-то жив-здоров, а он — нет.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 350,
@@ -550,7 +550,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-knife-toussaint.webp",
   "system": {
-   "description": "",
+   "description": "<p>Друже, даже в далёкой Зеррикании смерть — самая твёрдая валюта. И именно там куют одни из лучших кинжалов в мире. Впервые эти странные кривые штуки мы заметили у ассасинов из Мехта во время Первой войны.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 440,
@@ -604,7 +604,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-axe-head.webp",
   "system": {
-   "description": "",
+   "description": "<p>Полюбил я со временем простой топор. Рубил им сначала дрова. Крепкий такой инструмент. А уж если этим можно дерево рубить, то кости и подавно.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 205,
@@ -646,7 +646,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/people/t3-axe-great1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Надо выломать дверь? Изрубить тело, живое или мёртвое? Тогда, приятель, тебе нужен боевой топор. Форма может быть разной, но так-то боевой топор — смертоносное оружие, покрепче многих мечей.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 525,
@@ -688,7 +688,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-axe-great2.webp",
   "system": {
-   "description": "",
+   "description": "<p>На островах Скеллиге много волколаков и сирен, а ведьмаков мало. Добавь к этому показную храбрость обычного скеллигца, и получится вот эта штука. Двухметровый топор с огромным бородовидным лезвием, украшенным скеллигскими рунами.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 960,
@@ -741,7 +741,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-hammer-rusty.webp",
   "system": {
-   "description": "",
+   "description": "<p>Друже, мир — место несправедливое. И некоторым просто не повезло родиться слабыми. Обычно мне не приходится идти с врагом врукопашную — да-да, преимущество арбалетчика, — но если бы мне надо было регулярно чистить рожи, я бы обзавёлся кастетом, чтобы кулаком больнее бить.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 50,
@@ -789,7 +789,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-mace1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Серьёзная игрушка. Цельный кусок металла с выступающими лопастями или шипами. Удар булавой способен переломать кости. Знаю многих наёмников, которые с собой это оружие таскают только ради того, чтобы пробивать броню.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 525,
@@ -831,7 +831,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-mace2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Каэдвенцы — ребята крупные. Если бы меня попросили назвать самых крепких засранцев в мире, то я точно выбрал бы островитян со Скеллиге, каэдвенцев и геммерцев. Но вот эти вот молоты дают каэдвенцам преимущество. За свою жизнь я продал только два таких, но они действительно огромны. Почти два метра длиной, со здоровенным навершием, выложенным метеоритной сталью.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 1100,
@@ -884,7 +884,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t2-paling.webp",
   "system": {
-   "description": "",
+   "description": "<p>Любимое оружие пехоты. Немаленькое, в среднем два метра в длину, зато поможет врага удержать подальше, да и кавалерии не даст тебя затоптать. Служа арбалетчиком в армии, я копья полюбил: нас от кавалерии нильфов как раз защищал отряд копейщиков.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 375,
@@ -933,7 +933,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t2-halberd.webp",
   "system": {
-   "description": "",
+   "description": "<p>Эту лёгкую секиру выковал кузнец-краснолюд из Повисса. На длинном древке закреплён увесистый боёк: с одной стороны у него топор, с другой — молот, а сверху острый шип торчит. Это универсальное оружие создано, чтобы разбираться с любой бронёй. Если хочешь держать нейтралитет, надо иметь хорошее оружие.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 460,
@@ -983,7 +983,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t2-guisarme.webp",
   "system": {
-   "description": "",
+   "description": "<p>Реданские алебардщики — одни из самых организованных и опасных воинов на Севере. Эти шлюхины дети сдерживают атаку кавалерии и пехоты на раз-два. Алебарды, которыми они вооружены, — настоящие произведения искусства. Двухметровое древко с тяжёлым широким лезвием и с шипами сзади и сверху.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 865,
@@ -1033,7 +1033,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t2-staff.webp",
   "system": {
-   "description": "",
+   "description": "<p>Никому не говори, что я его тебе -продал, понял? Спокойно расхаживать с магическим посохом можно разве что на Скеллиге, или, может, в Зеррикании или Офире. Для простых смертных это светящаяся палка, а вот маги с помощью посоха способны использовать куда больше магии, чем без него. Учитывая ненависть к магам на Севере и недоверие к ним на Юге, посох делает из владельца ходячую мишень.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 335,
@@ -1086,7 +1086,7 @@
   "type": "weapon",
   "img": "icons/weapons/staves/staff-forked-wood.webp",
   "system": {
-   "description": "",
+   "description": "<p>Никогда не понимал, зачем нужен такой посох, но один юный маг, с которым я странствовал, рассказал, что таким орудовал маг по имени Альзур. Оказывается, этот Альзур крюком направлял тварей, которых сам создал. Бьюсь об заклад, у него-то крюк был из серебра. Но оружие это в любом случае пригодится тем, кто любит посохом промеж глаз засветить.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 550,
@@ -1145,7 +1145,7 @@
   "type": "weapon",
   "img": "icons/weapons/staves/staff-ornate-orb-steel-red.webp",
   "system": {
-   "description": "",
+   "description": "<p>Иногда магу требуется чуть больше защиты, ну, на тот случай, если магия подведёт. Для этого есть железный посох. По сути, это просто большая палка из железа с пятой эссенцией внутри. Такой посох крепче обычного, а врезать им можно прям как булавой, да и удары мечом отчасти блокировать.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 675,
@@ -1198,7 +1198,7 @@
   "type": "weapon",
   "img": "icons/weapons/staves/staff-blue-jewel.webp",
   "system": {
-   "description": "",
+   "description": "<p>Улучших магов при себе есть посох с кристаллом. На первый взгляд это обычный посох, в навершие которого вправлен самоцвет. Только вот самоцвет должен быть совершенным: если он хоть чуточку треснутый или с изъяном, то может рвануть прямо в лицо. Но посохи эти стоят подобного риска, учитывая то, как хорошо они магию усиливают.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 835,
@@ -1256,7 +1256,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-knife-butter.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ножички эти — весьма занимательные штучки. Они маленькие (так что их легко спрятать) и сбалансированы для метания. Придётся попрактиковаться, чтобы запомнить скорость вращения и прочее, но оно того стоит. Хорошее оружие для убийцы.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 50,
@@ -1298,7 +1298,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-axe-meteorite.webp",
   "system": {
-   "description": "",
+   "description": "<p>Нож летит куда дальше топора, зато топором по голове прилетит покрепче. Нет ничего страшнее, чем несущаяся тебе врыло металлическая штуковина с ручкой.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 75,
@@ -1340,7 +1340,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-virgin.webp",
   "system": {
-   "description": "",
+   "description": "<p>Чёрные стали ими пользоваться пару десятилетий назад. Это что-то вроде метательного ножа, только формой напоминает звёздочку. Странновато выглядит, но вещь опасная. Да и летит быстро.</p>",
    "quantity": 1,
    "weight": 0.1,
    "cost": 100,
@@ -1382,7 +1382,7 @@
   "type": "weapon",
   "img": "icons/weapons/bows/bow-simple-small.webp",
   "system": {
-   "description": "",
+   "description": "<p>На войне коротких луков раз-два и обчёлся. Они слишком маленькие, чтобы быть полезными на поле боя, да и дальность стрельбы у них не очень. Впрочем, такое оружие идеально подходит для охоты на оленя... или на проезжего купца.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 290,
@@ -1424,7 +1424,7 @@
   "type": "weapon",
   "img": "icons/weapons/bows/longbow-recurve-leather-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Длинный лук — предок арбалета. Для меня они слишком громоздкие, держать их трудно. Но это я ростом не выдался. А вот эльфы на длинные луки чуть ли не молятся. В их руках это второе по смертоносности дальнобойное оружие после, мать её, баллисты. Люди в основном предпочитают арбалеты, хотя в Нильфгаарде полным-полно лучников, готовых наглядно доказать своё смертоносное мастерство.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 475,
@@ -1466,7 +1466,7 @@
   "type": "weapon",
   "img": "icons/weapons/bows/longbow-recurve-skull-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Убойная штука. Создан для того, чтобы отстреливать рыцарей в крепких латах. Эта дура два метра высотой, с силой натяжения до 77 килограмм. Такие луки на поле боя часто встречаются — а что, стой себе и постреливай в небо, поливая врага дождём из стрел. Я-то предпочитаю арбалетом орудовать, но уважаю бойцов, способных стрелять из этой громадины.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 835,
@@ -1508,7 +1508,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/cb-hand.webp",
   "system": {
-   "description": "",
+   "description": "<p>Не знаю точно, где они впервые появились. Думается мне, изначально это оружие было для гражданских. Такой арбалетик небольшой, заметно слабее обычного, зато держать его можно одной рукой, да и стреляешь из такого поточнее. В наши дни их используют для защиты родной хаты: немногие могут себе позволить учиться боевому делу, а чтобы стрелять из арбалета, много ума не надо.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 285,
@@ -1556,7 +1556,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/cb-standard.webp",
   "system": {
-   "description": "",
+   "description": "<p>Крепкий, точный, мощный. Да, я предвзято говорю, но арбалет я обожаю. На перезарядку требуется время, это да, но хороший стрелок нашпигует противника болтами с точностью, которая большинству человеческих лучников и не снилась. Ложе можно к плечу приложить, чтобы вдоль него прицелиться, — так выстрел точнее будет. Я с таким арбалетом прошёл всю Вторую войну — добрую он сослужил мне службу.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 455,
@@ -1604,7 +1604,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/cb-hunter.webp",
   "system": {
-   "description": "",
+   "description": "<p>В наши дни чудовищ не так уж много. Я, пожалуй, могу пересчитать встреченных тварей по пальцам одной руки. Но всё же чудища раз от раза вылезают, а поскольку ведьмаков тоже совсем мало осталось, какой-то сукин сын с юга придумал вот такую игрушку. Больше метра длиной, столько же в плечах. Говорят, что арбалет этот надо воротом взводить, а выстрел у него силой в 136 килограмм. Решили, видать, что раз уж для убийства чудовища надо нехило так приложить силушки, чего б не сделать, курва, ручную баллисту, чтобы издалека их отстреливать.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 1125,
@@ -1657,7 +1657,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-skel-lvl4.webp",
   "system": {
-   "description": "",
+   "description": "<p>Поговаривают, что этот клинок выдумали назаирцы, которым чёрные запретили мечи носить. Вот и выковали нож-переросток — технически-то это не меч. Закончилось всё не очень хорошо, но в итоге эльфы взяли ту конструкцию и доработали.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 595,
@@ -1700,7 +1700,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-naevde.webp",
   "system": {
-   "description": "",
+   "description": "<p>Когда-то кавалерийской бригады «Врихедд» боялись по всему миру. Как-то раз мне довелось с ними столкнуться. Мне и моим парням. Вот эти вот мечи из синей стали в руках всадников снесут башку даже самому крепкому краснолюду. Мне повезло выжить.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 745,
@@ -1749,7 +1749,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/sw-glory.webp",
   "system": {
-   "description": "",
+   "description": "<p>Метеоритная сталь — один из лучших материалов для оружия. Выкованные из неё мечи поблёскивают разными цветами, да ещё и крепкие донельзя. И удивительно лёгкие.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 875,
@@ -1803,7 +1803,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-gwyhyr.webp",
   "system": {
-   "description": "",
+   "description": "<p>Долгое время гвихиры считались лучшими мечами в мире. Они до сих пор одни из лучших. Длинный чёрный клинок настолько острый, что им бриться можно. Настолько лёгкий, что им спокойно можно размахивать одной рукой на полной скорости. Обожаю эти игрушки, но они чертовски редкие.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 1090,
@@ -1901,7 +1901,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-knife-hunting.webp",
   "system": {
-   "description": "",
+   "description": "<p>Низушки куда ниже людей и куда хрупче краснолюдов. Не скажу, что они слабаки, но что-то не видно армий низушков. Этот кинжал для низушков в самый раз: тонкий и крепкий, с круглой головкой и гардой. Им очень легко колоть в стыки брони, оставляя кровоточащие раны.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 485,
@@ -1950,7 +1950,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-silver-dagger.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ха! Вот кто-кто, а краснолюды могут притащить секач на бой на ножах. Если тебе надо прорубиться... да, честно говоря, через что угодно, то бери краснолюдский секач. Он недлинный, но прекрасно и конечности людям рубит, и ветки деревьев.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 500,
@@ -1993,7 +1993,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/people/t3-axe-dwarven.webp",
   "system": {
-   "description": "",
+   "description": "<p>Есть ошибочное мнение, что краснолюды поголовно топоры таскают. На самом деле не все, но многие. Дай краснолюду тяжёлый топор, и он тебе дырку в любой стене прорубит. Особенно если топор этот краснолюдской работы. Двусторонний топор весьма увесист, да и рубить им можно в любую сторону.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 740,
@@ -2035,7 +2035,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-axe-cupro.webp",
   "system": {
-   "description": "",
+   "description": "<p>Гномий гвихир всем известен. Но немногие знают, что гномы ещё и топоры куют. Сделаны они аналогично гвихирам, только потяжелее. Топор бородовидный, покрытый гномьими рунами. Это оружие по ощущениям настолько лёгкое и тонкое, что пользовать его в бою кажется чем-то несусветным. Но достаточно крепкое, чтобы проломить доспех.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 910,
@@ -2077,7 +2077,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-mace-knight1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Мартель — краснолюдское оружие, достаточно редкое. Нечасто видишь, как с ним люди шастают. По сути, это молот с длинным шипом с обратной стороны, насаженный на метровую рукоять. Многие краснолюды предпочитают укорачивать рукоять и носить это оружие за голенищем сапога.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 750,
@@ -2125,7 +2125,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t3-mace-knight2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Стильная игрушка. Шипастый шар из метеоритной стали на цепочке, которая крепится к обмотанной кожей рукояти. На полной скорости шар проламывает шлем вместе с черепом, примерно как если бы в голову попал настоящий метеорит. А цепью можно не только оружие ловить...</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 900,
@@ -2178,7 +2178,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/t2-dwarven-hammer.webp",
   "system": {
-   "description": "",
+   "description": "<p>Махакамские краснолюды выковали первые боевые молоты несколько веков тому назад для защиты от любого сукина сына, которому духу хватит напасть. На крепкой двухметровой рукояти закреплена сложная головка с длинным шипом сверху и крюком сзади. Универсальное оружие. Прямо-таки машина для убийства.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 835,
@@ -2232,7 +2232,7 @@
   "type": "weapon",
   "img": "icons/weapons/polearms/glaive-simple-hooked.webp",
   "system": {
-   "description": "",
+   "description": "<p>Слыхал я, что глефы были самым популярным оружием в золотой век эльфов, ещё до прибытия людей. Полагаю, их использовала дворцовая стража. Длинное древко, на котором сверху закреплено бритвенно острое лезвие. Учитывая то, что большинство эльфов на севере сейчас прячутся, они, скорее всего, не могут себе позволить таскать такие большие штуки, как глефа.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 925,
@@ -2287,7 +2287,7 @@
   "type": "weapon",
   "img": "icons/weapons/staves/staff-engraved-red.webp",
   "system": {
-   "description": "",
+   "description": "<p>Как и любое изделие гномьей работы, эти посохи впечатляют. Они сделаны из тёмной травленой древесины и покрыты рунами сверху донизу. Обычно ещё местами в них вправлены самоцветы.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 910,
@@ -2340,7 +2340,7 @@
   "type": "weapon",
   "img": "icons/weapons/staves/staff-crescent-green.webp",
   "system": {
-   "description": "",
+   "description": "<p>Много лет назад с такими ходили эльфьи мудрецы. Дорожные посохи куда меньше обычных, самое большее до груди. Красивые, украшенные шёлком и золотом, но важнее всего в них то, насколько хорошо они позволяют фокусировать магическую энергию.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 975,
@@ -2398,7 +2398,7 @@
   "type": "weapon",
   "img": "icons/weapons/bows/bow-ornamental-carved-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>По сути, это просто уменьшенный зефар. Отличие в том, что с походного лука можно спокойно снять тетиву и согнуть его, чтобы запихнуть в сумку.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 575,
@@ -2440,7 +2440,7 @@
   "type": "weapon",
   "img": "icons/weapons/staves/staff-animal-bird.webp",
   "system": {
-   "description": "",
+   "description": "<p>Гордость и отрада эльфов. Это длинный лук с четырьмя плечами, на который натянута крепкая вощёная тетива. Две пары плеч у зефара увеличивают силу выстрела в два раза. Что приятно, лук от этого тяжелее не становится.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 1100,
@@ -2488,7 +2488,7 @@
   "type": "weapon",
   "img": "systems/vedmak/assets/fan/weapons/cb-gnome.webp",
   "system": {
-   "description": "",
+   "description": "<p>Не особо люблю ручные арбалеты, но вот такое оружие гномьей работы мне нравится. Настоящее произведение искусства: тонкая работа по металлу да чёрное травлёное дерево с изящной резьбой.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 425,
@@ -6010,65 +6010,6 @@
   }
  },
  {
-  "_id": "gjHIn7jlEeWHNw4T",
-  "name": "Укус (Вран)",
-  "type": "weapon",
-  "img": "systems/vedmak/assets/fan/bs/skills_icons/bite.webp",
-  "system": {
-   "description": "<p>- ОТРАВЛЯЮЩЕЕ (50 %) \n[Если это оружие наносит урон цели, с определенной вероятностью оно может вызвать отравление. Вероятность отравления указана в скобках.]</p>",
-   "quantity": 1,
-   "weight": 0.0,
-   "cost": 0.0,
-   "availability": "everywhere",
-   "concealment": "tiny",
-   "equipped": false,
-   "source": {
-    "book": "Книга сказаний",
-    "page": ""
-   },
-   "category": "bludgeon",
-   "skill": "melee",
-   "accuracy": 0,
-   "damage": "3d6",
-   "damageTypes": [
-    "piercing"
-   ],
-   "reliability": {
-    "value": 99,
-    "max": 99
-   },
-   "hands": 1,
-   "range": "",
-   "attackSpeed": 1,
-   "effects": [
-    {
-     "key": "poison",
-     "value": "50%",
-     "source": ""
-    }
-   ],
-   "enhancementSlots": 0,
-   "silverDamage": "",
-   "relic": false,
-   "mods": [],
-   "oil": {
-    "name": "",
-    "target": "",
-    "until": 0
-   },
-   "crossbowMods": []
-  },
-  "folder": [
-   "Дробящее",
-   "Туссент"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
   "_id": "jyOM8qve8uDeeJ16",
   "name": "Посох связывания",
   "type": "weapon",
@@ -6460,59 +6401,6 @@
   "folder": [
    "Посохи",
    "Магический рынок"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "4sXCVWOOgpcebPu4",
-  "name": "Сеть охотника на чудовищ",
-  "type": "weapon",
-  "img": "icons/tools/fishing/net-simple-tan.webp",
-  "system": {
-   "description": "<p>- ОПУТЫВАЮЩИЕ\n[Цель, пораженная этим оружием, становится опутанной. Она снижает свою Скор на 5 и получает штраф -2 ко всем физическим действиям. Каждый ход цель может совершать проверку Уклонения/Изворотливости или Борьбы со СЛ 18, чтобы высвободиться. В качестве альтернативы другой персонаж может потратить действие, чтобы освободить опутанного.]\n- МАГИЧЕСКИЕ ПУТЫ\n[Пока существо прикасается к этому оружию, оно не может стать невидимым или неосязаемым или использовать любую способность, которая позволяет ему телепортироваться. Существа, которые уже являются невидимыми или неосязаемыми, становятся видимыми и осязаемыми при прикосновении к этому оружию.]\n\nЯ слышал, что Охотники за колдуньями используют их, когда охотятся на магов и монстров вроде допплеров. Сама сеть на самом деле не особенная, но она пропитана \nхимическими веществами и чем-то ещё, что мешает тому, что попало в сеть, использовать магию для побега.</p><p>Опутывающее. Магические путы.</p>",
-   "quantity": 1,
-   "weight": 4.0,
-   "cost": 500.0,
-   "availability": "rare",
-   "concealment": "large",
-   "equipped": false,
-   "source": {
-    "book": "Профессиональные инструменты",
-    "page": ""
-   },
-   "category": "thrown",
-   "skill": "athletics",
-   "accuracy": 0,
-   "damage": "0",
-   "damageTypes": [
-    "slashing"
-   ],
-   "reliability": {
-    "value": 5,
-    "max": 5
-   },
-   "hands": 2,
-   "range": "4 м",
-   "attackSpeed": 1,
-   "effects": [],
-   "enhancementSlots": 0,
-   "silverDamage": "",
-   "relic": false,
-   "mods": [],
-   "oil": {
-    "name": "",
-    "target": "",
-    "until": 0
-   },
-   "crossbowMods": []
-  },
-  "folder": [
-   "Метательное",
-   "Фургончик Родольфа"
   ],
   "flags": {
    "vedmak": {
@@ -7149,65 +7037,6 @@
   "folder": [
    "Дробящее",
    "Домашние правила"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
-  "_id": "hNuw1IB2QMASceBj",
-  "name": "Острые зубы (Боболак)",
-  "type": "weapon",
-  "img": "icons/creatures/abilities/mouth-teeth-long-red.webp",
-  "system": {
-   "description": "<p>- УЛУЧШЕННОЕ ПРОБИВАЮЩЕЕ БРОНЮ\n[Такое оружие игнорирует сопротивление урону любой брони и половину прочности брони, по которой оно попадает.]</p>",
-   "quantity": 1,
-   "weight": 0.0,
-   "cost": 0.0,
-   "availability": "everywhere",
-   "concealment": "tiny",
-   "equipped": false,
-   "source": {
-    "book": "Книга сказаний",
-    "page": ""
-   },
-   "category": "bludgeon",
-   "skill": "melee",
-   "accuracy": 0,
-   "damage": "2d6",
-   "damageTypes": [
-    "piercing"
-   ],
-   "reliability": {
-    "value": 99,
-    "max": 99
-   },
-   "hands": 1,
-   "range": "",
-   "attackSpeed": 1,
-   "effects": [
-    {
-     "key": "improvedAP",
-     "value": "",
-     "source": ""
-    }
-   ],
-   "enhancementSlots": 0,
-   "silverDamage": "",
-   "relic": false,
-   "mods": [],
-   "oil": {
-    "name": "",
-    "target": "",
-    "until": 0
-   },
-   "crossbowMods": []
-  },
-  "folder": [
-   "Дробящее",
-   "Туссент"
   ],
   "flags": {
    "vedmak": {
@@ -8025,5 +7854,509 @@
     "layer": "bs"
    }
   }
+ },
+ {
+  "name": "Скрытый вес",
+  "type": "weapon",
+  "img": "icons/weapons/fist/fist-brass-knuckles.webp",
+  "folder": [
+   "Прочее",
+   "Людей"
+  ],
+  "system": {
+   "description": "<p>Утяжелитель, зажатый в кулаке: незаметное (найти — Внимание СЛ 18), рукопашное. Чертёж: Изготовление СЛ 13, 45 минут, сталь, полотно и нитки; доплата 60 крон.</p>",
+   "quantity": 1,
+   "weight": 0.5,
+   "cost": 120,
+   "availability": "poor",
+   "concealment": "tiny",
+   "equipped": false,
+   "source": {
+    "book": "Игры в таверне",
+    "page": "4"
+   },
+   "category": "other",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "1d6",
+   "damageTypes": [
+    "bludgeoning"
+   ],
+   "reliability": {
+    "value": 5,
+    "max": 5
+   },
+   "hands": 1,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "concealable",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "hands",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "Y7G0x5f24OAFw8xn",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Крюк-кошка (протез)",
+  "type": "weapon",
+  "img": "icons/tools/fasteners/chain-hook-grey.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Атака крюком-кошкой из протеза: Точность −2, урон 2d6 (колющий), дальность 8 м; медленно перезаряжается (притянуть крюк — действие), захватное.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Лавка Клауса и Нострадамуса",
+    "page": "2"
+   },
+   "category": "natural",
+   "skill": "athletics",
+   "accuracy": -2,
+   "damage": "2d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 0,
+    "max": 0
+   },
+   "hands": 0,
+   "range": "8 м",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "slowReload",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "grappling",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "vB1t8U1DbsAtFnw8",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Укус высшего вампира",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Раса «Высший вампир», основная атака: 6d6, колющий, борьба, кровопускание 100%, пробивание брони. Перед атакой можно заявить Высасывание крови (+2d6 урона, столько же ПЗ или ОК вампиру).</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Третья редакция",
+    "page": "8"
+   },
+   "category": "natural",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "6d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "to3l2My1QDGX1LBs",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Когти высшего вампира",
+  "type": "weapon",
+  "img": "icons/creatures/claws/claw-hooked-barbed.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Раса «Высший вампир», дополнительная атака: 4d6+3, колюще-режущий, ближний бой, кровопускание 75%.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Третья редакция",
+    "page": "8"
+   },
+   "category": "natural",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "4d6+3",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "tCmWmWHu2gTgnhwO",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Укус (Истинная форма)",
+  "type": "weapon",
+  "img": "icons/creatures/abilities/mouth-teeth-rows-red.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Высший вампир в Истинной форме: 8d6, кровопускание 100%, улучшенное пробитие брони, высасывание крови без дополнительной проверки.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Третья редакция",
+    "page": "31"
+   },
+   "category": "natural",
+   "skill": "brawling",
+   "accuracy": 0,
+   "damage": "8d6",
+   "damageTypes": [
+    "piercing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "100%",
+     "source": ""
+    },
+    {
+     "key": "improvedAP",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "uJhp3CNasgyIFnGd",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Когти (Истинная форма)",
+  "type": "weapon",
+  "img": "icons/creatures/claws/claw-talons-yellow-red.webp",
+  "folder": [
+   "Естественное"
+  ],
+  "system": {
+   "description": "<p>Высший вампир в Истинной форме: 6d6+3, кровопускание 75%, пробитие брони. С 7-го уровня Превращения когти бьют двух целей одним действием.</p>",
+   "quantity": 1,
+   "weight": 0.0,
+   "cost": 0,
+   "availability": "everywhere",
+   "concealment": "none",
+   "equipped": true,
+   "source": {
+    "book": "Высший вампир. Третья редакция",
+    "page": "31"
+   },
+   "category": "natural",
+   "skill": "melee",
+   "accuracy": 0,
+   "damage": "6d6+3",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 0,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "bleeding",
+     "value": "75%",
+     "source": ""
+    },
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 0,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   },
+   "crossbowMods": []
+  },
+  "_id": "DcTDeteJpgrHwXim",
+  "flags": {
+   "vedmak": {
+    "extraLayer": true
+   }
+  }
+ },
+ {
+  "name": "Стальной меч школы Улитки",
+  "type": "weapon",
+  "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Улитки — по легенде, первые такие ковали из плотницких топоров.</p><p>Ведьмак Улитки получает его вместо стандартного ведьмачьего меча.</p><p><b>Сокрушительная сила:</b> удар нельзя парировать, урон, разрушающий броню или оружие, удваивается.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "quantity": 1,
+   "weight": 5,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "4"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": -6,
+   "damage": "8d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 20,
+    "max": 20
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "armorPiercing",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "meteorite",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "pUlzKEJ0007UOmIY"
+ },
+ {
+  "name": "Серебряный меч школы Улитки",
+  "type": "weapon",
+  "img": "icons/weapons/swords/greatsword-crossguard-silver.webp",
+  "system": {
+   "description": "<p>Меч ведьмачьей школы Улитки — по легенде, первые такие ковали из плотницких топоров.</p><p>Ведьмак Улитки получает его вместо стандартного ведьмачьего меча.</p><p><b>Сокрушительная сила:</b> удар нельзя парировать, урон, разрушающий броню или оружие, удваивается.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
+   "quantity": 1,
+   "weight": 3,
+   "cost": 0,
+   "availability": "unique",
+   "concealment": "none",
+   "equipped": false,
+   "source": {
+    "book": "Школа Улитки",
+    "page": "4"
+   },
+   "category": "sword",
+   "skill": "swordsmanship",
+   "accuracy": -6,
+   "damage": "5d6",
+   "damageTypes": [
+    "piercing",
+    "slashing"
+   ],
+   "reliability": {
+    "value": 15,
+    "max": 15
+   },
+   "hands": 2,
+   "range": "",
+   "attackSpeed": 1,
+   "effects": [
+    {
+     "key": "ablating",
+     "value": "",
+     "source": ""
+    },
+    {
+     "key": "stun",
+     "value": "-2",
+     "source": ""
+    }
+   ],
+   "enhancementSlots": 1,
+   "silverDamage": "3d6",
+   "relic": false,
+   "mods": [],
+   "oil": {
+    "name": "",
+    "target": "",
+    "until": 0
+   }
+  },
+  "folder": [
+   "Мечи",
+   "Ведьмачьих школ"
+  ],
+  "_id": "CBp4uRxmlZxKOuWx"
  }
 ]

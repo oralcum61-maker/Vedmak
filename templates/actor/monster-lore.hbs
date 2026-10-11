@@ -30,7 +30,7 @@
     {{#if loot.length}}
     <ul class="loot-list">
       {{#each loot as |l|}}
-      <li data-index="{{l.index}}">
+      <li data-index="{{l.index}}"{{#if l.taken}} class="taken"{{/if}}>
         {{#if @root.editAbilities}}
         <input type="text" name="system.loot.{{l.index}}.name" value="{{l.name}}" placeholder="Название">
         <input type="text" class="qty" name="system.loot.{{l.index}}.quantity" value="{{l.quantity}}" placeholder="1d6/2">
@@ -40,7 +40,14 @@
         <span class="loot-name">{{#if l.link}}{{{l.link}}}{{else}}{{l.name}}{{/if}}</span>
         <span class="dots-fill"></span>
         <b class="loot-qty">{{l.quantity}}</b>
-        {{#if l.coins}}<a class="loot-coins" data-action="lootCoins" data-tooltip="Бросить и положить в кошелёк своего персонажа (или выделенного токена)"><i class="fa-solid fa-coins"></i></a>{{/if}}
+        {{#if l.coins}}
+        {{#if l.taken}}
+        <span class="loot-coins disabled" data-tooltip="Монеты уже взяты"><i class="fa-solid fa-coins"></i></span>
+        {{#if @root.isGM}}<a class="loot-reset" data-action="lootReset" data-tooltip="Вернуть монеты в добычу">вернуть</a>{{/if}}
+        {{else}}
+        <a class="loot-coins" data-action="lootCoins" data-tooltip="Бросить и положить в кошелёк своего персонажа (или выделенного токена). Взять можно один раз"><i class="fa-solid fa-coins"></i></a>
+        {{/if}}
+        {{/if}}
         {{/if}}
       </li>
       {{/each}}
@@ -57,17 +64,26 @@
   </div>
 
   <div class="vd-panel editor-panel">
-    <h3>Народные поверья <label class="inline">СЛ Образования <input type="number" name="system.knowledge.commonDC" value="{{system.knowledge.commonDC}}"></label></h3>
+    <h3>Народные поверья{{#if owner}} <label class="inline">СЛ Образования <input type="number" name="system.knowledge.commonDC" value="{{system.knowledge.commonDC}}"></label>{{/if}}</h3>
     {{formInput systemFields.commonKnowledge value=system.commonKnowledge enriched=enrichedCommon toggled=true}}
   </div>
 
   <div class="vd-panel editor-panel">
-    <h3>Ведьмачьи знания <label class="inline">СЛ Монстрологии <input type="number" name="system.knowledge.witcherDC" value="{{system.knowledge.witcherDC}}"></label></h3>
+    <h3>Ведьмачьи знания{{#if owner}} <label class="inline">СЛ Монстрологии <input type="number" name="system.knowledge.witcherDC" value="{{system.knowledge.witcherDC}}"></label>{{/if}}</h3>
     {{formInput systemFields.witcherKnowledge value=system.witcherKnowledge enriched=enrichedWitcher toggled=true}}
   </div>
 
   <div class="vd-panel editor-panel">
+    <h3>Заметки для игроков</h3>
+    {{#if owner}}<p class="hint">Их видят все, кому виден лист, — и на коротком листе («Ограниченный»).</p>{{/if}}
+    {{formInput systemFields.playerNotes value=system.playerNotes enriched=enrichedPlayerNotes toggled=true}}
+  </div>
+
+  {{!-- Заметки ведущего и СЛ знаний — только владельцу (ведущему): наблюдатель-игрок их не видит --}}
+  {{#if owner}}
+  <div class="vd-panel editor-panel">
     <h3>Заметки ведущего</h3>
     {{formInput systemFields.notes value=system.notes enriched=enrichedNotes toggled=true}}
   </div>
+  {{/if}}
 </section>

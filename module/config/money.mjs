@@ -6,6 +6,8 @@
 // их курс домашний, как и вес монет. Ведущий правит названия, курсы, вес монеты и комиссию менялы в настройках —
 // меню «Валюты и обмен», значение лежит в настройке `currencies`.
 
+import { worldSetting, memoBySource } from "../util.mjs";
+
 /** Ключи валют в данных персонажа (`system.money.<ключ>`). Крона — первая и основная. */
 export const CURRENCY_KEYS = ["crowns", "orens", "florens", "ducats", "marks", "lintars", "bizants"];
 
@@ -23,10 +25,11 @@ export const DEFAULT_CURRENCIES = {
 /** Значение настройки по умолчанию: валюты и комиссия менялы в процентах. */
 export const DEFAULT_MONEY_SETTING = { fee: 0, list: DEFAULT_CURRENCIES };
 
-/** Настройка мира с подстановкой умолчаний (неверные числа не ломают расчёты). */
-export function moneySetting() {
-  let saved = {};
-  try { saved = game.settings.get("vedmak", "currencies") ?? {}; } catch { /* до регистрации настроек */ }
+/** Настройка мира с подстановкой умолчаний (неверные числа не ломают расчёты). Считается заново, только когда
+    настройку поменяли (worldSetting отдаёт тот же объект); результат общий — не менять. */
+export const moneySetting = () => normalizeMoney(worldSetting("currencies", null));
+const normalizeMoney = memoBySource(raw => {
+  const saved = raw ?? {};
   const list = {};
   for (const key of CURRENCY_KEYS) {
     const def = DEFAULT_CURRENCIES[key];
@@ -44,7 +47,7 @@ export function moneySetting() {
   }
   const fee = Number(saved.fee);
   return { fee: Number.isFinite(fee) ? Math.min(100, Math.max(0, fee)) : 0, list };
-}
+});
 
 /** Валюты списком в порядке ключей. */
 export const currencies = () => Object.values(moneySetting().list);
@@ -64,7 +67,7 @@ export function coinWeightKg(money) {
 
 /** Считаются ли монеты в нагрузку (настройка мира «Вес монет»). */
 export function coinWeightEnabled() {
-  try { return !!game.settings.get("vedmak", "coinWeight"); } catch { return false; }
+  return !!worldSetting("coinWeight", false);
 }
 
 /**

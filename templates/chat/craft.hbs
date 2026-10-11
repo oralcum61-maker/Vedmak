@@ -5,7 +5,7 @@
       {{#if recipeName}}<span class="card-sub">{{recipeName}}{{#if time}} · {{time}}{{/if}}</span>{{/if}}
     </div>
     {{#unless disassembled}}
-    <div class="card-value">
+    <div class="card-value">{{vedmakRing dice}}
       <b>{{total}}</b>
       <span class="cap">против {{dc}}</span>
     </div>
@@ -21,6 +21,7 @@
 
     {{#if surcharge}}<p class="note">Материалы куплены за {{surcharge}} крон.</p>{{/if}}
     {{#if created}}<p class="note"><b>Готово:</b> {{created}}.</p>{{/if}}
+    {{#each abilityLines}}<p class="note">{{this}}</p>{{/each}}
     {{#if consumedList}}<p class="note dim">Потрачено: {{consumedList}}.</p>{{/if}}
     {{#if returned}}<p class="note"><b>Возвращено:</b> {{returned}}.</p>{{/if}}
     {{#if recycle}}{{#unless returned}}<p class="note dim">Материалы вернуть не удалось.</p>{{/unless}}{{/if}}
@@ -29,7 +30,7 @@
   {{#if canRecycle}}
   <div class="card-buttons">
     <button type="button" data-vedmak="recycle" data-tooltip="Та же СЛ: при успехе вернётся половина материалов (для формулы — одна субстанция)">
-      <i class="fa-solid fa-recycle"></i> Переработать
+      Переработать
     </button>
   </div>
   {{/if}}

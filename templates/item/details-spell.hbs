@@ -18,7 +18,10 @@
       {{#if system.variableCost}}
       <label>Максимум Вын <input type="number" name="system.maxCost" value="{{system.maxCost}}" min="0"></label>
       {{else}}
-      <label>Затраты Вын <input type="number" name="system.staCost" value="{{system.staCost}}" min="0"></label>
+      <label>{{#if isVampire}}Затраты{{else}}Затраты Вын{{/if}} <input type="number" name="system.staCost" value="{{system.staCost}}" min="0"></label>
+      {{/if}}
+      {{#if isVampire}}
+      <label>Оплата <select name="system.resource">{{selectOptions resourceOptions selected=system.resource}}</select></label>
       {{/if}}
       <label>Поддержание <input type="number" name="system.maintainCost" value="{{system.maintainCost}}" min="0"></label>
       <label>Поддержание от вложенной <select name="system.maintainMode">{{selectOptions maintainModes selected=system.maintainMode}}</select></label>
@@ -28,7 +31,7 @@
       <label>Длительность <input type="text" name="system.duration" value="{{system.duration}}"></label>
       <label>Защита <select name="system.defense">{{selectOptions config.MAGIC_DEFENSES selected=system.defense}}</select></label>
     </div>
-    <p class="hint">Цель: {{targetingLabel}}. Проверка: Воля + {{skillLabel}}.</p>
+    <p class="hint">Цель: {{targetingLabel}}. Проверка: {{checkLabel}}.{{#if system.defenseText}} Защита по книге: {{system.defenseText}}.{{/if}}</p>
   </fieldset>
 
   {{#if (eq system.kind "ritual")}}
@@ -56,7 +59,7 @@
     <p class="hint">В формулах: <code>@sta</code> — вложенная Вын, <code>@margin</code> — на сколько проверка превысила защиту. Пример: <code>(@sta)d6</code>, <code>(min(@margin, 10))d6</code>.</p>
     <div class="vd-grid g3">
       <label>Урон <input type="text" name="system.automation.damage" value="{{system.automation.damage}}" placeholder="4d6"></label>
-      <label>Тип урона <select name="system.automation.damageType">{{selectOptions damageTypeOptions selected=system.automation.damageType}}</select></label>
+      <label>Тип урона <select name="system.automation.damageType">{{selectOptions damageTypeOptions selected=system.automation.damageType blank="Стихийный (по умолчанию)"}}</select></label>
       <label>Часть тела <select name="system.automation.location">{{selectOptions locationOptions selected=system.automation.location}}</select></label>
       <label>Урон Вын <input type="text" name="system.automation.staDamage" value="{{system.automation.staDamage}}" placeholder="4d6"></label>
       <label class="check"><input type="checkbox" name="system.automation.ignoreArmor" {{checked system.automation.ignoreArmor}}> Мимо брони</label>

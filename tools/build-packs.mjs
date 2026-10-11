@@ -39,14 +39,22 @@ const PACKS = [
   {
     name: "races",
     source: "packs-src/races.json",
-    folders: () => [],
+    folders: doc => (doc.folder ?? []).map(name => ({ name })),
     sort: (a, b) => a.name.localeCompare(b.name, "ru")
   },
   {
     name: "professions",
     source: "packs-src/professions.json",
-    folders: () => [],
+    folders: doc => (doc.folder ?? []).map(name => ({ name })),
     sort: (a, b) => a.name.localeCompare(b.name, "ru")
+  },
+  // Заготовки канонических персонажей (_tools/pregens: ростер и сборщик в тестовом Foundry, PLAN 4.149)
+  {
+    name: "pregens",
+    source: "packs-src/pregens.json",
+    documentName: "Actor",
+    folders: doc => (doc.folder ?? []).map(name => ({ name })),
+    sort: () => 0
   },
   // Из компендиума BS & Tobi (_tools/bs_*.py)
   {

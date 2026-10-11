@@ -2,6 +2,7 @@
 
 import { CURRENCY_KEYS, moneySetting, exchangeQuote, formatRate } from "../config/money.mjs";
 import { postCard } from "../util.mjs";
+import { asGM, registerGMHandler } from "../combat/common.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -37,7 +38,7 @@ export async function exchangeDialog(actor) {
   });
 
   const result = await DialogV2.wait({
-    window: { title: `Обмен: ${actor.name}`, icon: "fa-solid fa-scale-balanced" },
+    window: { title: `Обмен: ${actor.name}` },
     classes: ["vedmak", "vedmak-dialog"],
     position: { width: 460 },
     content,
@@ -62,8 +63,8 @@ export async function exchangeDialog(actor) {
       form.addEventListener("change", update);
       update();
     },
-    buttons: [{ action: "ok", label: "Обменять", icon: "fa-solid fa-scale-balanced", default: true, callback: (e, b) => read(b.form) },
-      { action: "cancel", label: "Отмена", icon: "fa-solid fa-xmark" }],
+    buttons: [{ action: "ok", label: "Обменять", default: true, callback: (e, b) => read(b.form) },
+      { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   if (!result || result === "cancel") return null;
@@ -82,7 +83,7 @@ export async function exchangeDialog(actor) {
     `<p>${amount} ${list[from].label.toLowerCase()} → <b>${q.get} ${list[to].label.toLowerCase()}</b>.</p>`
     + `<p class="note dim">Курс: 1 ${list[from].abbr} = ${formatRate(list[from].rate / list[to].rate)} ${list[to].abbr}`
     + `${q.feeCrowns ? ` · комиссия ${result.fee}% (${formatRate(q.feeCrowns)} кр.)` : ""}.</p>`,
-    { icon: "fa-solid fa-coins", subtitle: actor.name });
+    { subtitle: actor.name });
 }
 
 /** Валюта по названию строки добычи: «Орены (Темерия)», «Кроны», «Флорены (Нильфгаард)». */
@@ -99,11 +100,16 @@ export function currencyForName(name) {
 
 /**
  * Монеты из добычи: бросить количество и положить в кошелёк персонажа пользователя
- * (или выделенного токена-персонажа).
+ * (или выделенного токена-персонажа). Строка после броска помечается взятой — иначе монеты можно брать без конца.
+ * Отметку ставит ведущий по сокету: игрок чудовище обновить не может.
  */
 export async function lootCoins(monster, row) {
   const key = currencyForName(row?.name);
   if (!key) return null;
+  if (row.taken) return ui.notifications.info("Эти монеты уже взяты. Вернуть их в добычу может ведущий.");
+  const index = monster.system.loot.findIndex(l => l === row || (l.name === row.name && l.quantity === row.quantity && !l.uuid));
+  if (index < 0) return null;
+  if (!game.user.isGM && !game.users.activeGM) return ui.notifications.warn("Взять монеты можно, когда в игре есть ведущий: он отмечает, что добыча взята.");
   const token = canvas?.tokens?.controlled?.find(t => t.actor?.type === "character" && t.actor !== monster);
   const hero = token?.actor ?? game.user.character;
   if (!hero) return ui.notifications.warn("Выделите токен персонажа или назначьте себе персонажа — ему достанутся монеты.");
@@ -116,8 +122,28 @@ export async function lootCoins(monster, row) {
   }
   const n = Math.max(0, roll.total);
   const { list } = moneySetting();
+  // Отметка — до выдачи монет: если сокет не дошёл, монеты не выдаются, а не выдаются дважды
+  await asGM("lootTaken", { uuid: monster.uuid, index, name: row.name, taken: true });
   await hero.update({ [`system.money.${key}`]: (hero.system.money?.[key] ?? 0) + n });
   return postCard(hero, "Добыча",
     `<p>${monster.name}: <b>${n} ${list[key].label.toLowerCase()}</b> (${row.quantity}) → ${hero.name}.</p>`,
     { icon: "fa-solid fa-coins", rolls: [roll] });
 }
+
+/**
+ * Ведущий отмечает строку добычи взятой (или возвращает). Отметку «взято» может запросить любой, кому видно
+ * чудовище (Наблюдатель и выше): игрок обновить чужого актора сам не может. Вернуть строку — только ведущий.
+ */
+registerGMHandler("lootTaken", async ({ uuid, index, name, taken }, userId) => {
+  const user = game.users.get(userId);
+  const monster = await fromUuid(uuid);
+  if (!user || monster?.documentName !== "Actor" || monster.type !== "monster") return;
+  if (!monster.testUserPermission(user, "OBSERVER")) return;
+  if (!taken && !user.isGM) return;
+  const rows = foundry.utils.deepClone(monster.system.toObject().loot ?? []);
+  // Строки могли сместиться (удалили соседнюю): сверяем название
+  if (rows[index]?.name !== name) return;
+  if (!!rows[index].taken === !!taken) return;
+  rows[index].taken = !!taken;
+  await monster.update({ "system.loot": rows });
+});

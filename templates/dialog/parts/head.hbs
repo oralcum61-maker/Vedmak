@@ -1,15 +1,16 @@
 {{!-- Шапка окна проверки: что бросаем, из чего складывается основа. Контекст — объект head. --}}
 <header class="dlg-head">
-  {{#if img}}<img src="{{img}}" alt="">{{/if}}
+  {{#if img}}<span class="dlg-frame"><img src="{{img}}" alt=""></span>{{/if}}
   <div class="dlg-ident">
     <span class="dlg-title">{{title}}</span>
     {{#if subtitle}}<span class="dlg-sub">{{subtitle}}</span>{{/if}}
-    {{#if note}}<span class="dlg-sub{{#if noteWarn}} warn{{/if}}">{{note}}</span>{{/if}}
+    {{#if note}}<span class="dlg-sub dlg-note{{#if noteWarn}} warn{{/if}}">{{note}}</span>{{/if}}
   </div>
   {{#unless noBase}}
+  {{!-- Основа — медальон (холст design/11); число в <b> переписывает bindDialog --}}
   <div class="dlg-base" data-base="{{base}}">
+    {{> "systems/vedmak/templates/actor/parts/medal.hbs" value=base cls="md"}}
     <span class="cap">ОСНОВА</span>
-    <b>{{base}}</b>
     {{#if baseHint}}<span class="cap dim">{{baseHint}}</span>{{/if}}
   </div>
   {{/unless}}

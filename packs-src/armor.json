@@ -72,7 +72,7 @@
   "type": "armor",
   "img": "icons/equipment/head/hood-cloth-blue-white.webp",
   "system": {
-   "description": "",
+   "description": "<p>Капюшон укрепить легко — просто добавь вставки из кожи, кольчужного полотна и тому подобного. Такие капюшоны куда плотнее обычных, отчего их сложнее повредить оружием. Простенько и защищает.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 175,
@@ -140,7 +140,7 @@
   "type": "armor",
   "img": "icons/equipment/head/helm-rounded-reinforced-leather.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такие шлемы куда чаще встречаются на Скеллиге и в Нильфгаарде. На севере шлемы обычно либо полностью закрытые, либо просто конусом. Полумаска защищает лицо и глаза. Порой снизу ещё крепится кольчуга для защиты шеи.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 200,
@@ -208,7 +208,7 @@
   "type": "armor",
   "img": "icons/equipment/head/hood-chain-worn.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ищешь простую и крепкую броньку? В таком случае, приятель, тебе нужен кольчужный капюшон. И удар меча остановит, и от молота спасёт. Некоторые носят его как полноценную часть брони, другие же поверх ещё и шлем надевают. Полезная штука, как ни крути.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 250,
@@ -276,7 +276,7 @@
   "type": "armor",
   "img": "icons/equipment/head/helm-spangen-engraved-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>В дебрях нужен обзор получше, потому народ, в особенности эльфы, носит капюшоны из крепкой кожи и нескольких слоёв льна, и всё это прошито крепкими нитками. Такие капюшоны достаточно плотные, чтобы не пропустить режущий удар или болт, пущенный из небольшого ручного арбалета.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 250,
@@ -344,7 +344,7 @@
   "type": "armor",
   "img": "icons/equipment/head/helm-sallet-steel.webp",
   "system": {
-   "description": "",
+   "description": "<p>Темерские рыцари обычно носят арметы — стандартные рыцарские шлемы. Это полностью закрытый металлический шлем с острым «клювом» на забрале и узкой прорезью для обзора. Одна проблема: через эту прорезь ни черта не видно.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 475,
@@ -412,7 +412,7 @@
   "type": "armor",
   "img": "icons/equipment/head/greathelm-banded-steel.webp",
   "system": {
-   "description": "",
+   "description": "<p>Топфхельмы носит высший класс рыцарей. Это большие шлемы цилиндрической формы с широкими прорезями для глаз и отверстиями, через которые можно нормально дышать. Они очень крепкие и часто украшены плетёными кисточками, рогами или даже орлами с раскинутыми крыльями. Ужасно вычурно, но небесполезно.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 575,
@@ -480,7 +480,7 @@
   "type": "armor",
   "img": "icons/equipment/head/helm-spangen-horned.webp",
   "system": {
-   "description": "",
+   "description": "<p>Выходцам со Скеллиге нравятся украшения, особенно если, напялив их, они выглядят брутальнее. И их шлемы — тому подтверждение. Скеллигский шлем крепкий, с кольчужной бармицей, на лице полумаска и пластины на щеках... а по бокам часто рога крепятся. По ходу, самые крепкие островитяне бодают врагов этими рогами.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 700,
@@ -548,7 +548,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/hd-nilf-helmet.webp",
   "system": {
-   "description": "",
+   "description": "<p>Шлемаки чёрных созданы весьма интересным образом — они состоят из двух частей. Первая — шлем-салад, у которого спереди либо кусок вырезан, либо прорезь есть для глаз. Вторая часть — бувигер, или нашейник, выступающий вперёд и закрывающий шею, нос и рот. Всё это вместе даёт неплохую защиту.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 800,
@@ -616,7 +616,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl1-1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ну, по-хорошему, гамбезон — это поддоспешник для более тяжёлых доспехов, но многие бедняки используют его вместо брони. Против меча не поможет, зато спасёт от кинжала и тому подобного.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 100,
@@ -752,7 +752,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl2-2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Как и капюшон из того же материала, двуслойный гамбезон — неплохое сочетание цены и качества. Спасёт от удара дешёвого меча или от болта из ручного арбалета, да и весит не так уж много. Обычно я такой и ношу, когда путешествую или хожу по городу. И защищает, и не вызывает лишних вопросов.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 250,
@@ -820,7 +820,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Обычно наёмники носят бригантину до тех пор, пока не разживутся бронёй получше. Это простенький кожаный жилет с прикреплёнными к нему пластинами из толстой дублёной кожи. Сам-то я бригантину носил под Бренной и Содденом. И скажу, что в ней плохо: неудобна она, жестковата.</p>",
    "quantity": 1,
    "weight": 7,
    "cost": 300,
@@ -888,7 +888,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl2.webp",
   "system": {
-   "description": "",
+   "description": "<p>Как ни странно, реданские алебардщики много брони на себя не напяливают — берут простенький, длиной до колен гамбезон из кожи и ткани, кольчугу, горжет и наплечники. Полагаю, когда между тобой и противником алебарда, тяжёлая броня особо-то и не нужна. От клинка в случае чего спасёт, да и манёвренность примерно такая же, как в гамбезоне.</p>",
    "quantity": 1,
    "weight": 8.5,
    "cost": 400,
@@ -956,7 +956,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-lt-ab-lvl3-1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Мне однажды довелось примерить кожаную куртку из Лирии. Курва, по ощущениям я на себя напялил чёртовы латы. Лирийцы каким-то особым образом обрабатывают кожу, отчего она становится крепкой, как шкура василиска. Я позволил торговцу в себя из длинного лука выстрелить, так меня даже не поцарапало! Хотя, может, я просто слегка пьян был в тот день.</p>",
    "quantity": 1,
    "weight": 6.5,
    "cost": 525,
@@ -1024,7 +1024,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl2-1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такую броню пристало носить рыцарям да королям — крепкие стальные пластины, подогнанные по телу. Тяжеловата, порой в ней едва дышать можно, но много от чего защитит. Иногда выглядит просто и неброско, а иногда пафосно до ужаса.</p>",
    "quantity": 1,
    "weight": 14,
    "cost": 625,
@@ -1160,7 +1160,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl4.webp",
   "system": {
-   "description": "",
+   "description": "<p>Это такой чёрно-золотой доспех, крепкий, с высокими наплечниками и кучей деталей. Должен признать, сработан хорошо. От арбалетного болта на нём разве что царапинка останется.</p>",
    "quantity": 1,
    "weight": 12,
    "cost": 850,
@@ -1228,7 +1228,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-light1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Кавалеристы обычно не носят тонну брони, если только это не драгуны какие-нибудь. Вот эти плотные штаны только кожаными полосками укреплены, и всё.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 75,
@@ -1364,7 +1364,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-light4.webp",
   "system": {
-   "description": "",
+   "description": "<p>Двойная ткань — лучший выбор. Не столь раздутая, как средней руки стёганка, а зад твой прикроет.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 225,
@@ -1432,7 +1432,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-reinforced.webp",
   "system": {
-   "description": "",
+   "description": "<p>Честно скажу, разнашивать пару недель точно придётся. Но это не так важно, как тот факт, ' что дублёная кожа да стальные пластины и защищают, и не слишком сковывают движения.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 250,
@@ -1500,7 +1500,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-temerian.webp",
   "system": {
-   "description": "",
+   "description": "<p>Что гамбезон, что поножи — реданские алебардщики особо не изгаляются. Простые кожаные штаны, поножи и гульфик. Манёвренность ценой прочности.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 400,
@@ -1568,7 +1568,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-lyria.webp",
   "system": {
-   "description": "",
+   "description": "<p>Штаны из кожи лирийской работы. Грубоваты, не дышат, но ноги защищают. Правда, внимание к себе ты точно привлечёшь.</p>",
    "quantity": 1,
    "weight": 3.5,
    "cost": 525,
@@ -1636,7 +1636,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-heavy1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Поножи, сабатоны, набедренники — всё это защищает твои ноги. Большие пластины из обработанной стали спасут от мечей, булав и стрел, пущенных из длинного лука.</p>",
    "quantity": 1,
    "weight": 7.5,
    "cost": 625,
@@ -1772,7 +1772,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/lg-nilf.webp",
   "system": {
-   "description": "",
+   "description": "<p>Поножи у нилъфгаардской брони чуточку легче, чем верхняя часть доспеха. Обычно это сабатоны, собственно поножи и надеваемые под них штаны в клетку из плотной кожи и ткани.</p>",
    "quantity": 1,
    "weight": 6,
    "cost": 850,
@@ -1840,7 +1840,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/buckler-wooden-boss-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>Проще щита, чем обтянутый кожей кусок дерева, не найти. Такие щиты не очень-то популярны в наши дни — слишком хлипкие в сравнении с деревянными или стальными. Но зато дешёвые и лёгкие.</p>",
    "quantity": 1,
    "weight": 0.5,
    "cost": 50,
@@ -1978,7 +1978,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-steel-boss-red.webp",
   "system": {
-   "description": "",
+   "description": "<p>Ммм, старая добрая темерская работа! Каплевидный щит, пожалуй, встречается чаще всего. Темерский щит достаточно долго будет защищать тебя от мечей и стрел.</p>",
    "quantity": 1,
    "weight": 1.5,
    "cost": 225,
@@ -2047,7 +2047,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-wooden-antlers-blue.webp",
   "system": {
-   "description": "",
+   "description": "<p>В отличие от остального мира, выходцы со Скеллиге используют большие круглые щиты с умбоном по центру и рукоятью с обратной стороны. Думаю, благодаря такому больше манёвренность, поскольку щит не прикреплён круке.</p>",
    "quantity": 1,
    "weight": 2,
    "cost": 325,
@@ -2116,7 +2116,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-steel-gray.webp",
   "system": {
-   "description": "",
+   "description": "<p>Каэдвенский щит несильно отличается от темерского. Они, правда, на внешнюю сторону тратят чёрное железо. Каэдвенские щиты потяжелее, зато более прочные.</p>",
    "quantity": 1,
    "weight": 2.5,
    "cost": 400,
@@ -2185,7 +2185,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-steel-engraved-lance-rest.webp",
   "system": {
-   "description": "",
+   "description": "<p>Щит, полностью сделанный из стали, — вещица любопытная. Гудит, что твой колокол, если по нему шибануть, но куда крепче других щитов, да и двинуть в рыло им можно.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 400,
@@ -2254,7 +2254,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/Scutum-steel-worn.webp",
   "system": {
-   "description": "",
+   "description": "<p>Если тебе надо за настоящую стенку запрятаться от врага, то прячься за павезой. Павеза здоровенная — по плечо человеку и шириной с краснолюда. За такой можно присесть и просто переждать, пока тебя поливают дождём из стрел.</p>",
    "quantity": 1,
    "weight": 4,
    "cost": 500,
@@ -2323,7 +2323,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-steel-segmented-purple.webp",
   "system": {
-   "description": "",
+   "description": "<p>Неприятно, конечно, такое говорить, но это лучший щит для арбалетчиков и всех, кто работает с механизмами под вражеским огнём. По размерам нильфгаардская павеза не отличается от обычной, но у неё есть сзади подставка, чтобы щит сам стоял, пока ты оружие перезаряжаешь или работаешь.</p>",
    "quantity": 1,
    "weight": 5,
    "cost": 600,
@@ -2460,7 +2460,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl3.webp",
   "system": {
-   "description": "",
+   "description": "<p>Созданная гномами кольчужка вся чернёная и полностью тело закрывает — там и капюшон, и хауберг, и шоссы. Просто, красиво и носится без труда. Колечки небольшие, но крепкие, так что кольчужка ещё и лёгкая.</p>",
    "quantity": 1,
    "weight": 5,
    "cost": 975,
@@ -2529,7 +2529,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-md-ab-lvl1-1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Такие плащи хороши в дороге. Они и защищают неплохо. Так-то это просто кожа, но настолько хорошо обработанная особым краснолюдским способом, что она не только броню может заменить, но и не промокает.</p>",
    "quantity": 1,
    "weight": 5,
    "cost": 1400,
@@ -2736,7 +2736,7 @@
   "type": "armor",
   "img": "systems/vedmak/assets/fan/armor/c-hv-ab-lvl4-1.webp",
   "system": {
-   "description": "",
+   "description": "<p>Махакамская сталь — прочнее её в мире нет. И потому броня из этой стали всегда будет самой лучшей. Махакамские латы тяжелы, да — тёмная броня, покрытая позолотой и бронзой, угловатыми узорами и краснолюдскими рунами. Сам я такую никогда не носил, но разок вёз комплект лат из Махакама в Ангрен. Продал за несколько тысяч.</p>",
    "quantity": 1,
    "weight": 30,
    "cost": 3525,
@@ -2805,7 +2805,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/buckler-boss-iron-wood-brown.webp",
   "system": {
-   "description": "",
+   "description": "<p>То, что для людей баклер, для гнома — полноценный щит. Правда, сомневаюсь, что так эта странная штука на свет появилась. Щит этот сделан по той же технологии, что и прочие гномьи изделия, да и удар держит получше более крупных щитов.</p>",
    "quantity": 1,
    "weight": 1,
    "cost": 450,
@@ -2874,7 +2874,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-emossed-spiral-green.webp",
   "system": {
-   "description": "",
+   "description": "<p>Теперь таких почти не сыщешь. Партизанская война не особо способствует бою с мечом и щитом. Или же храбрые повстанцы не хотят показаться трусами. Однако эльфский щит прекрасен. По форме каплевидный, с золочением и украшениями в форме листьев.</p>",
    "quantity": 1,
    "weight": 3,
    "cost": 700,
@@ -2943,7 +2943,7 @@
   "type": "armor",
   "img": "icons/equipment/shield/heater-steel-worn.webp",
   "system": {
-   "description": "",
+   "description": "<p>Махакамские бойцы с такими штуковинами защищают свои города. По строению эти павезы аналогичны нильфгаардским, да только сделаны они краснолюдскими ремесленниками, чьё искусство ковки совершенствовалось много веков. Если бы мне пришлось выбирать, за каким щитом спрятаться, я бы выбрал махакамскую павезу.</p>",
    "quantity": 1,
    "weight": 5.5,
    "cost": 1050,
@@ -3863,80 +3863,6 @@
   }
  },
  {
-  "_id": "2pp7IvUGwjBQ8SbB",
-  "name": "Кожаные конские доспехи",
-  "type": "armor",
-  "img": "systems/vedmak/assets/fan/bs/misc/horse-saddle--9.webp",
-  "system": {
-   "description": "<p>ПБ: 10 для скакуна.</p>",
-   "quantity": 1,
-   "weight": 10.0,
-   "cost": 550.0,
-   "availability": "common",
-   "concealment": "none",
-   "equipped": false,
-   "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
-   },
-   "weightClass": "medium",
-   "isShield": false,
-   "sp": {
-    "head": {
-     "value": 10,
-     "max": 10
-    },
-    "torso": {
-     "value": 10,
-     "max": 10
-    },
-    "leftArm": {
-     "value": 10,
-     "max": 10
-    },
-    "rightArm": {
-     "value": 10,
-     "max": 10
-    },
-    "leftLeg": {
-     "value": 10,
-     "max": 10
-    },
-    "rightLeg": {
-     "value": 10,
-     "max": 10
-    }
-   },
-   "reliability": {
-    "value": 0,
-    "max": 0
-   },
-   "encumbrance": 0,
-   "enhancementSlots": 0,
-   "resistances": {
-    "slashing": false,
-    "piercing": false,
-    "bludgeoning": false,
-    "elemental": false,
-    "bleeding": false,
-    "poison": false
-   },
-   "effectsText": "",
-   "relic": false,
-   "mods": [],
-   "enhancements": []
-  },
-  "folder": [
-   "Комплекты",
-   "Людей"
-  ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
- },
- {
   "_id": "9BF8911hrIxFlFHY",
   "name": "Доспехи короля дикой охоты",
   "type": "armor",
@@ -4233,77 +4159,72 @@
   }
  },
  {
-  "_id": "oLxBbnbaYTKH7Oon",
-  "name": "Кольчужные конские доспехи",
+  "name": "Латы школы Улитки",
   "type": "armor",
-  "img": "systems/vedmak/assets/fan/bs/misc/horse-saddle--16.webp",
+  "img": "icons/equipment/chest/breastplate-layered-steel.webp",
   "system": {
-   "description": "<p>ПБ: 15 для скакуна.\n-1 к проверкам управлени.</p>",
+   "description": "<p>Тяжёлые латы ведьмачьей школы Улитки на всё тело — с них школа и получила прозвище: в них ведьмаки едва передвигались.</p><p>Ведьмак Улитки получает их вместо двуслойного гамбезона.</p><p>Неканоничное первоапрельское дополнение R. Talsorian Games (2022): авторы предупреждают, что оно не тестировалось в игре.</p>",
    "quantity": 1,
-   "weight": 25.0,
-   "cost": 1050.0,
-   "availability": "rare",
+   "weight": 42,
+   "cost": 0,
+   "availability": "unique",
    "concealment": "none",
    "equipped": false,
    "source": {
-    "book": "Компендиум BS & Tobi",
-    "page": ""
+    "book": "Школа Улитки",
+    "page": "4"
    },
    "weightClass": "heavy",
    "isShield": false,
    "sp": {
     "head": {
-     "value": 15,
-     "max": 15
+     "value": 30,
+     "max": 30
     },
     "torso": {
-     "value": 15,
-     "max": 15
-    },
-    "leftArm": {
-     "value": 15,
-     "max": 15
+     "value": 30,
+     "max": 30
     },
     "rightArm": {
-     "value": 15,
-     "max": 15
+     "value": 30,
+     "max": 30
     },
-    "leftLeg": {
-     "value": 15,
-     "max": 15
+    "leftArm": {
+     "value": 30,
+     "max": 30
     },
     "rightLeg": {
-     "value": 15,
-     "max": 15
+     "value": 30,
+     "max": 30
+    },
+    "leftLeg": {
+     "value": 30,
+     "max": 30
     }
    },
    "reliability": {
     "value": 0,
     "max": 0
    },
-   "encumbrance": 0,
-   "enhancementSlots": 0,
+   "encumbrance": 6,
+   "enhancementSlots": 1,
    "resistances": {
-    "slashing": false,
-    "piercing": false,
-    "bludgeoning": false,
-    "elemental": false,
+    "slashing": true,
+    "piercing": true,
+    "bludgeoning": true,
+    "elemental": true,
     "bleeding": false,
     "poison": false
    },
-   "effectsText": "",
+   "effectsText": "Сопротивление режущему, колющему, дробящему и стихийному урону.",
    "relic": false,
    "mods": [],
    "enhancements": []
   },
   "folder": [
    "Комплекты",
-   "Людей"
+   "Ведьмачьих школ"
   ],
-  "flags": {
-   "vedmak": {
-    "layer": "bs"
-   }
-  }
+  "_id": "C93RYjDkm90BWmKT"
  }
 ]

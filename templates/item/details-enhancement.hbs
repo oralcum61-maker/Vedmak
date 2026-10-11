@@ -4,7 +4,7 @@
     <div class="vd-grid g3">
       <label>Вид <select name="system.kind">{{selectOptions config.ENHANCEMENT_KINDS selected=system.kind}}</select></label>
       {{#if (eq system.kind "armor")}}<label>+ПБ <input type="number" name="system.sp" value="{{system.sp}}"></label>{{/if}}
-      {{#if (eq system.kind "glyph")}}<label>Стихия <select name="system.element">{{selectOptions config.MAGIC_ELEMENTS selected=system.element}}</select></label>{{/if}}
+      {{#if (eq system.kind "glyph")}}<label>Стихия <select name="system.element">{{selectOptions config.MAGIC_ELEMENTS selected=system.element blank="—"}}</select></label>{{/if}}
     </div>
     <label class="wide">Эффект <textarea name="system.effect" rows="3">{{system.effect}}</textarea></label>
     {{#if (eq system.kind "armor")}}

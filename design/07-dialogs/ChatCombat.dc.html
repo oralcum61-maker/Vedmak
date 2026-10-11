@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Чат: бой</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Forum&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08090b}
+:root{--tl:url(/_blob/25612d673b3b274e866a8cf86c3d2833);--tp:url(/_blob/0fd0aebb9a4144aaf6db521a13c98d51);--ts:url(/_blob/156614f725e3402f6b23739d306af141);--tb:url(/_blob/da2f0eb7e517d3ac1b3d1bda263bcf1e)}
+button{font-family:'IBM Plex Sans',system-ui,sans-serif;cursor:pointer}
+button:focus-visible{outline:2px solid #e2ddd0;outline-offset:2px}
+.mat{background-color:#141518;background-image:var(--tl),linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.35));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal}
+.msg{background-color:#1f2024;background-image:var(--tp),linear-gradient(180deg,rgba(255,245,225,.06),rgba(255,245,225,0) 30%,rgba(0,0,0,.24));background-size:512px 512px,100% 100%;background-blend-mode:overlay,normal;border:1px solid #060708;border-radius:2px;overflow:hidden}
+.mhead{display:flex;align-items:baseline;gap:8px;padding:6px 10px 5px;border-bottom:1px solid rgba(0,0,0,.6);box-shadow:0 1px 0 rgba(255,240,215,.045)}
+.who{flex-grow:1;font-family:Forum,serif;font-size:13.5px;color:#cfc8b8;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.when{font-size:10px;color:#6c685f}
+.chead{display:flex;align-items:center;gap:9px;padding:9px 9px 8px 10px}
+.frame{position:relative;flex-shrink:0;display:grid;place-items:center;background-color:#0b0c0e;border:1px solid #040405;box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.08);overflow:hidden}
+.frame::after{content:"";position:absolute;inset:3px;border:1px solid rgba(226,221,208,.13);pointer-events:none}
+.cname{font-family:Forum,serif;font-size:16.5px;line-height:1.08;color:#f1ece0;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.csub{font-size:10.5px;line-height:1.35;color:#8e897e}
+.stamp{flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background-color:#222328;background-image:repeating-linear-gradient(135deg,rgba(240,232,215,.075) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,245,225,.14),transparent 62%),linear-gradient(180deg,#2d2e33,#17181b);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal;border:1px solid #050607;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3),inset 0 0 0 4px rgba(240,232,215,.12),inset 0 1px 0 rgba(255,245,225,.22),0 3px 7px rgba(0,0,0,.65)}
+.stamp.blood{background-color:#3a1610;background-image:repeating-linear-gradient(135deg,rgba(255,200,180,.07) 0 1px,transparent 1px 4px),var(--ts),radial-gradient(circle at 32% 22%,rgba(255,200,180,.18),transparent 62%),linear-gradient(180deg,#5a2019,#2a0c06);background-size:auto,256px 256px,auto,auto;background-blend-mode:normal,overlay,normal,normal}
+.metal{background:linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.95))}
+.cap{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#a29d92;text-shadow:0 1px 0 rgba(0,0,0,.9);white-space:nowrap}
+.body{display:flex;flex-direction:column;gap:8px;padding:0 10px 10px}
+.rolls{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,240,215,.07)}
+.die{position:relative;width:28px;height:30px;flex-shrink:0}
+.die svg{position:absolute;inset:0}
+.die b{position:absolute;left:0;right:0;top:6px;text-align:center;font-family:Forum,serif;font-weight:400;font-size:13.5px;line-height:1}
+.sum{flex-grow:1;text-align:right;font-size:11px;color:#8e897e}
+.sum b{font-family:Forum,serif;font-weight:400;font-size:15px;color:#e2ddd0}
+.ribbon{display:flex;align-items:center;justify-content:center;gap:8px;height:28px;font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;clip-path:polygon(0 0,100% 0,calc(100% - 9px) 50%,100% 100%,0 100%,9px 50%)}
+.ribbon.ok{color:#e3eed6;background:linear-gradient(180deg,#4b5a3b,#252e1d);text-shadow:0 1px 0 rgba(0,0,0,.7)}
+.ribbon.bad{color:#ffe2d9;background:linear-gradient(180deg,#8f301f,#4a150c);text-shadow:0 1px 0 rgba(0,0,0,.6)}
+.tag{display:flex;align-items:center;gap:7px;padding:5px 8px;font-size:11px;line-height:1.35;border-radius:2px}
+.tag.crit{color:#ffd8a8;background:#2b1c10;border:1px solid #5a3a1a;box-shadow:inset 0 1px 0 rgba(255,220,170,.08)}
+.tag.crit svg{flex-shrink:0}
+.parts{display:flex;flex-direction:column}
+.parts summary,.fold{display:flex;align-items:center;gap:6px;padding:0;font-size:10.5px;color:#8e897e;background:transparent;border:0;text-align:left}
+.row{display:flex;align-items:baseline;gap:8px;padding:4px 0;font-size:11.5px;color:#a29d92;border-bottom:1px solid rgba(0,0,0,.55);box-shadow:0 1px 0 rgba(255,240,215,.04)}
+.row span{flex-grow:1}
+.row b{font-family:Forum,serif;font-weight:400;font-size:14.5px;color:#e2ddd0}
+.row.gold b{color:#ffcf8a}
+.row.total{border-bottom:0;box-shadow:none;color:#d6d0c2}
+.row.total b{font-size:17px;color:#f1ece0}
+.sect{display:flex;flex-direction:column;gap:6px;padding:8px 10px 10px;border-top:1px solid #050607;box-shadow:inset 0 1px 0 rgba(255,240,215,.06);background:rgba(0,0,0,.14)}
+.target{display:flex;align-items:center;gap:7px;font-family:Forum,serif;font-size:14px;color:#e2ddd0}
+.defs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+.dbtn{height:30px;padding:0;font-size:10.5px;color:#d6d0c2;background-color:#25262b;background-image:linear-gradient(180deg,rgba(255,245,225,.1),rgba(0,0,0,.28));border:1px solid #060708;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,245,225,.13),0 3px 6px -3px rgba(0,0,0,.85)}
+.dbtn:hover{background-color:#2d2f34;color:#f1ece0}
+.go{height:34px;width:100%;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#fff3ea;background-color:#b8432c;background-image:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 46%,rgba(0,0,0,.32));border:1px solid #2a0c06;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,215,195,.45),inset 0 -2px 0 rgba(0,0,0,.3),0 4px 10px -4px rgba(0,0,0,.9);text-shadow:0 -1px 0 rgba(60,10,0,.6)}
+.quiet{height:30px;padding:0 12px;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#a29d92;background:transparent;border:1px solid #2a2c31;border-radius:2px}
+.quiet:hover{color:#e2ddd0;border-color:#3a3c42}
+.report{display:flex;flex-direction:column;gap:3px;padding:7px 9px;font-size:11.5px;line-height:1.4;color:#c9c3b6;background:#0c0d0f;border:1px solid #040405;border-radius:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8)}
+.report b{font-family:Forum,serif;font-weight:400;font-size:14px;color:#f1ece0}
+.wound{display:flex;flex-direction:column;gap:4px;padding:8px 9px 9px;background:#1c1110;border:1px solid #3a120a;border-radius:2px;box-shadow:inset 0 2px 0 #b8432c}
+.wound b{font-family:Forum,serif;font-weight:400;font-size:15px;color:#ffd9cf}
+.wound span{font-size:11px;line-height:1.4;color:#c9a59b}
+</style>
+</helmet>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="d-ok" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f2ea"></stop><stop offset=".5" stop-color="#c9c3b6"></stop><stop offset="1" stop-color="#7d7972"></stop></linearGradient>
+    <linearGradient id="d-max" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe2a6"></stop><stop offset=".45" stop-color="#e09a4a"></stop><stop offset="1" stop-color="#8a3a1c"></stop></linearGradient>
+  </defs>
+</svg>
+<div class="mat" style="width: 320px; min-height: 1180px; box-sizing: border-box; padding: 10px; display: flex; flex-direction: column; gap: 10px; color: #e2ddd0; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 12px; font-variant-numeric: tabular-nums">
+
+  <article class="msg" style="box-shadow: inset 0 2px 0 #b8432c, 0 6px 14px -8px rgba(0,0,0,.9)">
+    <header class="mhead"><span class="who">Ведьмак-тест</span><span class="when">21:14</span></header>
+    <div class="chead">
+      <div class="frame" style="width: 40px; height: 40px"><img src="/_blob/72f43b8b013119963123dd04111aecb4" alt="" style="width: 34px; height: 34px; object-fit: contain"></div>
+      <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+        <span class="cname">Серебряный меч школы Волка</span>
+        <span class="csub">Сильная атака · в туловище</span>
+      </div>
+      <div class="stamp" style="width: 52px; height: 50px"><span class="metal" style="font-family: Forum, serif; font-size: 25px; line-height: 1">28</span><span class="cap">атака</span></div>
+    </div>
+    <div class="body">
+      <div class="rolls">
+        <span class="die"><svg width="28" height="30" viewBox="0 0 28 30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#d-max)" stroke="#3a1206" stroke-width="1.2"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(58,18,6,.55)" stroke-width=".8"></path></svg><b style="color: #2a0c06">10</b></span>
+        <span class="die"><svg width="28" height="30" viewBox="0 0 28 30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#d-ok)" stroke="#050607" stroke-width="1.2"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">4</b></span>
+        <span class="sum">основа <b>14</b> + <b>14</b></span>
+      </div>
+      <div class="tag crit"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7L12 16.3 6.1 20l1.7-6.7-5.3-4.4 6.9-.5z" fill="#e09a4a" stroke="#2a0c06" stroke-width="1.2"></path></svg><span>Критический успех: <b style="font-family: Forum, serif; font-weight: 400; font-size: 14px">+4</b> сверх десятки</span></div>
+    </div>
+    <div class="sect">
+      <span class="cap" style="color: #8e897e">Защищается</span>
+      <div class="target"><img src="/_blob/20afe6c06d54b4db8890436f71098284" alt="" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px #050607">Утопец</div>
+      <div class="defs">
+        <button type="button" class="dbtn">Уклон</button><button type="button" class="dbtn">Позиция</button><button type="button" class="dbtn">Блок</button><button type="button" class="dbtn">Парир.</button><button type="button" class="dbtn">СЛ</button>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: flex-end; padding: 0 10px 10px; background: rgba(0,0,0,.14)"><button type="button" class="quiet">Ещё атака</button></div>
+  </article>
+
+  <article class="msg" style="box-shadow: inset 0 2px 0 #b8432c, 0 6px 14px -8px rgba(0,0,0,.9)">
+    <header class="mhead"><span class="who">Утопец</span><span class="when">21:14</span></header>
+    <div class="chead">
+      <div class="frame" style="width: 40px; height: 40px"><img src="/_blob/20afe6c06d54b4db8890436f71098284" alt="" style="width: 40px; height: 40px; object-fit: cover"></div>
+      <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+        <span class="cname">Утопец: Уклонение</span>
+        <span class="csub">против «Серебряный меч…» · Ведьмак-тест 28</span>
+      </div>
+      <div class="stamp" style="width: 52px; height: 50px"><span class="metal" style="font-family: Forum, serif; font-size: 25px; line-height: 1">15</span><span class="cap">защита</span></div>
+    </div>
+    <div class="body">
+      <div class="rolls">
+        <span class="die"><svg width="28" height="30" viewBox="0 0 28 30"><path d="M14 1.5L26.5 12L14 28.5L1.5 12Z" fill="url(#d-ok)" stroke="#050607" stroke-width="1.2"></path><path d="M1.5 12L14 17L26.5 12M14 17V28.5" fill="none" stroke="rgba(5,6,7,.4)" stroke-width=".8"></path></svg><b style="color: #16171a">6</b></span>
+        <span class="sum">основа <b>9</b> + <b>6</b></span>
+      </div>
+      <div class="ribbon bad">Попадание · выше на 13</div>
+      <div class="tag crit" style="color: #ffd9cf; background: #2a1210; border-color: #5a2019"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.5l9.5 17H2.5Z" fill="#b8432c" stroke="#2a0c06" stroke-width="1.2" stroke-linejoin="round"></path><path d="M12 9v5M12 16.6v.6" stroke="#ffe2d9" stroke-width="1.8" stroke-linecap="round"></path></svg><span>Критическое ранение: <b style="font-family: Forum, serif; font-weight: 400; font-size: 14px">Тяжёлое</b></span></div>
+      <button type="button" class="go">Урон</button>
+    </div>
+  </article>
+
+  <article class="msg" style="box-shadow: inset 0 2px 0 #b8432c, 0 6px 14px -8px rgba(0,0,0,.9)">
+    <header class="mhead"><span class="who">Ведьмак-тест</span><span class="when">21:15</span></header>
+    <div class="chead">
+      <div class="frame" style="width: 40px; height: 40px"><img src="/_blob/20afe6c06d54b4db8890436f71098284" alt="" style="width: 40px; height: 40px; object-fit: cover"></div>
+      <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+        <span class="cname">Урон: Утопец</span>
+        <span class="csub">Серебряный меч · туловище · рубящий · серебро</span>
+      </div>
+      <div class="stamp blood" style="width: 52px; height: 50px"><span style="font-family: Forum, serif; font-size: 25px; line-height: 1; color: #ffe2d9; text-shadow: 0 1px 0 rgba(0,0,0,.9)">28</span><span class="cap" style="color: #e0b0a2">ПЗ</span></div>
+    </div>
+    <div class="body">
+      <div class="parts">
+        <button type="button" class="fold" aria-expanded="true"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 3.5l3 3 3-3"/></svg>из чего сложилось</button>
+        <div style="display: flex; flex-direction: column; margin-top: 4px">
+          <div class="row"><span>Бросок 3d6 · серебро</span><b>+11</b></div>
+          <div class="row"><span>Сильная атака</span><b>×2</b></div>
+          <div class="row"><span>ПБ туловища</span><b>−2</b></div>
+          <div class="row"><span>Часть тела</span><b>×1</b></div>
+          <div class="row gold"><span>Крит «Тяжёлое», мимо брони</span><b>+8</b></div>
+          <div class="row total"><span>Итог</span><b>28</b></div>
+        </div>
+      </div>
+      <div class="wound">
+        <span class="cap" style="color: #e0937f">Тяжёлое ранение · бросок 7</span>
+        <b>Рана в живот</b>
+        <span>−2 ко всем действиям, 4 урона кислотой за раунд.</span>
+      </div>
+      <span style="font-size: 10.5px; color: #6c685f">Броня пробита: −1 ПБ.</span>
+      <button type="button" class="go">Применить</button>
+    </div>
+  </article>
+
+  <article class="msg" style="box-shadow: inset 0 2px 0 #5a2019, 0 6px 14px -8px rgba(0,0,0,.9)">
+    <header class="mhead"><span class="who">Ведьмак-тест</span><span class="when">21:15 · применено</span></header>
+    <div class="chead">
+      <div class="frame" style="width: 40px; height: 40px"><img src="/_blob/20afe6c06d54b4db8890436f71098284" alt="" style="width: 40px; height: 40px; object-fit: cover; filter: grayscale(.5) brightness(.75)"></div>
+      <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+        <span class="cname">Урон: Утопец</span>
+        <span class="csub">Серебряный меч · туловище</span>
+      </div>
+      <div class="stamp" style="width: 52px; height: 50px"><span style="font-family: Forum, serif; font-size: 25px; line-height: 1; color: #8e897e; text-decoration: line-through; text-decoration-color: rgba(184,67,44,.8)">28</span><span class="cap">ПЗ</span></div>
+    </div>
+    <div class="body">
+      <div class="report">
+        <span>ПЗ: <b>30</b> → <b>2</b></span>
+        <span>Ранение «Рана в живот» — на листе.</span>
+      </div>
+      <div style="display: flex; justify-content: flex-end"><button type="button" class="quiet" style="color: #e2ddd0; border-color: #3a3c42">Испытание Уст</button></div>
+    </div>
+  </article>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":320,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

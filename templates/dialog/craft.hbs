@@ -42,6 +42,25 @@
       <b class="plate-value">{{vedmakSigned bonus}}</b>
     </label>
 
+    {{#if abilities.length}}
+    <div class="dlg-group craft-abilities">
+      <span class="dlg-label">СПОСОБНОСТИ <span class="dim">· проверка Рем + способность после успеха</span></span>
+      {{#each abilities}}
+      <label class="plate">
+        <input type="checkbox" name="ab.{{key}}" {{#if mod}}data-mod="{{mod}}"{{/if}}>
+        <span class="plate-text"><b>{{label}}</b><small>{{text}}</small></span>
+        <b class="plate-value">{{value}}</b>
+      </label>
+      {{#if targets}}
+      <div class="dlg-row distill-target">
+        <span class="cap">Дистилляция усиливает</span>
+        <select name="distillTarget">{{#each targets}}<option value="{{@key}}">{{this}}</option>{{/each}}</select>
+      </div>
+      {{/if}}
+      {{/each}}
+    </div>
+    {{/if}}
+
     {{#if r.surcharge}}
     <label class="plate" {{#unless canSurcharge}}data-tooltip="Не хватает крон"{{/unless}}>
       <input type="checkbox" name="surcharge" {{#unless canSurcharge}}disabled{{/unless}} {{#unless req.materialsOk}}{{#if canSurcharge}}checked{{/if}}{{/unless}}>

@@ -6,10 +6,10 @@
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
-import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS } from "../config/crafting.mjs";
+import { CRAFTING, CROSSBOW_MODS, crossbowModLimit, ENCHANT_SLOTS, MAX_ENHANCEMENT_SLOTS } from "../config/crafting.mjs";
 import { ARMOR_LOCATIONS } from "../config/items.mjs";
-import { performCheck } from "../dice/check.mjs";
-import { postCard } from "../util.mjs";
+import { dialogCheck } from "../dice/check.mjs";
+import { postCard, spendOne } from "../util.mjs";
 import { hasTool, findItemData, giveItem } from "./craft.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -21,13 +21,7 @@ async function craftingCheck(actor, dc, title) {
     { label: SKILLS.crafting.label, value: skill.total, always: true }
   ];
   if (!hasTool(actor, "craftsman")) parts.push({ label: "Без инструментов ремесленника", value: -4 });
-  return performCheck({ actor, title, parts, dc });
-}
-
-async function spendOne(item) {
-  const q = item.system.quantity ?? 1;
-  if (q <= 1) await item.delete();
-  else await item.update({ "system.quantity": q - 1 });
+  return dialogCheck({ actor, title, parts, dc });
 }
 
 /** Выбрать предметы галочками. */
@@ -39,13 +33,66 @@ async function pickTargets(title, candidates, { multiple = false, hint = "" } = 
   const content = `<div class="vedmak-roll-dialog">${multiple ? rows : `<div class="form-group"><label>Куда</label><select name="target">${rows}</select></div>`}
     ${hint ? `<p class="hint">${hint}</p>` : ""}</div>`;
   const result = await DialogV2.wait({
-    window: { title, icon: "fa-solid fa-gem" }, classes: ["vedmak", "vedmak-dialog"], content,
-    buttons: [{ action: "ok", label: "Далее", icon: "fa-solid fa-check", default: true,
+    window: { title }, classes: ["vedmak", "vedmak-dialog"], content,
+    buttons: [{ action: "ok", label: "Далее", default: true,
       callback: (e, b) => multiple ? candidates.filter((c, i) => b.form.elements[`t${i}`].checked) : [candidates[Number(b.form.elements.target.value)]] },
       { action: "cancel", label: "Отмена" }],
     rejectClose: false
   });
   return result && result !== "cancel" && result.length ? result : null;
+}
+
+/**
+ * Что усиление делает с оружием — по его данным: эффект оружия (зазубривание — кровотечение), «Серебряное (2d6)»,
+ * «+N к надёжности», «+N к точности». Прежде такие наборы шли веткой брони и тратились впустую.
+ */
+function weaponEnhancementPlan(s) {
+  const text = `${s.effect ?? ""} ${s.description ?? ""}`;
+  return {
+    effect: s.weaponEffect?.key ? { key: s.weaponEffect.key, value: s.weaponEffect.value ?? "" } : null,
+    silver: text.match(/Серебрян\S*\s*\(([^)]+)\)/i)?.[1]?.trim() ?? "",
+    reliability: Number(text.match(/\+\s*(\d+)\s*к\s*надёжности/i)?.[1] ?? 0),
+    accuracy: Number(text.match(/\+\s*(\d+)\s*к\s*точности/i)?.[1] ?? 0)
+  };
+}
+
+/** Усиление оружия: проверка Изготовления, правка оружия, набор расходуется. */
+async function attachWeaponEnhancement(actor, item) {
+  const plan = weaponEnhancementPlan(item.system);
+  if (!plan.effect && !plan.silver && !plan.reliability && !plan.accuracy) {
+    return ui.notifications.warn(`«${item.name}»: непонятно, что усиление делает с оружием — правьте оружие вручную.`);
+  }
+  const weapons = actor.itemTypes.weapon.filter(w => w.system.category !== "natural");
+  const chosen = await pickTargets(`${item.name}: на какое оружие`, weapons.map(w => ({
+    item: w, label: `${w.name}${w.system.equipped ? "" : " (не в руках)"}`
+  })), { hint: `Изготовление СЛ ${CRAFTING.attachDc}, полный ход, нужны инструменты ремесленника. Изменение постоянное.` });
+  if (!chosen) return null;
+  const weapon = chosen[0].item;
+  const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление оружия: ${item.name}`);
+  if (!check?.success) return null;
+
+  const src = weapon.system.toObject();
+  const update = {};
+  const lines = [];
+  if (plan.effect) {
+    const effects = foundry.utils.deepClone(src.effects ?? []);
+    const same = effects.find(e => e.key === plan.effect.key);
+    const pct = v => parseInt(String(v).replace(/[^\d]/g, ""), 10) || 0;
+    if (same) same.value = `${pct(same.value) + pct(plan.effect.value)}%`;
+    else effects.push({ ...plan.effect });
+    update["system.effects"] = effects;
+    lines.push(`Эффект «${CONFIG.VEDMAK.WEAPON_EFFECTS?.[plan.effect.key]?.label ?? plan.effect.key}»: ${same ? same.value : plan.effect.value}.`);
+  }
+  if (plan.silver) { update["system.silverDamage"] = plan.silver; lines.push(`Серебро: ${plan.silver}.`); }
+  if (plan.reliability) {
+    update["system.reliability.max"] = (src.reliability?.max ?? 0) + plan.reliability;
+    update["system.reliability.value"] = (src.reliability?.value ?? 0) + plan.reliability;
+    lines.push(`Надёжность +${plan.reliability}.`);
+  }
+  if (plan.accuracy) { update["system.accuracy"] = (src.accuracy ?? 0) + plan.accuracy; lines.push(`Точность +${plan.accuracy}.`); }
+  await weapon.update(update);
+  await spendOne(item);
+  return postCard(actor, `${item.name} → ${weapon.name}`, lines.map(l => `<p>${l}</p>`).join(""), { icon: "fa-solid fa-hammer" });
 }
 
 /** Прикрепить усиление, руну или глиф из инвентаря. */
@@ -55,6 +102,8 @@ export async function attachEnhancement(actor, item) {
   if (s.kind === "glyph") return attachGlyph(actor, item);
   if (s.kind === "crossbow") return attachCrossbowMod(actor, item);
   if (s.kind === "runeword" || s.kind === "glyphword") return attachEnchantment(actor, item);
+  if (s.kind === "weapon") return attachWeaponEnhancement(actor, item);
+  if (s.kind === "slot") return attachSlot(actor, item);
 
   const armors = actor.itemTypes.armor.filter(a => !a.system.isShield && a.system.covers.length);
   const candidates = armors.map(a => ({
@@ -68,7 +117,7 @@ export async function attachEnhancement(actor, item) {
   const noSlot = chosen.filter(c => c.item.system.freeSlots <= 0);
   if (noSlot.length) return ui.notifications.warn(`Нет свободных ячеек: ${noSlot.map(c => c.item.name).join(", ")}.`);
   const check = await craftingCheck(actor, CRAFTING.attachDc, `Усиление брони: ${item.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
 
   // Один набор — одно наложение (стр. 90): все выбранные части помнят общий номер набора
   // во флаге `armorKits`, чтобы снять набор целиком и вернуть ровно один. Вес набора — на первой части.
@@ -118,7 +167,7 @@ export async function detachEnhancement(actor, armor, index) {
     ? actor.itemTypes.armor.filter(a => armorKits(a).some(k => k.id === kitId))
     : [armor];
   const check = await craftingCheck(actor, CRAFTING.detachDc, `Снять усиление: ${e.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
   for (const piece of pieces) {
     const enhancements = piece.system.toObject().enhancements;
     const at = piece === armor ? index : enhancements.findIndex(x => x.kind === "armor" && x.name === e.name);
@@ -178,6 +227,37 @@ async function attachGlyph(actor, item) {
   await armor.update({ "system.enhancements": enhancements });
   await spendOne(item);
   return postCard(actor, "Глиф нанесён", `<p><b>${item.name}</b> → «${armor.name}»: ${item.system.effect}</p>`, { icon: "fa-solid fa-gem" });
+}
+
+/** Целы ли оружие или броня: полная надёжность, у брони — полная ПБ во всех частях. */
+function isIntact(item) {
+  const s = item.system;
+  if (item.type === "armor") {
+    const parts = Object.values(s.sp ?? {}).filter(p => (p?.max ?? 0) > 0);
+    if (parts.some(p => p.value < p.max)) return false;
+  }
+  return !(s.reliability?.max > 0) || s.reliability.value >= s.reliability.max;
+}
+
+/**
+ * Слот зачарования («Том Хаоса», стр. 115): пустая ячейка усиления оружию или броне. Работа и проверка Ремесла —
+ * при изготовлении по чертежу; здесь ячейка ставится на выбранный предмет. Предмет цел, ячеек меньше трёх.
+ */
+async function attachSlot(actor, item) {
+  const candidates = [...actor.itemTypes.weapon, ...actor.itemTypes.armor]
+    .filter(i => i.system.category !== "natural" && (i.system.enhancementSlots ?? 0) < MAX_ENHANCEMENT_SLOTS && isIntact(i));
+  if (!candidates.length) {
+    return ui.notifications.warn(`Нет оружия или брони, куда встанет ячейка: нужна полная надёжность (у брони — ПБ), и ячеек меньше ${MAX_ENHANCEMENT_SLOTS}.`);
+  }
+  const chosen = await pickTargets(`${item.name}: какому предмету`, candidates.map(i => ({
+    item: i, label: `${i.name} — ячеек: ${i.system.enhancementSlots ?? 0} из ${MAX_ENHANCEMENT_SLOTS}`
+  })), { hint: "В ячейку войдут только руны и глифы. Убрать ячейку нельзя." });
+  if (!chosen) return null;
+  const target = chosen[0].item;
+  const slots = (target.system.enhancementSlots ?? 0) + 1;
+  await target.update({ "system.enhancementSlots": slots });
+  await spendOne(item);
+  return postCard(actor, "Слот зачарования", `<p>«${target.name}»: новая ячейка усиления — теперь их ${slots}.</p>`, { icon: "fa-solid fa-gem" });
 }
 
 /** Поставить модификацию на арбалет: полный ход, без проверки (DLC «Фургончик Родольфа»). */
@@ -252,7 +332,7 @@ async function attachEnchantment(actor, item) {
   if (!chosen) return null;
   const target = chosen[0].item;
   const check = await craftingCheck(actor, s.size === "large" ? 21 : 15, `Зачарование: ${item.name}`);
-  if (!check.success) return null;
+  if (!check?.success) return null;
 
   if (weapon) {
     const effects = target.system.toObject().effects.filter(e => !e.source);

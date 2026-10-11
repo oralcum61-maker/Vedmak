@@ -1,0 +1,344 @@
+/* ============================== Худ «Медальон на цепи» (PLAN 4.163) ==============================
+   Макет — design/12-hud-medallion. Без сплошной плиты: медальон на подставке, цепь, гнёзда и кожаные бирки; списки
+   всплывают над медальоном. Материал — фактуры листа: кожа, кованое серебро, стальные пластины на заклёпках.
+   Анимации — module/fx/hud-motion.mjs (Web Animations, transform и opacity); здесь только постоянные: дыхание кольца
+   своего хода и ореол опасных камешков — у HTML-слоёв, не у элементов SVG. */
+
+#vedmak-combat-hud { --hm-ink: #e2ddd0; --hm-silver: #f1ece0; --hm-ash: #a8a296; --hm-dim: #7a766d; --hm-blood: #b8432c; --hm-blood-lite: #e0937f;
+  --hm-sta: #8aa86a; --hm-violet: #8b78c9; --hm-violet-lite: #b5a6e6; --hm-brass: #c9a352; --hm-brass-lite: #f0d68f;
+  --hm-metal: linear-gradient(180deg, #fdf9ef 0%, #dcd6c8 44%, #9b958a 56%, #ebe6d9 100%);
+  color: var(--hm-ink); font: 400 13px/1.4 var(--vd-font-body); font-variant-numeric: tabular-nums; }
+#vedmak-combat-hud [hidden] { display: none !important; }
+#vedmak-combat-hud a { color: inherit; text-decoration: none; cursor: var(--cursor-pointer, pointer); }
+#vedmak-combat-hud a:focus-visible, #vedmak-combat-hud input:focus-visible { outline: 1px solid var(--hm-silver); outline-offset: 2px; }
+.hm { position: relative; pointer-events: none; }
+.hm-row, .hm-pop { pointer-events: auto; }
+
+/* ─── Раскладка: крыло · медальон · крыло. Колонки крыльев равны (1fr при ширине по содержимому — обе по
+   большему крылу), поэтому медальон всегда в центре худа, а худ — в центре экрана (vedmak.css) ─── */
+.hm-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: max-content; }
+.hm-wing { position: relative; display: flex; align-items: center; gap: 12px; }
+.hm-wing.l { justify-self: end; padding-right: 2px; } .hm-wing.r { justify-self: start; padding-left: 2px; }
+.hm-wing:empty { display: none; }
+/* ─── Цепь: кованые звенья, плоское и ребром — у каждого крыла своя, от крайней бирки до медальона ─── */
+.hm-wing::before { content: ""; position: absolute; top: 105px; height: 14px; margin-top: -7px; z-index: -1; pointer-events: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='14'><defs><linearGradient id='m' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23efe9da'/><stop offset='.42' stop-color='%23aaa395'/><stop offset='.58' stop-color='%23464339'/><stop offset='1' stop-color='%23968f82'/></linearGradient></defs><ellipse cx='8' cy='7' rx='7' ry='4.6' fill='none' stroke='%23060708' stroke-width='3.8'/><ellipse cx='8' cy='7' rx='7' ry='4.6' fill='none' stroke='url(%23m)' stroke-width='2.2'/><rect x='13.2' y='5.3' width='12.6' height='3.4' rx='1.7' fill='url(%23m)' stroke='%23060708' stroke-width='.9'/></svg>") repeat-x left center / 26px 14px; }
+.hm-wing.l::before { left: 14px; right: -30px; } .hm-wing.r::before { left: -30px; right: 14px; }
+.hm-wing { height: 210px; }
+.hm.collapsed .hm-wing::before { display: none; }
+
+/* ─── Ярлыки: кожаные бирки со строчкой, пришпилены к цепи заклёпкой; качаются при наведении ─── */
+.hm-chip { position: relative; flex: none; font: 600 10px/1 var(--vd-font-body); letter-spacing: .2em; text-transform: uppercase; color: #cfc6b4; white-space: nowrap;
+  padding: 9px 12px 9px 22px; border-radius: 4px 9px 9px 4px; transform-origin: 9px 50%;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .9), 0 1px 0 rgba(255, 230, 200, .06);
+  background: radial-gradient(120% 90% at 40% 0%, rgba(255, 225, 190, .10), transparent 60%), url("../assets/textures/leather.webp") center / 140px, #2b2420;
+  background-blend-mode: normal, overlay, normal;
+  box-shadow: inset 0 1px 0 rgba(255, 230, 200, .12), inset 0 -2px 3px rgba(0, 0, 0, .55), 0 0 0 1px #070605, 0 4px 9px rgba(0, 0, 0, .6); }
+.hm-chip::before { content: ""; position: absolute; inset: 3px 3px 3px 15px; border: 1px dashed rgba(214, 190, 150, .32); border-radius: 2px 7px 7px 2px; pointer-events: none; }
+.hm-chip::after { content: ""; position: absolute; left: 6px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6f1e4, #a29b8d 45%, #3b3832 80%); box-shadow: 0 1px 1px rgba(0, 0, 0, .9), 0 0 0 1px #0b0a09; }
+.hm-chip sup { font-size: 8.5px; letter-spacing: 0; color: #9c927f; margin-left: 2px; }
+.hm-chip:hover, .hm-chip.on { color: var(--hm-silver); }
+.hm-chip.on::before { border: 1px solid rgba(224, 147, 127, .7); }
+.hm-chip.mag.on::before { border-color: rgba(181, 166, 230, .7); }
+.hm-chip:not(.on):hover { animation: hm-swing .75s ease-out; }
+@keyframes hm-swing { 20% { transform: rotate(-3.5deg); } 45% { transform: rotate(2deg); } 70% { transform: rotate(-.8deg); } 100% { transform: none; } }
+
+/* ─── Гнёзда: кованый обод с четырьмя заклёпками, утопленный колодец; клеймо — основа или цена ─── */
+.hm-sock { position: relative; flex: none; width: 64px; height: 64px; border-radius: 50%;
+  background: conic-gradient(from 210deg, #f3eee2, #6f6a60 12%, #d8d1c2 25%, #47443d 38%, #e9e3d5 52%, #6a655c 66%, #cdc6b6 80%, #514d45 90%, #f3eee2);
+  box-shadow: 0 0 0 1px #060708, inset 0 0 0 1px rgba(0, 0, 0, .5), 0 6px 12px rgba(0, 0, 0, .6); }
+/* Середина выемки светлее (под иконкой): тёмные клинки (Волк, Лунный клинок) иначе сливались с ней */
+.hm-sock::before { content: ""; position: absolute; inset: 5px; border-radius: 50%;
+  background: url("../assets/textures/scratches.webp") center / 90px, radial-gradient(circle at 50% 42%, #5e6169, #2b2c31 48%, #0d0e10 78%); background-blend-mode: overlay, normal;
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, .95), inset 0 0 0 1px #050506, 0 1px 0 rgba(255, 245, 225, .25); }
+.hm-sock::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 50% 2.6px, #fbf7ec 0, #8e887c 1.6px, #2a2824 2.4px, transparent 2.9px),
+    radial-gradient(circle at 50% calc(100% - 2.6px), #fbf7ec 0, #8e887c 1.6px, #2a2824 2.4px, transparent 2.9px),
+    radial-gradient(circle at 2.6px 50%, #fbf7ec 0, #8e887c 1.6px, #2a2824 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 2.6px) 50%, #fbf7ec 0, #8e887c 1.6px, #2a2824 2.4px, transparent 2.9px); }
+.hm-sock img { position: absolute; inset: 10px; z-index: 1; width: 44px; height: 44px; border: 0; border-radius: 50%; object-fit: contain;
+  /* Тонкий светлый ореол по контуру — силуэт читается и у тёмной иконки; тень — как была */
+  filter: drop-shadow(0 0 1.4px rgba(248, 240, 222, .85)) drop-shadow(0 2px 2px rgba(0, 0, 0, .8)); transition: transform .22s cubic-bezier(.2, .8, .2, 1.3); }
+.hm-sock:hover img { transform: rotate(-8deg) scale(1.06); }
+.hm-sock:active img { transform: rotate(-30deg) scale(1.12); transition-duration: .08s; }
+.hm-sock.spell::before { background: url("../assets/textures/scratches.webp") center / 90px, radial-gradient(circle at 50% 30%, #2d2747, #0e0c18 72%); background-blend-mode: overlay, normal; }
+.hm-sock.spell img { inset: 14px; width: 36px; height: 36px; border-radius: 4px; box-shadow: 0 0 0 1px #060708, 0 0 8px rgba(139, 120, 201, .6); }
+.hm-sock b { position: absolute; left: 50%; bottom: -10px; z-index: 2; transform: translateX(-50%); padding: 3px 8px 2px; border-radius: 2px;
+  font: 400 16px/1 var(--vd-font-head); background: url("../assets/textures/baked/btn-steel.webp") center / 128px, #26272b;
+  box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .16), inset 0 -1px 0 rgba(0, 0, 0, .6), 0 3px 5px rgba(0, 0, 0, .6); }
+.hm-sock b span { color: #f6f1e5; text-shadow: 0 1px 0 #000; }
+.hm-sock.spell b span { color: #ddd4fb; }
+.hm-sock:hover::before { box-shadow: inset 0 3px 7px rgba(0, 0, 0, .95), inset 0 0 0 1px var(--hm-blood), inset 0 0 12px rgba(184, 67, 44, .45); }
+.hm-sock.spell:hover::before { box-shadow: inset 0 3px 7px rgba(0, 0, 0, .95), inset 0 0 0 1px var(--hm-violet), inset 0 0 12px rgba(139, 120, 201, .5); }
+.hm-sock.empty::before { background: radial-gradient(circle at 50% 30%, #1a1b1e, #0b0c0e 72%); }
+.hm-sock .hm-sflash { position: absolute; inset: 0; z-index: 3; border-radius: 50%; pointer-events: none; opacity: 0; }
+.hm-dragging .hm-sock::before, .hm-sock.drop::before { box-shadow: inset 0 3px 7px rgba(0, 0, 0, .95), inset 0 0 0 2px var(--hm-brass), 0 0 12px rgba(201, 163, 82, .5); }
+.hm-more { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; font: 400 12px/1 var(--vd-font-head); color: var(--hm-silver);
+  text-shadow: 0 1px 0 #000; background: radial-gradient(circle at 50% 35%, #2a2b30, #0e0f11 75%);
+  box-shadow: 0 0 0 2px #8e887c, 0 0 0 3px #060708, inset 0 2px 4px rgba(0, 0, 0, .9), 0 4px 8px rgba(0, 0, 0, .6); }
+.hm-more.on, .hm-more:hover { box-shadow: 0 0 0 2px #e2dbcc, 0 0 0 3px #060708, inset 0 2px 4px rgba(0, 0, 0, .9), 0 4px 8px rgba(0, 0, 0, .6); }
+.hm-unfold { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; margin-left: -30px; font: 400 18px/1 var(--vd-font-head); color: var(--hm-silver);
+  background: #1a1b1e; box-shadow: 0 0 0 1px #8e887c, 0 0 0 2px #060708; }
+
+/* ─── Медальон: неподвижный рисунок, слой дуг и HTML-слои сверху ─── */
+.hm-medal { position: relative; flex: none; width: 240px; height: 210px; margin: 0 -18px; contain: layout style; }
+.hm-medal svg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.hm-arcs { will-change: transform; }
+.hm-face { position: absolute; left: 73px; top: 58px; width: 94px; height: 94px; border-radius: 50%; cursor: var(--cursor-pointer, pointer); }
+.hm-flash, .hm-heal { position: absolute; left: 73.5px; top: 58.5px; width: 93px; height: 93px; border-radius: 50%; opacity: 0; pointer-events: none; }
+.hm-flash { background: #b8432c; } .hm-heal { background: #e8dcc0; }
+.hm-burst { position: absolute; left: 58px; top: 43px; width: 124px; height: 124px; border-radius: 50%; border: 3px solid var(--hm-violet-lite); opacity: 0; pointer-events: none; }
+/* Свой ход: латунное кольцо дышит (только opacity — на видеокарте) */
+.hm-ring { position: absolute; left: 45px; top: 30px; width: 150px; height: 150px; border-radius: 50%; pointer-events: none; opacity: 0;
+  border: 2px solid #e8c56f; box-shadow: 0 0 9px rgba(201, 163, 82, .8), inset 0 0 6px rgba(201, 163, 82, .45); }
+.hm.turn .hm-ring { opacity: 1; animation: hm-breathe 2.6s ease-in-out .6s infinite; }
+@keyframes hm-breathe { 50% { opacity: .5; } }
+/* Числа на крыльях подставки */
+.hm-num { position: absolute; top: 151px; width: 64px; height: 38px; margin-left: -32px; display: flex; flex-direction: column; align-items: center; pointer-events: none; line-height: 1;
+  contain: strict; overflow: visible; }
+.hm-num b { position: relative; }
+.hm-num.hp { left: 39px; } .hm-num.sta { left: 201px; }
+.hm-num i { font: 600 8px/1 var(--vd-font-body); font-style: normal; letter-spacing: .26em; text-transform: uppercase; color: #8a857a; margin-bottom: 3px; }
+.hm-num b { font: 400 25px/1 var(--vd-font-head); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1.5px 0 rgba(0, 0, 0, .95)); }
+.hm-num s { position: absolute; left: calc(50% + 15px); top: 23px; text-decoration: none; font: 400 12px/1 var(--vd-font-head); color: #8a857a; }
+.hm-num.hp b { background-image: var(--hm-metal); }
+.hm-num.hp.hurt b { background-image: linear-gradient(180deg, #ffe1d8 0%, #e79a86 44%, #9a4a38 56%, #f3b9aa 100%); }
+.hm-num.hp.bad b { background-image: linear-gradient(180deg, #ffd0c4, #c0503a 50%, #6e2416 58%, #e0735a); }
+.hm-num.sta b { background-image: linear-gradient(180deg, #eef5e2 0%, #b4c79c 44%, #5f7448 56%, #cfe0b8 100%); }
+/* Монеты Удачи в нижнем зазоре кольца */
+.hm-coins { position: absolute; left: 120px; top: 162px; width: 0; height: 0; }
+.hm-coin { position: absolute; left: calc(var(--x, 0px) - 4.5px); top: -4.5px; width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #f8e8b4 0, #c9a352 55%, #6d5020 100%); box-shadow: 0 0 0 .9px #4a3810, inset 0 0 0 2.2px rgba(255, 240, 190, .25); }
+.hm-coin.spent { background: #101113; box-shadow: 0 0 0 .8px #3b3e45; }
+.hm-coins em { position: absolute; left: 7px; top: -7px; font: 400 13px/1 var(--vd-font-head); font-style: normal; color: var(--hm-brass-lite); text-shadow: 0 1px 0 #000; }
+.hm-coins .hm-coin:only-of-type { left: -4.5px; }
+/* Камешки: эмаль в серебряной оправе на краю обода */
+.hm-stone { position: absolute; z-index: 2; width: 23px; height: 23px; transform: translate(-50%, -50%); border-radius: 50%;
+  background: linear-gradient(135deg, #f5f0e4, #8e887c 28%, #e2dbcc 48%, #4a463f 70%, #c7c0b0); box-shadow: 0 0 0 1px #060708, 0 2px 4px rgba(0, 0, 0, .6); }
+.hm-stone::before { content: ""; position: absolute; inset: 2.6px; border-radius: 50%; box-shadow: 0 0 0 .8px #060708; background: radial-gradient(circle at 42% 36%, var(--e1), var(--e2) 70%); }
+.hm-stone img { position: absolute; inset: 5px; width: 13px; height: 13px; border: 0; border-radius: 50%; object-fit: cover; }
+.hm-stone em { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%); font: 400 11px/1 var(--vd-font-head); font-style: normal; color: var(--hm-silver); text-shadow: 0 1px 0 #000; }
+.hm-stone.k-bad { --e1: #c2442c; --e2: #3d0e07; } .hm-stone.k-good { --e1: #7fa25c; --e2: #1d2a12; }
+.hm-stone.k-arcane { --e1: #6a5bb0; --e2: #1a1536; } .hm-stone.k-steel { --e1: #8d9aa8; --e2: #1d2329; }
+.hm-stone.k-arcane img { mix-blend-mode: screen; border-radius: 2px; }
+.hm-stone.k-more { --e1: #3b3e45; --e2: #121315; display: grid; place-items: center; font: 400 11px/1 var(--vd-font-head); color: var(--hm-silver); }
+.hm-stone.k-more::before { z-index: -1; }
+/* Опасное мерцает ореолом (opacity псевдоэлемента) */
+.hm-stone.k-bad::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(224, 115, 90, .9), 0 0 8px rgba(224, 90, 60, .6);
+  opacity: 0; animation: hm-aura 1.8s ease-in-out infinite; pointer-events: none; }
+@keyframes hm-aura { 50% { opacity: .7; } }
+.hm-stone .hm-x { position: absolute; right: -7px; top: -7px; width: 13px; height: 13px; display: none; place-items: center; border-radius: 50%;
+  font: 600 10px/1 var(--vd-font-body); color: #fff; background: #5a1a10; box-shadow: 0 0 0 1px #060708; }
+.hm-stone:hover .hm-x { display: grid; }
+/* «Конец хода» — латунная табличка на двух заклёпках */
+.hm-endturn { position: absolute; left: 50%; top: 6px; z-index: 3; transform: translateX(-50%); white-space: nowrap; overflow: hidden;
+  font: 600 10px/1 var(--vd-font-body); letter-spacing: .22em; text-transform: uppercase; color: #2b1d07 !important; padding: 8px 20px; border-radius: 2px;
+  text-shadow: 0 1px 0 rgba(255, 236, 180, .45);
+  background: url("../assets/textures/steel-brushed.webp") center / 160px, linear-gradient(180deg, #f2dc98 0%, #cfa955 45%, #8f6c2c 60%, #d8b768 100%);
+  background-blend-mode: overlay, normal;
+  box-shadow: 0 0 0 1px #3a2a0c, inset 0 1px 0 rgba(255, 246, 210, .6), inset 0 -1px 0 rgba(0, 0, 0, .35), 0 4px 10px rgba(0, 0, 0, .6), 0 0 22px rgba(201, 163, 82, .35); }
+.hm-endturn::before, .hm-endturn::after { content: ""; position: absolute; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3c9, #a07a2e 55%, #3a2a0c); }
+.hm-endturn::before { left: 6px; } .hm-endturn::after { right: 6px; }
+.hm-endturn:hover { filter: brightness(1.08); }
+.hm-sheen { position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; opacity: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 250, 230, .8), transparent); transform: skewX(-18deg); }
+/* Всплывающие надписи */
+.hm-float { position: absolute; left: 50%; top: 34%; z-index: 7; pointer-events: none; white-space: nowrap; contain: layout style;
+  font: 400 28px/1 var(--vd-font-head); text-shadow: 0 2px 0 #000, 0 0 12px rgba(0, 0, 0, .85); }
+.hm-float.dmg { color: #f39a83; } .hm-float.heal { color: #f4ecd6; }
+.hm-float.sta { color: #c3dca4; font-size: 20px; } .hm-float.luck { color: var(--hm-brass-lite); font-size: 18px; }
+.hm-float.l { left: 22%; } .hm-float.r { left: 78%; }
+
+/* ─── Списки над медальоном: стальная пластина на заклёпках ─── */
+.hm-pop { position: absolute; bottom: calc(100% + 8px); z-index: 10; max-height: calc(100vh - 290px); overflow-y: auto; scrollbar-width: thin;
+  padding: 12px 12px 9px; border-radius: 3px; text-align: left; text-transform: none; letter-spacing: normal;
+  background: radial-gradient(circle at 7px 7px, #e9e3d5 0, #7c766b 1.4px, #1b1a17 2.2px, transparent 2.7px) no-repeat,
+    radial-gradient(circle at calc(100% - 7px) 7px, #e9e3d5 0, #7c766b 1.4px, #1b1a17 2.2px, transparent 2.7px) no-repeat,
+    linear-gradient(180deg, rgba(255, 240, 215, .05), transparent 30%, rgba(0, 0, 0, .3)),
+    url("../assets/textures/baked/plate.webp") center / 384px, #1f2024;
+  box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .11), inset 0 -1px 0 rgba(0, 0, 0, .6), 0 18px 34px rgba(0, 0, 0, .7); }
+.hm-pop.side-l { left: 0; } .hm-pop.side-r { right: 0; }
+.hm-pop h4 { position: relative; display: flex; margin: 0 4px 8px; padding: 0 0 7px; border: 0; font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .24em; text-transform: uppercase;
+  color: var(--hm-blood-lite); text-shadow: 0 1px 0 rgba(0, 0, 0, .95); }
+.hm-pop h4::before { content: "◆"; margin-right: 6px; color: var(--hm-blood); font-size: 8px; }
+.hm-pop h4::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, rgba(0, 0, 0, .85), rgba(0, 0, 0, .1)); box-shadow: 0 1px 0 rgba(255, 240, 215, .06); }
+.hm-pop h4 i { margin-left: auto; font-style: normal; color: var(--hm-dim); letter-spacing: .1em; }
+.hm-pop.magic h4 { color: var(--hm-violet-lite); } .hm-pop.magic h4::before { color: var(--hm-violet); }
+.hm-cap { display: flex; align-items: center; gap: 7px; margin: 8px 2px 6px; font: 600 9px/1 var(--vd-font-body); letter-spacing: .22em; text-transform: uppercase; color: var(--hm-ash); text-shadow: 0 1px 0 #000; }
+.hm-cap:first-child { margin-top: 0; }
+.hm-cap::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(0, 0, 0, .8), transparent); box-shadow: 0 1px 0 rgba(255, 240, 215, .04); }
+.hm-foot { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 9px 2px 0; padding-top: 7px;
+  font: 600 8.5px/1.2 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-foot::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgba(0, 0, 0, .8); box-shadow: 0 1px 0 rgba(255, 240, 215, .05); }
+.hm-foot kbd { font: 400 11px/1 var(--vd-font-head); color: var(--hm-ash); letter-spacing: 0; text-transform: none; background: none; border: 0; box-shadow: none; padding: 0; }
+.hm-empty { margin: 6px 2px; color: var(--hm-ash); font-size: 12.5px; }
+/* Клеймо: утопленный колодец с литым числом */
+.hm-stamp { min-width: 38px; height: 32px; padding: 0 6px; display: grid; place-items: center; border-radius: 2px; background: #0b0c0e;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, .95), inset 0 0 0 1px rgba(0, 0, 0, .6), 0 1px 0 rgba(255, 240, 215, .07); }
+/* Мелкие числа — сплошным светлым серебром в тёмном колодце: литой градиент на стали не читается */
+.hm-stamp b { font: 400 22px/1 var(--vd-font-head); color: #f6f1e5; text-shadow: 0 0 6px rgba(255, 245, 225, .18), 0 1px 0 #000; }
+/* Выпуклая стальная кнопка */
+.hm-btn { position: relative; display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 2px; color: var(--hm-ink) !important; font-size: 12.5px; text-shadow: 0 1px 0 #000;
+  background: linear-gradient(180deg, rgba(255, 240, 215, .07), rgba(0, 0, 0, .25)), url("../assets/textures/baked/btn-steel.webp") center / 128px, #26272b;
+  box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .14), inset 0 -1px 0 rgba(0, 0, 0, .5), 0 2px 4px rgba(0, 0, 0, .5); }
+.hm-btn:hover { box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .2), inset 0 -1px 0 rgba(0, 0, 0, .5), 0 2px 4px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(224, 147, 127, .45); }
+.hm-btn:active { transform: translateY(1px); }
+.hm-btn.off, .hm-btn.static { opacity: .55; cursor: default; }
+.hm-btn.bad { box-shadow: 0 0 0 1px #060708, inset 0 0 0 1px rgba(224, 115, 90, .6); }
+.hm-btn small { display: block; font: 600 8px/1.3 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-btn .k { flex: none; margin-left: auto; min-width: 30px; height: 24px; padding: 0 5px; display: grid; place-items: center; border-radius: 2px;
+  font: 400 18px/1 var(--vd-font-head); color: #f6f1e5; text-shadow: 0 1px 0 #000; background: #0b0c0e;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, .95), inset 0 0 0 1px rgba(0, 0, 0, .6), 0 1px 0 rgba(255, 240, 215, .08); }
+.hm-btn .k.go { color: #cfe6b0; }
+.hm-pips { margin-left: auto; display: flex; gap: 3px; }
+.hm-pips i { width: 8px; height: 8px; transform: rotate(45deg); background: #0b0c0e; box-shadow: inset 0 1px 2px #000, 0 0 0 1px #3b3e45; }
+.hm-pips i.on { background: linear-gradient(135deg, #f3eee2, #9b958a); box-shadow: 0 0 0 1px #060708, 0 0 5px rgba(241, 236, 224, .4); }
+.hm-pop input[type="search"], .hm-pop input.hm-find { width: 100%; height: auto; margin: 0 0 8px; padding: 6px 9px; border: 0; border-radius: 2px; font: 12.5px var(--vd-font-body); color: var(--hm-ink);
+  background: #0b0c0e; box-shadow: inset 0 2px 5px rgba(0, 0, 0, .9), inset 0 0 0 1px rgba(0, 0, 0, .6), 0 1px 0 rgba(255, 240, 215, .07); }
+
+/* Защита */
+.hm-pop.def { width: 392px; }
+.hm-dgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.hm-dt { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 8px 8px 8px 10px; }
+.hm-dt .t b { display: block; font: 400 13.5px/1.15 var(--vd-font-body); }
+.hm-dt .t small { margin-top: 2px; }
+.hm-saves { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hm-save { display: flex; align-items: center; gap: 9px; padding: 4px 2px; }
+.hm-seal { position: relative; flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%;
+  background: conic-gradient(from 210deg, #f3eee2, #6f6a60 14%, #d8d1c2 28%, #47443d 42%, #e9e3d5 56%, #6a655c 70%, #cdc6b6 84%, #f3eee2);
+  box-shadow: 0 0 0 1px #060708, 0 3px 6px rgba(0, 0, 0, .6); }
+.hm-seal::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: radial-gradient(circle at 50% 30%, #2a2b30, #0d0e10 72%); box-shadow: inset 0 2px 5px #000; }
+.hm-seal b { position: relative; font: 400 21px/1 var(--vd-font-head); color: #f6f1e5; text-shadow: 0 1px 0 #000; }
+.hm-save .t b { display: block; font-size: 13px; color: var(--hm-ink); text-shadow: 0 1px 0 #000; font-weight: 400; }
+.hm-save .t small { display: block; font: 600 8px/1.35 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-save:hover .hm-seal { box-shadow: 0 0 0 1px #060708, 0 3px 6px rgba(0, 0, 0, .6), 0 0 0 2px rgba(224, 147, 127, .5); }
+.hm-save.bad .hm-seal { box-shadow: 0 0 0 1px #060708, 0 0 0 2px rgba(224, 90, 60, .8), 0 0 10px rgba(224, 90, 60, .5); }
+
+/* Действия */
+.hm-pop.act { width: 600px; }
+.hm-agrid { display: grid; grid-template-columns: 1fr 1.05fr 1fr; gap: 12px; }
+.hm-acol { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.hm-acol .hm-cap { margin-bottom: 1px; }
+.hm-acol .hm-cap:not(:first-child) { margin-top: 6px; }
+.hm-acol + .hm-acol { padding-left: 12px; border-left: 1px solid rgba(0, 0, 0, .6); box-shadow: -1px 0 0 rgba(255, 240, 215, .04); }
+.hm-acol input.hm-skill { margin: 0; }
+.hm-states { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; padding-top: 9px; border-top: 1px solid rgba(0, 0, 0, .7); box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04); }
+.hm-states .hm-cap { width: 100%; margin: 0 0 1px; }
+.hm-stc { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px 4px 4px; border-radius: 14px; font-size: 12px; color: var(--hm-ash) !important;
+  background: #0f1012; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9), 0 1px 0 rgba(255, 240, 215, .05); }
+.hm-stc img { width: 20px; height: 20px; padding: 3px; border: 0; border-radius: 50%; background: #1d1e22; box-shadow: 0 0 0 1px #3b3e45; opacity: .65; }
+.hm-stc:hover { color: var(--hm-ink) !important; }
+.hm-stc.on { color: var(--hm-silver) !important; background: linear-gradient(180deg, #4a1a12, #2a0e09); box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 200, 180, .15), 0 0 8px rgba(184, 67, 44, .35); }
+.hm-stc.on img { opacity: 1; background: #7a2516; box-shadow: 0 0 0 1px #e0937f; }
+.hm-stc.good { background: linear-gradient(180deg, #2c3a1e, #161e0e); box-shadow: 0 0 0 1px #060708, 0 0 8px rgba(127, 162, 92, .35); }
+.hm-stc.good img { background: #3c5226; box-shadow: 0 0 0 1px #b4cf96; }
+.hm-stc em { font: 400 12px/1 var(--vd-font-head); font-style: normal; color: var(--hm-blood-lite); }
+.hm-settings { justify-content: space-between; text-transform: none; letter-spacing: normal; font: 12px var(--vd-font-body); color: var(--hm-ash); }
+.hm-vol { display: flex; align-items: center; gap: 8px; }
+.hm-vol span { font: 600 8.5px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-vol input { width: 120px; }
+.hm-vol b { min-width: 34px; font: 400 14px/1 var(--vd-font-head); color: var(--hm-silver); }
+.hm-link { color: var(--hm-ash) !important; border-bottom: 1px dashed rgba(168, 162, 150, .4); }
+.hm-link:hover { color: var(--hm-silver) !important; }
+
+/* Алхимия */
+.hm-pop.alc { width: 470px; }
+.hm-tox { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 6px 10px; padding: 8px 10px; margin-bottom: 4px; border-radius: 2px;
+  background: #0b0c0e; box-shadow: inset 0 2px 6px rgba(0, 0, 0, .95), 0 1px 0 rgba(255, 240, 215, .06); }
+.hm-tox .lb { font: 600 9px/1 var(--vd-font-body); letter-spacing: .2em; text-transform: uppercase; color: var(--hm-ash); }
+.hm-tox .val b { font: 400 20px/1 var(--vd-font-head); background: linear-gradient(180deg, #e9f7d0, #a9d36a 45%, #4f7a22 58%, #c6e69a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hm-tox .val s { text-decoration: none; font: 400 12px/1 var(--vd-font-head); color: var(--hm-dim); }
+.hm-tube { position: relative; height: 12px; border-radius: 6px; overflow: hidden; background: #050607; box-shadow: inset 0 1px 3px #000, 0 0 0 1px #2a2c31; }
+.hm-tube .f { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: linear-gradient(180deg, #c6ef7a, #6fa22a 55%, #3a5c12); box-shadow: 0 0 8px rgba(160, 220, 80, .55); }
+.hm-tube .ghost { position: absolute; top: 0; bottom: 0; overflow: hidden; }
+.hm-tube .ghost::before { content: ""; position: absolute; top: 0; bottom: 0; left: -24px; right: -24px;
+  background: repeating-linear-gradient(135deg, rgba(232, 197, 111, .8) 0 4px, rgba(232, 197, 111, .32) 4px 8px); animation: hm-stripes 1s linear infinite; }
+@keyframes hm-stripes { to { transform: translateX(11.31px); } }
+.hm-tube i { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(0, 0, 0, .7); }
+.hm-toxnote { grid-column: 1 / -1; font: 600 8.5px/1.2 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-toxnote.warn { color: #e8a08a; }
+.hm-flasks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.hm-flask { position: relative; display: grid; justify-items: center; gap: 4px; padding: 8px 4px 6px; border-radius: 2px; text-align: center;
+  background: linear-gradient(180deg, rgba(255, 240, 215, .05), rgba(0, 0, 0, .3)), url("../assets/textures/baked/btn-steel.webp") center / 128px, #222327;
+  box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .12), 0 2px 4px rgba(0, 0, 0, .5); }
+.hm-flask:hover { box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .12), 0 0 0 2px rgba(232, 197, 111, .55); }
+.hm-flask .fr { position: relative; width: 44px; height: 44px; border-radius: 3px; background: radial-gradient(circle at 50% 35%, #2a2b30, #0d0e10 75%); box-shadow: inset 0 2px 5px #000, 0 1px 0 rgba(255, 240, 215, .08); }
+.hm-flask .fr img { width: 40px; height: 40px; margin: 2px; border: 0; filter: drop-shadow(0 2px 2px #000); }
+.hm-flask .q { position: absolute; right: -5px; bottom: -5px; min-width: 18px; height: 18px; padding: 0 4px; display: grid; place-items: center; border-radius: 9px;
+  font: 400 11px/1 var(--vd-font-head); color: var(--hm-silver); background: #1a1b1e; box-shadow: 0 0 0 1px #8e887c, 0 0 0 2px #060708; }
+.hm-flask .nm { font-size: 11.5px; line-height: 1.15; color: var(--hm-ink); text-shadow: 0 1px 0 #000; }
+.hm-flask .vb { font: 600 8px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-flask .vb em { font-style: normal; color: #a9d36a; margin-left: 4px; }
+.hm-flask.v-throw .vb, .hm-flask.v-trap .vb { color: var(--hm-blood-lite); }
+.hm-onw { position: absolute; z-index: 2; top: -7px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 2px 4px; border-radius: 2px;
+  font: 600 7.5px/1 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; color: #2b1d07; background: linear-gradient(#f0d68f, #c9a352); box-shadow: 0 0 0 1px #3a2a0c; }
+
+/* Ещё в руках */
+.hm-pop.more { width: 300px; }
+.hm-orow { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 9px; padding: 5px 6px 5px 4px; border-bottom: 1px solid rgba(0, 0, 0, .45); box-shadow: 0 1px 0 rgba(255, 240, 215, .035); }
+.hm-orow img { width: 30px; height: 30px; border: 0; border-radius: 2px; box-shadow: 0 0 0 1px #060708; }
+.hm-orow .n { font-size: 13px; line-height: 1.15; text-shadow: 0 1px 0 #000; }
+.hm-orow .n small { display: block; font: 600 8.5px/1.3 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--hm-dim); }
+.hm-orow:hover { background: linear-gradient(90deg, rgba(184, 67, 44, .22), rgba(184, 67, 44, .04)); }
+
+/* Гримуар */
+.hm-pop.magic { width: 500px; overflow: visible; }
+.hm-kinds { position: relative; display: flex; align-items: center; gap: 1px; margin: 0 2px 8px; padding-bottom: 6px; }
+.hm-kinds::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(0, 0, 0, .8); box-shadow: 0 1px 0 rgba(255, 240, 215, .05); }
+.hm-kind { padding: 5px 7px; border-radius: 2px; white-space: nowrap; font: 600 9px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--hm-dim) !important; }
+.hm-kind b { margin-left: 3px; font: 400 11px/1 var(--vd-font-head); letter-spacing: 0; color: var(--hm-ash); }
+.hm-kind:hover { color: var(--hm-ink) !important; }
+.hm-kind.on { color: var(--hm-silver) !important; background: rgba(139, 120, 201, .14); box-shadow: inset 0 -2px 0 var(--hm-violet); }
+.hm-els { margin-left: auto; display: flex; gap: 3px; }
+.hm-el { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 2px; background: #0b0c0e; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9), 0 1px 0 rgba(255, 240, 215, .06); }
+.hm-el.on { background: #17142a; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9), inset 0 0 0 1px var(--hm-violet); }
+/* Стихии — алхимические треугольники */
+.hm-el i, .hm-elg { display: block; width: 11px; height: 11px; background: center / contain no-repeat; }
+.el-fire :is(i), .hm-elg.el-fire { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 1 L9 9 L1 9 Z' fill='none' stroke='%23e0835a' stroke-width='1.3' stroke-linejoin='round'/></svg>"); }
+.el-water :is(i), .hm-elg.el-water { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M1 1 L9 1 L5 9 Z' fill='none' stroke='%236fa3d8' stroke-width='1.3' stroke-linejoin='round'/></svg>"); }
+.el-air :is(i), .hm-elg.el-air { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 1 L9 9 L1 9 Z M2.6 6 L7.4 6' fill='none' stroke='%23cfd8e2' stroke-width='1.3' stroke-linejoin='round'/></svg>"); }
+.el-earth :is(i), .hm-elg.el-earth { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M1 1 L9 1 L5 9 Z M2.6 4 L7.4 4' fill='none' stroke='%23a8c06a' stroke-width='1.3' stroke-linejoin='round'/></svg>"); }
+.el-mixed :is(i), .hm-elg.el-mixed { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 1 L9 5 L5 9 L1 5 Z' fill='none' stroke='%23b5a6e6' stroke-width='1.3' stroke-linejoin='round'/></svg>"); }
+.hm-favs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 8px; margin: 0 0 8px; border-radius: 2px;
+  background: #0b0c0e; box-shadow: inset 0 2px 6px rgba(0, 0, 0, .9), 0 1px 0 rgba(255, 240, 215, .06); }
+.hm-fav { position: relative; height: 54px; display: grid; place-items: center; border-radius: 3px; background: radial-gradient(circle at 50% 30%, #262330, #121116 75%);
+  box-shadow: 0 0 0 1px #060708, inset 0 0 0 1px rgba(181, 166, 230, .22), inset 0 1px 0 rgba(255, 240, 215, .08); }
+.hm-fav img { width: 34px; height: 34px; margin-top: -8px; border: 0; border-radius: 2px; box-shadow: 0 0 0 1px #060708; }
+.hm-fav b { position: absolute; bottom: 3px; left: 0; right: 0; text-align: center; font: 600 9.5px/1 var(--vd-font-body); color: var(--hm-violet-lite); }
+.hm-fav kbd { position: absolute; top: 2px; left: 4px; font: 400 10px/1 var(--vd-font-head); color: var(--hm-dim); background: none; border: 0; box-shadow: none; padding: 0; }
+.hm-fav:hover { box-shadow: 0 0 0 1px #060708, inset 0 0 0 1px var(--hm-violet), 0 0 10px rgba(139, 120, 201, .35); }
+.hm-fav.short img { filter: grayscale(.8) brightness(.6); } .hm-fav.short b { color: var(--hm-blood-lite); }
+.hm-glist { max-height: 236px; overflow-y: auto; padding-right: 4px; margin-right: -4px; scrollbar-width: thin; scrollbar-color: #4a463f #0b0c0e; }
+.hm-lvlh { display: flex; align-items: center; gap: 7px; margin: 6px 2px 3px; font: 600 9px/1 var(--vd-font-body); letter-spacing: .22em; text-transform: uppercase; color: var(--hm-ash); }
+.hm-lvl:first-child .hm-lvlh { margin-top: 0; }
+.hm-lvlh .dm { color: var(--hm-violet); letter-spacing: 1px; }
+.hm-lvlh i { font-style: normal; color: var(--hm-dim); letter-spacing: .05em; }
+.hm-lvlh::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(0, 0, 0, .8), transparent); box-shadow: 0 1px 0 rgba(255, 240, 215, .04); }
+.hm-cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; }
+.hm-sp { display: grid; grid-template-columns: 22px minmax(0, 1fr) 11px 26px; align-items: center; gap: 7px; padding: 3px 5px 3px 3px; border-radius: 2px; transition: background-color .12s; }
+.hm-sp img { width: 22px; height: 22px; border: 0; border-radius: 2px; box-shadow: 0 0 0 1px #060708; }
+.hm-sp .nm { font-size: 12.5px; color: var(--hm-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 0 #000; }
+.hm-sp .nm em { font-style: normal; color: var(--hm-brass); margin-right: 4px; font-size: 10px; }
+.hm-sp b { font: 600 11px/1 var(--vd-font-body); color: var(--hm-violet-lite); text-align: right; }
+.hm-sp:hover, .hm-sp.sel { background: linear-gradient(90deg, rgba(139, 120, 201, .3), rgba(139, 120, 201, .06)); }
+.hm-sp.sel { box-shadow: inset 2px 0 0 var(--hm-violet); }
+.hm-sp.short .nm, .hm-sp.short img { opacity: .42; } .hm-sp.short b { color: var(--hm-blood-lite); }
+.hm-gcard { position: absolute; right: calc(100% + 10px); bottom: 40px; width: 218px; padding: 12px 13px 10px; border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255, 240, 215, .05), rgba(0, 0, 0, .3)), url("../assets/textures/baked/plate.webp") center / 384px, #1d1e22;
+  box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .1), 0 14px 28px rgba(0, 0, 0, .7); }
+.hm-gcard .gh { display: flex; gap: 9px; align-items: center; margin-bottom: 8px; }
+.hm-gcard .gh img { width: 36px; height: 36px; border: 0; border-radius: 2px; box-shadow: 0 0 0 1px #060708, 0 0 0 2px rgba(181, 166, 230, .3); }
+.hm-gcard .gh b { display: block; font: 400 17px/1.1 var(--vd-font-head); color: var(--hm-silver); }
+.hm-gcard .gh small { display: block; margin-top: 2px; font: 600 8.5px/1.2 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--hm-violet-lite); }
+.hm-gcard dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0 0 8px; font-size: 12px; }
+.hm-gcard dt { color: var(--hm-dim); } .hm-gcard dd { margin: 0; color: var(--hm-ink); text-align: right; }
+.hm-gcard dd.warn { color: #e8c56f; }
+.hm-gcard p { margin: 0; font: 600 8.5px/1.45 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--hm-dim); }
+
+/* Свёрнутый худ — только медальон */
+.hm.collapsed .hm-medal { margin: 0; }
+
+body.vd-no-anim .hm *, body.vd-no-anim .hm *::before, body.vd-no-anim .hm *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .hm *, .hm *::before, .hm *::after { animation: none !important; transition: none !important; } }

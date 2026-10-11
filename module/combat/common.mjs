@@ -1,5 +1,6 @@
 // Общие помощники боевых карточек: поиск документов, цели, сокет ведущего, отметки «уже брошено».
 
+import { weaponMount } from "./prosthetics.mjs";
 import { renderTemplate } from "../util.mjs";
 
 const SOCKET = "system.vedmak";
@@ -53,6 +54,20 @@ export function fallbackDefender() {
 }
 
 /** Участник активного боя для актора. */
+/**
+ * Оружие готово к бою: у персонажа — надетое или естественное (когти, клыки не надевают); у чудовища — любое,
+ * снаряжения оно не носит. Только готовым атакуют, блокируют и парируют, только оно видно на вкладке боя и в худе.
+ */
+export function isReadyWeapon(actor, item) {
+  if (!item || actor?.type === "monster") return true;
+  // В Истинной форме вместо обычных укуса и когтей расы — оружие формы
+  if (actor?.system?.derived?.trueForm && actor.system.race?.system.grants?.includes(item.name)) return false;
+  // Медвежья форма: снаряжение превратилось вместе с берсерком — бьют только когти и зубы медведя
+  if (actor?.system?.derived?.bearForm) return !!item.flags?.vedmak?.bearFormWeapon;
+  // Ручной арбалет или скрытый клинок в протезе — всегда при себе
+  return !!item.system.equipped || item.system.category === "natural" || !!weaponMount(actor, item);
+}
+
 export function combatantFor(actor) {
   const combat = game.combat;
   if (!combat?.started || !actor) return null;
@@ -108,7 +123,27 @@ export function initSocket() {
  * явно, — без этого карточка уходила всем, даже если в чате выбрано «Ведущему».
  */
 export function defaultMessageMode() {
-  return game.settings.get("core", "messageMode") || "public";
+  return safeMessageMode(game.settings.get("core", "messageMode"));
+}
+
+/**
+ * Режим карточки системы: «ic» (в роли) превращает карточку в речевой пузырь персонажа — для боевых карточек он не
+ * годится, поэтому он идёт как «всем». Пустой режим тоже «всем».
+ */
+export function safeMessageMode(mode) {
+  return !mode || mode === "ic" ? "public" : mode;
+}
+
+/**
+ * Режим карточки, которую клиент ведущего создаёт за другого (защита НИП, урон за игрока, начало хода игрока).
+ * Режим чата самого ведущего тут нельзя брать: поставив «Ведущему», он спрятал бы карточку от игроков, которым она
+ * нужна. Для карточки по чужой атаке — режим, выбранный в атаке (если атакует НИП ведущего), иначе всем.
+ * @param {Actor|null} owner — чья это карточка по смыслу (атакующий или тот, чей ход)
+ * @param {string} [stored] — режим исходной карточки
+ */
+export function proxyMessageMode(owner, stored) {
+  if (owner?.hasPlayerOwner) return "public";
+  return safeMessageMode(stored);
 }
 
 /**
@@ -143,11 +178,23 @@ export async function markDone(source, result) {
 async function applyDoneMark(source, result) {
   const def = result.flags.vedmak?.defense;
   const dmg = result.flags.vedmak?.damage;
+  const duel = result.flags.vedmak?.verbal;
   if (def?.attackMessageId === source.id) {
     await source.update({ [`flags.vedmak.defended.${doneKey(def.defender.tokenUuid ?? def.defender.actorUuid)}`]: result.id });
   } else if (dmg?.defenseMessageId === source.id) {
     await source.update({ "flags.vedmak.damaged": result.id });
+  } else if (duel?.kind === "outcome" && duel.attackMessageId === source.id) {
+    // Словесная дуэль: исход — это «защита» цели от карточки атаки
+    await source.update({ [`flags.vedmak.defended.${doneKey(duel.defender.tokenUuid ?? duel.defender.actorUuid)}`]: result.id });
   }
+}
+
+/** Карточка-источник результата (атака для защиты, защита для урона, атака дуэли для исхода) или null. */
+export function sourceOfResult(result) {
+  const f = result?.flags?.vedmak;
+  const id = f?.defense?.attackMessageId ?? f?.damage?.defenseMessageId
+    ?? (f?.verbal?.kind === "outcome" ? f.verbal.attackMessageId : null);
+  return id ? game.messages.get(id) ?? null : null;
 }
 
 registerGMHandler("markDone", async ({ messageId, resultId }, userId) => {
@@ -170,7 +217,7 @@ export async function allowRepeat(what) {
     return false;
   }
   return !!(await foundry.applications.api.DialogV2.confirm({
-    window: { title: "Повторный бросок", icon: "fa-solid fa-rotate-right" },
+    window: { title: "Повторный бросок" },
     content: `<p>${what}</p><p>Бросить ещё раз? Прежняя карточка останется в чате — лишнюю удалите сами.</p>`,
     rejectClose: false
   }));
@@ -179,19 +226,14 @@ export async function allowRepeat(what) {
 /** Создать карточку боя из шаблона. */
 export async function postCard({ template, data, actor, flags, rolls, messageMode, speaker }) {
   const content = await renderTemplate(template, data);
+  // Пустой режим v14 не применяет вовсе (карточка уходит всем), «ic» — только защита от пузыря речи
+  if (messageMode === "ic") messageMode = "public";
   return ChatMessage.create({
     speaker: speaker ?? ChatMessage.getSpeaker({ actor }),
     content,
     rolls,
     flags: { vedmak: flags }
   }, { messageMode });
-}
-
-/** Режимы видимости сообщения для окон. */
-export function messageModes() {
-  return Object.entries(CONFIG.ChatMessage.modes)
-    .filter(([k]) => k !== "ic")
-    .map(([value, cfg]) => ({ value, label: game.i18n.localize(cfg.label) }));
 }
 
 /** Бросок формулы; пустая или ошибочная формула → 0. */

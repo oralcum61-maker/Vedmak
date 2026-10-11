@@ -20,17 +20,17 @@
 
     <div class="dlg-group">
       <span class="dlg-label">КУДА ПОПАЛО</span>
-      <div class="opt-grid g4">
+      <div class="loc-row">
         {{#each locations}}
-        <label class="opt">
+        <label class="opt loc">
           <input type="radio" name="location" value="{{key}}" {{checked selected}}>
-          <span>{{label}}<em class="dim">{{note}}</em></span>
+          <span><span class="loc-glyph {{glyph.kind}}{{#if glyph.flip}} flip{{/if}}" aria-hidden="true"></span><span class="loc-name">{{label}}</span><em class="dim">{{note}}</em></span>
         </label>
         {{/each}}
       </div>
     </div>
 
-    <details class="dlg-group fold">
+    <details class="dlg-group fold" {{#if cfg.coverAuto}}open{{/if}}>
       <summary class="dlg-label">УКРЫТИЕ ЦЕЛИ <span class="dim" data-cover-note>{{coverNote}}</span></summary>
       <div class="opt-row">
         {{#each covers}}

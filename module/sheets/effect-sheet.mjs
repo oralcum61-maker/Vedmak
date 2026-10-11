@@ -18,10 +18,17 @@ const EXPIRY_EVENTS = {
 
 export class VedmakEffectConfig extends ActiveEffectConfig {
 
+  /**
+   * Окно ядра на смене «Как» пишет подсказку в поле приоритета, а в нашем окне его нет — TypeError на каждый выбор.
+   * Шаг ядра пропускаем, остальную обработку формы (общий предок) оставляем.
+   */
+  _onChangeForm(formConfig, event) {
+    Object.getPrototypeOf(ActiveEffectConfig.prototype)._onChangeForm.call(this, formConfig, event);
+  }
+
   static DEFAULT_OPTIONS = {
     classes: ["vedmak", "sheet", "vedmak-effect"],
     position: { width: 620, height: 620 },
-    window: { icon: "fa-solid fa-bolt" },
     actions: {
       customKey: VedmakEffectConfig.#onCustomKey
     }
@@ -39,9 +46,9 @@ export class VedmakEffectConfig extends ActiveEffectConfig {
   static TABS = {
     sheet: {
       tabs: [
-        { id: "changes", label: "Изменения", icon: "fa-solid fa-gears" },
-        { id: "duration", label: "Длительность", icon: "fa-solid fa-clock" },
-        { id: "details", label: "Описание", icon: "fa-solid fa-book" }
+        { id: "changes", label: "Изменения" },
+        { id: "duration", label: "Длительность" },
+        { id: "details", label: "Описание" }
       ],
       initial: "changes"
     }
@@ -83,7 +90,7 @@ export class VedmakEffectConfig extends ActiveEffectConfig {
       return partContext;
     }
     if (partId === "footer") {
-      partContext.buttons = [{ type: "submit", icon: "fa-solid fa-floppy-disk", label: "Сохранить" }];
+      partContext.buttons = [{ type: "submit", label: "Сохранить" }];
       return partContext;
     }
     if (partId !== "changes") return partContext;

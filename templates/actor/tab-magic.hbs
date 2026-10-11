@@ -1,63 +1,192 @@
 <section class="tab magic-tab {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
-  <div class="magic-summary vd-panel">
-    <div class="derived" data-tooltip="Сколько Вын можно без вреда потратить на магию за раунд"><span class="abbr">Энергия</span><span class="value">{{magic.used}} / {{system.derived.vigor}}</span></div>
-    <div class="derived"><span class="abbr">Вын</span><span class="value">{{system.sta.value}} / {{system.sta.max}}</span></div>
-    <div class="derived" data-tooltip="Воля + Сотворение заклинаний"><span class="abbr">Сотворение</span><span class="value">{{magic.casting}}</span></div>
-    <div class="derived" data-tooltip="Воля + Проведение ритуалов"><span class="abbr">Ритуалы</span><span class="value">{{magic.rituals}}</span></div>
-    <div class="derived" data-tooltip="Воля + Наведение порчи"><span class="abbr">Порча</span><span class="value">{{magic.hexes}}</span></div>
-    <div class="derived" data-tooltip="Фокусирующий предмет в руках: −N к затратам Вын"><span class="abbr">Фокус</span><span class="value">{{#if system.derived.focus}}−{{system.derived.focus}}{{else}}—{{/if}}</span></div>
-    <div class="derived" data-tooltip="Щит Квена поглощает урон от блокируемых атак"><span class="abbr">Щит</span><span class="value">{{system.shield.value}}</span></div>
+
+  {{!-- Источник: Энергия раунда делениями, Вын, навыки магии клеймом, фокус и щит --}}
+  <div class="vd-panel source">
+    <div class="cell energy" data-vigor="{{magic.vigor}}" data-used="{{magic.used}}" data-focus="{{magic.focus}}">
+      <span class="cap">Энергия за раунд · <b>{{magic.used}} из {{magic.vigor}}</b></span>
+      <span class="segs">{{#each magic.energy}}<i class="{{cls}}"></i>{{/each}}</span>
+      <span class="energy-note">{{magic.energyNote}}</span>
+    </div>
+    <div class="cell sta">
+      <span class="cap">Выносливость</span>
+      <span class="num"><b>{{magic.sta.value}}</b><span class="of">/ {{magic.sta.max}}</span></span>
+      <span class="trough"><span style="width: {{magic.sta.pct}}%"></span></span>
+    </div>
+    {{#each magic.skills}}
+    <div class="cell skill" data-tooltip="{{title}}">
+      <span class="cap">{{label}}</span>
+      <span class="stamp"><b>{{value}}</b></span>
+    </div>
+    {{/each}}
+    {{#if magic.showFocus}}
+    <div class="cell focus" data-tooltip="Фокусирующий предмет в руках: на столько дешевле сотворение">
+      <span class="cap">Фокус</span>
+      <span class="num">
+        <svg class="ico" viewBox="0 0 24 26" aria-hidden="true"><circle cx="12" cy="8.5" r="5.5" fill="#6a5a98" stroke="#050607" stroke-width="1.3"/><path d="M12 14v10M8.5 20h7" stroke="#050607" stroke-width="2.6"/><path d="M12 14v10M8.5 20h7" stroke="#cfc8b8" stroke-width="1.2"/><circle cx="10.4" cy="6.8" r="1.4" fill="rgba(255,255,255,.55)"/></svg>
+        <b>{{#if magic.focus}}−{{magic.focus}}{{else}}—{{/if}}</b>
+      </span>
+      <span class="dim">{{#if magic.focusItem}}{{magic.focusItem}}{{else}}нет в руках{{/if}}</span>
+    </div>
+    {{/if}}
+    {{#if magic.showShield}}
+    <div class="cell shield" data-tooltip="Щит поглощает урон от атак, от которых вы не защитились">
+      <span class="cap">Щит</span>
+      <span class="num">
+        <svg class="ico" viewBox="0 0 24 26" aria-hidden="true"><path d="M3 3h18v8.5C21 18 12 23.5 12 23.5S3 18 3 11.5Z" fill="{{#if magic.shield}}#b08a4a{{else}}#17181b{{/if}}" stroke="{{#if magic.shield}}#050607{{else}}#3a3c42{{/if}}" stroke-width="1.4"/><path d="M12 6v14" stroke="#050607" stroke-width=".9"/></svg>
+        <b>{{magic.shield}}</b><span class="of">ПЗ</span>
+      </span>
+      <span class="dim">{{#if magic.shieldLeft}}{{magic.shieldLeft}}{{else}}&nbsp;{{/if}}</span>
+    </div>
+    {{/if}}
+    {{#if magic.showDimeritium}}
+    <div class="cell dimeritium{{#if magic.dimeritium}} on{{/if}}">
+      <span class="cap">Двимерит</span>
+      {{#if magic.dimeritium}}<span class="dim-text">{{magic.dimeritium}}</span>{{else}}<span class="dim">нет касания</span>{{/if}}
+      {{#if editable}}
+      <span class="dim-btns">
+        <button type="button" class="go-btn steel" data-action="dimeritiumTouch"
+          data-tooltip="{{#if magic.dimeritium}}Новая проверка Стойкости: каждые полчаса контакта{{else}}Энергия 0 и Стойкость СЛ 16 по таблице эффектов (стр. 167){{/if}}">{{#if magic.dimeritium}}Полчаса{{else}}Касание{{/if}}</button>
+        {{#if magic.dimeritium}}<button type="button" class="go-btn steel" data-action="dimeritiumEnd" data-tooltip="Контакт прерван: Энергия возвращается">Убрать</button>{{/if}}
+      </span>
+      {{/if}}
+    </div>
+    {{/if}}
   </div>
-  {{#if system.derived.focusItem}}<p class="hint">Фокус: {{system.derived.focusItem}}. Скованность брони снижает Сотворение, Ритуалы и Порчу.</p>{{/if}}
 
   {{#if magic.maintained.length}}
-  <div class="vd-panel">
-    <h3>Поддерживается</h3>
+  <div class="vd-panel maintained">
+    <div class="group-head"><span class="bronze-tag">Поддерживается</span><span class="rule"></span></div>
     {{#each magic.maintained}}
-      <div class="maintained-row" data-effect-id="{{id}}">
-        <img src="{{img}}" alt=""><span class="name">{{name}}</span><span class="dim">{{cost}} Вын/раунд</span>
-        <button type="button" class="roll-btn" data-action="endMaintained"><i class="fa-solid fa-hand"></i> Прекратить</button>
-      </div>
+    <div class="keep-row" data-effect-id="{{id}}">
+      <div class="item-frame small"><img src="{{img}}" alt=""></div>
+      <div class="keep-body"><span class="name">{{name}}</span><span class="dim">каждый раунд −{{cost}} Вын</span></div>
+      <span class="keep-segs" data-tooltip="Уходит в начале каждого раунда">{{#each segs}}<i></i>{{/each}}</span>
+      <button type="button" class="go-btn steel" data-action="endMaintained">Прекратить</button>
+    </div>
     {{/each}}
   </div>
   {{/if}}
 
-  {{#each spellGroups as |group|}}
-  {{#if group.items.length}}
-  <div class="vd-panel">
-    <h3>{{group.label}} <a class="add" data-action="itemCreate" data-type="spell" data-kind="{{group.kind}}" data-tooltip="Добавить"><i class="fa-solid fa-plus"></i></a></h3>
-    <table class="vd-table spells">
-      <thead><tr><th></th><th class="name">Название</th><th>Уровень</th><th>Стихия</th><th>Вын</th><th>Дис</th><th>Длит.</th><th>Защита</th><th></th></tr></thead>
-      <tbody>
-      {{#each group.items as |item|}}
-        <tr data-item-id="{{item.id}}">
-          <td><img src="{{item.img}}" class="icon"></td>
-          <td class="name"><a data-action="itemEdit">{{item.name}}</a></td>
-          <td>{{item.levelLabel}}</td>
-          <td>{{#if item.elementLabel}}{{item.elementLabel}}{{else}}—{{/if}}</td>
-          <td>{{#if item.system.variableCost}}1–{{#if item.system.maxCost}}{{item.system.maxCost}}{{else}}?{{/if}}{{else}}{{item.system.staCost}}{{/if}}{{#if item.maintain}} <span class="dim">(+{{item.maintain}})</span>{{/if}}</td>
-          <td class="small">{{item.system.range}}</td>
-          <td class="small">{{item.system.duration}}</td>
-          <td class="small">{{vedmakLabel "MAGIC_DEFENSES" item.system.defense}}</td>
-          <td class="controls">
-            <button type="button" class="roll-btn" data-action="castSpell" data-tooltip="Shift — без окна"><i class="fa-solid fa-hand-sparkles"></i> {{item.castLabel}}</button>
-            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
-            <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
-          </td>
-        </tr>
+  {{!-- ============================ Ведьмачьи знаки ============================ --}}
+  {{#if hasSigns}}
+  <div class="vd-panel signs">
+    <div class="group-head"><span class="bronze-tag">Ведьмачьи знаки</span><span class="rule"></span>
+      <span class="dim">{{magic.signNote}}</span>
+      <a class="add" data-action="itemCreate" data-type="spell" data-kind="sign" data-tooltip="Добавить знак">+ Добавить</a></div>
+    <div class="sign-row">
+      {{#each signForms as |f|}}
+      <div class="sign-col">
+        <button type="button" class="sign-medal" data-sign-pick="{{f.base.id}}" data-pair-id="{{f.base.id}}" aria-pressed="false">
+          <span class="medal"><img src="{{f.base.img}}" alt=""></span>
+          <span class="sign-name">{{f.base.name}}</span>
+          <span class="sign-meta">{{#if f.base.element}}<span class="el" data-tooltip="{{f.base.element.label}}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="{{f.base.element.path}}" stroke="{{f.base.element.color}}"/></svg></span>{{/if}}{{f.base.cost}} Вын</span>
+        </button>
+        {{#if f.altName}}
+        {{#if f.alt}}<button type="button" class="alt-form known" data-sign-pick="{{f.alt.id}}" data-tooltip="{{f.alt.name}}: выучен"><img src="{{f.altImg}}" alt="">{{f.alt.name}}</button>
+        {{else}}<span class="alt-form locked" data-tooltip="{{f.altName}}: не выучен — вторая форма знака, подмастерье"><img src="{{f.altImg}}" alt="">{{f.altName}}</span>{{/if}}
+        {{/if}}
+      </div>
       {{/each}}
-      </tbody>
-    </table>
+    </div>
+  </div>
+
+  {{#each signDetails as |s|}}
+  <div class="vd-panel sign-detail" data-item-id="{{s.id}}" data-pair-id="{{s.pairId}}" data-name="{{s.name}}" data-variable="{{s.variable}}"
+    data-max="{{s.maxCost}}" data-start="{{s.start}}" data-notes="{{s.notes}}"{{#unless @first}} hidden{{/unless}}>
+    <div class="detail-side">
+      <span class="medal big"><img src="{{s.img}}" alt=""></span>
+      {{#if s.hasAlt}}
+      <div class="form-switch" role="group" aria-label="Форма знака">
+        <button type="button" class="sw{{#unless s.isAlt}} on{{/unless}}" data-sign-pick="{{s.pairId}}">Основной</button>
+        <button type="button" class="sw{{#if s.isAlt}} on{{/if}}" data-sign-pick="{{s.altId}}">Второй</button>
+      </div>
+      {{/if}}
+    </div>
+    <div class="detail-body">
+      <div class="detail-head">
+        <a class="detail-name" data-action="itemEdit">{{s.name}}</a>
+        <span class="lvl" data-tooltip="{{s.levelLabel}}">{{#each s.pips}}<i class="{{#if on}}on{{/if}}"></i>{{/each}}</span>
+        <span class="dim">{{s.levelLabel}}</span>
+        <span class="grow"></span>
+        <a class="mini" data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+        <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      {{#if s.text}}<p class="detail-text">{{s.text}}</p>{{/if}}
+      <div class="detail-stats">
+        <div class="cell"><span class="cap">Дистанция</span><span class="val">{{#if s.range}}{{s.range}}{{else}}—{{/if}}</span></div>
+        <div class="cell"><span class="cap">Длительность</span><span class="val">{{#if s.duration}}{{s.duration}}{{else}}—{{/if}}</span></div>
+        <div class="cell"><span class="cap">Защита цели</span><span class="val">{{#if s.defense}}{{s.defense}}{{else}}—{{/if}}</span></div>
+      </div>
+      <div class="detail-cast">
+        {{#if s.variable}}
+        <span class="cap">Вложить Вын</span>
+        <span class="stepper"><button type="button" class="cost-step" data-step="-1" aria-label="Меньше Вын">−</button><output class="cost-value">{{s.start}}</output><button type="button" class="cost-step" data-step="1" aria-label="Больше Вын">+</button></span>
+        {{else}}<span class="cap">Стоимость · {{s.cost}} Вын</span>{{/if}}
+        <span class="cost-note"></span>
+        <button type="button" class="go-btn {{s.go}} big" data-action="castSpell" data-tooltip="Shift — без окна">{{s.castLabel}}</button>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+  {{/if}}
+
+  {{!-- ===================== Заклинания, инвокации, дары, ритуалы, порча ===================== --}}
+  {{#each spellGroups as |g|}}
+  {{#if g.items.length}}
+  <div class="vd-panel spell-group {{g.kind}}">
+    <div class="group-head"><span class="bronze-tag">{{g.label}}</span><span class="rule"></span><span class="dim">{{g.note}}</span>
+      <a class="add" data-action="itemCreate" data-type="spell" data-kind="{{g.kind}}" data-tooltip="Добавить">+ Добавить</a></div>
+    {{#each g.items as |s|}}
+    <div class="spell-card" data-item-id="{{s.id}}">
+      <div class="item-frame"><img src="{{s.img}}" alt=""></div>
+      <div class="spell-body">
+        <div class="spell-head">
+          {{#if s.element}}<span class="el" data-tooltip="{{s.element.label}}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="{{s.element.path}}" stroke="{{s.element.color}}"/></svg></span>{{/if}}
+          <a class="item-name" data-action="itemEdit">{{s.name}}</a>
+          <span class="lvl" data-tooltip="{{s.levelLabel}}">{{#each s.pips}}<i class="{{#if on}}on{{/if}}"></i>{{/each}}</span>
+          <span class="grow"></span>
+          {{#if s.keep}}<span class="keep-chip" data-tooltip="Поддержание каждый раунд">{{s.keep}}</span>{{/if}}
+          <div class="cost-stamp" data-tooltip="Стоимость в Вын"><b>{{s.cost}}</b><span class="cap">Вын</span></div>
+        </div>
+        {{#if s.text}}<span class="spell-text">{{s.text}}</span>{{/if}}
+        <div class="spell-meta">
+          {{#if s.range}}<span class="meta" data-tooltip="Дистанция"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><circle cx="10" cy="10" r="3.5"/><path d="M10 .5v4M10 15.5v4M.5 10h4M15.5 10h4"/></svg>{{s.range}}</span>{{/if}}
+          {{#if s.duration}}<span class="meta" data-tooltip="Длительность"><svg viewBox="0 0 20 22" aria-hidden="true"><path d="M4 2h12M4 20h12M5.5 2c0 5 4.5 6 4.5 9s-4.5 4-4.5 9M14.5 2c0 5-4.5 6-4.5 9s4.5 4 4.5 9"/></svg>{{s.duration}}</span>{{/if}}
+          {{#if s.defense}}<span class="meta" data-tooltip="Чем цель защищается"><svg viewBox="0 0 20 22" aria-hidden="true"><path d="M2.5 2.5h15v7.5c0 5.5-7.5 9.5-7.5 9.5S2.5 15.5 2.5 10Z"/></svg>{{s.defense}}</span>{{/if}}
+          {{#if s.dc}}<span class="meta" data-tooltip="Сложность">СЛ {{s.dc}}</span>{{/if}}
+          <span class="spell-acts">
+            <a class="mini" data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+            <a class="mini" data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
+            <button type="button" class="go-btn {{s.go}}" data-action="castSpell" data-tooltip="Shift — без окна">{{s.castLabel}}</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    {{/each}}
   </div>
   {{/if}}
   {{/each}}
 
-  {{#unless hasMagic}}<p class="hint">Магии нет. Заклинания, знаки, инвокации и ритуалы лежат в компендиуме «Магия» — перетащите нужное на лист. Персонаж без магической профессии учит их за О.У.</p>{{/unless}}
+  {{#unless hasMagic}}
+  <div class="vd-panel"><p class="hint">Магии нет. Заклинания, знаки, инвокации и ритуалы лежат в компендиуме «Магия» — перетащите нужное на лист. Персонаж без магической профессии учит их за О.У.</p></div>
+  {{/unless}}
 
-  <div class="add-row">
-    {{#each spellGroups as |group|}}
-    <a class="add-btn" data-action="itemCreate" data-type="spell" data-kind="{{group.kind}}"><i class="fa-solid fa-plus"></i> {{group.label}}</a>
-    {{/each}}
+  <div class="add-strip">
+    <span class="cap">Добавить</span>
+    {{#each magic.kinds}}<a class="add-kind" data-action="itemCreate" data-type="spell" data-kind="{{kind}}">{{label}}</a>{{/each}}
   </div>
-  <p class="hint">Изучение: новичок/низкая — 10 О.У, 4 дня, 2 проверки СЛ 14; подмастерье/средняя — 20 О.У, неделя, 4 проверки СЛ 18; мастер/высокая — 30 О.У, 3 недели, 6 проверок СЛ 22; верховный жрец — 40 О.У, 5 недель, 8 проверок СЛ 24 (стр. 123).</p>
+
+  <details class="learn" data-sync="learn">
+    <summary>Как выучить новое <span class="dim">— стр. 123</span></summary>
+    <div class="learn-grid">
+      {{#each magic.learning}}
+      <div class="learn-col">
+        <span class="lvl">{{#each pips}}<i class="{{#if on}}on{{/if}}"></i>{{/each}}</span>
+        <b>{{label}}</b>
+        <span>{{ip}} О.У · {{time}}</span>
+        <span>{{checksLabel}} СЛ {{dc}}</span>
+      </div>
+      {{/each}}
+    </div>
+  </details>
 </section>

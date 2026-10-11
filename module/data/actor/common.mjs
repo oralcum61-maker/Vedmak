@@ -6,6 +6,7 @@ import { SKILLS } from "../../config/skills.mjs";
 import { LOCATIONS_HUMANOID, LOCATIONS_MONSTER, MAGIC_SKILLS, layerBonus } from "../../config/combat.mjs";
 import { int, track } from "../fields.mjs";
 import { coinWeightKg, coinWeightEnabled } from "../../config/money.mjs";
+import { prostheticPart } from "../../config/items.mjs";
 
 const { SchemaField, BooleanField } = foundry.data.fields;
 
@@ -57,12 +58,23 @@ export function resourcesSchema() {
       // +% к шансу поджечь, заморозить, сбить с ног своими атаками и заклинаниями («Буря»)
       statusChance: int(0),
       // + к броску места критического ранения (отвар катакана)
-      critLocation: int(0)
+      critLocation: int(0),
+      // Обезболивание: штрафы критических ранений и «при смерти» мягче на столько (травы — 2, BS — 4; тип upgrade)
+      pain: int(0)
     })
   };
 }
 
 /* -------------------------------------------------------------------------- */
+
+/** Смягчить штрафы критических ранений на n (обезболивающее): каждый отрицательный — к нулю, не дальше. */
+function easeCritPenalties(crit, n) {
+  const ease = v => (v < 0 ? Math.min(0, v + n) : v);
+  for (const group of [crit.stats, crit.skills, crit.derived, crit.armBy]) {
+    for (const k of Object.keys(group ?? {})) group[k] = ease(group[k]);
+  }
+  for (const k of ["action", "magic", "duel", "empathicDuel", "sight", "arm"]) crit[k] = ease(crit[k] ?? 0);
+}
 
 /** Сложить модификаторы всех критических ранений актора в их текущем состоянии. */
 export function collectCritMods(actor) {
@@ -82,7 +94,9 @@ export function collectCritMods(actor) {
     }
     // Множители не складываются: берём самый суровый
     for (const [k, v] of Object.entries(m.mult ?? {})) out.mult[k] = Math.min(out.mult[k] ?? 1, v);
-    for (const k of ["action", "magic", "duel", "empathicDuel", "sight", "arm", "bleedExtra", "acid"]) out[k] += m[k] ?? 0;
+    for (const k of ["action", "magic", "duel", "empathicDuel", "sight", "arm", "bleedExtra"]) out[k] += m[k] ?? 0;
+    // Кислоту «Раны в живот» гасит щелочной порошок (флаг раны vedmak.acidNeutralized)
+    if (!item.flags?.vedmak?.acidNeutralized) out.acid += m.acid ?? 0;
     if (m.arm) {
       const loc = item.system.location || "arm";
       out.armBy[loc] = (out.armBy[loc] ?? 0) + m.arm;
@@ -99,9 +113,10 @@ export function collectCritMods(actor) {
  * У чудовищ естественная броня (`natural`) действует на все части тела как ещё один слой.
  * Врождённая прочность (`innate`, «Закалённый» краснолюдов) просто прибавляется и не разрушается (стр. 23).
  */
-export function computeArmor(actor, { natural = 0, innate = 0, bodyType = "humanoid" } = {}) {
+export function computeArmor(actor, { natural = 0, innate = 0, bodyType = "humanoid", wornOff = false } = {}) {
   const locations = bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
-  const armors = (actor?.itemTypes?.armor ?? []).filter(i => i.system.equipped);
+  // wornOff — надетое не учитывается (Истинная форма высшего вампира: только органическая броня)
+  const armors = wornOff ? [] : (actor?.itemTypes?.armor ?? []).filter(i => i.system.equipped);
   const pieces = armors.filter(i => !i.system.isShield);
   const shields = armors.filter(i => i.system.isShield);
   const slotFor = CONFIG.VEDMAK?.ARMOR_SLOT_FOR ?? {};
@@ -143,7 +158,7 @@ export function carriedWeight(actor) {
   let total = 0;
   for (const item of actor?.items ?? []) {
     const w = Number(item.system?.weight);
-    if (!Number.isFinite(w) || w <= 0) continue;
+    if (!Number.isFinite(w) || w <= 0 || item.system?.stored) continue;
     total += w * (item.system.quantity ?? 1);
   }
   // Монеты (настройка мира «Вес монет»)
@@ -167,10 +182,13 @@ export function carriedWeight(actor) {
  * @param {number} [opts.meleeBodyMod] — поправка Тел для урона в рукопашной и захвата (гномы −3)
  */
 export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, innateArmor = 0, bodyType = "humanoid",
-  extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0 } = {}) {
+  extra = {}, caps = {}, floors = {}, evMod = 0, meleeBodyMod = 0, wornOff = false, hpMult = 1 } = {}) {
   const actor = system.parent;
   const crit = collectCritMods(actor);
-  const armor = computeArmor(actor, { natural: naturalArmor, innate: innateArmor + (system.fx?.sp ?? 0), bodyType });
+  // Обезболивающее: каждый штраф критических ранений мягче на N (до нуля)
+  const pain = Math.max(0, system.fx?.pain ?? 0);
+  if (pain) easeCritPenalties(crit, pain);
+  const armor = computeArmor(actor, { natural: naturalArmor, innate: innateArmor + (system.fx?.sp ?? 0), bodyType, wornOff });
   const ev = Math.max(0, armor.encumbrance + (armor.encumbrance ? evMod : 0));
   const d = system.derived ??= {};
   const bonus = key => (system.bonus[key] ?? 0) + (extra[key] ?? 0) + (system.fx?.[key] ?? 0);
@@ -219,10 +237,20 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   d.damageBonus = (extra.damage ?? 0) + (system.fx?.damage ?? 0);
   d.meleeBonus += (extra.meleeDamage ?? 0) + (system.fx?.meleeDamage ?? 0);
 
-  system.hp.max = bw * 5 + bonus("hp");
+  // hpMult — медвежья форма берсерка: ПЗ вдвое (character/bear-form.mjs)
+  system.hp.max = (bw * 5 + bonus("hp")) * hpMult;
   system.sta.max = Math.floor((bw * 5 + bonus("sta") + (crit.derived.sta ?? 0)) * (crit.mult.sta ?? 1));
   d.woundThreshold = Math.floor(system.hp.max / 5);
-  d.vigor = Math.max(0, baseVigor + bonus("vigor"));
+  // Касание двимерита (стр. 167): Энергия падает до 0, пока длится контакт (magic/dimeritium.mjs)
+  // «Устойчивость к двимериту» мага: устоял — половина Энергии
+  const dimeritium = actor?.effects?.find(e => e.active && e.flags?.vedmak?.dimeritium);
+  // Двимеритовый протез («Лавка Клауса и Нострадамуса»): носитель под двимеритом и творить не может
+  const dimLimb = actor?.itemTypes?.gear?.find(i => i.system.equipped && i.system.category === "prosthetic"
+    && prostheticPart(i.name)?.dimeritium);
+  const fullVigor = Math.max(0, baseVigor + bonus("vigor"));
+  d.vigor = dimLimb ? 0 : !dimeritium ? fullVigor : dimeritium.flags.vedmak.dimeritium.resisted ? Math.floor(fullVigor / 2) : 0;
+  d.dimeritium = !!dimeritium || !!dimLimb;
+  d.dimeritiumLimb = dimLimb?.name ?? "";
 
   // Фокусирующий предмет в руках: работает только один — берём лучший (стр. 167)
   let focus = 0, focusItem = "";
@@ -259,7 +287,8 @@ export function prepareCommonDerived(system, { baseVigor = 0, naturalArmor = 0, 
   d.wounded = !d.dying && hp < d.woundThreshold && !(system.fx?.ignoreWound > 0);
   for (const [key, stat] of Object.entries(system.stats)) {
     let eff = stat.total;
-    if (d.dying) eff = Math.floor(eff / 3);
+    // При смерти ⅓; обезболивающее возвращает до N, не выше итога
+    if (d.dying) eff = Math.min(stat.total, Math.floor(eff / 3) + pain);
     else if (d.wounded && ["ref", "dex", "int", "will"].includes(key)) eff = Math.floor(eff / 2);
     stat.effective = eff;
   }
