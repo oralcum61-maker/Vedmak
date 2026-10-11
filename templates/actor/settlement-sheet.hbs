@@ -172,6 +172,29 @@
     {{/each}}
   {{/if}}
 
+  {{#if (eq tab "army")}}
+    <div class="sv-build-bar">
+      {{#if editable}}<a class="sv-btn" data-action="recruit">Набрать…</a>{{/if}}
+      {{#if gm}}<a class="sv-btn" data-action="battle">Битва</a>{{/if}}
+      <span class="sv-hint">Ополчение: {{army.militia}} чел. · семей без дела: {{army.idle}} · {{#if army.drill}}тренировка: плац ×{{army.drill}}{{else}}тренироваться негде — постройте плац или казарму{{/if}}</span>
+    </div>
+    {{#if army.units.length}}
+    <ul class="ar-units">
+      {{#each army.units}}
+      <li data-id="{{id}}">
+        <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
+        <div class="ar-unit-main"><a data-action="openUnit"><b>{{name}}</b></a><small>{{kind}} · {{origin}} · {{training}} · {{equipment}}</small></div>
+        <span class="bt-num" data-tooltip="Бойцы">{{soldiers}}</span>
+        <span class="bt-num" data-tooltip="Боевой дух">{{morale}}</span>
+        <span class="bt-num pow" data-tooltip="Сила">{{power}}</span>
+        {{#if ../editable}}<a class="sv-btn ar-drill {{#if drilling}}on{{/if}}" data-action="unitDrill">{{#if drilling}}Тренируются ✓{{else}}Тренировать{{/if}}</a>{{/if}}
+      </li>
+      {{/each}}
+    </ul>
+    <p class="sv-hint">Всего бойцов {{army.soldiers}}; в неделю войско ест {{army.food}} еды{{#if army.pay}} и получает {{army.pay}} Богатства{{/if}}.</p>
+    {{else}}<p class="sv-hint">Войска нет. Наберите отряд из Ополчения, из семей или наймите наёмников.</p>{{/if}}
+  {{/if}}
+
   {{#if (eq tab "chronicle")}}
     <ol class="sv-chronicle">
       {{#each chronicle}}

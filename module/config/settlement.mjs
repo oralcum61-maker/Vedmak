@@ -35,7 +35,11 @@ export const RESOURCE_ICONS = {
   "Доски": "icons/commodities/wood/lumber-plank-brown.webp",
   "Железо": "icons/commodities/metal/barstock-heated-steel.webp",
   "Инструменты": "icons/tools/smithing/anvil.webp",
-  "Снадобья": "icons/consumables/potions/bottle-bulb-corked-green.webp"
+  "Снадобья": "icons/consumables/potions/bottle-bulb-corked-green.webp",
+  "Оружие": "icons/weapons/swords/sword-guard-worn-purple.webp",
+  "Доспехи": "icons/equipment/chest/breastplate-banded-steel.webp",
+  "Луки": "icons/weapons/bows/bow-ornamental-carved-brown.webp",
+  "Лошади": "icons/environment/creatures/horse-brown.webp"
 };
 export const RESOURCE_ICON = "icons/containers/bags/sack-simple-leather-brown.webp";
 export const resourceIcon = name => RESOURCE_ICONS[name] ?? RESOURCE_ICON;
@@ -45,7 +49,7 @@ export const RESOURCE_PRICES = {
   "Еда": 2, "Топливо": 2, "Древесина": 3, "Камень": 4, "Глина": 2, "Железная руда": 8, "Серебряная руда": 30,
   "Шкуры": 6, "Кости": 1, "Лесные травы": 5, "Травы": 5,
   "Зерно": 2, "Мука": 3, "Пиво": 4, "Водка": 12, "Мёд": 6, "Шерсть": 4, "Ткань": 10, "Кожа": 10, "Доски": 5,
-  "Железо": 15, "Инструменты": 30, "Снадобья": 20
+  "Железо": 15, "Инструменты": 30, "Снадобья": 20, "Оружие": 25, "Доспехи": 40, "Луки": 15, "Лошади": 80
 };
 export const DEFAULT_PRICE = 5;
 export const BUY_MARKUP = 1.5;
@@ -1366,6 +1370,7 @@ export const BUILDINGS = {
         weeks: 3,
         families: 3,
         controlPerFamily: 1,
+        drill: 1,
         upkeep: [
           {
             resource: FOOD,
@@ -1388,6 +1393,7 @@ export const BUILDINGS = {
         weeks: 3,
         families: 5,
         controlPerFamily: 1,
+        drill: 1,
         upkeep: [
           {
             resource: FOOD,
@@ -1427,6 +1433,305 @@ export const BUILDINGS = {
       }
     ]
   },
+  drillground: {
+    label: "Плац",
+    group: "defense",
+    img: "icons/environment/settlement/target-dummy.webp",
+    unique: true,
+    hint: "Здесь отряды учатся строю: без плаца или казармы тренировки нет. Второй уровень — учатся вдвое быстрее.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 8
+          }
+        ],
+        weeks: 2,
+        drill: 1
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        drill: 2
+      }
+    ]
+  },
+  armory: {
+    label: "Оружейная",
+    group: "craft",
+    img: "icons/environment/settlement/blacksmith.webp",
+    hint: "Копья, топоры, мечи: 1 железо и 1 доска с семьи — 1d2 оружия.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        consume: [
+          {
+            resource: "Железо",
+            formula: "1",
+            per: "family"
+          },
+          {
+            resource: "Доски",
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Оружие",
+            formula: "1d2",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Железо",
+            qty: 2
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        consume: [
+          {
+            resource: "Железо",
+            formula: "1",
+            per: "family"
+          },
+          {
+            resource: "Доски",
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Оружие",
+            formula: "1d2",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  armorer: {
+    label: "Бронник",
+    group: "craft",
+    img: "icons/environment/settlement/house-city.webp",
+    hint: "Стёганки и кольчуги: 2 железа и 1 кожа с семьи — 1d2 доспехов.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        consume: [
+          {
+            resource: "Железо",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: "Кожа",
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Доспехи",
+            formula: "1d2",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Камень",
+            qty: 6
+          },
+          {
+            resource: "Железо",
+            qty: 2
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        consume: [
+          {
+            resource: "Железо",
+            formula: "2",
+            per: "family"
+          },
+          {
+            resource: "Кожа",
+            formula: "1",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Доспехи",
+            formula: "1d2",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  bowyer: {
+    label: "Мастерская лучника",
+    group: "craft",
+    img: "icons/environment/settlement/house-woods.webp",
+    hint: "Луки и стрелы: 2 доски с семьи — 1d3 луков.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 6
+          }
+        ],
+        weeks: 2,
+        families: 1,
+        consume: [
+          {
+            resource: "Доски",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Луки",
+            formula: "1d3",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 4
+          }
+        ],
+        weeks: 2,
+        families: 2,
+        consume: [
+          {
+            resource: "Доски",
+            formula: "2",
+            per: "family"
+          }
+        ],
+        produce: [
+          {
+            resource: "Луки",
+            formula: "1d3",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
+  stables: {
+    label: "Конюшня",
+    group: "food",
+    img: "icons/environment/settlement/stables-horses.webp",
+    hint: "Растит коней: 1 лошадь с семьи в месяц; кони едят 1 зерно с семьи в неделю.",
+    levels: [
+      {
+        cost: [
+          {
+            resource: "Древесина",
+            qty: 10
+          }
+        ],
+        weeks: 3,
+        families: 1,
+        produce: [
+          {
+            resource: "Лошади",
+            formula: "1",
+            per: "family",
+            period: "month"
+          }
+        ],
+        upkeep: [
+          {
+            resource: "Зерно",
+            formula: "1",
+            per: "family"
+          }
+        ]
+      },
+      {
+        cost: [
+          {
+            resource: "Доски",
+            qty: 6
+          },
+          {
+            resource: "Камень",
+            qty: 4
+          }
+        ],
+        weeks: 3,
+        families: 2,
+        produce: [
+          {
+            resource: "Лошади",
+            formula: "1",
+            per: "family",
+            period: "month"
+          }
+        ],
+        upkeep: [
+          {
+            resource: "Зерно",
+            formula: "1",
+            per: "family"
+          }
+        ]
+      }
+    ]
+  },
   storehouse: {
     label: "Склад", group: "storage", img: "icons/environment/settlement/warehouse-crates.webp",
     hint: "Здесь можно хранить огромное количество ресурсов; хорошее место для еды и всего, что портится.",
@@ -1444,7 +1749,7 @@ export const fullRow = r => ({ resource: r.resource ?? "", formula: r.formula ??
 /** Уровень со всеми полями. */
 export const fullLevel = l => ({
   cost: (l.cost ?? []).map(c => ({ ...c })), weeks: l.weeks ?? 1, families: l.families ?? 0, housing: l.housing ?? 0,
-  control: l.control ?? 0, controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0,
+  control: l.control ?? 0, controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0, drill: l.drill ?? 0,
   consume: (l.consume ?? []).map(fullRow), produce: (l.produce ?? []).map(fullRow), upkeep: (l.upkeep ?? []).map(fullRow)
 });
 

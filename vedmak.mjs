@@ -18,6 +18,9 @@ import { CharacterSheet } from "./module/sheets/character-sheet.mjs";
 import { MonsterSheet } from "./module/sheets/monster-sheet.mjs";
 import { LootSheet } from "./module/sheets/loot-sheet.mjs";
 import { SettlementSheet } from "./module/sheets/settlement-sheet.mjs";
+import { UnitSheet } from "./module/sheets/unit-sheet.mjs";
+import { BattleApp } from "./module/apps/battle-app.mjs";
+import * as ARMY from "./module/army/army.mjs";
 import * as settlement from "./module/settlement/settlement.mjs";
 import * as SETTLEMENT_CFG from "./module/config/settlement.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
@@ -272,6 +275,9 @@ Hooks.once("init", () => {
   DSC.registerSheet(Actor, SYSTEM_ID, SettlementSheet, {
     types: ["settlement"], makeDefault: true, label: "VEDMAK.SheetSettlement"
   });
+  DSC.registerSheet(Actor, SYSTEM_ID, UnitSheet, {
+    types: ["unit"], makeDefault: true, label: "VEDMAK.SheetUnit"
+  });
   DSC.registerSheet(Item, SYSTEM_ID, VedmakItemSheet, {
     makeDefault: true, label: "VEDMAK.SheetItem"
   });
@@ -313,6 +319,7 @@ Hooks.once("init", () => {
     hud: CombatHud,
     nexus: SceneNexus,
     settlement,
+    army: { ...ARMY, battle: units => BattleApp.open(units) },
     investigation: { ...investigation, open: () => InvestigationApp.open() },
     tavern: { open: () => TavernApp.open() },
     config: CONFIG.VEDMAK
@@ -473,6 +480,10 @@ Hooks.on("preCreateActor", (actor, data) => {
   // Новое чудовище получает трофейный значок вместо человечка Foundry
   if (actor.type === "monster" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
     actor.updateSource({ img: "systems/vedmak/assets/fan/monsters/mons-wraith.webp" });
+  }
+  // Отряд (PLAN 4.187): знамя — по роду войск
+  if (actor.type === "unit" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
+    actor.updateSource({ img: CONFIG.VEDMAK_UNIT_IMG ?? "icons/skills/melee/weapons-crossed-swords-yellow.webp" });
   }
   // Поселение (PLAN 4.183, 4.185): герб — усадьба; для начала — два жилых дома и лагерь лесорубов, уже готовые
   if (actor.type === "settlement") {

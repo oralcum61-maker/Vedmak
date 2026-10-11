@@ -1,0 +1,43 @@
+{{!-- Окно битвы (PLAN 4.187) --}}
+<div class="sv bt">
+  <div class="bt-bar">
+    <label>Местность <select name="terrain">{{#each terrains}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+    <span class="bt-round">Раунд {{round}}</span>
+    <button type="button" class="sv-next" data-action="round" {{#unless ready}}disabled{{/unless}}>Раунд</button>
+    <a class="sv-btn" data-action="reset" data-tooltip="Раунды с первого, бегство снято">Новая битва</a>
+  </div>
+  <div class="bt-sides">
+    {{#each sides}}
+    <section class="bt-side" data-side="{{index}}">
+      <header>
+        <span class="sv-tag">{{label}}</span>
+        <a class="bt-def {{#if defender}}on{{/if}}" data-action="defender" data-side="{{index}}" data-tooltip="Обороняющимся — прибавка местности">{{#if defender}}обороняется{{else}}наступает{{/if}}</a>
+        <small>бойцов {{soldiers}} · сила {{power}}</small>
+      </header>
+      <ul>
+        {{#each units}}
+        <li class="{{#if routed}}routed{{/if}}" data-id="{{id}}">
+          <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
+          <div><a data-action="open"><b>{{name}}</b></a><small>{{kind}} · {{training}} · {{equipment}}</small></div>
+          <span class="bt-num" data-tooltip="Бойцы">{{soldiers}}</span>
+          <span class="bt-num" data-tooltip="Боевой дух">{{morale}}</span>
+          <span class="bt-num pow" data-tooltip="Сила">{{power}}</span>
+          <a class="sv-demolish" data-action="remove" data-tooltip="Убрать из битвы">×</a>
+        </li>
+        {{else}}<li class="sv-hint">Перетащите сюда отряды из списка актёров или выделите их жетоны.</li>{{/each}}
+      </ul>
+      <a class="sv-btn" data-action="addSelected" data-side="{{index}}">Добавить выделенные жетоны</a>
+    </section>
+    {{/each}}
+  </div>
+  <ol class="bt-log">
+    {{#each log}}
+    <li>
+      <b>Раунд {{round}}</b>{{#if tie}} — ничья{{/if}}
+      {{#each sides}}<span class="{{#if win}}up{{/if}}">{{name}}: {{d10}} + {{power}}{{#if ground}} + {{ground}}{{/if}} = {{total}}</span>{{/each}}
+      {{#each units}}<small>{{name}}: −{{lost}} (осталось {{soldiers}}, дух {{morale}}){{#if routed}} — бегут!{{/if}}</small>{{/each}}
+      {{#if over}}<em>Битва окончена{{#if victor}}: победа — {{victor}}{{/if}}.</em>{{/if}}
+    </li>
+    {{/each}}
+  </ol>
+</div>

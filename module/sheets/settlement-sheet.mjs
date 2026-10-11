@@ -10,12 +10,14 @@ import { buildingState, levelDef, averageOf, WEALTH } from "../settlement/rules.
 import * as S from "../settlement/settlement.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { compareRu } from "../util.mjs";
+import { UNIT_KINDS, TRAINING, EQUIPMENT, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
+import * as ARMY from "../army/army.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
-const TABS = { economy: "Хозяйство", buildings: "Постройки", chronicle: "Летопись", notes: "Описание" };
+const TABS = { economy: "Хозяйство", buildings: "Постройки", army: "Войско", chronicle: "Летопись", notes: "Описание" };
 const fmt = n => (Math.round(n * 100) / 100).toLocaleString("ru-RU");
 const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + fmt(Math.abs(n));
 const plain = html => String(html ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
@@ -50,7 +52,11 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       editBuilding: SettlementSheet.#onEditBuilding,
       approval: SettlementSheet.#onApproval,
       addResource: SettlementSheet.#onAddResource,
-      removeResource: SettlementSheet.#onRemoveResource
+      removeResource: SettlementSheet.#onRemoveResource,
+      recruit: SettlementSheet.#onRecruit,
+      unitDrill: SettlementSheet.#onUnitDrill,
+      openUnit: SettlementSheet.#onOpenUnit,
+      battle: SettlementSheet.#onBattle
     }
   };
 
@@ -149,9 +155,25 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       taxes: Object.entries(TAXES).map(([k, t]) => ({ key: k, label: t.label, selected: k === sys.taxes })),
       taxNote: sum.taxMult ? (sum.taxCoins ? `${sum.taxCoins} ${cur.abbr} в неделю` : "налог не берётся") : "без усадьбы налог не собрать",
       resources, needs, month, groups, catalog, chronicle, trade: sum.trade, storage: sum.storage,
+      army: this.#army(sum),
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
     return context;
+  }
+
+  /** Войско поселения: отряды, откуда набирать, кормёжка и тренировка. */
+  #army(sum) {
+    const units = ARMY.settlementUnits(this.actor).map(a => ({
+      id: a.id, name: a.name, img: a.img, kind: UNIT_KINDS[a.system.kind]?.label, origin: ORIGINS[a.system.origin]?.label,
+      soldiers: a.system.soldiers, training: TRAINING[a.system.training].label, equipment: EQUIPMENT[a.system.equipment].label,
+      morale: a.system.morale, power: a.system.power.total, drilling: a.system.drilling, food: a.system.food, pay: a.system.pay
+    }));
+    return {
+      units, soldiers: units.reduce((n, u) => n + u.soldiers, 0),
+      food: Math.round(units.reduce((n, u) => n + u.food, 0) * 10) / 10,
+      pay: Math.round(units.reduce((n, u) => n + u.pay, 0) * 1000) / 1000,
+      drill: sum.drill, militia: this.actor.system.militia, idle: sum.idle
+    };
   }
 
   /** Карточка постройки: уровень, что даёт, семьи на работе, стройка, улучшение. */
@@ -169,6 +191,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (lv.control) gives.push(`Контроль +${lv.control}`);
       if (lv.controlPerFamily) gives.push(`Контроль +${lv.controlPerFamily} за семью`);
       if (lv.storage) gives.push(`склад +${lv.storage}`);
+      if (lv.drill) gives.push(`тренировка войск ×${lv.drill}`);
       if (lv.taxes) gives.push(lv.taxes > 1 ? `налог ×${lv.taxes}` : "налоги");
       if (b.trade) gives.push("торговля");
     }
@@ -236,6 +259,43 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rejectClose: false
     });
     if (units) await S.moveWealth(this.actor, units, mode);
+  }
+
+  static async #onUnitDrill(event, target) {
+    const unit = game.actors.get(target.closest("[data-id]").dataset.id);
+    if (unit?.isOwner) await unit.update({ "system.drilling": !unit.system.drilling });
+  }
+  static #onOpenUnit(event, target) { game.actors.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
+  static #onBattle() { game.vedmak.army.battle(ARMY.settlementUnits(this.actor)); }
+
+  /** Набор: откуда, род войск, сколько, в новый или существующий отряд. */
+  static async #onRecruit() {
+    const town = this.actor;
+    const sys = town.system;
+    const units = ARMY.settlementUnits(town);
+    const opt = (v, l, sel) => `<option value="${v}" ${sel ? "selected" : ""}>${l}</option>`;
+    const content = `<div class="vedmak-roll-dialog sv-recruit">
+      <div class="form-group"><label>Откуда</label><select name="origin">
+        ${opt("militia", `Ополчение — есть ${sys.militia} чел.`, true)}
+        ${opt("families", `Семьи без дела — ${sys.summary.idle} (по ${FAMILY_SOLDIERS} бойцов)`)}
+        ${opt("mercenary", `Наёмники — ${MERCENARY.hire} Богатства за бойца (в казне ${sys.wealth})`)}
+      </select></div>
+      <div class="form-group"><label>Сколько</label><input type="number" name="count" min="1" step="1" value="10">
+        <p class="hint">Для семей — число семей, для остальных — бойцов.</p></div>
+      <div class="form-group"><label>Куда</label><select name="unit">${opt("", "Новый отряд", true)}${units.map(u => opt(u.id, `${u.name} (${ORIGINS[u.system.origin].label.toLowerCase()})`)).join("")}</select></div>
+      <div class="form-group"><label>Род войск</label><select name="kind">${Object.entries(UNIT_KINDS).map(([k, v]) => opt(k, v.label, k === "infantry")).join("")}</select></div>
+      <div class="form-group"><label>Название</label><input type="text" name="name" placeholder="Ополчение ${town.name}"></div>
+      <p class="hint">Наёмники приходят обученными и со своим снаряжением, но им платят каждую неделю. Новички в старом отряде снаряжаются со склада как весь отряд.</p>
+    </div>`;
+    const data = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `Набор войска: ${town.name}` }, content,
+      ok: { label: "Набрать", callback: (ev, button) => Object.fromEntries(new FormData(button.form)) },
+      rejectClose: false
+    });
+    if (!data) return;
+    const unit = await ARMY.recruit(town, { origin: data.origin, count: data.count, kind: data.kind, name: data.name.trim(),
+      unit: data.unit ? game.actors.get(data.unit) : null });
+    if (unit) { this.render(); unit.sheet.render(true); }
   }
 
   /** Перетащенный на лист предмет «Постройка» закладывается (со списанием цены); прочие предметы поселению не нужны. */

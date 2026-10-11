@@ -21,6 +21,8 @@
     {{#if shortages}}<p class="note warn">Не хватило: {{shortages}}.</p>{{/if}}
     {{#each report.events}}<p class="note{{#if danger}} warn{{/if}}">{{text}}</p>{{/each}}
     {{#if built}}<p class="note"><b>Достроено:</b> {{built}}.</p>{{/if}}
+    {{#if army.length}}<p class="note"><b>Войско</b>{{#if armyHungry}} <span class="warn">— еды не хватило</span>{{/if}}:</p>
+    <ul class="sw-army">{{#each army}}<li>{{name}}{{#if notes}} — {{notes}}{{/if}}</li>{{/each}}</ul>{{/if}}
     {{#if overflow}}<p class="note dim">Не влезло на склад и пропало: {{overflow}}.</p>{{/if}}
   </div>
 </div>

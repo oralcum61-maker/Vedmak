@@ -28,6 +28,8 @@ export const buildingLevel = () => new SchemaField({
   controlPerFamily: num(0, { min: 0 }),
   taxes: num(0, { min: 0 }),
   storage: int(0, { min: 0 }),
+  // Скорость тренировки отрядов (плац, казарма): 0 — здесь не тренируют
+  drill: int(0, { min: 0 }),
   consume: new ArrayField(productionRow()),
   produce: new ArrayField(productionRow()),
   upkeep: new ArrayField(productionRow())

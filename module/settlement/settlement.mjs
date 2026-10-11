@@ -7,6 +7,7 @@ import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, pri
 import { simulateWeek, canAfford, costLabel, buildingState, levelDef, WEALTH } from "./rules.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { postCard } from "../combat/common.mjs";
+import { unitsWeek } from "../army/army.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 const LOG_LIMIT = 40;
@@ -159,6 +160,10 @@ export async function moveWealth(actor, units, mode) {
 export async function advanceWeek(actor) {
   if (!game.user.isGM) return ui.notifications.warn("Время двигает ведущий.");
   const { next, report } = simulateWeek(actor.system.state, { rand });
+  // Отряды поселения: еда со склада, плата наёмникам, тренировка, боевой дух (PLAN 4.187)
+  const army = await unitsWeek(actor, { stock: next.stock, wealth: next.wealth, drill: actor.system.summary.drill, rand });
+  next.stock = army.stock; next.wealth = army.wealth;
+  report.army = army.lines; report.armyFood = army.food ?? 0; report.armyFed = army.fed ?? 1;
   const before = new Map(actor.system.buildings.map(b => [b.id, b]));
   const changes = next.buildings.filter(b => {
     const was = before.get(b.id);
@@ -187,6 +192,7 @@ export function weekCardData(actor, report) {
     shortages: report.shortages.map(s => `${s.building ? `${s.building}: ` : ""}${s.resource.toLowerCase()} ${s.got} из ${s.need}${s.upkeep ? " (содержание)" : ""}`).join("; "),
     wealth: report.wealthGain ? (report.wealthGain > 0 ? "+" : "") + report.wealthGain + " " + WEALTH + (report.taxWealth ? " (налог " + report.taxWealth + ")" : "") : "",
     overflow: Object.entries(report.overflow).map(([k, v]) => k.toLowerCase() + " " + v).join(", "),
+    army: (report.army ?? []).map(a => ({ name: a.name, notes: a.notes.join("; ") })), armyHungry: (report.armyFed ?? 1) < 1,
     built: report.built.map(b => b.name + (b.level > 1 ? " (" + b.level + " ур.)" : "")).join(", ")
   };
 }

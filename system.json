@@ -32,7 +32,8 @@
     "styles/hud.css",
     "styles/nexus.css",
     "styles/pause.css",
-    "styles/settlement.css"
+    "styles/settlement.css",
+    "styles/army.css"
   ],
   "languages": [
     {
@@ -60,6 +61,11 @@
         ]
       },
       "settlement": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "unit": {
         "htmlFields": [
           "description"
         ]

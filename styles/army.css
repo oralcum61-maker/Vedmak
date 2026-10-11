@@ -1,0 +1,59 @@
+/* ============================== Ополчение и армии (PLAN 4.187) ==============================
+   Лист отряда — облик листа поселения (styles/settlement.css: пластины, гнёзда, ярлыки); здесь — своё: выучка,
+   уровни снаряжения, командир, список отрядов поселения, окно битвы и карточка раунда. */
+
+.ar .ar-label { font: 400 19px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.ar .sv-plaque .sv-pips { margin: 2px 0; }
+.ar .ar-small { width: 54px; height: 24px; text-align: center; }
+.ar-home { color: #e7d9bd; border-bottom: 1px dotted rgba(231, 217, 189, .4); }
+.ar-home:hover { color: #fff; }
+.sv-mini-acts a.on { color: var(--sv-green, #8fb07a); }
+
+.ar-commander { display: grid; grid-template-columns: 44px auto 1fr 24px; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 5px;
+  background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); }
+.ar-commander b { font: 400 17px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.ar-commander small { color: var(--sv-dim); }
+
+.ar-tiers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.ar-tiers li { display: grid; gap: 3px; padding: 8px 10px; border-radius: 5px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); opacity: .55; }
+.ar-tiers li.on { opacity: 1; }
+.ar-tiers li.current { box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(241, 236, 224, .5); }
+.ar-tiers b { font: 400 16px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.ar-tiers span { font-size: 11px; color: var(--sv-green, #8fb07a); }
+.ar-tiers small { font-size: 11px; color: var(--sv-ash); }
+.ar-foot { display: flex; justify-content: flex-end; }
+.ar-foot .sv-btn { flex: none; padding: 8px 14px; }
+
+/* Список отрядов поселения и окна битвы */
+.ar-units, .bt-side ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ar-units li, .bt-side li { display: grid; grid-template-columns: 44px minmax(0, 1fr) repeat(3, 38px) auto; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 5px;
+  background: linear-gradient(#26272c, #1d1e22); box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.bt-side li { grid-template-columns: 44px minmax(0, 1fr) repeat(3, 34px) 22px; }
+.ar-unit-main, .bt-side li > div { display: grid; min-width: 0; }
+.ar-units b, .bt-side li b { font: 400 16px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.ar-units small, .bt-side li small { font-size: 11px; color: var(--sv-ash); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bt-num { text-align: center; font: 400 18px/1 var(--vd-font-head); color: var(--sv-silver); padding: 4px 0; border-radius: 4px; background: rgba(0, 0, 0, .4); box-shadow: var(--vd-sink-sm); }
+.bt-num.pow { color: #e0c48f; }
+.ar-drill { flex: none; padding: 6px 10px; }
+.ar-drill.on { color: var(--sv-green, #8fb07a); }
+.bt-side li.routed { opacity: .45; }
+
+.battle-app .window-content { padding: 0; }
+.bt { height: 100%; }
+.bt-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 12px 16px; background: #17181b; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .6); }
+.bt-bar select { width: auto; height: 28px; margin-left: 6px; }
+.bt-round { font: 400 20px/1 var(--vd-font-head); color: var(--sv-silver); margin-left: auto; }
+.bt-bar .sv-btn { flex: none; padding: 9px 14px; }
+.bt .sv-next:disabled { filter: grayscale(1) brightness(.6); cursor: default; }
+.bt-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 14px 16px; overflow-y: auto; max-height: 50%; }
+.bt-side { display: grid; gap: 8px; align-content: start; padding: 10px; border-radius: 6px; background: rgba(10, 10, 12, .35); box-shadow: var(--vd-sink-sm); }
+.bt-side header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.bt-side header small { margin-left: auto; color: var(--sv-ash); font-size: 11px; }
+.bt-def { font: 600 10px/1 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--sv-dim); padding: 4px 6px; border-radius: 3px; background: rgba(0, 0, 0, .4); }
+.bt-def.on { color: #e0c48f; }
+.bt-log { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; gap: 8px; overflow-y: auto; }
+.bt-log li { display: grid; gap: 2px; padding: 8px 10px; border-radius: 5px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); font-size: 12px; }
+.bt-log b { font: 400 16px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.bt-log em { font-style: normal; color: #e0c48f; }
+.vedmak-card.settlement-week .sw-army { margin: 0 0 6px; padding-left: 18px; font-size: 12px; }
+@media (max-width: 760px) { .bt-sides, .ar-tiers { grid-template-columns: 1fr; } }

@@ -1,0 +1,16 @@
+{{!-- Раунд битвы (PLAN 4.187) --}}
+<div class="vedmak-card battle-round">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">Битва: раунд {{round}}</span>
+      <span class="card-sub">{{terrain}}{{#if tie}} · ничья{{/if}}</span>
+    </div>
+  </header>
+  <div class="card-body">
+    <ul class="sw-lines">
+      {{#each sides}}<li><span>{{name}}</span><b class="{{#if win}}up{{/if}}">{{total}}</b><em>d10 {{d10}} + сила {{power}}{{#if ground}} + местность {{ground}}{{/if}}</em></li>{{/each}}
+    </ul>
+    {{#each units}}<p class="note{{#if routed}} warn{{/if}}">{{name}}: потери {{lost}}, осталось {{soldiers}}, боевой дух {{morale}}{{#if routed}} — бегут с поля!{{/if}}</p>{{/each}}
+    {{#if over}}<p class="note"><b>Битва окончена{{#if victor}}: победа — {{victor}}{{/if}}.</b></p>{{/if}}
+  </div>
+</div>
