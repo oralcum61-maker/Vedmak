@@ -19,10 +19,12 @@ import { MonsterSheet } from "./module/sheets/monster-sheet.mjs";
 import { LootSheet } from "./module/sheets/loot-sheet.mjs";
 import { SettlementSheet } from "./module/sheets/settlement-sheet.mjs";
 import { UnitSheet } from "./module/sheets/unit-sheet.mjs";
+import { BuildingSheet } from "./module/sheets/building-sheet.mjs";
+import { registerBuildingHooks } from "./module/settlement/buildings.mjs";
+import { registerSettlementGMHandlers } from "./module/settlement/settlement.mjs";
 import { BattleApp } from "./module/apps/battle-app.mjs";
 import * as ARMY from "./module/army/army.mjs";
 import * as settlement from "./module/settlement/settlement.mjs";
-import * as SETTLEMENT_CFG from "./module/config/settlement.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
@@ -279,6 +281,9 @@ Hooks.once("init", () => {
   DSC.registerSheet(Actor, SYSTEM_ID, UnitSheet, {
     types: ["unit"], makeDefault: true, label: "VEDMAK.SheetUnit"
   });
+  DSC.registerSheet(Actor, SYSTEM_ID, BuildingSheet, {
+    types: ["building"], makeDefault: true, label: "VEDMAK.SheetBuilding"
+  });
   DSC.registerSheet(Item, SYSTEM_ID, VedmakItemSheet, {
     makeDefault: true, label: "VEDMAK.SheetItem"
   });
@@ -293,6 +298,8 @@ Hooks.once("init", () => {
   registerZoneHooks();
   registerZoneEffectHooks();
   registerVisionSpeedups();
+  registerBuildingHooks();
+  registerSettlementGMHandlers();
   registerAlchemyHooks();
   registerBuffHooks();
   registerRaceHooks();
@@ -488,18 +495,14 @@ Hooks.on("preCreateActor", (actor, data) => {
   if (actor.type === "unit" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
     actor.updateSource({ img: CONFIG.VEDMAK_UNIT_IMG ?? "icons/skills/melee/weapons-crossed-swords-yellow.webp" });
   }
-  // Поселение (PLAN 4.183, 4.185): герб — усадьба; для начала — два жилых дома и лагерь лесорубов, уже готовые
-  if (actor.type === "settlement") {
-    if (!data.img || data.img === Actor.DEFAULT_ICON) actor.updateSource({ img: "icons/environment/settlement/house-manor.webp" });
-    // Постройки — предметы «Постройка» (PLAN 4.185); готовые, без стройки
-    if (!data.items?.length) {
-      const start = [["house", 0], ["house", 0], ["lumber", 1]].map(([key, workers]) => {
-        const item = SETTLEMENT_CFG.buildingItemData(key);
-        Object.assign(item.system, { level: 1, workers });
-        return item;
-      });
-      actor.updateSource({ items: start });
-    }
+  // Поселение (PLAN 4.183, 4.185): герб — усадьба; стартовые постройки — актёры, их создаёт хук createActor (4.198)
+  if (actor.type === "settlement" && (!data.img || data.img === Actor.DEFAULT_ICON)) {
+    actor.updateSource({ img: "icons/environment/settlement/house-manor.webp" });
+  }
+  // Постройка (PLAN 4.198): значок стройки; жетон связан с актёром
+  if (actor.type === "building") {
+    if (!data.img || data.img === Actor.DEFAULT_ICON) actor.updateSource({ img: "icons/environment/settlement/house-construction.webp" });
+    if (!foundry.utils.hasProperty(data, "prototypeToken.actorLink")) actor.updateSource({ "prototypeToken.actorLink": true });
   }
   // Токен персонажа привязан к актору, дружелюбен и видит — если создатель не задал этого сам:
   // копия, импорт или враждебный НИП-персонаж сохраняют свои настройки токена

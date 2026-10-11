@@ -1,4 +1,8 @@
-// Поселение (PLAN 4.183, 4.185): правила журнала мира manorlords, уровни построек, налог, склад, торговля, своя постройка.
+// Поселение (PLAN 4.183, 4.185, 4.198): правила журнала мира manorlords, уровни построек, налог, склад, торговля, своя
+// постройка; постройки — актёры поселения, перенос старых предметов «Постройка».
+const BM = await import("/systems/vedmak/module/settlement/buildings.mjs");
+const bOf = (town, key) => town.system.buildingActors.find(b => b.system.key === key);
+const until = async (test, ms = 4000) => { for (let t = 0; t < ms && !test(); t += 100) await wait(100); return test(); };
 const S = game.vedmak.settlement;
 const R = await import("/systems/vedmak/module/settlement/rules.mjs");
 const SC = await import("/systems/vedmak/module/config/settlement.mjs");
@@ -33,28 +37,33 @@ ok(Object.keys(SC.BUILDINGS).length >= 30 && SC.BUILDINGS.distillery, `в спр
 
 stepName("лист и стройка");
 const town = await Actor.create({ name: "Прогон: Липов", type: "settlement", folder: folder.id });
-ok(town.itemTypes.building.length === 3 && town.img.includes("house-manor"), "новое поселение: два дома и лесорубы — предметы «Постройка»");
+await until(() => town.system.buildingActors.length === 3);
+const townFolder = game.folders.find(x => x.getFlag("vedmak", "settlement") === town.uuid);
+ok(town.system.buildingActors.length === 3 && town.img.includes("house-manor") && town.system.buildingActors.every(b => b.folder === townFolder),
+  "новое поселение: два дома и лесорубы — актёры «Постройка» в папке поселения");
+ok(townFolder?.folder?.id === folder.id && town.system.summary.houses === 2, "папка построек — внутри папки поселения; сводка видит дома");
 const sheet = town.sheet; await sheet.render({ force: true }); await wait(500);
 ok(!!sheet.element.querySelector(".sv-plaques .sv-ring") && !!sheet.element.querySelector(".sv-res"), "лист открылся: пластины, кольцо одобрения, склад");
 await town.update({ "system.stock.Древесина": 40, "system.stock.Камень": 30 });
 await S.build(town, "manor");
-const manor = town.items.find(i => i.system.key === "manor");
+const manor = bOf(town, "manor");
 ok(manor?.system.constructing && town.system.stock["Древесина"] === 25 && town.system.stock["Камень"] === 20, "усадьба заложена, древесина и камень списаны");
 await S.build(town, "manor");
-ok(town.itemTypes.building.filter(i => i.system.key === "manor").length === 1, "вторую усадьбу не заложить");
+ok(town.system.buildingActors.filter(b => b.system.key === "manor").length === 1, "вторую усадьбу не заложить");
+ok(manor?.ownership.default === town.ownership.default && manor.prototypeToken.actorLink, "права постройки — как у поселения, жетон связан с актёром");
 ok(town.system.summary.taxMult === 0 && town.system.forecast.taxWealth === 0, "пока усадьба строится, налога нет");
 await manor.update({ "system.level": 1, "system.constructing": false });
 await town.update({ "system.taxes": "normal" });
 ok(town.system.summary.taxCoins === town.system.families * 10, `с усадьбой обычный налог — 10 монет с семьи (${town.system.summary.taxCoins})`);
 
 stepName("уровни, семьи, склад");
-const lumber = town.items.find(i => i.system.key === "lumber");
+const lumber = bOf(town, "lumber");
 await S.setWorkers(town, lumber.id, 9);
 ok(town.system.summary.workers[lumber.id] === Math.min(3, town.system.families), "семей на работе не больше мест и семей");
 await S.upgrade(town, lumber.id);
 ok(lumber.system.constructing && town.system.stock["Камень"] === 18, "лесорубы улучшаются: цена второго уровня списана");
 await S.build(town, "storehouse");
-const store = town.items.find(i => i.system.key === "storehouse");
+const store = bOf(town, "storehouse");
 await store.update({ "system.level": 1, "system.constructing": false });
 ok(town.system.summary.storage === SC.BASE_STORAGE + 60, `склад: вместимость ${town.system.summary.storage}`);
 const before = town.system.year * 100 + town.system.month * 10 + town.system.week;
@@ -66,22 +75,55 @@ stepName("торговля и своя постройка");
 const w0 = town.system.wealth;
 await S.trade(town, "Древесина", 5, "sell");
 ok(town.system.wealth === w0, "без торгового поста торговли нет");
-{ const d = SC.buildingItemData("tradepost"); d.system.level = 1; await town.createEmbeddedDocuments("Item", [d]); }
+{ const d = SC.buildingItemData("tradepost"); d.system.level = 1; await S.createBuildings(town, [d]); }
 const wood0 = town.system.stock["Древесина"];
 await S.trade(town, "Древесина", 5, "sell");
 ok(town.system.stock["Древесина"] === wood0 - 5 && Math.abs(town.system.wealth - w0 - 15 / SC.WEALTH_RATE) < 1e-6, "продано 5 древесины: 15 монет — в Богатство по курсу");
-const herb = await Item.create({ name: "Прогон: хата травника", type: "building", system: { group: "food",
+// Свой тип сооружения: актёр-постройка без поселения — образец каталога
+const herb = await Actor.create({ name: "Прогон: хата травника", type: "building", folder: folder.id, system: { group: "food",
   levels: [{ cost: [{ resource: "Древесина", qty: 2 }], weeks: 0, families: 1,
     produce: [{ resource: "Мандрагора", formula: "1d6", per: "family", noWinter: true }] }] } });
 await herb.sheet.render({ force: true }); await wait(400);
-ok(!!herb.sheet.element.querySelector(".building-details .bl-rows input[name='system.levels.0.produce.0.formula']"), "лист постройки: строки выработки уровня");
+ok(!!herb.sheet.element.querySelector(".bl-line .bl-side.out .bl-chip") && herb.sheet.element.querySelectorAll(".bl-steps .bl-step:not(.add)").length === 1,
+  "лист постройки: линия выработки и лестница из одной ступени");
+herb.sheet.element.querySelector(".bl-step [data-action=editLevel]")?.click(); await wait(400);
+ok(!!herb.sheet.element.querySelector(".bl-blueprint .bl-rows input[name='system.levels.0.produce.0.formula']"), "«Править» раскрывает чертёж ступени со строками выработки");
+{ const input = herb.sheet.element.querySelector("input[name='system.levels.0.produce.0.formula']");
+  input.value = "1d6+1"; input.dispatchEvent(new Event("change", { bubbles: true })); await wait(500); }
+ok(herb.system.levels[0].produce[0].formula === "1d6+1" && herb.system.levels[0].produce[0].noWinter, "правка выработки на листе сохраняется, прочие поля строки целы");
+herb.sheet.element.querySelector("[data-action=blLevelAdd]")?.click(); await wait(500);
+ok(herb.system.levels.length === 2 && herb.sheet.editing === 1, "«+ Ступень» — вторая ступень, её чертёж открыт");
+{ const w = herb.sheet.element.querySelector("input[name='system.levels.1.weeks']"); w.value = "5"; w.dispatchEvent(new Event("change", { bubbles: true })); await wait(500); }
+ok(herb.system.levels[1].weeks === 5 && herb.system.levels[0].produce[0].formula === "1d6+1", "правка второй ступени не трогает первую");
+await herb.update({ "system.levels": [{ ...herb._source.system.levels[0], produce: [{ ...herb._source.system.levels[0].produce[0], formula: "1d6" }] }] });
 await herb.sheet.close();
+await town.sheet.render({ force: true }); town.sheet.tab = "buildings"; town.sheet.showCatalog = true; await town.sheet.render(); await wait(400);
+ok(!!town.sheet.element.querySelector(`[data-action=build][data-src="${herb.uuid}"]`), "образец ведущего — в каталоге листа поселения");
 await town.update({ "system.families": 12 });
 const hut = await S.build(town, herb.uuid);
 ok(hut?.system.level === 1 && !hut.system.constructing, "своя постройка без срока стройки готова сразу");
 await S.setWorkers(town, hut.id, 1);
 ok(town.system.forecast.produced["Мандрагора"] === 3.5, `своя постройка даёт свой ресурс: Мандрагора ≈ ${town.system.forecast.produced["Мандрагора"]}`);
 await herb.delete();
+
+stepName("перенос старых предметов");
+// Поселение со старыми вложенными предметами «Постройка» и образец-предмет мира — перенос делает ведущий при загрузке
+const old = await Actor.create({ name: "Прогон: Старое поселение", type: "settlement", folder: folder.id }, { vedmakStarter: false });
+const mk = (key, st) => { const d = SC.buildingItemData(key); Object.assign(d.system, st); return d; };
+await old.createEmbeddedDocuments("Item", [mk("house", { level: 2 }), mk("lumber", { level: 1, workers: 2 }), mk("manor", { level: 0, constructing: true, progress: 3 })]);
+const oldItem = await Item.create({ name: "Прогон: старый образец", type: "building", system: { group: "food", levels: [{ weeks: 2, families: 1 }] } });
+const moved = await BM.migrateBuildingItems();
+const ob = old.system.buildingActors;
+ok(moved >= 4 && old.items.filter(i => i.type === "building").length === 0 && !game.items.get(oldItem.id), `перенесено ${moved}: предметов не осталось`);
+ok(ob.map(b => b.system.key).join() === "house,lumber,manor", `порядок построек тот же (${ob.map(b => b.system.key).join(", ")})`);
+ok(ob[0].system.level === 2 && ob[1].system.workers === 2 && ob[2].system.constructing && ob[2].system.progress === 3, "уровень, работники и стройка сохранились");
+const sample = game.actors.find(a => a.type === "building" && a.name === "Прогон: старый образец");
+ok(sample && !sample.system.settlement && sample.folder?.name === "Каталог построек", "образец-предмет мира стал образцом каталога");
+ok(await BM.migrateBuildingItems() === 0, "повторный перенос ничего не делает");
+for (const a of [...ob, sample].filter(Boolean)) await a.delete();
+await game.folders.find(x => x.getFlag("vedmak", "settlement") === old.uuid)?.delete();
+if (sample?.folder && !sample.folder.contents?.length) await sample.folder.delete?.();
+await old.delete();
 
 stepName("вкладки листа");
 // Настоящий щелчок: обработчик действия вызывает ядро (раньше «tab» перехватывало оно и падало без data-group)
@@ -91,4 +133,6 @@ for (const id of ["army", "buildings", "economy"]) {
 }
 
 await sheet.close();
+for (const b of town.system.buildingActors) await b.delete();
+await townFolder?.delete();
 await town.delete();

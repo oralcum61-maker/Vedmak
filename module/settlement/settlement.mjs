@@ -1,12 +1,13 @@
-// Действия поселения (PLAN 4.183, 4.185): стройка, снос, семьи на работе, склад, Богатство и ход недели.
-// Постройки — вложенные предметы «Постройка»: заложить можно встроенную по журналу мира (config/settlement.mjs), свою
-// постройку ведущего из мира или перетащить предмет на лист. Владелец поселения (игрок-правитель) строит и ставит
-// семьи на работу; неделю двигает ведущий, он же правит одобрение, Контроль, Ополчение и склад.
+// Действия поселения (PLAN 4.183, 4.185, 4.198): стройка, снос, семьи на работе, склад, Богатство и ход недели.
+// Постройки — актёры «Постройка» с uuid поселения, в папке «Постройки: <поселение>»: заложить можно встроенную по журналу
+// мира (config/settlement.mjs), образец ведущего из каталога (актёр-постройка без поселения) или перетащить образец на
+// лист. Владелец поселения (игрок-правитель) строит и ставит семьи на работу; создавать актёров и папки Foundry даёт
+// только ведущему — это делает его клиент (asGM). Неделю двигает ведущий, он же правит одобрение, Контроль и склад.
 
 import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
 import { simulateWeek, canAfford, costLabel, buildingState, levelDef, WEALTH } from "./rules.mjs";
 import { worldCurrency } from "../config/money.mjs";
-import { postCard } from "../combat/common.mjs";
+import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { unitsWeek } from "../army/army.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -16,13 +17,80 @@ const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
 /** Цена подписью. */
 export const priceLabel = cost => costLabel(cost);
 
-/** Данные постройки: ключ встроенной, uuid предмета мира или сами данные предмета. */
+/** Состояние в поселении — не часть образца: копия закладывается заново. */
+const STATE_KEYS = ["level", "constructing", "progress", "workers", "settlement"];
+
+/**
+ * Данные постройки для стройки: ключ встроенной, uuid образца (актёр-постройка или старый предмет «Постройка») или
+ * сами данные. Без состояния и без _id — это чертёж.
+ */
 export async function buildingSource(src) {
   if (!src) return null;
-  if (typeof src === "object") return foundry.utils.deepClone(src);
-  if (BUILDINGS[src]) return buildingItemData(src);
-  const item = await fromUuid(src);
-  return item?.type === "building" ? item.toObject() : null;
+  let data = null;
+  if (typeof src === "object") data = foundry.utils.deepClone(src);
+  else if (BUILDINGS[src]) data = buildingItemData(src);
+  else {
+    const doc = await fromUuid(src);
+    if (doc?.type === "building") data = doc.toObject();
+  }
+  if (!data) return null;
+  data.type = "building";
+  for (const k of ["_id", "folder", "ownership", "sort", "_stats", "items", "effects"]) delete data[k];
+  for (const k of STATE_KEYS) delete data.system?.[k];
+  return data;
+}
+
+/** Актёр-постройка этого поселения по id (чужие и образцы — нет). */
+export function buildingOf(actor, id) {
+  const b = game.actors.get(id);
+  return b?.type === "building" && b.system.settlement === actor.uuid ? b : null;
+}
+
+/** Папки в создании: две стройки подряд (стартовые постройки и первая заложенная) не создают две папки. */
+const folderMaking = new Map();
+
+/** Папка «Постройки: <поселение>» — внутри папки поселения; создаёт ведущий. */
+async function buildingFolder(settlement) {
+  const SYS = "vedmak";
+  const found = game.folders.find(f => f.type === "Actor" && f.getFlag(SYS, "settlement") === settlement.uuid);
+  if (found) return found;
+  if (!folderMaking.has(settlement.uuid)) {
+    folderMaking.set(settlement.uuid, Folder.create({ name: `Постройки: ${settlement.name}`, type: "Actor",
+      folder: settlement.folder?.id ?? null, color: "#5c4a32", flags: { [SYS]: { settlement: settlement.uuid } } })
+      .finally(() => folderMaking.delete(settlement.uuid)));
+  }
+  return folderMaking.get(settlement.uuid);
+}
+
+/**
+ * Создать актёров-построек поселения (ведущий): папка поселения, права — как у поселения, жетон связан с актёром.
+ * @param {Actor} settlement
+ * @param {object[]} list — данные построек (buildingSource) с состоянием в system
+ */
+export async function createBuildings(settlement, list) {
+  if (!list.length) return [];
+  const folder = await buildingFolder(settlement);
+  const ownership = foundry.utils.deepClone(settlement.ownership);
+  const last = Math.max(0, ...settlement.system.buildingActors.map(a => a.sort));
+  const data = list.map((d, i) => foundry.utils.mergeObject(d, {
+    folder: folder.id, ownership, sort: last + (i + 1) * CONST.SORT_INTEGER_DENSITY,
+    system: { settlement: settlement.uuid }, prototypeToken: { name: d.name, actorLink: true }
+  }, { inplace: false }));
+  return Actor.implementation.createDocuments(data);
+}
+
+/** Ведущий по просьбе игрока: заложить постройку его поселения (цену игрок уже заплатил). */
+async function buildForUser({ settlementUuid, data }, userId) {
+  const settlement = await fromUuid(settlementUuid);
+  if (settlement?.type !== "settlement" || !userOwnsAny(userId, settlement)) return;
+  await createBuildings(settlement, [data]);
+}
+
+/** Ведущий по просьбе игрока: снести постройку его поселения. */
+async function demolishForUser({ uuid }, userId) {
+  const b = await fromUuid(uuid);
+  if (b?.type !== "building" || !userOwnsAny(userId, b.system.settlementActor)) return;
+  await b.delete();
 }
 
 /** Хватает ли склада и казны: null — да, иначе {ok: false, why}. */
@@ -54,21 +122,25 @@ async function pay(actor, cost) {
   if (Object.keys(update).length) await actor.update(update);
 }
 
-/** Заложить постройку: цена списывается сразу; строят свободные семьи (0 недель — готова сразу). */
+/**
+ * Заложить постройку: цена списывается сразу; строят свободные семьи (0 недель — готова сразу). Ведущему возвращает
+ * актёра; игроку — true (актёра создаст клиент ведущего).
+ */
 export async function build(actor, src) {
   const data = await buildingSource(src);
   const check = canBuild(actor, data);
   if (!check.ok) return ui.notifications.warn(check.why);
-  delete data._id;
   Object.assign(data.system, { level: check.weeks ? 0 : 1, constructing: !!check.weeks, progress: 0, workers: 0 });
+  if (!game.user.isGM && !game.users.activeGM) return ui.notifications.warn("Заложить постройку можно, когда ведущий в игре.");
   await pay(actor, check.cost);
-  const [item] = await actor.createEmbeddedDocuments("Item", [data]);
-  return item;
+  if (!game.user.isGM) { await asGM("settlementBuild", { settlementUuid: actor.uuid, data }); return true; }
+  const [made] = await createBuildings(actor, [data]);
+  return made;
 }
 
 /** Улучшить постройку до следующего уровня: цена сразу, стройка — свободными семьями. */
 export async function upgrade(actor, id) {
-  const item = actor.items.get(id);
+  const item = buildingOf(actor, id);
   if (!item) return;
   const b = buildingState(item);
   const next = levelDef(b, b.level + 1);
@@ -105,19 +177,21 @@ export async function trade(actor, resource, qty, mode) {
 
 /** Снести постройку (или бросить стройку): потраченное не возвращается. */
 export async function demolish(actor, id) {
-  const item = actor.items.get(id);
+  const item = buildingOf(actor, id);
   if (!item) return;
   const ok = await DialogV2.confirm({
     window: { title: `Снести: ${item.name}` },
     content: `<p>${item.system.level ? "Постройка будет снесена" : "Стройка будет брошена"}; потраченное не вернётся.</p>`,
     rejectClose: false
   });
-  if (ok) await item.delete();
+  if (!ok) return;
+  if (game.user.isGM || item.canUserModify(game.user, "delete")) await item.delete();
+  else await asGM("settlementDemolish", { uuid: item.uuid });
 }
 
 /** Поставить семьи на работу: не больше мест и свободных семей. */
 export async function setWorkers(actor, id, value) {
-  const item = actor.items.get(id);
+  const item = buildingOf(actor, id);
   const max = item ? levelDef(buildingState(item), item.system.level)?.families ?? 0 : 0;
   if (!max) return;
   const others = Object.entries(actor.system.summary.workers).filter(([k]) => k !== id).reduce((s, [, n]) => s + n, 0);
@@ -174,7 +248,7 @@ export async function advanceWeek(actor) {
     "system.families": next.families, "system.approval": next.approval, "system.wealth": next.wealth, "system.stock": next.stock,
     "system.log": [...actor.system.log, report].slice(-LOG_LIMIT)
   });
-  if (changes.length) await actor.updateEmbeddedDocuments("Item", changes);
+  if (changes.length) await Actor.implementation.updateDocuments(changes);
   await postCard({
     template: "systems/vedmak/templates/chat/settlement-week.hbs",
     data: weekCardData(actor, report),
@@ -195,4 +269,10 @@ export function weekCardData(actor, report) {
     army: (report.army ?? []).map(a => ({ name: a.name, notes: a.notes.join("; ") })), armyHungry: (report.armyFed ?? 1) < 1,
     built: report.built.map(b => b.name + (b.level > 1 ? " (" + b.level + " ур.)" : "")).join(", ")
   };
+}
+
+/** Действия, которые за игрока делает клиент ведущего. */
+export function registerSettlementGMHandlers() {
+  registerGMHandler("settlementBuild", buildForUser);
+  registerGMHandler("settlementDemolish", demolishForUser);
 }

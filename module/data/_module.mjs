@@ -3,6 +3,7 @@ import { MonsterData } from "./actor/monster.mjs";
 import { LootData } from "./actor/loot.mjs";
 import { SettlementData } from "./actor/settlement.mjs";
 import { UnitData } from "./actor/unit.mjs";
+import { BuildingActorData } from "./actor/building.mjs";
 import { WeaponData, ArmorData, GearData, SpellData, ProfessionData, RaceData, CritWoundData, ComponentData, RecipeData,
   AlchemicalData, EnhancementData } from "./item/items.mjs";
 import { BuildingData } from "./item/building.mjs";
@@ -12,7 +13,8 @@ export const ACTOR_MODELS = {
   monster: MonsterData,
   loot: LootData,
   settlement: SettlementData,
-  unit: UnitData
+  unit: UnitData,
+  building: BuildingActorData
 };
 
 export const ITEM_MODELS = {

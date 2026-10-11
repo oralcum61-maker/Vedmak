@@ -2,7 +2,7 @@
 // одобрение 0–10 (шансы прихода семей и бунта), казна в Богатстве, налог, Ополчение и Контроль; вкладки «Хозяйство»
 // (склад с вместимостью и прогнозом недели, торговля, нужды, конец месяца), «Постройки» (карточки с уровнями, семьями
 // на работе, стройкой; каталог), «Летопись» и «Описание». Владелец строит, ставит семьи, налог и торгует; ведущий ещё
-// двигает неделю и правит числа.
+// двигает неделю и правит числа. Постройки — актёры (PLAN 4.198): карточка открывает лист постройки.
 
 import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_PER_MONTH, RESOURCE_ORDER, TAXES, BUY_MARKUP, MONTHS,
   resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
@@ -115,8 +115,8 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       label, cards: sys.buildings.filter(b => b.group === g).map(b => this.#card(b, sum))
     })).filter(g => g.cards.length);
 
-    // Каталог: свои постройки ведущего (сверху) и встроенные; своя заменяет встроенную с тем же кодом
-    const own = game.items.filter(i => i.type === "building").sort((a, b) => compareRu(a.name, b.name));
+    // Каталог: образцы ведущего — актёры-постройки без поселения (сверху) и встроенные; свой заменяет встроенную с тем же кодом
+    const own = game.actors.filter(a => a.type === "building" && !a.system.settlement).sort((a, b) => compareRu(a.name, b.name));
     const ownKeys = new Set(own.map(i => buildingState(i).key));
     const entry = (data, src, mine) => {
       const b = buildingState(data);
@@ -182,7 +182,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const lv = levelDef(b, b.level);
     const next = levelDef(b, b.level + 1);
     const workers = sum.workers[b.id] ?? 0;
-    const item = this.actor.items.get(b.id);
+    const item = game.actors.get(b.id);
     const gives = [];
     if (lv) {
       if (lv.housing) gives.push(`дом на ${lv.housing} сем.`);
@@ -232,7 +232,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onBuild(event, target) { if (await S.build(this.actor, target.dataset.src)) { this.showCatalog = false; this.render(); } }
   static async #onUpgrade(event, target) { await S.upgrade(this.actor, target.closest("[data-id]").dataset.id); }
   static async #onDemolish(event, target) { await S.demolish(this.actor, target.closest("[data-id]").dataset.id); }
-  static #onEditBuilding(event, target) { this.actor.items.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
+  static #onEditBuilding(event, target) { game.actors.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
   static async #onWorkers(event, target) {
     const id = target.closest("[data-id]").dataset.id;
     await S.setWorkers(this.actor, id, (this.actor.system.summary.workers[id] ?? 0) + Number(target.dataset.delta));
@@ -299,11 +299,17 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (unit) { this.render(); unit.sheet.render(true); }
   }
 
-  /** Перетащенный на лист предмет «Постройка» закладывается (со списанием цены); прочие предметы поселению не нужны. */
+  /** Перетащенный образец постройки (актёр без поселения или старый предмет) закладывается со списанием цены. */
+  async _onDropActor(event, actor) {
+    if (!this.actor.isOwner) return null;
+    if (actor.type !== "building") { ui.notifications.warn("На лист поселения можно перетащить постройку."); return null; }
+    if (actor.system.settlement === this.actor.uuid) return null;
+    return S.build(this.actor, actor.toObject());
+  }
+
   async _onDropItem(event, item) {
     if (!this.actor.isOwner) return null;
-    if (item.type !== "building") { ui.notifications.warn("Поселению можно передать только постройку."); return null; }
-    if (item.parent === this.actor) return super._onDropItem(event, item);
+    if (item.type !== "building") { ui.notifications.warn("Поселению предметы не нужны."); return null; }
     return S.build(this.actor, item.toObject());
   }
 }

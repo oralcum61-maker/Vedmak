@@ -21,7 +21,7 @@ ok(res.winner === 0 && res.units.find(x => x.id === "y").lost > res.units.find(x
 stepName("набор");
 const town = await Actor.create({ name: "Прогон: замок", type: "settlement", folder: folder.id,
   system: { families: 6, militia: 30, wealth: 2, stock: { "Еда": 50, "Топливо": 20, "Оружие": 25, "Доспехи": 5 } } });
-{ const d = SC.buildingItemData("drillground"); d.system.level = 1; await town.createEmbeddedDocuments("Item", [d]); }
+{ const d = SC.buildingItemData("drillground"); d.system.level = 1; await game.vedmak.settlement.createBuildings(town, [d]); }
 ok(town.system.summary.drill === 1, "плац даёт тренировку");
 const militia = await ARMY.recruit(town, { origin: "militia", count: 20, kind: "infantry", name: "Прогон: ополчение" });
 ok(militia?.type === "unit" && militia.system.soldiers === 20 && town.system.militia === 10, "из Ополчения: 20 бойцов, в Ополчении осталось 10");
@@ -71,4 +71,6 @@ await disbanding; window.__noAutoDialog = false; await wait(400);
 ok(!game.actors.get(militia.id) && town.system.militia === m0 + left, "распущенное ополчение вернулось в Ополчение");
 
 for (const a of [fam, merc, foe]) if (game.actors.get(a.id)) await a.delete();
+for (const b of town.system.buildingActors) await b.delete();
+await game.folders.find(x => x.getFlag("vedmak", "settlement") === town.uuid)?.delete();
 await town.delete();

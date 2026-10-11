@@ -204,18 +204,6 @@
 @media (max-width: 760px) { .sv-plaques { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sv-res, .sv-cards, .sv-catalog, .sv-cols { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .sv-pips i.next { animation: none; } }
 
-/* ─── Лист предмета «Постройка» (PLAN 4.185): уровни с таблицей ресурсов ─── */
-.building-details .bl-checks { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 6px 0; }
-.building-details .bl-level { position: relative; }
-.building-details .bl-del { position: absolute; top: 4px; right: 8px; color: var(--vd-text-dim, #bab4a8); }
-.building-details .bl-del:hover { color: #e0937f; }
-.building-details .bl-table { overflow-x: auto; margin-top: 6px; }
-.building-details .bl-table table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-.building-details .bl-table th { font-weight: 600; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--vd-text-dim, #bab4a8); padding: 2px 3px; text-align: center; }
-.building-details .bl-table tbody th { text-align: left; white-space: nowrap; }
-.building-details .bl-table td { padding: 2px; }
-.building-details .bl-table input { width: 100%; min-width: 38px; height: 24px; padding: 0 3px; text-align: center; }
-.building-details .bl-add { width: 100%; margin-top: 4px; }
 
 /* ─── Журнал мира (PLAN 4.185): календарь, Ополчение и Контроль, склад со своими ресурсами, конец месяца ─── */
 .sv-week { display: inline-flex; align-items: center; gap: 4px; }
@@ -240,14 +228,111 @@
 .sv-month li { display: block; line-height: 1.35; }
 .sv-month li.warn { color: var(--sv-blood-lite); }
 .sv-month li.up { color: var(--sv-green); }
-.building-details .bl-list { display: grid; gap: 4px; margin-top: 8px; }
-.building-details .bl-cost { display: grid; grid-template-columns: 1fr 70px 20px; gap: 6px; align-items: center; }
-.building-details .bl-rows { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-.building-details .bl-rows th { font-weight: 600; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--vd-text-dim, #bab4a8); padding: 2px; text-align: left; }
-.building-details .bl-rows td { padding: 2px; }
-.building-details .bl-rows td.c { text-align: center; }
-.building-details .bl-rows input[type="text"], .building-details .bl-rows input[type="number"], .building-details .bl-rows select { width: 100%; height: 24px; }
-.building-details .bl-rows input[type="number"] { max-width: 50px; }
-.building-details .bl-formula { max-width: 70px; }
-.building-details .bl-plus { justify-self: start; font-size: 11px; color: var(--vd-text-dim, #bab4a8); }
-.building-details .bl-plus:hover { color: var(--vd-silver, #f1ece0); }
+
+/* ─── Лист постройки (PLAN 4.198) ───────────────────────────────────────────────────────────────────────────────
+   Производственная линия: сырьё → герб в кованом гнезде → выработка, значками ресурсов с бросками; лестница уровней —
+   ступени-пластины (пройденные посеребрены, текущая — серебряная грань, следующая — тёплый свет); чертёж ступени
+   ведущего — утопленная пластина под лестницей. */
+.sv.bl .sv-plaques { grid-template-columns: 1.15fr 1fr 1fr 1fr; }
+.sv.bl .bl-mini { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--sv-dim); }
+.sv.bl .bl-mini input[type="number"] { width: 46px; height: 22px; text-align: center; }
+.sv.bl .bl-mini input[type="text"] { width: 96px; height: 22px; }
+.sv.bl .bl-mini input[type="checkbox"] { width: 14px; height: 14px; margin: 0; }
+.bl-mini-row { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.bl-goto { color: var(--sv-ash); font-size: 12px; } .bl-goto:hover { color: var(--sv-silver); }
+.bl-flags { display: flex; flex-wrap: wrap; gap: 4px; }
+.bl-flags span { padding: 2px 7px; border-radius: 3px; background: rgba(0, 0, 0, .4); box-shadow: var(--vd-sink-sm); color: var(--sv-ink); }
+.bl-slots { display: flex; flex-wrap: wrap; gap: 4px; margin: 3px 0; }
+.bl-slots i { width: 14px; height: 18px; border-radius: 7px 7px 3px 3px; background: rgba(0, 0, 0, .5); box-shadow: inset 0 1px 2px #000, 0 0 0 1px rgba(255, 255, 255, .05); }
+.bl-slots i.on { background: linear-gradient(#e9e2d2, #9d9584); box-shadow: 0 1px 2px #000, inset 0 1px 0 rgba(255, 255, 255, .6); }
+
+/* Значок ресурса: гнездо с картинкой, бросок металлом, подпись */
+.bl-chip { display: inline-grid; grid-template-columns: 34px auto; grid-template-rows: auto auto; column-gap: 7px; align-items: center;
+  padding: 4px 10px 4px 4px; border-radius: 20px 6px 6px 20px; background: linear-gradient(#2a2b30, #1e1f23); box-shadow: var(--vd-lift-sm), 0 0 0 1px #060607; }
+.bl-chip img { grid-row: 1 / span 2; width: 34px; height: 34px; border: 0; border-radius: 50%; object-fit: cover; background: #121316;
+  box-shadow: 0 0 0 1.5px #0a0a0b, 0 0 0 2.5px #8e887c; }
+.bl-chip b { font: 400 17px/1 var(--vd-font-head); background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bl-chip small { font-size: 10.5px; line-height: 1.15; color: var(--sv-ash); max-width: 150px; }
+.bl-chip.sm { grid-template-columns: 26px auto; grid-template-rows: auto; padding: 3px 9px 3px 3px; }
+.bl-chip.sm img { grid-row: auto; width: 26px; height: 26px; }
+.bl-chip.sm b { font-size: 15px; }
+.bl-chip.xs { grid-template-columns: 20px auto; grid-template-rows: auto; column-gap: 5px; padding: 2px 7px 2px 2px; }
+.bl-chip.xs img { grid-row: auto; width: 20px; height: 20px; box-shadow: 0 0 0 1px #0a0a0b, 0 0 0 1.5px #6f6a60; }
+.bl-chip.xs b { font-size: 13px; }
+.bl-chip.short { box-shadow: var(--vd-lift-sm), 0 0 0 1px var(--sv-blood); }
+.bl-chip.short b { background: none; color: var(--sv-blood-lite); }
+.bl-none { font-size: 11.5px; font-style: italic; color: var(--sv-dim); }
+
+/* Производственная линия */
+.bl-flow.ghost .bl-line { opacity: .62; }
+.bl-line { display: grid; grid-template-columns: minmax(0, 1fr) 38px auto 38px minmax(0, 1fr); align-items: center; gap: 6px; padding: 16px 14px;
+  border-radius: 8px; background: radial-gradient(70% 120% at 50% 50%, rgba(255, 240, 215, .05), transparent 70%), rgba(10, 10, 12, .4); box-shadow: var(--vd-sink-sm); }
+.bl-side { display: flex; flex-wrap: wrap; align-content: center; gap: 6px; min-height: 64px; }
+.bl-side.in { justify-content: flex-end; }
+.bl-side .cap { flex-basis: 100%; }
+.bl-side.in .cap { text-align: right; }
+.bl-arrow { height: 2px; position: relative; background: linear-gradient(90deg, transparent, #8e887c); }
+.bl-arrow::after { content: ""; position: absolute; right: -1px; top: -4px; border: 5px solid transparent; border-left: 7px solid #bdb6a6; border-right: 0; }
+.bl-core { position: relative; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 38%, #3a3c42, #111215 74%);
+  box-shadow: 0 0 0 2px #0a0a0b, 0 0 0 4.5px #bdb6a6, 0 0 0 6px #0a0a0b, 0 0 0 8px #5f5a51, 0 6px 16px rgba(0, 0, 0, .8); }
+.bl-core img { width: 74px; height: 74px; border: 0; border-radius: 50%; object-fit: cover; filter: sepia(.25) contrast(1.08); }
+.bl-upkeep { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0 4px; }
+.bl-upkeep .cap { margin-right: 4px; }
+.bl-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.bl-tags li { display: flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 4px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); }
+.bl-tags i { color: var(--sv-ash); font-size: 12px; }
+.bl-tags span { font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--sv-dim); }
+.bl-tags b { font: 400 16px/1 var(--vd-font-head); color: var(--sv-silver); }
+
+/* Лестница уровней */
+.bl-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 10px; }
+.bl-step { position: relative; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 9px; padding: 10px 12px 10px 10px; border-radius: 6px;
+  background: linear-gradient(#26272c, #1c1d21); box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.bl-step.future { opacity: .62; }
+.bl-step.done { background: linear-gradient(#2c2c30, #222226); }
+.bl-step.current { box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506, 0 0 0 2px rgba(241, 236, 224, .55); }
+.bl-step.next { box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506, 0 0 14px rgba(224, 196, 143, .18); }
+.bl-step.editing { box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506, 0 0 0 2px rgba(224, 196, 143, .7); }
+.bl-n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 400 19px/1 var(--vd-font-head); color: var(--sv-dim);
+  background: radial-gradient(circle at 50% 38%, #34353b, #101114 72%); box-shadow: 0 0 0 1.5px #0a0a0b, 0 0 0 3px #4a4640; }
+.bl-step.done .bl-n, .bl-step.current .bl-n { color: var(--sv-silver); box-shadow: 0 0 0 1.5px #0a0a0b, 0 0 0 3px #bdb6a6; }
+.bl-step.next .bl-n { color: #e0c48f; box-shadow: 0 0 0 1.5px #0a0a0b, 0 0 0 3px #8a7550; }
+.bl-step-body { display: grid; gap: 6px; min-width: 0; align-content: start; }
+.bl-cost, .bl-gives { display: flex; flex-wrap: wrap; gap: 4px; }
+.bl-facts { display: flex; flex-wrap: wrap; gap: 4px 11px; font-size: 11.5px; color: var(--sv-ink); }
+.bl-facts i { color: var(--sv-dim); font-size: 10.5px; margin-right: 2px; }
+.bl-step-tags { font-size: 10.5px; line-height: 1.35; color: var(--sv-ash); }
+.bl-edit { position: absolute; top: 7px; right: 8px; color: var(--sv-dim); font-size: 11px; }
+.bl-edit:hover, .bl-step.editing .bl-edit { color: #e0c48f; }
+.bl-step.add { display: grid; place-items: center; grid-template-columns: 1fr; min-height: 90px; background: none; box-shadow: none;
+  border: 1px dashed rgba(214, 190, 150, .3); }
+.bl-step.add a { display: grid; justify-items: center; gap: 4px; color: var(--sv-dim); font: 600 10px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; }
+.bl-step.add a:hover { color: var(--sv-silver); }
+
+/* Чертёж ступени (ведущий) */
+.bl-blueprint { padding: 12px 14px 14px; border-radius: 8px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(224, 196, 143, .18); }
+.bl-blueprint h3 { justify-content: space-between; }
+.bl-del { color: var(--sv-dim); font-size: 13px; } .bl-del:hover { color: var(--sv-blood-lite); }
+.bl-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.bl-fields label { display: grid; gap: 3px; }
+.bl-fields span { font: 600 9px/1.1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--sv-dim); }
+.sv.bl .bl-fields input { width: 100%; height: 30px; text-align: center; font: 400 18px/1 var(--vd-font-head); }
+.bl-group { display: grid; gap: 6px; }
+.bl-costs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.bl-cost-row { display: inline-grid; grid-template-columns: 150px 60px 14px; gap: 5px; align-items: center; padding: 3px 6px; border-radius: 4px; background: rgba(0, 0, 0, .3); }
+.sv.bl .bl-cost-row input { height: 24px; }
+.bl-cost-row a, .bl-rows a { color: var(--sv-dim); } .bl-cost-row a:hover, .bl-rows a:hover { color: var(--sv-blood-lite); }
+.bl-rows { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.bl-rows th { font: 600 9px/1.1 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--sv-dim); padding: 2px 3px; text-align: left; }
+.bl-rows td { padding: 2px 3px; }
+.bl-rows td.c { text-align: center; }
+.sv.bl .bl-rows input[type="text"], .sv.bl .bl-rows input[type="number"], .sv.bl .bl-rows select { width: 100%; height: 24px; }
+.sv.bl .bl-rows input[type="number"] { max-width: 52px; }
+.sv.bl .bl-rows .bl-formula { max-width: 80px; }
+.bl-plus { justify-self: start; font-size: 11px; color: var(--sv-dim); } .bl-plus:hover { color: var(--sv-silver); }
+@media (max-width: 760px) {
+  .sv.bl .sv-plaques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bl-line { grid-template-columns: 1fr; justify-items: center; } .bl-arrow { width: 2px; height: 22px; } .bl-side, .bl-side.in { justify-content: center; }
+  .bl-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

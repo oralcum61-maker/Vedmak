@@ -1,6 +1,6 @@
 // Поселение (PLAN 4.183, 4.185) по журналу мира manorlords: календарь (год, месяц, неделя), семьи, одобрение 0–10,
 // Контроль, Ополчение, казна — Богатство (1 = 500 монет валюты мира), склад — свободный список ресурсов; постройки —
-// вложенные предметы «Постройка». Правила недели — settlement/rules.mjs; производные (дома, бездомные, работа,
+// актёры «Постройка» мира с uuid этого поселения (PLAN 4.198). Правила недели — settlement/rules.mjs; производные (дома, бездомные, работа,
 // шансы месяца, прогноз недели) считаются здесь из тех же правил.
 
 import { int, num, str, html } from "../fields.mjs";
@@ -30,9 +30,21 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
     };
   }
 
-  /** Постройки поселения для правил: в порядке листа. */
+  /**
+   * Актёры-постройки поселения: в порядке листа, затем по времени создания (от порядка зависят очередь строителей и
+   * раздача семей). Пока мир загружается, коллекции актёров ещё нет — пусто; поселения пересчитываются после загрузки.
+   */
+  get buildingActors() {
+    const uuid = this.parent?.uuid;
+    if (!uuid || !game.actors || this.parent.pack) return [];
+    const born = a => a._stats?.createdTime ?? 0;
+    return game.actors.filter(a => a.type === "building" && a.system.settlement === uuid)
+      .sort((a, b) => (a.sort - b.sort) || (born(a) - born(b)) || (a.id < b.id ? -1 : 1));
+  }
+
+  /** Постройки поселения для правил. */
   get buildings() {
-    return (this.parent?.itemTypes?.building ?? []).slice().sort((a, b) => a.sort - b.sort).map(buildingState);
+    return this.buildingActors.map(buildingState);
   }
 
   /** Склад числами (неверное — 0). */
