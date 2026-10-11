@@ -40,7 +40,8 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
-      tab: SettlementSheet.#onTab,
+      // Не «tab»: это имя ядро ApplicationV2 забирает себе (_onClickTab → changeTab с обязательной data-group)
+      settlementTab: SettlementSheet.#onTab,
       week: SettlementSheet.#onWeek,
       build: SettlementSheet.#onBuild,
       upgrade: SettlementSheet.#onUpgrade,

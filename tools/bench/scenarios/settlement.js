@@ -83,5 +83,12 @@ await S.setWorkers(town, hut.id, 1);
 ok(town.system.forecast.produced["Мандрагора"] === 3.5, `своя постройка даёт свой ресурс: Мандрагора ≈ ${town.system.forecast.produced["Мандрагора"]}`);
 await herb.delete();
 
+stepName("вкладки листа");
+// Настоящий щелчок: обработчик действия вызывает ядро (раньше «tab» перехватывало оно и падало без data-group)
+for (const id of ["army", "buildings", "economy"]) {
+  sheet.element.querySelector(`nav [data-tab="${id}"]`)?.click(); await wait(300);
+  ok(sheet.tab === id && !!sheet.element.querySelector(`nav [data-tab="${id}"].active`), `вкладка «${id}» открывается щелчком`);
+}
+
 await sheet.close();
 await town.delete();

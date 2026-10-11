@@ -118,7 +118,12 @@ function checkCode() {
       let depth = 1, j = m.index + m[0].length;
       const start = j;
       while (depth && j < s.length) { if (s[j] === "{") depth++; else if (s[j] === "}") depth--; j++; }
-      for (const k of s.slice(start, j - 1).matchAll(/(?:^|[,{\n])\s*([A-Za-z_]\w*)\s*(?=[:,(\n}])/g)) handled.add(k[1]);
+      for (const k of s.slice(start, j - 1).matchAll(/(?:^|[,{\n])\s*([A-Za-z_]\w*)\s*(?=[:,(\n}])/g)) {
+        handled.add(k[1]);
+        // «tab» ядро ApplicationV2 обрабатывает само (_onClickTab → changeTab, нужна data-group): свой обработчик
+        // с этим именем не вызывается, а щелчок без data-group падает (лист поселения, 3.2.0)
+        if (k[1] === "tab") err(S, `${rel(f)}: своё действие «tab» в actions — имя занято ядром; назовите иначе`);
+      }
     }
   }
   for (const f of [...templates, ...files]) {
