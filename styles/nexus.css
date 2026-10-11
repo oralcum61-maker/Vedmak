@@ -158,3 +158,72 @@ body.vd-hud .nx-board { max-height: min(860px, calc(100vh / var(--ui-scale, 1) -
 #vedmak-nexus .nx-acts .nx-access.on small { color: var(--nx-blood-lite); }
 .nx-hint { margin: 0; font-size: 11px; color: var(--nx-dim); }
 @media (prefers-reduced-motion: reduce) { .nx-board, .nx-pop { animation: none; } .nx-card, .nx-print img { transition: none; } }
+
+/* ═══════════════ Облик в духе худа и паузы (PLAN 4.184) ═══════════════
+   Медальон бирки — кованое гнездо на заклёпках; доска — кованые уголки и гравированная рамка, «Нексус» с разрядкой
+   и нитью с ромбом киновари (как у паузы); оттиски карточек — в металлической раме с заклёпками. */
+
+/* Медальон бирки: выходит за край кожи, как гнездо худа на цепи */
+#vedmak-nexus .nx-here { padding-left: 4px; }
+#vedmak-nexus .nx-medal { width: 50px; height: 50px; margin: -8px 0 -8px -12px; overflow: visible;
+  background: conic-gradient(from 210deg, #f3eee2, #6f6a60 12%, #d8d1c2 25%, #47443d 38%, #e9e3d5 52%, #6a655c 66%, #cdc6b6 80%, #514d45 90%, #f3eee2);
+  box-shadow: 0 0 0 1px #060708, 0 5px 10px rgba(0, 0, 0, .7); }
+#vedmak-nexus .nx-medal::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3a3c42, #121316 75%);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, .95), inset 0 0 0 1px #050506; }
+#vedmak-nexus .nx-medal::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 50% 2.3px, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at 50% calc(100% - 2.3px), #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at 2.3px 50%, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at calc(100% - 2.3px) 50%, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px); }
+#vedmak-nexus .nx-medal img, #vedmak-nexus .nx-medal b { position: absolute; inset: 6px; z-index: 1; width: calc(100% - 12px); height: calc(100% - 12px);
+  border-radius: 50%; display: grid; place-items: center; }
+#vedmak-nexus .nx-medal img { filter: sepia(.5) saturate(.7) contrast(1.12) brightness(.9); }
+
+/* Доска: кованые уголки с заклёпкой и гравированная рамка внутри */
+.nx-board::before { content: ""; position: absolute; inset: 0; border-radius: 8px; pointer-events: none; z-index: 2;
+  background:
+    radial-gradient(circle at 10px 10px, #fbf7ec 0, #8e887c 1.5px, #2a2824 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 10px) 10px, #fbf7ec 0, #8e887c 1.5px, #2a2824 2.4px, transparent 2.9px),
+    radial-gradient(circle at 10px calc(100% - 10px), #fbf7ec 0, #8e887c 1.5px, #2a2824 2.4px, transparent 2.9px),
+    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px), #fbf7ec 0, #8e887c 1.5px, #2a2824 2.4px, transparent 2.9px),
+    linear-gradient(#cfc8b8, #6f6a60) 4px 4px / 26px 3px no-repeat, linear-gradient(90deg, #cfc8b8, #6f6a60) 4px 4px / 3px 26px no-repeat,
+    linear-gradient(#cfc8b8, #6f6a60) calc(100% - 4px) 4px / 26px 3px no-repeat, linear-gradient(90deg, #6f6a60, #cfc8b8) calc(100% - 4px) 4px / 3px 26px no-repeat,
+    linear-gradient(#6f6a60, #cfc8b8) 4px calc(100% - 4px) / 26px 3px no-repeat, linear-gradient(90deg, #cfc8b8, #6f6a60) 4px calc(100% - 4px) / 3px 26px no-repeat,
+    linear-gradient(#6f6a60, #cfc8b8) calc(100% - 4px) calc(100% - 4px) / 26px 3px no-repeat, linear-gradient(90deg, #6f6a60, #cfc8b8) calc(100% - 4px) calc(100% - 4px) / 3px 26px no-repeat; }
+.nx-board::after { content: ""; position: absolute; inset: 7px; border-radius: 5px; pointer-events: none; z-index: 2;
+  border: 1px solid rgba(214, 205, 186, .1); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35); }
+
+/* «Нексус» — кованая надпись с разрядкой, под ней нить с ромбом киновари */
+.nx-head { position: relative; padding: 16px 22px 16px 26px; border-bottom: 0; box-shadow: none; }
+.nx-head h2 { font-size: 24px; letter-spacing: .3em; text-transform: uppercase; }
+.nx-head::after { content: ""; position: absolute; left: 26px; right: 22px; bottom: 2px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(214, 205, 186, .45) 18%, rgba(214, 205, 186, .45) 82%, transparent); }
+.nx-head::before { content: ""; position: absolute; left: 50%; bottom: -1.5px; width: 7px; height: 7px; margin-left: -3.5px; transform: rotate(45deg); z-index: 1;
+  background: #b8432c; box-shadow: 0 0 0 1.5px #0a0a0b, 0 0 0 2.5px rgba(214, 205, 186, .6); }
+.nx-groups { padding-top: 16px; }
+
+/* Карточки: оттиск в металлической раме с заклёпками по углам */
+.nx-card { box-shadow: inset 0 1px 0 rgba(255, 240, 215, .1), 0 0 0 1px #050506, 0 0 0 2.5px rgba(189, 182, 166, .28), 0 8px 14px -6px rgba(0, 0, 0, .9); }
+.nx-card:hover { box-shadow: inset 0 1px 0 rgba(255, 240, 215, .14), 0 0 0 1px #050506, 0 0 0 2.5px rgba(214, 205, 186, .6), 0 14px 20px -8px rgba(0, 0, 0, .95); }
+.nx-print::before { content: ""; position: absolute; inset: 4px; z-index: 1; pointer-events: none; border: 1px solid rgba(241, 236, 224, .22);
+  background:
+    radial-gradient(circle at 0 0, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at 100% 0, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at 0 100%, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at 100% 100%, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px); }
+.nx-name { position: relative; padding-left: 21px; background: linear-gradient(#202126, #18191c); }
+.nx-name::before { content: ""; position: absolute; left: 8px; top: 12px; width: 5px; height: 5px; transform: rotate(45deg);
+  background: linear-gradient(135deg, #fdf9ef, #9b958a); box-shadow: 0 0 0 1px #050506; }
+.nx-card.active .nx-name::before { background: #b8432c; }
+.nx-cards.sm .nx-name { padding-left: 18px; }
+.nx-cards.sm .nx-name::before { left: 7px; top: 9px; width: 4px; height: 4px; }
+
+/* Окно места: рама с заклёпками, название кованым шрифтом */
+.nx-pop { overflow: visible; }
+.nx-pop::after { content: ""; position: absolute; inset: 0; border-radius: 6px; pointer-events: none;
+  background: radial-gradient(circle at 7px 7px, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px),
+    radial-gradient(circle at 7px calc(100% - 7px), #fbf7ec 0, #8e887c 1.3px, #2a2824 2.1px, transparent 2.6px); }
+.nx-pop-print { border-radius: 6px 6px 0 0; overflow: hidden; }
+.nx-pop h3 { background: var(--vd-metal); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .9)) drop-shadow(0 0 6px rgba(0, 0, 0, .8)); text-shadow: none; }
