@@ -506,3 +506,12 @@
 .rc-cols p { margin: 3px 0 0; font-size: 11.5px; color: var(--sv-ink); }
 .rc-cols p.dim { color: var(--sv-dim); font-style: italic; }
 @media (max-width: 760px) { .rc-stats, .rc-cols { grid-template-columns: 1fr 1fr; } }
+
+/* Решение события из чата (PLAN 4.210): варианты кнопками; метка «ждёт решения» в списке актёров */
+.vedmak-card.settlement-event .se-choices { display: grid; gap: 5px; margin-top: 4px; }
+.vedmak-card.settlement-event .se-choice { display: grid; gap: 2px; }
+.vedmak-card.settlement-event .se-choice button { width: 100%; margin: 0; padding: 5px 8px; font-size: 11px; text-align: left; }
+.vedmak-card.settlement-event .se-choice small { font-size: 10.5px; line-height: 1.35; color: var(--sv-ash, #9a958a); }
+.vedmak-card.settlement-event .se-done { color: var(--sv-ash, #9a958a); font-style: italic; }
+.vd-pending { margin-left: 6px; font-size: 11px; color: #d9826d; }
+.sv-badge { display: inline-block; min-width: 16px; height: 16px; margin-left: 6px; padding: 0 4px; border-radius: 8px; font: 700 10px/16px var(--vd-font-body, sans-serif); text-align: center; vertical-align: 2px; color: #fff; background: #b8432c; box-shadow: 0 0 6px rgba(184, 67, 44, .6); }

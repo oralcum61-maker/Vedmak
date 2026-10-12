@@ -9,7 +9,8 @@ import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLeve
 import { worldCurrency } from "../config/money.mjs";
 import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { unitsWeek, clearBesieging } from "../army/army.mjs";
-import { autoResolve, rollMonthEvent, SETTLEMENT_EVENTS } from "./events.mjs";
+import { autoResolve, rollMonthEvent, postPending, SETTLEMENT_EVENTS } from "./events.mjs";
+import { playSound } from "../fx/sounds.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 const LOG_LIMIT = 40;
@@ -139,6 +140,7 @@ export async function build(actor, src) {
   await pay(actor, check.cost);
   if (!game.user.isGM) { await asGM("settlementBuild", { settlementUuid: actor.uuid, data }); return true; }
   const [made] = await createBuildings(actor, [data]);
+  playSound("ui-coin");
   return made;
 }
 
@@ -152,6 +154,7 @@ export async function upgrade(actor, id) {
   const miss = affordable(actor, next.cost);
   if (miss) return ui.notifications.warn(miss.why);
   await pay(actor, next.cost);
+  playSound("ui-coin");
   if (!next.weeks) await item.update({ "system.level": b.level + 1 });
   else await item.update({ "system.constructing": true, "system.progress": 0 });
 }
@@ -185,6 +188,7 @@ export async function research(settlement, buildingId, nodeId) {
   const check = canResearch(settlement, building, nodeId);
   if (!check.ok) return ui.notifications.warn(check.why);
   await pay(settlement, check.node.cost);
+  playSound("ui-coin");
   if (!check.node.weeks) await building.update({ "system.upgrades": [...building.system.upgrades, nodeId] });
   else await building.update({ "system.research": { node: nodeId, progress: 0 } });
   return check.node;
@@ -211,6 +215,7 @@ export async function placeOrder(settlement, buildingId, item, forActor, qty = 1
   const miss = affordable(settlement, cost);
   if (miss) return ui.notifications.warn(miss.why);
   await pay(settlement, cost);
+  playSound("ui-coin");
   const order = { id: foundry.utils.randomID(), uuid: item.uuid, name: item.name, img: item.img, type: item.type, qty,
     for: forActor?.uuid ?? "", forName: forActor?.name ?? "", weeks, progress: 0, cost };
   await b.update({ "system.orders": [...b.system.toObject().orders, order] });
@@ -307,12 +312,14 @@ export async function trade(actor, resource, qty, mode) {
     if (have < qty) return ui.notifications.warn("На складе меньше: " + have + ".");
     const gain = (priceOf(resource) * qty) / WEALTH_RATE;
     await actor.update({ ["system.stock." + resource]: have - qty, "system.wealth": Math.round((sys.wealth + gain) * 1000) / 1000 });
+    playSound("ui-coin");
   } else {
     const price = (Math.ceil(priceOf(resource) * BUY_MARKUP) * qty) / WEALTH_RATE;
     if (sys.wealth < price) return ui.notifications.warn("В казне меньше " + Math.round(price * 1000) / 1000 + " Богатства.");
     const room = Math.max(0, sys.summary.storage - have);
     if (qty > room) return ui.notifications.warn("На складе места на " + room + ".");
     await actor.update({ ["system.stock." + resource]: have + qty, "system.wealth": Math.round((sys.wealth - price) * 1000) / 1000 });
+    playSound("ui-coin");
   }
 }
 
@@ -364,10 +371,12 @@ export async function moveWealth(actor, units, mode) {
     if (purse < coins) return ui.notifications.warn(`Нужно ${coins} ${cur.abbr}, у ${hero.name} — ${purse}.`);
     await hero.update({ [`system.money.${cur.key}`]: purse - coins });
     await actor.update({ "system.wealth": actor.system.wealth + n });
+    playSound("ui-coin");
   } else {
     if (actor.system.wealth < n) return ui.notifications.warn(`В казне только ${actor.system.wealth} Богатства.`);
     await actor.update({ "system.wealth": actor.system.wealth - n });
     await hero.update({ [`system.money.${cur.key}`]: purse + coins });
+    playSound("ui-coin");
   }
 }
 
@@ -376,7 +385,8 @@ export async function advanceWeek(actor) {
   if (!game.user.isGM) return ui.notifications.warn("Время двигает ведущий.");
   // События месяца (PLAN 4.206): правитель не решил до хода — решение по умолчанию
   const resolved = await autoResolve(actor);
-  const { next, report } = simulateWeek(actor.system.state, { rand });
+  const needsApproval = (() => { try { return game.settings.get("vedmak", "settlementNeedsApproval"); } catch { return false; } })();
+  const { next, report } = simulateWeek(actor.system.state, { rand, needsApproval });
   report.events.unshift(...resolved);
   let decision = null;
   if (report.monthEnd) {
@@ -401,6 +411,9 @@ export async function advanceWeek(actor) {
   else if (actor.system.siege.units.length) report.events.push({ kind: "siege", text: "Осада снята: под стенами никого." });
   const caravans = await caravansWeek(actor, next.stock);
   next.stock = caravans.stock; report.caravans = caravans.lines;
+  // Летопись (PLAN 4.210): недели, что не помещаются на лист, — в журнал «Летопись: <поселение>»
+  const fullLog = [...actor.system.log, report];
+  if (fullLog.length > LOG_LIMIT) await archiveChronicle(actor, fullLog.slice(0, fullLog.length - LOG_LIMIT));
   const before = new Map(actor.system.buildings.map(b => [b.id, b]));
   const changes = next.buildings.filter(b => {
     const was = before.get(b.id);
@@ -410,17 +423,82 @@ export async function advanceWeek(actor) {
     "system.research": b.research, "system.upgrades": b.upgrades }));
   await actor.update({
     "system.year": next.year, "system.month": next.month, "system.week": next.week,
-    "system.families": next.families, "system.approval": next.approval, "system.wealth": next.wealth, "system.stock": next.stock,
-    "system.log": [...actor.system.log, report].slice(-LOG_LIMIT), "system.modifiers": next.modifiers, ...siegeUpdate,
+    "system.families": next.families, "system.approval": next.approval, "system.monthShort": next.monthShort, "system.wealth": next.wealth, "system.stock": next.stock,
+    "system.log": fullLog.slice(-LOG_LIMIT), "system.modifiers": next.modifiers, ...siegeUpdate,
     ...(decision ? { "system.decisions": [...actor.system.toObject().decisions, decision] } : {})
   });
   if (changes.length) await Actor.implementation.updateDocuments(changes);
+  if (decision) await postPending(actor, decision);
   await postCard({
     template: "systems/vedmak/templates/chat/settlement-week.hbs",
     data: weekCardData(actor, report),
     actor, speaker: ChatMessage.getSpeaker({ alias: actor.name })
   });
   return report;
+}
+
+/* ------------------------------ Летопись в журнале (PLAN 4.210) ------------------------------ */
+
+const CHRONICLE_FOLDER = "Летописи поселений";
+const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const sgn = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(Math.round(n * 100) / 100).toLocaleString("ru-RU");
+
+/** Неделя летописи — строками HTML для журнала. */
+export function reportHtml(r) {
+  const net = Object.entries(r.net ?? {}).filter(([, v]) => v).map(([k, v]) => `${k} ${sgn(v)}`).join(" · ");
+  const short = (r.shortages ?? []).map(s => `${String(s.resource).toLowerCase()} ${s.got} из ${s.need}`).join(", ");
+  const built = (r.built ?? []).map(b => b.name ?? b).join(", ");
+  const lines = [
+    net && `<p>${esc(net)}</p>`, r.wealthGain ? `<p>Казна: ${sgn(r.wealthGain)} Богатства</p>` : "",
+    short && `<p><em>Не хватило:</em> ${esc(short)}</p>`, ...(r.events ?? []).map(e => `<p>${esc(e.text)}</p>`),
+    built && `<p><em>Достроено:</em> ${esc(built)}</p>`
+  ].filter(Boolean).join("");
+  return `<h3>${esc(r.monthLabel ?? "")}, ${r.week}-я неделя</h3>${lines || "<p>Тихая неделя.</p>"}`;
+}
+
+/** Журнал «Летопись: <поселение>» (по флагу — переживает переименование); нет — создаётся (ведущий). */
+async function chronicleJournal(actor, create = true) {
+  let j = game.journal.get(actor.getFlag("vedmak", "chronicle") ?? "");
+  if (j || !create || !game.user.isGM) return j ?? null;
+  const folder = game.folders.find(f => f.type === "JournalEntry" && f.name === CHRONICLE_FOLDER)
+    ?? await Folder.create({ name: CHRONICLE_FOLDER, type: "JournalEntry", color: "#5c4a32" });
+  j = await JournalEntry.create({ name: `Летопись: ${actor.name}`, folder: folder.id, ownership: foundry.utils.deepClone(actor.ownership) });
+  await actor.setFlag("vedmak", "chronicle", j.id);
+  return j;
+}
+
+/** Дописать недели в журнал: страница на каждый год, недели — по порядку. */
+export async function archiveChronicle(actor, reports) {
+  if (!game.user.isGM || !reports.length) return null;
+  const j = await chronicleJournal(actor);
+  const byYear = new Map();
+  for (const r of reports) byYear.set(r.year, [...(byYear.get(r.year) ?? []), r]);
+  for (const [year, list] of byYear) {
+    const name = `Год ${year}`;
+    const html = list.map(reportHtml).join("");
+    const page = j.pages.find(p => p.name === name);
+    if (page) await page.update({ "text.content": (page.text.content ?? "") + html });
+    else await j.createEmbeddedDocuments("JournalEntryPage", [{ name, type: "text", text: { content: html }, sort: year * 10 }]);
+  }
+  return j;
+}
+
+/** Ведущий: перенести всю летопись листа в журнал (лист очищается). */
+export async function moveChronicle(actor) {
+  if (!game.user.isGM) return;
+  const log = actor.system.log;
+  if (!log.length) return ui.notifications.info("Летопись пуста.");
+  const j = await archiveChronicle(actor, log);
+  await actor.update({ "system.log": [] });
+  ui.notifications.info(`Летопись «${actor.name}» перенесена в журнал: недель ${log.length}.`);
+  j?.sheet.render(true);
+}
+
+/** Открыть журнал летописи. */
+export async function openChronicle(actor) {
+  const j = await chronicleJournal(actor, false);
+  if (!j) return ui.notifications.info("В журнале летописи ещё нет: недели уходят туда, когда на листе их больше " + LOG_LIMIT + ".");
+  j.sheet.render(true);
 }
 
 /** Данные карточки недели. */

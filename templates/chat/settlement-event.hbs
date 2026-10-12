@@ -10,7 +10,15 @@
   <div class="card-body">
     <p class="note">{{text}}</p>
     {{#if pending}}
-    <p class="note warn">Решение — на листе поселения, вкладка «Хозяйство», до следующего хода.</p>
+    <div class="se-choices">
+      {{#each choices}}
+      <div class="se-choice">
+        <button type="button" data-se-choice="{{index}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{label}}</button>
+        <small>{{#if cost}}цена: {{cost}}{{/if}}{{#if effects}} · {{effects}}{{/if}}{{#if check}} · {{check}}{{/if}}{{#if success}} · успех: {{success}}{{/if}}{{#if fail}} · провал: {{fail}}{{/if}}{{#if isDefault}} · <em>по умолчанию</em>{{/if}}</small>
+      </div>
+      {{/each}}
+      <p class="note dim">Решает правитель — здесь или на листе поселения, до следующего хода недели.</p>
+    </div>
     {{else}}
     <p class="note"><b>{{#if auto}}Решение не принято, по умолчанию:{{else}}Решение:{{/if}}</b> {{choice}}.</p>
     {{#if check}}<p class="note{{#unless check.ok}} warn{{/unless}}">Проверка ({{check.label}}): d10 {{check.d10}} + {{check.base}} = <b>{{check.total}}</b> против {{check.dc}} — {{#if check.ok}}успех{{else}}провал{{/if}}.</p>{{/if}}

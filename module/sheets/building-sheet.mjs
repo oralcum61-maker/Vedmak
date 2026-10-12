@@ -12,6 +12,7 @@ import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
 import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
+import { animateRealm } from "../fx/realm-fx.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -324,6 +325,12 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }
+
+  /** Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают. */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    animateRealm(this, this.element, this.actor.uuid, this.tab);
+  }
   static async #onClearManager() { await this.actor.update({ "system.manager": "" }); }
   static async #onCancelOrder(event, target) {
     const town = this.actor.system.settlementActor;

@@ -17,6 +17,7 @@ import { ResourceLibrary, RESOURCE_DRAG } from "../apps/resource-library.mjs";
 import { addResource } from "../settlement/resources.mjs";
 import * as EV from "../settlement/events.mjs";
 import { effectLabel } from "../config/settlement-events.mjs";
+import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -69,7 +70,9 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       liftSiege: SettlementSheet.#onLiftSiege,
       decide: SettlementSheet.#onDecide,
       addEvent: SettlementSheet.#onAddEvent,
-      removeModifier: SettlementSheet.#onRemoveModifier
+      removeModifier: SettlementSheet.#onRemoveModifier,
+      openChronicle: SettlementSheet.#onOpenChronicle,
+      moveChronicle: SettlementSheet.#onMoveChronicle
     }
   };
 
@@ -119,6 +122,9 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         : "Одобрение ниже 6 — новые семьи не придут.",
       revolt: sum.revolt ? `Шанс бунта ${sum.revolt}%${sum.control ? ` (Контроль ${sum.control} снимает ${sum.control * 5}%)` : ""}.` : "",
       content: sum.content,
+      needs: (() => { try { return game.settings.get("vedmak", "settlementNeedsApproval"); } catch { return false; } })()
+        && ((sys.monthShort ?? 0) > 0 || Object.values(fc.needs).some(n => n.short > 0))
+        ? `Нужд ${sys.monthShort ? `не хватало недель: ${sys.monthShort}` : "не хватит"} — в конце месяца одобрение −1.` : "",
       taxes: sum.taxMult && tax.approval ? `${tax.label} налог: одобрение ${tax.approval > 0 ? "+" : "−"}${Math.abs(tax.approval)}.` : ""
     };
 
@@ -154,7 +160,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     Object.assign(context, {
       actor, sys, systemFields: sys.schema.fields, gm, editable, tab: this.tab, tradeQty: this.tradeQty,
       showCatalog: this.showCatalog || !sys.buildings.length,
-      tabs: Object.entries(TABS).map(([id, label]) => ({ id, label, active: id === this.tab })),
+      tabs: Object.entries(TABS).map(([id, label]) => ({ id, label, active: id === this.tab, badge: id === "economy" ? sys.decisions.length : 0 })),
       cal: { ...cal, months: MONTHS.map((label, i) => ({ n: i + 1, label, on: i + 1 === cal.month })) },
       families: { value: sys.families, ...sum },
       approval: {
@@ -246,6 +252,11 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   _onRender(context, options) {
     super._onRender(context, options);
+    // Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают
+    animateRealm(this, this.element, this.actor.uuid, this.tab);
+    animateNew(this, this.element, ".sv-card[data-id]");
+    animateNew(this, this.element, ".sv-event[data-decision]");
+    animateNew(this, this.element, ".ar-units li[data-id]");
     const qty = this.element.querySelector(".sv-trade-qty");
     qty?.addEventListener("change", () => { this.tradeQty = Math.max(1, Math.floor(Number(qty.value) || 1)); });
   }
@@ -303,6 +314,12 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onLiftSiege() { if (game.user.isGM) await ARMY.liftSiege(null, this.actor); }
   static async #onDecide(event, target) {
     await EV.decide(this.actor, target.closest("[data-decision]").dataset.decision, Number(target.dataset.choice));
+  }
+  static async #onOpenChronicle() { await S.openChronicle(this.actor); }
+  static async #onMoveChronicle() {
+    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Летопись — в журнал" },
+      content: "<p>Все недели с листа перейдут в журнал «Летопись», а лист очистится. Продолжить?</p>", rejectClose: false });
+    if (ok) await S.moveChronicle(this.actor);
   }
   static async #onRemoveModifier(event, target) { await EV.removeModifier(this.actor, target.closest("[data-modifier]").dataset.modifier); }
   /** Ведущий: событие месяца по выбору или случайное из подходящих. */

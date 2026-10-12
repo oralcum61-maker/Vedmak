@@ -6,6 +6,7 @@ import { TERRAIN, TRAINING, WEAPONS, ARMOR, UNIT_KINDS } from "../config/army.mj
 import { unitState, battleRound } from "../army/rules.mjs";
 import { postCard, broadcast, registerBroadcast } from "../combat/common.mjs";
 import { shareView, closeView, viewerContext, wireViewer, viewerClosed } from "./shared-view.mjs";
+import { animateRealm, animateNew, playSound } from "../fx/realm-fx.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
@@ -77,8 +78,11 @@ function showText({ scene, token, text, danger }) {
 export function registerMapBattle() {
   registerBroadcast("battleText", showText);
   const declined = new Set();
-  Hooks.on("moveToken", async (tokenDoc, movement) => {
-    if (game.users.activeGM !== game.user || tokenDoc.actor?.type !== "unit" || !(tokenDoc.actor.system.soldiers > 0)) return;
+  Hooks.on("moveToken", async (tokenDoc, movement, operation, user) => {
+    if (tokenDoc.actor?.type !== "unit" || !(tokenDoc.actor.system.soldiers > 0)) return;
+    const gm = game.users.activeGM === game.user;
+    const mover = (user?.id ?? user) === game.user.id;
+    if (!gm && !mover) return;
     const scene = tokenDoc.parent;
     // В хуке документ ещё на старом месте — считается по концу пути
     const here = tokenCenter(tokenDoc, movement?.destination ?? tokenDoc);
@@ -86,6 +90,11 @@ export function registerMapBattle() {
       && foes(tokenDoc, t) && inContact(tokenDoc, t, here));
     for (const key of [...declined]) if (key.includes(tokenDoc.id) && !enemies.some(e => key.includes(e.id))) declined.delete(key);
     if (!enemies.length) return;
+    // Игрок двинул отряд вплотную к чужому — подсказка: битву начинает ведущий (PLAN 4.210)
+    if (!gm) {
+      if (!game.users.activeGM) return ui.notifications.warn("Отряды сошлись, но ведущего нет в игре — битву начать некому.");
+      return ui.notifications.info(`«${tokenDoc.name}» сошёлся с «${enemies.map(e => e.name).join("», «")}» — ведущему предложено начать битву.`);
+    }
     const app = foundry.applications.instances.get("vedmak-battle");
     if (app?.field?.scene === scene.id && app.rendered) { setTimeout(() => { app.syncField(); app.render(); }, 600); return; }
     const key = [tokenDoc.id, ...enemies.map(e => e.id)].sort().join("|");
@@ -237,6 +246,8 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   _onRender(context, options) {
     super._onRender?.(context, options);
+    animateRealm(this, this.element, "battle");
+    animateNew(this, this.element, ".bt-log > li", el => el.querySelector("b")?.textContent ?? "");
     if (this.viewer) return wireViewer(this);
     shareView("battle", this, { context, actors: this.#units, showAll: this.showAll });
     this.element.querySelector("select[name=terrain]")?.addEventListener("change", ev => { this.terrain = ev.target.value; });
@@ -335,6 +346,8 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const sides = actors.map((list, i) => ({ defender: this.sides[i].defender, fort, units: list.map(unitState) }));
     if (!sides.every(s => s.units.some(u => u.soldiers && !u.routed))) return ui.notifications.warn("На обеих сторонах нужны стоящие отряды.");
     const res = battleRound(sides, { round: this.roundNo, terrain: this.terrain, rand });
+    playSound("swing-heavy"); playSound("hit", { delay: 220 });
+    if (res.over) playSound("ui-success", { delay: 650 });
     // На сцене (PLAN 4.207): потери и бегство — всплывающим текстом над жетонами
     const scene = this.field ? game.scenes.get(this.field.scene) : null;
     if (scene) for (const u of res.units) {

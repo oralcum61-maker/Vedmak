@@ -349,7 +349,10 @@ const CLICKABLE = [
   ".vedmak-hud button", ".vedmak-hud a[data-action]",
   ".vedmak-dialog .form-footer button",
   ".application.vedmak nav.tabs a", ".application.vedmak nav.sheet-tabs a",
-  ".application.vedmak .vh-switch a", ".application.vedmak [data-action='tab']"
+  ".application.vedmak .vh-switch a", ".application.vedmak [data-action='tab']",
+  // Листы поселения, постройки, отряда, окна битвы, Совета и Библиотеки (PLAN 4.212)
+  ".application.vedmak .sv-tabs a", ".application.vedmak .sv-btn", ".application.vedmak .sv-workers a",
+  ".application.vedmak .sv-mini-acts a", ".application.vedmak [data-action='category']"
 ].join(", ");
 
 function onClick(event) {

@@ -236,7 +236,7 @@ export function summarize(state) {
  * @param {boolean} [opts.forecast] — прогноз: средние вместо бросков, без случайных событий месяца
  * @param {Function} [opts.rand] — равномерное [0, 1) для бросков
  */
-export function simulateWeek(state, { forecast = false, rand = Math.random } = {}) {
+export function simulateWeek(state, { forecast = false, rand = Math.random, needsApproval = false } = {}) {
   const sum = summarize(state);
   const cal = calendar(state);
   const monthEnd = cal.monthEnd;
@@ -368,6 +368,9 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     if (got < need) shortages.push({ resource: k, need: round1(need), got: round1(got) });
   }
 
+  // Нехватка нужд за месяц (PLAN 4.210): недели с голодом или холодом копятся до конца месяца
+  const monthShort = (state.monthShort ?? 0) + (Object.values(needs).some(n => n.short > 0) ? 1 : 0);
+
   // Налог: монеты валюты мира → Богатство по курсу
   const taxWealth = round3(sum.taxCoins / WEALTH_RATE);
   if (taxWealth) wealth = round3(wealth + taxWealth);
@@ -413,6 +416,11 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       if (chance > 0 || minus) events.push(d <= chance
         ? { kind: "revolt", text: `Бунт! Народ поднялся против правителя (бросок ${d}, шанс ${chance}%${note}).`, danger: true }
         : { kind: "revolt", text: `Ропот без бунта (бросок ${d}, шанс ${chance}%${note}).` });
+    }
+    // Настройка «одобрение от нужд»: был в месяце голод или холод — одобрение −1
+    if (needsApproval && monthShort > 0) {
+      approval = Math.max(0, approval - 1);
+      events.push({ kind: "needs", text: `Голод и холод (недель с нехваткой: ${monthShort}): одобрение падает до ${approval}.`, danger: true });
     }
     if (state.siege) {
       approval = Math.max(0, approval - 1);
@@ -469,7 +477,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     if ((m.weeks ?? 0) > 1) modifiers.push({ ...m, weeks: m.weeks - 1 });
     else events.push({ kind: "modifier", text: `Закончилось: «${m.label}».` });
   }
-  const next = { year, month, week, families: families + arrived, approval, wealth, stock, buildings, modifiers };
+  const next = { year, month, week, families: families + arrived, approval, wealth, stock, buildings, modifiers, monthShort: monthEnd ? 0 : monthShort };
   const report = {
     year: cal.year, month: cal.month, monthLabel: cal.monthLabel, week: cal.week, season: cal.seasonLabel, monthEnd,
     lines, produced, consumed, net, needs, shortages, events, built, arrived, overflow, taxWealth,

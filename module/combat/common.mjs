@@ -248,7 +248,7 @@ export async function postCard({ template, data, actor, flags, rolls, messageMod
     speaker: speaker ?? ChatMessage.getSpeaker({ actor }),
     content,
     rolls,
-    flags: { vedmak: flags }
+    flags: { vedmak: flags ?? {} }
   }, { messageMode });
 }
 

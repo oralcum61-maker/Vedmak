@@ -10,6 +10,7 @@ import { resourceIcon } from "../config/settlement.mjs";
 import { equipCost, routAt } from "../army/rules.mjs";
 import * as ARMY from "../army/army.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
+import { animateRealm } from "../fx/realm-fx.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -178,6 +179,12 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }
+
+  /** Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают. */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    animateRealm(this, this.element, this.actor.uuid, this.tab);
+  }
   static async #onEquip(event, target) {
     const track = target.dataset.track;
     await ARMY.equip(this.actor, track, this.actor.system[track] + 1);

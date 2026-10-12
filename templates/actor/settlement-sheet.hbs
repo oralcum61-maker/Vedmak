@@ -55,7 +55,7 @@
   </section>
 
   <nav class="sv-tabs">
-    {{#each tabs}}<a class="{{#if active}}active{{/if}}" data-action="settlementTab" data-tab="{{id}}">{{label}}</a>{{/each}}
+    {{#each tabs}}<a class="{{#if active}}active{{/if}}" data-action="settlementTab" data-tab="{{id}}">{{label}}{{#if badge}}<b class="sv-badge" data-tooltip="Ждёт решения правителя">{{badge}}</b>{{/if}}</a>{{/each}}
   </nav>
 
   <div class="sv-scroll">
@@ -134,6 +134,7 @@
           <li><span>{{month.arrival}}</span></li>
           {{#if month.revolt}}<li class="warn"><span>{{month.revolt}}</span></li>{{/if}}
           {{#if month.taxes}}<li><span>{{month.taxes}}</span></li>{{/if}}
+          {{#if month.needs}}<li class="warn"><span>{{month.needs}}</span></li>{{/if}}
           {{#if month.content}}<li class="up"><span>Народ доволен: возможны дополнительные ресурсы — решает ведущий.</span></li>{{/if}}
         </ul>
       </section>
@@ -244,7 +245,12 @@
   {{/if}}
 
   {{#if (eq tab "chronicle")}}
-    {{#if gm}}<div class="sv-build-bar"><a class="sv-btn" data-action="addEvent">Событие…</a><span class="sv-hint">События месяца случаются сами (настройка «Поселения: события месяца»); здесь ведущий задаёт своё.</span></div>{{/if}}
+    <div class="sv-build-bar">
+      <a class="sv-btn" data-action="openChronicle" data-tooltip="Журнал «Летопись»: недели, что не поместились на лист"><i class="fa-solid fa-book"></i> Вся летопись</a>
+      {{#if gm}}<a class="sv-btn" data-action="moveChronicle" data-tooltip="Перенести все недели с листа в журнал">В журнал</a>
+      <a class="sv-btn" data-action="addEvent">Событие…</a>{{/if}}
+      <span class="sv-hint">На листе — последние недели; старые уходят в журнал «Летопись».{{#if gm}} События месяца случаются сами; «Событие…» — своё.{{/if}}</span>
+    </div>
     <ol class="sv-chronicle">
       {{#each chronicle}}
       <li>

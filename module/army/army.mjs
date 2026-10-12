@@ -7,6 +7,7 @@ import { FOOD, WEALTH } from "../config/settlement.mjs";
 import { RANKS, unitTree, kindBranch } from "../config/unit-upgrades.mjs";
 import { unitState, unitWeek, equipCost, unitFood, unitPay, unitNodes } from "./rules.mjs";
 import { asGM, registerGMHandler } from "../combat/common.mjs";
+import { playSound } from "../fx/sounds.mjs";
 
 const r3 = n => Math.round(n * 1000) / 1000;
 const r1 = n => Math.round(n * 10) / 10;
@@ -51,6 +52,7 @@ export async function recruit(settlement, { origin, count, kind = "infantry", na
     const price = r3(count * MERCENARY.hire);
     if (sys.wealth < price) return ui.notifications.warn(`Найм стоит ${price} Богатства, в казне ${sys.wealth}.`);
     update["system.wealth"] = r3(sys.wealth - price);
+    playSound("ui-coin");
   } else return null;
 
   if (unit) {
@@ -111,6 +113,7 @@ export async function equip(unit, track, tier) {
   const miss = missing(home, cost);
   if (miss) return ui.notifications.warn(`На складе «${home.name}» не хватает: ${miss}.`);
   await take(home, cost);
+  playSound("ui-coin");
   await unit.update({ [`system.${track}`]: tier });
   ui.notifications.info(`«${unit.name}»: ${GEAR[track].label.toLowerCase()} — ${GEAR[track].tiers[tier].label.toLowerCase()}.`);
 }
@@ -144,6 +147,7 @@ export async function train(unit, nodeId) {
   const check = canTrain(unit, nodeId);
   if (!check.ok) return ui.notifications.warn(check.why);
   await take(unit.system.settlementActor, check.node.cost);
+  playSound("ui-coin");
   if (!check.node.weeks) await unit.update({ "system.upgrades": [...unit.system.upgrades, nodeId] });
   else await unit.update({ "system.research": { node: nodeId, progress: 0 }, "system.drilling": true });
   return check.node;
@@ -272,7 +276,13 @@ export function registerUnitHooks() {
     if (target?.type === "settlement") await target.update(clean);
   });
   Hooks.on("preCreateActor", (actor, data) => {
-    if (actor.type === "unit" && !data.system?.branches?.length) actor.updateSource({ "system.branches": unitTree(data.system?.kind ?? "infantry") });
+    if (actor.type !== "unit") return;
+    if (!data.system?.branches?.length) actor.updateSource({ "system.branches": unitTree(data.system?.kind ?? "infantry") });
+    // Жетон отряда всегда связан с актёром (PLAN 4.210): потери и дух из битвы — на жетоне те же, что на листе
+    actor.updateSource({ "prototypeToken.actorLink": true });
+  });
+  Hooks.on("preCreateToken", (token, data) => {
+    if (token.actor?.type === "unit" && !data.actorLink && game.actors.get(data.actorId)) token.updateSource({ actorLink: true });
   });
   Hooks.on("preUpdateActor", (actor, changes) => {
     const kind = foundry.utils.getProperty(changes, "system.kind");
@@ -289,6 +299,13 @@ export function registerUnitHooks() {
     const updates = game.actors.filter(a => a.type === "unit" && !a.system.branches.length)
       .map(a => ({ _id: a.id, "system.branches": unitTree(a.system.kind) }));
     if (updates.length) await Actor.implementation.updateDocuments(updates);
+    // Отряды, набранные вручную до 4.210: прототип и жетоны на сценах — связать с актёром
+    const protos = game.actors.filter(a => a.type === "unit" && !a.prototypeToken.actorLink).map(a => ({ _id: a.id, "prototypeToken.actorLink": true }));
+    if (protos.length) await Actor.implementation.updateDocuments(protos);
+    for (const scene of game.scenes) {
+      const toks = scene.tokens.filter(t => !t.actorLink && game.actors.get(t.actorId)?.type === "unit").map(t => ({ _id: t.id, actorLink: true }));
+      if (toks.length) await scene.updateEmbeddedDocuments("Token", toks);
+    }
   });
 }
 

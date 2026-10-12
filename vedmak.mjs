@@ -29,6 +29,7 @@ import { BattleApp, registerMapBattle } from "./module/apps/battle-app.mjs";
 import * as ARMY from "./module/army/army.mjs";
 import * as settlement from "./module/settlement/settlement.mjs";
 import * as settlementEvents from "./module/settlement/events.mjs";
+import { registerRealmFx } from "./module/fx/realm-fx.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
@@ -260,6 +261,11 @@ Hooks.once("init", () => {
     hint: "Шанс события в конце месяца, %: ярмарка, мор, разбойники, пожар… Правитель решает на листе поселения до следующего хода. 0 — событий нет.",
     scope: "world", config: true, type: Number, default: 40, range: { min: 0, max: 100, step: 5 }
   });
+  game.settings.register(SYSTEM_ID, "settlementNeedsApproval", {
+    name: "Поселения: одобрение от нужд",
+    hint: "Если за месяц хоть раз не хватило еды или топлива, в конце месяца одобрение падает на 1. Выключено — как в журнале мира: одобрение от нужд сдвигает ведущий.",
+    scope: "world", config: true, type: Boolean, default: false
+  });
   game.settings.register(SYSTEM_ID, "verbalDuel", {
     name: "Словесная дуэль",
     hint: "Подвкладка «Социальный бой» у персонажей и чудовищ: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
@@ -312,6 +318,8 @@ Hooks.once("init", () => {
   registerResourceHooks();
   registerCouncilUi();
   registerSettlementGMHandlers();
+  registerRealmFx();
+  settlementEvents.registerEventHooks();
   ARMY.registerUnitHooks();
   ARMY.registerMapSiege();
   registerMapBattle();

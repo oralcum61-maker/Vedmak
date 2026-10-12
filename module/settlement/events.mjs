@@ -6,6 +6,7 @@ import { SETTLEMENT_EVENTS, CHECK_BASES, EVENT_CHANCE, rollEvent, effectLabel } 
 import { APPROVAL_MAX } from "../config/settlement.mjs";
 import { rollFormula, costLabel, WEALTH } from "./rules.mjs";
 import { postCard } from "../combat/common.mjs";
+import { playSound } from "../fx/sounds.mjs";
 
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
 const r1 = n => Math.round(n * 10) / 10;
@@ -151,6 +152,11 @@ export async function decide(actor, decisionId, index, { auto = false } = {}) {
   update["system.decisions"] = actor.system.toObject().decisions.filter(x => x.id !== decisionId);
   if (modifiers.length !== (actor.system.modifiers ?? []).length) update["system.modifiers"] = modifiers;
   await actor.update(update);
+  // Звук, как у проверок: успех или провал; без проверки, но с ценой — монеты
+  if (!auto) {
+    if (check) playSound(check.ok ? "ui-success" : "ui-fail", { delay: 300 });
+    else if (choice?.cost?.length) playSound("ui-coin");
+  }
   await postCard({
     template: "systems/vedmak/templates/chat/settlement-event.hbs",
     data: { name: actor.name, label: ev.label, img: ev.img, text: ev.text, choice: choice?.label ?? "ничего не сделали", auto, check,
@@ -189,12 +195,88 @@ export async function addEvent(actor, key = "") {
   if (!SETTLEMENT_EVENTS[key]) return ui.notifications.warn("Подходящих событий нет.");
   const d = makeDecision(key, actor.system.calendar);
   await actor.update({ "system.decisions": [...actor.system.toObject().decisions, d] });
-  await postCard({
-    template: "systems/vedmak/templates/chat/settlement-event.hbs",
-    data: { name: actor.name, label: SETTLEMENT_EVENTS[key].label, img: SETTLEMENT_EVENTS[key].img, text: SETTLEMENT_EVENTS[key].text, pending: true },
-    actor, speaker: ChatMessage.getSpeaker({ alias: actor.name })
-  });
+  await postPending(actor, d);
   return d;
+}
+
+/**
+ * Карточка события, ждущего решения (PLAN 4.210): варианты кнопками — правитель решает прямо в чате; остальные видят
+ * варианты. Решено (здесь или на листе) — карточка перерисовывается: «Решено».
+ */
+export async function postPending(actor, d) {
+  const view = decisionView(actor, d);
+  if (!view) return null;
+  return postCard({
+    template: "systems/vedmak/templates/chat/settlement-event.hbs",
+    data: { ...view, name: actor.name, pending: true, uuid: actor.uuid, decision: d.id },
+    actor, speaker: ChatMessage.getSpeaker({ alias: actor.name }),
+    flags: { settlementEvent: { uuid: actor.uuid, decision: d.id } }
+  });
+}
+
+/** Уведомить владельца (не ведущего) о решениях, что ждут его. */
+function notifyPending(actor, list = actor.system.decisions) {
+  if (game.user.isGM || !actor.isOwner) return;
+  for (const d of list) {
+    const ev = SETTLEMENT_EVENTS[d.key];
+    if (ev) ui.notifications.info(`«${actor.name}» ждёт решения правителя: «${ev.label}». Варианты — в чате и на листе поселения.`, { permanent: true });
+  }
+}
+
+/** Карточки событий в чате, кнопки решений, уведомления и метки «ждёт решения» (PLAN 4.210). */
+export function registerEventHooks() {
+  // Какие решения этот клиент уже видел — чтобы уведомлять только о новых
+  const known = new Map();
+  Hooks.on("renderChatMessageHTML", (message, html) => {
+    const f = message.getFlag("vedmak", "settlementEvent");
+    if (!f) return;
+    const actor = fromUuidSync(f.uuid);
+    const open = actor?.system.decisions.some(x => x.id === f.decision);
+    const box = html.querySelector(".se-choices");
+    if (!box) return;
+    if (!open) { box.outerHTML = `<p class="note se-done">Решено.</p>`; return; }
+    for (const b of box.querySelectorAll("button[data-se-choice]")) {
+      if (!actor.isOwner) { b.disabled = true; b.dataset.tooltip = "Решает правитель — владелец поселения"; continue; }
+      b.addEventListener("click", async ev => {
+        ev.preventDefault();
+        box.querySelectorAll("button").forEach(x => { x.disabled = true; });
+        await decide(actor, f.decision, Number(b.dataset.seChoice));
+      });
+    }
+  });
+  // Решение принято (в чате, на листе или по умолчанию) — его карточка перерисовывается; новое — уведомление владельцу
+  Hooks.on("updateActor", (actor, changes, options, userId) => {
+    if (actor.type !== "settlement" || !foundry.utils.hasProperty(changes, "system.decisions")) return;
+    const ids = new Set(actor.system.decisions.map(d => d.id));
+    for (const m of game.messages.contents.slice(-60)) {
+      const f = m.getFlag("vedmak", "settlementEvent");
+      if (f?.uuid === actor.uuid && !ids.has(f.decision)) ui.chat?.updateMessage(m);
+    }
+    const seen = known.get(actor.id) ?? new Set();
+    if (userId !== game.user.id) notifyPending(actor, actor.system.decisions.filter(d => !seen.has(d.id)));
+    known.set(actor.id, ids);
+    ui.actors?.render();
+  });
+  // При входе в игру — что ждёт решения
+  Hooks.once("ready", () => {
+    for (const a of game.actors) if (a.type === "settlement") {
+      known.set(a.id, new Set(a.system.decisions.map(d => d.id)));
+      if (a.system.decisions.length) notifyPending(a);
+    }
+  });
+  // Метка в списке актёров: у поселения есть нерешённое событие
+  Hooks.on("renderActorDirectory", (app, html) => {
+    const root = html instanceof HTMLElement ? html : html?.[0];
+    for (const a of game.actors) {
+      if (a.type !== "settlement" || !a.system.decisions?.length) continue;
+      const li = root?.querySelector(`[data-entry-id="${a.id}"]`);
+      if (!li || li.querySelector(".vd-pending")) continue;
+      const mark = document.createElement("i");
+      mark.className = "vd-pending fa-solid fa-scroll";
+      mark.dataset.tooltip = "Ждёт решения правителя";
+      (li.querySelector(".entry-name, .document-name") ?? li).append(mark);
+    }
+  });
 }
 
 /** Снять действующее последствие (ведущий). */

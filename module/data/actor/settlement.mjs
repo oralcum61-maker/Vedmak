@@ -34,6 +34,8 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
       // События месяца (PLAN 4.206): ждут решения правителя; последствия надолго — на недели
       decisions: new ArrayField(new SchemaField({ id: str(""), key: str(""), year: int(1), month: int(1), week: int(1) })),
       modifiers: new ArrayField(new ObjectField()),
+      // Недель с нехваткой нужд в этом месяце (настройка «одобрение от нужд», PLAN 4.210)
+      monthShort: int(0, { min: 0 }),
       description: html()
     };
   }
@@ -73,7 +75,7 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
   get state() {
     return { year: this.year, month: this.month, week: this.week, families: this.families, approval: this.approval,
       control: this.control, wealth: this.wealth, taxes: this.taxes, stock: this.stockMap, buildings: this.buildings,
-      siege: this.siege?.units?.length > 0, modifiers: this.modifiers ?? [] };
+      siege: this.siege?.units?.length > 0, modifiers: this.modifiers ?? [], monthShort: this.monthShort ?? 0 };
   }
 
   prepareDerivedData() {
