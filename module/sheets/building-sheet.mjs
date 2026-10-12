@@ -6,7 +6,7 @@
 // закрыта (почему); ведущий правит дерево на месте и выдаёт ступени даром. Облик — общий с листом поселения
 // (styles/settlement.css), своё — раздел «Лист постройки».
 
-import { BUILDING_GROUPS, PERIODS, RESOURCE_ICONS, fullRow, resourceIcon } from "../config/settlement.mjs";
+import { BUILDING_GROUPS, PERIODS, fullRow, resourceIcon, resourceNames } from "../config/settlement.mjs";
 import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
 import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
@@ -174,7 +174,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       track, canDelete: b.levels.length > 1,
       edit: gm && this.editing !== null ? blueprint(b.levels[this.editing], this.editing) : null,
       perOptions: { building: "за постройку", family: "за семью" }, periodOptions: PERIODS,
-      resourceNames: [...Object.keys(RESOURCE_ICONS), WEALTH], codePlaceholder: actor.name.toLowerCase(),
+      resourceNames: [...resourceNames(), WEALTH], codePlaceholder: actor.name.toLowerCase(),
       tree: this.#tree(town, stock, have), treeEdit: gm && this.treeEdit,
       effectTypes: Object.fromEntries(Object.entries(BUILDING_EFFECTS).map(([k, v]) => [k, v.label])),
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })

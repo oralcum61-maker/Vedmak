@@ -86,6 +86,7 @@
       <div class="sv-res-bar">
         {{#if trade}}{{#if editable}}<label class="sv-qty">Торговать по <input class="sv-trade-qty" type="number" min="1" step="1" value="{{tradeQty}}"> ед.</label>{{/if}}
         {{else}}<span class="sv-hint">Торговли нет: купцы заезжают только к торговому посту.</span>{{/if}}
+        {{#if editable}}<a class="sv-btn sv-lib" data-action="library" data-tooltip="Библиотека ресурсов: перетащите ресурс сюда или нажмите «+» — склад начнёт его учитывать"><i class="fa-solid fa-boxes-stacked"></i> Библиотека</a>{{/if}}
         {{#if gm}}<span class="sv-add-res"><input class="sv-new-res" type="text" placeholder="Новый ресурс" aria-label="Новый ресурс">
           <input class="sv-new-qty" type="number" min="0" step="1" value="0" aria-label="Сколько"><a class="sv-btn" data-action="addResource">Добавить</a></span>{{/if}}
       </div>

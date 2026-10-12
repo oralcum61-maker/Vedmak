@@ -1,5 +1,6 @@
 // Лист предмета: общая шапка, вкладка свойств по типу, описание, эффекты.
 
+import { RESOURCE_CATEGORIES } from "../config/resources.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { CRIT_LEVELS, CRIT_STATES, CRIT_WOUNDS, LOCATIONS_HUMANOID, LOCATIONS_MONSTER } from "../config/combat.mjs";
@@ -148,6 +149,7 @@ export class VedmakItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       }
     }
     if (owner && isProstheticItem(item)) context.prostheticRel = prostheticStats(owner, item).reliability;
+    if (item.type === "resource") context.resourceCategories = RESOURCE_CATEGORIES;
     if (item.type === "component") {
       context.substanceOptions = { "": "—", ...Object.fromEntries(Object.entries(SUBSTANCES).map(([k, v]) => [k, v.label])) };
       context.substance = SUBSTANCES[system.substance] ?? null;

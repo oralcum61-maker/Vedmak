@@ -13,6 +13,8 @@ import { compareRu } from "../util.mjs";
 import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
 import { RANKS } from "../config/unit-upgrades.mjs";
 import * as ARMY from "../army/army.mjs";
+import { ResourceLibrary, RESOURCE_DRAG } from "../apps/resource-library.mjs";
+import { addResource } from "../settlement/resources.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -58,7 +60,8 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       recruit: SettlementSheet.#onRecruit,
       unitDrill: SettlementSheet.#onUnitDrill,
       openUnit: SettlementSheet.#onOpenUnit,
-      battle: SettlementSheet.#onBattle
+      battle: SettlementSheet.#onBattle,
+      library: SettlementSheet.#onLibrary
     }
   };
 
@@ -275,6 +278,17 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
   static #onOpenUnit(event, target) { game.actors.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
   static #onBattle() { game.vedmak.army.battle(ARMY.settlementUnits(this.actor)); }
+  static #onLibrary() { ResourceLibrary.open(this.actor); }
+
+  /** Ресурс из библиотеки (PLAN 4.201) — склад начинает его учитывать; остальное — как обычно. */
+  async _onDrop(event) {
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+    if (data?.type === RESOURCE_DRAG) {
+      if (await addResource(this.actor, data.name)) ui.notifications.info(`«${data.name}» — на складе «${this.actor.name}».`);
+      return;
+    }
+    return super._onDrop(event);
+  }
 
   /** Набор: откуда, род войск, сколько, в новый или существующий отряд. */
   static async #onRecruit() {
@@ -316,7 +330,9 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   async _onDropItem(event, item) {
     if (!this.actor.isOwner) return null;
-    if (item.type !== "building") { ui.notifications.warn("Поселению предметы не нужны."); return null; }
+    // Свой ресурс ведущего — склад начинает его учитывать
+    if (item.type === "resource") return addResource(this.actor, item.name);
+    if (item.type !== "building") { ui.notifications.warn("Поселению из предметов нужны постройки и ресурсы."); return null; }
     return S.build(this.actor, item.toObject());
   }
 }

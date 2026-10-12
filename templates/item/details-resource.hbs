@@ -1,0 +1,12 @@
+{{!-- Ресурс (PLAN 4.201): свой тип ресурса ведущего. Имя предмета — имя ресурса на складе, значок — его картинка. --}}
+<section class="tab details {{tab.cssClass}}" data-group="primary" data-tab="details">
+  <fieldset class="vd-fieldset">
+    <legend>Ресурс поселений</legend>
+    <div class="vd-grid g2">
+      <label data-tooltip="Монет валюты мира за единицу: по ней продаёт торговый пост (покупка — дороже в полтора раза)">Цена за единицу
+        <input type="number" name="system.price" value="{{system.price}}" min="0" step="any"></label>
+      <label>Раздел библиотеки <select name="system.category">{{selectOptions resourceCategories selected=system.category}}</select></label>
+    </div>
+    <p class="hint">Перетащите этот предмет на лист поселения — склад начнёт учитывать ресурс «{{item.name}}». Постройки называют ресурс по имени: в выработке, сырье и цене впишите то же название. Ресурс появится и в «Библиотеке ресурсов» среди своих.</p>
+  </fieldset>
+</section>

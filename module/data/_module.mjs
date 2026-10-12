@@ -7,6 +7,7 @@ import { BuildingActorData } from "./actor/building.mjs";
 import { WeaponData, ArmorData, GearData, SpellData, ProfessionData, RaceData, CritWoundData, ComponentData, RecipeData,
   AlchemicalData, EnhancementData } from "./item/items.mjs";
 import { BuildingData } from "./item/building.mjs";
+import { ResourceData } from "./item/resource.mjs";
 
 export const ACTOR_MODELS = {
   character: CharacterData,
@@ -29,5 +30,6 @@ export const ITEM_MODELS = {
   recipe: RecipeData,
   alchemical: AlchemicalData,
   enhancement: EnhancementData,
-  building: BuildingData
+  building: BuildingData,
+  resource: ResourceData
 };

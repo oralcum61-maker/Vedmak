@@ -5,6 +5,7 @@
 // Правила хода — module/settlement/rules.mjs, модели — data/actor/settlement.mjs и data/item/building.mjs.
 
 import { buildingTree } from "./building-upgrades.mjs";
+import { resourceInfo, RESOURCE_LIBRARY } from "./resources.mjs";
 
 /** Нужды семьи в неделю: еда 1, топливо 1 (зимой 2). Ресурсы-нужды называются так. */
 export const FOOD = "Еда";
@@ -44,7 +45,7 @@ export const RESOURCE_ICONS = {
   "Лошади": "icons/environment/creatures/horse-brown.webp"
 };
 export const RESOURCE_ICON = "icons/containers/bags/sack-simple-leather-brown.webp";
-export const resourceIcon = name => RESOURCE_ICONS[name] ?? RESOURCE_ICON;
+export const resourceIcon = name => resourceInfo(name)?.img || RESOURCE_ICONS[name] || RESOURCE_ICON;
 
 /** Цена продажи на торговом посту — монет валюты мира за единицу; покупка — ×1,5. Прочее — по умолчанию. */
 export const RESOURCE_PRICES = {
@@ -55,7 +56,10 @@ export const RESOURCE_PRICES = {
 };
 export const DEFAULT_PRICE = 5;
 export const BUY_MARKUP = 1.5;
-export const priceOf = name => RESOURCE_PRICES[name] ?? DEFAULT_PRICE;
+export const priceOf = name => resourceInfo(name)?.price ?? RESOURCE_PRICES[name] ?? DEFAULT_PRICE;
+
+/** Все известные ресурсы по имени: библиотека (PLAN 4.201) и справочник поселения — для подсказок в полях. */
+export const resourceNames = () => [...new Set([...RESOURCE_LIBRARY.map(x => x.name), ...Object.keys(RESOURCE_ICONS)])];
 
 /** Порядок на складе: нужды, затем остальное по алфавиту. */
 export const RESOURCE_ORDER = [FOOD, FUEL];
