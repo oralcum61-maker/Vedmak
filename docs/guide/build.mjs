@@ -209,7 +209,7 @@ const chapter = (title, lead, id, epigraph = null) => {
   const art = img(`ch-${id}.jpg`);
   const epi = epigraph ? `<blockquote class="epigraph"><p>${epigraph[0]}</p><cite>${epigraph[1]}</cite></blockquote>` : "";
   return `<header class="chapter${art ? " has-art" : ""}" id="${id}">${art ? `<div class="ch-art" style="background-image: url('${art}')"></div>` : ""}<div class="numeral">${numeral}</div>
-  <h1>${title}</h1><p class="lead">${lead}</p>${epi}<div class="thread"><i></i></div></header>`;
+  <h1>${title}</h1><div class="ch-intro"><p class="lead">${lead}</p>${epi}</div><div class="thread"><i></i></div></header>`;
 };
 
 /** Слово к правительнице — разворот после обложки: кому книга, как её читать. */
@@ -326,19 +326,16 @@ ${chapter("Лист поселения", "В шапке — всё, чем жи�
   <tr><td><b>Войско</b></td><td>Отряды поселения, «Набрать…», «Битва», тренировка.</td></tr>
   <tr><td><b>Летопись</b></td><td>Прошедшие недели: броски, нехватки, события, достроенное. Здесь же ведущий задаёт событие.</td></tr>
   <tr><td><b>Описание</b></td><td>Свободный текст — история поселения, его люди, слухи.</td></tr></tbody></table>
-${fig("town-buildings.jpg", "Вкладка «Постройки»: группы на кожаных ярлыках, работники «−/+», ступени обустройства «N из M».")}
 </div>
 </div>
 
 ${chapter("Ход недели", "Одна кнопка — одна неделя. Четыре недели — месяц, а в конце месяца решается судьба поселения.", "week",
   ["Неделя за неделей — глядишь, и амбар полон. Или пуст: смотря кто считал.", "мельник из-под Майены"])}
-<p class="lede">Неделя всегда проходит в одном и том же порядке — от первого удара топора до последнего обоза. Если знать этот
-порядок, нехватки перестают быть неожиданностью.</p>
 ${weekChain()}
 <div class="cols">
 <div>
 <h3>Выработка</h3>
-<p>Каждая строка выработки — это бросок: один за постройку или по одному за каждую семью на работе. Три семьи
+<p class="lede">Неделя всегда идёт в одном порядке — он показан цепью выше. Каждая строка выработки — это бросок: один за постройку или по одному за каждую семью на работе. Три семьи
 у лесорубов с <i>1d6 за семью</i> — три броска. У строки бывает свой срок (каждую неделю, раз в месяц, раз в два месяца),
 пометка «не зимой» и наименьшее число работников.</p>
 <p><b>Сырьё</b> списывается до выработки. Если его не хватает, постройка работает частью: дали половину зерна — получили
@@ -351,17 +348,15 @@ ${weekChain()}
 <div>
 <h3>Стройка</h3>
 <p>Цена уровня или ступени обустройства списывается сразу, а дальше стройку ведут люди: каждую неделю одна <b>свободная</b>
-семья продвигает одну стройку на неделю. Пять строек и две свободные семьи — значит, идут две, остальные ждут своей очереди.</p>
-${warn("Если все семьи заняты на постройках, стройка стоит. Снимите одну семью с работы — и дело пойдёт.")}
+семья продвигает одну стройку на неделю. Пять строек и две свободные семьи — значит, идут две, остальные ждут своей очереди.
+<b>Если все семьи заняты на постройках, стройка стоит</b> — снимите одну семью с работы, и дело пойдёт.</p>
 <h3>Конец месяца</h3>
 <ol class="tight">
   <li>Налог сдвигает одобрение: без налога +1, высокий −1.</li>
   <li>Если нет бездомных, а одобрение не ниже ${Object.keys(S.ARRIVALS)[0]}, могут прийти новые семьи.</li>
   <li>При одобрении 3 и ниже — или если событие подняло шанс — может вспыхнуть бунт.</li>
-  <li>Осада отнимает 1 одобрения.</li>
-  <li>Обустройство добавляет одобрение, если у построек есть такие ступени.</li>
-  <li>При одобрении ${S.CONTENT_LEVEL} и выше народ доволен, и ведущий может его наградить.</li>
-  <li>Случается событие месяца — см. главу V.</li>
+  <li>Осада отнимает 1 одобрения, ступени обустройства могут его прибавить.</li>
+  <li>При одобрении ${S.CONTENT_LEVEL} и выше народ доволен — ведущий может наградить. И случается событие месяца (глава V).</li>
 </ol>
 </div>
 </div>
@@ -459,16 +454,17 @@ ${chapter("Постройки", `${Object.keys(S.BUILDINGS).length} встрое
 <p>На вкладке <b>«Обзор»</b> — производственная линия текущего уровня (сырьё → герб → выработка), содержание и клейма:
 жильё, Контроль, склад, налоги. Ниже — лестница уровней с ценой, где нехватка подсвечена киноварью, а также управляющий
 и заказы. <b>«Обустройство»</b> — ветки улучшений, <b>«Описание»</b> — текст.</p>
-</div>
-<div>
-${fig("building.jpg", "Лист постройки, «Обзор»: производственная линия, лестница уровней, управляющий.")}
-</div>
-</div>
 ${gm(`<b>Свой тип сооружения.</b> Создайте актёра «Постройка» без поселения — он станет образцом в каталоге (папка «Каталог построек»).
 Кнопка «Править» на листе открывает чертёж уровня: недели, цена, рабочие места, жильё, Контроль, налоги, склад, плац, укрепления,
 строки выработки, сырья и содержания (бросок, за постройку или за семью, срок, «не зимой», «столько же»). Ветки обустройства
 правятся на вкладке «Обустройство». Образец с кодом встроенной постройки заменяет её в каталоге. Перетащите образец
 на лист поселения — и заложится его копия.`)}
+</div>
+<div>
+${fig("building.jpg", "Лист постройки, «Обзор»: производственная линия, лестница уровней, управляющий.")}
+</div>
+</div>
+
 
 ${chapter("Обустройство и мастерские", "Постройка растёт не только уровнем: у неё есть три ветки улучшений, хозяин и очередь заказов.", "growth",
   ["Острый топор — половина работы. Вторая половина — кто его держит.", "старшина лесорубов"])}
@@ -627,7 +623,6 @@ ${chapter("Битва", "Каждый раунд стороны бросают �
   <li>Отряд с духом ${A.ROUT_AT} и ниже бежит; ступени «Стойкость» опускают этот порог.</li>
   <li>Битва кончается, когда у одной из сторон не осталось стоящих отрядов.</li>
 </ul>
-${ladder(Object.values(A.TERRAIN), [["Местность", x => `<b>${x.label}</b>`], ["Обороняющимся", x => x.defender ? "+" + x.defender : "—", 1], ["Коннице", x => x.cavalry ?? "—", 1]])}
 </div>
 <div>
 ${fig("battle.jpg", "Окно битвы: стороны, местность, бросок раунда и летопись боя.")}
@@ -651,6 +646,8 @@ ${fig("battle.jpg", "Окно битвы: стороны, местность, б
   <li><b>Потери</b> всплывают над жетонами у всех игроков: «−14», «−6 · бегут!».</li>
   <li>Кнопка <b>«Со сцены»</b> собирает поле вокруг выделенных жетонов (или середины экрана), <b>«Без сцены»</b> переводит битву на ручное ведение.</li>
 </ul>
+<h3>Местность</h3>
+${ladder(Object.values(A.TERRAIN), [["Местность", x => `<b>${x.label}</b>`], ["Обороняющимся", x => x.defender ? "+" + x.defender : "—", 1], ["Коннице", x => x.cavalry ?? "—", 1]])}
 </div>
 <div>
 ${fig("field.jpg", "Раунд на сцене: потери всплывают над жетонами у всех игроков.")}
@@ -723,7 +720,7 @@ aside.note, .chain li, figure {
 
 /* Слово к правительнице */
 .preface { break-before: page; padding-top: 6mm; }
-.preface .pf-art { height: 92mm; margin: -6mm 0 8mm; background: center / cover no-repeat; border: 1px solid var(--rule); position: relative; }
+.preface .pf-art { height: 92mm; margin: -6mm 0 8mm; background: 12% center / cover no-repeat; border: 1px solid var(--rule); position: relative; }
 .preface .pf-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(19,20,23,.75)); }
 .preface .kicker { font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--cinnabar); margin: 0 0 3mm; }
 .preface h1 { font-size: 34pt; line-height: 1.02; margin: 0; }
@@ -782,13 +779,16 @@ aside.note, .chain li, figure {
 .chapter .numeral { position: absolute; right: 0; top: -8mm; font: 400 120pt/1 "Vedmak Display", serif;
   color: transparent; -webkit-text-stroke: 1px rgba(243,238,226,.16); letter-spacing: -.04em; }
 .chapter.has-art { padding-top: 0; }
-.chapter .ch-art { position: relative; height: 58mm; margin: 0 0 6mm; background: var(--plate) left center / cover no-repeat;
+.chapter .ch-art { position: relative; height: 46mm; margin: 0 0 5mm; background: var(--plate) left center / cover no-repeat;
   border: 1px solid var(--rule); box-sizing: border-box; }
 .chapter .ch-art::after { content: ""; position: absolute; inset: 0;
   background: linear-gradient(90deg, transparent 48%, rgba(19,20,23,.85) 74%, var(--night) 92%), linear-gradient(180deg, transparent 62%, rgba(19,20,23,.7) 100%); }
-.chapter.has-art .numeral { top: 4mm; right: 5mm; z-index: 1; -webkit-text-stroke: 1px rgba(243,238,226,.32); }
+.chapter.has-art .numeral { top: -2mm; right: 5mm; z-index: 1; -webkit-text-stroke: 1px rgba(243,238,226,.32); }
 .chapter h1 { font-size: 30pt; line-height: 1.05; margin: 0; position: relative; max-width: 138mm; }
-.chapter .lead { font-size: 11pt; color: var(--muted); max-width: 130mm; margin: 2mm 0 0; position: relative; }
+.chapter .lead { font-size: 10.5pt; line-height: 1.45; color: var(--muted); margin: 0; position: relative; }
+.chapter .ch-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; margin-top: 2.4mm; align-items: start; }
+.chapter .ch-intro blockquote.epigraph { margin: .6mm 0 0; }
+.chapter .thread { margin: 4mm 0 4.5mm; }
 #units, #ref, #week { }
 
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; align-items: start; }
@@ -841,7 +841,7 @@ figure { margin: 2mm 0 4mm; break-inside: avoid; padding: 2.2mm 2.2mm 2mm; borde
   background: var(--rv) left .3mm top .3mm / 2mm 2mm no-repeat, var(--rv) right .3mm top .3mm / 2mm 2mm no-repeat,
     var(--rv) left .3mm bottom .3mm / 2mm 2mm no-repeat, var(--rv) right .3mm bottom .3mm / 2mm 2mm no-repeat, linear-gradient(#1d1e22, #141518); }
 figure img { width: 100%; display: block; border: 1px solid #060607; }
-figure.wide { margin-top: 4mm; }
+figure.wide { margin: 4mm auto 0; width: 132mm; }
 figcaption { font-size: 7.6pt; color: var(--muted); margin: 2mm .6mm 0; padding-left: 3mm; border-left: 1px solid var(--cinnabar); }
 
 table.data { width: 100%; border-collapse: collapse; font-size: 7.8pt; margin: 2mm 0 5mm; }
