@@ -6,7 +6,7 @@
 
 import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_PER_MONTH, RESOURCE_ORDER, TAXES, BUY_MARKUP, MONTHS,
   resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
-import { buildingState, levelDef, activeLevel, upgradeNodes, averageOf, WEALTH } from "../settlement/rules.mjs";
+import { buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "../settlement/rules.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { compareRu } from "../util.mjs";

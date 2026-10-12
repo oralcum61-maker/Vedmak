@@ -10,6 +10,8 @@ const KINDS = {};
 const viewers = new Map();
 const hosts = new Map();
 const dismissed = new Set();
+/** Последний разосланный снимок окна каждого вида. */
+const sent = new Map();
 /** Атрибуты, по которым ищется элемент у хозяина окна. */
 const KEYS = ["action", "id", "uuid", "side", "i", "node", "track", "game", "seat", "index", "level", "list", "kind", "path", "mode",
   "delta", "die", "bet", "mod", "spectatorBet", "gwentSkill", "player", "spectator", "tab"];
@@ -39,12 +41,19 @@ export function shareView(kind, app, { context, actors, showAll = false, title =
     && (u.isGM || actors.some(a => a?.testUserPermission?.(u, "OWNER")))).map(u => u.id);
   app.participants = participants;
   const audience = showAll ? game.users.filter(u => u.active && !u.isSelf).map(u => u.id) : participants;
-  broadcast("sharedView", { kind, session: app.session, title, host: game.user.name, audience, participants, context: plain(context) });
+  if (!audience.length) return;
+  const payload = { kind, session: app.session, title, host: game.user.name, audience, participants, context: plain(context) };
+  // Перерисовка без перемен (наведение, тот же ход) — снимок не рассылается повторно
+  const key = JSON.stringify(payload);
+  if (sent.get(kind) === key) return;
+  sent.set(kind, key);
+  broadcast("sharedView", payload);
 }
 
 /** Хозяин окна закрыл его — у остальных окно тоже закрывается. */
 export function closeView(kind, app) {
   if (hosts.get(kind) === app) hosts.delete(kind);
+  sent.delete(kind);
   if (game.ready) broadcast("sharedViewClose", { kind, session: app.session });
 }
 

@@ -12,7 +12,6 @@ import { describeChanges } from "../config/effects.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
 import { animateTab } from "../fx/sheet-motion.mjs";
 import { isProstheticItem, prostheticStats, prostheticWeaponCfg } from "../combat/prosthetics.mjs";
-import { worldCurrency } from "../config/money.mjs";
 
 /**
  * Ключи рас для выпадающих списков: корник (RACES) и все расы компендиумов (дополнения, фанатские книги).

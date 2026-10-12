@@ -103,20 +103,33 @@ export function registerBuildingHooks() {
     refreshSettlements();
     try { await migrateBuildingItems(); await fillBuildingTrees(); await syncBuildingDefense(); } catch (err) { console.error("vedmak | перенос построек", err); }
   });
-  // Постройку перенесли в другое поселение — пересчитать и прежнее
+  // Постройку перенесли в другое поселение — пересчитать и прежнее. Пачка правок (ход недели, перенос) — один пересчёт
+  // поселения на пачку: поселения копятся и пересчитываются в микрозадаче, раньше, чем продолжится ждавший правку код.
   const was = new Map();
+  let pending = null;
+  const queue = uuid => {
+    if (!pending) {
+      pending = new Set();
+      queueMicrotask(() => { const uuids = pending; pending = null; refreshSettlements(uuids); });
+    }
+    pending.add(uuid);
+  };
   const touched = doc => {
     if (doc.type !== "building") return;
-    const uuids = new Set([doc.system.settlement]);
-    if (was.has(doc.id)) { uuids.add(was.get(doc.id)); was.delete(doc.id); }
-    refreshSettlements(uuids);
+    queue(doc.system.settlement);
+    if (was.has(doc.id)) { queue(was.get(doc.id)); was.delete(doc.id); }
+  };
+  // Управляющий (персонаж) поднял навык, сменил имя или удалён — поселения его построек пересчитать (PLAN 4.203)
+  const managerTouched = (doc, changes) => {
+    if (doc.type !== "character" || (changes && !["system.skills", "system.stats", "name"].some(k => foundry.utils.hasProperty(changes, k)))) return;
+    for (const b of game.actors) if (b.type === "building" && b.system.manager === doc.uuid) queue(b.system.settlement);
   };
   Hooks.on("preUpdateActor", (doc, changes) => {
     if (doc.type === "building" && foundry.utils.hasProperty(changes, "system.settlement")) was.set(doc.id, doc.system.settlement);
   });
   Hooks.on("createActor", doc => touched(doc));
-  Hooks.on("updateActor", doc => touched(doc));
-  Hooks.on("deleteActor", doc => touched(doc));
+  Hooks.on("updateActor", (doc, changes) => { touched(doc); managerTouched(doc, changes); });
+  Hooks.on("deleteActor", doc => { touched(doc); managerTouched(doc); });
 
   Hooks.on("createActor", (doc, options, userId) => {
     if (doc.type !== "settlement" || userId !== game.user.id || options.vedmakStarter === false) return;

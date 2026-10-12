@@ -56,12 +56,6 @@ const normalizeMoney = memoBySource(raw => {
 /** Валюта мира: { key, label, abbr, rate, … }. */
 export const worldCurrency = () => { const s = moneySetting(); return s.list[s.world]; };
 
-/** Сколько это в валюте мира (из крон), до десятых. */
-export const crownsToWorld = crowns => Math.round(((Number(crowns) || 0) / worldCurrency().rate) * 10) / 10;
-
-/** Подпись суммы в кронах — в валюте мира: «12 ор.». */
-export const worldLabel = crowns => `${crownsToWorld(crowns).toLocaleString("ru-RU")} ${worldCurrency().abbr}`;
-
 /** Валюты списком в порядке ключей. */
 export const currencies = () => Object.values(moneySetting().list);
 

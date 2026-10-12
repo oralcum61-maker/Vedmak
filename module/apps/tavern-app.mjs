@@ -290,24 +290,6 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     return ctx;
   }
 
-  /** Поле игры: что сейчас на кону. */
-  #board() {
-    const st = this.state;
-    const pot = st.pot ? ` · банк ${st.pot} крон${st.settled ? " (роздан)" : ""}` : "";
-    return this.#boardText(st) + pot;
-  }
-
-  #boardText(st) {
-    switch (this.game) {
-      case "drinking": return `Порция ${st.round ?? 0} · следующая — Стойкость СЛ ${10 + 2 * (st.round ?? 0)}`;
-      case "hoard": return st.pile === undefined ? `В куче будет ${HOARD_STAKE * this.players.length} крон` : `В куче ${st.pile} крон`;
-      case "fillet": return `Ускорений ${st.speed ?? 0} · СЛ ${12 + 3 * (st.speed ?? 0)}${(st.speed ?? 0) >= 2 ? " · предел ставок ×2" : ""}`;
-      case "gwent": return `Раунд ${Math.min(3, (st.round ?? 0) + (st.done ? 0 : 1))} из 3`;
-      case "armwrestle": return "Победа — два выигранных раунда подряд";
-      default: return "";
-    }
-  }
-
   #turnLabel() {
     return { armwrestle: "Раунд", drinking: "Налить порцию", hoard: "Раунд со змеёй", fillet: "Удар ножом",
       gwent: `Раунд ${Math.min(3, (this.state.round ?? 0) + 1)}`, poker: "Бросить кости" }[this.game] ?? "";

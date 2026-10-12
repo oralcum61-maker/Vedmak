@@ -175,12 +175,6 @@ export function requirements(actor, recipe, { perComponent = null } = {}) {
   return { components, substances, tools, materialsOk, toolsOk: tools.every(t => t.ok) };
 }
 
-/** Готов ли рецепт к изготовлению прямо сейчас (для значка в списке). */
-export function readiness(actor, recipe) {
-  const req = requirements(actor, recipe);
-  return { ok: req.materialsOk && req.toolsOk, materials: req.materialsOk, tools: req.toolsOk };
-}
-
 /* ------------------------- Способности ремесла ------------------------- */
 
 /** Уровень способности древа профессии по названию (0 — нет такой). */

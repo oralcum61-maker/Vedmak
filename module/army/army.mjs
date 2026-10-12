@@ -190,11 +190,19 @@ export async function besiege(unit, target) {
 export async function liftSiege(unit, settlement = null) {
   const target = settlement ?? (unit?.system.besieging ? fromUuidSync(unit.system.besieging) : null);
   if (target?.type === "settlement") {
-    const units = settlement ? [] : target.system.siege.units.filter(u => u !== unit.uuid);
+    const was = [...target.system.siege.units];
+    const units = settlement ? [] : was.filter(u => u !== unit.uuid);
     await asGMUpdate(target, { "system.siege.units": units, ...(units.length ? {} : { "system.siege.weeks": 0 }) });
-    if (settlement) for (const u of target.system.siege.units) { const a = fromUuidSync(u); if (a?.isOwner) await a.update({ "system.besieging": "" }); }
+    if (settlement) await clearBesieging(was, target.uuid);
   }
   if (unit) await unit.update({ "system.besieging": "" });
+}
+
+/** Отрядам из списка uuid, что ещё осаждают поселение town, — отметку осады снять (свои — сразу, разом). */
+export async function clearBesieging(uuids, town) {
+  const updates = uuids.map(u => fromUuidSync(u)).filter(a => a?.type === "unit" && a.isOwner && a.system.besieging === town)
+    .map(a => ({ _id: a.id, "system.besieging": "" }));
+  if (updates.length) await Actor.implementation.updateDocuments(updates);
 }
 
 /** Обновить чужое поселение (осада): своё — сразу, чужое — через ведущего. */

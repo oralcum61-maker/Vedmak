@@ -1,0 +1,697 @@
+// Гайд «Поселения и войско» (PLAN 4.205): HTML из справочников системы и PDF через Chromium Playwright.
+// Запуск: node docs/guide/build.mjs — пишет docs/guide/guide.html и «Поселения и войско.pdf». Таблицы построек, родов войск,
+// деревьев обустройства и обучения берутся из module/config — гайд не расходится с игрой. Снимки окон — docs/guide/img
+// (их делает docs/guide/shots.mjs на тестовом сервере).
+
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(HERE, "../..");
+const cfg = f => import(pathToFileURL(path.join(ROOT, "module/config", f)).href);
+const S = await cfg("settlement.mjs");
+const A = await cfg("army.mjs");
+const U = await cfg("unit-upgrades.mjs");
+const BU = await cfg("building-upgrades.mjs");
+const R = await cfg("resources.mjs");
+const VERSION = JSON.parse(fs.readFileSync(path.join(ROOT, "system.json"), "utf8")).version;
+
+const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const num = n => String(n).replace(".", ",");
+const cost = list => (list ?? []).map(c => `${esc(c.resource)} ${num(c.qty)}`).join(", ") || "—";
+const img = name => fs.existsSync(path.join(HERE, "img", name)) ? `img/${name}` : null;
+const PER = { week: "", month: " в месяц", bimonth: " раз в 2 мес." };
+
+/* ------------------------------ Справочные таблицы ------------------------------ */
+
+const row = r => `${esc(r.resource)} ${esc(String(r.formula ?? r.value).replace(/(d).(d)/g, "$1,$2"))}${r.per === "family" ? "/сем." : ""}${PER[r.period] ?? ""}${r.noWinter ? " (не зимой)" : ""}`;
+
+function buildingTable() {
+  const groups = Object.entries(S.BUILDING_GROUPS);
+  let out = "";
+  for (const [g, label] of groups) {
+    const list = Object.entries(S.BUILDINGS).filter(([, d]) => d.group === g);
+    if (!list.length) continue;
+    out += `<tr class="grp"><th colspan="6">${esc(label)}</th></tr>`;
+    for (const [key, d] of list) {
+      d.levels.forEach((l0, i) => {
+        const l = S.fullLevel ? S.fullLevel(l0) : l0;
+        const extra = [
+          l.housing ? `жильё ${l.housing}` : "", l.control ? `Контроль +${l.control}` : "",
+          l.controlPerFamily ? `Контроль +${l.controlPerFamily}/сем.` : "", l.taxes ? `налог ×${num(l.taxes)}` : "",
+          l.storage ? `склад +${l.storage}` : "", l.drill ? `плац ×${l.drill}` : "", l.defense ? `укрепления ${l.defense}` : "",
+          i === 0 && d.unique ? "одна на поселение" : "", i === 0 && d.trade ? "торговля" : ""
+        ].filter(Boolean).join(" · ");
+        const make = (l.produce ?? []).map(row).join("; ");
+        const take = [l.consume?.length ? "сырьё: " + l.consume.map(row).join(", ") : "", l.upkeep?.length ? "содержание: " + l.upkeep.map(row).join(", ") : ""].filter(Boolean).join(" · ");
+        out += `<tr${i ? ' class="lv2"' : ""}>
+          <td>${i ? "" : `<b>${esc(d.label)}</b>`}<span class="lv"><i>${i + 1}</i></span></td>
+          <td class="n">${l.weeks ?? 0}</td><td>${cost(l.cost)}</td><td class="n">${l.families || "—"}</td>
+          <td>${make || "—"}</td><td>${[take, extra].filter(Boolean).join(" · ") || "—"}</td></tr>`;
+      });
+    }
+  }
+  return `<table class="data buildings"><thead><tr><th>Постройка · уровень</th><th>Нед.</th><th>Цена</th><th>Семей</th><th>Выработка</th><th>Сырьё, содержание, прочее</th></tr></thead><tbody>${out}</tbody></table>`;
+}
+
+/** Эффект ступени обустройства подписью. */
+function buildingEffect(e) {
+  const res = e.resource ? esc(e.resource) : "";
+  const d = e.formula || (e.value ? BU.effectDice?.(e) : "") || num(e.value);
+  switch (e.type) {
+    case "produce": return `+${d} ${res || "к каждой выработке"}`;
+    case "produceAdd": return `новая выработка: ${row(e)}`;
+    case "consume": return `−${d} сырья${res ? ` (${res})` : ""}`;
+    case "upkeep": return `−${d} содержания${res ? ` (${res})` : ""}`;
+    case "families": return `+${num(e.value)} раб. места`;
+    case "housing": return `+${num(e.value)} жильё`;
+    case "control": return `Контроль +${num(e.value)}`;
+    case "storage": return `склад +${num(e.value)}`;
+    case "drill": return `плац +${num(e.value)}`;
+    case "taxes": return `налог +${num(e.value)}`;
+    case "approval": return `одобрение +${num(e.value)} в месяц`;
+    case "revolt": return `бунт −${d}%`;
+    case "arrival": return `приход семей +${d}%`;
+    case "trade": return "торговля";
+    case "defense": return `укрепления +${num(e.value)}`;
+    default: return esc(e.type);
+  }
+}
+
+function buildingTrees() {
+  let out = "";
+  for (const [g, glabel] of Object.entries(S.BUILDING_GROUPS)) {
+    for (const [key, d] of Object.entries(S.BUILDINGS).filter(([, x]) => x.group === g)) {
+      const tree = BU.buildingTree(key, d.levels.length);
+      if (!tree?.length) continue;
+      out += `<section class="tree"><h4>${esc(d.label)}<small>${esc(glabel)}</small></h4><div class="branches">`;
+      for (const br of tree) {
+        out += `<div class="branch"><h5>${esc(br.name)}</h5><ol>`;
+        for (const n of br.nodes) out += `<li><b>${esc(n.name)}</b> <span class="meta">ур. ${n.level} · ${n.weeks} нед. · ${cost(n.cost)}</span><br>${n.effects.map(buildingEffect).join("; ")}</li>`;
+        out += `</ol></div>`;
+      }
+      out += `</div></section>`;
+    }
+  }
+  return out;
+}
+
+const KIND_LABEL = Object.fromEntries(Object.entries(A.UNIT_KINDS).map(([k, v]) => [k, v.label]));
+const TERRAIN_LABEL = Object.fromEntries(Object.entries(A.TERRAIN).map(([k, v]) => [k, v.label]));
+
+function unitEffect(e) {
+  const v = num(e.value);
+  switch (e.type) {
+    case "power": return `сила +${v}`;
+    case "vs": return `+${v} против: ${(KIND_LABEL[e.kind] ?? e.kind).toLowerCase()}`;
+    case "terrain": return `+${v}, местность «${TERRAIN_LABEL[e.terrain] ?? e.terrain}»`;
+    case "firstRound": return `+${v} в первом раунде`;
+    case "defend": return `+${v} в обороне`;
+    case "morale": return `боевой дух +${v}`;
+    case "rout": return `бежит на ${v} позже`;
+    case "losses": return `${esc(e.formula)} бойцов выживает в раунд`;
+    case "food": return `${esc(e.formula)} бойцов едят даром`;
+    case "pay": return `${esc(e.formula)} наёмников служат даром`;
+    case "drill": return `тренировка +${v}`;
+    default: return esc(e.type);
+  }
+}
+
+function unitTrees() {
+  const block = (br, title) => `<div class="branch"><h5>${esc(title)}</h5><ol>${br.nodes.map(n => {
+    const need = [n.rank ? `звание «${U.RANKS[n.rank].label}»` : "", n.weapons ? `оружие «${A.WEAPONS[n.weapons].label}»` : "", n.armor ? `броня «${A.ARMOR[n.armor].label}»` : ""].filter(Boolean).join(", ");
+    return `<li><b>${esc(n.name)}</b> <span class="meta">${n.weeks} нед. · ${cost(n.cost)}</span><br>${need ? `<span class="need">${need}</span><br>` : ""}${n.effects.map(unitEffect).join("; ")}</li>`;
+  }).join("")}</ol></div>`;
+  const common = U.COMMON_BRANCHES.map(br => block(br, br.name)).join("");
+  const kinds = Object.keys(A.UNIT_KINDS).map(k => { const br = U.kindBranch(k); return block(br, `${br.name} · ${KIND_LABEL[k]}`); }).join("");
+  return `<div class="branches">${common}</div><div class="branches four">${kinds}</div>`;
+}
+
+function kindTable() {
+  const gear = (k, track) => A.UNIT_KINDS[k].gear[track].map((t, i) => `<span class="tier">${i + 1}</span> ${cost(t)}`).join("<br>");
+  return `<table class="data"><thead><tr><th>Род войск</th><th>Сила рода</th><th>Особенность</th><th>Оружие на бойца по ступеням</th><th>Броня на бойца по ступеням</th></tr></thead><tbody>${
+    Object.entries(A.UNIT_KINDS).map(([k, d]) => `<tr><td><b>${d.label}</b></td><td class="n">${d.base}</td><td>${[
+      d.vs ? Object.entries(d.vs).map(([x, v]) => `+${v} против: ${KIND_LABEL[x].toLowerCase()}`).join(", ") : "",
+      d.firstRound ? `+${d.firstRound} в первом раунде` : "", d.mount ? "лес −2, стены −3" : ""].filter(Boolean).join("; ") || "—"}</td>
+      <td>${gear(k, "weapons")}</td><td>${gear(k, "armor")}</td></tr>`).join("")}</tbody></table>`;
+}
+
+const ladder = (list, cols) => `<table class="data compact"><thead><tr>${cols.map(c => `<th>${c[0]}</th>`).join("")}</tr></thead><tbody>${
+  list.map((x, i) => `<tr>${cols.map(c => `<td${c[2] ? ' class="n"' : ""}>${c[1](x, i)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+
+function approvalTable() {
+  const rows = [];
+  for (let a = 0; a <= S.APPROVAL_MAX; a++) {
+    const arr = S.ARRIVALS[a];
+    const rev = S.revoltChance(a, 0);
+    rows.push(`<tr class="${rev ? "bad" : a >= S.CONTENT_LEVEL ? "good" : ""}"><td class="n"><b>${a}</b></td><td>${rev ? `${rev}%` : "—"}</td><td>${arr ? `${arr[0]}% — ${arr[1]} сем.` : "—"}</td><td>${a >= S.CONTENT_LEVEL ? "доволен" : a <= 3 ? "ропот" : ""}</td></tr>`);
+  }
+  return `<table class="data compact approval"><thead><tr><th>Одобрение</th><th>Бунт в конце месяца</th><th>Приход семей</th><th>Народ</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
+}
+
+function resourceLib() {
+  return Object.entries(R.RESOURCE_CATEGORIES).map(([c, label]) => {
+    const list = R.RESOURCE_LIBRARY.filter(x => x.cat === c);
+    return `<div class="rescat"><h5>${esc(label)} <small>${list.length}</small></h5><p>${list.map(x => `${esc(x.name)}&nbsp;<i>${x.price}</i>`).join(" · ")}</p></div>`;
+  }).join("");
+}
+
+const SKILL_RU = { wilderness: "Выживание", physique: "Сила", alchemy: "Алхимия", business: "Торговля", leadership: "Лидерство",
+  tactics: "Тактика", persuasion: "Убеждение", crafting: "Ремесло" };
+function managerTable() {
+  const by = {};
+  for (const [key, d] of Object.entries(S.BUILDINGS)) {
+    const sk = S.managerSkillOf(key, d.group);
+    (by[sk] ??= []).push(d.label);
+  }
+  return `<table class="data compact"><thead><tr><th>Навык управляющего</th><th>Постройки</th></tr></thead><tbody>${
+    Object.entries(by).map(([sk, l]) => `<tr><td><b>${SKILL_RU[sk] ?? sk}</b></td><td>${l.join(", ")}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function orderTable() {
+  const shops = Object.entries(S.ORDER_SHOPS).map(([k, t]) => `<li><b>${esc(S.BUILDINGS[k]?.label ?? k)}</b> — ${t.map(x => S.ORDER_TYPES[x]).join(", ")}</li>`).join("");
+  return `<ul class="shops">${shops}</ul>`;
+}
+
+/* ------------------------------ Части страницы ------------------------------ */
+
+const fig = (file, caption, cls = "") => {
+  const src = img(file);
+  return src ? `<figure class="${cls}"><img src="${src}" alt=""><figcaption>${caption}</figcaption></figure>` : "";
+};
+const gm = html => `<aside class="note gm"><span>Ведущему</span>${html}</aside>`;
+const tip = html => `<aside class="note tip"><span>Совет</span>${html}</aside>`;
+const warn = html => `<aside class="note warn"><span>Осторожно</span>${html}</aside>`;
+let chapterNo = 0;
+const chapter = (title, lead, id) => `<header class="chapter" id="${id}"><div class="numeral">${["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"][++chapterNo]}</div>
+  <h1>${title}</h1><p class="lead">${lead}</p><div class="thread"><i></i></div></header>`;
+
+/** Цепь хода недели — порядок simulateWeek. */
+const WEEK = [
+  ["Выработка", "постройки без сырья, затем с сырьём; броски обустройства и управляющего"],
+  ["Содержание", "дрова шахте, еда храму и казарме"],
+  ["Нужды семей", `еда ${S.NEEDS[S.FOOD]}, топливо ${S.NEEDS[S.FUEL]} (зимой ${S.WINTER_FUEL}) на семью`],
+  ["Налог", "монеты с семьи → Богатство"],
+  ["Склад", "сверх вместимости — пропадает"],
+  ["Конец месяца", "налог и одобрение, приход семей, бунт"],
+  ["Стройка", "свободная семья — неделя стройки"],
+  ["Войско и заказы", "еда и плата отрядам, тренировка, мастерские, осада, караваны"]
+];
+const weekChain = (active = -1) => `<ol class="chain">${WEEK.map(([t, d], i) => `<li class="${i === active ? "on" : ""}"><b>${t}</b><span>${d}</span></li>`).join("")}</ol>`;
+
+/* ------------------------------ Текст ------------------------------ */
+
+const cover = `<section class="cover">
+  <div class="art"></div>
+  <div class="plate">
+    <p class="kicker">«Ведьмак: НРИ» · система для Foundry VTT · версия ${VERSION}</p>
+    <p class="dedication">Составлено для <b>Леди Ядвиги</b></p>
+    <h1>Поселения<br><em>и</em> войско</h1>
+    <p class="sub">Руководство правителя: хозяйство недели за неделей, постройки и их обустройство, управляющие и мастерские,
+      караваны, отряды, поход, осада и битва.</p>
+    <div class="thread"><i></i></div>
+    <ul class="contents">
+      <li><span>I</span>Первые шаги</li><li><span>II</span>Лист поселения</li><li><span>III</span>Ход недели</li>
+      <li><span>IV</span>Семьи и одобрение</li><li><span>V</span>Склад, казна, торговля</li><li><span>VI</span>Постройки</li>
+      <li><span>VII</span>Обустройство и мастерские</li><li><span>VIII</span>Караваны и Совет</li>
+      <li><span>IX</span>Отряды</li><li><span>X</span>Поход и осада</li><li><span>XI</span>Битва</li><li><span>XII</span>Справочник</li>
+    </ul>
+  </div>
+</section>`;
+
+const body = `
+${chapter("Первые шаги", "Поселение — актёр, постройки и отряды — тоже актёры. Всё считает система; у ведущего всегда есть ручная правка.", "start")}
+<div class="cols">
+<ol class="steps">
+  <li><b>Создайте поселение.</b> Ведущий создаёт актёра типа «Поселение». Он сразу получает два жилых дома и лагерь
+    лесорубов (готовые, один лесоруб на работе). Постройки ложатся в папку «Постройки: &lt;поселение&gt;».</li>
+  <li><b>Отдайте его игрокам.</b> Права владельца выдаются на поселение, постройки получают те же права сами. Владелец
+    строит, ставит семьи на работу, торгует, набирает войско; время двигает только ведущий.</li>
+  <li><b>Заполните шапку.</b> Семьи, одобрение (0–10), казна в Богатстве, налог, Ополчение и Контроль. Склад правится
+    прямо в листе, новый ресурс — кнопкой «Добавить» или из «Библиотеки».</li>
+  <li><b>Поставьте людей на работу.</b> На вкладке «Постройки» у каждой постройки с местами есть «−» и «+». Семьи без
+    дела строят.</li>
+  <li><b>Прошла неделя.</b> Ведущий жмёт кнопку в листе или «Неделя для всех» в Совете правителя. В чат приходит карточка:
+    броски, итог склада, нехватки, события месяца, достроенное.</li>
+</ol>
+<div>
+${fig("town-economy.jpg", "Лист поселения, вкладка «Хозяйство»: склад с прогнозом недели, торговля, нужды и откуда одобрение.")}
+${tip("Прогноз на листе — это та же неделя, посчитанная по средним броскам. Перед ходом посмотрите на красные числа: где не хватит, там и будет нехватка.")}
+</div>
+</div>
+
+${chapter("Лист поселения", "Шапка — состояние поселения. Пять вкладок — пять забот правителя.", "sheet")}
+<div class="cols">
+<dl class="glossary">
+  <dt>Семьи</dt><dd>Единица населения. Живут в домах, работают на постройках, едят и греются. Семья без дела строит.</dd>
+  <dt>Одобрение</dt><dd>0–${S.APPROVAL_MAX}. От него зависят приход новых семей и бунт. Ставит ведущий (−1 / +1); сдвигают налог, осада и обустройство.</dd>
+  <dt>Казна</dt><dd>Богатство: 1 = ${S.WEALTH_RATE} монет валюты мира. «Внести» и «Взять» — из кошелька вашего персонажа.</dd>
+  <dt>Налог</dt><dd>Без налога, низкий, обычный, высокий. Собирается только при постройке с налогами (усадьба).</dd>
+  <dt>Ополчение</dt><dd>Мужчины, которых можно поставить в строй. Число ведущего; набор из Ополчения его уменьшает.</dd>
+  <dt>Контроль</dt><dd>Порядок: каждый пункт снимает 5% шанса бунта. Число ведущего плюс храм, частокол, казарма, управляющие.</dd>
+  <dt>Укрепления</dt><dd>Прибавка защитникам в битве у стен: частокол, казарма, усадьба 2-го уровня, ступени обустройства.</dd>
+</dl>
+<div>
+<table class="data compact tabs"><thead><tr><th>Вкладка</th><th>Что там</th></tr></thead><tbody>
+  <tr><td><b>Хозяйство</b></td><td>Склад с прогнозом и вместимостью, «Библиотека» ресурсов, торговля, казна, нужды, откуда одобрение, караваны.</td></tr>
+  <tr><td><b>Постройки</b></td><td>Карточки по группам: уровень, стройка, работники, управляющий, обустройство. «Построить…» открывает каталог.</td></tr>
+  <tr><td><b>Войско</b></td><td>Отряды поселения, «Набрать…», «Битва», тренировка, осада.</td></tr>
+  <tr><td><b>Летопись</b></td><td>Недели: броски, нехватки, события, достроенное.</td></tr>
+  <tr><td><b>Описание</b></td><td>Свободный текст.</td></tr></tbody></table>
+${fig("town-buildings.jpg", "Вкладка «Постройки»: группы на кожаных ярлыках, работники «−/+», ступени обустройства «N из M».")}
+</div>
+</div>
+
+${chapter("Ход недели", "Одна кнопка — одна неделя. Месяц — четыре недели; в конце месяца решается судьба поселения.", "week")}
+${weekChain()}
+<div class="cols">
+<div>
+<h3>Выработка</h3>
+<p>Каждая строка выработки — бросок: за постройку или за каждую семью на работе (<i>1d6/сем.</i> при трёх лесорубах —
+три броска). У строки бывает период (в неделю, в месяц, раз в два месяца), пометка «не зимой» и нужное число семей.</p>
+<p><b>Сырьё</b> берётся до выработки. Не хватает — постройка работает частью: дали половину зерна — половина муки.
+Постройки без сырья работают первыми, поэтому зерно фермы этой же недели успевает на мельницу и в пивоварню.</p>
+<h3>Сезоны</h3>
+<p>Зима — декабрь, январь, февраль: поля, пасеки, травники и глина стоят, топлива нужно ${S.WINTER_FUEL} на семью.
+Весна — март–май, лето — июнь–август, осень — сентябрь–ноябрь.</p>
+</div>
+<div>
+<h3>Стройка</h3>
+<p>Цена уровня (или ступени обустройства) списывается сразу. Дальше каждую неделю одна <b>свободная</b> семья двигает одну
+стройку на неделю. Пять строек и две семьи без дела — идут две, остальные ждут.</p>
+${warn("Все семьи на работе — стройка стоит. Снимите одну семью с постройки, если нужно достроить.")}
+<h3>Конец месяца</h3>
+<ol class="tight">
+  <li>Налог сдвигает одобрение: без налога +1, высокий −1.</li>
+  <li>Приход семей (одобрение ${Object.keys(S.ARRIVALS)[0]}+), если нет бездомных.</li>
+  <li>Бунт (одобрение 3 и ниже).</li>
+  <li>Осада: одобрение −1.</li>
+  <li>Обустройство «одобрение в месяц».</li>
+  <li>Одобрение ${S.CONTENT_LEVEL}+: награда на усмотрение ведущего.</li>
+</ol>
+</div>
+</div>
+
+${chapter("Семьи и одобрение", "Люди приходят туда, где есть крыша, хлеб и справедливый правитель.", "people")}
+<div class="cols">
+<div>
+<h3>Жильё</h3>
+<p>Жилой дом даёт крышу одной семье (2-й уровень — двум). Семей больше, чем мест, — лишние бездомные. Пока есть
+бездомные, новые семьи не приходят. Если свободных домов нет, приходит не больше ${S.HOMELESS_CAP} семей — они становятся бездомными.</p>
+<h3>Работа</h3>
+<p>Постройка даёт рабочие места (столько семей можно поставить). Без работников постройка с местами ничего не даёт.
+Свободные семьи — строители.</p>
+<h3>Нужды</h3>
+<p>Каждая семья в неделю съедает ${S.NEEDS[S.FOOD]} еды и сжигает ${S.NEEDS[S.FUEL]} топлива (зимой ${S.WINTER_FUEL}). Нехватка видна в карточке недели.
+Одобрение по нуждам ведущий сдвигает сам.</p>
+<h3>Бунт</h3>
+<p>Шанс бунта — 25% при одобрении 3 и ещё 25% за каждый пункт ниже. Каждый пункт Контроля снимает 5%, ступени «Тише бунт»
+снимают бросок. Что значит бунт, решает ведущий: карточка сообщает только о нём.</p>
+</div>
+<div>
+${approvalTable()}
+<p class="small">Доволен — в конце месяца награда на усмотрение ведущего. Шанс бунта снижают Контроль (−5% за пункт) и обустройство.</p>
+${gm("Одобрение система не считает из нужд: голод и холод видны в карточке, а сдвиг одобрения — ваше решение. Сама она сдвигает его только налогом, осадой и обустройством.")}
+</div>
+</div>
+
+${chapter("Склад, казна и торговля", "Каждый ресурс хранится отдельно, у каждого своя вместимость.", "stock")}
+<div class="cols">
+<div>
+<h3>Вместимость</h3>
+<p>Без построек на каждый ресурс помещается ${S.BASE_STORAGE}. Склад поднимает вместимость на 60 (2-й уровень — на 150), ступени
+обустройства — ещё. Сверх вместимости новое пропадает (в карточке — «пропало»), старое не трогается.</p>
+<h3>Ресурсы</h3>
+<p>Склад — свободный список: ресурс появляется, как только его даёт постройка или его добавили. Библиотека ресурсов
+(кнопка «Библиотека» у склада) — ${R.RESOURCE_LIBRARY.length} ресурсов в ${Object.keys(R.RESOURCE_CATEGORIES).length} разделах с ценой и значком.
+Перетащите ресурс на лист или нажмите «+», и склад начнёт его учитывать.</p>
+${gm("«Свой ресурс» в Библиотеке создаёт предмет типа «Ресурс» в папке «Ресурсы»: имя ресурса, цена, раздел, значок. Он переопределяет ресурс библиотеки с тем же именем.")}
+</div>
+<div>
+<h3>Казна</h3>
+<p>Богатство — деньги поселения: 1 Богатство = ${S.WEALTH_RATE} монет валюты мира (её выбирает ведущий в «Валютах и обмене»).
+Налог: монеты с семьи в неделю — низкий ${S.TAXES.low.perFamily}, обычный ${S.TAXES.normal.perFamily}, высокий ${S.TAXES.high.perFamily} — умножаются на
+множитель усадьбы (×1, на 2-м уровне ×1,5) и идут в казну по курсу.</p>
+<h3>Торговля</h3>
+<p>Нужен торговый пост (или ступень «торговля»). Продажа — по цене ресурса в монетах, покупка — ×${num(S.BUY_MARKUP)}; в казне это
+Богатство по курсу. Купить больше, чем поместится на склад, нельзя. В осаде купцов нет.</p>
+${fig("library.jpg", "Библиотека ресурсов: разделы, поиск, цена; перетащите на лист поселения.")}
+</div>
+</div>
+
+${chapter("Постройки", `${Object.keys(S.BUILDINGS).length} встроенных построек в ${Object.keys(S.BUILDING_GROUPS).length} группах. Каждая — актёр со своим листом.`, "buildings")}
+<div class="cols">
+<div>
+<h3>Построить, улучшить, снести</h3>
+<p>«Построить…» на вкладке «Постройки» открывает каталог. Доступное по цене подсвечено; «одна на поселение» второй раз не строится.
+Цена списывается сразу, стройка идёт неделями (см. «Ход недели»). «Улучшить» — следующий уровень по тем же правилам.
+Снос ничего не возвращает.</p>
+<h3>Лист постройки</h3>
+<p><b>Обзор</b> — производственная линия текущего уровня: сырьё → герб → выработка, содержание, клейма (жильё, Контроль,
+склад, налоги); лестница уровней с ценой (нехватка — киноварью); управляющий и заказы. <b>Обустройство</b> — ветки
+прокачки. <b>Описание</b> — текст.</p>
+</div>
+<div>
+${fig("building.jpg", "Лист постройки, «Обзор»: производственная линия, лестница уровней, управляющий.")}
+</div>
+</div>
+${gm(`<b>Свой тип сооружения.</b> Создайте актёра «Постройка» без поселения: он станет образцом в каталоге (папка «Каталог построек»).
+На листе «Править» открывает чертёж уровня: недели, цена, места, жильё, Контроль, налоги, склад, плац, укрепления, строки выработки,
+сырья и содержания (бросок, за постройку или за семью, период, «не зимой», «столько же»). Ветки обустройства правятся на
+вкладке «Обустройство». Образец с кодом встроенной постройки заменяет её в каталоге. Перетащите образец на лист поселения — заложится копия.`)}
+
+${chapter("Обустройство и мастерские", "Постройка растёт не только уровнем: три ветки обустройства, управляющий и очередь заказов.", "growth")}
+<div class="cols">
+<div>
+<h3>Обустройство</h3>
+<p>У каждой встроенной постройки 3 ветки × 3 ступени. Ступень требует уровень постройки и предыдущую ступень своей ветки;
+цена — со склада поселения сразу, недели строит свободная семья, как уровень. У постройки в работе одна ступень.</p>
+<p><b>Бонусы-броски</b> («+1d3 древесины», «−1d2 сырья», «бунт −1d6%») бросаются <b>столько раз, какой уровень постройки</b>,
+каждую неделю (шансы — в конце месяца). Подняли уровень — бонус вырос.</p>
+${gm("«Выдать даром» и «Забрать ступень» — на ступени. «Править» дерево: ветки, значки, ступени, уровень, недели, цена, эффекты.")}
+${fig("tree.jpg", "Вкладка «Обустройство»: взята — серебро, строится — полоса, доступна — «Взять», закрыта — причина.")}
+<p class="small">Цена заказа: оружие — железо (1 за 40 крон) и доски 1; луки и арбалеты — доски (1 за 30) и кожа 1; броня — железо (1 за 70) и кожа (1 за 80);
+снаряжение — кожа (1 за 60) и ткань (1 за 80); алхимия — лесные травы (1 за 15), компоненты — (1 за 20).</p>
+</div>
+<div>
+<h3>Управляющий</h3>
+<p>Перетащите персонажа на лист постройки — он управляющий. К главной выработке (первой строке) прибавляется
+<b>1d4 за каждые 3 очка</b> навыка (1–3 → 1d4, 4–6 → 2d4…). У постройки без выработки управляющий даёт Контроль +1 за 4 очка.
+Навык зависит от постройки; ведущий может сменить.</p>
+${managerTable()}
+<h3>Заказы мастерских</h3>
+<p>Перетащите предмет (из компендиума, мира или с листа персонажа) на лист мастерской: для кого и сколько. Цена — ресурсы склада
+по роду предмета и его цене в кронах; срок — 1 неделя за каждые 150 крон. Заказы идут по одному и только пока в постройке
+работают. Готовый предмет ложится в инвентарь заказчика. Своя постройка ведущего из группы «Ремесло» принимает всё.</p>
+${orderTable()}
+
+</div>
+</div>
+
+${chapter("Караваны и Совет правителя", "Поселения торгуют друг с другом, а правитель видит все владения одним окном.", "council")}
+<div class="cols">
+<div>
+<h3>Караваны</h3>
+<p>На вкладке «Хозяйство»: куда, какой ресурс и сколько в неделю — «Отправлять». После хода недели караван везёт со склада
+(уже после выработки и нужд), но не больше, чем есть, и не больше свободного места у получателя.</p>
+<ul class="tight">
+  <li>Нужен торговый пост или рынок у отправителя.</li>
+  <li>Осада любого из двух поселений — караван стоит.</li>
+  <li>В «Неделе для всех» поселения ходят по очереди: груз, привезённый в уже прошедшее, учтётся на следующей неделе.</li>
+</ul>
+</div>
+<div>
+<h3>Совет правителя</h3>
+<p>Кнопка в панели актёров. Все поселения, что вы видите: семьи, одобрение, казна, Контроль, укрепления, осада; еда и
+топливо с прогнозом, главные запасы, стройки, обустройство и заказы, войско, караваны, предупреждения
+(«бездомных…», «нужд не хватит», «бунт N%»). Ведущему — «Прошла неделя» у каждого и «Неделя для всех».</p>
+</div>
+</div>
+${fig("council.jpg", "Совет правителя: все поселения одним окном.", "wide")}
+
+${chapter("Отряды", "Отряд — актёр: бойцы, выучка, опыт, снаряжение, боевой дух и командир.", "units")}
+<div class="cols">
+<div>
+<h3>Набор</h3>
+<p>«Набрать…» на вкладке «Войско». Откуда:</p>
+<ul class="tight">
+  <li><b>${A.ORIGINS.militia.label}</b> — бойцы уходят из числа Ополчения, при роспуске возвращаются.</li>
+  <li><b>${A.ORIGINS.families.label}</b> — свободная семья даёт ${A.FAMILY_SOLDIERS} бойцов и больше не работает.</li>
+  <li><b>${A.ORIGINS.mercenary.label}</b> — ${num(A.MERCENARY.hire)} Богатства за бойца, сразу «${A.TRAINING[A.MERCENARY.training].label}», оружие и броня
+    2-й ступени, дух ${A.MERCENARY.morale}; плата ${num(A.MERCENARY.pay)} Богатства в неделю за бойца.</li>
+</ul>
+<p>Пополнение в существующий отряд того же происхождения: новичков снаряжают со склада как отряд, выучка усредняется.
+Роспуск возвращает ополченцев и семьи; снаряжение на склад не возвращается.</p>
+<h3>Выучка</h3>
+${ladder(A.TRAINING, [["Выучка", x => `<b>${x.label}</b>`], ["Сила", x => x.power, 1], ["Дух до", x => x.morale, 1], ["Недель до следующей", x => x.weeks || "—", 1]])}
+<p>Отряд «тренируется» (переключатель на листе) — каждую неделю продвигается на скорость плаца: плац 1-го уровня или казарма ×1,
+плац 2-го ×2, плюс ступени. Без плаца и казармы тренироваться негде. В походе не тренируются.</p>
+</div>
+<div>
+<h3>Опыт и звания</h3>
+<p>Неделя на плацу +${U.XP.drill}, раунд битвы +${U.XP.round}, победа +${U.XP.victory}. Звание даёт силу и открывает ступени обучения;
+броски обучения бросаются по званию раз (1, 1, 2, 2, 3).</p>
+${ladder(U.RANKS, [["Звание", x => `<b>${x.label}</b>`], ["Опыт", x => x.xp, 1], ["Сила", x => x.power, 1], ["Бросков", (x, i) => U.diceTimes(i), 1]])}
+<h3>Снаряжение</h3>
+<p>Две отдельные шкалы, от выучки не зависят. «Снарядить» берёт ресурсы со склада родного поселения на каждого бойца.</p>
+${ladder(A.WEAPONS.map((w, i) => ({ w, a: A.ARMOR[i] })), [["Ступень", (x, i) => i, 1], ["Оружие", x => x.w.label], ["Сила", x => x.w.power, 1], ["Броня", x => x.a.label], ["Сила", x => x.a.power, 1], ["Кубиков спасения на 40 бойцов", x => x.a.saves || "—", 1]])}
+<p class="small">Броня спасает бойцов в каждом раунде: кубики 1d2−1 (0 или 1 боец) — столько, сколько указано, за каждые ${A.ARMOR_PER} бойцов.</p>
+</div>
+</div>
+${kindTable()}
+<div class="cols">
+<div>
+<h3>Сила отряда</h3>
+<p class="formula">род + выучка + оружие + броня + 1 за каждые ${A.SOLDIERS_PER_POWER} бойцов + звание + командир + (дух − 5) / 2 + обучение</p>
+<p>В бою ещё: против рода врага, первый раунд, местность, оборона. Разбор силы — подсказкой на листе отряда.</p>
+<h3>Командир</h3>
+<p>Перетащите персонажа на лист отряда: к силе отряда (Эмпатия + Лидерство) / 3 с округлением вниз, не больше ${A.COMMANDER_MAX}.</p>
+</div>
+<div>
+<h3>Неделя отряда</h3>
+<p>Дома отряд ест ${num(A.FOOD_PER_SOLDIER)} еды на бойца со склада поселения, наёмникам платят из казны. Боевой дух растёт на 1 до уровня
+выучки. Голод — дух −2. Наёмникам не заплатили — дух −3 и десятая часть уходит. Ступень обучения продвигается на плацу.</p>
+${fig("unit.jpg", "Лист отряда: пять пластин, оружие и броня шкалами, командир.")}
+</div>
+</div>
+<h3>Обучение — ветки отряда</h3>
+<p>Три общие ветки и ветка рода войск по три ступени. Ступень требует звание (иногда — оружие или броню) и предыдущую ступень;
+цена — со склада родного поселения, недели — на плацу (отряд должен тренироваться).</p>
+${unitTrees()}
+
+${chapter("Поход и осада", "Отряд выходит за стены со своими припасами и может запереть чужое поселение.", "siege")}
+<div class="cols">
+<div>
+<h3>В поход</h3>
+<p>«В поход…» на листе отряда: на сколько недель взять припасов. Еда (${num(A.FOOD_PER_SOLDIER)} на бойца в неделю) списывается со склада
+сразу. В походе отряд ест свои припасы, а не склад, и не тренируется. Припасы кончились — голод: дух −2 каждую неделю.
+«Домой» — остаток припасов возвращается на склад, осада снимается.</p>
+<h3>Осада</h3>
+<p>«Осадить…» — выбрать поселение. Или подведите жетон отряда в походе к жетону чужого поселения на сцене (две клетки) —
+система предложит осаду. В осаждённом поселении:</p>
+<ul class="tight">
+  <li>поля и промыслы (группы «Еда и промысел» и «Добыча») стоят;</li>
+  <li>нет торговли, караванов и прихода семей;</li>
+  <li>одобрение −1 в конце каждого месяца;</li>
+  <li>в шапке — плашка осады со счётом недель.</li>
+</ul>
+</div>
+<div>
+<p>Осада держится, пока под стенами есть отряд в походе, не бежавший и с бойцами. Ушли, бежали или перебиты все — осада снимается
+в ход недели. Ведущий снимает осаду кнопкой «Снять осаду» на листе поселения.</p>
+${gm("Осадить чужое поселение игрок может и без прав на него: поле осады за него обновляет клиент ведущего. Ведущий должен быть в игре.")}
+${tip("Перед осадой запаситесь: осаждённый живёт на складе, а склад без полей тает. Посчитайте нужды семей и отрядов.")}
+</div>
+</div>
+
+${chapter("Битва", "Раунд — бросок сил сторон. Потери, дух и опыт пишутся в отряды сами.", "battle")}
+<div class="cols">
+<div>
+<h3>Окно битвы</h3>
+<p>Открывает ведущий: «Битва» на вкладке «Войско» или «В бой» на листе отряда. Две стороны — перетащите отряды или
+добавьте выделенные жетоны. Местность, кто обороняется, «У стен &lt;поселение&gt;» (его укрепления — обороняющимся).</p>
+<h3>Раунд</h3>
+<p class="formula">d10 + сила стоящих отрядов + местность (обороняющимся) + укрепления</p>
+<ul class="tight">
+  <li>Проигравший теряет 5% + 2% за каждое очко разницы (не больше 40%) и 1 + разница/4 духа.</li>
+  <li>Победитель теряет 5% при разнице меньше 3, иначе 2%; при разнице 6+ дух +1.</li>
+  <li>Ничья — по 3% и −1 духа обоим.</li>
+  <li>Броня и ступени «Меньше потерь» спасают часть бойцов.</li>
+  <li>Дух ${A.ROUT_AT} и ниже — отряд бежит («Стойкость» опускает порог).</li>
+  <li>Битва кончается, когда у стороны нет стоящих отрядов.</li>
+</ul>
+${ladder(Object.values(A.TERRAIN), [["Местность", x => `<b>${x.label}</b>`], ["Обороняющимся", x => x.defender ? "+" + x.defender : "—", 1], ["Коннице", x => x.cavalry ?? "—", 1]])}
+</div>
+<div>
+${fig("battle.jpg", "Окно битвы: стороны, местность, бросок раунда и летопись.")}
+<h3>После битвы</h3>
+<p>Лекари родного поселения возвращают в строй 20% павших и ещё по 10% за хату травника, алхимическую лавку и храм
+(не больше 50%). «Новая битва» снимает бегство и начинает раунды заново.</p>
+<h3>Общий стол</h3>
+<p>Владельцы отрядов видят окно битвы у себя и жмут кнопки сами: щелчок уходит ведущему и выполняется у него.
+«Показать всем» — смотрят и остальные игроки. Закрыли окно — до новой битвы оно не всплывёт.</p>
+</div>
+</div>
+
+${chapter("Справочник", "Всё, что считает система, — из её справочников. Обновится система — пересоберите гайд.", "ref")}
+<h3>Постройки</h3>
+${buildingTable()}
+<h3>Если что-то не так</h3>
+<dl class="faq">
+  <dt>Постройка ничего не даёт</dt><dd>Нет работников, нет сырья, зима (строки «не зимой»), осада (поля и промыслы), строка «в месяц» ждёт конца месяца.</dd>
+  <dt>Стройка не движется</dt><dd>Нет свободных семей — все на работе или в строю.</dd>
+  <dt>Семьи не приходят</dt><dd>Одобрение ниже ${Object.keys(S.ARRIVALS)[0]}, есть бездомные, осада; приход решает бросок в конце месяца.</dd>
+  <dt>Ресурс пропал</dt><dd>Склад полон: сверх вместимости новое пропадает. Постройте склад или продайте.</dd>
+  <dt>Нельзя торговать</dt><dd>Нет торгового поста (или ступени «торговля») либо поселение в осаде.</dd>
+  <dt>Отряд не тренируется</dt><dd>Переключатель «тренируется» выключен, нет плаца или казармы, отряд в походе.</dd>
+  <dt>Караван стоит</dt><dd>Нет торгового поста или рынка, осада, у получателя нет места, на складе нечего везти.</dd>
+</dl>
+<h3>Деревья обустройства</h3>
+<p class="small">Ступени по порядку; «ур.» — нужный уровень постройки. Броски бонусов — столько раз, какой уровень постройки.</p>
+${buildingTrees()}
+<h3>Библиотека ресурсов</h3>
+<p class="small">Цена — монет валюты мира за единицу (продажа; покупка ×${num(S.BUY_MARKUP)}).</p>
+<div class="reslib">${resourceLib()}</div>
+<footer class="colophon">Составлено для Леди Ядвиги — правительницы, которой есть кого кормить и кого вести в бой.<br>«Ведьмак: НРИ» — неофициальная фанатская система для Foundry VTT. «Ведьмак» и его ассеты принадлежат CD Projekt RED;
+настольная игра — R. Talsorian Games. Гайд собран из справочников системы версии ${VERSION}.</footer>
+`;
+
+/* ------------------------------ Стили ------------------------------ */
+
+const css = `
+@font-face { font-family: "Vedmak Display"; src: url("../../fonts/VedmakDisplay.woff2") format("woff2"); }
+@font-face { font-family: "Vedmak Sans"; src: url("../../fonts/VedmakSans.woff2") format("woff2"); font-weight: 100 700; }
+@font-face { font-family: "Vedmak Sans"; src: url("../../fonts/VedmakSans-Italic.woff2") format("woff2"); font-weight: 100 700; font-style: italic; }
+:root {
+  --night: #131417; --plate: #1c1d21; --plate2: #232429; --rule: #34363c;
+  --bone: #ddd6c6; --silver: #f3eee2; --muted: #8e9198; --cinnabar: #b8432c; --steel: #7d93a8; --sage: #8fa88a;
+}
+@page { size: A4; margin: 15mm 14mm 16mm; background: #131417; }
+@page :first { margin: 0; }
+html { background: var(--night); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; color: var(--bone); font: 400 9.2pt/1.5 "Vedmak Sans", sans-serif; font-variant-numeric: tabular-nums; }
+h1, h2, h3, h4, h5 { font-family: "Vedmak Display", serif; font-weight: 400; color: var(--silver); }
+h3 { font-size: 13pt; margin: 10pt 0 4pt; letter-spacing: .02em; }
+h3::before { content: "◆"; color: var(--cinnabar); font-size: 7pt; margin-right: 6pt; vertical-align: 2pt; }
+p { margin: 0 0 6pt; }
+b { color: var(--silver); font-weight: 600; }
+i { color: var(--muted); }
+.small { font-size: 8pt; color: var(--muted); }
+
+/* Обложка — целая страница без полей */
+.cover { height: 297mm; position: relative; overflow: hidden; break-after: page;
+  background: var(--night) url("../../assets/textures/steel-plate.webp"); background-blend-mode: overlay; }
+.cover .art { position: absolute; inset: 0 0 auto 0; height: 64%;
+  background: url("../../assets/cover/cover.webp") 100% 34% / 330% auto no-repeat; filter: saturate(.65) brightness(.78);
+  -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent 100%); mask-image: linear-gradient(180deg, #000 40%, transparent 100%); }
+.cover .plate { position: absolute; left: 18mm; right: 18mm; bottom: 20mm; }
+.cover .kicker { font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.cover h1 { font-size: 64pt; line-height: .92; margin: 4mm 0 5mm; color: var(--silver); letter-spacing: -.01em; }
+.cover h1 em { font-style: normal; color: var(--cinnabar); font-size: .6em; vertical-align: .18em; }
+.cover .dedication { font: italic 400 13pt/1.2 "Vedmak Sans", sans-serif; color: var(--bone); margin: 5mm 0 0; }
+.cover .dedication b { font: 400 17pt "Vedmak Display", serif; color: var(--silver); font-style: normal; letter-spacing: .01em; }
+.cover .sub { font-size: 11pt; max-width: 135mm; color: var(--bone); }
+.cover .contents { list-style: none; padding: 0; margin: 6mm 0 0; columns: 3; column-gap: 8mm; font-size: 9pt; }
+.cover .contents li { break-inside: avoid; padding: 1.4mm 0; border-bottom: 1px solid var(--rule); }
+.cover .contents span { display: inline-block; width: 9mm; font-family: "Vedmak Display"; color: var(--cinnabar); }
+
+/* Нить с ромбом киновари — как у паузы и нексуса */
+.thread { position: relative; height: 1px; margin: 5mm 0; background: linear-gradient(90deg, var(--silver), rgba(243,238,226,.15) 70%, transparent); }
+.thread i { position: absolute; left: 0; top: -3.5px; width: 7px; height: 7px; background: var(--cinnabar); transform: rotate(45deg); }
+
+/* Открытие главы: римская цифра гравюрой */
+.chapter { break-before: page; position: relative; padding: 4mm 0 0; margin-bottom: 5mm; }
+.chapter .numeral { position: absolute; right: 0; top: -8mm; font: 400 120pt/1 "Vedmak Display", serif;
+  color: transparent; -webkit-text-stroke: 1px rgba(243,238,226,.16); letter-spacing: -.04em; }
+.chapter h1 { font-size: 30pt; line-height: 1.05; margin: 0; position: relative; max-width: 138mm; }
+.chapter .lead { font-size: 11pt; color: var(--muted); max-width: 130mm; margin: 2mm 0 0; position: relative; }
+#units, #ref, #week { }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; align-items: start; }
+.cols > * { min-width: 0; }
+
+/* Цепь хода недели — фирменный элемент */
+.chain { list-style: none; counter-reset: step; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.4mm; padding: 0; margin: 2mm 0 6mm; }
+.chain li { counter-increment: step; position: relative; background: var(--plate); border: 1px solid var(--rule); border-top: 2px solid var(--silver);
+  padding: 2.4mm 3mm 2.6mm; break-inside: avoid; }
+.chain li::before { content: counter(step); position: absolute; right: 2.5mm; top: 1.2mm; font: 18pt/1 "Vedmak Display"; color: rgba(243,238,226,.18); }
+.chain li:nth-child(6) { border-top-color: var(--cinnabar); }
+.chain li:not(:nth-child(4n))::after { content: ""; position: absolute; right: -2.4mm; top: 50%; width: 2.4mm; height: 1px; background: var(--muted); }
+.chain b { display: block; font: 11pt "Vedmak Display"; color: var(--silver); }
+.chain span { font-size: 7.8pt; color: var(--muted); line-height: 1.35; display: block; }
+
+.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; }
+.steps li { counter-increment: s; position: relative; padding: 0 0 4mm 11mm; break-inside: avoid; }
+.steps li::before { content: ""; position: absolute; left: 0; top: -1mm; width: 7.5mm; height: 7.5mm; border: 1px solid var(--silver);
+  transform: rotate(45deg) scale(.82); }
+.steps li::after { content: counter(s); position: absolute; left: .1mm; top: -.7mm; width: 7.5mm; height: 7.5mm; line-height: 7.5mm; text-align: center; font: 11pt "Vedmak Display"; color: var(--silver); }
+ul.shops { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 5mm; font-size: 8pt; }
+ul.shops li { break-inside: avoid; padding: .8mm 0; border-bottom: 1px solid var(--rule); }
+ul.tight, ol.tight { margin: 0 0 6pt; padding-left: 5mm; }
+ul.tight li, ol.tight li { margin-bottom: 1.2mm; }
+ul.tight li::marker { color: var(--cinnabar); }
+
+dl.glossary { margin: 0; display: grid; grid-template-columns: 26mm 1fr; gap: 2.2mm 4mm; }
+dl.glossary dt { font: 11pt "Vedmak Display"; color: var(--silver); }
+dl.glossary dd { margin: 0; }
+dl.faq dt { font-weight: 600; color: var(--silver); margin-top: 2mm; }
+dl.faq dd { margin: 0 0 0 4mm; color: var(--bone); }
+
+.formula { font: 10pt "Vedmak Display"; color: var(--silver); background: var(--plate); border-left: 2px solid var(--cinnabar); padding: 2.4mm 3.5mm; }
+
+aside.note { position: relative; background: var(--plate); border: 1px solid var(--rule); padding: 3mm 3.5mm 2.6mm; margin: 3mm 0; font-size: 8.6pt; break-inside: avoid; }
+aside.note > span { display: block; font-size: 7pt; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 1mm; font-weight: 600; }
+aside.gm { border-top: 2px solid var(--steel); } aside.gm > span { color: var(--steel); }
+aside.tip { border-top: 2px solid var(--sage); } aside.tip > span { color: var(--sage); }
+aside.warn { border-top: 2px solid var(--cinnabar); } aside.warn > span { color: var(--cinnabar); }
+
+figure { margin: 2mm 0 4mm; break-inside: avoid; }
+figure img { width: 100%; display: block; border: 1px solid var(--rule); box-shadow: 0 2mm 5mm rgba(0,0,0,.5); }
+figure.wide { margin-top: 4mm; }
+figcaption { font-size: 7.6pt; color: var(--muted); margin-top: 1.6mm; padding-left: 3mm; border-left: 1px solid var(--cinnabar); }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 7.8pt; margin: 2mm 0 5mm; }
+table.data th { text-align: left; font: 600 6.8pt "Vedmak Sans"; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--silver); padding: 1.4mm 1.6mm; vertical-align: bottom; }
+table.data td { padding: 1.1mm 1.6mm; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.data td.n { text-align: center; white-space: nowrap; }
+table.data tr { break-inside: avoid; }
+table.data thead { display: table-header-group; }
+table.compact { font-size: 8pt; }
+table.buildings td:first-child { white-space: nowrap; }
+table.buildings tr.grp th { font: 11pt "Vedmak Display"; color: var(--silver); letter-spacing: .02em; text-transform: none; padding-top: 3.5mm;
+  border-bottom: 1px solid var(--cinnabar); }
+table.buildings tr.lv2 td { color: #bdb6a7; border-bottom-color: #2a2b30; }
+.lv { position: relative; display: inline-block; margin-left: 1.8mm; width: 5mm; height: 5mm; vertical-align: -1.4mm; }
+.lv::before { content: ""; position: absolute; inset: .5mm; border: 1px solid var(--muted); transform: rotate(45deg); }
+.lv i { position: absolute; left: 0; top: 0; width: 5mm; height: 5mm; text-align: center; line-height: 5mm; font: normal 600 6.8pt/5mm "Vedmak Sans", sans-serif; color: var(--silver); }
+tr.lv2 .lv { margin-left: 0; }
+.tier { display: inline-block; width: 3.6mm; color: var(--cinnabar); font-family: "Vedmak Display"; }
+table.approval tr.bad td:first-child b { color: var(--cinnabar); }
+table.approval tr.good td:first-child b { color: var(--sage); }
+
+.branches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+.branches.four { grid-template-columns: repeat(4, 1fr); margin-bottom: 3mm; }
+.branch { background: var(--plate); border: 1px solid var(--rule); padding: 2.4mm 2.8mm; break-inside: avoid; }
+.branch h5 { margin: 0 0 1.6mm; font-size: 10pt; }
+.branch ol { margin: 0; padding-left: 4mm; font-size: 7.4pt; line-height: 1.38; }
+.branch li { margin-bottom: 1.4mm; }
+.branch li::marker { color: var(--cinnabar); font-family: "Vedmak Display"; }
+.branch .meta { color: var(--muted); }
+.branch .need { color: var(--steel); }
+section.tree { break-inside: avoid; margin-bottom: 3.5mm; }
+section.tree h4 { font-size: 12pt; margin: 0 0 1.6mm; display: flex; align-items: baseline; gap: 3mm; }
+section.tree h4 small { font: 600 6.5pt "Vedmak Sans"; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+section.tree .branch { padding: 2mm 2.4mm; }
+section.tree .branch ol { font-size: 7pt; }
+
+.reslib { columns: 2; column-gap: 6mm; }
+.rescat { break-inside: avoid; margin-bottom: 3mm; }
+.rescat h5 { margin: 0 0 1mm; font-size: 10pt; } .rescat h5 small { color: var(--muted); font-family: "Vedmak Sans"; font-size: 7pt; }
+.rescat p { font-size: 7.6pt; line-height: 1.5; } .rescat i { color: var(--cinnabar); font-style: normal; font-size: 7pt; }
+.colophon { margin-top: 8mm; padding-top: 3mm; border-top: 1px solid var(--rule); font-size: 7pt; color: var(--muted); }
+`;
+
+const html = `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Поселения и войско — «Ведьмак: НРИ»</title>
+<style>${css}</style></head><body>${cover}${body}</body></html>`;
+const htmlPath = path.join(HERE, "guide.html");
+fs.writeFileSync(htmlPath, html);
+console.log("HTML:", htmlPath);
+
+/* ------------------------------ PDF ------------------------------ */
+if (!process.argv.includes("--html")) {
+  process.env.PLAYWRIGHT_BROWSERS_PATH ??= "D:\\ms-playwright";
+  const pw = await import(pathToFileURL(path.join(ROOT, ".ds-sync/node_modules/playwright/index.mjs")).href);
+  const browser = await pw.chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(pathToFileURL(htmlPath).href, { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+  const pdf = path.join(HERE, "Поселения и войско.pdf");
+  await page.pdf({ path: pdf, format: "A4", printBackground: true, preferCSSPageSize: true, displayHeaderFooter: true,
+    headerTemplate: "<span></span>",
+    footerTemplate: `<div style="width:100%;font:7px sans-serif;color:#8e9198;padding:0 14mm;display:flex;justify-content:space-between;-webkit-print-color-adjust:exact">
+      <span>Поселения и войско · «Ведьмак: НРИ» ${VERSION}</span><span class="pageNumber"></span></div>` });
+  await browser.close();
+  console.log("PDF:", pdf);
+}

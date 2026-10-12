@@ -8,7 +8,7 @@ import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, pri
 import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "./rules.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
-import { unitsWeek } from "../army/army.mjs";
+import { unitsWeek, clearBesieging } from "../army/army.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 const LOG_LIMIT = 40;
@@ -258,6 +258,7 @@ export async function addRoute(settlement, to, resource, qty) {
   resource = String(resource ?? "").trim();
   qty = Math.max(0, Number(qty) || 0);
   if (!to || to === settlement.uuid || !resource || !qty) return ui.notifications.warn("Укажите, куда, какой ресурс и сколько.");
+  if (resource.includes(".")) return ui.notifications.warn("Название ресурса — без точек.");
   await settlement.update({ "system.routes": [...settlement.system.toObject().routes, { id: foundry.utils.randomID(), to, resource, qty }] });
 }
 
@@ -384,6 +385,8 @@ export async function advanceWeek(actor) {
   const siegeUpdate = besiegers.length
     ? { "system.siege.units": besiegers.map(u => u.uuid), "system.siege.weeks": actor.system.siege.weeks + 1 }
     : (actor.system.siege.units.length ? { "system.siege.units": [], "system.siege.weeks": 0 } : {});
+  // Отпавшим (бежали, вернулись, перебиты) — отметку осады снять
+  await clearBesieging(actor.system.siege.units.filter(u => !besiegers.some(b => b.uuid === u)), actor.uuid);
   if (besiegers.length) report.events.push({ kind: "siege", text: `Под стенами ${besiegers.map(u => u.name).join(", ")} — ${actor.system.siege.weeks + 1}-я неделя осады.`, danger: true });
   else if (actor.system.siege.units.length) report.events.push({ kind: "siege", text: "Осада снята: под стенами никого." });
   const caravans = await caravansWeek(actor, next.stock);
