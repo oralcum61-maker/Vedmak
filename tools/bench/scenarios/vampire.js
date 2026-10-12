@@ -89,3 +89,5 @@ const heal = vRace.system.powers.find(p => p.key === "critHealing");
 const step = rp.powerStep(vRace.system, { ...heal, value: 0 });
 ok(heal.kind === "once" && step?.cost === 30 && rp.powerStep(vRace.system, { ...heal, value: 1 }) === null,
   `«Вампирская регенерация» — открыть раз за ${step?.cost} ОК, дальше докупать нечего`);
+ok(/^Залечивает критические ранения любой степени/.test(heal.description) && !/Открытие —/.test(heal.description),
+  "текст «Вампирской регенерации» — по-человечески, без служебных пометок");
