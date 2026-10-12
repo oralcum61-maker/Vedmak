@@ -126,7 +126,19 @@ const ACTIONS = [
   { name: "Худ: наведение и списки", prep: `hudPoints()`,
     act: async (m, p) => { let n = await m.sweep(p.hover); for (const c of p.chips) { n += await m.click(c.x, c.y); await sleep(350); n += await m.click(c.x, c.y); await sleep(200); } return n; } },
   { name: "Мышь: зажатая левая кнопка на пустом месте", prep: `canvasCenter()`,
-    act: async (m, p) => { let n = 0; for (let i = 0; i < 6; i++) { await m.down(p.x + 300, p.y - 200); await sleep(60); await m.up(p.x + 300, p.y - 200); await sleep(60); n += 2; } return n; } }
+    act: async (m, p) => { let n = 0; for (let i = 0; i < 6; i++) { await m.down(p.x + 300, p.y - 200); await sleep(60); await m.up(p.x + 300, p.y - 200); await sleep(60); n += 2; } return n; } },
+  // Поселения, постройки, отряды (PLAN 4.198–4.203): открыть и пройти вкладки настоящими щелчками; библиотека и Совет
+  { name: "Поселение: открыть лист", prep: `openSettlement()`, act: async () => 0, measurePrep: true, freezeMs: 250, after: `closeApps()` },
+  { name: "Поселение: вкладки по очереди", prep: `settlementTabs()`,
+    act: async (m, p) => { let n = 0; for (const t of p.tabs) { n += await m.click(t.x, t.y); await sleep(300); } return n; }, after: `closeApps()` },
+  { name: "Постройка: вкладки по очереди", prep: `buildingTabs()`,
+    act: async (m, p) => { let n = 0; for (const t of p.tabs) { n += await m.click(t.x, t.y); await sleep(300); } return n; }, after: `closeApps()` },
+  { name: "Отряд: вкладки по очереди", prep: `unitTabs()`,
+    act: async (m, p) => { let n = 0; for (const t of p.tabs) { n += await m.click(t.x, t.y); await sleep(300); } return n; }, after: `closeApps()` },
+  { name: "Библиотека ресурсов: прокрутка", prep: `libraryRect()`,
+    act: async (m, p) => { for (let i = 0; i < 10; i++) { await m.wheel(p.x, p.y, i < 5 ? 240 : -240); await sleep(40); } return 10; }, after: `closeApps()` },
+  { name: "Совет правителя: прокрутка", prep: `councilRect()`,
+    act: async (m, p) => { for (let i = 0; i < 10; i++) { await m.wheel(p.x, p.y, i < 5 ? 240 : -240); await sleep(40); } return 10; }, after: `closeApps()` }
 ];
 
 // Помощники в странице: координаты и подготовка
@@ -152,7 +164,37 @@ window.__vf = {
     const hud = document.getElementById("vedmak-combat-hud"); if (!hud) return { hover: [], chips: [] };
     const box = hud.getBoundingClientRect(); const hover = Array.from({ length: 40 }, (_, i) => [box.left + (i / 40) * box.width, box.top + box.height * .6]);
     const chips = [...hud.querySelectorAll("[data-action=togglePop]")].map(c => { const r = c.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; });
-    return { hover, chips }; }
+    return { hover, chips }; },
+  /** Поселение мира (или временное «Фриз: поселение» со стартовыми постройками и отрядом). */
+  async realm() {
+    let town = game.actors.find(a => a.type === "settlement" && a.system.buildingActors.length);
+    if (!town) {
+      town = await Actor.create({ name: "Фриз: поселение", type: "settlement", system: { militia: 20 } });
+      for (let i = 0; i < 40 && town.system.buildingActors.length < 3; i++) await new Promise(r => setTimeout(r, 100));
+      window.__vfTemp = town.id;
+    }
+    let unit = game.vedmak.army.settlementUnits(town)[0];
+    if (!unit) {
+      unit = await Actor.create({ name: "Фриз: отряд", type: "unit", system: { kind: "infantry", soldiers: 20, settlement: town.uuid } });
+      window.__vfTempUnit = unit.id;
+    }
+    return { settlement: town, building: town.system.buildingActors[0], unit };
+  },
+  async closeApps() { for (const app of [...foundry.applications.instances.values()]) if (app.document || ["vedmak-resources", "vedmak-council"].includes(app.id)) await app.close(); },
+  async openDoc(type) { await this.closeApps(); const doc = (await this.realm())[type]; await doc.sheet.render({ force: true }); await new Promise(r => setTimeout(r, 1200));
+    doc.sheet.setPosition({ left: 300, top: 40 }); window.__vfDoc = doc.uuid; return {}; },
+  async docTabs(type) { await this.openDoc(type); const el = fromUuidSync(window.__vfDoc).sheet.element;
+    return { tabs: [...el.querySelectorAll(".sv-tabs a[data-tab]")].map(a => { const r = a.getBoundingClientRect(); return { name: a.textContent.trim(), x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; }) }; },
+  openSettlement() { return this.openDoc("settlement"); },
+  settlementTabs() { return this.docTabs("settlement"); },
+  buildingTabs() { return this.docTabs("building"); },
+  unitTabs() { return this.docTabs("unit"); },
+  libraryRect() { return this.toolRect("resources"); },
+  councilRect() { return this.toolRect("council"); },
+  async toolRect(kind) { await this.closeApps(); const realm = await this.realm();
+    const app = kind === "resources" ? game.vedmak.resources.open(realm.settlement) : game.vedmak.council.open();
+    await new Promise(r => setTimeout(r, 1200)); const r = app.element.getBoundingClientRect();
+    return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height * .6) }; }
 };
 // Long Animation Frames: худший кадр и чей скрипт
 window.__loaf = [];
@@ -338,6 +380,10 @@ try {
   const heavy = [...rows].sort((x, y) => y.styleMs - x.styleMs)[0];
   if (heavy) { sel = { action: heavy.name, ...(await selectorStats(b, ACTIONS.find(a => a.name === heavy.name))) }; }
 } finally {
+  // Временные поселение и отряд (если создавались) — убрать
+  try { await b.ev(`(async () => { await window.__vf?.closeApps?.(); const t = game.actors.get(window.__vfTemp ?? "");
+    if (t) { for (const x of t.system.buildingActors) await x.delete(); await game.folders.find(f => f.getFlag("vedmak", "settlement") === t.uuid)?.delete(); await t.delete(); }
+    await game.actors.get(window.__vfTempUnit ?? "")?.delete(); return 1; })()`); } catch {}
   b.close();
   if (foundry) killTree(foundry);
 }
