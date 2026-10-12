@@ -167,6 +167,18 @@ Hooks.once("init", () => {
     onChange: value => document.body.classList.toggle("vd-lite", !!value)
   });
   document.body.classList.toggle("vd-lite", !!game.settings.get(SYSTEM_ID, "lightGraphics"));
+  // Масштаб листа персонажа (PLAN 4.214): лист свёрстан в пикселях — уменьшается целиком, окно — вместе с ним
+  const applySheetScale = v => document.body.style.setProperty("--vd-char-scale", String(Number(v) || 1));
+  game.settings.register(SYSTEM_ID, "characterSheetScale", {
+    name: "Масштаб листа персонажа",
+    hint: "Насколько крупно рисуется лист персонажа: 100% — как было, меньше — мельче и окно, и всё внутри. У каждого игрока свой. Открытый лист — переоткройте.",
+    scope: "client", config: true, type: Number, default: 1, range: { min: 0.7, max: 1.15, step: 0.05 },
+    onChange: v => {
+      applySheetScale(v);
+      for (const app of foundry.applications.instances.values()) if (app.actor?.type === "character" && app.rendered) app.setPosition(app.scaledPosition?.());
+    }
+  });
+  applySheetScale(game.settings.get(SYSTEM_ID, "characterSheetScale"));
   // Какие компендиумы уже разложены по папкам: новые паки системы раскладываются при следующем запуске
   game.settings.register(SYSTEM_ID, "packFoldersDone", {
     scope: "world", config: false, type: String, default: ""

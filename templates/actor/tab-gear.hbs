@@ -5,17 +5,22 @@
       <div class="group-head">
         <span class="bronze-tag">Кошелёк</span>
         <span class="rule"></span>
-        <span class="dim" data-tooltip="Всё в кронах по курсу из настроек «Валюты и обмен»">≈ {{purse.crowns}} кр.</span>
-        {{#if purse.weightOn}}<span class="dim" data-tooltip="Вес монет входит в нагрузку">· монеты {{purse.kg}} кг</span>{{/if}}
         <a class="exchange" data-action="moneyExchange" data-tooltip="Обменять у менялы">Обмен</a>
       </div>
       <div class="coin-row">
-        {{#each purse.rows as |c|}}{{#if c.main}}
-        <label class="coin-main" data-tooltip="{{c.region}}">
-          <input type="number" name="system.money.{{c.key}}" value="{{c.value}}" min="0" aria-label="{{c.label}}">
-          <span class="cap">{{c.label}}</span>
-        </label>
-        {{/if}}{{/each}}
+        {{!-- Главная валюта — литым числом; под ней итог по всем валютам и вес монет (PLAN 4.215) --}}
+        <div class="coin-hero">
+          {{#each purse.rows as |c|}}{{#if c.main}}
+          <label class="coin-main" data-tooltip="{{c.region}}">
+            <input type="number" name="system.money.{{c.key}}" value="{{c.value}}" min="0" aria-label="{{c.label}}">
+            <span class="cap">{{c.label}}</span>
+          </label>
+          {{/if}}{{/each}}
+          <div class="purse-sum">
+            <span data-tooltip="Всё в кронах по курсу из настроек «Валюты и обмен»">всего ≈ <b>{{purse.crowns}}</b> кр.</span>
+            {{#if purse.weightOn}}<span data-tooltip="Вес монет входит в нагрузку">монеты <b>{{purse.kg}}</b> кг</span>{{/if}}
+          </div>
+        </div>
         <div class="coin-grid">
           {{#each purse.rows as |c|}}{{#unless c.main}}
           <label class="coin{{#unless c.value}} empty{{/unless}}" data-tooltip="{{c.region}} · 1 {{c.abbr}} = {{c.rateText}} кр.">

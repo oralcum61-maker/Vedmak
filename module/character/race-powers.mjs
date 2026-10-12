@@ -9,12 +9,15 @@ const KIND_LABELS = {
   tree: "ступень древа",
   skill: "навык за опыт",
   level: "уровень + d10",
-  stages: "стадии"
+  stages: "стадии",
+  once: "открывается раз"
 };
 const STAGE_LABELS = ["Лёгкий", "Средний", "Тяжёлый", "Смертельный"];
 
 /** Что даёт следующий щелчок «за ОК»: открытие ступени, стадия или уровень. null — нечего. */
 export function powerStep(rs, p) {
+  // Открывается один раз за свою цену — дальше докупать нечего (Вампирская регенерация, правка автора 12.10)
+  if (p.kind === "once") return p.value > 0 ? null : { cost: p.unlockCost, label: "Открыть" };
   if (p.kind === "stages") {
     if (p.value >= p.stageCosts.length) return null;
     return { cost: p.stageCosts[p.value], label: `Открыть стадию «${STAGE_LABELS[p.value] ?? p.value + 1}»` };

@@ -517,10 +517,6 @@ function vampireEffects(table, v, fx, entry) {
     else fx.notes.push("Клан Тдет: шанс отравления вдвое меньше");
     return;
   }
-  if (table === "vAge") {
-    skill(v <= 2 ? "streetwise" : v <= 5 ? "etiquette" : "education", 2);
-    return;
-  }
   if (table === "vEvent") {
     switch (v) {
       case 1: skill("perception", 2); break;
@@ -559,11 +555,14 @@ function buildVampire(b) {
   const clan = b.table(origin, "vClan", "vClan", { sides: 6 });
   vampireEffects("vClan", clan.value, fx, clan);
   const age = b.table(origin, "vAge", "vAge");
-  vampireEffects("vAge", age.value, fx, age);
+  // Возраст не даёт навыков — только сколько событий жизни: 1d3 сверху нижней границы (Юный 1–3, Молодой 3–5, Взрослый 5–7)
+  const [lo, hi] = VAMPIRE_EVENTS_BY_AGE[age.row?.min] ?? [1, 3];
+  const many = b.plain(origin, "vEventsCount", `Сколько событий жизни (${lo}–${hi})`, v => `Событий жизни: ${lo + v - 1}`,
+    { sides: hi - lo + 1, options: Array.from({ length: hi - lo + 1 }, (_, i) => ({ value: i + 1, label: `${lo + i} событий` })) });
   b.table(origin, "vYouth", "vYouth");
 
   const ev = b.section("События жизни");
-  const count = VAMPIRE_EVENTS_BY_AGE[age.row?.min] ?? 1;
+  const count = lo + many.value - 1;
   for (let i = 0; i < count; i++) {
     const e = b.table(ev, `vEvent.${i}`, "vEvent", { label: `${i + 1}-е событие` });
     if (e.value === 8) {
@@ -729,7 +728,8 @@ export function dependents(path) {
   if (/^mage\.acad\.\d+$/.test(path)) return [`${path}.ally`, `${path}.grudge`, `${path}.knowledge`, `${path}.d6`, `${path}.ev`,
     `${path}.skill`, "mage.appr", "mage.mentor", "mage.teach", "mage.moment", "mage.mentorEnd"];
   // Возраст вампира решает, сколько событий; восьмое событие — ещё бросок славы
-  if (path === "vAge") return ["vEvent"];
+  if (path === "vAge") return ["vEventsCount", "vEvent"];
+  if (path === "vEventsCount") return ["vEvent"];
   if (/^vEvent\.\d+$/.test(path)) return [`${path}.fame`];
   // Броски-соседи, а не вложенные пути: «жив ли» решает, бросать ли «когда умер» и «как», поворот охоты —
   // бросать ли, какой он, подробности неудачи — бросать ли месяцы (у «Изуродован» их нет)

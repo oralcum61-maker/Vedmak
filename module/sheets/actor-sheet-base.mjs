@@ -311,8 +311,20 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     for (const cls of chain) {
       if (Object.hasOwn(cls, "DEFAULT_OPTIONS")) Object.assign(position, cls.DEFAULT_OPTIONS.position);
     }
-    return position;
+    return this._scalePosition(position);
   }
+
+  /** Масштаб содержимого листа (лист персонажа — настройка, PLAN 4.214); окно по умолчанию — в том же масштабе. */
+  get sheetScale() { return 1; }
+  _scalePosition(position) {
+    const k = this.sheetScale;
+    if (k === 1) return position;
+    const out = { ...position };
+    for (const key of ["width", "height"]) if (typeof out[key] === "number") out[key] = Math.round(out[key] * k);
+    return out;
+  }
+  /** Окно полного листа по умолчанию — для смены масштаба на открытом листе. */
+  scaledPosition() { return this.#viewPosition(this.#limited); }
 
   /** Короткий лист — узким окном по высоте содержимого. */
   _initializeApplicationOptions(options) {
@@ -320,7 +332,7 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (!options.document.testUserPermission(game.user, "OBSERVER")) {
       options.position = { ...options.position, width: 480, height: "auto" };
       options.classes.push("limited");
-    }
+    } else options.position = this._scalePosition(options.position);
     return options;
   }
 

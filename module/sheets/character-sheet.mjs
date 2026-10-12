@@ -75,6 +75,11 @@ function remainingLabel(seconds) {
 
 export class CharacterSheet extends VedmakActorSheet {
 
+  /** Масштаб листа персонажа — настройка клиента «Масштаб листа персонажа» (PLAN 4.214). */
+  get sheetScale() {
+    try { return Number(game.settings.get("vedmak", "characterSheetScale")) || 1; } catch { return 1; }
+  }
+
   static DEFAULT_OPTIONS = {
     classes: ["character"],
     position: { width: 1040, height: 860 },

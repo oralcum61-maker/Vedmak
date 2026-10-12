@@ -14,6 +14,8 @@
 //   each   — {pack, set}: одно и то же поле всем документам пакета
 //   loot   — {pack, where(doc), row: {name, quantity, uuid}}: строка добычи существам, подходящим под where, —
 //            дописывается к их добыче, если такой строки ещё нет
+//   deep   — {where(obj), set: {поле: значение}, fix?(obj)}: любой вложенный объект во всех пакетах, подходящий под where
+//            (например, расовый навык по ключу — и в расе, и в её копиях в заготовках персонажей)
 
 import { createHash } from "node:crypto";
 
@@ -44,6 +46,20 @@ function stableId(key) {
 }
 
 export const OVERRIDES = [
+  /* ---------------------- Высший вампир (12.10, правки автора) ---------------------- */
+  // «Вампирская регенерация» — одна на все степени критических ранений: открывается раз за 30 ОК, без стадий
+  { op: "deep", where: o => o?.key === "critHealing" && o.name === "Вампирская регенерация",
+    set: { kind: "once", max: 1, unlockCost: 30, levelCost: 0, stageCosts: [],
+      description: "Открытие — 30 ОК, один раз: регенерация действует на критические ранения любой степени, ничего докупать не нужно. "
+        + "Ранение сразу стабилизируется и исцеляется за 1–4 раунда (вне боя время не важно); за раз — одно ранение. "
+        + "Ранения, полученные в Истинной форме, переходят на обычный облик и лечатся и после выхода из неё; ранения до превращения в форму не переходят." },
+    fix: o => { o.value = Math.min(1, Number(o.value) || 0); } },
+  // Возраст вампира — без навыков, только число событий жизни (правка автора 12.10)
+  { op: "set", pack: "chargen", name: "Высший вампир: возраст", set: {
+    "results.0.description": "Юный: несколько десятков лет, вырос уже в нынешнем мире. Событий жизни — от 1 до 3.",
+    "results.1.description": "Молодой: пара веков, застал смену нескольких королевств. Событий жизни — от 3 до 5.",
+    "results.2.description": "Взрослый: несколько веков, помнит то, о чём люди пишут в летописях. Событий жизни — от 5 до 7." } },
+
   /* ---------------------------- Оружие (30.09) ---------------------------- */
   { op: "set", pack: "weapons", name: "Красная алебарда", set: { img: `${W}t2-halberd.webp` } },
   { op: "remove", pack: "weapons", name: "Партизан" },
@@ -276,7 +292,7 @@ export function applyOverrides(packs) {
 
   for (const o of OVERRIDES) {
     const docs = packs[o.pack];
-    if (!docs) { skipped.push(`${o.op} ${o.pack}: пакета нет`); continue; }
+    if (!docs && o.op !== "deep") { skipped.push(`${o.op} ${o.pack}: пакета нет`); continue; }
 
     if (o.op === "rename") {
       const doc = find(o.pack, o.from);
@@ -314,6 +330,16 @@ export function applyOverrides(packs) {
         if (!loot.some(l => l.name === o.row.name)) loot.push(structuredClone(o.row));
       }
       applied++;
+    } else if (o.op === "deep") {
+      let n = 0;
+      const walk = v => {
+        if (Array.isArray(v)) { v.forEach(walk); return; }
+        if (!v || typeof v !== "object") return;
+        if (o.where(v)) { for (const [key, value] of Object.entries(o.set)) setPath(v, key, structuredClone(value)); o.fix?.(v); n++; return; }
+        for (const x of Object.values(v)) walk(x);
+      };
+      for (const list of Object.values(packs)) walk(list);
+      if (n) applied++; else skipped.push("deep: совпадений нет");
     } else if (o.op === "copy") {
       if (find(o.pack, o.name)) continue;
       const src = find(o.pack, o.from);

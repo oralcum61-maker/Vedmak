@@ -304,9 +304,9 @@
   background-image: var(--vd-rivet), var(--vd-rivet), linear-gradient(180deg, rgba(255, 215, 195, .24), rgba(255, 215, 195, 0) 46%, rgba(0, 0, 0, .34)), var(--vd-s-bad);
 }
 .application.vedmak .save.bad.alert { box-shadow: inset 0 1px 0 rgba(255, 215, 195, .4), 0 0 0 2px #e0604a, 0 0 12px rgba(224, 96, 74, .6); }
-.application.vedmak .save .sv { display: flex; flex-direction: column; gap: .2rem; }
-.application.vedmak .save .sv .name { font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: inherit; }
-.application.vedmak .save .sv em { font-style: normal; font-size: .6rem; opacity: .85; }
+.application.vedmak .save .save-txt { display: flex; flex-direction: column; gap: .2rem; }
+.application.vedmak .save .save-txt .name { font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: inherit; }
+.application.vedmak .save .save-txt em { font-style: normal; font-size: .6rem; opacity: .85; }
 .application.vedmak .save .thr {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 46px; height: 38px; border-radius: 2px;
   background: rgba(0, 0, 0, .45); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .8), 0 1px 0 rgba(255, 240, 215, .1);
@@ -949,3 +949,25 @@ body.vd-no-anim .vedmak .vd-medal .vd-ring { transition: none; }
    в боковой панели «Звуки» — строка «Ведьмак» в блоке громкости Foundry */
 input.vd-fx-slider { flex: 1 1 auto; width: 120px; min-width: 80px; height: 16px; margin: 0; accent-color: #b8432c; cursor: var(--cursor-pointer, pointer); background: none; border: 0; box-shadow: none; }
 #sidebar .global-volume .vd-fx-volume input.vd-fx-slider { width: auto; }
+/* Решительность словесной дуэли — клеймо размера параметров, а не огромное (PLAN 4.214) */
+.application.vedmak .duel-resolve .vd-medal.xl { --size: 70px; --rim: 10px; }
+.application.vedmak .combat-block .duel-resolve { gap: 1rem; }
+.application.vedmak .duel-resolve .rv-head input { font-size: 1.35rem; }
+/* Производные (Движение, Стойкость, Дух, Рукопашная) — по высоте содержимого: раньше панель тянулась на свободное место
+   вкладки (flex: 1, space-evenly), и сверху и снизу оставались пустые полосы (PLAN 4.214) */
+.application.vedmak.character .stats-tab .derived-lists { flex: none; align-content: start; }
+
+/* Подвкладка «Профессия» (PLAN 4.214): на 5 % мельче, промежутки между блоками — вдвое уже */
+.application.vedmak.character:not(.limited) .skills-tab .tab.pane[data-tab="profession"] { zoom: .95; }
+.application.vedmak .skills-tab .vp-head { margin-bottom: .5rem; padding: .65rem 1rem; }
+.application.vedmak .skills-tab .vp-defining { margin-bottom: .55rem; padding: .7rem .9rem; gap: .5rem; }
+.application.vedmak .skills-tab .vp-branch { gap: .45rem; }
+.application.vedmak .skills-tab .vp-chain { gap: 16px; }
+.application.vedmak .skills-tab .vp-gate { bottom: -14px; height: 12px; min-width: 40px; font-size: .5rem; }
+.application.vedmak .skills-tab .vp-alt { margin-top: .6rem; gap: .45rem; }
+.application.vedmak .skills-tab .vp-hint { margin-top: .55rem; }
+/* «Параметры»: между группами — один шаг вкладки, без своих отступов панелей (PLAN 4.214) */
+.application.vedmak.character .stats-tab .derived-lists, .application.vedmak.character .stats-tab .fate-bar { margin-top: 0; }
+/* Подвкладка уже ставит шаг .5rem между блоками — свои отступы снизу у шапки и определяющего навыка его удваивали */
+.application.vedmak .skills-tab .vp-head, .application.vedmak .skills-tab .vp-defining { margin-bottom: 0; }
+.application.vedmak .skills-tab .vp-alt, .application.vedmak .skills-tab .vp-hint { margin-top: .1rem; }

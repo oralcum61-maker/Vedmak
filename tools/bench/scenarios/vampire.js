@@ -71,4 +71,21 @@ ok(sta0 - v.system.sta.value === spell.system.staCost * 2 && v.system.blood.valu
 stepName("жизненный путь");
 const lp = LP.buildLifepath({}, { race: "highVampire" });
 const events = lp.sections.find(s => /События/.test(s.title))?.entries.filter(e => !/слава/i.test(e.label ?? "")).length;
-ok(events === 3, `событий в жизненном пути: ${events}`);
+// Возраст (правка автора 12.10): навыков не даёт, событий — Юный 1–3, Молодой 3–5, Взрослый 5–7
+const RANGE = { 1: [1, 3], 3: [3, 5], 6: [5, 7] };
+for (let i = 0; i < 12; i++) {
+  const run = LP.buildLifepath({}, { race: "highVampire" });
+  const age = run.sections.flatMap(s => s.entries).find(e => e.path === "vAge");
+  const n = run.sections.find(s => /События/.test(s.title))?.entries.filter(e => /^vEvent\.\d+$/.test(e.path)).length;
+  const [lo, hi] = RANGE[age?.row?.min] ?? [0, -1];
+  if (n < lo || n > hi) { ok(false, `возраст «${age?.title}»: событий ${n}, ждали ${lo}–${hi}`); break; }
+  if (i === 11) ok(true, `число событий — в пределах возраста (12 бросков, последний: «${age?.title}» — ${n})`);
+}
+const ageSkills = ["streetwise", "etiquette", "education"].filter(k => (lp.effects?.skills?.[k] ?? 0) > 0 && !lp.sections.some(s => s.entries.some(e => /^v(Event|Hobby)/.test(e.path) && /Этикет|Образован|Ориентир/i.test(e.text ?? ""))));
+ok(!ageSkills.length, `возраст не даёт навыков (${ageSkills.join(", ") || "нет"})`);
+const rp = await import("/systems/vedmak/module/character/race-powers.mjs");
+const vRace = (await game.packs.get("vedmak.races").getDocuments()).find(r => r.name === "Высший вампир");
+const heal = vRace.system.powers.find(p => p.key === "critHealing");
+const step = rp.powerStep(vRace.system, { ...heal, value: 0 });
+ok(heal.kind === "once" && step?.cost === 30 && rp.powerStep(vRace.system, { ...heal, value: 1 }) === null,
+  `«Вампирская регенерация» — открыть раз за ${step?.cost} ОК, дальше докупать нечего`);

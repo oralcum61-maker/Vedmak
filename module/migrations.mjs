@@ -75,8 +75,34 @@ async function vampireThirdEdition() {
   if (n) ui.notifications.info(`Ведьмак: высшие вампиры мира переведены на третью редакцию (${n}).`);
 }
 
+/**
+ * «Вампирская регенерация» стала одной на все степени критических ранений (правка автора 12.10, PLAN 4.218): у рас
+ * на персонажах и в мире — вид «открывается раз» за 30 ОК; у кого была открыта хоть одна стадия — регенерация открыта.
+ */
+async function vampireCritHealingOnce() {
+  const fix = race => {
+    const powers = race.system.toObject().powers ?? [];
+    const p = powers.find(x => x.key === "critHealing");
+    if (!p || p.kind === "once") return null;
+    Object.assign(p, { kind: "once", max: 1, unlockCost: 30, levelCost: 0, stageCosts: [], value: p.value > 0 ? 1 : 0,
+      description: "Открытие — 30 ОК, один раз: регенерация действует на критические ранения любой степени, ничего докупать не нужно. "
+        + "Ранение сразу стабилизируется и исцеляется за 1–4 раунда (вне боя время не важно); за раз — одно ранение. "
+        + "Ранения, полученные в Истинной форме, переходят на обычный облик и лечатся и после выхода из неё; ранения до превращения в форму не переходят." });
+    return { _id: race.id, "system.powers": powers };
+  };
+  let n = 0;
+  for (const actor of game.actors) {
+    const updates = actor.items.filter(i => i.type === "race").map(fix).filter(Boolean);
+    if (updates.length) { await actor.updateEmbeddedDocuments("Item", updates); n += updates.length; }
+  }
+  const world = game.items.filter(i => i.type === "race").map(fix).filter(Boolean);
+  if (world.length) { await Item.updateDocuments(world); n += world.length; }
+  if (n) ui.notifications.info(`Ведьмак: «Вампирская регенерация» — одна на все ранения, 30 ОК (${n}).`);
+}
+
 const MIGRATIONS = [{ key: "bestiaryVigor", run: bestiaryVigor }, { key: "bestiaryRotation", run: bestiaryRotation },
-  { key: "storagesFromMigratedLoot", run: storagesFromMigratedLoot }, { key: "vampireThirdEdition", run: vampireThirdEdition }];
+  { key: "storagesFromMigratedLoot", run: storagesFromMigratedLoot }, { key: "vampireThirdEdition", run: vampireThirdEdition },
+  { key: "vampireCritHealingOnce", run: vampireCritHealingOnce }];
 
 export function registerMigrationSettings() {
   game.settings.register(SYSTEM_ID, "migrationsDone", { scope: "world", config: false, type: Array, default: [] });

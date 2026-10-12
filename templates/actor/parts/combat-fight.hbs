@@ -74,12 +74,12 @@
 
       <div class="save-grid">
         <a class="save rollable" data-action="stunSave" data-tooltip="d10 меньше Уст — иначе дезориентация">
-          <span class="sv"><span class="name">Испытание Уст</span><em>успех на d10 {{vedmakSaveRange system.derived.stun}}</em></span>
+          <span class="save-txt"><span class="name">Испытание Уст</span><em>успех на d10 {{vedmakSaveRange system.derived.stun}}</em></span>
           <span class="thr"><b>{{system.derived.stun}}</b><span class="cap">порог</span></span>
         </a>
         <a class="save bad rollable{{#if system.derived.dying}} alert{{/if}}" data-action="deathSave"
            data-tooltip="d10 меньше Уст − накопленный штраф (Удача поднимает порог)">
-          <span class="sv"><span class="name">Против смерти</span><em>успех на d10 {{vedmakSaveRange (vedmakSub system.derived.stun system.deathSaves.penalty)}}</em></span>
+          <span class="save-txt"><span class="name">Против смерти</span><em>успех на d10 {{vedmakSaveRange (vedmakSub system.derived.stun system.deathSaves.penalty)}}</em></span>
           <span class="thr"><b>{{vedmakSub system.derived.stun system.deathSaves.penalty}}</b><span class="cap">порог</span></span>
         </a>
       </div>
