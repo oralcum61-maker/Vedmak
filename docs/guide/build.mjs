@@ -204,8 +204,8 @@ const weekChain = (active = -1) => `<ol class="chain">${WEEK.map(([t, d], i) => 
 
 const cover = `<section class="cover">
   <div class="art"></div>
+  <p class="kicker top">«Ведьмак: НРИ» · система для Foundry VTT · версия ${VERSION}</p>
   <div class="plate">
-    <p class="kicker">«Ведьмак: НРИ» · система для Foundry VTT · версия ${VERSION}</p>
     <p class="dedication">Составлено для <b>Леди Ядвиги</b></p>
     <h1>Поселения<br><em>и</em> войско</h1>
     <p class="sub">Руководство правителя: хозяйство недели за неделей, постройки и их обустройство, управляющие и мастерские,
@@ -562,18 +562,22 @@ i { color: var(--muted); }
 /* Обложка — целая страница без полей */
 .cover { height: 297mm; position: relative; overflow: hidden; break-after: page;
   background: var(--night) url("../../assets/textures/steel-plate.webp"); background-blend-mode: overlay; }
-.cover .art { position: absolute; inset: 0 0 auto 0; height: 64%;
-  background: url("../../assets/cover/cover.webp") 100% 34% / 330% auto no-repeat; filter: saturate(.65) brightness(.78);
-  -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent 100%); mask-image: linear-gradient(180deg, #000 40%, transparent 100%); }
-.cover .plate { position: absolute; left: 18mm; right: 18mm; bottom: 20mm; }
+.cover .art { position: absolute; inset: 0 0 auto 0; height: 100%;
+  background: url("img/cover.jpg") 50% 0 / 100% auto no-repeat; }
+.cover .art::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(19,20,23,.35) 0, transparent 14%, transparent 50%, rgba(19,20,23,.65) 70%, var(--night) 86%); }
+.cover .plate { position: absolute; left: 18mm; right: 18mm; bottom: 16mm; }
+.cover .plate::before { content: ""; position: absolute; inset: -14mm -18mm -16mm; z-index: -1;
+  background: linear-gradient(180deg, transparent, rgba(19,20,23,.82) 22%, var(--night) 60%); }
+.cover .kicker.top { position: absolute; top: 12mm; left: 18mm; margin: 0; color: var(--bone); }
 .cover .kicker { font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
-.cover h1 { font-size: 64pt; line-height: .92; margin: 4mm 0 5mm; color: var(--silver); letter-spacing: -.01em; }
+.cover h1 { font-size: 54pt; line-height: .92; margin: 4mm 0 5mm; color: var(--silver); letter-spacing: -.01em; }
 .cover h1 em { font-style: normal; color: var(--cinnabar); font-size: .6em; vertical-align: .18em; }
 .cover .dedication { font: italic 400 13pt/1.2 "Vedmak Sans", sans-serif; color: var(--bone); margin: 5mm 0 0; }
 .cover .dedication b { font: 400 17pt "Vedmak Display", serif; color: var(--silver); font-style: normal; letter-spacing: .01em; }
 .cover .sub { font-size: 11pt; max-width: 135mm; color: var(--bone); }
-.cover .contents { list-style: none; padding: 0; margin: 6mm 0 0; columns: 3; column-gap: 8mm; font-size: 9pt; }
-.cover .contents li { break-inside: avoid; padding: 1.4mm 0; border-bottom: 1px solid var(--rule); }
+.cover .contents { list-style: none; padding: 0; margin: 4mm 0 0; columns: 3; column-gap: 8mm; font-size: 8.4pt; }
+.cover .contents li { break-inside: avoid; padding: 1mm 0; border-bottom: 1px solid var(--rule); }
 .cover .contents span { display: inline-block; width: 9mm; font-family: "Vedmak Display"; color: var(--cinnabar); }
 
 /* Нить с ромбом киновари — как у паузы и нексуса */
