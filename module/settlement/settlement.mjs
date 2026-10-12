@@ -4,7 +4,7 @@
 // лист. Владелец поселения (игрок-правитель) строит и ставит семьи на работу; создавать актёров и папки Foundry даёт
 // только ведущему — это делает его клиент (asGM). Неделю двигает ведущий, он же правит одобрение, Контроль и склад.
 
-import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
+import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, priceOf, orderTypes, orderCost, ORDER_TYPES } from "../config/settlement.mjs";
 import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "./rules.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
@@ -196,6 +196,102 @@ export async function cancelResearch(settlement, buildingId) {
 }
 
 /**
+ * Заказ в мастерской (PLAN 4.203): предмет (из компендиума, мира или с листа) для персонажа forActor. Цена со склада
+ * поселения сразу; делается неделями, пока в постройке работают; готовый предмет — у заказчика.
+ */
+export async function placeOrder(settlement, buildingId, item, forActor, qty = 1) {
+  const b = buildingOf(settlement, buildingId);
+  if (!b || !item) return;
+  const types = orderTypes(b.system.key, b.system.group);
+  if (!types.includes(item.type)) return ui.notifications.warn(`«${b.name}» не делает такого: ${types.map(t => ORDER_TYPES[t]).join(", ") || "заказов не берёт"}.`);
+  if (!b.system.level) return ui.notifications.warn("Сначала постройте.");
+  qty = Math.max(1, Math.floor(Number(qty) || 1));
+  const { cost, weeks } = orderCost(item.type, item.system.cost, qty, item.name);
+  const miss = affordable(settlement, cost);
+  if (miss) return ui.notifications.warn(miss.why);
+  await pay(settlement, cost);
+  const order = { id: foundry.utils.randomID(), uuid: item.uuid, name: item.name, img: item.img, type: item.type, qty,
+    for: forActor?.uuid ?? "", forName: forActor?.name ?? "", weeks, progress: 0, cost };
+  await b.update({ "system.orders": [...b.system.toObject().orders, order] });
+  return order;
+}
+
+/** Снять заказ (потраченное не возвращается). */
+export async function cancelOrder(settlement, buildingId, orderId) {
+  const b = buildingOf(settlement, buildingId);
+  if (b) await b.update({ "system.orders": b.system.toObject().orders.filter(o => o.id !== orderId) });
+}
+
+/**
+ * Неделя мастерских (ведущий): у каждой постройки с заказами и людьми на работе первый заказ — на неделю ближе;
+ * готовый — предметом у заказчика. Строки отчёта.
+ */
+async function ordersWeek(settlement) {
+  const lines = [];
+  const workers = settlement.system.summary.workers;
+  for (const b of settlement.system.buildingActors) {
+    const orders = b.system.toObject().orders;
+    if (!orders.length || !b.system.level) continue;
+    const lv = activeLevel(buildingState(b));
+    if (lv?.families && !(workers[b.id] > 0)) { lines.push(`${b.name}: заказ «${orders[0].name}» стоит — никто не работает`); continue; }
+    const o = orders[0];
+    o.progress += 1;
+    if (o.progress >= o.weeks) {
+      orders.shift();
+      const src = await fromUuid(o.uuid);
+      const who = o.for ? await fromUuid(o.for) : null;
+      if (src && who) {
+        const data = src.toObject();
+        delete data._id;
+        if (data.system && "quantity" in data.system) data.system.quantity = o.qty;
+        await who.createEmbeddedDocuments("Item", [data]);
+        lines.push(`${b.name}: готово «${o.name}»${o.qty > 1 ? ` ×${o.qty}` : ""} — у ${who.name}`);
+      } else lines.push(`${b.name}: готово «${o.name}», но ${src ? "заказчика нет" : "образца больше нет"} — выдайте вручную`);
+    } else lines.push(`${b.name}: «${o.name}» — ${o.progress} из ${o.weeks} нед.`);
+    await b.update({ "system.orders": orders });
+  }
+  return lines;
+}
+
+/** Караван (PLAN 4.203): добавить маршрут — каждую неделю qty ресурса в поселение to. */
+export async function addRoute(settlement, to, resource, qty) {
+  resource = String(resource ?? "").trim();
+  qty = Math.max(0, Number(qty) || 0);
+  if (!to || to === settlement.uuid || !resource || !qty) return ui.notifications.warn("Укажите, куда, какой ресурс и сколько.");
+  await settlement.update({ "system.routes": [...settlement.system.toObject().routes, { id: foundry.utils.randomID(), to, resource, qty }] });
+}
+
+export async function removeRoute(settlement, id) {
+  await settlement.update({ "system.routes": settlement.system.toObject().routes.filter(r => r.id !== id) });
+}
+
+/**
+ * Караваны недели (ведущий): со своего склада (после недели) — в другие поселения, не больше, чем там поместится.
+ * Без торговли (торговый пост, рынок) и в осаде караваны не ходят. Возвращает склад после отправки и строки отчёта.
+ */
+async function caravansWeek(settlement, stock) {
+  const lines = [];
+  const routes = settlement.system.routes;
+  if (!routes.length) return { stock, lines };
+  if (!settlement.system.summary.trade) return { stock, lines: ["Караваны стоят: нет торгового поста или рынка."] };
+  if (settlement.system.siege.units.length) return { stock, lines: ["Караваны стоят: поселение в осаде."] };
+  stock = { ...stock };
+  for (const r of routes) {
+    const to = fromUuidSync(r.to);
+    if (to?.type !== "settlement") { lines.push(`Караван «${r.resource}» — поселения назначения больше нет`); continue; }
+    if (to.system.siege.units.length) { lines.push(`В ${to.name} караван не прошёл — осада`); continue; }
+    const have = Math.round(((stock[r.resource] ?? 0)) * 10) / 10;
+    const room = Math.max(0, to.system.summary.storage - (to.system.stockMap[r.resource] ?? 0));
+    const sent = Math.min(r.qty, have, room);
+    if (sent <= 0) { lines.push(`В ${to.name}: ${r.resource.toLowerCase()} — ${have <= 0 ? "нечего везти" : "там некуда сложить"}`); continue; }
+    stock[r.resource] = Math.round((have - sent) * 10) / 10;
+    await to.update({ [`system.stock.${r.resource}`]: Math.round(((to.system.stockMap[r.resource] ?? 0) + sent) * 10) / 10 });
+    lines.push(`В ${to.name}: ${r.resource.toLowerCase()} ${sent}`);
+  }
+  return { stock, lines };
+}
+
+/**
  * Торговый пост: продать или купить ресурс. Цена — монет валюты мира за единицу (config/settlement.mjs), покупка
  * ×1,5; в казне это Богатство по курсу.
  */
@@ -281,6 +377,17 @@ export async function advanceWeek(actor) {
   const army = await unitsWeek(actor, { stock: next.stock, wealth: next.wealth, drill: actor.system.summary.drill, rand });
   next.stock = army.stock; next.wealth = army.wealth;
   report.army = army.lines; report.armyFood = army.food ?? 0; report.armyFed = army.fed ?? 1;
+  report.orders = await ordersWeek(actor);
+  // Осада (PLAN 4.203): под стенами остаются отряды в походе, не бежавшие; нет никого — осада снята
+  const besiegers = actor.system.siege.units.map(u => fromUuidSync(u)).filter(u => u?.system.campaign && !u.system.routed && u.system.soldiers > 0
+    && u.system.besieging === actor.uuid);
+  const siegeUpdate = besiegers.length
+    ? { "system.siege.units": besiegers.map(u => u.uuid), "system.siege.weeks": actor.system.siege.weeks + 1 }
+    : (actor.system.siege.units.length ? { "system.siege.units": [], "system.siege.weeks": 0 } : {});
+  if (besiegers.length) report.events.push({ kind: "siege", text: `Под стенами ${besiegers.map(u => u.name).join(", ")} — ${actor.system.siege.weeks + 1}-я неделя осады.`, danger: true });
+  else if (actor.system.siege.units.length) report.events.push({ kind: "siege", text: "Осада снята: под стенами никого." });
+  const caravans = await caravansWeek(actor, next.stock);
+  next.stock = caravans.stock; report.caravans = caravans.lines;
   const before = new Map(actor.system.buildings.map(b => [b.id, b]));
   const changes = next.buildings.filter(b => {
     const was = before.get(b.id);
@@ -291,7 +398,7 @@ export async function advanceWeek(actor) {
   await actor.update({
     "system.year": next.year, "system.month": next.month, "system.week": next.week,
     "system.families": next.families, "system.approval": next.approval, "system.wealth": next.wealth, "system.stock": next.stock,
-    "system.log": [...actor.system.log, report].slice(-LOG_LIMIT)
+    "system.log": [...actor.system.log, report].slice(-LOG_LIMIT), ...siegeUpdate
   });
   if (changes.length) await Actor.implementation.updateDocuments(changes);
   await postCard({
@@ -312,6 +419,7 @@ export function weekCardData(actor, report) {
     wealth: report.wealthGain ? (report.wealthGain > 0 ? "+" : "") + report.wealthGain + " " + WEALTH + (report.taxWealth ? " (налог " + report.taxWealth + ")" : "") : "",
     overflow: Object.entries(report.overflow).map(([k, v]) => k.toLowerCase() + " " + v).join(", "),
     army: (report.army ?? []).map(a => ({ name: a.name, notes: a.notes.join("; ") })), armyHungry: (report.armyFed ?? 1) < 1,
+    orders: report.orders ?? [], caravans: report.caravans ?? [],
     built: report.built.map(b => b.name + (b.level > 1 ? " (" + b.level + " ур.)" : "")).join(", ")
   };
 }

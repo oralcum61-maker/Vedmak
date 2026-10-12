@@ -49,6 +49,16 @@
         <label class="bl-mini">нед. <input type="number" name="system.progress" value="{{sys.progress}}" min="0" step="1"></label>
       </div>{{/if}}
     </div>
+    <div class="sv-plaque bl-manager" data-tooltip="Перетащите сюда персонажа: его навык «{{manager.skillLabel}}» даёт постройке бонус">
+      <span class="cap">Управляющий</span>
+      {{#if manager.who}}
+      <div class="bl-mgr"><span class="sv-sock sm"><img src="{{manager.who.img}}" alt=""></span>
+        <div><a class="ar-home" data-action="openActor" data-uuid="{{manager.who.uuid}}">{{manager.who.name}}</a>
+          <small>{{manager.skillLabel}} {{manager.value}} · {{manager.bonus}}</small></div>
+        {{#if editable}}<a class="bl-x" data-action="clearManager" data-tooltip="Снять управляющего"><i class="fa-solid fa-xmark"></i></a>{{/if}}</div>
+      {{else}}<small>никого — перетащите персонажа</small>{{/if}}
+      {{#if gm}}<select name="system.managerSkill" class="bl-mgr-skill" aria-label="Навык управляющего"><option value="" {{#unless manager.override}}selected{{/unless}}>по постройке: {{manager.skillLabel}}</option>{{selectOptions manager.skills selected=manager.override}}</select>{{/if}}
+    </div>
     <div class="sv-plaque">
       <span class="cap">Особое</span>
       <small class="bl-flags">{{#if sys.unique}}<span>одна на поселение</span>{{/if}}{{#if sys.trade}}<span>торговый пост</span>{{/if}}{{#unless sys.unique}}{{#unless sys.trade}}<span>—</span>{{/unless}}{{/unless}}</small>
@@ -93,6 +103,25 @@
       {{#if flow.tags.length}}
       <ul class="bl-tags">{{#each flow.tags}}<li><i class="fa-solid {{icon}}"></i><span>{{label}}</span><b>{{value}}</b></li>{{/each}}</ul>
       {{/if}}
+    </section>
+    {{/if}}
+
+    {{!-- Заказы мастерской (PLAN 4.203) --}}
+    {{#if orders}}
+    <section class="sv-block bl-orders">
+      <h3><span class="sv-tag">Заказы</span><small>делает: {{orders.types}} · перетащите предмет сюда</small></h3>
+      {{#if orders.list.length}}
+      <ul class="bl-order-list">
+        {{#each orders.list}}
+        <li data-order="{{id}}" class="{{#if first}}now{{/if}}">
+          <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
+          <div><b>{{name}}{{#if (gt qty 1)}} ×{{qty}}{{/if}}</b><small>для {{forName}} · {{cost}}</small>
+            <span class="sv-bar"><i style="width: {{pct}}%"></i></span><small>{{progress}} из {{weeks}} нед.{{#unless first}} · в очереди{{/unless}}</small></div>
+          {{#if @root.editable}}<a class="bl-x" data-action="cancelOrder" data-tooltip="Снять заказ (потраченное не вернётся)"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+        </li>
+        {{/each}}
+      </ul>
+      {{else}}<p class="sv-hint">Заказов нет. Перетащите на лист предмет из компендиума, мира или с листа персонажа — мастерская сделает его из ресурсов склада.</p>{{/if}}
     </section>
     {{/if}}
 

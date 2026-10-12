@@ -61,7 +61,10 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       unitDrill: SettlementSheet.#onUnitDrill,
       openUnit: SettlementSheet.#onOpenUnit,
       battle: SettlementSheet.#onBattle,
-      library: SettlementSheet.#onLibrary
+      library: SettlementSheet.#onLibrary,
+      addRoute: SettlementSheet.#onAddRoute,
+      removeRoute: SettlementSheet.#onRemoveRoute,
+      liftSiege: SettlementSheet.#onLiftSiege
     }
   };
 
@@ -161,6 +164,9 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       taxNote: sum.taxMult ? (sum.taxCoins ? `${sum.taxCoins} ${cur.abbr} в неделю` : "налог не берётся") : "без усадьбы налог не собрать",
       resources, needs, month, groups, catalog, chronicle, trade: sum.trade, storage: sum.storage,
       army: this.#army(sum),
+      routes: sys.routes.map(r => ({ ...r, to: fromUuidSync(r.to)?.name ?? "—", img: resourceIcon(r.resource) })),
+      routeTargets: game.actors.filter(a => a.type === "settlement" && a.id !== actor.id && a.visible).map(a => ({ uuid: a.uuid, name: a.name })),
+      siege: sys.siege.units.length ? { weeks: sys.siege.weeks, units: sys.siege.units.map(u => fromUuidSync(u)?.name ?? "?").join(", ") } : null,
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
     return context;
@@ -218,6 +224,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       stalled: b.constructing && !this.#hasBuilder(b, sum),
       max: lv?.families ?? 0, workers, canMore: workers < (lv?.families ?? 0) && sum.idle > 0, canLess: workers > 0,
       gives: gives.join(" · "), tree,
+      manager: b.manager ? `${b.manager.name} — ${b.manager.label.toLowerCase()} ${b.manager.value}${b.manager.dice ? `, +${b.manager.dice}d4` : ""}` : "",
       idle: !!lv?.families && !workers && lv.produce.some(r => r.per === "family" || r.minFamilies),
       upgrade: !b.constructing && next && b.level >= 1 && b.level < b.levels.length ? { cost: S.priceLabel(next.cost), weeks: next.weeks, ok: canPay } : null
     };
@@ -280,6 +287,12 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static #onOpenUnit(event, target) { game.actors.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
   static #onBattle() { game.vedmak.army.battle(ARMY.settlementUnits(this.actor)); }
   static #onLibrary() { ResourceLibrary.open(this.actor); }
+  static async #onAddRoute() {
+    const el = this.element;
+    await S.addRoute(this.actor, el.querySelector(".sv-route-to")?.value, el.querySelector(".sv-route-res")?.value, el.querySelector(".sv-route-qty")?.valueAsNumber);
+  }
+  static async #onRemoveRoute(event, target) { await S.removeRoute(this.actor, target.closest("[data-route]").dataset.route); }
+  static async #onLiftSiege() { if (game.user.isGM) await ARMY.liftSiege(null, this.actor); }
 
   /** Ресурс из библиотеки (PLAN 4.201) — склад начинает его учитывать; остальное — как обычно. */
   async _onDrop(event) {

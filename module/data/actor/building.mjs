@@ -50,12 +50,26 @@ export class BuildingActorData extends foundry.abstract.TypeDataModel {
       progress: int(0, { min: 0 }),
       workers: int(0, { min: 0 }),
       settlement: str(""),
+      // Управляющий (PLAN 4.203): uuid персонажа и навык (пусто — по постройке)
+      manager: str(""),
+      managerSkill: str(""),
+      // Заказы мастерской (PLAN 4.203): очередь, делается по одному, пока в постройке работают
+      orders: new ArrayField(new SchemaField({
+        id: str(""), uuid: str(""), name: str(""), img: str(""), type: str(""), qty: int(1, { min: 1 }),
+        for: str(""), forName: str(""), weeks: int(1, { min: 1 }), progress: int(0, { min: 0 }),
+        cost: new ArrayField(new SchemaField({ resource: str(""), qty: num(0, { min: 0 }) }))
+      })),
       // Прокачка: ветки, купленные ступени (id), ступень в стройке
       branches: new ArrayField(new SchemaField({ id: str(""), name: str("Ветка"), icon: str("fa-star"), nodes: new ArrayField(upgradeNode()) })),
       upgrades: new ArrayField(str("")),
       research: new SchemaField({ node: str(""), progress: int(0, { min: 0 }) }),
       description: html()
     };
+  }
+
+  /** Управляющий-персонаж. */
+  get managerActor() {
+    return this.manager ? fromUuidSync(this.manager) : null;
   }
 
   /** Поселение постройки (null — образец каталога или поселение удалено). */

@@ -51,6 +51,10 @@ export class UnitData extends foundry.abstract.TypeDataModel {
       weapons: int(0, { min: 0, max: MAX_GEAR }),
       armor: int(0, { min: 0, max: MAX_GEAR }),
       xp: int(0, { min: 0 }),
+      // Поход (PLAN 4.203): в походе отряд ест взятые припасы, а не склад поселения; может осадить чужое поселение
+      campaign: new BooleanField({ initial: false }),
+      supplies: num(0, { min: 0 }),
+      besieging: str(""),
       morale: int(5, { min: 0, max: MORALE_MAX }),
       routed: new BooleanField({ initial: false }),
       // uuid родного поселения и командира-персонажа

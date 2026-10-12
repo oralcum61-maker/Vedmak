@@ -181,7 +181,7 @@ export function summarize(state) {
     taxMult = Math.max(taxMult, lv.taxes);
     drill = Math.max(drill, lv.drill);
     defense += lv.defense ?? 0;
-    if (b.trade || b.mods?.trade) trade = true;
+    if ((b.trade || b.mods?.trade) && !state.siege) trade = true;
     if (b.mods) {
       taxBonus += b.mods.taxes; approvalBonus += b.mods.approval;
       for (const f of b.mods.revolt ?? []) revoltDice.push({ f, times: b.level });
@@ -197,13 +197,16 @@ export function summarize(state) {
     const lv = activeLevel(b);
     const j = jobs.find(x => x.id === b.id);
     if (lv?.controlPerFamily && j) control += lv.controlPerFamily * j.workers;
+    // Управляющий постройки без выработки — порядок: Контроль, 1 за каждые 4 очка навыка
+    if (lv && b.manager?.value && !lv.produce.length) control += Math.floor(b.manager.value / 4);
   }
   // Стройка: уровни и ступени прокачки — каждой нужна свободная семья
   const constructing = (state.buildings ?? []).filter(b => b.constructing || b.research?.node).length;
   // Налог без постройки с налогами (усадьбы) не собрать — прибавки ступеней только поверх
   const idle = families - assigned;
   const approval = Math.max(0, Math.min(APPROVAL_MAX, state.approval ?? 5));
-  const arrival = ARRIVALS[approval] ?? null;
+  // В осаде (PLAN 4.203) новые семьи не приходят
+  const arrival = state.siege ? null : ARRIVALS[approval] ?? null;
   const tax = TAXES[state.taxes] ?? TAXES.low;
   return {
     houses, homeless: Math.max(0, families - houses), freeHouses: Math.max(0, houses - families),
@@ -246,7 +249,10 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
 
   // Выработка: сначала постройки без сырья, потом те, что его берут (мельница — зерно с фермы этой же недели);
   // сырья не хватает — постройка работает частью: выработка во столько же раз меньше
-  const order = (state.buildings ?? []).map(b => ({ b, lv: activeLevel(b) })).filter(x => x.lv);
+  // В осаде (PLAN 4.203) поля и промыслы за стенами стоят
+  const outside = b => state.siege && (b.group === "food" || b.group === "raw");
+  const order = (state.buildings ?? []).map(b => ({ b, lv: activeLevel(b) })).filter(x => x.lv && !outside(x.b));
+  if (state.siege) events.push({ kind: "siege", text: "Осада: поля и промыслы за стенами стоят, купцы и новые семьи не приходят.", danger: true });
   const takes = x => x.lv.consume.length > 0;
   for (const { b, lv } of [...order.filter(x => !takes(x)), ...order.filter(takes)]) {
     const workers = sum.workers[b.id] ?? 0;
@@ -299,6 +305,18 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       else add(res, amount);
       produced[res] = res === WEALTH ? round3((produced[res] ?? 0) + amount) : round1((produced[res] ?? 0) + amount);
       lines.push({ building: b.name, resource: res, amount, formula: `обустройство ${bonus.formula}`, dice: bonus.dice });
+    }
+    // Управляющий (PLAN 4.203): 1d4 за каждые 3 очка навыка — к главной выработке (первой строки), с долей сырья
+    const main = lv.produce.find(r => made.has(r.resource))?.resource;
+    if (main && b.manager?.dice) {
+      const x = roll(`${b.manager.dice}d4`);
+      const amount = main === WEALTH ? round3(Math.max(0, x.total * ratio)) : round1(Math.max(0, x.total * ratio));
+      if (amount) {
+        if (main === WEALTH) wealth = round3(wealth + amount);
+        else add(main, amount);
+        produced[main] = main === WEALTH ? round3((produced[main] ?? 0) + amount) : round1((produced[main] ?? 0) + amount);
+        lines.push({ building: b.name, resource: main, amount, formula: `управляющий ${b.manager.name}: ${b.manager.dice}d4`, dice: x.dice });
+      }
     }
   }
 
@@ -381,6 +399,10 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       if (chance > 0 || minus) events.push(d <= chance
         ? { kind: "revolt", text: `Бунт! Народ поднялся против правителя (бросок ${d}, шанс ${chance}%${note}).`, danger: true }
         : { kind: "revolt", text: `Ропот без бунта (бросок ${d}, шанс ${chance}%${note}).` });
+    }
+    if (state.siege) {
+      approval = Math.max(0, approval - 1);
+      events.push({ kind: "siege", text: `Осада тянется: одобрение падает до ${approval}.`, danger: true });
     }
     if (sum.approvalBonus) {
       const was = approval;

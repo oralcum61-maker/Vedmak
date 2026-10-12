@@ -6,6 +6,7 @@ import { UNIT_KINDS, TRAINING, ORIGINS, FAMILY_SOLDIERS, MERCENARY, MAX_GEAR, GE
 import { FOOD, WEALTH } from "../config/settlement.mjs";
 import { RANKS, unitTree, kindBranch } from "../config/unit-upgrades.mjs";
 import { unitState, unitWeek, equipCost, unitFood, unitPay, unitNodes } from "./rules.mjs";
+import { asGM, registerGMHandler } from "../combat/common.mjs";
 
 const r3 = n => Math.round(n * 1000) / 1000;
 const r1 = n => Math.round(n * 10) / 10;
@@ -148,6 +149,60 @@ export async function train(unit, nodeId) {
   return check.node;
 }
 
+/**
+ * В поход (PLAN 4.203): припасы на weeks недель — еда со склада родного поселения; в походе отряд ест их, а не склад.
+ */
+export async function marchOut(unit, weeks) {
+  const home = unit.system.settlementActor;
+  weeks = Math.max(0, Math.floor(Number(weeks) || 0));
+  const need = r1(unitFood(unitState(unit)) * weeks);
+  if (home && need) {
+    const have = home.system.stockMap[FOOD] ?? 0;
+    if (have < need) return ui.notifications.warn(`На складе «${home.name}» еды ${have}, нужно ${need}.`);
+    await home.update({ [`system.stock.${FOOD}`]: r1(have - need) });
+  }
+  await unit.update({ "system.campaign": true, "system.drilling": false, "system.supplies": r1(unit.system.supplies + need) });
+}
+
+/** Домой: остаток припасов — на склад родного поселения; осада, если была, снимается. */
+export async function returnHome(unit) {
+  if (unit.system.besieging) await liftSiege(unit);
+  const home = unit.system.settlementActor;
+  const left = unit.system.supplies;
+  if (home && left) await home.update({ [`system.stock.${FOOD}`]: r1((home.system.stockMap[FOOD] ?? 0) + left) });
+  await unit.update({ "system.campaign": false, "system.supplies": 0 });
+}
+
+/**
+ * Осадить поселение (отряд в походе): отряд — в осаде поселения; поля и промыслы там стоят, купцы и новые семьи не
+ * приходят, одобрение падает каждый месяц. Битва у стен — с укреплениями поселения.
+ */
+export async function besiege(unit, target) {
+  if (!unit.system.campaign) return ui.notifications.warn("Осадить можно только из похода.");
+  if (target?.type !== "settlement" || target.uuid === unit.system.settlement) return;
+  if (unit.system.besieging) await liftSiege(unit);
+  const units = [...new Set([...target.system.siege.units, unit.uuid])];
+  await asGMUpdate(target, { "system.siege.units": units });
+  await unit.update({ "system.besieging": target.uuid });
+}
+
+/** Снять осаду этого отряда (или всю — по поселению: liftSiege(null, settlement)). */
+export async function liftSiege(unit, settlement = null) {
+  const target = settlement ?? (unit?.system.besieging ? fromUuidSync(unit.system.besieging) : null);
+  if (target?.type === "settlement") {
+    const units = settlement ? [] : target.system.siege.units.filter(u => u !== unit.uuid);
+    await asGMUpdate(target, { "system.siege.units": units, ...(units.length ? {} : { "system.siege.weeks": 0 }) });
+    if (settlement) for (const u of target.system.siege.units) { const a = fromUuidSync(u); if (a?.isOwner) await a.update({ "system.besieging": "" }); }
+  }
+  if (unit) await unit.update({ "system.besieging": "" });
+}
+
+/** Обновить чужое поселение (осада): своё — сразу, чужое — через ведущего. */
+async function asGMUpdate(target, data) {
+  if (target.isOwner) return target.update(data);
+  return asGM("siegeUpdate", { uuid: target.uuid, data });
+}
+
 /** Бросить ступень обучения (потраченное не возвращается). */
 export async function stopTraining(unit) {
   if (unit.system.research.node) await unit.update({ "system.research": { node: "", progress: 0 } });
@@ -163,9 +218,11 @@ export async function unitsWeek(settlement, { stock, wealth, drill, rand = Math.
   if (!units.length) return { stock, wealth, lines };
   const states = new Map(units.map(a => [a.id, unitState(a)]));
   const foods = new Map(units.map(a => [a.id, unitFood(states.get(a.id), rand)]));
-  const needFood = [...foods.values()].reduce((s, n) => s + n, 0);
+  // Дома отряды едят со склада поселения, в походе — свои припасы (PLAN 4.203)
+  const home = units.filter(a => !a.system.campaign);
+  const needFood = home.reduce((s, a) => s + foods.get(a.id), 0);
   const food = Math.min(stock[FOOD] ?? 0, needFood);
-  const fed = needFood ? food / needFood : 1;
+  const fedHome = needFood ? food / needFood : 1;
   stock = { ...stock, [FOOD]: r1((stock[FOOD] ?? 0) - food) };
   const updates = [];
   for (const actor of units) {
@@ -173,13 +230,24 @@ export async function unitsWeek(settlement, { stock, wealth, drill, rand = Math.
     const pay = unitPay(u, rand);
     const paid = !pay || wealth >= pay;
     if (pay && paid) wealth = r3(wealth - pay);
-    const w = unitWeek(u, { fed, paid, drill, rand });
-    updates.push({ _id: actor.id, "system.training": w.training, "system.progress": w.progress, "system.morale": w.morale,
+    let fed = fedHome;
+    const update = { _id: actor.id };
+    if (actor.system.campaign) {
+      const need = foods.get(actor.id);
+      const eat = Math.min(actor.system.supplies, need);
+      fed = need ? eat / need : 1;
+      update["system.supplies"] = r1(actor.system.supplies - eat);
+    }
+    // В походе не тренируются: плаца нет
+    const w = unitWeek(u, { fed, paid, drill: actor.system.campaign ? 0 : drill, rand });
+    if (actor.system.campaign) w.notes.unshift(`в походе: припасов ${update["system.supplies"]}${fed < 1 ? " — кончились" : ""}`);
+    Object.assign(update, { "system.training": w.training, "system.progress": w.progress, "system.morale": w.morale,
       "system.soldiers": w.soldiers, "system.routed": false, "system.xp": w.xp, "system.research": w.research, "system.upgrades": w.upgrades });
+    updates.push(update);
     lines.push({ name: actor.name, notes: w.notes, food: foods.get(actor.id), pay });
   }
   await Actor.updateDocuments(updates);
-  return { stock, wealth, lines, food: r1(needFood), fed };
+  return { stock, wealth, lines, food: r1(needFood), fed: fedHome };
 }
 
 export { WEALTH };
@@ -189,6 +257,12 @@ export { WEALTH };
  * забывается); отрядам, набранным до обучения, ведущий проставляет дерево при загрузке мира.
  */
 export function registerUnitHooks() {
+  // Осада чужого поселения игроком: обновляет ведущий (только поле осады)
+  registerGMHandler("siegeUpdate", async ({ uuid, data }) => {
+    const target = await fromUuid(uuid);
+    const clean = Object.fromEntries(Object.entries(data).filter(([k]) => k.startsWith("system.siege.")));
+    if (target?.type === "settlement") await target.update(clean);
+  });
   Hooks.on("preCreateActor", (actor, data) => {
     if (actor.type === "unit" && !data.system?.branches?.length) actor.updateSource({ "system.branches": unitTree(data.system?.kind ?? "infantry") });
   });
@@ -207,5 +281,29 @@ export function registerUnitHooks() {
     const updates = game.actors.filter(a => a.type === "unit" && !a.system.branches.length)
       .map(a => ({ _id: a.id, "system.branches": unitTree(a.system.kind) }));
     if (updates.length) await Actor.implementation.updateDocuments(updates);
+  });
+}
+
+/**
+ * Отряд на карте (PLAN 4.203): жетон отряда в походе подошёл вплотную (две клетки) к жетону чужого поселения — тому, кто
+ * двигал, предлагается осада.
+ */
+export function registerMapSiege() {
+  Hooks.on("moveToken", async (tokenDoc, movement, options, userId) => {
+    if (userId !== game.user.id) return;
+    const unit = tokenDoc.actor;
+    if (unit?.type !== "unit" || !unit.system.campaign || unit.system.besieging || !unit.isOwner) return;
+    const scene = tokenDoc.parent;
+    const reach = (scene.grid.size ?? 100) * 2;
+    const c = tokenDoc.object?.center ?? { x: tokenDoc.x, y: tokenDoc.y };
+    const near = scene.tokens.find(t => t.actor?.type === "settlement" && t.actor.uuid !== unit.system.settlement && t.object
+      && Math.hypot(t.object.center.x - c.x, t.object.center.y - c.y) <= reach + Math.max(t.object.w, t.object.h) / 2);
+    if (!near) return;
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Под стенами" },
+      content: `<p>«${unit.name}» подошёл к «${near.actor.name}». Начать осаду?</p>`,
+      rejectClose: false
+    });
+    if (ok) await besiege(unit, near.actor);
   });
 }

@@ -60,6 +60,8 @@
 
   <div class="sv-scroll">
   {{#if (eq tab "economy")}}
+    {{#if siege}}<div class="sv-siege"><i class="fa-solid fa-chess-rook"></i><span><b>В осаде</b> {{siege.weeks}} нед.: под стенами {{siege.units}}. Поля и промыслы стоят, купцы и новые семьи не приходят; одобрение падает каждый месяц.</span>
+      {{#if gm}}<a class="sv-btn" data-action="liftSiege">Снять осаду</a>{{/if}}</div>{{/if}}
     <section class="sv-block">
       <h3><span class="sv-tag">Склад</span><small>до {{storage}} каждого · ≈ — в среднем за неделю</small></h3>
       <ul class="sv-res">
@@ -111,6 +113,24 @@
         </ul>
       </section>
     </div>
+
+    {{!-- Караваны (PLAN 4.203) --}}
+    <section class="sv-block sv-routes">
+      <h3><span class="sv-tag">Караваны</span><small>каждую неделю — со склада в другое поселение{{#unless trade}} · нужны торговый пост или рынок{{/unless}}</small></h3>
+      {{#if routes.length}}
+      <ul class="sv-parts">
+        {{#each routes}}<li data-route="{{id}}"><span><img class="sv-route-img" src="{{img}}" alt=""> {{resource}} {{qty}} в неделю → <b>{{to}}</b></span>
+          {{#if @root.editable}}<a class="sv-res-x" data-action="removeRoute" data-tooltip="Отменить караван">×</a>{{/if}}</li>{{/each}}
+      </ul>
+      {{else}}<p class="sv-hint">Караванов нет.</p>{{/if}}
+      {{#if editable}}{{#if routeTargets.length}}
+      <div class="sv-add-res sv-route-add">
+        <select class="sv-route-to" aria-label="Куда">{{#each routeTargets}}<option value="{{uuid}}">{{name}}</option>{{/each}}</select>
+        <select class="sv-route-res" aria-label="Что">{{#each resources}}<option value="{{name}}">{{name}}</option>{{/each}}</select>
+        <input class="sv-route-qty" type="number" min="1" step="1" value="5" aria-label="Сколько в неделю">
+        <a class="sv-btn" data-action="addRoute">Отправлять</a>
+      </div>{{/if}}{{/if}}
+    </section>
   {{/if}}
 
   {{#if (eq tab "buildings")}}
@@ -149,6 +169,7 @@
               <small>{{#if firstBuild}}Строится{{else}}Улучшается{{/if}}: {{progress.done}} из {{progress.weeks}} нед.{{#if stalled}} — нет свободных семей{{/if}}</small></div>
             {{/if}}
             {{#if gives}}<small class="sv-gives">{{gives}}{{#if idle}} · <span class="warn">никто не работает</span>{{/if}}</small>{{/if}}
+            {{#if manager}}<small class="sv-tree" data-tooltip="Управляющий постройки"><i class="fa-solid fa-user-tie"></i> {{manager}}</small>{{/if}}
             {{#if tree}}<small class="sv-tree" data-tooltip="Обустройство — на листе постройки"><i class="fa-solid fa-sitemap"></i> {{tree.done}} из {{tree.total}}{{#if tree.working}} · строится «{{tree.working.name}}»: {{tree.working.done}} из {{tree.working.weeks}} нед.{{#if tree.stalled}} — <span class="warn">нет свободных семей</span>{{/if}}{{/if}}</small>{{/if}}
             <div class="sv-card-acts">
               {{#if max}}

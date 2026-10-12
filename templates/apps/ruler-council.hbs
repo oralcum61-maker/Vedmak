@@ -1,0 +1,39 @@
+{{!-- Совет правителя (PLAN 4.203): все поселения одним окном --}}
+<div class="sv rc">
+  <div class="rc-bar">
+    <span class="sv-hint">Поселения, которые вы видите: хозяйство, стройки, войско и что случится в конце месяца.</span>
+    {{#if gm}}{{#unless empty}}<button type="button" class="sv-next" data-action="weekAll" data-tooltip="Прошла неделя во всех поселениях по очереди">Неделя для всех</button>{{/unless}}{{/if}}
+  </div>
+  <div class="rc-list">
+    {{#each towns}}
+    <section class="rc-town" data-uuid="{{uuid}}">
+      <header>
+        <span class="sv-sock"><img src="{{img}}" alt=""></span>
+        <div class="rc-title"><a data-action="openActor"><b>{{name}}</b></a><small>{{when}}</small>
+          {{#if warn.length}}<span class="rc-warn">{{#each warn}}<i>{{this}}</i>{{/each}}</span>{{/if}}</div>
+        {{#if siege}}<span class="rc-siege"><i class="fa-solid fa-chess-rook"></i> в осаде {{siege}}</span>{{/if}}
+        {{#if @root.gm}}<a class="sv-btn" data-action="week">Прошла неделя</a>{{/if}}
+      </header>
+      <div class="rc-stats">
+        <span><small>Семьи</small><b>{{families}}</b><em>домов {{houses}}{{#if homeless}} · бездомных {{homeless}}{{/if}} · без дела {{idle}}</em></span>
+        <span><small>Одобрение</small><b>{{approval}}</b><em>{{#if revolt}}бунт {{revolt}}%{{else if arrival}}приход {{arrival}}%{{else}}спокойно{{/if}}</em></span>
+        <span><small>Казна</small><b>{{wealth}}</b><em>{{coins}}{{#if wealthNet}} · {{wealthNet}}/нед.{{/if}}</em></span>
+        <span><small>Контроль · укрепления</small><b>{{control}} · {{defense}}</b><em>&nbsp;</em></span>
+      </div>
+      <div class="rc-row">
+        <div class="rc-res">
+          {{#each needs}}<span class="bl-chip sm {{#if low}}short{{/if}}" data-tooltip="{{name}}"><img src="{{img}}" alt=""><b>{{value}}</b>{{#if netLabel}}<small class="{{#if down}}down{{/if}}">{{netLabel}}</small>{{/if}}</span>{{/each}}
+          {{#each top}}<span class="bl-chip sm" data-tooltip="{{name}}"><img src="{{img}}" alt=""><b>{{value}}</b>{{#if net}}<small>{{net}}</small>{{/if}}</span>{{/each}}
+        </div>
+      </div>
+      <div class="rc-cols">
+        <div><span class="cap">Работы</span>{{#each works}}<p>{{this}}</p>{{else}}<p class="dim">ничего не строится</p>{{/each}}</div>
+        <div><span class="cap">Войско</span>{{#if army}}<p>отрядов {{army.units}}, бойцов {{army.soldiers}}{{#if army.away}} · в походе {{army.away}}{{/if}}</p>{{else}}<p class="dim">нет</p>{{/if}}</div>
+        <div><span class="cap">Караваны</span>{{#each routes}}<p>{{this}}</p>{{else}}<p class="dim">нет</p>{{/each}}</div>
+      </div>
+    </section>
+    {{else}}
+    <p class="sv-hint">Поселений нет — создайте актёра «Поселение».</p>
+    {{/each}}
+  </div>
+</div>

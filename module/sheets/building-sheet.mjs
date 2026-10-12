@@ -6,7 +6,8 @@
 // закрыта (почему); ведущий правит дерево на месте и выдаёт ступени даром. Облик — общий с листом поселения
 // (styles/settlement.css), своё — раздел «Лист постройки».
 
-import { BUILDING_GROUPS, PERIODS, fullRow, resourceIcon, resourceNames } from "../config/settlement.mjs";
+import { BUILDING_GROUPS, PERIODS, fullRow, resourceIcon, resourceNames, managerSkillOf, managerDice, orderTypes, orderCost, ORDER_TYPES } from "../config/settlement.mjs";
+import { SKILLS } from "../config/skills.mjs";
 import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
 import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
@@ -116,6 +117,8 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       treeAdd: BuildingSheet.#onTreeAdd,
       treeDel: BuildingSheet.#onTreeDel,
       openActor: BuildingSheet.#onOpenActor,
+      clearManager: BuildingSheet.#onClearManager,
+      cancelOrder: BuildingSheet.#onCancelOrder,
       editLevel: BuildingSheet.#onEditLevel,
       blAdd: BuildingSheet.#onBlAdd,
       blDelete: BuildingSheet.#onBlDelete,
@@ -178,11 +181,70 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       edit: gm && this.editing !== null ? blueprint(b.levels[this.editing], this.editing) : null,
       perOptions: { building: "за постройку", family: "за семью" }, periodOptions: PERIODS,
       resourceNames: [...resourceNames(), WEALTH], codePlaceholder: actor.name.toLowerCase(),
+      manager: this.#manager(lv),
+      orders: this.#orders(),
       tree: this.#tree(town, stock, have), treeEdit: gm && this.treeEdit,
       effectTypes: Object.fromEntries(Object.entries(BUILDING_EFFECTS).map(([k, v]) => [k, v.label])),
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
     return context;
+  }
+
+  /** Управляющий: кто, навык, бонус (1d4 за 3 очка навыка к главной выработке; без выработки — Контроль). */
+  #manager(lv) {
+    const sys = this.actor.system;
+    const skill = managerSkillOf(sys.key, sys.group, sys.managerSkill);
+    const who = sys.managerActor;
+    const value = who?.system.skills?.[skill]?.total ?? 0;
+    const main = lv?.produce?.[0]?.resource;
+    const dice = managerDice(value);
+    return {
+      who: who ? { uuid: who.uuid, name: who.name, img: who.img } : null, skill, skillLabel: SKILLS[skill]?.label ?? skill, value,
+      bonus: !who ? "" : main ? (dice ? `+${dice}d4 к «${main}» в неделю` : "навык 0 — бонуса нет") : `Контроль +${Math.floor(value / 4)}`,
+      skills: Object.fromEntries(Object.entries(SKILLS).map(([k, v]) => [k, v.label])), override: sys.managerSkill
+    };
+  }
+
+  /** Заказы мастерской: что берёт, очередь с прогрессом. */
+  #orders() {
+    const sys = this.actor.system;
+    const types = orderTypes(sys.key, sys.group);
+    if (!types.length) return null;
+    return {
+      types: types.map(t => ORDER_TYPES[t]).join(", "),
+      list: sys.orders.map((o, i) => ({ ...o, first: !i, pct: Math.round((o.progress / o.weeks) * 100),
+        cost: o.cost.map(c => `${c.resource} ${c.qty}`).join(", ") }))
+    };
+  }
+
+  /** Перетащенный предмет — заказ мастерской: для кого и сколько; цена — со склада поселения. */
+  async _onDropItem(event, item) {
+    const town = this.actor.system.settlementActor;
+    if (!town?.isOwner) return null;
+    const types = orderTypes(this.actor.system.key, this.actor.system.group);
+    if (!types.includes(item.type)) { ui.notifications.warn(`«${this.actor.name}» не делает такого.`); return null; }
+    const heroes = game.actors.filter(a => a.type === "character" && a.isOwner);
+    const mine = game.user.character?.id ?? item.parent?.id;
+    const { cost, weeks } = orderCost(item.type, item.system.cost, 1, item.name);
+    const data = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `Заказ: ${item.name}` },
+      content: `<div class="vedmak-roll-dialog">
+        <div class="form-group"><label>Для кого</label><select name="for">${heroes.map(a => `<option value="${a.uuid}" ${a.id === mine ? "selected" : ""}>${a.name}</option>`).join("")}</select></div>
+        <div class="form-group"><label>Сколько</label><input type="number" name="qty" min="1" step="1" value="1"></div>
+        <p class="hint">За штуку: ${cost.map(c => `${c.resource} ${c.qty}`).join(", ")} со склада «${town.name}», ${weeks} нед. работы.</p></div>`,
+      ok: { label: "Заказать", callback: (ev, button) => Object.fromEntries(new FormData(button.form)) },
+      rejectClose: false
+    });
+    if (!data) return null;
+    return game.vedmak.settlement.placeOrder(town, this.actor.id, item, fromUuidSync(data.for), data.qty);
+  }
+
+  /** Перетащенный персонаж — управляющий постройки. */
+  async _onDropActor(event, actor) {
+    if (!this.isEditable) return null;
+    if (actor.type !== "character") { ui.notifications.warn("Управляющим может быть только персонаж."); return null; }
+    await this.actor.update({ "system.manager": actor.uuid });
+    return actor;
   }
 
   /** Ветки обустройства: ступени с состоянием, ценой значками, эффектами подписью; для правки — пути полей. */
@@ -262,6 +324,11 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }
+  static async #onClearManager() { await this.actor.update({ "system.manager": "" }); }
+  static async #onCancelOrder(event, target) {
+    const town = this.actor.system.settlementActor;
+    if (town) await game.vedmak.settlement.cancelOrder(town, this.actor.id, target.closest("[data-order]").dataset.order);
+  }
   static async #onOpenActor(event, target) { (await fromUuid(target.dataset.uuid))?.sheet.render(true); }
   static #onEditLevel(event, target) {
     const i = Number(target.closest("[data-level]").dataset.level);

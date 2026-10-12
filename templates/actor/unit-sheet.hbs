@@ -77,6 +77,20 @@
       </div>
     </section>
 
+    <section class="sv-block ar-campaign">
+      <h3><span class="sv-tag">Поход</span><small>{{#if campaign.on}}в походе{{else}}дома{{/if}}</small></h3>
+      <div class="ar-camp">
+        {{#if campaign.on}}
+        <span><b>{{campaign.supplies}}</b> еды с собой — на {{campaign.weeks}} нед.{{#if campaign.siege}} · <span class="warn">осаждает «{{campaign.siege}}»</span>{{/if}}</span>
+        {{#if editable}}{{#if campaign.siege}}<a class="sv-btn" data-action="liftSiege">Снять осаду</a>{{else}}<a class="sv-btn" data-action="besiege">Осадить…</a>{{/if}}
+        <a class="sv-btn" data-action="returnHome">Домой</a>{{/if}}
+        {{else}}
+        <span class="sv-hint">Дома отряд ест со склада поселения и тренируется. В походе — ест взятые припасы, может осадить чужое поселение.</span>
+        {{#if editable}}<a class="sv-btn" data-action="march">В поход…</a>{{/if}}
+        {{/if}}
+      </div>
+    </section>
+
     <div class="sv-cols">
       <section class="sv-block">
         <h3><span class="sv-tag">Командир</span><small>перетащите персонажа</small></h3>

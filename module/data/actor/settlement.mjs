@@ -4,10 +4,11 @@
 // шансы месяца, прогноз недели) считаются здесь из тех же правил.
 
 import { int, num, str, html } from "../fields.mjs";
-import { calendar, APPROVAL_MAX, TAXES } from "../../config/settlement.mjs";
+import { calendar, APPROVAL_MAX, TAXES, managerSkillOf, managerDice } from "../../config/settlement.mjs";
+import { SKILLS } from "../../config/skills.mjs";
 import { summarize, simulateWeek, buildingState } from "../../settlement/rules.mjs";
 
-const { ArrayField, ObjectField } = foundry.data.fields;
+const { ArrayField, ObjectField, SchemaField } = foundry.data.fields;
 
 export class SettlementData extends foundry.abstract.TypeDataModel {
 
@@ -26,6 +27,10 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
       stock: new ObjectField({ initial: () => ({ "Еда": 10, "Топливо": 6, "Древесина": 12 }) }),
       // Летопись: последние недели — отчёты simulateWeek
       log: new ArrayField(new ObjectField()),
+      // Караваны (PLAN 4.203): каждую неделю — ресурс в другое поселение
+      routes: new ArrayField(new SchemaField({ id: str(""), to: str(""), resource: str(""), qty: num(1, { min: 0 }) })),
+      // Осада (PLAN 4.203): отряды под стенами (uuid) и сколько недель
+      siege: new SchemaField({ units: new ArrayField(str("")), weeks: int(0, { min: 0 }) }),
       description: html()
     };
   }
@@ -42,9 +47,18 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
       .sort((a, b) => (a.sort - b.sort) || (born(a) - born(b)) || (a.id < b.id ? -1 : 1));
   }
 
-  /** Постройки поселения для правил. */
+  /** Постройки поселения для правил: с управляющим — его имя, навык и кубики (PLAN 4.203). */
   get buildings() {
-    return this.buildingActors.map(buildingState);
+    return this.buildingActors.map(a => {
+      const b = buildingState(a);
+      const who = a.system.managerActor;
+      if (who) {
+        const skill = managerSkillOf(b.key, b.group, a.system.managerSkill);
+        const value = who.system.skills?.[skill]?.total ?? 0;
+        b.manager = { name: who.name, skill, label: SKILLS[skill]?.label ?? skill, value, dice: managerDice(value) };
+      }
+      return b;
+    });
   }
 
   /** Склад числами (неверное — 0). */
@@ -55,7 +69,8 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
   /** Состояние для правил недели. */
   get state() {
     return { year: this.year, month: this.month, week: this.week, families: this.families, approval: this.approval,
-      control: this.control, wealth: this.wealth, taxes: this.taxes, stock: this.stockMap, buildings: this.buildings };
+      control: this.control, wealth: this.wealth, taxes: this.taxes, stock: this.stockMap, buildings: this.buildings,
+      siege: this.siege?.units?.length > 0 };
   }
 
   prepareDerivedData() {

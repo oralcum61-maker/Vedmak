@@ -1774,3 +1774,50 @@ export function buildingItemData(key) {
       branches: buildingTree(key, d.levels.length), description: `<p>${d.hint}</p>` }
   };
 }
+
+/**
+ * Управляющий постройки (PLAN 4.203): какой навык персонажа работает в постройке. По коду постройки, иначе по группе.
+ * Бонус — по 1d4 за каждые 3 очка навыка к главной выработке; у постройки без выработки — Контроль.
+ */
+export const MANAGER_SKILLS = {
+  hunters: "wilderness", herbalist: "wilderness", fishery: "wilderness", farm: "wilderness", sheepfold: "wilderness", apiary: "wilderness",
+  stables: "wilderness", lumber: "physique", mine: "physique", quarry: "physique", claypit: "physique", charcoal: "physique",
+  alchemist: "alchemy", distillery: "alchemy", market: "business", tradepost: "business", tavern: "business", storehouse: "business",
+  manor: "leadership", barracks: "leadership", drillground: "tactics", palisade: "tactics", temple: "persuasion"
+};
+export const MANAGER_GROUP_SKILLS = { food: "crafting", raw: "physique", craft: "crafting", service: "business", defense: "leadership",
+  living: "leadership", storage: "business" };
+/** Навык управляющего постройки. */
+export const managerSkillOf = (key, group, override = "") => override || MANAGER_SKILLS[key] || MANAGER_GROUP_SKILLS[group] || "crafting";
+/** Кубиков управляющего: 1d4 за каждые 3 очка навыка. */
+export const managerDice = value => Math.max(0, Math.ceil((Number(value) || 0) / 3));
+
+/**
+ * Заказы (PLAN 4.203): какие предметы делает мастерская (по коду постройки). Своя постройка ведущего из группы «Ремесло»
+ * берёт любые. Цена — ресурсы склада по роду предмета и его цене в кронах, срок — недели (1 за каждые 150 крон).
+ */
+export const ORDER_SHOPS = {
+  smithy: ["weapon", "gear"], armory: ["weapon"], armorer: ["armor"], bowyer: ["weapon"], alchemist: ["alchemical", "component"],
+  herbalist: ["alchemical", "component"], weaver: ["gear", "armor"], tannery: ["armor", "gear"], sawmill: ["gear"]
+};
+export const ORDER_TYPES = { weapon: "оружие", armor: "броня", gear: "снаряжение", alchemical: "алхимия", component: "компоненты" };
+
+/** Что заказ может сделать эта постройка: список типов предметов (пусто — заказов не берёт). */
+export function orderTypes(key, group) {
+  return ORDER_SHOPS[key] ?? (group === "craft" ? Object.keys(ORDER_TYPES) : []);
+}
+
+/** Цена и срок заказа: по роду предмета и его цене в кронах (на штуку). */
+export function orderCost(type, price, qty = 1, name = "") {
+  const p = Math.max(1, Number(price) || 0) * Math.max(1, qty);
+  const n = d => Math.max(1, Math.ceil(p / d));
+  const bow = /лук|арбалет/i.test(name);
+  const cost = {
+    weapon: bow ? [{ resource: "Доски", qty: n(30) }, { resource: "Кожа", qty: 1 }] : [{ resource: "Железо", qty: n(40) }, { resource: "Доски", qty: 1 }],
+    armor: [{ resource: "Железо", qty: n(70) }, { resource: "Кожа", qty: n(80) }],
+    gear: [{ resource: "Кожа", qty: n(60) }, { resource: "Ткань", qty: n(80) }],
+    alchemical: [{ resource: "Лесные травы", qty: n(15) }],
+    component: [{ resource: "Лесные травы", qty: n(20) }]
+  }[type] ?? [{ resource: "Доски", qty: n(50) }];
+  return { cost, weeks: Math.max(1, Math.ceil(p / 150)) };
+}

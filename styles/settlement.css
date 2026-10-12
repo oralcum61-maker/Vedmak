@@ -235,7 +235,11 @@
    Производственная линия: сырьё → герб в кованом гнезде → выработка, значками ресурсов с бросками; лестница уровней —
    ступени-пластины (пройденные посеребрены, текущая — серебряная грань, следующая — тёплый свет); чертёж ступени
    ведущего — утопленная пластина под лестницей. */
-.sv.bl .sv-plaques { grid-template-columns: 1.15fr 1fr 1fr 1fr; }
+.sv.bl .sv-plaques { grid-template-columns: 1.1fr 1fr 1fr 1.4fr 1fr; }
+.bl-mgr { display: grid; grid-template-columns: 34px minmax(0, 1fr) 14px; align-items: center; gap: 7px; }
+.bl-mgr .sv-sock.sm { --s: 34px; }
+.bl-mgr small { display: block; font-size: 10.5px; line-height: 1.3; color: var(--sv-ash); }
+.sv.bl .bl-mgr-skill { width: 100%; height: 22px; font-size: 11px; }
 .sv .bl-mini { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--sv-dim); }
 .sv .bl-mini input[type="number"] { width: 46px; height: 22px; text-align: center; }
 .sv .bl-mini input[type="text"] { width: 96px; height: 22px; }
@@ -431,3 +435,49 @@
 .rl-add { color: var(--sv-dim); } .rl-add:hover { color: #e0c48f; }
 .rl-have { color: var(--sv-green); font-size: 11px; }
 .rl-edit { position: absolute; top: 3px; right: 26px; font-size: 9px; color: var(--sv-dim); } .rl-edit:hover { color: #e0c48f; }
+
+/* Заказы мастерской (PLAN 4.203) */
+.bl-order-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.bl-order-list li { display: grid; grid-template-columns: 44px minmax(0, 1fr) 14px; align-items: center; gap: 9px; padding: 6px 10px; border-radius: 6px;
+  background: linear-gradient(#26272c, #1c1d21); box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.bl-order-list li.now { box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506, 0 0 0 2px rgba(224, 196, 143, .4); }
+.bl-order-list b { font: 400 15px/1.15 var(--vd-font-head); color: var(--sv-silver); }
+.bl-order-list small { display: block; font-size: 10.5px; color: var(--sv-ash); }
+.bl-order-list .sv-bar { margin: 3px 0 1px; }
+
+/* Осада и караваны на листе поселения (PLAN 4.203) */
+.sv-siege { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 6px; color: #f0c9bd;
+  background: linear-gradient(90deg, rgba(184, 67, 44, .28), rgba(184, 67, 44, .08)); box-shadow: inset 0 0 0 1px rgba(184, 67, 44, .4); }
+.sv-siege span { flex: 1; font-size: 12px; line-height: 1.4; }
+.sv-siege .sv-btn { flex: none; padding: 7px 12px; }
+.sv-route-img { width: 20px; height: 20px; border: 0; vertical-align: middle; border-radius: 3px; }
+.sv-route-add select { height: 26px; }
+
+/* ─── Совет правителя (PLAN 4.203): поселения одним окном ─── */
+.ruler-council .window-content { padding: 0; }
+.rc { display: flex; flex-direction: column; height: 100%; }
+.rc-bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #17181b; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .6); }
+.rc-bar .sv-hint { flex: 1; }
+.rc-list { flex: 1; overflow-y: auto; padding: 12px 16px 16px; display: grid; gap: 14px; align-content: start; }
+.rc-town { display: grid; gap: 10px; padding: 12px 14px; border-radius: 8px; background: linear-gradient(#222327, #1a1b1f); box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506; }
+.rc-town > header { display: flex; align-items: center; gap: 12px; }
+.rc-town .sv-sock { --s: 54px; }
+.rc-title { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.rc-title b { font: 400 22px/1.1 var(--vd-font-head); color: var(--sv-silver); }
+.rc-title small { font-size: 11px; color: var(--sv-ash); }
+.rc-warn { display: flex; flex-wrap: wrap; gap: 4px; }
+.rc-warn i { font-style: normal; font-size: 10.5px; padding: 1px 7px; border-radius: 3px; color: #f0c9bd; background: rgba(184, 67, 44, .25); }
+.rc-siege { font-size: 12px; color: #f0c9bd; }
+.rc-town > header .sv-btn { flex: none; padding: 8px 12px; }
+.rc-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.rc-stats > span { display: grid; gap: 2px; padding: 7px 10px; border-radius: 5px; background: rgba(10, 10, 12, .45); box-shadow: var(--vd-sink-sm); }
+.rc-stats small { font: 600 9px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--sv-dim); }
+.rc-stats b { font: 400 20px/1 var(--vd-font-head); color: var(--sv-silver); }
+.rc-stats em { font-style: normal; font-size: 10.5px; color: var(--sv-ash); }
+.rc-res { display: flex; flex-wrap: wrap; gap: 5px; }
+.rc-res .bl-chip small { font-size: 10px; color: var(--sv-green); }
+.rc-res .bl-chip small.down { color: var(--sv-blood-lite); }
+.rc-cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 10px; }
+.rc-cols p { margin: 3px 0 0; font-size: 11.5px; color: var(--sv-ink); }
+.rc-cols p.dim { color: var(--sv-dim); font-style: italic; }
+@media (max-width: 760px) { .rc-stats, .rc-cols { grid-template-columns: 1fr 1fr; } }

@@ -51,6 +51,10 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       clearCommander: UnitSheet.#onClearCommander,
       openActor: UnitSheet.#onOpenActor,
       battle: UnitSheet.#onBattle,
+      march: UnitSheet.#onMarch,
+      returnHome: UnitSheet.#onReturnHome,
+      besiege: UnitSheet.#onBesiege,
+      liftSiege: UnitSheet.#onLiftSiege,
       train: UnitSheet.#onTrain,
       stopTraining: UnitSheet.#onStopTraining,
       grant: UnitSheet.#onGrant,
@@ -114,6 +118,8 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       power: { total: sys.power.total, parts: sys.power.parts.map(p => `${p.label} ${p.value > 0 ? "+" : ""}${p.value}`).join(" · ") },
       commander: cmd ? { uuid: cmd.uuid, name: cmd.name, img: cmd.img, bonus: sys.commanderBonus } : null,
       upkeep: { food: sys.food, pay: sys.pay },
+      campaign: { on: sys.campaign, supplies: sys.supplies, weeks: sys.food ? Math.floor(sys.supplies / sys.food) : 0,
+        siege: sys.besieging ? fromUuidSync(sys.besieging)?.name ?? "?" : "" },
       tree: this.#tree(home, have), treeEdit: gm && this.treeEdit,
       effectTypes: Object.fromEntries(Object.entries(UNIT_EFFECTS).map(([k, v]) => [k, v.label])),
       rankOptions: Object.fromEntries(RANKS.map((r, i) => [i, r.label])),
@@ -181,6 +187,34 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onClearCommander() { await this.actor.update({ "system.commander": "" }); }
   static async #onOpenActor(event, target) { (await fromUuid(target.dataset.uuid))?.sheet.render(true); }
   static async #onBattle() { game.vedmak.army.battle([this.actor]); }
+
+  /* ------------------------------ Поход (PLAN 4.203) ------------------------------ */
+
+  static async #onMarch() {
+    const weeks = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `В поход: ${this.actor.name}` },
+      content: `<div class="vedmak-roll-dialog"><label class="num"><span class="cap">Припасов на недель</span>
+        <input type="number" name="weeks" min="0" step="1" value="2" autofocus></label>
+        <p class="hint">Еда со склада родного поселения: ${this.actor.system.food} в неделю. В походе отряд ест припасы, а не склад; на плацу не тренируется.</p></div>`,
+      ok: { label: "В поход", callback: (ev, button) => button.form.elements.weeks.valueAsNumber },
+      rejectClose: false
+    });
+    if (weeks !== null && weeks !== undefined) await ARMY.marchOut(this.actor, weeks);
+  }
+  static async #onReturnHome() { await ARMY.returnHome(this.actor); }
+  static async #onBesiege() {
+    const towns = game.actors.filter(a => a.type === "settlement" && a.uuid !== this.actor.system.settlement && a.visible);
+    if (!towns.length) return ui.notifications.warn("Осаждать некого.");
+    const uuid = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `Осада: ${this.actor.name}` },
+      content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Какое поселение</label><select name="town">${towns.map(t => `<option value="${t.uuid}">${t.name}</option>`).join("")}</select></div>
+        <p class="hint">Пока отряд под стенами, там стоят поля и промыслы, не ходят купцы и караваны, не приходят семьи, одобрение падает. Битва у стен — с их укреплениями.</p></div>`,
+      ok: { label: "Осадить", callback: (ev, button) => button.form.elements.town.value },
+      rejectClose: false
+    });
+    if (uuid) await ARMY.besiege(this.actor, fromUuidSync(uuid));
+  }
+  static async #onLiftSiege() { await ARMY.liftSiege(this.actor); }
 
   /* ------------------------------ Обучение ------------------------------ */
 

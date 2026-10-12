@@ -81,3 +81,7 @@
 .sv .ar-node-req select { width: 100%; height: 24px; }
 @media (max-width: 760px) { .sv.ar .ar-plaques { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ar-gear { grid-template-columns: 1fr; } }
 .bt-fort { color: #e0c48f; font: 400 15px/1 var(--vd-font-head); }
+.ar-camp { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ar-camp > span { flex: 1; font-size: 12.5px; }
+.ar-camp b { font: 400 18px/1 var(--vd-font-head); color: var(--sv-silver); }
+.ar-camp .sv-btn { flex: none; padding: 7px 12px; }
