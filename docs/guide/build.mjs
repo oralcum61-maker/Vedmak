@@ -203,8 +203,13 @@ const gm = html => `<aside class="note gm"><span>Ведущему</span>${html}<
 const tip = html => `<aside class="note tip"><span>Совет</span>${html}</aside>`;
 const warn = html => `<aside class="note warn"><span>Осторожно</span>${html}</aside>`;
 let chapterNo = 0;
-const chapter = (title, lead, id) => `<header class="chapter" id="${id}"><div class="numeral">${["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII"][++chapterNo]}</div>
+const chapter = (title, lead, id) => {
+  const numeral = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII"][++chapterNo];
+  // Заставка главы (docs/guide/img/ch-<id>.jpg): полоса над заголовком, цифра — на тёмном правом краю
+  const art = img(`ch-${id}.jpg`);
+  return `<header class="chapter${art ? " has-art" : ""}" id="${id}">${art ? `<div class="ch-art" style="background-image: url('${art}')"></div>` : ""}<div class="numeral">${numeral}</div>
   <h1>${title}</h1><p class="lead">${lead}</p><div class="thread"><i></i></div></header>`;
+};
 
 /** Цепь хода недели — порядок simulateWeek. */
 const WEEK = [
@@ -500,7 +505,7 @@ ${kindTable()}
 ${fig("unit.jpg", "Лист отряда: пять пластин, оружие и броня шкалами, командир.")}
 </div>
 </div>
-<h3>Обучение — ветки отряда</h3>
+<h3 class="newpage">Обучение — ветки отряда</h3>
 <p>Три общие ветки и ветка рода войск по три ступени. Ступень требует звание (иногда — оружие или броню) и предыдущую ступень;
 цена — со склада родного поселения, недели — на плацу (отряд должен тренироваться).</p>
 ${unitTrees()}
@@ -655,6 +660,12 @@ i { color: var(--muted); }
 .chapter { break-before: page; position: relative; padding: 4mm 0 0; margin-bottom: 5mm; }
 .chapter .numeral { position: absolute; right: 0; top: -8mm; font: 400 120pt/1 "Vedmak Display", serif;
   color: transparent; -webkit-text-stroke: 1px rgba(243,238,226,.16); letter-spacing: -.04em; }
+.chapter.has-art { padding-top: 0; }
+.chapter .ch-art { position: relative; height: 58mm; margin: 0 0 6mm; background: var(--plate) left center / cover no-repeat;
+  border: 1px solid var(--rule); box-sizing: border-box; }
+.chapter .ch-art::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 48%, rgba(19,20,23,.85) 74%, var(--night) 92%), linear-gradient(180deg, transparent 62%, rgba(19,20,23,.7) 100%); }
+.chapter.has-art .numeral { top: 4mm; right: 5mm; z-index: 1; -webkit-text-stroke: 1px rgba(243,238,226,.32); }
 .chapter h1 { font-size: 30pt; line-height: 1.05; margin: 0; position: relative; max-width: 138mm; }
 .chapter .lead { font-size: 11pt; color: var(--muted); max-width: 130mm; margin: 2mm 0 0; position: relative; }
 #units, #ref, #week { }
