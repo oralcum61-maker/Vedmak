@@ -1,4 +1,4 @@
-{{!-- Лист отряда (PLAN 4.187) --}}
+{{!-- Лист отряда (PLAN 4.187, 4.198): пластины, «Отряд» (командир, содержание, оружие и броня), «Обучение», «Летопись» --}}
 <div class="sv ar">
   <header class="sv-head">
     <span class="sv-sock big"><img class="sv-arms" src="{{actor.img}}" alt="" data-edit="img" data-tooltip="Знамя отряда"></span>
@@ -15,7 +15,7 @@
     {{#if gm}}<button type="button" class="sv-next" data-action="battle" data-tooltip="Открыть окно битвы с этим отрядом">В бой</button>{{/if}}
   </header>
 
-  <section class="sv-plaques">
+  <section class="sv-plaques ar-plaques">
     <div class="sv-plaque">
       <span class="cap">Бойцы</span>
       {{#if gm}}<input type="number" name="system.soldiers" value="{{sys.soldiers}}" min="0" step="1" class="big">{{else}}<b class="big">{{sys.soldiers}}</b>{{/if}}
@@ -26,16 +26,14 @@
       <b class="ar-label">{{training.label}}</b>
       <span class="sv-pips">{{#each training.pips}}<i class="{{#if on}}on{{/if}}" data-tooltip="{{label}}"></i>{{/each}}</span>
       <small>{{training.progress}}</small>
-      {{#if editable}}<div class="sv-mini-acts"><a data-action="drill" class="{{#if sys.drilling}}on{{/if}}">{{#if sys.drilling}}Тренируются ✓{{else}}Тренировать{{/if}}</a></div>{{/if}}
+      {{#if editable}}<div class="sv-mini-acts"><a data-action="drill" class="{{#if sys.drilling}}on{{/if}}">{{#if sys.drilling}}На плацу ✓{{else}}На плац{{/if}}</a></div>{{/if}}
       {{#if sys.drilling}}{{#unless training.canDrill}}<small class="warn">нет плаца или казармы</small>{{/unless}}{{/if}}
     </div>
-    <div class="sv-plaque">
-      <span class="cap">Снаряжение</span>
-      <b class="ar-label">{{equipment.label}}</b>
-      {{#if equipment.next}}
-      <small>до «{{equipment.next}}»: {{equipment.cost}}</small>
-      {{#if editable}}<div class="sv-mini-acts"><a data-action="equip" class="{{#unless equipment.ok}}off{{/unless}}" data-tooltip="Со склада родного поселения">Снарядить</a></div>{{/if}}
-      {{else}}<small>лучше не бывает</small>{{/if}}
+    <div class="sv-plaque" data-tooltip="Опыт: неделя на плацу +1, раунд битвы +2, победа +5. Звание открывает ступени обучения">
+      <span class="cap">Опыт</span>
+      <b class="ar-label">{{rank.label}}</b>
+      <span class="sv-bar"><i style="width: {{rank.pct}}%"></i></span>
+      <small>{{#if gm}}<input type="number" name="system.xp" value="{{sys.xp}}" min="0" step="1" class="ar-small" aria-label="Опыт">{{else}}{{rank.xp}}{{/if}} · {{rank.next}}</small>
     </div>
     <div class="sv-plaque sv-approval tone-{{morale.tone}}">
       <span class="sv-ring" style="--arc: {{morale.arc}}deg"><b>{{morale.value}}</b></span>
@@ -52,7 +50,33 @@
     </div>
   </section>
 
+  <nav class="sv-tabs">
+    {{#each tabs}}<a class="{{#if active}}active{{/if}}" data-action="unitTab" data-tab="{{id}}">{{label}}</a>{{/each}}
+  </nav>
+
   <div class="sv-scroll">
+  {{#if (eq tab "unit")}}
+    <section class="sv-block">
+      <h3><span class="sv-tag">Снаряжение</span><small>{{kind.label}} · со склада родного поселения, на каждого бойца</small></h3>
+      <div class="ar-gear">
+        {{#each gear}}
+        <div class="ar-track">
+          <header><b>{{label}}</b><span>{{current}}</span></header>
+          <ol class="ar-tiers">
+            {{#each tiers}}<li class="{{#if on}}on{{/if}}{{#if current}} current{{/if}}"><b>{{label}}</b>
+              <span>{{#if power}}сила +{{power}}{{/if}}{{#if losses}}{{#if power}} · {{/if}}потери −{{losses}}%{{/if}}{{#unless power}}{{#unless losses}}—{{/unless}}{{/unless}}</span><small>{{gear}}</small></li>{{/each}}
+          </ol>
+          {{#if next}}
+          <div class="ar-track-foot">
+            <span class="ar-track-cost">до «{{next}}»: {{#each cost}}<span class="bl-chip xs {{#if short}}short{{/if}}" data-tooltip="{{name}}{{#if short}} — на складе не хватает{{/if}}"><img src="{{img}}" alt=""><b>{{qty}}</b></span>{{/each}}</span>
+            {{#if @root.editable}}<a class="sv-btn {{#unless ok}}off{{/unless}}" data-action="equip" data-track="{{track}}">Снарядить</a>{{/if}}
+          </div>
+          {{else}}<small class="ar-track-max">лучше не бывает</small>{{/if}}
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
     <div class="sv-cols">
       <section class="sv-block">
         <h3><span class="sv-tag">Командир</span><small>перетащите персонажа</small></h3>
@@ -74,20 +98,100 @@
         </ul>
       </section>
     </div>
+    {{#if editable}}<div class="ar-foot"><a class="sv-btn" data-action="disband">Распустить отряд</a></div>{{/if}}
+  {{/if}}
 
-    <section class="sv-block">
-      <h3><span class="sv-tag">Снаряжение по уровням</span><small>{{kind.label}}</small></h3>
-      <ul class="ar-tiers">
-        {{#each equipment.tiers}}<li class="{{#if on}}on{{/if}}{{#if current}} current{{/if}}"><b>{{label}}</b><span>сила +{{power}}</span><small>{{gear}}</small></li>{{/each}}
-      </ul>
-    </section>
+  {{#if (eq tab "training")}}
+    <div class="bl-tree-bar">
+      <span class="sv-hint">Ступень — цена со склада родного поселения сразу, недели — на плацу (отряд должен тренироваться). Звание, оружие и броня открывают новые ступени.</span>
+      {{#if gm}}<a class="sv-btn {{#if treeEdit}}on{{/if}}" data-action="treeEdit">{{#if treeEdit}}Готово{{else}}Править дерево{{/if}}</a>{{/if}}
+    </div>
+    <div class="bl-branches">
+      {{#each tree as |br|}}
+      <section class="bl-branch">
+        <header>
+          <span class="bl-branch-icon"><i class="fa-solid {{br.icon}}"></i></span>
+          {{#if @root.treeEdit}}
+          <input type="text" name="{{br.path}}.name" value="{{br.name}}" aria-label="Название ветки">
+          <input type="text" name="{{br.path}}.icon" value="{{br.icon}}" class="bl-icon-in" data-tooltip="Значок Font Awesome" aria-label="Значок">
+          <a class="bl-x" data-action="treeDel" data-path="system.branches" data-index="{{br.index}}" data-tooltip="Убрать ветку"><i class="fa-solid fa-trash"></i></a>
+          {{else}}<b>{{br.name}}</b><small>{{br.done}} из {{br.total}}</small>{{/if}}
+        </header>
+        <ol class="bl-nodes">
+          {{#each br.nodes as |nd|}}
+          <li class="bl-node {{nd.state}}" data-node="{{nd.id}}">
+            {{#if @root.treeEdit}}
+            <div class="bl-node-edit">
+              <input type="text" name="{{nd.path}}.name" value="{{nd.name}}" class="bl-node-name-in" aria-label="Название ступени">
+              <div class="bl-node-nums ar-node-req">
+                <label data-tooltip="Нужное звание"><select name="{{nd.path}}.rank">{{selectOptions @root.rankOptions selected=nd.rank}}</select></label>
+                <label data-tooltip="Нужное оружие"><select name="{{nd.path}}.weapons">{{selectOptions @root.weaponOptions selected=nd.weapons}}</select></label>
+                <label data-tooltip="Нужная броня"><select name="{{nd.path}}.armor">{{selectOptions @root.armorOptions selected=nd.armor}}</select></label>
+              </div>
+              <div class="bl-node-nums">
+                <label data-tooltip="Недель на плацу; 0 — сразу">нед. <input type="number" name="{{nd.path}}.weeks" value="{{nd.weeks}}" min="0" step="1"></label>
+                <a class="bl-x" data-action="treeDel" data-path="system.branches.{{br.index}}.nodes" data-index="{{nd.index}}" data-tooltip="Убрать ступень"><i class="fa-solid fa-trash"></i></a>
+              </div>
+              <textarea name="{{nd.path}}.description" rows="2" placeholder="Что это">{{nd.description}}</textarea>
+              <div class="bl-node-list">
+                <span class="cap">Цена</span>
+                {{#each nd.cost}}<span class="bl-cost-row">
+                  <input type="text" name="{{path}}.resource" value="{{resource}}" list="ar-res-{{@root.actor.id}}" placeholder="Ресурс">
+                  <input type="number" name="{{path}}.qty" value="{{qty}}" min="0" step="any">
+                  <a data-action="treeDel" data-path="{{nd.path}}.cost" data-index="{{index}}" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a></span>{{/each}}
+                <a class="bl-plus" data-action="treeAdd" data-kind="cost" data-path="{{nd.path}}.cost"><i class="fa-solid fa-plus"></i> ресурс</a>
+              </div>
+              <div class="bl-node-list">
+                <span class="cap">Эффекты</span>
+                {{#each nd.effects}}
+                <div class="bl-eff-row">
+                  <select name="{{path}}.type">{{selectOptions @root.effectTypes selected=type}}</select>
+                  {{#if vs}}<select name="{{path}}.kind">{{selectOptions @root.kindOptions selected=kind}}</select>{{/if}}
+                  {{#if ter}}<select name="{{path}}.terrain">{{selectOptions @root.terrainOptions selected=terrain}}</select>{{/if}}
+                  <label class="bl-eff-val"><input type="number" name="{{path}}.value" value="{{value}}" step="any">{{#if pct}}%{{/if}}</label>
+                  <a data-action="treeDel" data-path="{{nd.path}}.effects" data-index="{{index}}" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>
+                </div>
+                {{/each}}
+                <a class="bl-plus" data-action="treeAdd" data-kind="effect" data-path="{{nd.path}}.effects"><i class="fa-solid fa-plus"></i> эффект</a>
+              </div>
+            </div>
+            {{else}}
+            <div class="bl-node-head">
+              <b>{{nd.name}}</b>
+              {{#if @root.gm}}<a class="bl-grant" data-action="grant" data-tooltip="{{#if (eq nd.state "bought")}}Забрать ступень{{else}}Дать даром{{/if}}"><i class="fa-solid {{#if (eq nd.state "bought")}}fa-rotate-left{{else}}fa-gift{{/if}}"></i></a>{{/if}}
+            </div>
+            {{#if nd.needs}}<small class="ar-needs">{{nd.needs}}</small>{{/if}}
+            {{#if nd.description}}<p class="bl-node-desc">{{nd.description}}</p>{{/if}}
+            <ul class="bl-effects">{{#each nd.effects}}<li>{{label}}</li>{{else}}<li class="none">без эффекта</li>{{/each}}</ul>
+            <div class="bl-node-foot">
+              {{#if (eq nd.state "bought")}}<span class="bl-done"><i class="fa-solid fa-check"></i> освоена</span>
+              {{else if (eq nd.state "working")}}
+                <span class="bl-work"><span class="sv-bar"><i style="width: {{nd.progress.pct}}%"></i></span><small>{{nd.progress.done}} из {{nd.progress.weeks}} нед. на плацу{{#if nd.progress.stalled}} — <span class="warn">отряд не тренируется</span>{{/if}}</small></span>
+                {{#if @root.editable}}<a class="bl-cancel" data-action="stopTraining" data-tooltip="Бросить (потраченное не вернётся)"><i class="fa-solid fa-xmark"></i></a>{{/if}}
+              {{else}}
+                <span class="bl-cost">{{#each nd.cost}}<span class="bl-chip xs {{#if short}}short{{/if}}" data-tooltip="{{resource}}"><img src="{{img}}" alt=""><b>{{qty}}</b></span>{{else}}<span class="bl-none">даром</span>{{/each}}</span>
+                <small class="bl-weeks"><i class="fa-solid fa-person-running"></i> {{#if nd.weeks}}{{nd.weeks}} нед.{{else}}сразу{{/if}}</small>
+                {{#if (eq nd.state "open")}}{{#if @root.editable}}<a class="sv-btn bl-take" data-action="train">Учить</a>{{/if}}
+                {{else}}<small class="bl-why"><i class="fa-solid fa-lock"></i> {{nd.why}}</small>{{/if}}
+              {{/if}}
+            </div>
+            {{/if}}
+          </li>
+          {{/each}}
+          {{#if @root.treeEdit}}<li class="bl-node add"><a data-action="treeAdd" data-kind="node" data-path="system.branches.{{br.index}}.nodes"><i class="fa-solid fa-plus"></i> ступень</a></li>{{/if}}
+        </ol>
+      </section>
+      {{/each}}
+      {{#if treeEdit}}<section class="bl-branch add"><a data-action="treeAdd" data-kind="branch"><i class="fa-solid fa-plus"></i><span>Ветка</span></a></section>{{/if}}
+    </div>
+    {{#if treeEdit}}<datalist id="ar-res-{{actor.id}}">{{#each resourceNames}}<option value="{{this}}"></option>{{/each}}</datalist>{{/if}}
+  {{/if}}
 
+  {{#if (eq tab "notes")}}
     <section class="sv-block sv-notes">
-      <h3><span class="sv-tag">Летопись отряда</span></h3>
       {{#if editable}}{{formInput systemFields.description value=sys.description enriched=enrichedDescription toggled=true}}
       {{else}}{{{enrichedDescription}}}{{/if}}
     </section>
-
-    {{#if editable}}<div class="ar-foot"><a class="sv-btn" data-action="disband">Распустить отряд</a></div>{{/if}}
+  {{/if}}
   </div>
 </div>

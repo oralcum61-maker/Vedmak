@@ -3,12 +3,15 @@
 // карточкой в чат. Кулачный бой — обычный бой системы, в окне только подсказка. Состояние игры живёт в окне.
 // Ставки: у каждого участника своя (в «Драконьем кладе» — 10 крон, они и есть куча); с первым ходом кроны
 // уходят в банк, исход игры отдаёт банк победителю, ничья или «Заново» до конца — возвращает ставки.
+// Общий стол (PLAN 4.199): окно — у того, кто открыл; владельцы участников видят его у себя и жмут кнопки сами
+// («Показать всем» — смотрят и остальные; apps/shared-view.mjs).
 
 import { SKILLS } from "../config/skills.mjs";
 import { STATS } from "../config/stats.mjs";
 import { performCheck, rollD10 } from "../dice/check.mjs";
 import { resolveActor } from "../combat/common.mjs";
 import { postCard, esc } from "../util.mjs";
+import { shareView, closeView, viewerContext, wireViewer, viewerClosed } from "./shared-view.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -107,7 +110,8 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       addSpectators: TavernApp.#onAddSpectators,
       removeSpectator: TavernApp.#onRemoveSpectator,
       brawlStart: TavernApp.#onBrawlStart,
-      brawlNotes: TavernApp.#onBrawlNotes
+      brawlNotes: TavernApp.#onBrawlNotes,
+      showAll: TavernApp.#onShowAll
     }
   };
 
@@ -129,6 +133,12 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
     this.#busy = true;
     try { await fn(); } finally { this.#busy = false; }
   }
+
+  /** Окно участника или зрителя (общий стол): снимок окна хозяина. */
+  get viewer() { return !!this.options.viewer; }
+  /** Сессия общего стола: новая игра — новая. */
+  session = foundry.utils.randomID();
+  showAll = false;
 
   game = "armwrestle";
   players = [];
@@ -174,6 +184,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   async #resetGame() {
+    this.session = foundry.utils.randomID();
     // Игра брошена до конца — ставки возвращаются
     if (this.state.pot && !this.state.settled) await this.#refund("Игра прервана — ставки вернулись.");
     this.state = {};
@@ -182,6 +193,7 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   async _prepareContext() {
+    if (this.viewer) return viewerContext(this);
     const cfg = this.cfg;
     const st = this.state;
     const key = this.game;
@@ -303,6 +315,10 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   _onRender(context, options) {
     super._onRender(context, options);
+    if (this.viewer) return wireViewer(this);
+    context.showAll = this.showAll;
+    shareView("tavern", this, { context, showAll: this.showAll,
+      actors: [...this.players, ...this.spectators].map(p => resolveActor(p.uuid)).filter(Boolean) });
     for (const el of this.element.querySelectorAll("input[data-mod]")) {
       el.addEventListener("change", () => {
         const p = this.players.find(x => x.uuid === el.dataset.mod);
@@ -332,6 +348,14 @@ export class TavernApp extends HandlebarsApplicationMixin(ApplicationV2) {
       });
     }
   }
+
+  _onClose(options) {
+    super._onClose?.(options);
+    if (this.viewer) viewerClosed(this, options);
+    else closeView("tavern", this);
+  }
+
+  static #onShowAll() { this.showAll = !this.showAll; this.render(); }
 
   /* ------------------------------ Участники ------------------------------ */
 

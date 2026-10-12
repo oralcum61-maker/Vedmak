@@ -1,9 +1,11 @@
 // Действия ополчений и армий (PLAN 4.187): набор (из Ополчения, из семей, наёмники), роспуск, снаряжение со склада
-// поселения, командир, неделя отрядов поселения (еда, плата, тренировка, боевой дух). Битва — apps/battle-app.mjs.
+// поселения (оружие и броня — отдельно, PLAN 4.198), командир, обучение (ступени веток неделями на плацу), неделя отрядов
+// поселения (еда, плата, тренировка, опыт, боевой дух). Битва — apps/battle-app.mjs.
 
-import { UNIT_KINDS, TRAINING, ORIGINS, FAMILY_SOLDIERS, MERCENARY, MAX_EQUIPMENT, EQUIPMENT } from "../config/army.mjs";
+import { UNIT_KINDS, TRAINING, ORIGINS, FAMILY_SOLDIERS, MERCENARY, MAX_GEAR, GEAR } from "../config/army.mjs";
 import { FOOD, WEALTH } from "../config/settlement.mjs";
-import { unitState, unitWeek, equipCost, unitFood, unitPay } from "./rules.mjs";
+import { RANKS, unitTree, kindBranch } from "../config/unit-upgrades.mjs";
+import { unitState, unitWeek, equipCost, unitFood, unitPay, unitNodes } from "./rules.mjs";
 
 const r3 = n => Math.round(n * 1000) / 1000;
 const r1 = n => Math.round(n * 10) / 10;
@@ -52,7 +54,8 @@ export async function recruit(settlement, { origin, count, kind = "infantry", na
 
   if (unit) {
     if (unit.system.origin !== origin) return ui.notifications.warn(`«${unit.name}» набран иначе (${ORIGINS[unit.system.origin].label.toLowerCase()}) — наберите новый отряд.`);
-    const gear = origin === "mercenary" ? [] : equipCost(unit.system.kind, 0, unit.system.equipment, soldiers);
+    const gear = origin === "mercenary" ? [] : [...equipCost(unit.system.kind, "weapons", 0, unit.system.weapons, soldiers),
+      ...equipCost(unit.system.kind, "armor", 0, unit.system.armor, soldiers)];
     const miss = missing(settlement, gear);
     if (miss) return ui.notifications.warn(`Новичков нечем снарядить как отряд: не хватает ${miss}.`);
     await take(settlement, gear);
@@ -69,8 +72,9 @@ export async function recruit(settlement, { origin, count, kind = "infantry", na
   return Actor.create({
     name: name || `${UNIT_KINDS[kind].label}: ${settlement.name}`, type: "unit", img: UNIT_KINDS[kind].img, folder: folder?.id,
     ownership: foundry.utils.deepClone(settlement.ownership),
-    system: { kind, origin, soldiers, training: merc ? MERCENARY.training : 0, equipment: merc ? MERCENARY.equipment : 0,
-      morale: merc ? MERCENARY.morale : TRAINING[0].morale, settlement: settlement.uuid },
+    system: { kind, origin, soldiers, training: merc ? MERCENARY.training : 0, weapons: merc ? MERCENARY.weapons : 0,
+      armor: merc ? MERCENARY.armor : 0, morale: merc ? MERCENARY.morale : TRAINING[0].morale, settlement: settlement.uuid,
+      branches: unitTree(kind) },
     prototypeToken: { name: name || UNIT_KINDS[kind].label, actorLink: true, disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY }
   });
 }
@@ -91,19 +95,62 @@ export async function disband(unit) {
   await unit.delete();
 }
 
-/** Снарядить отряд до уровня tier: на каждого бойца — по роду войск, со склада родного поселения. */
-export async function equip(unit, tier) {
+/**
+ * Снарядить отряд по дорожке track («weapons» — оружие, «armor» — броня) до ступени tier: на каждого бойца — по роду
+ * войск, со склада родного поселения.
+ */
+export async function equip(unit, track, tier) {
   const sys = unit.system;
-  tier = Math.max(0, Math.min(MAX_EQUIPMENT, tier));
-  if (tier <= sys.equipment) return;
+  if (!GEAR[track]) return;
+  tier = Math.max(0, Math.min(MAX_GEAR, tier));
+  if (tier <= sys[track]) return;
   const home = sys.settlementActor;
   if (!home) return ui.notifications.warn("У отряда нет родного поселения — снаряжение берётся с его склада.");
-  const cost = equipCost(sys.kind, sys.equipment, tier, sys.soldiers);
+  const cost = equipCost(sys.kind, track, sys[track], tier, sys.soldiers);
   const miss = missing(home, cost);
   if (miss) return ui.notifications.warn(`На складе «${home.name}» не хватает: ${miss}.`);
   await take(home, cost);
-  await unit.update({ "system.equipment": tier });
-  ui.notifications.info(`«${unit.name}»: снаряжение — ${EQUIPMENT[tier].label.toLowerCase()}.`);
+  await unit.update({ [`system.${track}`]: tier });
+  ui.notifications.info(`«${unit.name}»: ${GEAR[track].label.toLowerCase()} — ${GEAR[track].tiers[tier].label.toLowerCase()}.`);
+}
+
+/**
+ * Можно ли начать ступень обучения: нет другой в работе, звание, оружие и броня достаточны, предыдущая ступень ветки
+ * освоена; хватает ли склада родного поселения.
+ * @returns {{ok: boolean, why?: string, node?: object}}
+ */
+export function canTrain(unit, nodeId) {
+  const u = unitState(unit);
+  const node = unitNodes(u).find(x => x.id === nodeId);
+  if (!node) return { ok: false, why: "Нет такой ступени." };
+  if (u.upgrades.includes(node.id)) return { ok: false, why: "Уже освоена." };
+  if (u.rank < node.rank) return { ok: false, why: `Нужно звание «${RANKS[node.rank].label}».` };
+  if (u.weapons < node.weapons) return { ok: false, why: `Нужно оружие «${GEAR.weapons.tiers[node.weapons].label}».` };
+  if (u.armor < node.armor) return { ok: false, why: `Нужна броня «${GEAR.armor.tiers[node.armor].label}».` };
+  if (node.requires && !u.upgrades.includes(node.requires)) {
+    const prev = unitNodes(u).find(x => x.id === node.requires);
+    return { ok: false, why: `Сначала — «${prev?.name ?? "предыдущая ступень"}».` };
+  }
+  if (u.research.node) return { ok: false, why: "Другая ступень уже осваивается." };
+  const home = unit.system.settlementActor;
+  if (!home) return { ok: false, why: "Нет родного поселения — учиться негде." };
+  const miss = missing(home, node.cost);
+  return miss ? { ok: false, why: `На складе не хватает: ${miss}.` } : { ok: true, node };
+}
+
+/** Начать ступень обучения: цена со склада поселения сразу; недели — на плацу (отряд должен тренироваться). */
+export async function train(unit, nodeId) {
+  const check = canTrain(unit, nodeId);
+  if (!check.ok) return ui.notifications.warn(check.why);
+  await take(unit.system.settlementActor, check.node.cost);
+  if (!check.node.weeks) await unit.update({ "system.upgrades": [...unit.system.upgrades, nodeId] });
+  else await unit.update({ "system.research": { node: nodeId, progress: 0 }, "system.drilling": true });
+  return check.node;
+}
+
+/** Бросить ступень обучения (потраченное не возвращается). */
+export async function stopTraining(unit) {
+  if (unit.system.research.node) await unit.update({ "system.research": { node: "", progress: 0 } });
 }
 
 /**
@@ -126,7 +173,7 @@ export async function unitsWeek(settlement, { stock, wealth, drill, rand = Math.
     if (pay && paid) wealth = r3(wealth - pay);
     const w = unitWeek(u, { fed, paid, drill, rand });
     updates.push({ _id: actor.id, "system.training": w.training, "system.progress": w.progress, "system.morale": w.morale,
-      "system.soldiers": w.soldiers, "system.routed": false });
+      "system.soldiers": w.soldiers, "system.routed": false, "system.xp": w.xp, "system.research": w.research, "system.upgrades": w.upgrades });
     lines.push({ name: actor.name, notes: w.notes, food: unitFood(u), pay });
   }
   await Actor.updateDocuments(updates);
@@ -134,3 +181,29 @@ export async function unitsWeek(settlement, { stock, wealth, drill, rand = Math.
 }
 
 export { WEALTH };
+
+/**
+ * Дерево обучения (PLAN 4.198): новый отряд получает его сам; смена рода войск меняет ветку рода (освоенное в ней
+ * забывается); отрядам, набранным до обучения, ведущий проставляет дерево при загрузке мира.
+ */
+export function registerUnitHooks() {
+  Hooks.on("preCreateActor", (actor, data) => {
+    if (actor.type === "unit" && !data.system?.branches?.length) actor.updateSource({ "system.branches": unitTree(data.system?.kind ?? "infantry") });
+  });
+  Hooks.on("preUpdateActor", (actor, changes) => {
+    const kind = foundry.utils.getProperty(changes, "system.kind");
+    if (actor.type !== "unit" || !kind || kind === actor.system.kind) return;
+    const old = new Set((actor.system.branches.find(b => b.id === "kind")?.nodes ?? []).map(n => n.id));
+    const branches = foundry.utils.deepClone(actor._source.system.branches).filter(b => b.id !== "kind");
+    branches.push(kindBranch(kind));
+    foundry.utils.setProperty(changes, "system.branches", branches);
+    foundry.utils.setProperty(changes, "system.upgrades", actor.system.upgrades.filter(id => !old.has(id)));
+    if (old.has(actor.system.research.node)) foundry.utils.setProperty(changes, "system.research", { node: "", progress: 0 });
+  });
+  Hooks.once("ready", async () => {
+    if (!game.user.isGM || game.users.activeGM !== game.user) return;
+    const updates = game.actors.filter(a => a.type === "unit" && !a.system.branches.length)
+      .map(a => ({ _id: a.id, "system.branches": unitTree(a.system.kind) }));
+    if (updates.length) await Actor.implementation.updateDocuments(updates);
+  });
+}

@@ -5,6 +5,8 @@ import { renderTemplate } from "../util.mjs";
 
 const SOCKET = "system.vedmak";
 const HANDLERS = {};
+/** Рассылки всем клиентам (PLAN 4.199: общий просмотр битвы и игр в таверне). */
+const BROADCASTS = {};
 
 /** Актор по UUID токена или актора. */
 export function resolveActor(uuid) {
@@ -95,6 +97,15 @@ export function registerGMHandler(action, fn) {
   HANDLERS[action] = fn;
 }
 
+/** Разослать всем клиентам (обработчик — registerBroadcast; отправителю не приходит). */
+export function broadcast(action, data) {
+  game.socket.emit(SOCKET, { action, data, all: true });
+}
+
+export function registerBroadcast(action, fn) {
+  BROADCASTS[action] = fn;
+}
+
 /**
  * Может ли пользователь действовать за кого-то из акторов: ведущий — за всех, игрок — за своих.
  * Для проверок на стороне ведущего: кто прислал запрос по сокету и кто создал карточку в чате.
@@ -108,7 +119,12 @@ export function userOwnsAny(userId, ...actors) {
 export function initSocket() {
   // Отправителя подставляет сервер Foundry вторым аргументом. Своё поле userId в теле запроса клиент может
   // подделать из консоли — и выдать себя за ведущего, обойдя проверки владения у обработчиков
-  game.socket.on(SOCKET, async ({ action, data }, userId) => {
+  game.socket.on(SOCKET, async ({ action, data, all }, userId) => {
+    // Рассылка: каждому клиенту (отправителю Foundry её не возвращает)
+    if (all) {
+      try { await BROADCASTS[action]?.(data, userId); } catch (err) { console.error(`vedmak | ошибка рассылки ${action}`, err); }
+      return;
+    }
     if (!game.users.activeGM?.isSelf) return;
     try {
       await HANDLERS[action]?.(data, userId);

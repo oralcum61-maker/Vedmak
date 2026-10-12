@@ -6160,3 +6160,8 @@ body.system-vedmak .combat-tracker {
   .vedmak.storage .st-meta { grid-column: 2; grid-row: 2; }
   .vedmak.storage .st-ctl { grid-column: 3; grid-row: 1 / span 2; }
 }
+
+/* ─── Общий стол (PLAN 4.199): плашка у участников и зрителей; зрителю кнопки только видны ─── */
+.vd-view-banner { display: flex; align-items: center; gap: 8px; padding: 6px 14px; font-size: 12px; color: #e0c48f;
+  background: linear-gradient(90deg, rgba(224, 196, 143, .14), transparent); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .5); }
+.vd-viewer-only [data-action]:not([data-action="open"]):not([data-action="openActor"]) { pointer-events: none; opacity: .55; }

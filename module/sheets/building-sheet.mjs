@@ -10,6 +10,7 @@ import { BUILDING_GROUPS, PERIODS, RESOURCE_ICONS, fullRow, resourceIcon } from 
 import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
 import { BUILDING_EFFECTS } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
+import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -74,24 +75,6 @@ export function effectLabel(e) {
     case "trade": return "торговля";
     default: return `${BUILDING_EFFECTS[e.type]?.label ?? e.type} ${v}`;
   }
-}
-
-/** Поверх сохранённого массива объектов — правка формы с номерами (name="…levels.1.cost.0.qty"), вглубь. */
-function patchArray(src = [], patch = {}) {
-  const out = foundry.utils.deepClone(src);
-  for (const [k, val] of Object.entries(patch)) {
-    const i = Number(k);
-    if (!Number.isInteger(i)) continue;
-    out[i] = patchValue(out[i], val);
-  }
-  return out;
-}
-function patchValue(cur, val) {
-  if (!val || typeof val !== "object" || Array.isArray(val)) return val;
-  if (Array.isArray(cur)) return patchArray(cur, val);
-  const out = { ...(cur ?? {}) };
-  for (const [k, v] of Object.entries(val)) out[k] = Array.isArray(out[k]) ? patchArray(out[k], v) : patchValue(out[k], v);
-  return out;
 }
 
 /** Чертёж ступени для правки: имена полей формы готовые, чтобы в шаблоне не было путей через ../. */
@@ -232,12 +215,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    * строки списков — поверх сохранённых строк по номеру.
    */
   _processFormData(event, form, formData) {
-    const data = super._processFormData(event, form, formData);
-    for (const key of ["levels", "branches"]) {
-      const v = data.system?.[key];
-      if (v && typeof v === "object" && !Array.isArray(v)) data.system[key] = patchArray(this.actor._source.system[key] ?? [], v);
-    }
-    return data;
+    return patchFormArrays(super._processFormData(event, form, formData), this.actor._source.system, ["levels", "branches"]);
   }
 
   /* ------------------------------ Обустройство ------------------------------ */
@@ -264,31 +242,19 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /** Ведущий: добавить ветку, ступень, эффект или ресурс цены (data-kind, data-path — путь к массиву: «system.branches.0.nodes»). */
   static async #onTreeAdd(event, target) {
-    const { kind, path } = target.dataset;
     const sys = foundry.utils.deepClone(this.actor._source.system);
-    const id = () => foundry.utils.randomID(8);
-    if (kind === "branch") sys.branches.push({ id: id(), name: "Новая ветка", icon: "fa-star", nodes: [] });
-    else {
-      const list = foundry.utils.getProperty(sys, path.replace(/^system\./, ""));
-      if (!Array.isArray(list)) return;
-      if (kind === "node") list.push({ id: id(), name: "Новая ступень", description: "", level: 1, weeks: 1,
-        requires: list.at(-1)?.id ?? "", cost: [], effects: [] });
-      else if (kind === "effect") list.push({ type: "produce", resource: "", value: 10, formula: "1", per: "building", period: "week" });
-      else if (kind === "cost") list.push({ resource: "", qty: 1 });
-    }
+    treeAdd(sys, target.dataset.kind, target.dataset.path, {
+      node: () => ({ name: "Новая ступень", description: "", level: 1, weeks: 1, cost: [], effects: [] }),
+      effect: () => ({ type: "produce", resource: "", value: 10, formula: "1", per: "building", period: "week" })
+    });
     await this.actor.update({ "system.branches": sys.branches });
   }
 
-  /** Ведущий: убрать элемент массива (data-path — путь к массиву, data-index); у удалённой ступени снимается связь. */
+  /** Ведущий: убрать ветку, ступень, эффект или ресурс цены (data-path — путь к массиву, data-index). */
   static async #onTreeDel(event, target) {
-    const { path, index } = target.dataset;
     const sys = foundry.utils.deepClone(this.actor._source.system);
-    const list = foundry.utils.getProperty(sys, path.replace(/^system\./, ""));
-    if (!Array.isArray(list)) return;
-    const [gone] = list.splice(Number(index), 1);
-    const ids = new Set(gone?.id ? [gone.id, ...(gone.nodes ?? []).map(x => x.id)] : []);
-    for (const br of sys.branches) for (const nd of br.nodes) if (ids.has(nd.requires)) nd.requires = "";
-    await this.actor.update({ "system.branches": sys.branches, "system.upgrades": sys.upgrades.filter(x => !ids.has(x)) });
+    treeDel(sys, target.dataset.path, target.dataset.index);
+    await this.actor.update({ "system.branches": sys.branches, "system.upgrades": sys.upgrades, "system.research": sys.research });
   }
 
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }

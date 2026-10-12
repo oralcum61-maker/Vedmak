@@ -1,10 +1,12 @@
 {{!-- Окно битвы (PLAN 4.187) --}}
 <div class="sv bt">
+  {{#if viewer}}<div class="vd-view-banner"><i class="fa-solid fa-eye"></i> {{#if viewCanAct}}Общий стол: окно ведёт {{viewHost}}, ваши нажатия идут к нему{{else}}Смотрите вместе со всеми: битву ведёт {{viewHost}}{{/if}}</div>{{/if}}
   <div class="bt-bar">
     <label>Местность <select name="terrain">{{#each terrains}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
     <span class="bt-round">Раунд {{round}}</span>
     <button type="button" class="sv-next" data-action="round" {{#unless ready}}disabled{{/unless}}>Раунд</button>
     <a class="sv-btn" data-action="reset" data-tooltip="Раунды с первого, бегство снято">Новая битва</a>
+    {{#unless viewer}}<a class="sv-btn {{#if showAll}}on{{/if}}" data-action="showAll" data-tooltip="Битву и так видят владельцы отрядов; так — все игроки в игре">{{#if showAll}}Видят все ✓{{else}}Показать всем{{/if}}</a>{{/unless}}
   </div>
   <div class="bt-sides">
     {{#each sides}}

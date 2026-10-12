@@ -54,6 +54,7 @@
 </div>
 {{/inline}}
 <section class="tv2">
+  {{#if viewer}}<div class="vd-view-banner"><i class="fa-solid fa-eye"></i> {{#if viewCanAct}}Общий стол: окно ведёт {{viewHost}}, ваши нажатия идут к нему{{else}}Смотрите вместе со всеми: игру ведёт {{viewHost}}{{/if}}</div>{{/if}}
   <nav class="tv2-rail" aria-label="Игры">
     {{#each games}}
     <a class="tv2-game{{#if active}} on{{/if}}" data-action="pickGame" data-game="{{key}}" data-tooltip="{{label}} · {{size}}"><i class="{{icon}}" aria-hidden="true"></i><span>{{short}}</span></a>
@@ -66,6 +67,7 @@
       <div class="tv2-add">
         <button type="button" class="tv2-addbtn" data-action="addSelected" data-tooltip="Посадить за стол выделенные токены"><i class="fa-solid fa-user-plus"></i> Выделенные</button>
         <button type="button" class="tv2-addbtn" data-action="addPlayers" data-tooltip="Посадить за стол персонажей игроков"><i class="fa-solid fa-users"></i> Игроки</button>
+        {{#unless viewer}}<button type="button" class="tv2-addbtn {{#if showAll}}on{{/if}}" data-action="showAll" data-tooltip="Стол и так видят владельцы участников — и жмут кнопки сами; так — смотрят все игроки в игре"><i class="fa-solid fa-eye"></i> {{#if showAll}}Видят все{{else}}Всем{{/if}}</button>{{/unless}}
       </div>
     </header>
 

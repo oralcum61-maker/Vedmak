@@ -57,3 +57,26 @@
 .bt-log em { font-style: normal; color: #e0c48f; }
 .vedmak-card.settlement-week .sw-army { margin: 0 0 6px; padding-left: 18px; font-size: 12px; }
 @media (max-width: 760px) { .bt-sides, .ar-tiers { grid-template-columns: 1fr; } }
+
+/* ─── Лист отряда (PLAN 4.198): пять пластин, оружие и броня — две шкалы, требования ступеней обучения ─── */
+.sv.ar .ar-plaques { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.sv.ar .ar-plaques .sv-bar { margin: 3px 0; }
+.ar-gear { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ar-track { display: grid; gap: 8px; align-content: start; padding: 10px 12px; border-radius: 6px; background: rgba(10, 10, 12, .4); box-shadow: var(--vd-sink-sm); }
+.ar-track > header { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.ar-track > header b { font: 400 18px/1 var(--vd-font-head); color: var(--sv-silver); }
+.ar-track > header span { font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: #e0c48f; }
+.ar-track .ar-tiers { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.ar-track .ar-tiers li { padding: 6px 7px; }
+.ar-track .ar-tiers b { font-size: 13.5px; }
+.ar-track .ar-tiers small { font-size: 10px; line-height: 1.25; }
+.ar-track-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.ar-track-cost { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 11px; color: var(--sv-ash); }
+.ar-track-foot .sv-btn { flex: none; padding: 7px 12px; }
+.ar-track-foot .sv-btn.off { opacity: .4; pointer-events: none; }
+.ar-track-max { font-size: 11px; color: var(--sv-dim); }
+.ar-needs { font: 600 9.5px/1.2 var(--vd-font-body); letter-spacing: .1em; text-transform: uppercase; color: #a8987d; }
+.ar-node-req { flex-wrap: wrap; gap: 4px; }
+.sv .ar-node-req label { flex: 1 1 30%; min-width: 0; }
+.sv .ar-node-req select { width: 100%; height: 24px; }
+@media (max-width: 760px) { .sv.ar .ar-plaques { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ar-gear { grid-template-columns: 1fr; } }

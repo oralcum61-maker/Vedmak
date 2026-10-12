@@ -10,7 +10,8 @@ import { buildingState, levelDef, activeLevel, upgradeNodes, averageOf, WEALTH }
 import * as S from "../settlement/settlement.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { compareRu } from "../util.mjs";
-import { UNIT_KINDS, TRAINING, EQUIPMENT, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
+import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
+import { RANKS } from "../config/unit-upgrades.mjs";
 import * as ARMY from "../army/army.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -166,7 +167,8 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   #army(sum) {
     const units = ARMY.settlementUnits(this.actor).map(a => ({
       id: a.id, name: a.name, img: a.img, kind: UNIT_KINDS[a.system.kind]?.label, origin: ORIGINS[a.system.origin]?.label,
-      soldiers: a.system.soldiers, training: TRAINING[a.system.training].label, equipment: EQUIPMENT[a.system.equipment].label,
+      soldiers: a.system.soldiers, training: TRAINING[a.system.training].label, rank: RANKS[a.system.rank ?? 0].label,
+      equipment: `${WEAPONS[a.system.weapons].label.toLowerCase()}, ${ARMOR[a.system.armor].label.toLowerCase()}`,
       morale: a.system.morale, power: a.system.power.total, drilling: a.system.drilling, food: a.system.food, pay: a.system.pay
     }));
     return {

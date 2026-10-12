@@ -1,9 +1,11 @@
 // Окно битвы (PLAN 4.187): две стороны из отрядов, местность, кто обороняется; «Раунд» — бросок сил сторон
-// (army/rules.mjs battleRound), потери и боевой дух — в отряды, итог — карточкой в чат. Только ведущий.
+// (army/rules.mjs battleRound), потери и боевой дух — в отряды, итог — карточкой в чат. Окно — у ведущего; владельцы
+// отрядов видят его у себя и жмут кнопки сами («Показать всем» — смотрят и остальные; apps/shared-view.mjs, PLAN 4.199).
 
-import { TERRAIN, TRAINING, EQUIPMENT, UNIT_KINDS } from "../config/army.mjs";
+import { TERRAIN, TRAINING, WEAPONS, ARMOR, UNIT_KINDS } from "../config/army.mjs";
 import { unitState, battleRound } from "../army/rules.mjs";
 import { postCard } from "../combat/common.mjs";
+import { shareView, closeView, viewerContext, wireViewer, viewerClosed } from "./shared-view.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
@@ -21,7 +23,8 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
       round: BattleApp.#onRound,
       defender: BattleApp.#onDefender,
       reset: BattleApp.#onReset,
-      open: BattleApp.#onOpen
+      open: BattleApp.#onOpen,
+      showAll: BattleApp.#onShowAll
     }
   };
 
@@ -36,6 +39,12 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     return app;
   }
 
+  /** Окно зрителя (общий просмотр): снимок окна ведущего, без управления. */
+  get viewer() { return !!this.options.viewer; }
+  /** Сессия общего просмотра: новая битва — новая. */
+  session = foundry.utils.randomID();
+  showAll = false;
+
   sides = [{ ids: [], defender: false }, { ids: [], defender: true }];
   terrain = "field";
   roundNo = 1;
@@ -48,10 +57,11 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   async _prepareContext() {
+    if (this.viewer) return viewerContext(this);
     const sides = this.sides.map((s, i) => {
       const units = s.ids.map(id => game.actors.get(id)).filter(Boolean).map(a => ({
         id: a.id, name: a.name, img: a.img, soldiers: a.system.soldiers, morale: a.system.morale, routed: a.system.routed,
-        kind: UNIT_KINDS[a.system.kind]?.label, training: TRAINING[a.system.training].label, equipment: EQUIPMENT[a.system.equipment].label,
+        kind: UNIT_KINDS[a.system.kind]?.label, training: TRAINING[a.system.training].label, equipment: `${WEAPONS[a.system.weapons].label} · ${ARMOR[a.system.armor].label.toLowerCase()}`,
         power: a.system.power.total
       }));
       return { index: i, label: i ? "Вторая сторона" : "Первая сторона", defender: s.defender, units,
@@ -60,12 +70,17 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     return {
       sides, round: this.roundNo, log: [...this.log].reverse(),
       terrains: Object.entries(TERRAIN).map(([k, t]) => ({ key: k, label: t.label, selected: k === this.terrain })),
-      ready: sides.every(s => s.units.some(u => !u.routed && u.soldiers))
+      ready: sides.every(s => s.units.some(u => !u.routed && u.soldiers)), showAll: this.showAll
     };
   }
 
+  /** Участники битвы — отряды обеих сторон. */
+  get #units() { return this.sides.flatMap(s => s.ids).map(id => game.actors.get(id)).filter(Boolean); }
+
   _onRender(context, options) {
     super._onRender?.(context, options);
+    if (this.viewer) return wireViewer(this);
+    shareView("battle", this, { context, actors: this.#units, showAll: this.showAll });
     this.element.querySelector("select[name=terrain]")?.addEventListener("change", ev => { this.terrain = ev.target.value; });
     // Отряд из списка актёров — на сторону, куда бросили
     for (const col of this.element.querySelectorAll("[data-side]")) {
@@ -80,6 +95,14 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
       });
     }
   }
+
+  _onClose(options) {
+    super._onClose?.(options);
+    if (this.viewer) viewerClosed(this, options);
+    else closeView("battle", this);
+  }
+
+  static #onShowAll() { this.showAll = !this.showAll; this.render(); }
 
   static #onAddSelected(event, target) {
     const side = Number(target.dataset.side);
@@ -108,6 +131,7 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const ids = this.sides.flatMap(s => s.ids);
     await Actor.updateDocuments(ids.filter(id => game.actors.get(id)?.system.routed).map(id => ({ _id: id, "system.routed": false })));
     this.roundNo = 1; this.log = [];
+    this.session = foundry.utils.randomID();
     this.render();
   }
 
@@ -116,7 +140,9 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const sides = actors.map((list, i) => ({ defender: this.sides[i].defender, units: list.map(unitState) }));
     if (!sides.every(s => s.units.some(u => u.soldiers && !u.routed))) return ui.notifications.warn("На обеих сторонах нужны стоящие отряды.");
     const res = battleRound(sides, { round: this.roundNo, terrain: this.terrain, rand });
-    await Actor.updateDocuments(res.units.map(u => ({ _id: u.id, "system.soldiers": u.soldiers, "system.morale": u.morale, "system.routed": u.routed })));
+    // Опыт (PLAN 4.198): каждому сражавшемуся — за раунд, победителям битвы — за победу
+    await Actor.updateDocuments(res.units.map(u => ({ _id: u.id, "system.soldiers": u.soldiers, "system.morale": u.morale, "system.routed": u.routed,
+      "system.xp": (game.actors.get(u.id)?.system.xp ?? 0) + (u.xp ?? 0) })));
     const name = i => actors[i].map(a => a.name).join(", ");
     const entry = {
       round: this.roundNo, terrain: TERRAIN[this.terrain].label,
