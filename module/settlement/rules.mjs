@@ -3,10 +3,12 @@
 // прогноз берёт среднее. Постройка — предмет «Постройка», правила получают её простым объектом (buildingState).
 // Неделя: выработка построек → содержание → нужды семей (еда 1, топливо 1, зимой 2) → налог в казну → склад по
 // вместимости → в конце месяца приход семей, бунт, довольство и одобрение от налога → стройка → календарь.
-// Прокачка (PLAN 4.198, кусок Б): купленные ступени постройки сводятся в upgradeMods; activeLevel — её уровень с ними
-// (проценты выработки, сырья и содержания — множителем строки mult); налоги, одобрение, бунт, приход и торговля —
-// в сводке поселения. Ступень в стройке занимает строителя, как уровень.
+// Обустройство (PLAN 4.198, 4.200): купленные ступени постройки сводятся в upgradeMods; activeLevel — её уровень с ними.
+// Бонусы ступеней — броски, каждый столько раз, какой уровень постройки: к выработке ресурса (после строк, долей сырья),
+// в минус сырью и содержанию, к шансам бунта и прихода в конце месяца; налоги, одобрение и торговля — в сводке поселения.
+// Ступень в стройке занимает строителя, как уровень.
 
+import { effectDice } from "../config/building-upgrades.mjs";
 import { FOOD, FUEL, WEALTH, NEEDS, WINTER_FUEL, ARRIVALS, HOMELESS_CAP, CONTENT_LEVEL, WEEKS_PER_MONTH, BASE_STORAGE,
   APPROVAL_MAX, TAXES, WEALTH_RATE, revoltChance, calendar } from "../config/settlement.mjs";
 
@@ -30,6 +32,11 @@ export function parseFormula(formula) {
     else if (m[2]) terms.push({ sign, n, d: 0 });
   }
   return pos === src.length ? terms : [];
+}
+
+/** Среднее списка бросков [{f, times}] (для шансов в сводке). */
+export function diceAverage(list = []) {
+  return list.reduce((n, x) => n + averageOf(x.f) * x.times, 0);
 }
 
 /** Среднее формулы (для прогноза). */
@@ -73,14 +80,18 @@ const normLevel = (l = {}) => ({
 export function upgradeMods(branches = [], upgrades = []) {
   const bought = new Set(upgrades);
   const m = { produce: {}, consume: {}, upkeep: {}, produceAdd: [], families: 0, housing: 0, control: 0, storage: 0, drill: 0,
-    taxes: 0, approval: 0, revolt: 0, arrival: 0, trade: false };
+    taxes: 0, approval: 0, revolt: [], arrival: [], trade: false };
   for (const br of branches) for (const nd of br.nodes ?? []) {
     if (!bought.has(nd.id)) continue;
     for (const e of nd.effects ?? []) {
       const v = Number(e.value) || 0;
       if (e.type === "produce" || e.type === "consume" || e.type === "upkeep") {
         const k = String(e.resource ?? "").trim() || "*";
-        m[e.type][k] = (m[e.type][k] ?? 0) + v;
+        const d = effectDice(e);
+        if (d) (m[e.type][k] ??= []).push(d);
+      } else if (e.type === "revolt" || e.type === "arrival") {
+        const d = effectDice(e);
+        if (d) m[e.type].push(d);
       } else if (e.type === "produceAdd") {
         if (String(e.resource ?? "").trim()) m.produceAdd.push(normRow({ resource: e.resource, formula: e.formula, per: e.per, period: e.period }));
       } else if (e.type === "trade") m.trade = true;
@@ -112,24 +123,33 @@ export function buildingState(item) {
 }
 
 /**
- * Действующий уровень постройки — с купленными ступенями: прибавки мест, жилья, Контроля, склада, тренировки;
- * строкам выработки, сырья и содержания — множитель mult; новые строки выработки — в конец. null — не построена.
+ * Бросок бонусов ступеней по ресурсу: формулы ресурса и «*», каждая — times раз (уровень постройки).
+ * @returns {{total: number, dice: number[], formula: string}}
+ */
+export function bonusRoll(map, res, times, roll) {
+  const list = [...(map?.[res] ?? []), ...(map?.["*"] ?? [])];
+  let total = 0;
+  const dice = [];
+  if (times > 0) for (const f of list) for (let i = 0; i < times; i++) { const x = roll(f); total += x.total; dice.push(...x.dice); }
+  return { total, dice, formula: list.map(f => (times > 1 ? `${f}×${times}` : f)).join(" + ") };
+}
+
+/**
+ * Действующий уровень постройки — с купленными ступенями: прибавки мест, жилья, Контроля, склада, тренировки; новые
+ * строки выработки — в конец; броски ступеней (bonus) — к выработке, сырью и содержанию, каждый уровень раз. null — не
+ * построена.
  */
 export function activeLevel(b) {
   const lv = levelDef(b, b?.level ?? 0);
   if (!lv) return null;
   const m = b.mods;
   if (!m) return lv;
-  const pct = (map, res) => (map[res] ?? 0) + (map["*"] ?? 0);
-  const more = (map, r) => ({ ...r, mult: Math.max(0, 1 + pct(map, r.resource) / 100) });
-  const less = (map, r) => ({ ...r, mult: Math.max(0, 1 - pct(map, r.resource) / 100) });
   return {
     ...lv,
     families: lv.families + m.families, housing: lv.housing + m.housing, control: lv.control + m.control,
     storage: lv.storage + m.storage, drill: lv.drill ? lv.drill + m.drill : m.drill,
-    consume: lv.consume.map(r => less(m.consume, r)),
-    produce: [...lv.produce, ...m.produceAdd].map(r => more(m.produce, r)),
-    upkeep: lv.upkeep.map(r => less(m.upkeep, r))
+    produce: [...lv.produce, ...m.produceAdd],
+    bonus: { produce: m.produce, consume: m.consume, upkeep: m.upkeep, times: b.level }
   };
 }
 
@@ -149,7 +169,8 @@ export function canAfford(state, cost = []) {
 /** Что есть у поселения без хода: дома, бездомные, работа, строители, вместимость, налоги, Контроль, шансы месяца. */
 export function summarize(state) {
   let houses = 0, control = state.control ?? 0, assigned = 0, storage = BASE_STORAGE, taxMult = 0, trade = false, drill = 0;
-  let taxBonus = 0, approvalBonus = 0, revoltMinus = 0, arrivalPlus = 0;
+  let taxBonus = 0, approvalBonus = 0;
+  const revoltDice = [], arrivalDice = [];
   const jobs = [];
   for (const b of state.buildings ?? []) {
     const lv = activeLevel(b);
@@ -160,7 +181,11 @@ export function summarize(state) {
     taxMult = Math.max(taxMult, lv.taxes);
     drill = Math.max(drill, lv.drill);
     if (b.trade || b.mods?.trade) trade = true;
-    if (b.mods) { taxBonus += b.mods.taxes; approvalBonus += b.mods.approval; revoltMinus += b.mods.revolt; arrivalPlus += b.mods.arrival; }
+    if (b.mods) {
+      taxBonus += b.mods.taxes; approvalBonus += b.mods.approval;
+      for (const f of b.mods.revolt ?? []) revoltDice.push({ f, times: b.level });
+      for (const f of b.mods.arrival ?? []) arrivalDice.push({ f, times: b.level });
+    }
     if (lv.families) jobs.push({ id: b.id, max: lv.families, workers: Math.min(Math.max(0, b.workers), lv.families) });
   }
   const families = Math.max(0, state.families ?? 0);
@@ -183,10 +208,11 @@ export function summarize(state) {
     houses, homeless: Math.max(0, families - houses), freeHouses: Math.max(0, houses - families),
     assigned, idle, constructing, builders: Math.min(idle, constructing), control, storage, trade, drill,
     taxMult: taxMult ? taxMult + taxBonus : 0, taxCoins: families * tax.perFamily * (taxMult ? taxMult + taxBonus : 0),
-    approvalBonus, arrivalPlus, revoltMinus,
+    approvalBonus, revoltDice, arrivalDice, revoltBase: revoltChance(approval, control),
+    revoltMinus: diceAverage(revoltDice), arrivalPlus: diceAverage(arrivalDice),
     workers: Object.fromEntries(jobs.map(j => [j.id, j.workers])),
-    revolt: Math.max(0, revoltChance(approval, control) - (revoltChance(approval, control) ? revoltMinus : 0)),
-    arrival: arrival ? { chance: Math.min(100, arrival[0] + arrivalPlus), formula: arrival[1] } : null,
+    revolt: revoltChance(approval, control) ? Math.max(0, Math.round(revoltChance(approval, control) - diceAverage(revoltDice))) : 0,
+    arrival: arrival ? { chance: Math.min(100, Math.round(arrival[0] + diceAverage(arrivalDice))), base: arrival[0], formula: arrival[1] } : null,
     content: approval >= CONTENT_LEVEL
   };
 }
@@ -227,7 +253,8 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     const inputs = [];
     for (const r of lv.consume) {
       if (!active(r, workers)) continue;
-      const need = round1(Math.max(0, averageOf(r.formula)) * (r.per === "family" ? workers : 1) * (r.mult ?? 1));
+      const base = Math.max(0, averageOf(r.formula)) * (r.per === "family" ? workers : 1);
+      const need = round1(Math.max(0, base - bonusRoll(lv.bonus?.consume, r.resource, lv.bonus?.times ?? 0, roll).total));
       if (need <= 0) continue;
       const have = r.resource === WEALTH ? wealth : stock[r.resource] ?? 0;
       ratio = Math.min(ratio, have / need);
@@ -245,6 +272,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       if (ratio <= 0) continue;
     }
     let last = null;
+    const made = new Set();
     for (const r of lv.produce) {
       if (!active(r, workers)) { last = null; continue; }
       const times = r.per === "family" ? workers : 1;
@@ -253,13 +281,23 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       if (r.same && last !== null) amount = last;
       else for (let i = 0; i < times; i++) { const x = roll(r.formula); amount += x.total; dice.push(...x.dice); }
       last = amount;
-      amount *= r.mult ?? 1;
+      made.add(r.resource);
       amount = r.resource === WEALTH ? round3(Math.max(0, amount * ratio)) : round1(Math.max(0, amount * ratio));
       if (!amount) continue;
       if (r.resource === WEALTH) wealth = round3(wealth + amount);
       else add(r.resource, amount);
       produced[r.resource] = r.resource === WEALTH ? round3((produced[r.resource] ?? 0) + amount) : round1((produced[r.resource] ?? 0) + amount);
       lines.push({ building: b.name, resource: r.resource, amount, formula: r.same ? "столько же" : (times > 1 ? `${r.formula} ×${times}` : r.formula), dice });
+    }
+    // Броски ступеней к выработке — по ресурсу, уровень постройки раз (с той же долей сырья)
+    for (const res of made) {
+      const bonus = bonusRoll(lv.bonus?.produce, res, lv.bonus?.times ?? 0, roll);
+      const amount = res === WEALTH ? round3(Math.max(0, bonus.total * ratio)) : round1(Math.max(0, bonus.total * ratio));
+      if (!amount) continue;
+      if (res === WEALTH) wealth = round3(wealth + amount);
+      else add(res, amount);
+      produced[res] = res === WEALTH ? round3((produced[res] ?? 0) + amount) : round1((produced[res] ?? 0) + amount);
+      lines.push({ building: b.name, resource: res, amount, formula: `обустройство ${bonus.formula}`, dice: bonus.dice });
     }
   }
 
@@ -273,7 +311,7 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       const times = r.per === "family" ? workers : 1;
       let need = 0;
       for (let i = 0; i < times; i++) need += roll(r.formula).total;
-      need = round1(Math.max(0, need) * (r.mult ?? 1));
+      need = round1(Math.max(0, need - bonusRoll(lv.bonus?.upkeep, r.resource, lv.bonus?.times ?? 0, roll).total));
       if (r.resource === WEALTH) {
         const got = Math.min(wealth, need);
         wealth = round3(wealth - got);
@@ -319,22 +357,29 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       approval = Math.max(0, Math.min(APPROVAL_MAX, approval + tax.approval));
       if (approval !== was) events.push({ kind: "taxes", text: `${tax.label} налог: одобрение ${tax.approval > 0 ? "растёт" : "падает"} до ${approval}.` });
     }
+    // Броски ступеней к шансам (уровень постройки раз)
+    const rollAll = list => list.reduce((n, x) => { for (let i = 0; i < x.times; i++) n += rollFormula(x.f, rand).total; return n; }, 0);
     if (sum.arrival) {
       if (sum.homeless > 0) events.push({ kind: "arrival", text: "Новые семьи не придут, пока есть бездомные." });
       else {
+        const plus = rollAll(sum.arrivalDice);
+        const chance = Math.min(100, sum.arrival.base + plus);
         const d = rollFormula("1d100", rand).total;
-        if (d <= sum.arrival.chance) {
+        if (d <= chance) {
           const cap = sum.freeHouses > 0 ? sum.freeHouses : HOMELESS_CAP;
           arrived = Math.min(cap, Math.max(1, rollFormula(sum.arrival.formula, rand).total));
-          events.push({ kind: "arrival", text: `Пришли семьи: ${arrived}${sum.freeHouses ? "" : " (домов нет — бездомными)"}. Бросок ${d} из ${sum.arrival.chance}.` });
-        } else events.push({ kind: "arrival", text: `Новые семьи не пришли (бросок ${d}, нужно ${sum.arrival.chance} и меньше).` });
+          events.push({ kind: "arrival", text: `Пришли семьи: ${arrived}${sum.freeHouses ? "" : " (домов нет — бездомными)"}. Бросок ${d} из ${chance}${plus ? ` (обустройство +${plus})` : ""}.` });
+        } else events.push({ kind: "arrival", text: `Новые семьи не пришли (бросок ${d}, нужно ${chance} и меньше${plus ? `, обустройство +${plus}` : ""}).` });
       }
     }
-    if (sum.revolt > 0) {
+    if (sum.revoltBase > 0) {
+      const minus = rollAll(sum.revoltDice);
+      const chance = Math.max(0, sum.revoltBase - minus);
       const d = rollFormula("1d100", rand).total;
-      events.push(d <= sum.revolt
-        ? { kind: "revolt", text: `Бунт! Народ поднялся против правителя (бросок ${d}, шанс ${sum.revolt}%).`, danger: true }
-        : { kind: "revolt", text: `Ропот без бунта (бросок ${d}, шанс ${sum.revolt}%).` });
+      const note = minus ? `, обустройство −${minus}` : "";
+      if (chance > 0 || minus) events.push(d <= chance
+        ? { kind: "revolt", text: `Бунт! Народ поднялся против правителя (бросок ${d}, шанс ${chance}%${note}).`, danger: true }
+        : { kind: "revolt", text: `Ропот без бунта (бросок ${d}, шанс ${chance}%${note}).` });
     }
     if (sum.approvalBonus) {
       const was = approval;

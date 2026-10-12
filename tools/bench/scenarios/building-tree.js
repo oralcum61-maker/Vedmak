@@ -22,7 +22,7 @@ stepName("эффекты в правилах");
 const base = { year: 1, month: 4, week: 1, families: 4, approval: 5, control: 0, wealth: 0, taxes: "normal", stock: { "Еда": 30, "Топливо": 30, "Зерно": 30 } };
 const plain = R.simulateWeek({ ...base, buildings: [st("lumber", { level: 1, workers: 2 })] }, { forecast: true }).report;
 const axes = R.simulateWeek({ ...base, buildings: [st("lumber", { level: 1, workers: 2, upgrades: ["b1n1"] })] }, { forecast: true }).report;
-ok(plain.produced["Древесина"] === 13.5 && axes.produced["Древесина"] === 15.5, `«Точильный круг»: +15% древесины (${plain.produced["Древесина"]} → ${axes.produced["Древесина"]})`);
+ok(plain.produced["Древесина"] === 13.5 && axes.produced["Древесина"] === 15.5, `«Точильный круг»: +1d3 древесины за уровень (${plain.produced["Древесина"]} → ${axes.produced["Древесина"]})`);
 const dist0 = R.simulateWeek({ ...base, buildings: [st("distillery", { level: 1, workers: 1 })] }, { forecast: true }).report;
 const dist1 = R.simulateWeek({ ...base, buildings: [st("distillery", { level: 1, workers: 1, upgrades: ["b2n1"] })] }, { forecast: true }).report;
 ok(dist1.consumed["Топливо"] < dist0.consumed["Топливо"], `«Кирпичная топка»: топлива меньше (${dist0.consumed["Топливо"]} → ${dist1.consumed["Топливо"]})`);
@@ -34,10 +34,14 @@ const t1 = R.summarize({ ...base, buildings: [manor, st("market", { level: 1, up
 ok(t1.taxMult === t0.taxMult + 0.1, `«Весы и меры»: налог ×${t0.taxMult} → ×${t1.taxMult}`);
 ok(R.summarize({ ...base, buildings: [st("market", { level: 1, upgrades: ["b3n1"] })] }).taxMult === 0, "без усадьбы прибавка к налогу не работает");
 const angry = { ...base, approval: 2 };
-ok(R.summarize({ ...angry, buildings: [st("tavern", { level: 1, upgrades: ["b3n1"] })] }).revolt === R.summarize(angry).revolt - 5, "«Вышибала»: бунт −5%");
+ok(R.summarize({ ...angry, buildings: [st("tavern", { level: 1, upgrades: ["b3n1"] })] }).revolt === Math.round(R.summarize(angry).revolt - 3.5), "«Вышибала»: шанс бунта −1d6 (в среднем −3,5)");
+ok(R.summarize({ ...angry, buildings: [st("tavern", { level: 2, upgrades: ["b3n1"] })] }).revolt === Math.round(R.summarize(angry).revolt - 7), "2-й уровень таверны: −1d6 дважды");
 const happy = { ...base, approval: 8 };
-ok(R.summarize({ ...happy, buildings: [st("house", { level: 2, upgrades: ["b1n1", "b1n2"] })] }).arrival.chance === R.summarize({ ...happy, buildings: [st("house", { level: 2 })] }).arrival.chance + 10,
-  "«Дымоход»: приход семей +10%");
+ok(R.summarize({ ...happy, buildings: [st("house", { level: 2, upgrades: ["b1n1", "b1n2"] })] }).arrival.chance === R.summarize({ ...happy, buildings: [st("house", { level: 2 })] }).arrival.chance + 14,
+  "«Дымоход» у дома 2-го уровня: шанс прихода +2d6 дважды (в среднем +14)");
+const axes2 = R.simulateWeek({ ...base, buildings: [st("lumber", { level: 2, workers: 2, upgrades: ["b1n1"] })] }, { forecast: true }).report;
+const plain2 = R.simulateWeek({ ...base, buildings: [st("lumber", { level: 2, workers: 2 })] }, { forecast: true }).report;
+ok(axes2.produced["Древесина"] - plain2.produced["Древесина"] === 4, "на 2-м уровне «Точильный круг» бросается дважды (+4 в среднем)");
 const monthEnd = R.simulateWeek({ ...base, week: 4, approval: 5, buildings: [st("house", { level: 1, upgrades: ["b1n1"] })] }, { rand: () => 0.99 });
 ok(monthEnd.next.approval === 6 && monthEnd.report.events.some(e => e.kind === "approval"), "«Глиняная печь»: в конце месяца одобрение +1");
 ok(R.summarize({ ...base, buildings: [st("lumber", { level: 1, upgrades: ["b2n1"] })] }).workers !== undefined
@@ -69,8 +73,8 @@ el().querySelector('.bl-node[data-node="b2n1"] [data-action=grant]')?.click(); a
 ok(lumber.system.upgrades.includes("b2n1"), "ведущий выдал «Подсеку» даром");
 el().querySelector("[data-action=treeEdit]")?.click(); await wait(400);
 ok(!!el().querySelector('input[name="system.branches.0.nodes.0.name"]'), "правка дерева: поля ступеней");
-{ const v = el().querySelector('input[name="system.branches.0.nodes.0.effects.0.value"]'); v.value = "40"; v.dispatchEvent(new Event("change", { bubbles: true })); await wait(500); }
-ok(lumber.system.branches[0].nodes[0].effects[0].value === 40 && lumber.system.branches[2].nodes.length === 3, "эффект ступени изменён, остальное дерево цело");
+{ const v = el().querySelector('input[name="system.branches.0.nodes.0.effects.0.formula"]'); v.value = "1d6"; v.dispatchEvent(new Event("change", { bubbles: true })); await wait(500); }
+ok(lumber.system.branches[0].nodes[0].effects[0].formula === "1d6" && lumber.system.branches[2].nodes.length === 3, "бросок эффекта изменён, остальное дерево цело");
 el().querySelector('[data-action=treeAdd][data-kind=branch]')?.click(); await wait(500);
 ok(lumber.system.branches.length === 4, "ведущий добавил ветку");
 el().querySelector('[data-action=treeAdd][data-kind=node][data-path="system.branches.3.nodes"]')?.click(); await wait(500);
@@ -82,11 +86,11 @@ await sheet.close();
 stepName("свой тип сооружения с прокачкой");
 const own = await Actor.create({ name: "Прогон: мельница-самоделка", type: "building", folder: folder.id, system: { group: "food",
   levels: [{ weeks: 0, families: 1, produce: [{ resource: "Мука", formula: "2", per: "family" }] }],
-  branches: [{ id: "x", name: "Жернова", nodes: [{ id: "x1", name: "Камень", level: 1, weeks: 0, cost: [], effects: [{ type: "produce", resource: "Мука", value: 50 }] }] }] } });
+  branches: [{ id: "x", name: "Жернова", nodes: [{ id: "x1", name: "Камень", level: 1, weeks: 0, cost: [], effects: [{ type: "produce", resource: "Мука", formula: "1d4" }] }] }] } });
 const mill = await S.build(town, own.uuid);
 await S.setWorkers(town, mill.id, 1);
 await S.research(town, mill.id, "x1");
-ok(mill.system.upgrades.includes("x1") && town.system.forecast.produced["Мука"] === 3, `своя постройка: ступень ведущего даёт +50% муки (${town.system.forecast.produced["Мука"]})`);
+ok(mill.system.upgrades.includes("x1") && town.system.forecast.produced["Мука"] === 4.5, `своя постройка: ступень ведущего даёт +1d4 муки (${town.system.forecast.produced["Мука"]})`);
 
 for (const b of town.system.buildingActors) await b.delete();
 await game.folders.find(x => x.getFlag("vedmak", "settlement") === town.uuid)?.delete();

@@ -148,7 +148,8 @@
                   <select name="{{path}}.type">{{selectOptions @root.effectTypes selected=type}}</select>
                   {{#if vs}}<select name="{{path}}.kind">{{selectOptions @root.kindOptions selected=kind}}</select>{{/if}}
                   {{#if ter}}<select name="{{path}}.terrain">{{selectOptions @root.terrainOptions selected=terrain}}</select>{{/if}}
-                  <label class="bl-eff-val"><input type="number" name="{{path}}.value" value="{{value}}" step="any">{{#if pct}}%{{/if}}</label>
+                  {{#if dice}}<label class="bl-eff-val" data-tooltip="Бросок — 1 раз у новобранцев и обстрелянных, 2 — у ветеранов и закалённых, 3 — у элиты"><input type="text" name="{{path}}.formula" value="{{diceFormula}}" class="bl-formula"></label>
+                  {{else}}<label class="bl-eff-val"><input type="number" name="{{path}}.value" value="{{value}}" step="any"></label>{{/if}}
                   <a data-action="treeDel" data-path="{{nd.path}}.effects" data-index="{{index}}" aria-label="Убрать"><i class="fa-solid fa-xmark"></i></a>
                 </div>
                 {{/each}}

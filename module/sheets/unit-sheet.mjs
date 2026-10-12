@@ -5,7 +5,7 @@
 // своё — styles/army.css.
 
 import { UNIT_KINDS, TRAINING, GEAR, ORIGINS, MAX_GEAR, MAX_TRAINING, MORALE_MAX, TERRAIN } from "../config/army.mjs";
-import { RANKS, UNIT_EFFECTS } from "../config/unit-upgrades.mjs";
+import { RANKS, UNIT_EFFECTS, unitEffectDice } from "../config/unit-upgrades.mjs";
 import { resourceIcon } from "../config/settlement.mjs";
 import { equipCost, routAt } from "../army/rules.mjs";
 import * as ARMY from "../army/army.mjs";
@@ -17,7 +17,7 @@ const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 const TABS = { unit: "Отряд", training: "Обучение", notes: "Летопись" };
 
-/** Эффект ступени обучения подписью: «+1 к силе», «+2 против конницы», «−15% потерь». */
+/** Эффект ступени обучения подписью: «+1 к силе», «+2 против конницы», «1d3 бойцов выживает в раунд». */
 export function unitEffectLabel(e) {
   const v = Number(e.value) || 0;
   switch (e.type) {
@@ -28,9 +28,9 @@ export function unitEffectLabel(e) {
     case "defend": return `+${v} в обороне`;
     case "morale": return `боевой дух +${v}`;
     case "rout": return `бегут на ${v} позже`;
-    case "losses": return `−${v}% потерь`;
-    case "food": return `−${v}% еды`;
-    case "pay": return `−${v}% платы`;
+    case "losses": return `${unitEffectDice(e)} бойцов выживает в раунд (по званию)`;
+    case "food": return `${unitEffectDice(e)} бойцов едят даром (по званию)`;
+    case "pay": return `${unitEffectDice(e)} наёмников служат даром (по званию)`;
     case "drill": return `тренировка +${v}`;
     default: return `${UNIT_EFFECTS[e.type]?.label ?? e.type} ${v}`;
   }
@@ -151,7 +151,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
           cost: nd.cost.map((c, ci) => ({ index: ci, path: `${npath}.cost.${ci}`, resource: c.resource, qty: c.qty, img: resourceIcon(c.resource),
             short: !done && !working && !have(c) })),
           effects: nd.effects.map((e, ei) => ({ index: ei, path: `${npath}.effects.${ei}`, ...e, label: unitEffectLabel(e),
-            vs: e.type === "vs", ter: e.type === "terrain", pct: UNIT_EFFECTS[e.type]?.kind === "pct" }))
+            vs: e.type === "vs", ter: e.type === "terrain", dice: UNIT_EFFECTS[e.type]?.kind === "dice", diceFormula: unitEffectDice(e) }))
         };
       });
       return { index: bi, id: br.id, name: br.name, icon: br.icon, path, nodes,
@@ -202,7 +202,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const sys = foundry.utils.deepClone(this.actor._source.system);
     treeAdd(sys, target.dataset.kind, target.dataset.path, {
       node: () => ({ name: "Новая ступень", description: "", rank: 0, weapons: 0, armor: 0, weeks: 1, cost: [], effects: [] }),
-      effect: () => ({ type: "power", value: 1, kind: "", terrain: "" })
+      effect: () => ({ type: "power", value: 1, formula: "", kind: "", terrain: "" })
     });
     await this.actor.update({ "system.branches": sys.branches });
   }

@@ -161,20 +161,22 @@ export async function unitsWeek(settlement, { stock, wealth, drill, rand = Math.
   const units = settlementUnits(settlement);
   const lines = [];
   if (!units.length) return { stock, wealth, lines };
-  const needFood = units.reduce((s, u) => s + unitFood(unitState(u)), 0);
+  const states = new Map(units.map(a => [a.id, unitState(a)]));
+  const foods = new Map(units.map(a => [a.id, unitFood(states.get(a.id), rand)]));
+  const needFood = [...foods.values()].reduce((s, n) => s + n, 0);
   const food = Math.min(stock[FOOD] ?? 0, needFood);
   const fed = needFood ? food / needFood : 1;
   stock = { ...stock, [FOOD]: r1((stock[FOOD] ?? 0) - food) };
   const updates = [];
   for (const actor of units) {
-    const u = unitState(actor);
-    const pay = unitPay(u);
+    const u = states.get(actor.id);
+    const pay = unitPay(u, rand);
     const paid = !pay || wealth >= pay;
     if (pay && paid) wealth = r3(wealth - pay);
     const w = unitWeek(u, { fed, paid, drill, rand });
     updates.push({ _id: actor.id, "system.training": w.training, "system.progress": w.progress, "system.morale": w.morale,
       "system.soldiers": w.soldiers, "system.routed": false, "system.xp": w.xp, "system.research": w.research, "system.upgrades": w.upgrades });
-    lines.push({ name: actor.name, notes: w.notes, food: unitFood(u), pay });
+    lines.push({ name: actor.name, notes: w.notes, food: foods.get(actor.id), pay });
   }
   await Actor.updateDocuments(updates);
   return { stock, wealth, lines, food: r1(needFood), fed };

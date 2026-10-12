@@ -80,6 +80,7 @@ await militia.update({ "system.xp": 30 }); await town.update({ "system.stock.Д�
 ok(militia.system.rank === 2 && ARMY.canTrain(militia, "discipline-2").ok, `30 опыта — «Ветераны»: «Сомкнутый строй» открыт (${ARMY.canTrain(militia, "discipline-2").why ?? "да"})`);
 await militia.update({ "system.upgrades": [...militia.system.upgrades, "discipline-2"] });
 ok(AR.routAt(AR.unitState(militia)) === 1, "«Сомкнутый строй»: бегут на 1 позже");
+ok(AR.unitDice(AR.unitState(militia), "losses") === 3, "«Сомкнутый строй» у ветеранов: 1d2 спасённых бойцов дважды (в среднем 3)");
 await fam.update({ "system.kind": "cavalry" });
 ok(fam.system.branches.find(b => b.id === "kind")?.name === "Удар", "смена рода войск — ветка рода «Удар»");
 militia.sheet.tab = "training"; await militia.sheet.render({ force: true }); await wait(500);

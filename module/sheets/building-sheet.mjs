@@ -8,7 +8,7 @@
 
 import { BUILDING_GROUPS, PERIODS, RESOURCE_ICONS, fullRow, resourceIcon } from "../config/settlement.mjs";
 import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
-import { BUILDING_EFFECTS } from "../config/building-upgrades.mjs";
+import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 
@@ -54,15 +54,15 @@ function tagsOf(lv, trade) {
   return out;
 }
 
-/** Эффект ступени подписью: «+20% выработки: древесина», «Топливо 1d2 за семью», «−10% к бунту». */
+/** Эффект ступени подписью: «+1d3 древесины за уровень», «Топливо 1d2 за семью», «−1d6 к шансу бунта за уровень». */
 export function effectLabel(e) {
   const res = String(e.resource ?? "").trim().toLowerCase();
   const v = Number(e.value) || 0;
   switch (e.type) {
-    case "produce": return `+${v}% ${res ? `выработки: ${res}` : "всей выработки"}`;
+    case "produce": return `+${effectDice(e)} ${res ? `выработки: ${res}` : "к каждой выработке"} за уровень`;
     case "produceAdd": return `${e.resource || "?"} ${e.formula}${e.per === "family" ? " за семью" : ""}${e.period !== "week" ? ` ${PERIODS[e.period]?.toLowerCase() ?? ""}` : ""}`;
-    case "consume": return `−${v}% сырья${res ? `: ${res}` : ""}`;
-    case "upkeep": return `−${v}% содержания${res ? `: ${res}` : ""}`;
+    case "consume": return `−${effectDice(e)} сырья${res ? `: ${res}` : ""} за уровень`;
+    case "upkeep": return `−${effectDice(e)} содержания${res ? `: ${res}` : ""} за уровень`;
     case "families": return `+${v} рабочих мест`;
     case "housing": return `+${v} жилья`;
     case "control": return `Контроль +${v}`;
@@ -70,8 +70,8 @@ export function effectLabel(e) {
     case "drill": return `тренировка +${v}`;
     case "taxes": return `налог +${v}`;
     case "approval": return `+${v} одобрения в месяц`;
-    case "revolt": return `−${v}% к бунту`;
-    case "arrival": return `+${v}% к приходу семей`;
+    case "revolt": return `−${effectDice(e)} к шансу бунта за уровень`;
+    case "arrival": return `+${effectDice(e)} к шансу прихода семей за уровень`;
     case "trade": return "торговля";
     default: return `${BUILDING_EFFECTS[e.type]?.label ?? e.type} ${v}`;
   }
@@ -202,7 +202,8 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
           cost: nd.cost.map((c, ci) => ({ index: ci, path: `${npath}.cost.${ci}`, resource: c.resource, qty: c.qty, img: resourceIcon(c.resource),
             short: town && !bought && !working && !have(c) })),
           effects: nd.effects.map((e, ei) => ({ index: ei, path: `${npath}.effects.${ei}`, ...e, label: effectLabel(e),
-            row: e.type === "produceAdd", pct: BUILDING_EFFECTS[e.type]?.kind === "pct", res: !!BUILDING_EFFECTS[e.type]?.resource }))
+            row: e.type === "produceAdd", dice: BUILDING_EFFECTS[e.type]?.kind === "dice", res: !!BUILDING_EFFECTS[e.type]?.resource,
+            diceFormula: effectDice(e) }))
         };
       });
       return { index: bi, id: br.id, name: br.name, icon: br.icon, path, nodes,
@@ -245,7 +246,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const sys = foundry.utils.deepClone(this.actor._source.system);
     treeAdd(sys, target.dataset.kind, target.dataset.path, {
       node: () => ({ name: "Новая ступень", description: "", level: 1, weeks: 1, cost: [], effects: [] }),
-      effect: () => ({ type: "produce", resource: "", value: 10, formula: "1", per: "building", period: "week" })
+      effect: () => ({ type: "produce", resource: "", value: 0, formula: "1d4", per: "building", period: "week" })
     });
     await this.actor.update({ "system.branches": sys.branches });
   }

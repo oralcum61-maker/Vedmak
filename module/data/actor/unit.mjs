@@ -23,6 +23,8 @@ export const unitNode = () => new SchemaField({
   effects: new ArrayField(new SchemaField({
     type: str("power", { choices: Object.keys(UNIT_EFFECTS) }),
     value: num(0),
+    // Бросок эффекта-броска (меньше потерь, еды, платы)
+    formula: str(""),
     kind: str("", { blank: true, choices: ["", ...Object.keys(UNIT_KINDS)] }),
     terrain: str("", { blank: true, choices: ["", ...Object.keys(TERRAIN)] })
   }))

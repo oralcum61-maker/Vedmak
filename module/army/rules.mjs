@@ -4,20 +4,22 @@
 
 import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, MAX_TRAINING, MAX_GEAR, MORALE_MAX, ROUT_AT, TERRAIN, SOLDIERS_PER_POWER,
   FOOD_PER_SOLDIER, MERCENARY } from "../config/army.mjs";
-import { RANKS, XP, rankOf } from "../config/unit-upgrades.mjs";
+import { RANKS, XP, rankOf, diceTimes, unitEffectDice } from "../config/unit-upgrades.mjs";
+import { rollFormula, averageOf } from "../settlement/rules.mjs";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 /** Сводка эффектов купленных ступеней обучения. */
 export function unitMods(branches = [], upgrades = []) {
   const bought = new Set(upgrades);
-  const m = { power: 0, firstRound: 0, defend: 0, morale: 0, rout: 0, losses: 0, food: 0, pay: 0, drill: 0, vs: {}, terrain: {} };
+  const m = { power: 0, firstRound: 0, defend: 0, morale: 0, rout: 0, losses: [], food: [], pay: [], drill: 0, vs: {}, terrain: {} };
   for (const br of branches) for (const nd of br.nodes ?? []) {
     if (!bought.has(nd.id)) continue;
     for (const e of nd.effects ?? []) {
       const v = Number(e.value) || 0;
       if (e.type === "vs") { if (e.kind) m.vs[e.kind] = (m.vs[e.kind] ?? 0) + v; }
       else if (e.type === "terrain") { if (e.terrain) m.terrain[e.terrain] = (m.terrain[e.terrain] ?? 0) + v; }
+      else if (e.type === "losses" || e.type === "food" || e.type === "pay") { const d = unitEffectDice(e); if (d) m[e.type].push(d); }
       else if (e.type in m) m[e.type] += v;
     }
   }
@@ -88,11 +90,24 @@ export function equipCost(kind, track, from, to, count) {
   return Object.entries(sum).map(([resource, qty]) => ({ resource, qty }));
 }
 
-/** Еда отряда в неделю («Снабжение» сокращает). */
-export const unitFood = u => Math.round(u.soldiers * FOOD_PER_SOLDIER * Math.max(0, 1 - (u.mods?.food ?? 0) / 100) * 10) / 10;
-/** Плата наёмникам в неделю (Богатство). */
-export const unitPay = u => (u.origin === "mercenary"
-  ? Math.round(u.soldiers * MERCENARY.pay * Math.max(0, 1 - (u.mods?.pay ?? 0) / 100) * 1000) / 1000 : 0);
+/**
+ * Броски эффектов отряда (меньше потерь, еды, платы): каждый — столько раз, сколько даёт звание (diceTimes). Без rand —
+ * среднее (лист, прогноз).
+ */
+export function unitDice(u, type, rand = null) {
+  const times = diceTimes(u.rank);
+  return (u.mods?.[type] ?? []).reduce((n, f) => {
+    for (let i = 0; i < times; i++) n += rand ? rollFormula(f, rand).total : averageOf(f);
+    return n;
+  }, 0);
+}
+
+/** Еда отряда в неделю: «Снабжение» кормит часть бойцов даром (бросок). */
+export const unitFood = (u, rand = null) =>
+  Math.round(Math.max(0, u.soldiers - unitDice(u, "food", rand)) * FOOD_PER_SOLDIER * 10) / 10;
+/** Плата наёмникам в неделю (Богатство): часть служит даром (бросок). */
+export const unitPay = (u, rand = null) => (u.origin === "mercenary"
+  ? Math.round(Math.max(0, u.soldiers - unitDice(u, "pay", rand)) * MERCENARY.pay * 1000) / 1000 : 0);
 
 /**
  * Неделя отряда.
@@ -170,8 +185,10 @@ export function battleRound(sides, { round = 1, terrain = "field", rand = Math.r
     const moraleLoss = winner === null ? 1 : i === winner ? 0 : 1 + Math.floor(margin / 4);
     for (const u of side.units) {
       if (!u.soldiers || u.routed) { units.push({ side: i, id: u.id, name: u.name, lost: 0, soldiers: u.soldiers, morale: u.morale, routed: u.routed, xp: 0 }); continue; }
-      const cut = Math.min(0.9, ((ARMOR[u.armor ?? 0]?.losses ?? 0) + (u.mods?.losses ?? 0)) / 100);
-      const dead = Math.min(u.soldiers, Math.ceil(u.soldiers * lost * (1 - cut)));
+      // Броня — доля потерь (снаряжение), обучение — бросок спасённых бойцов (по званию раз)
+      const cut = Math.min(0.9, (ARMOR[u.armor ?? 0]?.losses ?? 0) / 100);
+      const saved = Math.floor(unitDice(u, "losses", rand));
+      const dead = Math.max(0, Math.min(u.soldiers, Math.ceil(u.soldiers * lost * (1 - cut)) - saved));
       const morale = clamp(u.morale - moraleLoss + (i === winner && margin >= 6 ? 1 : 0), 0, MORALE_MAX);
       const soldiers = u.soldiers - dead;
       units.push({ side: i, id: u.id, name: u.name, lost: dead, soldiers, morale, routed: morale <= routAt(u) || !soldiers, xp: XP.round });
