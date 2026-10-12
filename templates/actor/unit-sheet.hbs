@@ -64,7 +64,7 @@
           <header><b>{{label}}</b><span>{{current}}</span></header>
           <ol class="ar-tiers">
             {{#each tiers}}<li class="{{#if on}}on{{/if}}{{#if current}} current{{/if}}"><b>{{label}}</b>
-              <span>{{#if power}}сила +{{power}}{{/if}}{{#if losses}}{{#if power}} · {{/if}}потери −{{losses}}%{{/if}}{{#unless power}}{{#unless losses}}—{{/unless}}{{/unless}}</span><small>{{gear}}</small></li>{{/each}}
+              <span>{{#if power}}сила +{{power}}{{/if}}{{#if saves}}{{#if power}} · {{/if}}<span data-tooltip="Кубики 1d2−1: каждый спасает 0 или 1 бойца в раунд; их больше у большого отряда">спасает {{saves}}d2−{{saves}}</span>{{/if}}{{#unless power}}{{#unless saves}}—{{/unless}}{{/unless}}</span><small>{{gear}}</small></li>{{/each}}
           </ol>
           {{#if next}}
           <div class="ar-track-foot">

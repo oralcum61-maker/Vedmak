@@ -29,6 +29,8 @@ const bare = AR.battleRound([{ units: [u("x", "infantry", 40)] }, { units: [u("z
 ok(plate.units.find(x => x.id === "x").lost < bare.units.find(x => x.id === "x").lost || plate.units.find(x => x.id === "z").lost <= bare.units.find(x => x.id === "z").lost,
   "латы снимают часть потерь");
 ok(res.units.every(x => x.xp >= 2), "за раунд каждому сражавшемуся — опыт");
+ok(AR.armorSave(u("pl", "infantry", 40, 1, 1, 5, 3)) === 1.5 && AR.armorSave(u("pl2", "infantry", 80, 1, 1, 5, 3)) === 3,
+  "латы: 3 кубика 1d2−1 на 40 бойцов (в среднем 1,5), на 80 — вдвое");
 
 stepName("набор");
 const town = await Actor.create({ name: "Прогон: замок", type: "settlement", folder: folder.id,
@@ -101,6 +103,22 @@ ok(militia.system.soldiers + foe.system.soldiers < before, "раунд: обе �
 ok(game.messages.contents.at(-1)?.content.includes("battle-round"), "карточка раунда в чате");
 ok(militia.system.xp >= 32 || militia.system.soldiers === 0, `опыт за раунд битвы (${militia.system.xp})`);
 await app.close();
+
+stepName("оборона поселения и лекари");
+{ const d = SC.buildingItemData("palisade"); d.system.level = 1; await game.vedmak.settlement.createBuildings(town, [d]); }
+ok(town.system.summary.defense === 2, `частокол: укрепления +2 (${town.system.summary.defense})`);
+const raiders = await Actor.create({ name: "Прогон: налётчики", type: "unit", folder: folder.id, system: { kind: "infantry", soldiers: 60, training: 2, morale: 9, weapons: 2 } });
+const siege = ARMY.battle([raiders]);
+siege.sides = [{ ids: [raiders.id], defender: false }, { ids: [militia.id], defender: true }];
+siege.town = town.uuid; await siege.render(); await wait(400);
+ok(siege.element.querySelector(".bt-fort")?.textContent.includes("2"), "в окне битвы — укрепления «у стен» +2");
+siege.element.querySelector("[data-action=round]").click(); await wait(800);
+ok(game.messages.contents.at(-1)?.content.includes("укрепления 2"), "защитникам в броске — укрепления");
+for (let i = 0; i < 25 && !siege.log.at(-1)?.over; i++) { siege.element.querySelector("[data-action=round]")?.click(); await wait(500); }
+const last = siege.log.at(-1);
+ok(last?.over && (last.healed.length > 0 || !Object.keys(siege.lost).length), `битва окончена, лекари вернули часть павших (${last?.healed?.join("; ") || "павших нет"})`);
+await siege.close();
+await raiders.delete();
 
 stepName("роспуск");
 const m0 = town.system.militia, left = militia.system.soldiers;

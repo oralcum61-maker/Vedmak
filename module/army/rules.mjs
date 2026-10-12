@@ -2,7 +2,7 @@
 // отдельно), неделя отряда (тренировка, опыт, ступень обучения, еда, плата, боевой дух) и раунд битвы (бросок сил сторон,
 // потери с бронёй, бегство, опыт). Ступени обучения (config/unit-upgrades.mjs) сводятся в unitMods.
 
-import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, MAX_TRAINING, MAX_GEAR, MORALE_MAX, ROUT_AT, TERRAIN, SOLDIERS_PER_POWER,
+import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, armorDice, MAX_TRAINING, MAX_GEAR, MORALE_MAX, ROUT_AT, TERRAIN, SOLDIERS_PER_POWER,
   FOOD_PER_SOLDIER, MERCENARY } from "../config/army.mjs";
 import { RANKS, XP, rankOf, diceTimes, unitEffectDice } from "../config/unit-upgrades.mjs";
 import { rollFormula, averageOf } from "../settlement/rules.mjs";
@@ -102,6 +102,15 @@ export function unitDice(u, type, rand = null) {
   }, 0);
 }
 
+/** Сколько бойцов спасла броня в раунд: кубики 1d2−1 (их число — armorDice); без rand — среднее. */
+export function armorSave(u, rand = null) {
+  const n = armorDice(u.armor ?? 0, u.soldiers);
+  if (!rand) return n / 2;
+  let saved = 0;
+  for (let i = 0; i < n; i++) saved += Math.floor(rand() * 2);
+  return saved;
+}
+
 /** Еда отряда в неделю: «Снабжение» кормит часть бойцов даром (бросок). */
 export const unitFood = (u, rand = null) =>
   Math.round(Math.max(0, u.soldiers - unitDice(u, "food", rand)) * FOOD_PER_SOLDIER * 10) / 10;
@@ -173,8 +182,10 @@ export function battleRound(sides, { round = 1, terrain = "field", rand = Math.r
     const powers = side.units.map(u => ({ id: u.id, ...unitPower(u, { enemyKinds: enemy, round, terrain, defender: !!side.defender }) }));
     const power = powers.reduce((s, p) => s + p.total, 0);
     const ground = side.defender ? TERRAIN[terrain]?.defender ?? 0 : 0;
+    // Укрепления поселения, у стен которого бой (PLAN 4.203) — его защитникам
+    const fort = side.defender ? side.fort ?? 0 : 0;
     const d10 = Math.floor(rand() * 10) + 1;
-    return { d10, power, ground, total: d10 + power + ground, powers };
+    return { d10, power, ground, fort, total: d10 + power + ground + fort, powers };
   });
   const diff = rolls[0].total - rolls[1].total;
   const winner = diff > 0 ? 0 : diff < 0 ? 1 : null;
@@ -185,10 +196,9 @@ export function battleRound(sides, { round = 1, terrain = "field", rand = Math.r
     const moraleLoss = winner === null ? 1 : i === winner ? 0 : 1 + Math.floor(margin / 4);
     for (const u of side.units) {
       if (!u.soldiers || u.routed) { units.push({ side: i, id: u.id, name: u.name, lost: 0, soldiers: u.soldiers, morale: u.morale, routed: u.routed, xp: 0 }); continue; }
-      // Броня — доля потерь (снаряжение), обучение — бросок спасённых бойцов (по званию раз)
-      const cut = Math.min(0.9, (ARMOR[u.armor ?? 0]?.losses ?? 0) / 100);
-      const saved = Math.floor(unitDice(u, "losses", rand));
-      const dead = Math.max(0, Math.min(u.soldiers, Math.ceil(u.soldiers * lost * (1 - cut)) - saved));
+      // Спасённые бойцы: броня — кубики 1d2−1 по численности, обучение — броски по званию
+      const saved = armorSave(u, rand) + Math.floor(unitDice(u, "losses", rand));
+      const dead = Math.max(0, Math.min(u.soldiers, Math.ceil(u.soldiers * lost) - saved));
       const morale = clamp(u.morale - moraleLoss + (i === winner && margin >= 6 ? 1 : 0), 0, MORALE_MAX);
       const soldiers = u.soldiers - dead;
       units.push({ side: i, id: u.id, name: u.name, lost: dead, soldiers, morale, routed: morale <= routAt(u) || !soldiers, xp: XP.round });

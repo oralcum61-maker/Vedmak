@@ -3,6 +3,7 @@
   {{#if viewer}}<div class="vd-view-banner"><i class="fa-solid fa-eye"></i> {{#if viewCanAct}}Общий стол: окно ведёт {{viewHost}}, ваши нажатия идут к нему{{else}}Смотрите вместе со всеми: битву ведёт {{viewHost}}{{/if}}</div>{{/if}}
   <div class="bt-bar">
     <label>Местность <select name="terrain">{{#each terrains}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+    <label data-tooltip="Бой у стен поселения: его укрепления (частокол, башни, ров) — прибавка обороняющейся стороне">У стен <select name="battleTown"><option value="">— в поле —</option>{{#each towns}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select>{{#if fort}} <b class="bt-fort">+{{fort}}</b>{{/if}}</label>
     <span class="bt-round">Раунд {{round}}</span>
     <button type="button" class="sv-next" data-action="round" {{#unless ready}}disabled{{/unless}}>Раунд</button>
     <a class="sv-btn" data-action="reset" data-tooltip="Раунды с первого, бегство снято">Новая битва</a>

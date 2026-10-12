@@ -150,7 +150,7 @@ export const BUILDINGS = {
     hint: "Дом правителя: без усадьбы налоги не собрать. Второй уровень — налог в полтора раза больше и +1 к Контролю.",
     levels: [
       { cost: [{ resource: "Древесина", qty: 15 }, { resource: "Камень", qty: 10 }], weeks: 4, housing: 1, taxes: 1 },
-      { cost: [{ resource: "Камень", qty: 20 }, { resource: WEALTH, qty: 1 }], weeks: 4, housing: 1, taxes: 1.5, control: 1 }
+      { cost: [{ resource: "Камень", qty: 20 }, { resource: WEALTH, qty: 1 }], weeks: 4, housing: 1, taxes: 1.5, control: 1, defense: 1 }
     ]
   },
   lumber: {
@@ -1377,6 +1377,7 @@ export const BUILDINGS = {
         families: 3,
         controlPerFamily: 1,
         drill: 1,
+        defense: 1,
         upkeep: [
           {
             resource: FOOD,
@@ -1400,6 +1401,7 @@ export const BUILDINGS = {
         families: 5,
         controlPerFamily: 1,
         drill: 1,
+        defense: 1,
         upkeep: [
           {
             resource: FOOD,
@@ -1415,7 +1417,7 @@ export const BUILDINGS = {
     group: "defense",
     img: "icons/environment/settlement/fence-wooden-picket.webp",
     unique: true,
-    hint: "Стена вокруг поселения: +1 к Контролю; каменная — +2.",
+    hint: "Стена вокруг поселения: +1 к Контролю, укрепления +2; каменная — +2 и +4. Укрепления — прибавка защитникам в битве у стен.",
     levels: [
       {
         cost: [
@@ -1425,7 +1427,8 @@ export const BUILDINGS = {
           }
         ],
         weeks: 3,
-        control: 1
+        control: 1,
+        defense: 2
       },
       {
         cost: [
@@ -1435,7 +1438,8 @@ export const BUILDINGS = {
           }
         ],
         weeks: 6,
-        control: 2
+        control: 2,
+        defense: 4
       }
     ]
   },
@@ -1756,6 +1760,7 @@ export const fullRow = r => ({ resource: r.resource ?? "", formula: r.formula ??
 export const fullLevel = l => ({
   cost: (l.cost ?? []).map(c => ({ ...c })), weeks: l.weeks ?? 1, families: l.families ?? 0, housing: l.housing ?? 0,
   control: l.control ?? 0, controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0, drill: l.drill ?? 0,
+  defense: l.defense ?? 0,
   consume: (l.consume ?? []).map(fullRow), produce: (l.produce ?? []).map(fullRow), upkeep: (l.upkeep ?? []).map(fullRow)
 });
 

@@ -198,6 +198,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (lv.controlPerFamily) gives.push(`Контроль +${lv.controlPerFamily} за семью`);
       if (lv.storage) gives.push(`склад +${lv.storage}`);
       if (lv.drill) gives.push(`тренировка войск ×${lv.drill}`);
+      if (lv.defense) gives.push(`укрепления +${lv.defense}`);
       if (lv.taxes) gives.push(lv.taxes > 1 ? `налог ×${lv.taxes}` : "налоги");
       if (b.trade) gives.push("торговля");
     }

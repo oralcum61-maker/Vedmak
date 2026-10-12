@@ -38,13 +38,20 @@ export const WEAPONS = [
   { label: "Добротное", power: 2 },
   { label: "Мастерское", power: 3 }
 ];
-/** Броня: подпись, сила и сколько процентов потерь снимает. */
+/**
+ * Броня: подпись, сила и кубики спасения (PLAN 4.203: «броня на кубиках»). saves — сколько кубиков 1d2−1 (спасает 0 или 1
+ * бойца) на каждые ARMOR_PER бойцов отряда: так броня держит потери соразмерными и большому, и малому отряду.
+ */
 export const ARMOR = [
-  { label: "Без брони", power: 0, losses: 0 },
-  { label: "Стёганка", power: 0, losses: 10 },
-  { label: "Кольчуга", power: 1, losses: 20 },
-  { label: "Латы", power: 1, losses: 30 }
+  { label: "Без брони", power: 0, saves: 0 },
+  { label: "Стёганка", power: 0, saves: 1 },
+  { label: "Кольчуга", power: 1, saves: 2 },
+  { label: "Латы", power: 1, saves: 3 }
 ];
+/** На сколько бойцов один набор кубиков брони. */
+export const ARMOR_PER = 40;
+/** Кубиков брони у отряда (бросок каждого — 1d2−1). */
+export const armorDice = (tier, soldiers) => (ARMOR[tier]?.saves ?? 0) * Math.ceil(Math.max(0, soldiers) / ARMOR_PER);
 /** Снаряжение по дорожкам: оружие и броня — каждое со своей шкалой. */
 export const GEAR = { weapons: { label: "Оружие", tiers: WEAPONS }, armor: { label: "Броня", tiers: ARMOR } };
 export const MAX_GEAR = 3;

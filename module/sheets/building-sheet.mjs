@@ -27,7 +27,8 @@ const LEVEL_FIELDS = [
   ["controlPerFamily", "Контроль / семья", "Прибавка к Контролю за каждую семью на работе (стража)"],
   ["drill", "Тренировка", "Скорость тренировки отрядов поселения (плац, казарма): 0 — здесь не тренируют"],
   ["taxes", "Налоги ×", "Без постройки с налогами (усадьба) налог не собрать: 1 — обычный, 1,5 — в полтора раза больше"],
-  ["storage", "Склад +", "Прибавка к вместимости склада по каждому ресурсу"]
+  ["storage", "Склад +", "Прибавка к вместимости склада по каждому ресурсу"],
+  ["defense", "Укрепления", "Прибавка защитникам в битве у стен поселения"]
 ];
 
 /** Строка выработки — значком: ресурс, бросок, кому, как часто, условия. */
@@ -48,6 +49,7 @@ function tagsOf(lv, trade) {
   if (lv.control) out.push({ label: "Контроль", value: `+${lv.control}`, icon: "fa-shield-halved" });
   if (lv.controlPerFamily) out.push({ label: "Контроль", value: `+${lv.controlPerFamily} / сем.`, icon: "fa-shield-halved" });
   if (lv.storage) out.push({ label: "Склад", value: `+${lv.storage}`, icon: "fa-boxes-stacked" });
+  if (lv.defense) out.push({ label: "Укрепления", value: `+${lv.defense}`, icon: "fa-chess-rook" });
   if (lv.drill) out.push({ label: "Тренировка", value: `×${lv.drill}`, icon: "fa-person-rifle" });
   if (lv.taxes) out.push({ label: "Налоги", value: lv.taxes > 1 ? `×${lv.taxes}` : "собираются", icon: "fa-coins" });
   if (trade) out.push({ label: "Торговля", value: "купцы", icon: "fa-scale-balanced" });
@@ -73,6 +75,7 @@ export function effectLabel(e) {
     case "revolt": return `−${effectDice(e)} к шансу бунта за уровень`;
     case "arrival": return `+${effectDice(e)} к шансу прихода семей за уровень`;
     case "trade": return "торговля";
+    case "defense": return `укрепления +${v}`;
     default: return `${BUILDING_EFFECTS[e.type]?.label ?? e.type} ${v}`;
   }
 }

@@ -4,7 +4,7 @@
 // доступна, закрыта; ведущий правит дерево); «Летопись». Облик — общий с листом поселения (styles/settlement.css),
 // своё — styles/army.css.
 
-import { UNIT_KINDS, TRAINING, GEAR, ORIGINS, MAX_GEAR, MAX_TRAINING, MORALE_MAX, TERRAIN } from "../config/army.mjs";
+import { UNIT_KINDS, TRAINING, GEAR, ORIGINS, MAX_GEAR, MAX_TRAINING, MORALE_MAX, TERRAIN, armorDice } from "../config/army.mjs";
 import { RANKS, UNIT_EFFECTS, unitEffectDice } from "../config/unit-upgrades.mjs";
 import { resourceIcon } from "../config/settlement.mjs";
 import { equipCost, routAt } from "../army/rules.mjs";
@@ -88,7 +88,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       const cost = up ? equipCost(sys.kind, track, level, up, sys.soldiers) : [];
       return {
         track, label: g.label, level, current: g.tiers[level].label,
-        tiers: g.tiers.map((t, i) => ({ label: t.label, power: t.power, losses: t.losses ?? 0, on: i <= level, current: i === level,
+        tiers: g.tiers.map((t, i) => ({ label: t.label, power: t.power, saves: track === "armor" ? armorDice(i, sys.soldiers) : 0, on: i <= level, current: i === level,
           gear: i ? (kind.gear?.[track]?.[i - 1] ?? []).map(x => `${x.resource} ${x.qty}`).join(", ") + " на бойца" : "ничего" })),
         next: up ? g.tiers[up].label : "",
         cost: cost.map(c => ({ img: resourceIcon(c.resource), name: c.resource, qty: c.qty, short: !have(c) })),

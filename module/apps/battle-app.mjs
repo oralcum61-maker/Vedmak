@@ -46,6 +46,10 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
   showAll = false;
 
   sides = [{ ids: [], defender: false }, { ids: [], defender: true }];
+  /** Поселение, у стен которого бой (uuid): его укрепления — обороняющимся. */
+  town = "";
+  /** Павшие за битву по отрядам: после битвы лекари возвращают часть. */
+  lost = {};
   terrain = "field";
   roundNo = 1;
   log = [];
@@ -67,8 +71,11 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
       return { index: i, label: i ? "Вторая сторона" : "Первая сторона", defender: s.defender, units,
         soldiers: units.filter(u => !u.routed).reduce((n, u) => n + u.soldiers, 0), power: units.filter(u => !u.routed).reduce((n, u) => n + u.power, 0) };
     });
+    const town = this.town ? fromUuidSync(this.town) : null;
     return {
       sides, round: this.roundNo, log: [...this.log].reverse(),
+      towns: game.actors.filter(a => a.type === "settlement").map(a => ({ uuid: a.uuid, name: a.name, selected: a.uuid === this.town })),
+      fort: town ? town.system.summary.defense : 0,
       terrains: Object.entries(TERRAIN).map(([k, t]) => ({ key: k, label: t.label, selected: k === this.terrain })),
       ready: sides.every(s => s.units.some(u => !u.routed && u.soldiers)), showAll: this.showAll
     };
@@ -82,6 +89,7 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.viewer) return wireViewer(this);
     shareView("battle", this, { context, actors: this.#units, showAll: this.showAll });
     this.element.querySelector("select[name=terrain]")?.addEventListener("change", ev => { this.terrain = ev.target.value; });
+    this.element.querySelector("select[name=battleTown]")?.addEventListener("change", ev => { this.town = ev.target.value; this.render(); });
     // Отряд из списка актёров — на сторону, куда бросили
     for (const col of this.element.querySelectorAll("[data-side]")) {
       col.addEventListener("dragover", ev => ev.preventDefault());
@@ -100,6 +108,28 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     super._onClose?.(options);
     if (this.viewer) viewerClosed(this, options);
     else closeView("battle", this);
+  }
+
+  /**
+   * Битва кончилась — лекари родного поселения возвращают в строй часть павших: 20 % и по 10 % за хату травника,
+   * алхимическую лавку и храм (не больше 50 %).
+   */
+  async #heal() {
+    const out = [];
+    const updates = [];
+    for (const [id, lost] of Object.entries(this.lost)) {
+      const unit = game.actors.get(id);
+      const home = unit?.system.settlementActor;
+      if (!unit || !home) continue;
+      const healers = home.system.buildings.filter(b => b.level >= 1 && ["herbalist", "alchemist", "temple"].includes(b.key)).length;
+      const back = Math.floor(lost * Math.min(0.5, 0.2 + 0.1 * healers));
+      if (!back) continue;
+      updates.push({ _id: id, "system.soldiers": unit.system.soldiers + back });
+      out.push(`${unit.name}: +${back} из ${lost}`);
+    }
+    if (updates.length) await Actor.updateDocuments(updates);
+    this.lost = {};
+    return out;
   }
 
   static #onShowAll() { this.showAll = !this.showAll; this.render(); }
@@ -130,23 +160,28 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onReset() {
     const ids = this.sides.flatMap(s => s.ids);
     await Actor.updateDocuments(ids.filter(id => game.actors.get(id)?.system.routed).map(id => ({ _id: id, "system.routed": false })));
-    this.roundNo = 1; this.log = [];
+    this.roundNo = 1; this.log = []; this.lost = {};
     this.session = foundry.utils.randomID();
     this.render();
   }
 
   static async #onRound() {
     const actors = this.sides.map(s => s.ids.map(id => game.actors.get(id)).filter(Boolean));
-    const sides = actors.map((list, i) => ({ defender: this.sides[i].defender, units: list.map(unitState) }));
+    const town = this.town ? fromUuidSync(this.town) : null;
+    const fort = town?.system.summary.defense ?? 0;
+    const sides = actors.map((list, i) => ({ defender: this.sides[i].defender, fort, units: list.map(unitState) }));
     if (!sides.every(s => s.units.some(u => u.soldiers && !u.routed))) return ui.notifications.warn("На обеих сторонах нужны стоящие отряды.");
     const res = battleRound(sides, { round: this.roundNo, terrain: this.terrain, rand });
     // Опыт (PLAN 4.198): каждому сражавшемуся — за раунд, победителям битвы — за победу
     await Actor.updateDocuments(res.units.map(u => ({ _id: u.id, "system.soldiers": u.soldiers, "system.morale": u.morale, "system.routed": u.routed,
       "system.xp": (game.actors.get(u.id)?.system.xp ?? 0) + (u.xp ?? 0) })));
+    for (const u of res.units) if (u.lost) this.lost[u.id] = (this.lost[u.id] ?? 0) + u.lost;
+    const healed = res.over ? await this.#heal() : [];
     const name = i => actors[i].map(a => a.name).join(", ");
     const entry = {
       round: this.roundNo, terrain: TERRAIN[this.terrain].label,
-      sides: res.rolls.map((r, i) => ({ name: name(i), d10: r.d10, power: r.power, ground: r.ground, total: r.total, win: res.winner === i })),
+      sides: res.rolls.map((r, i) => ({ name: name(i), d10: r.d10, power: r.power, ground: r.ground, fort: r.fort, total: r.total, win: res.winner === i })),
+      healed,
       units: res.units.filter(u => u.lost || u.routed).map(u => ({ name: u.name, lost: u.lost, soldiers: u.soldiers, morale: u.morale, routed: u.routed })),
       tie: res.winner === null, over: res.over, victor: res.over && res.victor !== null ? name(res.victor) : ""
     };

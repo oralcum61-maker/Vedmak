@@ -30,6 +30,8 @@ export const buildingLevel = () => new SchemaField({
   storage: int(0, { min: 0 }),
   // Скорость тренировки отрядов (плац, казарма): 0 — здесь не тренируют
   drill: int(0, { min: 0 }),
+  // Укрепления (PLAN 4.203): прибавка обороняющимся в битве у стен поселения
+  defense: int(0, { min: 0 }),
   consume: new ArrayField(productionRow()),
   produce: new ArrayField(productionRow()),
   upkeep: new ArrayField(productionRow())

@@ -79,11 +79,29 @@ export async function fillBuildingTrees() {
   return updates.length;
 }
 
+/**
+ * Встроенным постройкам, созданным до укреплений (PLAN 4.203), — укрепления уровней из справочника (ведущий; только там,
+ * где их нет: своё ведущего не трогается).
+ */
+export async function syncBuildingDefense() {
+  if (!game.user.isGM || game.users.activeGM !== game.user) return 0;
+  const updates = [];
+  for (const a of game.actors.filter(a => a.type === "building" && BUILDINGS[a.system.key])) {
+    const ref = buildingItemData(a.system.key).system.levels;
+    const levels = foundry.utils.deepClone(a._source.system.levels);
+    let changed = false;
+    levels.forEach((l, i) => { if (!l.defense && ref[i]?.defense) { l.defense = ref[i].defense; changed = true; } });
+    if (changed) updates.push({ _id: a.id, "system.levels": levels });
+  }
+  if (updates.length) await Actor.implementation.updateDocuments(updates);
+  return updates.length;
+}
+
 export function registerBuildingHooks() {
   // Пока мир загружается, поселения считаются без построек — пересчёт после загрузки, затем перенос старых предметов
   Hooks.once("ready", async () => {
     refreshSettlements();
-    try { await migrateBuildingItems(); await fillBuildingTrees(); } catch (err) { console.error("vedmak | перенос построек", err); }
+    try { await migrateBuildingItems(); await fillBuildingTrees(); await syncBuildingDefense(); } catch (err) { console.error("vedmak | перенос построек", err); }
   });
   // Постройку перенесли в другое поселение — пересчитать и прежнее
   const was = new Map();

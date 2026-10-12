@@ -66,7 +66,7 @@ const normRow = r => ({ resource: String(r.resource ?? "").trim(), formula: r.fo
 const normLevel = (l = {}) => ({
   cost: (l.cost ?? []).filter(c => c.resource && c.qty > 0).map(c => ({ resource: String(c.resource).trim(), qty: c.qty })),
   weeks: l.weeks ?? 1, families: l.families ?? 0, housing: l.housing ?? 0, control: l.control ?? 0,
-  controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0, drill: l.drill ?? 0,
+  controlPerFamily: l.controlPerFamily ?? 0, taxes: l.taxes ?? 0, storage: l.storage ?? 0, drill: l.drill ?? 0, defense: l.defense ?? 0,
   consume: (l.consume ?? []).map(normRow).filter(r => r.resource),
   produce: (l.produce ?? []).map(normRow).filter(r => r.resource),
   upkeep: (l.upkeep ?? []).map(normRow).filter(r => r.resource)
@@ -80,7 +80,7 @@ const normLevel = (l = {}) => ({
 export function upgradeMods(branches = [], upgrades = []) {
   const bought = new Set(upgrades);
   const m = { produce: {}, consume: {}, upkeep: {}, produceAdd: [], families: 0, housing: 0, control: 0, storage: 0, drill: 0,
-    taxes: 0, approval: 0, revolt: [], arrival: [], trade: false };
+    taxes: 0, approval: 0, revolt: [], arrival: [], trade: false, defense: 0 };
   for (const br of branches) for (const nd of br.nodes ?? []) {
     if (!bought.has(nd.id)) continue;
     for (const e of nd.effects ?? []) {
@@ -147,7 +147,7 @@ export function activeLevel(b) {
   return {
     ...lv,
     families: lv.families + m.families, housing: lv.housing + m.housing, control: lv.control + m.control,
-    storage: lv.storage + m.storage, drill: lv.drill ? lv.drill + m.drill : m.drill,
+    storage: lv.storage + m.storage, drill: lv.drill ? lv.drill + m.drill : m.drill, defense: (lv.defense ?? 0) + m.defense,
     produce: [...lv.produce, ...m.produceAdd],
     bonus: { produce: m.produce, consume: m.consume, upkeep: m.upkeep, times: b.level }
   };
@@ -168,7 +168,7 @@ export function canAfford(state, cost = []) {
 
 /** Что есть у поселения без хода: дома, бездомные, работа, строители, вместимость, налоги, Контроль, шансы месяца. */
 export function summarize(state) {
-  let houses = 0, control = state.control ?? 0, assigned = 0, storage = BASE_STORAGE, taxMult = 0, trade = false, drill = 0;
+  let houses = 0, control = state.control ?? 0, assigned = 0, storage = BASE_STORAGE, taxMult = 0, trade = false, drill = 0, defense = 0;
   let taxBonus = 0, approvalBonus = 0;
   const revoltDice = [], arrivalDice = [];
   const jobs = [];
@@ -180,6 +180,7 @@ export function summarize(state) {
     storage += lv.storage;
     taxMult = Math.max(taxMult, lv.taxes);
     drill = Math.max(drill, lv.drill);
+    defense += lv.defense ?? 0;
     if (b.trade || b.mods?.trade) trade = true;
     if (b.mods) {
       taxBonus += b.mods.taxes; approvalBonus += b.mods.approval;
@@ -206,7 +207,7 @@ export function summarize(state) {
   const tax = TAXES[state.taxes] ?? TAXES.low;
   return {
     houses, homeless: Math.max(0, families - houses), freeHouses: Math.max(0, houses - families),
-    assigned, idle, constructing, builders: Math.min(idle, constructing), control, storage, trade, drill,
+    assigned, idle, constructing, builders: Math.min(idle, constructing), control, storage, trade, drill, defense,
     taxMult: taxMult ? taxMult + taxBonus : 0, taxCoins: families * tax.perFamily * (taxMult ? taxMult + taxBonus : 0),
     approvalBonus, revoltDice, arrivalDice, revoltBase: revoltChance(approval, control),
     revoltMinus: diceAverage(revoltDice), arrivalPlus: diceAverage(arrivalDice),

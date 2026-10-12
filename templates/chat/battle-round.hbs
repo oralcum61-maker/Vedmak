@@ -8,9 +8,10 @@
   </header>
   <div class="card-body">
     <ul class="sw-lines">
-      {{#each sides}}<li><span>{{name}}</span><b class="{{#if win}}up{{/if}}">{{total}}</b><em>d10 {{d10}} + сила {{power}}{{#if ground}} + местность {{ground}}{{/if}}</em></li>{{/each}}
+      {{#each sides}}<li><span>{{name}}</span><b class="{{#if win}}up{{/if}}">{{total}}</b><em>d10 {{d10}} + сила {{power}}{{#if ground}} + местность {{ground}}{{/if}}{{#if fort}} + укрепления {{fort}}{{/if}}</em></li>{{/each}}
     </ul>
     {{#each units}}<p class="note{{#if routed}} warn{{/if}}">{{name}}: потери {{lost}}, осталось {{soldiers}}, боевой дух {{morale}}{{#if routed}} — бегут с поля!{{/if}}</p>{{/each}}
     {{#if over}}<p class="note"><b>Битва окончена{{#if victor}}: победа — {{victor}}{{/if}}.</b></p>{{/if}}
+    {{#if healed.length}}<p class="note up">Лекари вернули в строй: {{#each healed}}{{this}}{{#unless @last}}; {{/unless}}{{/each}}.</p>{{/if}}
   </div>
 </div>
