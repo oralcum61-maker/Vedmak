@@ -37,6 +37,7 @@ import { performCheck, rollD10 } from "./module/dice/check.mjs";
 import { SYSTEM_ID, forgetSetting } from "./module/util.mjs";
 import { registerStatusEffects } from "./module/combat/statuses.mjs";
 import { registerMonsterTraitHooks } from "./module/combat/monster-traits.mjs";
+import { registerImmortality } from "./module/combat/immortality.mjs";
 import { VedmakCombat } from "./module/combat/combat.mjs";
 import { registerChatListeners } from "./module/combat/chat.mjs";
 import { registerCombatAutomation } from "./module/combat/auto.mjs";
@@ -114,6 +115,7 @@ Hooks.once("init", () => {
   CONFIG.time.roundTime = 3;
   registerStatusEffects();
   registerMonsterTraitHooks();
+  registerImmortality();
 
   game.settings.register(SYSTEM_ID, "booksMonsters", {
     name: "Чудовища из книг",

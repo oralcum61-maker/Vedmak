@@ -12,6 +12,7 @@ import { expireZonesForTurn } from "./zones.mjs";
 import { repeatZonesForTurn } from "../magic/cast.mjs";
 import { dimeritiumTurn } from "../magic/dimeritium.mjs";
 import { regenStartOfTurn } from "./monster-traits.mjs";
+import { critRegenStartOfTurn, isImmortalPC, immortalFloor } from "./immortality.mjs";
 
 export class VedmakCombat extends Combat {
 
@@ -150,6 +151,7 @@ export async function startOfTurn(actor, combat, context) {
   await step("медвежья форма", () => bearFormStartOfTurn(actor));
   await step("магия", () => magicStartOfTurn(actor));
   if (actor.type === "monster") await step("регенерация", () => regenStartOfTurn(actor));
+  await step("регенерация ранений", () => critRegenStartOfTurn(actor));
   await step("зоны", () => expireZonesForTurn(actor, combat));
   await step("повтор зон", () => repeatZonesForTurn(actor, combat));
 
@@ -223,7 +225,9 @@ export async function startOfTurn(actor, combat, context) {
   }
 
   // При смерти — испытание каждый раунд
-  if (actor.system.hp.value < 0 && !actor.statuses.has("dead")) {
+  if (actor.system.hp.value < 0 && !actor.statuses.has("dead") && isImmortalPC(actor)) {
+    lines.push(`Бессмертие: при смерти, но не умирает — испытаний нет до −${-immortalFloor(actor)} ПЗ.`);
+  } else if (actor.system.hp.value < 0 && !actor.statuses.has("dead")) {
     lines.push(wasDying ? "При смерти: испытание против смерти." : "Персонаж при смерти: испытание против смерти.");
     buttons.push({ action: "deathSave", label: "Испытание против смерти" });
   }

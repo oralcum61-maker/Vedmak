@@ -146,15 +146,13 @@ export const regenBlocked = actor => (actor?.effects ?? []).some(e => e.active
 export async function regenStartOfTurn(actor) {
   const regen = monsterTraits(actor).regen;
   if (!regen || actor.statuses.has("dead")) return [];
-  const crits = regen.crits && actor.items.some(i => i.type === "critWound")
-    ? ["Бессмертие: заживает одно критическое ранение, начиная с лёгких (1/2/4/6 раундов) — отметьте вручную."] : [];
-  if (regen.conditional) return [`Регенерация (по условию — проверьте): ${regen.text}`, ...crits];
+  if (regen.conditional) return [`Регенерация (по условию — проверьте): ${regen.text}`];
   if (regenBlocked(actor)) return ["Регенерация: не действует — лунная пыль."];
   const hp = actor.system.hp;
-  if (hp.value >= hp.max) return crits;
+  if (hp.value >= hp.max) return [];
   const heal = Math.min(regen.amount, hp.max - hp.value);
   await actor.update({ "system.hp.value": hp.value + heal });
-  return [`Регенерация: +${heal} ПЗ (${hp.value + heal}/${hp.max}).`, ...crits];
+  return [`Регенерация: +${heal} ПЗ (${hp.value + heal}/${hp.max}).`];
 }
 
 /** Высота токена — по данным документа: поле `elevation` в v14 анимируется и до конца перемещения отстаёт. */
@@ -250,7 +248,7 @@ export function traitSummary(actor) {
   if (t.regen) {
     out.push(t.regen.conditional ? "регенерация — напоминание в начале хода (есть условие)"
       : `регенерация ${t.regen.amount} ПЗ в начале хода`);
-    if (t.regen.crits) out.push("заживление критов — напоминание");
+    if (t.regen.crits) out.push("заживление критов — само, по раундам");
   }
   if (t.incorporeal) out.push("бесплотен — оружие не ранит вне Ирдена и лунной пыли");
   if (t.invisibility) out.push(t.invisibility === "superior" ? "превосходная невидимость по статусу «Невидимость» (+5 к атаке и защите, спадает от попадания)"

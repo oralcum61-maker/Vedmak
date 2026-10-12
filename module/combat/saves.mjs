@@ -3,6 +3,7 @@
 import { bindDialog, luckDots, luckNote } from "../dice/dialog-ui.mjs";
 import { renderTemplate } from "../util.mjs";
 import { defaultMessageMode } from "./common.mjs";
+import { isImmortalPC, immortalFloor } from "./immortality.mjs";
 
 /** Сообщение-карточка испытания. Видимость — режим чата пользователя: без него v14 отдаёт карточку всем. */
 async function saveCard(actor, data) {
@@ -60,6 +61,11 @@ export async function rollStunSave(actor, { mod = 0, reason = "", applyStatus = 
  */
 export async function rollDeathSave(actor, { luck = 0, reason = "" } = {}) {
   if (!actor) return null;
+  // Бессмертие высшего вампира: до −максимума ПЗ не умирает (PLAN 4.219)
+  if (isImmortalPC(actor) && actor.system.hp.value >= immortalFloor(actor)) {
+    ui.notifications.info(`${actor.name}: Бессмертие — испытание против смерти не нужно (до −${-immortalFloor(actor)} ПЗ).`);
+    return null;
+  }
   const sys = actor.system;
   const roll = await new Roll("1d10").evaluate();
   const penalty = sys.deathSaves?.penalty ?? 0;
@@ -96,6 +102,7 @@ export async function markDead(actor) {
 
 /** Окно выбора Удачи перед испытанием против смерти. */
 export async function deathSaveDialog(actor) {
+  if (isImmortalPC(actor)) return rollDeathSave(actor);
   const luckMax = actor.system.luck?.value ?? 0;
   if (!luckMax) return rollDeathSave(actor);
   const sys = actor.system;

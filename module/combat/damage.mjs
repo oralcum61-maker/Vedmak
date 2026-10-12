@@ -12,6 +12,7 @@ import {
 } from "./common.mjs";
 import { alchemyAfterDamage, adrenalinePerCrit, immuneStatuses } from "../crafting/alchemy-triggers.mjs";
 import { markDead } from "./saves.mjs";
+import { isImmortalPC, immortalDamageNote } from "./immortality.mjs";
 import { implantStatusBonus, implantBurnVulnerability } from "../config/crafting.mjs";
 import { wallCover } from "./cover.mjs";
 import { isIncorporeal, flightAfterDamage, dropInvisibility } from "./monster-traits.mjs";
@@ -547,7 +548,10 @@ export async function applyDamageToActor(actor, dmg) {
     const hp = sys.hp.value - dmg.final;
     updates["system.hp.value"] = hp;
     lines.push(`Урон ${dmg.final}: ПЗ ${sys.hp.value} → ${hp}.`);
-    if (hp < 0) {
+    if (hp < 0 && isImmortalPC(actor)) {
+      // Бессмертие высшего вампира: до −максимума ПЗ испытаний нет, за ним — окончательная смерть (PLAN 4.219)
+      lines.push(...immortalDamageNote(actor, hp).lines);
+    } else if (hp < 0) {
       deathSave = true;
       // Новое ранение при смерти: порог испытания падает ещё на 1 (стр. 162 — «за раунд и за каждое новое ранение»)
       if (wasDying) updates["system.deathSaves.penalty"] = (sys.deathSaves?.penalty ?? 0) + 1;
@@ -589,8 +593,11 @@ export async function applyDamageToActor(actor, dmg) {
     if (m.bleeding) await actor.toggleStatusEffect("bleeding", { active: true });
     if (m.poisoned) await actor.toggleStatusEffect("poisoned", { active: true });
     if (m.suffocating) await actor.toggleStatusEffect("suffocating", { active: true });
-    if (m.deathSave) { deathSave = true; lines.push("Травма сердца: немедленное испытание против смерти."); }
-    if (m.death) { await markDead(actor); lines.push("Смертельное ранение — мгновенная смерть."); deathSave = false; }
+    if (isImmortalPC(actor) && (m.deathSave || m.death)) lines.push("Бессмертие: смертельное ранение не убивает высшего вампира.");
+    else {
+      if (m.deathSave) { deathSave = true; lines.push("Травма сердца: немедленное испытание против смерти."); }
+      if (m.death) { await markDead(actor); lines.push("Смертельное ранение — мгновенная смерть."); deathSave = false; }
+    }
   }
 
   // Эффекты оружия
