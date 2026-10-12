@@ -62,6 +62,31 @@
   {{#if (eq tab "economy")}}
     {{#if siege}}<div class="sv-siege"><i class="fa-solid fa-chess-rook"></i><span><b>В осаде</b> {{siege.weeks}} нед.: под стенами {{siege.units}}. Поля и промыслы стоят, купцы и новые семьи не приходят; одобрение падает каждый месяц.</span>
       {{#if gm}}<a class="sv-btn" data-action="liftSiege">Снять осаду</a>{{/if}}</div>{{/if}}
+    {{!-- События месяца (PLAN 4.206): решение правителя и последствия --}}
+    {{#each decisions}}
+    <section class="sv-event" data-decision="{{id}}">
+      <span class="sv-sock"><img src="{{img}}" alt=""></span>
+      <div class="sv-event-main">
+        <h4><span class="cap">Решение правителя</span>{{label}}</h4>
+        <p>{{text}}</p>
+        <ul class="sv-choices">
+          {{#each choices}}
+          <li class="{{#unless ok}}off{{/unless}}">
+            {{#if @root.editable}}<button type="button" data-action="decide" data-choice="{{index}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{label}}</button>
+            {{else}}<b>{{label}}</b>{{/if}}
+            <small>{{#if cost}}<span>цена: {{cost}}</span>{{/if}}{{#if effects}}<span>{{effects}}</span>{{/if}}{{#if check}}<span class="chk">{{check}}</span>{{/if}}{{#if success}}<span class="up">успех: {{success}}</span>{{/if}}{{#if fail}}<span class="warn">провал: {{fail}}</span>{{/if}}{{#if hint}}<span>{{hint}}</span>{{/if}}{{#if isDefault}}<em>по умолчанию</em>{{/if}}</small>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </section>
+    {{/each}}
+    {{#if modifiers.length}}
+    <ul class="sv-mods">
+      {{#each modifiers}}<li data-modifier="{{id}}"><i class="fa-solid fa-hourglass-half"></i><span><b>{{label}}</b> — ещё {{weeks}} нед.{{#if text}} · {{text}}{{/if}}</span>
+        {{#if @root.gm}}<a class="sv-res-x" data-action="removeModifier" data-tooltip="Снять (ведущий)">×</a>{{/if}}</li>{{/each}}
+    </ul>
+    {{/if}}
     <section class="sv-block">
       <h3><span class="sv-tag">Склад</span><small>до {{storage}} каждого · ≈ — в среднем за неделю</small></h3>
       <ul class="sv-res">
@@ -219,6 +244,7 @@
   {{/if}}
 
   {{#if (eq tab "chronicle")}}
+    {{#if gm}}<div class="sv-build-bar"><a class="sv-btn" data-action="addEvent">Событие…</a><span class="sv-hint">События месяца случаются сами (настройка «Поселения: события месяца»); здесь ведущий задаёт своё.</span></div>{{/if}}
     <ol class="sv-chronicle">
       {{#each chronicle}}
       <li>

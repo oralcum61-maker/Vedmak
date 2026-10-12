@@ -31,6 +31,9 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
       routes: new ArrayField(new SchemaField({ id: str(""), to: str(""), resource: str(""), qty: num(1, { min: 0 }) })),
       // Осада (PLAN 4.203): отряды под стенами (uuid) и сколько недель
       siege: new SchemaField({ units: new ArrayField(str("")), weeks: int(0, { min: 0 }) }),
+      // События месяца (PLAN 4.206): ждут решения правителя; последствия надолго — на недели
+      decisions: new ArrayField(new SchemaField({ id: str(""), key: str(""), year: int(1), month: int(1), week: int(1) })),
+      modifiers: new ArrayField(new ObjectField()),
       description: html()
     };
   }
@@ -70,7 +73,7 @@ export class SettlementData extends foundry.abstract.TypeDataModel {
   get state() {
     return { year: this.year, month: this.month, week: this.week, families: this.families, approval: this.approval,
       control: this.control, wealth: this.wealth, taxes: this.taxes, stock: this.stockMap, buildings: this.buildings,
-      siege: this.siege?.units?.length > 0 };
+      siege: this.siege?.units?.length > 0, modifiers: this.modifiers ?? [] };
   }
 
   prepareDerivedData() {

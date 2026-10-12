@@ -451,6 +451,31 @@
 .sv-siege span { flex: 1; font-size: 12px; line-height: 1.4; }
 .sv-siege .sv-btn { flex: none; padding: 7px 12px; }
 .sv-route-img { width: 20px; height: 20px; border: 0; vertical-align: middle; border-radius: 3px; }
+
+/* События месяца (PLAN 4.206): решение правителя — пластина с нитью киновари; последствия — строки с песочными часами */
+.sv-event { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; padding: 12px 14px; margin-bottom: 12px; border-radius: 7px;
+  background: linear-gradient(#24252a, #1b1c20); box-shadow: var(--vd-lift-sm), 0 0 0 1px #050506, inset 0 2px 0 rgba(184, 67, 44, .7); }
+.sv-event .sv-sock { width: 64px; height: 64px; }
+.sv-event h4 { margin: 0 0 4px; font: 400 20px/1.1 var(--vd-font-head); color: var(--sv-silver); border: 0; }
+.sv-event h4 .cap { display: block; margin-bottom: 3px; color: #d9826d; }
+.sv-event p { margin: 0 0 8px; font-size: 12.5px; line-height: 1.45; color: var(--sv-bone, #ddd6c6); }
+.sv-choices { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sv-choices li { display: grid; grid-template-columns: minmax(150px, max-content) minmax(0, 1fr); align-items: center; gap: 10px; }
+.sv-choices li.off { opacity: .55; }
+.sv-choices button { margin: 0; padding: 6px 12px; white-space: nowrap; }
+.sv-choices small { display: flex; flex-wrap: wrap; gap: 3px 10px; font-size: 11px; line-height: 1.35; color: var(--sv-ash); }
+.sv-choices small .chk { color: #a9bccf; }
+.sv-choices small .up { color: #9fbf8f; }
+.sv-choices small .warn { color: #d9826d; }
+.sv-choices small em { color: var(--sv-silver); font-style: italic; }
+.sv-mods { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; }
+.sv-mods li { display: flex; align-items: center; gap: 9px; padding: 6px 10px; border-radius: 5px; font-size: 12px; color: var(--sv-ash);
+  background: rgba(255, 255, 255, .03); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); }
+.sv-mods li span { flex: 1; }
+.sv-mods b { color: var(--sv-silver); font-weight: 600; }
+.sv-mods li > i { color: #a9bccf; }
+.vedmak-card.settlement-event .card-head { display: flex; align-items: center; gap: 10px; }
+.vedmak-card.settlement-event .sw-img { width: 40px; height: 40px; flex: none; border: 0; border-radius: 50%; box-shadow: 0 0 0 2px #2a2b30, 0 0 0 3px #08090a; }
 .sv-route-add select { height: 26px; }
 
 /* ─── Совет правителя (PLAN 4.203): поселения одним окном ─── */

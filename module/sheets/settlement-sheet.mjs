@@ -15,6 +15,8 @@ import { RANKS } from "../config/unit-upgrades.mjs";
 import * as ARMY from "../army/army.mjs";
 import { ResourceLibrary, RESOURCE_DRAG } from "../apps/resource-library.mjs";
 import { addResource } from "../settlement/resources.mjs";
+import * as EV from "../settlement/events.mjs";
+import { effectLabel } from "../config/settlement-events.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -64,7 +66,10 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       library: SettlementSheet.#onLibrary,
       addRoute: SettlementSheet.#onAddRoute,
       removeRoute: SettlementSheet.#onRemoveRoute,
-      liftSiege: SettlementSheet.#onLiftSiege
+      liftSiege: SettlementSheet.#onLiftSiege,
+      decide: SettlementSheet.#onDecide,
+      addEvent: SettlementSheet.#onAddEvent,
+      removeModifier: SettlementSheet.#onRemoveModifier
     }
   };
 
@@ -166,6 +171,9 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       army: this.#army(sum),
       routes: sys.routes.map(r => ({ ...r, to: fromUuidSync(r.to)?.name ?? "—", img: resourceIcon(r.resource) })),
       routeTargets: game.actors.filter(a => a.type === "settlement" && a.id !== actor.id && a.visible).map(a => ({ uuid: a.uuid, name: a.name })),
+      // События месяца (PLAN 4.206)
+      decisions: sys.decisions.map(d => EV.decisionView(actor, d)).filter(Boolean),
+      modifiers: (sys.modifiers ?? []).map(m => ({ id: m.id, label: m.label, weeks: m.weeks, text: effectLabel({ mod: m }).replace(/^.*?»:?\s*/, "") })),
       siege: sys.siege.units.length ? { weeks: sys.siege.weeks, units: sys.siege.units.map(u => fromUuidSync(u)?.name ?? "?").join(", ") } : null,
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
@@ -293,6 +301,27 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
   static async #onRemoveRoute(event, target) { await S.removeRoute(this.actor, target.closest("[data-route]").dataset.route); }
   static async #onLiftSiege() { if (game.user.isGM) await ARMY.liftSiege(null, this.actor); }
+  static async #onDecide(event, target) {
+    await EV.decide(this.actor, target.closest("[data-decision]").dataset.decision, Number(target.dataset.choice));
+  }
+  static async #onRemoveModifier(event, target) { await EV.removeModifier(this.actor, target.closest("[data-modifier]").dataset.modifier); }
+  /** Ведущий: событие месяца по выбору или случайное из подходящих. */
+  static async #onAddEvent() {
+    if (!game.user.isGM) return;
+    const s = EV.eventState(this.actor);
+    const opts = Object.entries(EV.SETTLEMENT_EVENTS).map(([k, e]) => {
+      let fits = true; try { fits = e.when(s); } catch { fits = false; }
+      return `<option value="${k}">${e.label}${fits ? "" : " (сейчас не к месту)"}</option>`;
+    }).join("");
+    const key = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `Событие: ${this.actor.name}` },
+      content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Событие</label><select name="key"><option value="">Случайное из подходящих</option>${opts}</select></div>
+        <p class="hint">Правитель решит на листе поселения; не решит до хода недели — решение по умолчанию.</p></div>`,
+      ok: { label: "Случилось", callback: (ev, button) => button.form.elements.key.value },
+      rejectClose: false
+    });
+    if (key !== null && key !== undefined) await EV.addEvent(this.actor, key);
+  }
 
   /** Ресурс из библиотеки (PLAN 4.201) — склад начинает его учитывать; остальное — как обычно. */
   async _onDrop(event) {

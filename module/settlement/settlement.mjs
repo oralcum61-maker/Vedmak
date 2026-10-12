@@ -9,6 +9,7 @@ import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLeve
 import { worldCurrency } from "../config/money.mjs";
 import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
 import { unitsWeek, clearBesieging } from "../army/army.mjs";
+import { autoResolve, rollMonthEvent, SETTLEMENT_EVENTS } from "./events.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 const LOG_LIMIT = 40;
@@ -373,7 +374,16 @@ export async function moveWealth(actor, units, mode) {
 /** Ход недели (ведущий): броски построек, нужды, итоги месяца, стройка, летопись и карточка в чат. */
 export async function advanceWeek(actor) {
   if (!game.user.isGM) return ui.notifications.warn("Время двигает ведущий.");
+  // События месяца (PLAN 4.206): правитель не решил до хода — решение по умолчанию
+  const resolved = await autoResolve(actor);
   const { next, report } = simulateWeek(actor.system.state, { rand });
+  report.events.unshift(...resolved);
+  let decision = null;
+  if (report.monthEnd) {
+    decision = rollMonthEvent(actor, actor.system.calendar);
+    const ev = decision ? SETTLEMENT_EVENTS[decision.key] : null;
+    if (ev) report.events.push({ kind: "event", text: `Событие — «${ev.label}». ${ev.text} Решение — на листе поселения до следующего хода.`, danger: true });
+  }
   // Отряды поселения: еда со склада, плата наёмникам, тренировка, боевой дух (PLAN 4.187)
   const army = await unitsWeek(actor, { stock: next.stock, wealth: next.wealth, drill: actor.system.summary.drill, rand });
   next.stock = army.stock; next.wealth = army.wealth;
@@ -401,7 +411,8 @@ export async function advanceWeek(actor) {
   await actor.update({
     "system.year": next.year, "system.month": next.month, "system.week": next.week,
     "system.families": next.families, "system.approval": next.approval, "system.wealth": next.wealth, "system.stock": next.stock,
-    "system.log": [...actor.system.log, report].slice(-LOG_LIMIT), ...siegeUpdate
+    "system.log": [...actor.system.log, report].slice(-LOG_LIMIT), "system.modifiers": next.modifiers, ...siegeUpdate,
+    ...(decision ? { "system.decisions": [...actor.system.toObject().decisions, decision] } : {})
   });
   if (changes.length) await Actor.implementation.updateDocuments(changes);
   await postCard({

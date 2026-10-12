@@ -25,9 +25,10 @@ import { registerResourceHooks } from "./module/settlement/resources.mjs";
 import { ResourceLibrary } from "./module/apps/resource-library.mjs";
 import { RulerCouncil, registerCouncilUi } from "./module/apps/ruler-council.mjs";
 import { registerSettlementGMHandlers } from "./module/settlement/settlement.mjs";
-import { BattleApp } from "./module/apps/battle-app.mjs";
+import { BattleApp, registerMapBattle } from "./module/apps/battle-app.mjs";
 import * as ARMY from "./module/army/army.mjs";
 import * as settlement from "./module/settlement/settlement.mjs";
+import * as settlementEvents from "./module/settlement/events.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
 import { registerHelpers, preloadTemplates } from "./module/helpers.mjs";
@@ -254,6 +255,11 @@ Hooks.once("init", () => {
   game.settings.register(SYSTEM_ID, "mysteries", {
     scope: "world", config: false, type: Object, default: { list: [] }, onChange: () => InvestigationApp.refresh()
   });
+  game.settings.register(SYSTEM_ID, "settlementEvents", {
+    name: "Поселения: события месяца",
+    hint: "Шанс события в конце месяца, %: ярмарка, мор, разбойники, пожар… Правитель решает на листе поселения до следующего хода. 0 — событий нет.",
+    scope: "world", config: true, type: Number, default: 40, range: { min: 0, max: 100, step: 5 }
+  });
   game.settings.register(SYSTEM_ID, "verbalDuel", {
     name: "Словесная дуэль",
     hint: "Подвкладка «Социальный бой» у персонажей и чудовищ: Решительность и действия словесной дуэли (стр. 176–177). Выключено — во вкладке «Бой» только обычный бой.",
@@ -308,6 +314,7 @@ Hooks.once("init", () => {
   registerSettlementGMHandlers();
   ARMY.registerUnitHooks();
   ARMY.registerMapSiege();
+  registerMapBattle();
   registerAlchemyHooks();
   registerBuffHooks();
   registerRaceHooks();
@@ -339,10 +346,10 @@ Hooks.once("init", () => {
     hud: CombatHud,
     nexus: SceneNexus,
     setVisionSpeedups,
-    settlement,
+    settlement: { ...settlement, events: settlementEvents },
     resources: ResourceLibrary,
     council: RulerCouncil,
-    army: { ...ARMY, battle: units => BattleApp.open(units) },
+    army: { ...ARMY, battle: units => BattleApp.open(units), battleAt: (scene, point, opts) => BattleApp.fromScene(scene, point, opts) },
     investigation: { ...investigation, open: () => InvestigationApp.open() },
     tavern: { open: () => TavernApp.open() },
     config: CONFIG.VEDMAK

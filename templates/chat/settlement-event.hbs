@@ -1,0 +1,20 @@
+{{!-- Событие месяца поселения (PLAN 4.206): что случилось, выбор правителя, проверка и последствия. --}}
+<div class="vedmak-card settlement-week settlement-event">
+  <header class="card-head">
+    <img class="sw-img" src="{{img}}" alt="">
+    <div class="card-ident">
+      <span class="card-name">{{label}}</span>
+      <span class="card-sub">{{name}}</span>
+    </div>
+  </header>
+  <div class="card-body">
+    <p class="note">{{text}}</p>
+    {{#if pending}}
+    <p class="note warn">Решение — на листе поселения, вкладка «Хозяйство», до следующего хода.</p>
+    {{else}}
+    <p class="note"><b>{{#if auto}}Решение не принято, по умолчанию:{{else}}Решение:{{/if}}</b> {{choice}}.</p>
+    {{#if check}}<p class="note{{#unless check.ok}} warn{{/unless}}">Проверка ({{check.label}}): d10 {{check.d10}} + {{check.base}} = <b>{{check.total}}</b> против {{check.dc}} — {{#if check.ok}}успех{{else}}провал{{/if}}.</p>{{/if}}
+    {{#if lines.length}}<ul class="sw-army">{{#each lines}}<li>{{this}}</li>{{/each}}</ul>{{/if}}
+    {{/if}}
+  </div>
+</div>

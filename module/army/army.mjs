@@ -297,21 +297,27 @@ export function registerUnitHooks() {
  * двигал, предлагается осада.
  */
 export function registerMapSiege() {
-  Hooks.on("moveToken", async (tokenDoc, movement, options, userId) => {
-    if (userId !== game.user.id) return;
+  Hooks.on("moveToken", async (tokenDoc, movement, options, user) => {
+    // Четвёртый аргумент — пользователь (документ), не его id
+    if ((user?.id ?? user) !== game.user.id) return;
     const unit = tokenDoc.actor;
     if (unit?.type !== "unit" || !unit.system.campaign || unit.system.besieging || !unit.isOwner) return;
     const scene = tokenDoc.parent;
     const reach = (scene.grid.size ?? 100) * 2;
-    const c = tokenDoc.object?.center ?? { x: tokenDoc.x, y: tokenDoc.y };
-    const near = scene.tokens.find(t => t.actor?.type === "settlement" && t.actor.uuid !== unit.system.settlement && t.object
-      && Math.hypot(t.object.center.x - c.x, t.object.center.y - c.y) <= reach + Math.max(t.object.w, t.object.h) / 2);
+    // В хуке документ ещё на старом месте — середина по концу пути; поселение — актёр мира (жетон может быть не связан)
+    const size = scene.grid.size ?? 100;
+    const at = movement?.destination ?? tokenDoc;
+    const c = { x: at.x + (tokenDoc.width * size) / 2, y: at.y + (tokenDoc.height * size) / 2 };
+    const townOf = t => game.actors.get(t.actorId) ?? t.actor;
+    const near = scene.tokens.find(t => townOf(t)?.type === "settlement" && townOf(t).uuid !== unit.system.settlement
+      && Math.hypot(t.x + (t.width * size) / 2 - c.x, t.y + (t.height * size) / 2 - c.y) <= reach + (Math.max(t.width, t.height) * size) / 2);
     if (!near) return;
+    const town = townOf(near);
     const ok = await foundry.applications.api.DialogV2.confirm({
       window: { title: "Под стенами" },
-      content: `<p>«${unit.name}» подошёл к «${near.actor.name}». Начать осаду?</p>`,
+      content: `<p>«${unit.name}» подошёл к «${town.name}». Начать осаду?</p>`,
       rejectClose: false
     });
-    if (ok) await besiege(unit, near.actor);
+    if (ok) await besiege(unit, town);
   });
 }

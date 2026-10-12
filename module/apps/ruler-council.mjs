@@ -6,6 +6,7 @@ import { WEALTH_RATE, resourceIcon, RESOURCE_ORDER } from "../config/settlement.
 import { worldCurrency } from "../config/money.mjs";
 import { upgradeNodes } from "../settlement/rules.mjs";
 import { settlementUnits } from "../army/army.mjs";
+import { SETTLEMENT_EVENTS } from "../config/settlement-events.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const fmt = n => (Math.round(n * 10) / 10).toLocaleString("ru-RU");
@@ -71,7 +72,8 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
         away: units.filter(u => u.system.campaign).length } : null,
       routes: sys.routes.map(r => `${r.resource.toLowerCase()} ${r.qty} → ${fromUuidSync(r.to)?.name ?? "?"}`),
       revolt: sum.revolt, arrival: sum.arrival?.chance ?? 0,
-      warn: [sum.homeless ? `бездомных ${sum.homeless}` : "", needs.some(x => x.low) ? "нужд не хватит" : "", sum.revolt ? `бунт ${sum.revolt}%` : ""].filter(Boolean)
+      warn: [...sys.decisions.map(d => `ждёт решения: «${SETTLEMENT_EVENTS[d.key]?.label ?? d.key}»`),
+        ...(sys.modifiers ?? []).map(m => `«${m.label}» ещё ${m.weeks} нед.`), sum.homeless ? `бездомных ${sum.homeless}` : "", needs.some(x => x.low) ? "нужд не хватит" : "", sum.revolt ? `бунт ${sum.revolt}%` : ""].filter(Boolean)
     };
   }
 

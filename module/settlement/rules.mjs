@@ -189,6 +189,11 @@ export function summarize(state) {
     }
     if (lv.families) jobs.push({ id: b.id, max: lv.families, workers: Math.min(Math.max(0, b.workers), lv.families) });
   }
+  // Последствия событий месяца (PLAN 4.206): закрытые ворота, слава, обиды
+  const mods = state.modifiers ?? [];
+  if (mods.some(m => m.trade === false)) trade = false;
+  const modRevolt = mods.reduce((n, m) => n + (Number(m.revolt) || 0), 0);
+  const modArrival = mods.reduce((n, m) => n + (Number(m.arrival) || 0), 0);
   const families = Math.max(0, state.families ?? 0);
   let left = families;
   for (const j of jobs) { j.workers = Math.min(j.workers, left); left -= j.workers; assigned += j.workers; }
@@ -208,15 +213,16 @@ export function summarize(state) {
   // В осаде (PLAN 4.203) новые семьи не приходят
   const arrival = state.siege ? null : ARRIVALS[approval] ?? null;
   const tax = TAXES[state.taxes] ?? TAXES.low;
+  const revoltBase = Math.min(100, Math.max(0, revoltChance(approval, control) + modRevolt));
   return {
     houses, homeless: Math.max(0, families - houses), freeHouses: Math.max(0, houses - families),
     assigned, idle, constructing, builders: Math.min(idle, constructing), control, storage, trade, drill, defense,
     taxMult: taxMult ? taxMult + taxBonus : 0, taxCoins: families * tax.perFamily * (taxMult ? taxMult + taxBonus : 0),
-    approvalBonus, revoltDice, arrivalDice, revoltBase: revoltChance(approval, control),
+    approvalBonus, revoltDice, arrivalDice, revoltBase,
     revoltMinus: diceAverage(revoltDice), arrivalPlus: diceAverage(arrivalDice),
     workers: Object.fromEntries(jobs.map(j => [j.id, j.workers])),
-    revolt: revoltChance(approval, control) ? Math.max(0, Math.round(revoltChance(approval, control) - diceAverage(revoltDice))) : 0,
-    arrival: arrival ? { chance: Math.min(100, Math.round(arrival[0] + diceAverage(arrivalDice))), base: arrival[0], formula: arrival[1] } : null,
+    revolt: revoltBase ? Math.max(0, Math.round(revoltBase - diceAverage(revoltDice))) : 0,
+    arrival: arrival ? { chance: Math.min(100, Math.max(0, Math.round(arrival[0] + modArrival + diceAverage(arrivalDice)))), base: Math.max(0, arrival[0] + modArrival), formula: arrival[1] } : null,
     content: approval >= CONTENT_LEVEL
   };
 }
@@ -244,6 +250,10 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
   let wealth = state.wealth ?? 0;
   let approval = Math.max(0, Math.min(APPROVAL_MAX, state.approval ?? 5));
 
+  // Последствия событий: множители выработки (группа, ресурс или вся) и нужд
+  const mods = state.modifiers ?? [];
+  const prodMult = (group, res) => mods.reduce((m, x) => m * (x.produce ?? []).reduce((k, p) =>
+    ((!p.group && !p.resource) || p.group === group || p.resource === res) ? k * (Number(p.mult) || 0) : k, 1), 1);
   const active = (r, workers) => (r.period === "week" || (r.period === "month" && monthEnd) || (r.period === "bimonth" && bimonth))
     && !(r.noWinter && cal.winter) && workers >= r.minFamilies && !(r.per === "family" && workers <= 0);
 
@@ -289,7 +299,8 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
       else for (let i = 0; i < times; i++) { const x = roll(r.formula); amount += x.total; dice.push(...x.dice); }
       last = amount;
       made.add(r.resource);
-      amount = r.resource === WEALTH ? round3(Math.max(0, amount * ratio)) : round1(Math.max(0, amount * ratio));
+      const pm = prodMult(b.group, r.resource);
+      amount = r.resource === WEALTH ? round3(Math.max(0, amount * ratio * pm)) : round1(Math.max(0, amount * ratio * pm));
       if (!amount) continue;
       if (r.resource === WEALTH) wealth = round3(wealth + amount);
       else add(r.resource, amount);
@@ -299,7 +310,8 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     // Броски ступеней к выработке — по ресурсу, уровень постройки раз (с той же долей сырья)
     for (const res of made) {
       const bonus = bonusRoll(lv.bonus?.produce, res, lv.bonus?.times ?? 0, roll);
-      const amount = res === WEALTH ? round3(Math.max(0, bonus.total * ratio)) : round1(Math.max(0, bonus.total * ratio));
+      const pm = prodMult(b.group, res);
+      const amount = res === WEALTH ? round3(Math.max(0, bonus.total * ratio * pm)) : round1(Math.max(0, bonus.total * ratio * pm));
       if (!amount) continue;
       if (res === WEALTH) wealth = round3(wealth + amount);
       else add(res, amount);
@@ -310,7 +322,8 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     const main = lv.produce.find(r => made.has(r.resource))?.resource;
     if (main && b.manager?.dice) {
       const x = roll(`${b.manager.dice}d4`);
-      const amount = main === WEALTH ? round3(Math.max(0, x.total * ratio)) : round1(Math.max(0, x.total * ratio));
+      const pm = prodMult(b.group, main);
+      const amount = main === WEALTH ? round3(Math.max(0, x.total * ratio * pm)) : round1(Math.max(0, x.total * ratio * pm));
       if (amount) {
         if (main === WEALTH) wealth = round3(wealth + amount);
         else add(main, amount);
@@ -347,7 +360,8 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
   const families = Math.max(0, state.families ?? 0);
   const needs = {};
   for (const [k, per] of Object.entries(NEEDS)) {
-    const need = families * per * (k === FUEL && cal.winter ? WINTER_FUEL : 1);
+    const needMult = mods.reduce((m, x) => m * (Number(x.needs?.[k]) || 1), 1);
+    const need = families * per * (k === FUEL && cal.winter ? WINTER_FUEL : 1) * needMult;
     const got = Math.min(stock[k] ?? 0, need);
     if (got) { add(k, -got); consumed[k] = round1((consumed[k] ?? 0) + got); }
     needs[k] = { need: round1(need), got: round1(got), short: round1(need - got) };
@@ -449,7 +463,13 @@ export function simulateWeek(state, { forecast = false, rand = Math.random } = {
     if (k === WEALTH) continue;
     net[k] = round1((stock[k] ?? 0) - (before[k] ?? 0));
   }
-  const next = { year, month, week, families: families + arrived, approval, wealth, stock, buildings };
+  // Модификаторы событий — на неделю короче; кончились — строкой в отчёте
+  const modifiers = [];
+  for (const m of mods) {
+    if ((m.weeks ?? 0) > 1) modifiers.push({ ...m, weeks: m.weeks - 1 });
+    else events.push({ kind: "modifier", text: `Закончилось: «${m.label}».` });
+  }
+  const next = { year, month, week, families: families + arrived, approval, wealth, stock, buildings, modifiers };
   const report = {
     year: cal.year, month: cal.month, monthLabel: cal.monthLabel, week: cal.week, season: cal.seasonLabel, monthEnd,
     lines, produced, consumed, net, needs, shortages, events, built, arrived, overflow, taxWealth,

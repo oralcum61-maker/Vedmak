@@ -15,6 +15,8 @@ const A = await cfg("army.mjs");
 const U = await cfg("unit-upgrades.mjs");
 const BU = await cfg("building-upgrades.mjs");
 const R = await cfg("resources.mjs");
+const EVC = await cfg("settlement-events.mjs");
+const FIELD = 4;
 const VERSION = JSON.parse(fs.readFileSync(path.join(ROOT, "system.json"), "utf8")).version;
 
 const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -174,6 +176,23 @@ function orderTable() {
   return `<ul class="shops">${shops}</ul>`;
 }
 
+function eventsTable() {
+  const ch = c => {
+    const bits = [];
+    if (c.cost?.length) bits.push(`<span class="meta">${cost(c.cost)}</span>`);
+    if (c.requires) bits.push(`<span class="meta">нужно Ополчение от 5</span>`);
+    const fx = (c.effects ?? []).map(EVC.effectLabel).filter(Boolean);
+    if (fx.length) bits.push(esc(fx.join("; ")));
+    if (c.check) {
+      bits.push(`<span class="need">${EVC.CHECK_BASES[c.check.base].label}: d10 + основа против ${c.check.dc}${c.check.bonus ? " (" + Object.entries(c.check.bonus).map(([k, v]) => `${S.BUILDINGS[k]?.label.toLowerCase() ?? k} +${v}`).join(", ") + ")" : ""}</span>`);
+      bits.push(`успех: ${esc((c.success ?? []).map(EVC.effectLabel).join("; ") || "обошлось")}; провал: ${esc((c.fail ?? []).map(EVC.effectLabel).join("; "))}`);
+    }
+    return `<li><b>${esc(c.label)}</b>${bits.length ? " — " + bits.join(" · ") : ""}</li>`;
+  };
+  return `<div class="events">${Object.values(EVC.SETTLEMENT_EVENTS).map(e => `<section class="branch">
+    <h5>${esc(e.label)}</h5><p class="cond">${esc(e.cond ?? "")}</p><ol>${e.choices.map((c, i) => ch(c) .replace("</li>", i === (e.default ?? e.choices.length - 1) ? ` <i>· по умолчанию</i></li>` : "</li>")).join("")}</ol></section>`).join("")}</div>`;
+}
+
 /* ------------------------------ Части страницы ------------------------------ */
 
 const fig = (file, caption, cls = "") => {
@@ -184,7 +203,7 @@ const gm = html => `<aside class="note gm"><span>Ведущему</span>${html}<
 const tip = html => `<aside class="note tip"><span>Совет</span>${html}</aside>`;
 const warn = html => `<aside class="note warn"><span>Осторожно</span>${html}</aside>`;
 let chapterNo = 0;
-const chapter = (title, lead, id) => `<header class="chapter" id="${id}"><div class="numeral">${["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"][++chapterNo]}</div>
+const chapter = (title, lead, id) => `<header class="chapter" id="${id}"><div class="numeral">${["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII"][++chapterNo]}</div>
   <h1>${title}</h1><p class="lead">${lead}</p><div class="thread"><i></i></div></header>`;
 
 /** Цепь хода недели — порядок simulateWeek. */
@@ -194,7 +213,7 @@ const WEEK = [
   ["Нужды семей", `еда ${S.NEEDS[S.FOOD]}, топливо ${S.NEEDS[S.FUEL]} (зимой ${S.WINTER_FUEL}) на семью`],
   ["Налог", "монеты с семьи → Богатство"],
   ["Склад", "сверх вместимости — пропадает"],
-  ["Конец месяца", "налог и одобрение, приход семей, бунт"],
+  ["Конец месяца", "налог и одобрение, приход семей, бунт, событие"],
   ["Стройка", "свободная семья — неделя стройки"],
   ["Войско и заказы", "еда и плата отрядам, тренировка, мастерские, осада, караваны"]
 ];
@@ -213,9 +232,10 @@ const cover = `<section class="cover">
     <div class="thread"><i></i></div>
     <ul class="contents">
       <li><span>I</span>Первые шаги</li><li><span>II</span>Лист поселения</li><li><span>III</span>Ход недели</li>
-      <li><span>IV</span>Семьи и одобрение</li><li><span>V</span>Склад, казна, торговля</li><li><span>VI</span>Постройки</li>
-      <li><span>VII</span>Обустройство и мастерские</li><li><span>VIII</span>Караваны и Совет</li>
-      <li><span>IX</span>Отряды</li><li><span>X</span>Поход и осада</li><li><span>XI</span>Битва</li><li><span>XII</span>Справочник</li>
+      <li><span>IV</span>Семьи и одобрение</li><li><span>V</span>События месяца</li>
+      <li><span>VI</span>Склад, казна, торговля</li><li><span>VII</span>Постройки</li><li><span>VIII</span>Обустройство и мастерские</li>
+      <li><span>IX</span>Караваны и Совет</li><li><span>X</span>Отряды</li>
+      <li><span>XI</span>Поход и осада</li><li><span>XII</span>Битва</li><li><span>XIII</span>Справочник</li>
     </ul>
   </div>
 </section>`;
@@ -315,6 +335,31 @@ ${approvalTable()}
 ${gm("Одобрение система не считает из нужд: голод и холод видны в карточке, а сдвиг одобрения — ваше решение. Сама она сдвигает его только налогом, осадой и обустройством.")}
 </div>
 </div>
+
+${chapter("События месяца", "В конце месяца в поселении что-то случается. Решает правитель — и отвечает за последствия.", "events")}
+<div class="cols">
+<div>
+<h3>Как это устроено</h3>
+<p>В конце каждого месяца с шансом из настройки «Поселения: события месяца» (по умолчанию ${EVC.EVENT_CHANCE}%) случается одно событие
+из подходящих поселению: ярмарка, мор, разбойники, пожар, неурожай… В чат приходит карточка, на листе поселения, вкладка
+«Хозяйство», появляется пластина <b>«Решение правителя»</b> с вариантами.</p>
+<ul class="tight">
+  <li><b>Цена</b> списывается со склада и казны сразу; не хватает — вариант закрыт.</li>
+  <li><b>Последствия сразу</b>: склад, казна, одобрение, семьи, Ополчение, Контроль.</li>
+  <li><b>Последствия надолго</b> — на несколько недель: выработка вполсилы, торговля закрыта, шанс бунта или прихода семей. Видны под решением с песочными часами.</li>
+  <li><b>Проверка</b>: d10 + основа против сложности; успех и провал ведут к разному.</li>
+</ul>
+<p class="formula">стража = Контроль + укрепления + Ополчение / 10 · порядок = Контроль + одобрение / 2</p>
+<p>Правитель не решил до следующего хода недели — срабатывает вариант <b>по умолчанию</b> (обычно самый осторожный или самый пассивный), и карточка об этом скажет.</p>
+${gm("Своё событие — кнопка «Событие…» на вкладке «Летопись»: любое из справочника или случайное из подходящих. Действующее последствие снимается крестиком. Шанс 0 в настройке выключает события.")}
+</div>
+<div>
+${fig("event.jpg", "Решение правителя на листе поселения: варианты с ценой, проверкой и последствиями; «по умолчанию» — если не решить.")}
+${tip("Решайте вместе: это лучший повод для сцены за столом совета. Варианты с проверкой рискованны, но дают больше.")}
+</div>
+</div>
+<h3 class="newpage">Все события</h3>
+${eventsTable()}
 
 ${chapter("Склад, казна и торговля", "Каждый ресурс хранится отдельно, у каждого своя вместимость.", "stock")}
 <div class="cols">
@@ -513,6 +558,27 @@ ${fig("battle.jpg", "Окно битвы: стороны, местность, б
 «Показать всем» — смотрят и остальные игроки. Закрыли окно — до новой битвы оно не всплывёт.</p>
 </div>
 </div>
+<h3 class="newpage">Битва на карте</h3>
+<div class="cols">
+<div>
+<p>Отряды — жетоны на сцене. Жетон-отряд подошёл вплотную к отряду другой стороны (дружественные против враждебных) — ведущему
+приходит предложение начать битву на этом месте. Отказ запоминается, пока отряды не разойдутся.</p>
+<ul class="tight">
+  <li><b>Состав</b> — все отряды в ${FIELD} клетках от места встречи; сторона — по расположению жетона.</li>
+  <li><b>Перед каждым раундом</b> состав сверяется со сценой: отошедшие выходят из битвы, подошедшие вступают — в летописи раунда.</li>
+  <li><b>Потери</b> всплывают над жетонами у всех игроков: «−14», «−6 · бегут!».</li>
+  <li>Кнопка <b>«Со сцены»</b> собирает поле вокруг выделенных жетонов (или середины экрана), <b>«Без сцены»</b> — ведёт битву вручную.</li>
+</ul>
+</div>
+<div>
+${fig("field.jpg", "Раунд на сцене: потери всплывают над жетонами у всех игроков.")}
+<p><b>Местность</b> берётся из региона сцены, в котором встретились отряды, — по названию: «Лес…», «Роща» — лес; «Холм», «Курган» —
+холм; «Брод», «Река», «Переправа» — брод; «Стена», «Частокол» — стены; «Поле», «Луг» — поле.</p>
+<p>Рядом жетон поселения — бой <b>у его стен</b>: укрепления — обороняющимся, обороняется сторона его отрядов.</p>
+${gm("Регион можно назвать как угодно и задать местность флагом: <code>region.setFlag(\"vedmak\", \"terrain\", \"forest\")</code> — field, forest, hill, river, walls.")}
+${tip("Осада тоже с карты: отряд в походе подошёл к жетону чужого поселения — система предложит осаду.")}
+</div>
+</div>
 
 ${chapter("Справочник", "Всё, что считает система, — из её справочников. Обновится система — пересоберите гайд.", "ref")}
 <h3>Постройки</h3>
@@ -525,6 +591,7 @@ ${buildingTable()}
   <dt>Ресурс пропал</dt><dd>Склад полон: сверх вместимости новое пропадает. Постройте склад или продайте.</dd>
   <dt>Нельзя торговать</dt><dd>Нет торгового поста (или ступени «торговля») либо поселение в осаде.</dd>
   <dt>Отряд не тренируется</dt><dd>Переключатель «тренируется» выключен, нет плаца или казармы, отряд в походе.</dd>
+  <dt>События не случаются</dt><dd>Настройка «Поселения: события месяца» на 0; событие бросается только в конце месяца; часть событий — по условиям (сезон, постройки, осада).</dd>
   <dt>Караван стоит</dt><dd>Нет торгового поста или рынка, осада, у получателя нет места, на складе нечего везти.</dd>
 </dl>
 <h3>Деревья обустройства</h3>
@@ -666,6 +733,12 @@ table.approval tr.good td:first-child b { color: var(--sage); }
 .branch .meta { color: var(--muted); }
 .branch .need { color: var(--steel); }
 section.tree { break-inside: avoid; margin-bottom: 3.5mm; }
+.events { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+.events .cond { font-size: 7.2pt; color: var(--steel); margin: 0 0 1.4mm; }
+.events .branch ol { font-size: 7.3pt; }
+.events .branch li i { color: var(--muted); }
+h3.newpage { break-before: page; margin-top: 0; }
+code { font-size: 7.5pt; color: var(--silver); }
 section.tree h4 { font-size: 12pt; margin: 0 0 1.6mm; display: flex; align-items: baseline; gap: 3mm; }
 section.tree h4 small { font: 600 6.5pt "Vedmak Sans"; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 section.tree .branch { padding: 2mm 2.4mm; }
