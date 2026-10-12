@@ -609,7 +609,8 @@ i { color: var(--muted); }
 .steps li { counter-increment: s; position: relative; padding: 0 0 4mm 11mm; break-inside: avoid; }
 .steps li::before { content: ""; position: absolute; left: 0; top: -1mm; width: 7.5mm; height: 7.5mm; border: 1px solid var(--silver);
   transform: rotate(45deg) scale(.82); }
-.steps li::after { content: counter(s); position: absolute; left: .1mm; top: -.7mm; width: 7.5mm; height: 7.5mm; line-height: 7.5mm; text-align: center; font: 11pt "Vedmak Display"; color: var(--silver); }
+.steps li::after { content: counter(s); position: absolute; left: 0; top: -1mm; width: 7.5mm; height: 7.5mm;
+  font: 400 11pt/7.5mm "Vedmak Display", serif; text-align: center; color: var(--silver); }
 ul.shops { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 5mm; font-size: 8pt; }
 ul.shops li { break-inside: avoid; padding: .8mm 0; border-bottom: 1px solid var(--rule); }
 ul.tight, ol.tight { margin: 0 0 6pt; padding-left: 5mm; }
