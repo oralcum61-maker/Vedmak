@@ -15,6 +15,7 @@ import { RANKS } from "../config/unit-upgrades.mjs";
 import * as ARMY from "../army/army.mjs";
 import { ResourceLibrary, RESOURCE_DRAG } from "../apps/resource-library.mjs";
 import { addResource } from "../settlement/resources.mjs";
+import { bindUnitMenu } from "../army/unit-menu.mjs";
 import * as EV from "../settlement/events.mjs";
 import { effectLabel } from "../config/settlement-events.mjs";
 import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
@@ -248,6 +249,12 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   #hasBuilder(b, sum) {
     const queue = this.actor.system.buildings.filter(x => x.constructing || x.research?.node);
     return queue.findIndex(x => x.id === b.id) < sum.builders;
+  }
+
+  _onFirstRender(context, options) {
+    super._onFirstRender?.(context, options);
+    // Правая кнопка по отряду во «Войске»: лист, картинка, жетон, роспуск, удаление
+    bindUnitMenu(this.element, ".ar-units li[data-id]");
   }
 
   _onRender(context, options) {

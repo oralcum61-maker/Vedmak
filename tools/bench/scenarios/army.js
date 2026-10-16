@@ -64,6 +64,18 @@ ok(town.sheet.element.querySelectorAll(".ar-units li").length === 3, "вклад
   town.sheet.element.querySelector("[data-action=recruit]")?.click(); await wait(1200);
   ok(town.system.militia === 3 && town.sheet.element.querySelectorAll(".ar-units li").length === 3, "«Набрать» при нехватке — отказ, отряды те же");
   await town.update({ "system.militia": before }); }
+// Правая кнопка по отряду: меню с листом, картинкой, жетоном, роспуском и удалением; «Удалить» убирает отряд
+{ const extra = await ARMY.recruit(town, { origin: "militia", count: 1, kind: "infantry", name: "Прогон: на удаление" }); await town.sheet.render(); await wait(800);
+  const row = town.sheet.element.querySelector(`.ar-units li[data-id="${extra.id}"]`);
+  row?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 300, clientY: 300 })); await wait(400);
+  const items = [...document.querySelectorAll("#context-menu .context-item")];
+  ok(items.map(i => i.textContent.trim()).join("|") === "Лист отряда|Сменить картинку|Настроить жетон|Распустить|Удалить", `меню отряда: ${items.map(i => i.textContent.trim()).join(", ")}`);
+  // Подтверждение ядра по умолчанию — «Нет»: «Да» жмём сами
+  window.__noAutoDialog = true;
+  items.find(i => i.textContent.trim() === "Удалить")?.click(); await wait(600);
+  document.querySelector("dialog.application [data-action=yes], .application.dialog [data-action=yes]")?.click(); await wait(1000);
+  window.__noAutoDialog = false;
+  ok(!game.actors.get(extra.id), "«Удалить» в меню убирает отряд"); }
 await town.sheet.close();
 
 stepName("неделя поселения");

@@ -7,6 +7,7 @@ import { unitState, battleRound } from "../army/rules.mjs";
 import { postCard, broadcast, registerBroadcast } from "../combat/common.mjs";
 import { shareView, closeView, viewerContext, wireViewer, viewerClosed } from "./shared-view.mjs";
 import { animateRealm, animateNew, playSound } from "../fx/realm-fx.mjs";
+import { bindUnitMenu } from "../army/unit-menu.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
@@ -243,6 +244,11 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   /** Участники битвы — отряды обеих сторон. */
   get #units() { return this.sides.flatMap(s => s.ids).map(id => game.actors.get(id)).filter(Boolean); }
+
+  _onFirstRender(context, options) {
+    super._onFirstRender?.(context, options);
+    bindUnitMenu(this.element, ".bt-side li[data-id]");
+  }
 
   _onRender(context, options) {
     super._onRender?.(context, options);
