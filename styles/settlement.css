@@ -519,3 +519,153 @@
 .vedmak-card.settlement-event .se-done { color: var(--sv-ash, #9a958a); font-style: italic; }
 .vd-pending { margin-left: 6px; font-size: 11px; color: #d9826d; }
 .sv-badge { display: inline-block; min-width: 16px; height: 16px; margin-left: 6px; padding: 0 4px; border-radius: 8px; font: 700 10px/16px var(--vd-font-body, sans-serif); text-align: center; vertical-align: 2px; color: #fff; background: #b8432c; box-shadow: 0 0 6px rgba(184, 67, 44, .6); }
+
+/* ============================== Облик «Гравюра» (PLAN 4.228) ==============================
+   Утверждённые холсты Claude Design для поселения, постройки, совета, карточек чата и окон поселения и войска — поверх разметки выше, шаблоны не менялись.
+   Шапка — кожа со строчкой и названием металлом; полоса пластин — одна кованая пластина с желобками; плитки —
+   шлифованный металл; кнопки — стальные планки на заклёпках, главные — киноварь. Переменные --rg-* — на .sv
+   (settlement.css). Облик целиком — этот блок до конца файла. */
+.sv { --rg-plate: linear-gradient(180deg, rgba(255, 245, 225, .05), transparent 45%, rgba(0, 0, 0, .25)), var(--vd-t-plate, none);
+  --rg-forged: inset 0 1px 0 rgba(255, 245, 225, .08), inset 0 -2px 0 rgba(0, 0, 0, .35), 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 8px 16px -8px rgba(0, 0, 0, .9);
+  --rg-brushed: linear-gradient(180deg, rgba(255, 245, 225, .08), transparent 42%, rgba(0, 0, 0, .24)), var(--vd-t-brushed, none);
+  --rg-lift: inset 0 1px 0 rgba(255, 245, 225, .13), 0 3px 8px -3px rgba(0, 0, 0, .85), 0 0 0 1px #050506;
+  --rg-groove: linear-gradient(90deg, #060607 50%, rgba(255, 240, 215, .07) 50%); }
+/* ─── Шапка: кожа со строчкой, желобок снизу, название металлом ─── */
+.sv-head { position: relative; overflow: hidden; background-color: #2a231e;
+  background-image: radial-gradient(70% 170% at 7% 50%, rgba(255, 232, 200, .15), transparent 60%), linear-gradient(90deg, transparent 50%, rgba(0, 0, 0, .38)), var(--vd-t-leather, none);
+  background-size: auto, auto, 200px; background-blend-mode: normal, normal, overlay;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 215, .08), 0 1px 0 rgba(255, 240, 215, .05); padding: 18px 22px 16px; }
+.sv-head::before { content: ""; position: absolute; inset: 6px 6px 9px; border: 1px dashed rgba(214, 190, 150, .24); border-radius: 4px; pointer-events: none; }
+.sv-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(180deg, #070708, rgba(255, 240, 215, .09)); pointer-events: none; }
+.sv-head > * { position: relative; z-index: 1; }
+.sv-head .sv-sock.big { --s: 88px; }
+.sv-head .sv-sock.big img { inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); }
+.sv h1.sv-name { color: transparent; -webkit-background-clip: text; background-clip: text; text-shadow: none;
+  background-image: var(--vd-metal); filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .85)); }
+/* ─── Кнопки: стальная планка на заклёпках в кованой рамке; главное действие — киноварь ─── */
+.sv .sv-next { height: 40px; padding: 0 28px; border: 0; border-radius: 2px; white-space: nowrap;
+  font: 600 11.5px/1 var(--vd-font-body); letter-spacing: .2em; text-transform: uppercase; color: #fff6ef; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7);
+  background-color: #b8432c; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-go, none);
+  background-position: left 7px center, right 7px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
+  transition: filter .12s ease, transform .08s ease; }
+.sv .sv-next:hover { filter: brightness(1.1); }
+.sv .sv-btn, .sv .sv-trade a, .sv .sv-choices button { display: inline-flex; align-items: center; justify-content: center; min-height: 26px; padding: 0 15px; border: 0; border-radius: 2px; white-space: nowrap;
+  font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-btn, none);
+  background-position: left 5px center, right 5px center, 0 0, 0 0; background-size: 5px 5px, 5px 5px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 1px #303137, 0 0 0 2px #060708, 0 5px 9px -5px rgba(0, 0, 0, .95);
+  transition: filter .12s ease, transform .08s ease; }
+.sv .sv-btn:hover, .sv .sv-trade a:hover, .sv .sv-choices button:hover { color: #fff; filter: brightness(1.12); }
+.sv .sv-btn.on { color: #f6f1e6; background-color: #4b4e55; box-shadow: inset 0 2px 4px rgba(0, 0, 0, .6), 0 0 0 1px #303137, 0 0 0 2px #060708; }
+.sv .sv-build-bar .sv-btn, .sv .bl-tree-bar .sv-btn, .sv .rc-town > header .sv-btn { min-height: 30px; padding: 0 18px; font-size: 10px; }
+.sv .sv-choices button { min-height: 30px; padding: 0 18px; font-size: 10px; }
+.sv .sv-catalog button, .sv .sv-card-acts button, .sv .bl-take { min-height: 26px; padding: 0 14px; border-radius: 2px; letter-spacing: .14em; color: #fff6ef; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7);
+  background-color: #b8432c; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-go, none);
+  background-position: left 5px center, right 5px center, 0 0, 0 0; background-size: 5px 5px, 5px 5px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .5), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 1px #303137, 0 0 0 2px #060708, 0 5px 9px -5px rgba(0, 0, 0, .95); }
+.sv .sv-catalog button:disabled, .sv .sv-card-acts button:disabled, .sv .sv-next:disabled { cursor: not-allowed; filter: grayscale(.8) brightness(.55); }
+/* Нажатие — кнопка вдавливается; с клавиатуры — обводка */
+.sv .sv-next:not(:disabled):active, .sv .sv-btn:active, .sv .sv-trade a:active, .sv .sv-choices button:not(:disabled):active, .sv .sv-catalog button:not(:disabled):active, .sv .sv-card-acts button:not(:disabled):active { transform: translateY(1px); filter: brightness(.88); }
+.sv .sv-next:focus-visible, .sv .sv-btn:focus-visible, .sv .sv-choices button:focus-visible { outline: 1px solid #8a8578; outline-offset: 3px; }
+/* ─── Полоса пластин: одна кованая пластина, разделы — желобками ─── */
+.sv-plaques { gap: 0; margin: 14px 16px 0; padding: 0; border-radius: 6px; background-color: #17181b; background-image: var(--rg-plate);
+  background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
+.sv-plaque { padding: 12px 14px 13px; border-radius: 0; background: none; box-shadow: none; }
+.sv-plaque::after { display: none; }
+.sv-plaque + .sv-plaque::before { content: ""; position: absolute; left: 0; top: 12px; bottom: 12px; width: 2px; background: var(--rg-groove); }
+.sv-plaque .cap { font: 400 15px/1.1 var(--vd-font-head); letter-spacing: 0; text-transform: none; color: var(--sv-silver); text-shadow: 0 1px 0 rgba(0, 0, 0, .8); }
+.sv-plaque b.big, .sv-duo b { color: transparent; -webkit-background-clip: text; background-clip: text; background-image: var(--vd-metal); filter: drop-shadow(0 1px 0 #000); }
+.sv-mini-acts a { padding: 5px 9px; border-radius: 2px; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: var(--vd-gloss, none), var(--vd-s-btn, none); background-size: 100% 100%, 512px 512px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .25), 0 0 0 1px #303137, 0 0 0 2px #060708; }
+.sv-mini-acts a:hover { color: #fff; filter: brightness(1.12); }
+/* ─── Вкладки: утопленная дорожка, выбранная — приподнята ─── */
+.sv-tabs { gap: 4px; margin: 14px 16px 0; padding: 4px; border-radius: 5px; background: rgba(0, 0, 0, .45); box-shadow: var(--vd-sink-sm); }
+.sv-tabs a { flex: 1; text-align: center; padding: 9px 10px; border: 0; border-radius: 3px; transition: background-color .12s ease, color .12s ease; }
+.sv-tabs a:not(.active):hover { background: rgba(255, 240, 215, .05); }
+.sv-tabs a.active { background: #2a2c31; box-shadow: var(--vd-lift-sm); border-bottom-color: transparent; }
+/* ─── Плитки: шлифованный металл с бликом сверху ─── */
+.sv-res li, .sv-card, .sv-catalog li, .bl-step, .bl-node, .bl-order-list li, .bl-chip { background-color: #25272c; background-image: var(--rg-brushed); background-size: auto, 220px; background-blend-mode: normal, overlay; }
+.sv-res li, .sv-card, .sv-catalog li, .bl-step, .bl-node, .bl-order-list li { box-shadow: var(--rg-lift); transition: filter .12s ease; }
+.sv-res li:hover, .sv-card:hover, .bl-order-list li:hover { filter: brightness(1.07); }
+.sv .sv-res li { grid-template-columns: 48px 1fr; }
+.sv .sv-res li .sv-sock.sm { --s: 48px; }
+.sv-res li.full { box-shadow: inset 0 0 0 1px rgba(224, 147, 127, .45), var(--rg-lift); }
+.bl-step.done { box-shadow: inset 0 2px 0 var(--sv-green), var(--rg-lift); }
+.bl-step.current { box-shadow: inset 0 0 0 1px rgba(241, 236, 224, .36), var(--rg-lift); }
+.bl-step.future, .bl-node.locked { background: #141518; background-image: var(--vd-grain, none); background-blend-mode: soft-light; box-shadow: var(--vd-sink-sm); }
+.bl-node.bought { box-shadow: inset 0 2px 0 var(--sv-green), var(--rg-lift); }
+.bl-node.open { box-shadow: inset 0 0 0 1px rgba(241, 236, 224, .32), var(--rg-lift); }
+.bl-node.working { box-shadow: inset 0 0 0 1px rgba(214, 190, 150, .45), var(--rg-lift); }
+.sv .sv-card.building { box-shadow: inset 0 0 0 1px rgba(214, 190, 150, .42), var(--rg-lift); }
+/* Заказы мастерской — значок крупнее */
+.bl-order-list li { grid-template-columns: 48px minmax(0, 1fr) 14px; padding: 8px 12px; }
+.bl-order-list .sv-sock.sm { --s: 48px; }
+.bl-order-list li.now { box-shadow: inset 0 0 0 1px rgba(224, 196, 143, .45), var(--rg-lift); }
+/* ─── Кованые пластины: событие, производственная линия, дорожки снаряжения, стороны битвы, поселения совета ─── */
+.sv-event, .bl-line, .rc-town, .rc-bar { background-color: #17181b; background-image: var(--rg-plate); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
+.sv-event { box-shadow: inset 0 2px 0 rgba(184, 67, 44, .75), var(--rg-forged); }
+.bl-line { border-radius: 6px; }
+.rc-bar { margin: 12px 16px 0; border-radius: 6px; }
+.rc-title b { color: transparent; -webkit-background-clip: text; background-clip: text; background-image: var(--vd-metal); filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .85)); }
+.rc-stats { gap: 0; border-radius: 4px; background: rgba(0, 0, 0, .3); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .85); }
+.rc-stats > span { position: relative; background: none; box-shadow: none; }
+.rc-stats > span + span::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; background: var(--rg-groove); }
+.rc-stats b { color: transparent; -webkit-background-clip: text; background-clip: text; background-image: var(--vd-metal); }
+/* ─── Командир отряда — утопленная кованая табличка с крупным портретом ─── */
+/* ─── Отряды и битва: числа в кованых кругах, журнал — недели на желобке ─── */
+/* ─── Летопись: недели на кованом желобке ─── */
+.sv-chronicle { position: relative; padding-left: 28px; }
+.sv-chronicle::before { content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px; background: var(--rg-groove); }
+.sv-chronicle > li:not(.sv-hint) { position: relative; background-color: #17181b; background-image: var(--rg-plate); background-size: auto, 220px;
+  background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
+.sv-chronicle > li:not(.sv-hint)::before { content: ""; position: absolute; left: -24px; top: 14px; width: 10px; height: 10px; transform: rotate(45deg);
+  background: linear-gradient(135deg, #f1ece0, #8f897d); box-shadow: 0 0 0 1px #050506, 0 0 0 4px #0f1012; }
+/* ─── Карточки чата королевства: кожаная шапка со строчкой, название металлом, строки — утопленный список ─── */
+.chat-message .vedmak-card.settlement-week .card-head, .chat-message .vedmak-card.battle-round .card-head { position: relative; overflow: hidden; padding: 10px 12px; border-bottom: 0; background-color: #2a231e;
+  background-image: radial-gradient(70% 170% at 8% 50%, rgba(255, 232, 200, .15), transparent 60%), linear-gradient(90deg, transparent 50%, rgba(0, 0, 0, .38)), var(--vd-t-leather, none);
+  background-size: auto, auto, 200px; background-blend-mode: normal, normal, overlay; }
+.chat-message .vedmak-card.settlement-week .card-head::before, .chat-message .vedmak-card.battle-round .card-head::before { content: ""; position: absolute; inset: 4px 4px 6px; border: 1px dashed rgba(214, 190, 150, .24); border-radius: 3px; pointer-events: none; }
+.chat-message .vedmak-card.settlement-week .card-head::after, .chat-message .vedmak-card.battle-round .card-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(180deg, #070708, rgba(255, 240, 215, .09)); }
+.chat-message .vedmak-card.settlement-week .card-head > *, .chat-message .vedmak-card.battle-round .card-head > * { position: relative; z-index: 1; }
+.chat-message .vedmak-card.settlement-week .card-name, .chat-message .vedmak-card.battle-round .card-name { font: 400 19px/1.05 var(--vd-font-head); color: var(--sv-silver, #f1ece0); -webkit-text-fill-color: currentColor; text-shadow: 0 1px 0 rgba(0, 0, 0, .9);
+ }
+.chat-message .vedmak-card.settlement-week .card-sub, .chat-message .vedmak-card.battle-round .card-sub { font: 600 9px/1.25 var(--vd-font-body); letter-spacing: .12em; text-transform: uppercase; color: #c7b99f; }
+.vedmak-card.settlement-event .sw-img { width: 42px; height: 42px; box-shadow: 0 0 0 2px #8f897d, 0 0 0 3px #060708, 0 3px 7px rgba(0, 0, 0, .7); }
+.vedmak-card .sw-lines { list-style: none; margin: 0 0 6px; padding: 0; border-radius: 4px; background: rgba(0, 0, 0, .3); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .85); }
+.vedmak-card .sw-lines li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 8px; padding: 5px 9px; }
+.vedmak-card .sw-lines li + li { border-top: 1px solid rgba(0, 0, 0, .55); box-shadow: inset 0 1px 0 rgba(255, 240, 215, .04); }
+.vedmak-card .sw-lines b { font: 400 18px/1 var(--vd-font-head); color: transparent; -webkit-background-clip: text; background-clip: text; background-image: var(--vd-metal); }
+.vedmak-card .sw-lines b.up { background-image: var(--vd-metal-green, var(--vd-metal)); }
+.vedmak-card .sw-lines em { grid-column: 1 / -1; font-style: normal; font-size: 10px; color: #8d887e; }
+.vedmak-card.settlement-event .se-choice button { min-height: 30px; padding: 0 14px; border: 0; border-radius: 2px; text-align: center;
+  font: 600 10px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-btn, none);
+  background-position: left 5px center, right 5px center, 0 0, 0 0; background-size: 5px 5px, 5px 5px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 1px #303137, 0 0 0 2px #060708; }
+.vedmak-card.settlement-event .se-choice button:not(:disabled):hover { filter: brightness(1.12); }
+.vedmak-card.settlement-event .se-choice button:disabled { filter: grayscale(.8) brightness(.55); }
+/* ─── Окна поселения и войска (realm-dialog.mjs): «Отмена»/«Нет» — слева сталью, действие — справа киноварью ─── */
+.vd-realm .form-footer { justify-content: space-between; gap: 10px; }
+.vd-realm .form-footer button { flex: 0 0 auto; min-width: 120px; height: 40px; padding: 0 24px; border: 0; border-radius: 2px; white-space: nowrap;
+  font: 600 11px/1 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #cfc8b8; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #26282d; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-btn, none);
+  background-position: left 7px center, right 7px center, 0 0, 0 0; background-size: 6px 6px, 6px 6px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .22), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #2a2b30, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95); }
+.vd-realm .form-footer button:not([data-action="cancel"]):not([data-action="no"]) { order: 2; color: #fff6ef; text-shadow: 0 -1px 0 rgba(60, 10, 0, .7);
+  background-color: #b8432c; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-go, none);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95); }
+.vd-realm .form-footer button[data-action="cancel"], .vd-realm .form-footer button[data-action="no"] { order: 1; }
+.vd-realm .form-footer button:only-child { margin-left: auto; }
+.vd-realm .form-footer button:hover { filter: brightness(1.1); color: #fff; }
+.vd-realm .form-footer button:not(:disabled):active { transform: translateY(1px); filter: brightness(.88); }
+.vd-realm .form-footer button:disabled { cursor: not-allowed; filter: grayscale(.8) brightness(.55); }
+.vd-realm .form-footer button:focus { outline: none; }
+.vd-realm .form-footer button:focus-visible { outline: 1px solid #8a8578; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .sv .sv-next, .sv .sv-btn, .sv .sv-trade a, .sv .sv-choices button, .sv-tabs a, .sv-res li, .sv-card, .bl-order-list li { transition: none; }
+}
+@media (max-width: 760px) {
+  .sv-plaque:nth-child(odd)::before { display: none; }
+}
