@@ -1,0 +1,8 @@
+{{!-- Событие месяца по выбору ведущего (лист поселения) --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <div class="form-group"><label>Событие</label>
+    <select name="key"><option value="">Случайное из подходящих</option>
+      {{#each events}}<option value="{{key}}">{{label}}{{#unless fits}} (сейчас не к месту){{/unless}}</option>{{/each}}
+    </select></div>
+  <p class="hint">Правитель решит на листе поселения; не решит до хода недели — решение по умолчанию.</p>
+</div>

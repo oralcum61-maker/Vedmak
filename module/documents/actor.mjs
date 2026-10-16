@@ -123,7 +123,8 @@ export class VedmakActor extends Actor {
     const race = this.system.race;
     const power = race?.system.power(key);
     if (!power) return null;
-    if (!power.roll) return ui.notifications.info(`«${power.name}» — без проверки.`);
+    // null, а не объект уведомления: Истинная форма принимала его за проваленную проверку и снимала ОК и ПЗ
+    if (!power.roll) { ui.notifications.info(`«${power.name}» — без проверки.`); return null; }
     const parts = [];
     if (power.stat) parts.push({ label: STATS[power.stat]?.label ?? power.stat, value: this.system.stats[power.stat]?.effective ?? 0, always: true });
     parts.push({ label: power.name, value: power.value, always: true });

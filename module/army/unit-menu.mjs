@@ -1,7 +1,8 @@
 // Меню отряда по правой кнопке (просьба автора 16.10): лист, картинка, жетон, роспуск и удаление — в списке войска
 // поселения и в окне битвы. Строка отряда — элемент с data-id актёра «Отряд».
 
-import { disband } from "./army.mjs";
+import { disband, removeUnit } from "./army.mjs";
+import { realmConfirm } from "../apps/realm-dialog.mjs";
 
 const unitOf = target => game.actors.get(target.closest("[data-id]")?.dataset.id);
 const own = target => !!unitOf(target)?.isOwner;
@@ -23,12 +24,10 @@ function tokenConfig(unit) {
 }
 
 async function remove(unit) {
-  const ok = await foundry.applications.api.DialogV2.confirm({
-    window: { title: `Удалить: ${unit.name}` },
-    content: "<p>Отряд исчезнет вместе с бойцами — они не вернутся ни в Ополчение, ни в семьи. Вернуть бойцов — «Распустить».</p>",
-    rejectClose: false
-  });
-  if (ok) await unit.delete();
+  const ok = await realmConfirm("delete", { title: `Удалить: ${unit.name}`,
+    text: "Отряд исчезнет вместе с бойцами — они не вернутся ни в Ополчение, ни в семьи.", hint: "Вернуть бойцов — «Распустить»." });
+  // Игроку удалять актёров Foundry не даёт — removeUnit отдаёт это ведущему
+  if (ok) await removeUnit(unit);
 }
 
 /**

@@ -11,9 +11,9 @@ import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common
 import { unitsWeek, clearBesieging } from "../army/army.mjs";
 import { autoResolve, rollMonthEvent, postPending, SETTLEMENT_EVENTS } from "./events.mjs";
 import { playSound } from "../fx/sounds.mjs";
-import { refuse } from "../util.mjs";
+import { refuse, once } from "../util.mjs";
+import { realmConfirm } from "../apps/realm-dialog.mjs";
 
-const { DialogV2 } = foundry.applications.api;
 const LOG_LIMIT = 40;
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
 
@@ -328,11 +328,8 @@ export async function trade(actor, resource, qty, mode) {
 export async function demolish(actor, id) {
   const item = buildingOf(actor, id);
   if (!item) return;
-  const ok = await DialogV2.confirm({
-    window: { title: `Снести: ${item.name}` },
-    content: `<p>${item.system.level ? "Постройка будет снесена" : "Стройка будет брошена"}; потраченное не вернётся.</p>`,
-    rejectClose: false
-  });
+  const ok = await realmConfirm("demolish", { title: `Снести: ${item.name}`,
+    text: `${item.system.level ? "Постройка будет снесена" : "Стройка будет брошена"}; потраченное не вернётся.` });
   if (!ok) return;
   if (game.user.isGM || item.canUserModify(game.user, "delete")) await item.delete();
   else await asGM("settlementDemolish", { uuid: item.uuid });
@@ -365,25 +362,33 @@ export async function moveWealth(actor, units, mode) {
   if (!hero) return refuse("Назначьте себе персонажа (настройки пользователя), чтобы вносить и брать Богатство.");
   if (!hero.isOwner) return refuse(`${hero.name} — не ваш персонаж.`);
   const cur = worldCurrency();
-  const n = Math.floor(Number(units) || 0);
+  // Десятыми долями: казна копит дробное Богатство (торговля, налог), и остаток раньше было не взять
+  const n = Math.floor((Number(units) || 0) * 10) / 10;
   if (n <= 0) return;
   const purse = hero.system.money?.[cur.key] ?? 0;
-  const coins = n * WEALTH_RATE;
+  const coins = Math.round(n * WEALTH_RATE);
   if (mode === "deposit") {
     if (purse < coins) return refuse(`Нужно ${coins} ${cur.abbr}, у ${hero.name} — ${purse}.`);
     await hero.update({ [`system.money.${cur.key}`]: purse - coins });
-    await actor.update({ "system.wealth": actor.system.wealth + n });
+    await actor.update({ "system.wealth": Math.round((actor.system.wealth + n) * 1000) / 1000 });
     playSound("ui-coin");
   } else {
     if (actor.system.wealth < n) return refuse(`В казне только ${actor.system.wealth} Богатства.`);
-    await actor.update({ "system.wealth": actor.system.wealth - n });
+    await actor.update({ "system.wealth": Math.round((actor.system.wealth - n) * 1000) / 1000 });
     await hero.update({ [`system.money.${cur.key}`]: purse + coins });
     playSound("ui-coin");
   }
 }
 
-/** Ход недели (ведущий): броски построек, нужды, итоги месяца, стройка, летопись и карточка в чат. */
-export async function advanceWeek(actor) {
+/**
+ * Ход недели (ведущий): броски построек, нужды, итоги месяца, стройка, летопись и карточка в чат. Одна неделя за раз:
+ * двойной щелчок (лист, Совет правителя) гнал две недели с одного и того же состояния.
+ */
+export function advanceWeek(actor) {
+  return once(actor, "week", () => runWeek(actor));
+}
+
+async function runWeek(actor) {
   if (!game.user.isGM) return refuse("Время двигает ведущий.");
   // События месяца (PLAN 4.206): правитель не решил до хода — решение по умолчанию
   const resolved = await autoResolve(actor);

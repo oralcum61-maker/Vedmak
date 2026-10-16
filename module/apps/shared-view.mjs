@@ -90,8 +90,9 @@ export function wireViewer(app) {
   const el = app.element;
   if (!el) return;
   el.classList.add("vd-viewer");
+  // Зритель мог стать участником (его актёр вошёл в битву) — пометку «только смотрит» снять: корень окна тот же
+  el.classList.toggle("vd-viewer-only", !app.canAct);
   if (!app.canAct) {
-    el.classList.add("vd-viewer-only");
     for (const x of el.querySelectorAll("input, select, textarea, button")) x.disabled = true;
     return;
   }

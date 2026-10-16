@@ -107,6 +107,20 @@ export function refuse(message) {
   return null;
 }
 
+/**
+ * Одно нажатие — одно действие: пока действие key окна owner идёт, повторный вызов ничего не делает (вернёт null).
+ * Двойной щелчок по «Неделя прошла» гнал две недели с одного состояния, по «Заложить», «Снарядить», решению события —
+ * платил дважды, пока первое списание не дошло до документа.
+ */
+const BUSY = new WeakMap();
+export async function once(owner, key, fn) {
+  let keys = BUSY.get(owner);
+  if (!keys) BUSY.set(owner, keys = new Set());
+  if (keys.has(key)) return null;
+  keys.add(key);
+  try { return await fn(); } finally { keys.delete(key); }
+}
+
 /** HTML → строка без тегов; описаний немного, а читаются они на каждую перерисовку — с запоминанием. */
 const PLAIN_CACHE = new Map();
 export function plainText(html) {

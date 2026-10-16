@@ -4,7 +4,7 @@
 // каждая рука и нога по 3. Книга не называет навык нанесения — берём Искусство.
 
 import { TATTOO_LOCATIONS, TATTOO_TIERS } from "../config/items.mjs";
-import { postCard, renderTemplate, esc } from "../util.mjs";
+import { postCard, renderTemplate, esc, refuse } from "../util.mjs";
 import { checkChance } from "./implant.mjs";
 
 const TATTOO_SKILL = "fineArts";
@@ -66,7 +66,7 @@ export async function applyTattoo(actor, item) {
   if (t.applied) return ui.notifications.info(`«${item.name}» уже нанесена: ${TATTOO_LOCATIONS[t.location]?.label ?? t.location}.`);
   const used = tattooSlots(actor);
   const free = Object.entries(TATTOO_LOCATIONS).filter(([k, l]) => used[k] < l.max);
-  if (!free.length) return ui.notifications.warn(`${actor.name}: места для татуировок не осталось.`);
+  if (!free.length) return refuse(`${actor.name}: места для татуировок не осталось.`);
   // Наносит сам персонаж или другой, которым владеет пользователь («Вы также можете набить татуировку друзьям»)
   // У ведущего «свои» — все персонажи: сам персонаж и пятеро лучших в Искусстве, чтобы окно не разрасталось
   const artBase = a => a.system.skills?.[TATTOO_SKILL]?.base ?? 0;

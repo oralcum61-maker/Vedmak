@@ -1,0 +1,19 @@
+{{!-- Набор войска: откуда, сколько, куда, род войск, название (лист поселения, вкладка «Войско») --}}
+<div class="vedmak-roll-dialog realm-dlg sv-recruit" data-dlg="{{dlg}}">
+  <div class="form-group"><label>Откуда</label>
+    <select name="origin">
+      <option value="militia" selected>Ополчение — есть {{militia}} чел.</option>
+      <option value="families">Семьи без дела — {{idle}} (по {{familySoldiers}} бойцов)</option>
+      <option value="mercenary">Наёмники — {{hire}} Богатства за бойца (в казне {{wealth}})</option>
+    </select></div>
+  <div class="form-group"><label>Сколько</label><input type="number" name="count" min="1" step="1" value="10">
+    <p class="hint">Для семей — число семей, для остальных — бойцов.</p></div>
+  <div class="form-group"><label>Куда</label>
+    <select name="unit"><option value="" selected>Новый отряд</option>
+      {{#each units}}<option value="{{id}}">{{name}} ({{origin}})</option>{{/each}}
+    </select></div>
+  <div class="form-group"><label>Род войск</label>
+    <select name="kind">{{#each kinds}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div class="form-group"><label>Название</label><input type="text" name="name" placeholder="Ополчение {{town}}"></div>
+  <p class="hint">Наёмники приходят обученными и со своим снаряжением, но им платят каждую неделю. Новички в старом отряде снаряжаются со склада как весь отряд.</p>
+</div>

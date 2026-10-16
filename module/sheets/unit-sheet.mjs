@@ -11,6 +11,8 @@ import { equipCost, routAt } from "../army/rules.mjs";
 import * as ARMY from "../army/army.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 import { animateRealm } from "../fx/realm-fx.mjs";
+import { once, refuse } from "../util.mjs";
+import { realmPrompt } from "../apps/realm-dialog.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -187,7 +189,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
   static async #onEquip(event, target) {
     const track = target.dataset.track;
-    await ARMY.equip(this.actor, track, this.actor.system[track] + 1);
+    await once(this.actor, "equip", () => ARMY.equip(this.actor, track, this.actor.system[track] + 1));
   }
   static async #onDrill() { await this.actor.update({ "system.drilling": !this.actor.system.drilling }); }
   static async #onDisband() { await ARMY.disband(this.actor); }
@@ -198,34 +200,23 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /* ------------------------------ Поход (PLAN 4.203) ------------------------------ */
 
   static async #onMarch() {
-    const weeks = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `В поход: ${this.actor.name}` },
-      content: `<div class="vedmak-roll-dialog"><label class="num"><span class="cap">Припасов на недель</span>
-        <input type="number" name="weeks" min="0" step="1" value="2" autofocus></label>
-        <p class="hint">Еда со склада родного поселения: ${this.actor.system.food} в неделю. В походе отряд ест припасы, а не склад; на плацу не тренируется.</p></div>`,
-      ok: { label: "В поход", callback: (ev, button) => button.form.elements.weeks.valueAsNumber },
-      rejectClose: false
-    });
+    const weeks = await realmPrompt("march", { title: `В поход: ${this.actor.name}`, okLabel: "В поход",
+      data: { food: this.actor.system.food }, read: form => form.elements.weeks.valueAsNumber });
     if (weeks !== null && weeks !== undefined) await ARMY.marchOut(this.actor, weeks);
   }
   static async #onReturnHome() { await ARMY.returnHome(this.actor); }
   static async #onBesiege() {
     const towns = game.actors.filter(a => a.type === "settlement" && a.uuid !== this.actor.system.settlement && a.visible);
-    if (!towns.length) return ui.notifications.warn("Осаждать некого.");
-    const uuid = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `Осада: ${this.actor.name}` },
-      content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Какое поселение</label><select name="town">${towns.map(t => `<option value="${t.uuid}">${t.name}</option>`).join("")}</select></div>
-        <p class="hint">Пока отряд под стенами, там стоят поля и промыслы, не ходят купцы и караваны, не приходят семьи, одобрение падает. Битва у стен — с их укреплениями.</p></div>`,
-      ok: { label: "Осадить", callback: (ev, button) => button.form.elements.town.value },
-      rejectClose: false
-    });
+    if (!towns.length) return refuse("Осаждать некого.");
+    const uuid = await realmPrompt("siege", { title: `Осада: ${this.actor.name}`, okLabel: "Осадить",
+      data: { towns: towns.map(t => ({ uuid: t.uuid, name: t.name })) }, read: form => form.elements.town.value });
     if (uuid) await ARMY.besiege(this.actor, fromUuidSync(uuid));
   }
   static async #onLiftSiege() { await ARMY.liftSiege(this.actor); }
 
   /* ------------------------------ Обучение ------------------------------ */
 
-  static async #onTrain(event, target) { await ARMY.train(this.actor, target.closest("[data-node]").dataset.node); }
+  static async #onTrain(event, target) { await once(this.actor, "train", () => ARMY.train(this.actor, target.closest("[data-node]").dataset.node)); }
   static async #onStopTraining() { await ARMY.stopTraining(this.actor); }
   /** Ведущий: дать ступень даром или забрать. */
   static async #onGrant(event, target) {

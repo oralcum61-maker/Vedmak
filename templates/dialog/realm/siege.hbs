@@ -1,0 +1,6 @@
+{{!-- Осада: какое поселение (лист отряда в походе) --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <div class="form-group"><label>Какое поселение</label>
+    <select name="town">{{#each towns}}<option value="{{uuid}}">{{name}}</option>{{/each}}</select></div>
+  <p class="hint">Пока отряд под стенами, там стоят поля и промыслы, не ходят купцы и караваны, не приходят семьи, одобрение падает. Битва у стен — с их укреплениями.</p>
+</div>

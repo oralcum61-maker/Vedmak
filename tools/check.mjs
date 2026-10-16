@@ -177,6 +177,10 @@ function checkTemplates() {
     for (const m of s.matchAll(/systems\/vedmak\/(templates\/[\w\-/]+\.hbs)/g)) {
       if (!fs.existsSync(path.join(ROOT, m[1]))) err(S, `${rel(f)}: нет файла ${m[1]}`);
     }
+    // Окна поселения и войска (module/apps/realm-dialog.mjs) берут шаблон по имени: realmPrompt("recruit") → realm/recruit.hbs
+    for (const m of s.matchAll(/realmPrompt\(\s*["']([\w-]+)["']/g)) {
+      if (!fs.existsSync(path.join(ROOT, `templates/dialog/realm/${m[1]}.hbs`))) err(S, `${rel(f)}: нет шаблона окна templates/dialog/realm/${m[1]}.hbs`);
+    }
     if (!f.endsWith(".hbs")) continue;
     for (const m of s.matchAll(/\{\{>\s*["']systems\/vedmak\/(templates\/[^"']+\.hbs)["']/g)) {
       if (!preloaded.has(m[1])) err(S, `${rel(f)}: подшаблон ${m[1]} не зарегистрирован в TEMPLATE_PATHS (module/helpers.mjs)`);

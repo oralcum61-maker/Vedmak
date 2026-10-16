@@ -6,9 +6,10 @@ import { UNIT_KINDS, TRAINING, ORIGINS, FAMILY_SOLDIERS, MERCENARY, MAX_GEAR, GE
 import { FOOD, WEALTH } from "../config/settlement.mjs";
 import { RANKS, unitTree, kindBranch } from "../config/unit-upgrades.mjs";
 import { unitState, unitWeek, equipCost, unitFood, unitPay, unitNodes } from "./rules.mjs";
-import { asGM, registerGMHandler } from "../combat/common.mjs";
+import { asGM, registerGMHandler, userOwnsAny, broadcast, registerBroadcast } from "../combat/common.mjs";
 import { playSound } from "../fx/sounds.mjs";
 import { refuse } from "../util.mjs";
+import { realmConfirm } from "../apps/realm-dialog.mjs";
 
 const r3 = n => Math.round(n * 1000) / 1000;
 const r1 = n => Math.round(n * 10) / 10;
@@ -69,34 +70,60 @@ export async function recruit(settlement, { origin, count, kind = "infantry", na
     await unit.update({ "system.soldiers": was + soldiers, "system.training": training });
     return unit;
   }
+  // Актёров создаёт только ведущий: игрок-правитель терял людей и Богатство, а отряд не появлялся
+  if (!game.user.isGM && !game.users.activeGM) return refuse("Набрать новый отряд можно, когда ведущий в игре.");
+  if (!UNIT_KINDS[kind]) kind = "infantry";
   await settlement.update(update);
   const merc = origin === "mercenary";
-  const folder = game.folders.find(f => f.type === "Actor" && f.name === "Войско")
-    ?? (game.user.isGM ? await Folder.create({ name: "Войско", type: "Actor", color: "#7a3b2e" }) : null);
-  return Actor.create({
-    name: name || `${UNIT_KINDS[kind].label}: ${settlement.name}`, type: "unit", img: UNIT_KINDS[kind].img, folder: folder?.id,
-    ownership: foundry.utils.deepClone(settlement.ownership),
+  const data = {
+    name: name || `${UNIT_KINDS[kind].label}: ${settlement.name}`, type: "unit", img: UNIT_KINDS[kind].img,
     system: { kind, origin, soldiers, training: merc ? MERCENARY.training : 0, weapons: merc ? MERCENARY.weapons : 0,
       armor: merc ? MERCENARY.armor : 0, morale: merc ? MERCENARY.morale : TRAINING[0].morale, settlement: settlement.uuid,
       branches: unitTree(kind) },
     prototypeToken: { name: name || UNIT_KINDS[kind].label, actorLink: true, disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY }
-  });
+  };
+  if (!game.user.isGM) {
+    await asGM("armyRecruit", { settlementUuid: settlement.uuid, data });
+    ui.notifications.info(`«${data.name}» набран — отряд появится в папке «Войско».`);
+    return null;
+  }
+  return createUnit(settlement, data);
+}
+
+/** Создать актёра-отряд (ведущий): папка «Войско», права — как у поселения. */
+async function createUnit(settlement, data) {
+  const folder = game.folders.find(f => f.type === "Actor" && f.name === "Войско")
+    ?? await Folder.create({ name: "Войско", type: "Actor", color: "#7a3b2e" });
+  return Actor.create({ ...data, folder: folder.id, ownership: foundry.utils.deepClone(settlement.ownership) });
 }
 
 /** Распустить отряд: ополченцы — в Ополчение, семьи — по домам, наёмники уходят. */
 export async function disband(unit) {
-  const ok = await foundry.applications.api.DialogV2.confirm({
-    window: { title: `Распустить: ${unit.name}` },
-    content: `<p>${{ militia: "Бойцы вернутся в Ополчение поселения.", families: `Семьи вернутся домой (${Math.floor(unit.system.soldiers / FAMILY_SOLDIERS)} сем.).`, mercenary: "Наёмники уйдут." }[unit.system.origin]} Снаряжение не вернётся на склад.</p>`,
-    rejectClose: false
-  });
+  const back = { militia: "Бойцы вернутся в Ополчение поселения.", families: `Семьи вернутся домой (${Math.floor(unit.system.soldiers / FAMILY_SOLDIERS)} сем.).`,
+    mercenary: "Наёмники уйдут." }[unit.system.origin] ?? "";
+  const ok = await realmConfirm("disband", { title: `Распустить: ${unit.name}`, text: `${back} Снаряжение не вернётся на склад.`.trim() });
   if (!ok) return;
+  return removeUnit(unit, { returnPeople: true });
+}
+
+/**
+ * Убрать отряд (роспуск — с возвратом людей в поселение, удаление — без). Удалять актёров игроку Foundry не даёт:
+ * роспуск у игрока возвращал людей, а удаление падало — бойцы удваивались. У игрока это делает ведущий.
+ */
+export async function removeUnit(unit, { returnPeople = false } = {}) {
+  if (game.user.isGM || (game.user.can("ACTOR_CREATE") && unit.canUserModify(game.user, "delete"))) return dropUnit(unit, returnPeople);
+  if (!game.users.activeGM) return refuse("Убрать отряд можно, когда ведущий в игре.");
+  return asGM("armyRemove", { uuid: unit.uuid, returnPeople });
+}
+
+/** Удалить актёра-отряд, затем (если роспуск) вернуть людей: сначала удаление — при отказе люди не удвоятся. */
+async function dropUnit(unit, returnPeople) {
   const home = unit.system.settlementActor;
-  if (home?.isOwner) {
-    if (unit.system.origin === "militia") await home.update({ "system.militia": home.system.militia + unit.system.soldiers });
-    if (unit.system.origin === "families") await home.update({ "system.families": home.system.families + Math.floor(unit.system.soldiers / FAMILY_SOLDIERS) });
-  }
+  const { origin, soldiers } = unit.system;
   await unit.delete();
+  if (!returnPeople || !home) return;
+  if (origin === "militia") await home.update({ "system.militia": home.system.militia + soldiers });
+  if (origin === "families") await home.update({ "system.families": home.system.families + Math.floor(soldiers / FAMILY_SOLDIERS) });
 }
 
 /**
@@ -271,6 +298,24 @@ export { WEALTH };
  */
 export function registerUnitHooks() {
   // Осада чужого поселения игроком: обновляет ведущий (только поле осады)
+  // Набор игроком-правителем: людей и Богатство он уже списал, ведущий создаёт отряд
+  registerGMHandler("armyRecruit", async ({ settlementUuid, data }, userId) => {
+    const settlement = await fromUuid(settlementUuid);
+    if (settlement?.type !== "settlement" || !userOwnsAny(userId, settlement) || data?.type !== "unit") return;
+    const unit = await createUnit(settlement, { ...data, system: { ...data.system, settlement: settlement.uuid } });
+    // Лист — тому, кто набирал
+    if (unit && userId !== game.user.id) broadcast("armyRecruited", { uuid: unit.uuid, userId });
+  });
+  registerGMHandler("armyRemove", async ({ uuid, returnPeople }, userId) => {
+    const unit = await fromUuid(uuid);
+    if (unit?.type === "unit" && userOwnsAny(userId, unit)) await dropUnit(unit, !!returnPeople);
+  });
+  registerBroadcast("armyRecruited", ({ uuid, userId }) => {
+    if (userId !== game.user.id) return;
+    const open = () => fromUuidSync(uuid)?.sheet.render(true);
+    // Рассылка может обогнать сам документ — тогда чуть позже
+    if (fromUuidSync(uuid)) open(); else setTimeout(open, 500);
+  });
   registerGMHandler("siegeUpdate", async ({ uuid, data }) => {
     const target = await fromUuid(uuid);
     const clean = Object.fromEntries(Object.entries(data).filter(([k]) => k.startsWith("system.siege.")));
@@ -315,6 +360,8 @@ export function registerUnitHooks() {
  * двигал, предлагается осада.
  */
 export function registerMapSiege() {
+  const declined = new Set();
+  const asking = new Set();
   Hooks.on("moveToken", async (tokenDoc, movement, options, user) => {
     // Четвёртый аргумент — пользователь (документ), не его id
     if ((user?.id ?? user) !== game.user.id) return;
@@ -329,13 +376,15 @@ export function registerMapSiege() {
     const townOf = t => game.actors.get(t.actorId) ?? t.actor;
     const near = scene.tokens.find(t => townOf(t)?.type === "settlement" && townOf(t).uuid !== unit.system.settlement
       && Math.hypot(t.x + (t.width * size) / 2 - c.x, t.y + (t.height * size) / 2 - c.y) <= reach + (Math.max(t.width, t.height) * size) / 2);
-    if (!near) return;
+    if (!near) { for (const k of [...declined]) if (k.startsWith(unit.uuid)) declined.delete(k); return; }
     const town = townOf(near);
-    const ok = await foundry.applications.api.DialogV2.confirm({
-      window: { title: "Под стенами" },
-      content: `<p>«${unit.name}» подошёл к «${town.name}». Начать осаду?</p>`,
-      rejectClose: false
-    });
+    // Отказались — не спрашивать на каждом шаге у тех же стен (пока отряд не отойдёт); вопрос открыт — второго не надо
+    const key = `${unit.uuid}|${town.uuid}`;
+    if (declined.has(key) || asking.has(key)) return;
+    asking.add(key);
+    const ok = await realmConfirm("walls", { title: "Под стенами", text: `«${unit.name}» подошёл к «${town.name}». Начать осаду?` })
+      .finally(() => asking.delete(key));
     if (ok) await besiege(unit, town);
+    else declined.add(key);
   });
 }

@@ -1,0 +1,7 @@
+{{!-- Казна: внести из кошелька или взять в кошелёк (лист поселения) --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <label class="num"><span class="cap">Сколько Богатства</span>
+    <input type="number" name="units" min="0.1" step="0.1" max="{{max}}" value="{{value}}" autofocus></label>
+  <p class="hint">1 Богатство = {{rate}} {{abbr}}. В казне {{treasury}};
+    {{#if hero}}в кошельке {{hero}} — {{purse}} {{abbr}} (можно {{verb}} до {{maxLabel}}){{else}}персонаж не назначен{{/if}}.</p>
+</div>

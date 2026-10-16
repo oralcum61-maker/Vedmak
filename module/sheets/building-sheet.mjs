@@ -13,6 +13,8 @@ import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 import { animateRealm } from "../fx/realm-fx.mjs";
+import { once } from "../util.mjs";
+import { realmPrompt } from "../apps/realm-dialog.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -227,15 +229,10 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const heroes = game.actors.filter(a => a.type === "character" && a.isOwner);
     const mine = game.user.character?.id ?? item.parent?.id;
     const { cost, weeks } = orderCost(item.type, item.system.cost, 1, item.name);
-    const data = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `Заказ: ${item.name}` },
-      content: `<div class="vedmak-roll-dialog">
-        <div class="form-group"><label>Для кого</label><select name="for">${heroes.map(a => `<option value="${a.uuid}" ${a.id === mine ? "selected" : ""}>${a.name}</option>`).join("")}</select></div>
-        <div class="form-group"><label>Сколько</label><input type="number" name="qty" min="1" step="1" value="1"></div>
-        <p class="hint">За штуку: ${cost.map(c => `${c.resource} ${c.qty}`).join(", ")} со склада «${town.name}», ${weeks} нед. работы.</p></div>`,
-      ok: { label: "Заказать", callback: (ev, button) => Object.fromEntries(new FormData(button.form)) },
-      rejectClose: false
-    });
+    const data = await realmPrompt("order", { title: `Заказ: ${item.name}`, okLabel: "Заказать",
+      data: { heroes: heroes.map(a => ({ uuid: a.uuid, name: a.name, selected: a.id === mine })), town: town.name, weeks,
+        cost: cost.map(c => `${c.resource} ${c.qty}`).join(", ") },
+      read: form => Object.fromEntries(new FormData(form)) });
     if (!data) return null;
     return game.vedmak.settlement.placeOrder(town, this.actor.id, item, fromUuidSync(data.for), data.qty);
   }
@@ -289,7 +286,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onResearch(event, target) {
     const town = this.actor.system.settlementActor;
-    if (town) await S.research(town, this.actor.id, target.closest("[data-node]").dataset.node);
+    if (town) await once(this.actor, "research", () => S.research(town, this.actor.id, target.closest("[data-node]").dataset.node));
   }
   static async #onCancelResearch() {
     const town = this.actor.system.settlementActor;

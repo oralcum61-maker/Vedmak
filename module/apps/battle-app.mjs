@@ -8,8 +8,9 @@ import { postCard, broadcast, registerBroadcast } from "../combat/common.mjs";
 import { shareView, closeView, viewerContext, wireViewer, viewerClosed } from "./shared-view.mjs";
 import { animateRealm, animateNew, playSound } from "../fx/realm-fx.mjs";
 import { bindUnitMenu } from "../army/unit-menu.mjs";
+import { realmConfirm } from "./realm-dialog.mjs";
 
-const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
 
 /* ------------------------------ Битва на карте (PLAN 4.207) ------------------------------ */
@@ -79,6 +80,7 @@ function showText({ scene, token, text, danger }) {
 export function registerMapBattle() {
   registerBroadcast("battleText", showText);
   const declined = new Set();
+  const asking = new Set();
   Hooks.on("moveToken", async (tokenDoc, movement, operation, user) => {
     if (tokenDoc.actor?.type !== "unit" || !(tokenDoc.actor.system.soldiers > 0)) return;
     const gm = game.users.activeGM === game.user;
@@ -99,13 +101,12 @@ export function registerMapBattle() {
     const app = foundry.applications.instances.get("vedmak-battle");
     if (app?.field?.scene === scene.id && app.rendered) { setTimeout(() => { app.syncField(); app.render(); }, 600); return; }
     const key = [tokenDoc.id, ...enemies.map(e => e.id)].sort().join("|");
-    if (declined.has(key)) return;
-    const ok = await DialogV2.confirm({
-      window: { title: "Отряды сошлись" },
-      content: `<p>«${tokenDoc.name}» сошёлся с «${enemies.map(e => e.name).join("», «")}». Начать битву на этом месте?</p>
-        <p class="hint">В бою — все отряды в ${FIELD_CELLS} клетках; местность — из региона сцены.</p>`,
-      rejectClose: false
-    });
+    // Пока вопрос открыт, новые шаги тех же отрядов не открывают второе окно поверх первого
+    if (declined.has(key) || asking.has(key)) return;
+    asking.add(key);
+    const ok = await realmConfirm("clash", { title: "Отряды сошлись",
+      text: `«${tokenDoc.name}» сошёлся с «${enemies.map(e => e.name).join("», «")}». Начать битву на этом месте?`,
+      hint: `В бою — все отряды в ${FIELD_CELLS} клетках; местность — из региона сцены.` }).finally(() => asking.delete(key));
     if (!ok) { declined.add(key); return; }
     const b = tokenCenter(enemies[0]);
     BattleApp.fromScene(scene, { x: (here.x + b.x) / 2, y: (here.y + b.y) / 2, elevation: here.elevation }, { attacker: tokenDoc });

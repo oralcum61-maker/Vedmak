@@ -9,7 +9,7 @@
 import { IMPLANT_RUNES, IMPLANT_GLYPHS, IMPLANT_TIERS, IMPLANT_LIMIT } from "../config/crafting.mjs";
 import { findItemData } from "./craft.mjs";
 import { RACES } from "../config/character.mjs";
-import { postCard, renderTemplate, esc, spendOne } from "../util.mjs";
+import { postCard, renderTemplate, esc, spendOne, refuse } from "../util.mjs";
 
 const SYS = "vedmak";
 const BOOK = "Офир и Зеррикания";
@@ -65,7 +65,7 @@ function tierValue(key, tier) {
 export async function implantDialog(actor) {
   if (actor?.type !== "character") return null;
   const count = implantsOf(actor).length;
-  if (count >= IMPLANT_LIMIT) return ui.notifications.warn(`${actor.name}: уже вживлено ${count} — больше нельзя (стр. 84).`);
+  if (count >= IMPLANT_LIMIT) return refuse(`${actor.name}: уже вживлено ${count} — больше нельзя (стр. 84).`);
   // Маг — свой персонаж с Энергией (сам подопытный тоже), сильнейшие в Сотворении — первыми; магов нет — сам персонаж
   const castBase = a => a.system.skills?.spellCasting?.base ?? 0;
   const owned = [actor, ...game.actors.filter(a => a.type === "character" && a.isOwner && a !== actor)];

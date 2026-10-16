@@ -7,6 +7,7 @@ import { worldCurrency } from "../config/money.mjs";
 import { upgradeNodes } from "../settlement/rules.mjs";
 import { settlementUnits } from "../army/army.mjs";
 import { SETTLEMENT_EVENTS } from "../config/settlement-events.mjs";
+import { once } from "../util.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const fmt = n => (Math.round(n * 10) / 10).toLocaleString("ru-RU");
@@ -89,7 +90,9 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Неделя для всех поселений по очереди (караваны везут в уже прошедшие — как и вручную). */
   static async #onWeekAll() {
     if (!game.user.isGM) return;
-    for (const town of game.actors.filter(a => a.type === "settlement")) await game.vedmak.settlement.advanceWeek(town);
+    await once(this, "weekAll", async () => {
+      for (const town of game.actors.filter(a => a.type === "settlement")) await game.vedmak.settlement.advanceWeek(town);
+    });
     this.render();
   }
 }

@@ -9,7 +9,7 @@ import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_P
 import { buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "../settlement/rules.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { worldCurrency } from "../config/money.mjs";
-import { compareRu } from "../util.mjs";
+import { compareRu, once } from "../util.mjs";
 import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
 import { RANKS } from "../config/unit-upgrades.mjs";
 import * as ARMY from "../army/army.mjs";
@@ -19,6 +19,7 @@ import { bindUnitMenu } from "../army/unit-menu.mjs";
 import * as EV from "../settlement/events.mjs";
 import { effectLabel } from "../config/settlement-events.mjs";
 import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
+import { realmPrompt, realmConfirm } from "../apps/realm-dialog.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -270,18 +271,21 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /* ------------------------------ Действия ------------------------------ */
 
+  // Действия с ценой — через once: двойной щелчок не платит и не двигает неделю дважды
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }
   static #onCatalog() { this.showCatalog = !this.showCatalog; this.render(); }
   static async #onWeek() { await S.advanceWeek(this.actor); }
-  static async #onBuild(event, target) { if (await S.build(this.actor, target.dataset.src)) { this.showCatalog = false; this.render(); } }
-  static async #onUpgrade(event, target) { await S.upgrade(this.actor, target.closest("[data-id]").dataset.id); }
+  static async #onBuild(event, target) {
+    if (await once(this.actor, "build", () => S.build(this.actor, target.dataset.src))) { this.showCatalog = false; this.render(); }
+  }
+  static async #onUpgrade(event, target) { await once(this.actor, "upgrade", () => S.upgrade(this.actor, target.closest("[data-id]").dataset.id)); }
   static async #onDemolish(event, target) { await S.demolish(this.actor, target.closest("[data-id]").dataset.id); }
   static #onEditBuilding(event, target) { game.actors.get(target.closest("[data-id]").dataset.id)?.sheet.render(true); }
   static async #onWorkers(event, target) {
     const id = target.closest("[data-id]").dataset.id;
     await S.setWorkers(this.actor, id, (this.actor.system.summary.workers[id] ?? 0) + Number(target.dataset.delta));
   }
-  static async #onTrade(event, target) { await S.trade(this.actor, target.dataset.name, this.tradeQty, target.dataset.mode); }
+  static async #onTrade(event, target) { await once(this.actor, "trade", () => S.trade(this.actor, target.dataset.name, this.tradeQty, target.dataset.mode)); }
   static async #onApproval(event, target) {
     const v = Math.max(0, Math.min(APPROVAL_MAX, this.actor.system.approval + Number(target.dataset.delta)));
     await this.actor.update({ "system.approval": v });
@@ -295,13 +299,15 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onWealth(event, target) {
     const mode = target.dataset.mode;
     const cur = worldCurrency();
-    const units = await foundry.applications.api.DialogV2.prompt({
-      window: { title: mode === "deposit" ? "Внести в казну" : "Взять из казны" },
-      content: `<div class="vedmak-roll-dialog"><label class="num"><span class="cap">Сколько Богатства</span>
-        <input type="number" name="units" min="1" step="1" value="1" autofocus></label>
-        <p class="hint">1 Богатство = ${WEALTH_RATE} ${cur.abbr}. ${mode === "deposit" ? "Из кошелька" : "В кошелёк"}: ${game.user.character?.name ?? "персонаж не назначен"}.</p></div>`,
-      ok: { label: mode === "deposit" ? "Внести" : "Взять", callback: (ev, button) => button.form.elements.units.valueAsNumber },
-      rejectClose: false
+    const hero = game.user.character;
+    const purse = hero?.system.money?.[cur.key] ?? 0;
+    // Сколько можно: внести — сколько есть в кошельке, взять — сколько в казне (десятыми долями)
+    const max = Math.floor((mode === "deposit" ? purse / WEALTH_RATE : this.actor.system.wealth) * 10) / 10;
+    const units = await realmPrompt("wealth", {
+      title: mode === "deposit" ? "Внести в казну" : "Взять из казны", okLabel: mode === "deposit" ? "Внести" : "Взять",
+      data: { max, value: Math.min(1, max) || 1, rate: WEALTH_RATE, abbr: cur.abbr, treasury: fmt(this.actor.system.wealth),
+        hero: hero?.name ?? "", purse, verb: mode === "deposit" ? "внести" : "взять", maxLabel: fmt(max) },
+      read: form => form.elements.units.valueAsNumber
     });
     if (units) await S.moveWealth(this.actor, units, mode);
   }
@@ -320,12 +326,13 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onRemoveRoute(event, target) { await S.removeRoute(this.actor, target.closest("[data-route]").dataset.route); }
   static async #onLiftSiege() { if (game.user.isGM) await ARMY.liftSiege(null, this.actor); }
   static async #onDecide(event, target) {
-    await EV.decide(this.actor, target.closest("[data-decision]").dataset.decision, Number(target.dataset.choice));
+    // Двойной щелчок по решению платил его цену дважды
+    await once(this.actor, "decide", () => EV.decide(this.actor, target.closest("[data-decision]").dataset.decision, Number(target.dataset.choice)));
   }
   static async #onOpenChronicle() { await S.openChronicle(this.actor); }
   static async #onMoveChronicle() {
-    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Летопись — в журнал" },
-      content: "<p>Все недели с листа перейдут в журнал «Летопись», а лист очистится. Продолжить?</p>", rejectClose: false });
+    const ok = await realmConfirm("chronicle", { title: "Летопись — в журнал",
+      text: "Все недели с листа перейдут в журнал «Летопись», а лист очистится. Продолжить?" });
     if (ok) await S.moveChronicle(this.actor);
   }
   static async #onRemoveModifier(event, target) { await EV.removeModifier(this.actor, target.closest("[data-modifier]").dataset.modifier); }
@@ -333,17 +340,12 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onAddEvent() {
     if (!game.user.isGM) return;
     const s = EV.eventState(this.actor);
-    const opts = Object.entries(EV.SETTLEMENT_EVENTS).map(([k, e]) => {
+    const events = Object.entries(EV.SETTLEMENT_EVENTS).map(([key, e]) => {
       let fits = true; try { fits = e.when(s); } catch { fits = false; }
-      return `<option value="${k}">${e.label}${fits ? "" : " (сейчас не к месту)"}</option>`;
-    }).join("");
-    const key = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `Событие: ${this.actor.name}` },
-      content: `<div class="vedmak-roll-dialog"><div class="form-group"><label>Событие</label><select name="key"><option value="">Случайное из подходящих</option>${opts}</select></div>
-        <p class="hint">Правитель решит на листе поселения; не решит до хода недели — решение по умолчанию.</p></div>`,
-      ok: { label: "Случилось", callback: (ev, button) => button.form.elements.key.value },
-      rejectClose: false
+      return { key, label: e.label, fits };
     });
+    const key = await realmPrompt("event", { title: `Событие: ${this.actor.name}`, okLabel: "Случилось", data: { events },
+      read: form => form.elements.key.value });
     if (key !== null && key !== undefined) await EV.addEvent(this.actor, key);
   }
 
@@ -362,24 +364,12 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const town = this.actor;
     const sys = town.system;
     const units = ARMY.settlementUnits(town);
-    const opt = (v, l, sel) => `<option value="${v}" ${sel ? "selected" : ""}>${l}</option>`;
-    const content = `<div class="vedmak-roll-dialog sv-recruit">
-      <div class="form-group"><label>Откуда</label><select name="origin">
-        ${opt("militia", `Ополчение — есть ${sys.militia} чел.`, true)}
-        ${opt("families", `Семьи без дела — ${sys.summary.idle} (по ${FAMILY_SOLDIERS} бойцов)`)}
-        ${opt("mercenary", `Наёмники — ${MERCENARY.hire} Богатства за бойца (в казне ${sys.wealth})`)}
-      </select></div>
-      <div class="form-group"><label>Сколько</label><input type="number" name="count" min="1" step="1" value="10">
-        <p class="hint">Для семей — число семей, для остальных — бойцов.</p></div>
-      <div class="form-group"><label>Куда</label><select name="unit">${opt("", "Новый отряд", true)}${units.map(u => opt(u.id, `${u.name} (${ORIGINS[u.system.origin].label.toLowerCase()})`)).join("")}</select></div>
-      <div class="form-group"><label>Род войск</label><select name="kind">${Object.entries(UNIT_KINDS).map(([k, v]) => opt(k, v.label, k === "infantry")).join("")}</select></div>
-      <div class="form-group"><label>Название</label><input type="text" name="name" placeholder="Ополчение ${town.name}"></div>
-      <p class="hint">Наёмники приходят обученными и со своим снаряжением, но им платят каждую неделю. Новички в старом отряде снаряжаются со склада как весь отряд.</p>
-    </div>`;
-    const data = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `Набор войска: ${town.name}` }, content,
-      ok: { label: "Набрать", callback: (ev, button) => Object.fromEntries(new FormData(button.form)) },
-      rejectClose: false
+    const data = await realmPrompt("recruit", {
+      title: `Набор войска: ${town.name}`, okLabel: "Набрать",
+      data: { town: town.name, militia: sys.militia, idle: sys.summary.idle, familySoldiers: FAMILY_SOLDIERS, hire: MERCENARY.hire, wealth: sys.wealth,
+        units: units.map(u => ({ id: u.id, name: u.name, origin: ORIGINS[u.system.origin].label.toLowerCase() })),
+        kinds: Object.entries(UNIT_KINDS).map(([key, v]) => ({ key, label: v.label, selected: key === "infantry" })) },
+      read: form => Object.fromEntries(new FormData(form))
     });
     if (!data) return;
     const unit = await ARMY.recruit(town, { origin: data.origin, count: data.count, kind: data.kind, name: data.name.trim(),

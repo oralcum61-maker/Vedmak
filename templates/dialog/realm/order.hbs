@@ -1,0 +1,7 @@
+{{!-- Заказ мастерской: для кого и сколько (предмет перетащили на лист постройки) --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <div class="form-group"><label>Для кого</label>
+    <select name="for">{{#each heroes}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{else}}<option value="">— готовое выдаст ведущий —</option>{{/each}}</select></div>
+  <div class="form-group"><label>Сколько</label><input type="number" name="qty" min="1" step="1" value="1"></div>
+  <p class="hint">За штуку: {{cost}} со склада «{{town}}», {{weeks}} нед. работы.</p>
+</div>
