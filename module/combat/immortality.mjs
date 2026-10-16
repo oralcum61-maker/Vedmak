@@ -55,7 +55,18 @@ function currentWound(actor) {
  * Раунд регенерации ранений (начало хода): одно ранение продвигается на раунд; персонажу оно стабилизировано сразу,
  * чудовищу — после первого раунда; готовое — исцелено (удаляется). Строки для карточки хода.
  */
-export async function critRegenStartOfTurn(actor) {
+export function critRegenStartOfTurn(actor) {
+  // По очереди для актёра: начало хода от боя и второй вызов в тот же миг иначе удаляли одно ранение дважды
+  // («Item … does not exist»)
+  const prev = regenQueue.get(actor.uuid) ?? Promise.resolve();
+  const next = prev.catch(() => {}).then(() => critRegenStep(actor));
+  regenQueue.set(actor.uuid, next);
+  next.finally(() => { if (regenQueue.get(actor.uuid) === next) regenQueue.delete(actor.uuid); }).catch(() => {});
+  return next;
+}
+const regenQueue = new Map();
+
+async function critRegenStep(actor) {
   const kind = critRegenKind(actor);
   if (!kind || actor.statuses.has("dead")) return [];
   const wound = currentWound(actor);
@@ -63,6 +74,7 @@ export async function critRegenStartOfTurn(actor) {
   const need = ROUNDS[kind][wound.system.level] ?? 1;
   const done = (wound.getFlag(SYS, "regen")?.done ?? 0) + 1;
   const label = `${wound.name} (${wound.system.levelConfig?.label?.toLowerCase() ?? ""})`;
+  if (!actor.items.has(wound.id)) return [];
   if (done >= need) {
     await wound.delete();
     return [`Регенерация: ${label} исцелено.`];

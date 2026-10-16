@@ -69,7 +69,7 @@ ok(IM.isImmortalMonster(m) && IM.critRegenKind(m) === "monster", "«Бессме
 const c2 = await Combat.create({ scene: canvas.scene.id, active: true });
 const mt = await placeToken(m, 1400, 1000);
 await c2.createEmbeddedDocuments("Combatant", [{ tokenId: mt.id, sceneId: canvas.scene.id, actorId: m.id }]);
-await c2.startCombat();
+await c2.startCombat(); await wait(1000); // начало хода от боя — до ранения, иначе оно и цикл ниже двигают его оба
 const serious = await addWound(m, "fracturedArm");
 const need = { simple: 1, complex: 2, difficult: 4, deadly: 6 }[serious.system.level];
 let n = 0;
