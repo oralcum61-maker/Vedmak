@@ -55,6 +55,10 @@ ok(merc.system.weapons === 2 && merc.system.armor === 2, "наёмники — �
 await militia.update({ "system.drilling": true });
 await militia.sheet.render({ force: true }); await wait(500);
 ok(!!militia.sheet.element.querySelector(".sv-plaques .sv-ring") && !!militia.sheet.element.querySelector(".ar-tiers"), "лист отряда открылся");
+// Полоса цены следующей ступени снаряжения (PLAN 4.230): у оружия и брони, подпись — хватает ли склада
+{ const bars = [...militia.sheet.element.querySelectorAll(".ar-cost")];
+  ok(bars.length === 2 && bars.every(b => /хватает|не хватает|нет родного/.test(b.textContent) && b.querySelector(".sv-bar i")),
+    `полоса цены у оружия и брони: ${bars.map(b => b.textContent.trim()).join(" | ")}`); }
 await militia.sheet.close();
 await town.sheet.render({ force: true }); town.sheet.tab = "army"; await town.sheet.render(); await wait(500);
 ok(town.sheet.element.querySelectorAll(".rs-units .rs-urow").length === 3, "вкладка «Войско»: три отряда");
