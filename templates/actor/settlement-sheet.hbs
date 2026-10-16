@@ -1,277 +1,320 @@
-{{!-- Лист поселения (PLAN 4.183, 4.185): правила журнала мира manorlords, уровни построек, налоги, склад, торговля --}}
-<div class="sv">
-  <header class="sv-head">
-    <span class="sv-sock big"><img class="sv-arms" src="{{actor.img}}" alt="" data-edit="img" data-tooltip="Герб поселения"></span>
-    <div class="sv-title">
-      {{#if editable}}<input class="sv-name" type="text" name="name" value="{{actor.name}}" aria-label="Название">
-      {{else}}<h1 class="sv-name">{{actor.name}}</h1>{{/if}}
-      <div class="sv-cal">
-        {{#if gm}}
-        <span class="sv-week"><select name="system.month" aria-label="Месяц">{{#each cal.months}}<option value="{{n}}" {{#if on}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+{{!-- Лист поселения по артефакту (PLAN 4.230): https://claude.ai/artifact/TAKQ3Hu849YKHt4En1Bn7N — доски «Хозяйство»,
+     «Постройки», «Войско», «Летопись», пустые состояния; стили — styles/realm-sheet.css. Данные и действия — прежние
+     (PLAN 4.183–4.227); значки ресурсов — картинки Foundry. --}}
+<div class="rs rs-sheet">
+  <header class="rs-head">
+    <svg class="rs-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V9h14v12M5 9V4h2.6v2h2.2V4h4.4v2h2.2V4H19v5M10 21v-4a2 2 0 0 1 4 0v4M3.5 21h17"></path></svg>
+    <span class="rs-sock"><img src="{{actor.img}}" alt="" data-edit="img" data-tooltip="Герб поселения"></span>
+    <div style="flex: 1; min-width: 0;">
+      <h1>{{#if editable}}<input class="rs-name" type="text" name="name" value="{{actor.name}}" aria-label="Название">{{else}}{{actor.name}}{{/if}}</h1>
+      <div class="rs-sub">
+        {{#if gm}}<span><select name="system.month" aria-label="Месяц">{{#each cal.months}}<option value="{{n}}" {{#if on}}selected{{/if}}>{{label}}</option>{{/each}}</select>
           <input type="number" name="system.week" value="{{cal.week}}" min="1" max="4" step="1" aria-label="Неделя месяца">-я неделя</span>
-        {{else}}<span class="sv-week">{{cal.monthLabel}}, {{cal.week}}-я неделя</span>{{/if}}
+        {{else}}<span>{{cal.monthLabel}}, {{cal.week}}-я неделя</span>{{/if}}
         <i></i><span>{{cal.seasonLabel}}</span><i></i>
-        <span>год {{#if gm}}<input type="number" name="system.year" value="{{cal.year}}" min="1" step="1" class="sv-year" aria-label="Год">{{else}}{{cal.year}}{{/if}}</span>
+        <span>год {{#if gm}}<input type="number" name="system.year" value="{{cal.year}}" min="1" step="1" aria-label="Год">{{else}}{{cal.year}}{{/if}}</span>
       </div>
     </div>
-    {{#if gm}}<button type="button" class="sv-next" data-action="week" data-tooltip="Бросить выработку построек, посчитать нужды, стройку и — в конце месяца — приход семей и бунт; итог — в чат">Прошла неделя</button>{{/if}}
+    {{#if gm}}<button type="button" class="rs-go" data-action="week" data-tooltip="Бросить выработку построек, посчитать нужды, стройку и — в конце месяца — приход семей и бунт; итог — в чат">Неделя прошла</button>{{/if}}
   </header>
 
-  <section class="sv-plaques">
-    <div class="sv-plaque" data-tooltip="Работают: {{families.assigned}} · без дела: {{families.idle}}{{#if families.builders}} (строят: {{families.builders}}){{/if}}">
-      <span class="cap">Семьи</span>
-      {{#if gm}}<input type="number" name="system.families" value="{{sys.families}}" min="0" step="1" class="big">{{else}}<b class="big">{{families.value}}</b>{{/if}}
-      <small>домов {{families.houses}}{{#if families.homeless}} · <span class="warn">бездомных {{families.homeless}}</span>{{/if}} · без дела {{families.idle}}</small>
-    </div>
-    <div class="sv-plaque sv-approval tone-{{approval.tone}}">
-      <span class="sv-ring" style="--arc: {{approval.arc}}deg"><b>{{approval.value}}</b></span>
-      <div class="sv-approval-text">
-        <span class="cap">Одобрение</span>
-        <small>{{approval.note}}</small>
-        {{#if gm}}<div class="sv-mini-acts"><a data-action="approval" data-delta="-1" class="{{#unless approval.canDown}}off{{/unless}}">−1</a><a data-action="approval" data-delta="1" class="{{#unless approval.canUp}}off{{/unless}}">+1</a></div>{{/if}}
+  <div class="rs-stats" style="grid-template-columns: 1fr 1fr 1fr 1.35fr 1fr;">
+    <div class="rs-stat" data-tooltip="Работают: {{families.assigned}} · без дела: {{families.idle}}{{#if families.builders}} (строят: {{families.builders}}){{/if}}">
+      <span class="rs-medal">{{#if gm}}<input type="number" name="system.families" value="{{sys.families}}" min="0" step="1" aria-label="Семьи">{{else}}<b class="rs-metal">{{families.value}}</b>{{/if}}</span>
+      <div class="rs-stat-t">
+        <b>Семьи</b>
+        <span>домов {{families.houses}}{{#if families.homeless}} · <span class="warn">бездомных {{families.homeless}}</span>{{/if}}</span>
+        <span class="{{#if families.idle}}warn{{/if}}">без дела {{families.idle}}</span>
       </div>
     </div>
-    <div class="sv-plaque" data-tooltip="{{wealth.rate}}">
-      <span class="cap">Казна · Богатство</span>
-      {{#if gm}}<input type="number" name="system.wealth" value="{{wealth.raw}}" min="0" step="any" class="big">{{else}}<b class="big">{{wealth.value}}</b>{{/if}}
-      <small>{{wealth.coins}}{{#if wealth.gain}} · {{wealth.gain}}{{/if}}</small>
-      {{#if editable}}<div class="sv-mini-acts">
-        <a data-action="wealth" data-mode="deposit" data-tooltip="Из кошелька {{#if wealth.hero}}{{wealth.hero}}{{else}}своего персонажа{{/if}}">Внести</a>
-        <a data-action="wealth" data-mode="withdraw" data-tooltip="В кошелёк {{#if wealth.hero}}{{wealth.hero}}{{else}}своего персонажа{{/if}}">Взять</a>
-      </div>{{/if}}
+    <div class="rs-stat">
+      <span class="rs-medal arc" style="--arc: {{approval.arc}}deg;"><b class="rs-metal">{{approval.value}}</b></span>
+      <div class="rs-stat-t">
+        <b>Одобрение</b>
+        <span class="{{#if (eq approval.tone "high")}}up{{/if}}{{#if (eq approval.tone "bad")}}warn{{/if}}">{{approval.note}}</span>
+        {{#if gm}}<div class="rs-acts"><button type="button" class="rs-btn" data-action="approval" data-delta="-1" {{#unless approval.canDown}}disabled{{/unless}}>−1</button><button type="button" class="rs-btn" data-action="approval" data-delta="1" {{#unless approval.canUp}}disabled{{/unless}}>+1</button></div>{{/if}}
+      </div>
     </div>
-    <div class="sv-plaque">
-      <span class="cap">Налог</span>
-      <select name="system.taxes" {{#unless editable}}disabled{{/unless}}>
-        {{#each taxes}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
-      </select>
-      <small>{{taxNote}}</small>
+    <div class="rs-stat" data-tooltip="{{wealth.rate}}">
+      <span class="rs-medal">{{#if gm}}<input type="number" name="system.wealth" value="{{wealth.raw}}" min="0" step="any" aria-label="Казна, Богатство">{{else}}<b class="rs-metal" style="font-size: 19px;">{{wealth.value}}</b>{{/if}}</span>
+      <div class="rs-stat-t">
+        <b>Казна</b>
+        <span>Богатство · {{wealth.coins}}</span>
+        {{#if wealth.gain}}<span class="up">{{wealth.gain}}</span>{{/if}}
+        {{#if editable}}<div class="rs-acts">
+          <button type="button" class="rs-btn" data-action="wealth" data-mode="deposit" data-tooltip="Из кошелька {{#if wealth.hero}}{{wealth.hero}}{{else}}своего персонажа{{/if}}">Внести</button>
+          <button type="button" class="rs-btn" data-action="wealth" data-mode="withdraw" data-tooltip="В кошелёк {{#if wealth.hero}}{{wealth.hero}}{{else}}своего персонажа{{/if}}">Взять</button>
+        </div>{{/if}}
+      </div>
     </div>
-    <div class="sv-plaque sv-duo">
-      <label><span class="cap">Ополчение</span>{{#if gm}}<input type="number" name="system.militia" value="{{sys.militia}}" min="0" step="1">{{else}}<b>{{sys.militia}}</b>{{/if}}</label>
-      <label data-tooltip="Уровень Контроля: каждый снимает 5% шанса бунта. Свой — от событий и стражи; постройки добавляют сверху"><span class="cap">Контроль</span>{{#if gm}}<input type="number" name="system.control" value="{{sys.control}}" min="0" step="1">{{else}}<b>{{sys.control}}</b>{{/if}}
-        {{#if (gt families.control sys.control)}}<small>всего {{families.control}}</small>{{/if}}</label>
+    <div class="rs-stat tax">
+      <div class="rs-stat-row">
+        <span class="rs-medal sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><path d="M12 8.5v7M9.8 10.2c0-1 1-1.7 2.2-1.7s2.2.6 2.2 1.6c0 2.2-4.4 1.2-4.4 3.5 0 1 1 1.6 2.2 1.6s2.2-.7 2.2-1.7"></path></svg></span>
+        <div class="rs-stat-t"><b>Налог</b><span>{{taxNote}}</span></div>
+      </div>
+      <div class="rs-seg" role="radiogroup" aria-label="Налог">
+        {{#each taxes}}<label class="{{#if selected}}on{{/if}}"><input type="radio" name="system.taxes" value="{{key}}" {{#if selected}}checked{{/if}} {{#unless @root.editable}}disabled{{/unless}}>{{label}}</label>{{/each}}
+      </div>
     </div>
-  </section>
+    <div class="rs-stat" data-tooltip="Уровень Контроля: каждый снимает 5% шанса бунта. Свой — от событий и стражи; постройки добавляют сверху">
+      <span class="rs-medal">{{#if gm}}<input type="number" name="system.militia" value="{{sys.militia}}" min="0" step="1" aria-label="Ополчение">{{else}}<b class="rs-metal">{{sys.militia}}</b>{{/if}}</span>
+      <div class="rs-stat-t">
+        <b>Ополчение</b>
+        <span>контроль {{#if gm}}<input class="rs-inline" type="number" name="system.control" value="{{sys.control}}" min="0" step="1" aria-label="Контроль">{{else}}{{sys.control}}{{/if}}{{#if (gt families.control sys.control)}} · всего {{families.control}}{{/if}}</span>
+        {{#if families.control}}<span class="up">бунт −{{families.revoltCut}}%</span>{{/if}}
+      </div>
+    </div>
+  </div>
 
-  <nav class="sv-tabs">
-    {{#each tabs}}<a class="{{#if active}}active{{/if}}" data-action="settlementTab" data-tab="{{id}}">{{label}}{{#if badge}}<b class="sv-badge" data-tooltip="Ждёт решения правителя">{{badge}}</b>{{/if}}</a>{{/each}}
+  <nav class="rs-tabs" aria-label="Разделы поселения">
+    {{#each tabs}}<button type="button" class="{{#if active}}on{{/if}}" aria-pressed="{{#if active}}true{{else}}false{{/if}}" data-action="settlementTab" data-tab="{{id}}">{{label}}{{#if badge}}<span class="rs-badge" aria-label="ждёт решения" data-tooltip="Ждёт решения правителя">{{badge}}</span>{{/if}}</button>{{/each}}
   </nav>
 
-  <div class="sv-scroll">
+  <div class="rs-scroll">
   {{#if (eq tab "economy")}}
-    {{#if siege}}<div class="sv-siege"><i class="fa-solid fa-chess-rook"></i><span><b>В осаде</b> {{siege.weeks}} нед.: под стенами {{siege.units}}. Поля и промыслы стоят, купцы и новые семьи не приходят; одобрение падает каждый месяц.</span>
-      {{#if gm}}<a class="sv-btn" data-action="liftSiege">Снять осаду</a>{{/if}}</div>{{/if}}
+    {{#if siege}}<div class="rs-siege"><span class="rs-sock sm"><i class="fa-solid fa-chess-rook" aria-hidden="true"></i></span>
+      <p><b>В осаде {{siege.weeks}} нед.</b> Под стенами {{siege.units}}. Поля и промыслы стоят, купцы и новые семьи не приходят; одобрение падает каждый месяц.</p>
+      {{#if gm}}<button type="button" class="rs-btn" data-action="liftSiege">Снять осаду</button>{{/if}}</div>{{/if}}
+
     {{!-- События месяца (PLAN 4.206): решение правителя и последствия --}}
     {{#each decisions}}
-    <section class="sv-event" data-decision="{{id}}">
-      <span class="sv-sock"><img src="{{img}}" alt=""></span>
-      <div class="sv-event-main">
-        <h4><span class="cap">Решение правителя</span>{{label}}</h4>
-        <p>{{text}}</p>
-        <ul class="sv-choices">
+    <section class="rs-event" data-decision="{{id}}">
+      <span class="rs-sock sm"><img src="{{img}}" alt=""></span>
+      <div class="rs-event-main">
+        <div style="display: flex; align-items: baseline; gap: 10px;"><h3>{{label}}</h3><span class="rs-cap">решает правитель</span></div>
+        <p class="rs-hint">{{text}}</p>
+        <div class="rs-tiles">
           {{#each choices}}
-          <li class="{{#unless ok}}off{{/unless}}">
-            {{#if @root.editable}}<button type="button" data-action="decide" data-choice="{{index}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{label}}</button>
-            {{else}}<b>{{label}}</b>{{/if}}
-            <small>{{#if cost}}<span>цена: {{cost}}</span>{{/if}}{{#if effects}}<span>{{effects}}</span>{{/if}}{{#if check}}<span class="chk">{{check}}</span>{{/if}}{{#if success}}<span class="up">успех: {{success}}</span>{{/if}}{{#if fail}}<span class="warn">провал: {{fail}}</span>{{/if}}{{#if hint}}<span>{{hint}}</span>{{/if}}{{#if isDefault}}<em>по умолчанию</em>{{/if}}</small>
-          </li>
+          <button type="button" class="rs-tile rs-choice" data-action="decide" data-choice="{{index}}" {{#if ok}}{{#unless @root.editable}}disabled{{/unless}}{{else}}disabled data-tooltip="{{why}}"{{/if}}>
+            <b>{{label}}</b>
+            <span class="rs-fx">{{#if cost}}<em class="down"><span>цена</span><b>{{cost}}</b></em>{{/if}}{{#if effects}}<em><span>итог</span><b>{{effects}}</b></em>{{/if}}{{#if check}}<em><span>проверка</span><b>{{check}}</b></em>{{/if}}{{#if success}}<em class="up"><span>успех</span><b>{{success}}</b></em>{{/if}}{{#if fail}}<em class="down"><span>провал</span><b>{{fail}}</b></em>{{/if}}{{#if hint}}<em><span>{{hint}}</span></em>{{/if}}</span>
+          </button>
           {{/each}}
-        </ul>
+        </div>
+        {{#each choices}}{{#if isDefault}}<span class="rs-note">Не решите до конца недели — будет «{{label}}».</span>{{/if}}{{/each}}
       </div>
     </section>
     {{/each}}
     {{#if modifiers.length}}
-    <ul class="sv-mods">
-      {{#each modifiers}}<li data-modifier="{{id}}"><i class="fa-solid fa-hourglass-half"></i><span><b>{{label}}</b> — ещё {{weeks}} нед.{{#if text}} · {{text}}{{/if}}</span>
-        {{#if @root.gm}}<a class="sv-res-x" data-action="removeModifier" data-tooltip="Снять (ведущий)">×</a>{{/if}}</li>{{/each}}
+    <ul class="rs-mods">
+      {{#each modifiers}}<li data-modifier="{{id}}"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i><span><b>{{label}}</b> — ещё {{weeks}} нед.{{#if text}} · {{text}}{{/if}}</span>
+        {{#if @root.gm}}<button type="button" class="rs-x" data-action="removeModifier" aria-label="Снять" data-tooltip="Снять (ведущий)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>{{/if}}</li>{{/each}}
     </ul>
     {{/if}}
-    <section class="sv-block">
-      <h3><span class="sv-tag">Склад</span><small>до {{storage}} каждого · ≈ — в среднем за неделю</small></h3>
-      <ul class="sv-res">
-        {{#each resources}}
-        <li class="{{#if full}}full{{/if}}">
-          <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
-          <div class="sv-res-main">
-            <span class="nm">{{name}}</span>
-            {{#if ../gm}}<input type="number" name="system.stock.{{name}}" value="{{raw}}" min="0" step="any">{{else}}<b>{{value}}</b>{{/if}}
-            <span class="cap-of">/ {{cap}}</span>
-            {{#if net}}<em class="{{#if up}}up{{/if}}{{#if down}}down{{/if}}">{{net}}</em>{{/if}}
-            <span class="sv-bar"><i style="width: {{pct}}%"></i></span>
-          </div>
-          {{#if ../gm}}{{#unless need}}<a class="sv-res-x" data-action="removeResource" data-name="{{name}}" data-tooltip="Убрать ресурс со склада">×</a>{{/unless}}{{/if}}
-          {{#if ../trade}}{{#if ../editable}}
-          <div class="sv-trade">
-            <a data-action="trade" data-name="{{name}}" data-mode="sell" data-tooltip="Продать: {{sell}} за единицу">Продать</a>
-            <a data-action="trade" data-name="{{name}}" data-mode="buy" data-tooltip="Купить: {{buy}} за единицу">Купить</a>
-          </div>
-          {{/if}}{{/if}}
-        </li>
-        {{/each}}
-      </ul>
-      <div class="sv-res-bar">
-        {{#if trade}}{{#if editable}}<label class="sv-qty">Торговать по <input class="sv-trade-qty" type="number" min="1" step="1" value="{{tradeQty}}"> ед.</label>{{/if}}
-        {{else}}<span class="sv-hint">Торговли нет: купцы заезжают только к торговому посту.</span>{{/if}}
-        {{#if editable}}<a class="sv-btn sv-lib" data-action="library" data-tooltip="Библиотека ресурсов: перетащите ресурс сюда или нажмите «+» — склад начнёт его учитывать"><i class="fa-solid fa-boxes-stacked"></i> Библиотека</a>{{/if}}
-        {{#if gm}}<span class="sv-add-res"><input class="sv-new-res" type="text" placeholder="Новый ресурс" aria-label="Новый ресурс">
-          <input class="sv-new-qty" type="number" min="0" step="1" value="0" aria-label="Сколько"><a class="sv-btn" data-action="addResource">Добавить</a></span>{{/if}}
+    {{#unless decisions.length}}<div class="rs-empty quiet"><span class="rs-sock sm"><i class="fa-solid fa-sun" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Событий нет.</b><p>В начале месяца их бросает ведущий — или они случаются сами.</p></div></div>{{/unless}}
+
+    <section class="rs-sec">
+      <div class="rs-sec-h">
+        <h2>Склад</h2>
+        <span>до {{storage}} каждого · ≈ — в среднем за неделю</span>
+        {{#if editable}}<button type="button" class="rs-btn" data-action="library" data-tooltip="Библиотека ресурсов: перетащите ресурс сюда или нажмите «+» — склад начнёт его учитывать">Библиотека ресурсов</button>{{/if}}
       </div>
+      <div class="rs-stock">
+        {{#each resources}}
+        <div class="rs-res{{#if full}} full{{/if}}" data-name="{{name}}">
+          <span class="rs-sock sm" style="grid-row: 1 / span 2;"><img src="{{img}}" alt=""></span>
+          <span class="rs-res-name">{{name}}</span>
+          {{#if @root.gm}}<input type="number" name="system.stock.{{name}}" value="{{raw}}" min="0" step="any" aria-label="{{name}}">{{else}}<b class="rs-metal">{{value}}</b>{{/if}}
+          <span class="rs-res-d{{#if up}} rs-up{{/if}}{{#if down}} rs-down{{/if}}">{{#if net}}{{net}}{{else}}—{{/if}}</span>
+          {{#if left}}<span class="rs-res-left" data-tooltip="При нынешней убыли за неделю">{{left}}</span>{{/if}}
+          {{#if @root.gm}}{{#unless need}}<button type="button" class="rs-x rs-res-x" data-action="removeResource" data-name="{{name}}" aria-label="Убрать {{name}}" data-tooltip="Убрать ресурс со склада"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>{{/unless}}{{/if}}
+        </div>
+        {{/each}}
+      </div>
+      {{#if gm}}<div class="rs-qty-row"><span class="rs-cap">Новый ресурс</span>
+        <input class="rs-new-res" type="text" placeholder="Название" aria-label="Новый ресурс">
+        <input class="rs-new-qty" type="number" min="0" step="1" value="0" aria-label="Сколько">
+        <button type="button" class="rs-btn" data-action="addResource">Добавить</button></div>{{/if}}
     </section>
 
-    <div class="sv-cols">
-      <section class="sv-block">
-        <h3><span class="sv-tag">Нужды семей</span><small>в неделю{{#if cal.winter}}, зима — топлива вдвое{{/if}}</small></h3>
-        <ul class="sv-needs">
+    <div class="rs-cols">
+      <section class="rs-sec">
+        <div class="rs-sec-h"><h2>Нужды недели</h2><span>на {{families.value}} сем.{{#if cal.winter}} · зима — топлива вдвое{{/if}}</span></div>
+        <div class="rs-cards">
           {{#each needs}}
-          <li class="{{#if ok}}ok{{else}}short{{/if}}"><span>{{label}}</span><b>{{got}} / {{need}}</b><span class="sv-bar"><i style="width: {{pct}}%"></i></span></li>
+          <div class="rs-need{{#unless ok}} bad{{/unless}}">
+            <span class="rs-sock sm"><img src="{{img}}" alt=""></span>
+            <div class="rs-need-main">
+              <div class="rs-need-top"><b>{{label}}</b><span class="rs-pill {{#if ok}}ok{{else}}bad{{/if}}">{{#if ok}}хватает{{else}}не хватает{{/if}}</span></div>
+              <span class="rs-meter"><i class="{{#if ok}}ok{{else}}bad{{/if}}" style="width: {{pct}}%;"></i></span>
+              <span class="rs-note">{{got}} из {{need}}</span>
+            </div>
+          </div>
           {{/each}}
-        </ul>
+        </div>
       </section>
-      <section class="sv-block">
-        <h3><span class="sv-tag">Конец месяца</span><small>{{month.when}}</small></h3>
-        <ul class="sv-parts sv-month">
-          <li><span>{{month.arrival}}</span></li>
-          {{#if month.revolt}}<li class="warn"><span>{{month.revolt}}</span></li>{{/if}}
-          {{#if month.taxes}}<li><span>{{month.taxes}}</span></li>{{/if}}
-          {{#if month.needs}}<li class="warn"><span>{{month.needs}}</span></li>{{/if}}
-          {{#if month.content}}<li class="up"><span>Народ доволен: возможны дополнительные ресурсы — решает ведущий.</span></li>{{/if}}
-        </ul>
+      <section class="rs-sec">
+        <div class="rs-sec-h"><h2>Торговля</h2><span>{{#if trade}}купцы у торгового поста{{else}}торгового поста нет{{/if}}</span></div>
+        {{#if trade}}
+        <div class="rs-cards rs-deals">
+          {{#each resources}}
+          <div class="rs-deal">
+            <span class="rs-sock sm"><img src="{{img}}" alt=""></span>
+            <div class="rs-deal-main"><b>{{name}}</b><span class="rs-note">на складе {{value}}</span></div>
+            <div class="rs-price" data-tooltip="Продать · купить, {{@root.abbr}} за единицу"><b class="rs-metal">{{sellN}}</b><small>/ {{buyN}}</small></div>
+            {{#if @root.editable}}<div class="rs-deal-acts"><button type="button" class="rs-btn" data-action="trade" data-name="{{name}}" data-mode="sell">Продать</button><button type="button" class="rs-btn" data-action="trade" data-name="{{name}}" data-mode="buy">Купить</button></div>{{/if}}
+          </div>
+          {{/each}}
+        </div>
+        {{#if editable}}<div class="rs-qty-row">
+          <span class="rs-cap">Торговать по</span>
+          <div class="rs-mini-step" role="group" aria-label="Сколько единиц за раз">
+            <button type="button" aria-label="Меньше" data-action="tradeStep" data-delta="-1">−</button><output class="rs-metal">{{tradeQty}}</output><button type="button" aria-label="Больше" data-action="tradeStep" data-delta="1">+</button>
+          </div>
+          <span class="rs-note">ед. за раз · цена — {{abbr}} за единицу</span>
+        </div>{{/if}}
+        {{else}}
+        <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Торговли нет</b><p>Купцы заезжают только к торговому посту.</p></div></div>
+        {{/if}}
       </section>
     </div>
 
-    {{!-- Караваны (PLAN 4.203) --}}
-    <section class="sv-block sv-routes">
-      <h3><span class="sv-tag">Караваны</span><small>каждую неделю — со склада в другое поселение{{#unless trade}} · нужны торговый пост или рынок{{/unless}}</small></h3>
-      {{#if routes.length}}
-      <ul class="sv-parts">
-        {{#each routes}}<li data-route="{{id}}"><span><img class="sv-route-img" src="{{img}}" alt=""> {{resource}} {{qty}} в неделю → <b>{{to}}</b></span>
-          {{#if @root.editable}}<a class="sv-res-x" data-action="removeRoute" data-tooltip="Отменить караван">×</a>{{/if}}</li>{{/each}}
-      </ul>
-      {{else}}<p class="sv-hint">Караванов нет.</p>{{/if}}
-      {{#if editable}}{{#if routeTargets.length}}
-      <div class="sv-add-res sv-route-add">
-        <select class="sv-route-to" aria-label="Куда">{{#each routeTargets}}<option value="{{uuid}}">{{name}}</option>{{/each}}</select>
-        <select class="sv-route-res" aria-label="Что">{{#each resources}}<option value="{{name}}">{{name}}</option>{{/each}}</select>
-        <input class="sv-route-qty" type="number" min="1" step="1" value="5" aria-label="Сколько в неделю">
-        <a class="sv-btn" data-action="addRoute">Отправлять</a>
-      </div>{{/if}}{{/if}}
-    </section>
+    <div class="rs-cols">
+      <section class="rs-sec">
+        <div class="rs-sec-h"><h2>Конец месяца</h2><span>{{month.when}}</span></div>
+        <ul class="rs-month">
+          <li>{{month.arrival}}</li>
+          {{#if month.revolt}}<li class="warn">{{month.revolt}}</li>{{/if}}
+          {{#if month.taxes}}<li>{{month.taxes}}</li>{{/if}}
+          {{#if month.needs}}<li class="warn">{{month.needs}}</li>{{/if}}
+          {{#if month.content}}<li class="up">Народ доволен: возможны дополнительные ресурсы — решает ведущий.</li>{{/if}}
+        </ul>
+      </section>
+      {{!-- Караваны (PLAN 4.203) --}}
+      <section class="rs-sec">
+        <div class="rs-sec-h"><h2>Караваны</h2><span>в неделю — со склада в другое поселение{{#unless trade}} · нужен торговый пост или рынок{{/unless}}</span></div>
+        {{#if routes.length}}
+        <ul class="rs-month rs-routes">
+          {{#each routes}}<li data-route="{{id}}"><img src="{{img}}" alt=""><span>{{resource}} {{qty}} в неделю → <b>{{to}}</b></span>
+            {{#if @root.editable}}<button type="button" class="rs-x" data-action="removeRoute" aria-label="Отменить караван" data-tooltip="Отменить караван"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>{{/if}}</li>{{/each}}
+        </ul>
+        {{else}}<div class="rs-empty quiet"><div class="rs-empty-t"><b>Караванов нет.</b></div></div>{{/if}}
+        {{#if editable}}{{#if routeTargets.length}}
+        <div class="rs-qty-row rs-route-add">
+          <select class="rs-route-to" aria-label="Куда">{{#each routeTargets}}<option value="{{uuid}}">{{name}}</option>{{/each}}</select>
+          <select class="rs-route-res" aria-label="Что">{{#each resources}}<option value="{{name}}">{{name}}</option>{{/each}}</select>
+          <input class="rs-route-qty" type="number" min="1" step="1" value="5" aria-label="Сколько в неделю">
+          <button type="button" class="rs-btn" data-action="addRoute">Отправлять</button>
+        </div>{{/if}}{{/if}}
+      </section>
+    </div>
   {{/if}}
 
   {{#if (eq tab "buildings")}}
     {{#if editable}}
-    <div class="sv-build-bar">
-      <a class="sv-btn {{#if showCatalog}}on{{/if}}" data-action="catalog">{{#if showCatalog}}Скрыть каталог{{else}}Построить…{{/if}}</a>
-      <span class="sv-hint">Строят семьи без дела: одна семья — неделя стройки. Без дела: {{families.idle}}. Свой тип сооружения — актёр «Постройка» без поселения: он появится в каталоге, его можно и перетащить сюда.</span>
-    </div>
+    <div class="rs-toolbar"><button type="button" class="rs-go" data-action="catalog">{{#if showCatalog}}Скрыть каталог{{else}}Построить…{{/if}}</button>
+      <p class="rs-hint">Строят семьи без дела: одна семья — неделя стройки. Без дела сейчас: <b>{{families.idle}}</b>. Свой тип сооружения — актёр «Постройка» без поселения.</p></div>
     {{#if showCatalog}}
-    <ul class="sv-catalog">
-      {{#each catalog}}
-      <li class="{{#unless ok}}off{{/unless}}">
-        <span class="sv-sock"><img src="{{img}}" alt=""></span>
-        <div><b>{{label}}{{#if mine}} <em class="sv-mine">своя</em>{{/if}}</b><small>{{hint}}</small><span class="sv-cost">{{cost}} · {{weeks}} нед.{{#if (gt levels 1)}} · уровней: {{levels}}{{/if}}</span></div>
-        <button type="button" data-action="build" data-src="{{src}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{#if taken}}Есть{{else}}Заложить{{/if}}</button>
-      </li>
-      {{/each}}
-    </ul>
+    <section class="rs-sec">
+      <div class="rs-sec-h"><h2>Каталог</h2><span>цена — со склада сразу</span></div>
+      <div class="rs-bgrid">
+        {{#each catalog}}
+        <div class="rs-bcard{{#unless ok}} off{{/unless}}">
+          <span class="rs-sock sm"><img src="{{img}}" alt=""></span>
+          <div class="rs-bcard-main">
+            <div class="rs-bcard-top"><b>{{label}}{{#if mine}} <em class="rs-mine">своя</em>{{/if}}</b></div>
+            <span class="rs-gives">{{hint}}</span>
+            <span class="rs-gives rs-ok">{{cost}} · {{weeks}} нед.{{#if (gt levels 1)}} · уровней {{levels}}{{/if}}</span>
+            <div class="rs-bcard-acts"><button type="button" class="rs-btn" data-action="build" data-src="{{src}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{#if taken}}Есть{{else}}Заложить{{/if}}</button></div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
     {{/if}}
     {{/if}}
-
     {{#each groups}}
-    <section class="sv-block">
-      <h3><span class="sv-tag">{{label}}</span></h3>
-      <ul class="sv-cards">
+    <section class="rs-sec">
+      <div class="rs-sec-h"><h2>{{label}}</h2></div>
+      <div class="rs-bgrid">
         {{#each cards}}
-        <li class="sv-card {{#if constructing}}building{{/if}}" data-id="{{id}}">
-          <span class="sv-sock" data-tooltip="{{hint}}"><img src="{{img}}" alt=""></span>
-          <div class="sv-card-main">
-            <div class="sv-card-head">
-              <b>{{name}}</b>
-              <span class="sv-pips">{{#each pips}}<i class="{{#if on}}on{{/if}}{{#if next}} next{{/if}}"></i>{{/each}}</span>
-            </div>
-            {{#if progress}}
-            <div class="sv-progress {{#if stalled}}stalled{{/if}}"><span class="sv-bar"><i style="width: {{progress.pct}}%"></i></span>
-              <small>{{#if firstBuild}}Строится{{else}}Улучшается{{/if}}: {{progress.done}} из {{progress.weeks}} нед.{{#if stalled}} — нет свободных семей{{/if}}</small></div>
-            {{/if}}
-            {{#if gives}}<small class="sv-gives">{{gives}}{{#if idle}} · <span class="warn">никто не работает</span>{{/if}}</small>{{/if}}
-            {{#if manager}}<small class="sv-tree" data-tooltip="Управляющий постройки"><i class="fa-solid fa-user-tie"></i> {{manager}}</small>{{/if}}
-            {{#if tree}}<small class="sv-tree" data-tooltip="Обустройство — на листе постройки"><i class="fa-solid fa-sitemap"></i> {{tree.done}} из {{tree.total}}{{#if tree.working}} · строится «{{tree.working.name}}»: {{tree.working.done}} из {{tree.working.weeks}} нед.{{#if tree.stalled}} — <span class="warn">нет свободных семей</span>{{/if}}{{/if}}</small>{{/if}}
-            <div class="sv-card-acts">
-              {{#if max}}
-              <span class="sv-workers" data-tooltip="Семьи на работе">
-                {{#if ../../editable}}<a data-action="workers" data-delta="-1" class="{{#unless canLess}}off{{/unless}}">−</a>{{/if}}
-                <b>{{workers}}</b>/{{max}}
-                {{#if ../../editable}}<a data-action="workers" data-delta="1" class="{{#unless canMore}}off{{/unless}}">+</a>{{/if}}
-              </span>
-              {{/if}}
-              {{#if ../../editable}}
-              {{#if upgrade}}<button type="button" data-action="upgrade" {{#unless upgrade.ok}}disabled{{/unless}} data-tooltip="{{upgrade.cost}} · {{upgrade.weeks}} нед.">Улучшить</button>{{/if}}
-              <a class="sv-edit" data-action="editBuilding" data-tooltip="Править постройку: название, выработка, содержание, уровни"><i class="fa-solid fa-pen"></i></a>
-              <a class="sv-demolish" data-action="demolish" data-tooltip="{{#if firstBuild}}Бросить стройку{{else}}Снести{{/if}}">×</a>
+        <div class="rs-bcard{{#if constructing}} building{{/if}}" data-id="{{id}}">
+          <span class="rs-sock sm" data-tooltip="{{hint}}"><img src="{{img}}" alt=""></span>
+          <div class="rs-bcard-main">
+            <div class="rs-bcard-top"><b>{{name}}</b><span class="rs-lv" aria-label="уровень {{level}}">{{#each pips}}<i class="{{#if on}}on{{/if}}{{#if next}} next{{/if}}"></i>{{/each}}</span></div>
+            {{#if progress}}<div class="rs-bprog"><span class="rs-meter"><i class="work" style="width: {{progress.pct}}%;"></i></span>
+              <small class="{{#if stalled}}rs-warn{{/if}}">{{#if firstBuild}}Строится{{else}}Улучшается{{/if}}: {{progress.done}} из {{progress.weeks}} нед.{{#if stalled}} — нет свободных семей{{/if}}</small></div>{{/if}}
+            {{#if gives}}<span class="rs-gives">{{gives}}{{#if idle}} · <span class="rs-warn">никто не работает</span>{{/if}}</span>{{/if}}
+            {{#if manager}}<span class="rs-who" data-tooltip="Управляющий постройки"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> {{manager}}</span>{{/if}}
+            {{#if tree}}<span class="rs-who" data-tooltip="Обустройство — на листе постройки"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> обустройство {{tree.done}} из {{tree.total}}{{#if tree.working}} · строится «{{tree.working.name}}», {{tree.working.done}} из {{tree.working.weeks}} нед.{{/if}}</span>{{/if}}
+            <div class="rs-bcard-acts">
+              {{#if max}}<span class="rs-work" data-tooltip="Семьи на работе">{{#if @root.editable}}<button type="button" aria-label="Меньше" data-action="workers" data-delta="-1" {{#unless canLess}}disabled{{/unless}}>−</button>{{/if}}<b>{{workers}}</b>/{{max}}{{#if @root.editable}}<button type="button" aria-label="Больше" data-action="workers" data-delta="1" {{#unless canMore}}disabled{{/unless}}>+</button>{{/if}}</span>{{/if}}
+              {{#if @root.editable}}
+              {{#if upgrade}}<button type="button" class="rs-btn" data-action="upgrade" {{#unless upgrade.ok}}disabled{{/unless}} data-tooltip="{{upgrade.cost}} · {{upgrade.weeks}} нед.">Улучшить</button>{{/if}}
+              <button type="button" class="rs-x first" data-action="editBuilding" aria-label="Править постройку" data-tooltip="Править постройку: название, выработка, содержание, уровни"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16zM14 6l3 3"></path></svg></button>
+              <button type="button" class="rs-x danger" data-action="demolish" aria-label="{{#if firstBuild}}Бросить стройку{{else}}Снести{{/if}}" data-tooltip="{{#if firstBuild}}Бросить стройку{{else}}Снести{{/if}}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
               {{/if}}
             </div>
           </div>
-        </li>
+        </div>
         {{/each}}
-      </ul>
+      </div>
     </section>
     {{else}}
-    <p class="sv-hint">Пока ничего не построено. Начните с жилых домов и лагеря лесорубов.</p>
+    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-house" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Пока ничего не построено</b><p>Начните с жилых домов и лагеря лесорубов.</p></div></div>
     {{/each}}
   {{/if}}
 
   {{#if (eq tab "army")}}
-    <div class="sv-build-bar">
-      {{#if editable}}<a class="sv-btn" data-action="recruit">Набрать…</a>{{/if}}
-      {{#if gm}}<a class="sv-btn" data-action="battle">Битва</a>{{/if}}
-      <span class="sv-hint">Ополчение: {{army.militia}} чел. · семей без дела: {{army.idle}} · {{#if army.drill}}тренировка: плац ×{{army.drill}}{{else}}тренироваться негде — постройте плац или казарму{{/if}}</span>
+    <div class="rs-toolbar">
+      {{#if editable}}<button type="button" class="rs-go" data-action="recruit">Набрать…</button>{{/if}}
+      {{#if gm}}<button type="button" class="rs-btn" data-action="battle">Битва</button>{{/if}}
+      <p class="rs-hint">Ополчение: <b>{{army.militia}} чел.</b> · семей без дела: <b>{{army.idle}}</b> · {{#if army.drill}}тренировка: плац ×{{army.drill}}{{else}}тренироваться негде — нужен плац или казарма{{/if}}</p>
     </div>
     {{#if army.units.length}}
-    <ul class="ar-units">
-      {{#each army.units}}
-      <li data-id="{{id}}">
-        <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
-        <div class="ar-unit-main"><a data-action="openUnit"><b>{{name}}</b></a><small>{{kind}} · {{origin}} · {{training}} · {{rank}} · {{equipment}}</small></div>
-        <span class="bt-num" data-tooltip="Бойцы">{{soldiers}}</span>
-        <span class="bt-num" data-tooltip="Боевой дух">{{morale}}</span>
-        <span class="bt-num pow" data-tooltip="Сила">{{power}}</span>
-        {{#if ../editable}}<a class="sv-btn ar-drill {{#if drilling}}on{{/if}}" data-action="unitDrill">{{#if drilling}}Тренируются ✓{{else}}Тренировать{{/if}}</a>{{/if}}
-      </li>
-      {{/each}}
-    </ul>
-    <p class="sv-hint">Всего бойцов {{army.soldiers}}; в неделю войско ест {{army.food}} еды{{#if army.pay}} и получает {{army.pay}} Богатства{{/if}}.</p>
-    {{else}}<p class="sv-hint">Войска нет. Наберите отряд из Ополчения, из семей или наймите наёмников.</p>{{/if}}
+    <section class="rs-sec">
+      <div class="rs-sec-h"><h2>Отряды</h2><span>{{army.units.length}} · бойцов {{army.soldiers}}</span></div>
+      <div class="rs-units">
+        {{#each army.units}}
+        <div class="rs-urow" data-id="{{id}}">
+          <span class="rs-sock sm"><img src="{{img}}" alt=""></span>
+          <div class="rs-urow-main"><a data-action="openUnit"><b>{{name}}</b></a><small>{{kind}} · {{origin}} · {{training}} · {{rank}} · {{equipment}}</small></div>
+          <span class="rs-num"><b>{{soldiers}}</b><span>бойцы</span></span>
+          <span class="rs-num"><b>{{morale}}</b><span>дух</span></span>
+          <span class="rs-num"><b class="rs-metal">{{power}}</b><span>сила</span></span>
+          {{#if @root.editable}}<button type="button" class="rs-btn{{#if drilling}} on{{/if}}" aria-pressed="{{#if drilling}}true{{else}}false{{/if}}" data-action="unitDrill">{{#if drilling}}На плацу ✓{{else}}Тренировать{{/if}}</button>{{else}}<span></span>{{/if}}
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    <p class="rs-hint">Всего бойцов <b>{{army.soldiers}}</b>; в неделю войско ест <b>{{army.food}} еды</b>{{#if army.pay}} и получает <b>{{army.pay}} Богатства</b>{{/if}}.</p>
+    {{else}}
+    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-flag" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Войска нет</b><p>Наберите отряд из Ополчения, из семей или наймите наёмников.</p></div></div>
+    {{/if}}
   {{/if}}
 
   {{#if (eq tab "chronicle")}}
-    <div class="sv-build-bar">
-      <a class="sv-btn" data-action="openChronicle" data-tooltip="Журнал «Летопись»: недели, что не поместились на лист"><i class="fa-solid fa-book"></i> Вся летопись</a>
-      {{#if gm}}<a class="sv-btn" data-action="moveChronicle" data-tooltip="Перенести все недели с листа в журнал">В журнал</a>
-      <a class="sv-btn" data-action="addEvent">Событие…</a>{{/if}}
-      <span class="sv-hint">На листе — последние недели; старые уходят в журнал «Летопись».{{#if gm}} События месяца случаются сами; «Событие…» — своё.{{/if}}</span>
+    <div class="rs-toolbar">
+      <button type="button" class="rs-btn" data-action="openChronicle" data-tooltip="Журнал «Летопись»: недели, что не поместились на лист">Вся летопись</button>
+      {{#if gm}}<button type="button" class="rs-btn" data-action="moveChronicle" data-tooltip="Перенести все недели с листа в журнал">В журнал</button>
+      <button type="button" class="rs-btn" data-action="addEvent">Событие…</button>{{/if}}
+      <p class="rs-hint">На листе — последние недели; старые уходят в журнал «Летопись».</p>
     </div>
-    <ol class="sv-chronicle">
+    {{#if chronicle.length}}
+    <ol class="rs-chron">
       {{#each chronicle}}
       <li>
         <header><b>{{when}}</b><span>{{season}}, год {{year}}</span></header>
-        {{#if lines}}<p>{{lines}}</p>{{/if}}
-        {{#if wealth}}<p>Казна: {{wealth}}</p>{{/if}}
-        {{#if shortages}}<p class="warn">Не хватило: {{shortages}}</p>{{/if}}
-        {{#each events}}<p>{{this}}</p>{{/each}}
-        {{#if built}}<p>Достроено: {{built}}</p>{{/if}}
+        {{#if lines}}<p><i>Склад</i><span>{{lines}}</span></p>{{/if}}
+        {{#if wealth}}<p><i>Казна</i><span>{{wealth}}</span></p>{{/if}}
+        {{#if shortages}}<p class="warn"><i>Нехватка</i><span>{{shortages}}</span></p>{{/if}}
+        {{#each events}}<p><i>Событие</i><span>{{this}}</span></p>{{/each}}
+        {{#if built}}<p class="up"><i>Достроено</i><span>{{built}}</span></p>{{/if}}
       </li>
-      {{else}}
-      <li class="sv-hint">Недели ещё не проходили.</li>
       {{/each}}
     </ol>
+    {{else}}
+    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-book" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Недели ещё не проходили</b><p>Летопись пишется сама, когда ведущий нажимает «Неделя прошла».</p></div></div>
+    {{/if}}
   {{/if}}
 
   {{#if (eq tab "notes")}}
-    <section class="sv-block sv-notes">
-      {{#if editable}}
-      {{formInput systemFields.description value=sys.description enriched=enrichedDescription toggled=true}}
-      {{else}}{{{enrichedDescription}}}{{/if}}
+    <section class="rs-sec">
+      <div class="rs-notes">
+        {{#if editable}}
+        {{formInput systemFields.description value=sys.description enriched=enrichedDescription toggled=true}}
+        {{else}}{{{enrichedDescription}}}{{/if}}
+      </div>
     </section>
   {{/if}}
   </div>

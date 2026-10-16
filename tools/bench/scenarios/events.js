@@ -27,7 +27,7 @@ stepName("решение с ценой");
 await EV.addEvent(town, "plague"); await wait(300);
 ok(town.system.decisions.length === 1 && lastCard().includes("Мор"), "ведущий задал «Мор» — решение ждёт, карточка в чате");
 town.sheet.tab = "economy"; await town.sheet.render({ force: true }); await wait(600);
-const card = town.sheet.element.querySelector(".sv-event");
+const card = town.sheet.element.querySelector(".rs-event");
 ok(card && card.querySelectorAll("[data-action=decide]").length === 3, "на листе — «Решение правителя» с тремя выборами");
 await EV.decide(town, town.system.decisions[0].id, 1); await wait(300);
 ok(town.system.stock["Снадобья"] === 2 && town.system.approval === 6 && !town.system.decisions.length,
@@ -43,7 +43,7 @@ await EV.addEvent(town, "monster"); await wait(200);
 await EV.decide(town, town.system.decisions[0].id, 2); await wait(300);
 ok(Math.abs(town.system.forecast.produced["Древесина"] - wood0 / 2) < 0.6, `«Не ходить в лес»: древесина вполовину (${wood0} → ${town.system.forecast.produced["Древесина"]})`);
 town.sheet.tab = "economy"; await town.sheet.render(); await wait(500);
-ok(town.sheet.element.querySelectorAll(".sv-mods li").length === 2, "на листе — два действующих последствия");
+ok(town.sheet.element.querySelectorAll(".rs-mods li").length === 2, "на листе — два действующих последствия");
 
 stepName("проверка");
 await EV.addEvent(town, "dispute"); await wait(200);

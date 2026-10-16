@@ -32,13 +32,15 @@
       </div>
     </div>
     <div class="sv-plaque" data-tooltip="Семей ставят на работу на листе поселения">
+      <span class="sv-medal">{{#if workers.max}}<b class="big">{{workers.value}}/{{workers.max}}</b>{{else}}<b class="big">—</b>{{/if}}</span>
       <span class="cap">Работают</span>
       {{#if workers.max}}<span class="bl-slots">{{#each workers.slots}}<i class="{{#if this}}on{{/if}}"></i>{{/each}}</span>
       <small>{{workers.value}} из {{workers.max}} сем.</small>
-      {{else}}<b class="ar-label">—</b><small>рабочих мест нет</small>{{/if}}
+      {{else}}<small>рабочих мест нет</small>{{/if}}
       {{#if gm}}<label class="bl-mini">семей <input type="number" name="system.workers" value="{{sys.workers}}" min="0" step="1"></label>{{/if}}
     </div>
     <div class="sv-plaque">
+      <span class="sv-medal"><i class="fa-solid fa-hammer" aria-hidden="true"></i></span>
       <span class="cap">Стройка</span>
       {{#if build}}<b class="ar-label">{{build.n}}-я ступень</b>
       <span class="sv-bar"><i style="width: {{build.pct}}%"></i></span>
@@ -50,16 +52,20 @@
       </div>{{/if}}
     </div>
     <div class="sv-plaque bl-manager" data-tooltip="Перетащите сюда персонажа: его навык «{{manager.skillLabel}}» даёт постройке бонус">
-      <span class="cap">Управляющий</span>
       {{#if manager.who}}
-      <div class="bl-mgr"><span class="sv-sock sm"><img src="{{manager.who.img}}" alt=""></span>
+      <span class="sv-sock bl-mgr-sock"><img src="{{manager.who.img}}" alt=""></span>
+      <span class="cap">Управляющий</span>
+      <div class="bl-mgr">
         <div><a class="ar-home" data-action="openActor" data-uuid="{{manager.who.uuid}}">{{manager.who.name}}</a>
           <small>{{manager.skillLabel}} {{manager.value}} · {{manager.bonus}}</small></div>
         {{#if editable}}<a class="bl-x" data-action="clearManager" data-tooltip="Снять управляющего"><i class="fa-solid fa-xmark"></i></a>{{/if}}</div>
-      {{else}}<small>никого — перетащите персонажа</small>{{/if}}
+      {{else}}<span class="sv-medal empty"><i class="fa-solid fa-user" aria-hidden="true"></i></span>
+      <span class="cap">Управляющий</span>
+      <small>никого — перетащите персонажа</small>{{/if}}
       {{#if gm}}<select name="system.managerSkill" class="bl-mgr-skill" aria-label="Навык управляющего"><option value="" {{#unless manager.override}}selected{{/unless}}>по постройке: {{manager.skillLabel}}</option>{{selectOptions manager.skills selected=manager.override}}</select>{{/if}}
     </div>
     <div class="sv-plaque">
+      <span class="sv-medal"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
       <span class="cap">Особое</span>
       <small class="bl-flags">{{#if sys.unique}}<span>одна на поселение</span>{{/if}}{{#if sys.trade}}<span>торговый пост</span>{{/if}}{{#unless sys.unique}}{{#unless sys.trade}}<span>—</span>{{/unless}}{{/unless}}</small>
       {{#if gm}}<div class="bl-mini-row">
@@ -121,7 +127,7 @@
         </li>
         {{/each}}
       </ul>
-      {{else}}<p class="sv-hint">Заказов нет. Перетащите на лист предмет из компендиума, мира или с листа персонажа — мастерская сделает его из ресурсов склада.</p>{{/if}}
+      {{else}}<p class="sv-hint sv-empty">Заказов нет. Перетащите на лист предмет из компендиума, мира или с листа персонажа — мастерская сделает его из ресурсов склада.</p>{{/if}}
     </section>
     {{/if}}
 

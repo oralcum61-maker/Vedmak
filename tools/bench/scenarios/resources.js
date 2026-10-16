@@ -24,7 +24,7 @@ const dt = new DataTransfer(); dt.setData("text/plain", JSON.stringify({ type: R
 await town.sheet.render({ force: true }); await wait(400);
 await town.sheet._onDrop(new DragEvent("drop", { dataTransfer: dt })); await wait(400);
 ok("Соль" in town.system.stock, "перетащенная соль — на складе");
-ok(!!town.sheet.element.querySelector(".sv-res [data-name], .sv-res li") && town.sheet.element.textContent.includes("Соль"), "лист поселения показывает соль");
+ok(!!town.sheet.element.querySelector(".rs-stock .rs-res[data-name]") && town.sheet.element.textContent.includes("Соль"), "лист поселения показывает соль");
 
 stepName("свой ресурс");
 const own = await Item.create({ name: "Прогон: звёздный камень", type: "resource", img: "icons/commodities/gems/gem-faceted-diamond-blue.webp",

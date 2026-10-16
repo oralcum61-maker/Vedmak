@@ -57,6 +57,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       workers: SettlementSheet.#onWorkers,
       wealth: SettlementSheet.#onWealth,
       trade: SettlementSheet.#onTrade,
+      tradeStep: SettlementSheet.#onTradeStep,
       catalog: SettlementSheet.#onCatalog,
       editBuilding: SettlementSheet.#onEditBuilding,
       approval: SettlementSheet.#onApproval,
@@ -79,7 +80,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static PARTS = {
-    body: { template: "systems/vedmak/templates/actor/settlement-sheet.hbs", scrollable: [".sv-scroll"] }
+    body: { template: "systems/vedmak/templates/actor/settlement-sheet.hbs", scrollable: [".rs-scroll"] }
   };
 
   tab = "economy";
@@ -105,10 +106,16 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const resources = [...names].sort((a, b) => order(a) - order(b) || compareRu(a, b)).map(name => {
       const net = fc.net[name] ?? 0;
       const value = stock[name] ?? 0;
-      return { name, img: resourceIcon(name), value: fmt(value), raw: value, cap: sum.storage,
+      // Тающий запас: на сколько недель хватит при нынешней убыли (макет склада, PLAN 4.230)
+      const weeks = net < 0 ? Math.floor(value / -net) : Infinity;
+      const left = weeks > 6 ? "" : value <= 0 ? "на складе нет" : weeks === 0 ? "кончится на этой неделе"
+        : weeks === 1 ? "хватит на неделю" : `хватит на ${weeks} нед.`;
+      return { name, img: resourceIcon(name), value: fmt(value), raw: value, cap: sum.storage, left,
         pct: Math.min(100, Math.round((value / sum.storage) * 100)), full: value >= sum.storage,
         net: net ? `≈ ${signed(net)}` : "", up: net > 0, down: net < 0, need: RESOURCE_ORDER.includes(name),
-        sell: `${priceOf(name)} ${cur.abbr}`, buy: `${Math.ceil(priceOf(name) * BUY_MARKUP)} ${cur.abbr}` };
+        sell: `${priceOf(name)} ${cur.abbr}`, buy: `${Math.ceil(priceOf(name) * BUY_MARKUP)} ${cur.abbr}`,
+        // Цены числом для плитки торговли (лист по холсту): валюта — подписью рядом
+        sellN: priceOf(name), buyN: Math.ceil(priceOf(name) * BUY_MARKUP) };
     });
     const needs = Object.entries(fc.needs).map(([k, n]) => ({
       label: k, need: fmt(n.need), got: fmt(n.got), ok: n.short <= 0, pct: n.need ? Math.round((n.got / n.need) * 100) : 100
@@ -175,7 +182,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         gain: fc.wealthGain ? `${signed(fc.wealthGain)} в неделю` : "", hero: game.user.character?.name ?? "" },
       taxes: Object.entries(TAXES).map(([k, t]) => ({ key: k, label: t.label, selected: k === sys.taxes })),
       taxNote: sum.taxMult ? (sum.taxCoins ? `${sum.taxCoins} ${cur.abbr} в неделю` : "налог не берётся") : "без усадьбы налог не собрать",
-      resources, needs, month, groups, catalog, chronicle, trade: sum.trade, storage: sum.storage,
+      resources, needs, month, groups, catalog, chronicle, trade: sum.trade, storage: sum.storage, abbr: cur.abbr,
       army: this.#army(sum),
       routes: sys.routes.map(r => ({ ...r, to: fromUuidSync(r.to)?.name ?? "—", img: resourceIcon(r.resource) })),
       routeTargets: game.actors.filter(a => a.type === "settlement" && a.id !== actor.id && a.visible).map(a => ({ uuid: a.uuid, name: a.name })),
@@ -255,18 +262,16 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _onFirstRender(context, options) {
     super._onFirstRender?.(context, options);
     // Правая кнопка по отряду во «Войске»: лист, картинка, жетон, роспуск, удаление
-    bindUnitMenu(this.element, ".ar-units li[data-id]");
+    bindUnitMenu(this.element, ".rs-units .rs-urow[data-id]");
   }
 
   _onRender(context, options) {
     super._onRender(context, options);
     // Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают
     animateRealm(this, this.element, this.actor.uuid, this.tab);
-    animateNew(this, this.element, ".sv-card[data-id]");
-    animateNew(this, this.element, ".sv-event[data-decision]");
-    animateNew(this, this.element, ".ar-units li[data-id]");
-    const qty = this.element.querySelector(".sv-trade-qty");
-    qty?.addEventListener("change", () => { this.tradeQty = Math.max(1, Math.floor(Number(qty.value) || 1)); });
+    animateNew(this, this.element, ".rs-bcard[data-id]");
+    animateNew(this, this.element, ".rs-event[data-decision]");
+    animateNew(this, this.element, ".rs-urow[data-id]");
   }
 
   /* ------------------------------ Действия ------------------------------ */
@@ -285,14 +290,19 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const id = target.closest("[data-id]").dataset.id;
     await S.setWorkers(this.actor, id, (this.actor.system.summary.workers[id] ?? 0) + Number(target.dataset.delta));
   }
+  /** «−/+» у «Торговать по»: сколько единиц за раз (не меньше одной). */
+  static #onTradeStep(event, target) {
+    this.tradeQty = Math.max(1, this.tradeQty + Number(target.dataset.delta || 0));
+    this.render();
+  }
   static async #onTrade(event, target) { await once(this.actor, "trade", () => S.trade(this.actor, target.dataset.name, this.tradeQty, target.dataset.mode)); }
   static async #onApproval(event, target) {
     const v = Math.max(0, Math.min(APPROVAL_MAX, this.actor.system.approval + Number(target.dataset.delta)));
     await this.actor.update({ "system.approval": v });
   }
   static async #onAddResource() {
-    const name = this.element.querySelector(".sv-new-res")?.value.trim();
-    const qty = this.element.querySelector(".sv-new-qty")?.valueAsNumber || 0;
+    const name = this.element.querySelector(".rs-new-res")?.value.trim();
+    const qty = this.element.querySelector(".rs-new-qty")?.valueAsNumber || 0;
     if (name) await S.setStock(this.actor, name, qty);
   }
   static async #onRemoveResource(event, target) { await S.setStock(this.actor, target.dataset.name, null); }
@@ -321,7 +331,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static #onLibrary() { ResourceLibrary.open(this.actor); }
   static async #onAddRoute() {
     const el = this.element;
-    await S.addRoute(this.actor, el.querySelector(".sv-route-to")?.value, el.querySelector(".sv-route-res")?.value, el.querySelector(".sv-route-qty")?.valueAsNumber);
+    await S.addRoute(this.actor, el.querySelector(".rs-route-to")?.value, el.querySelector(".rs-route-res")?.value, el.querySelector(".rs-route-qty")?.valueAsNumber);
   }
   static async #onRemoveRoute(event, target) { await S.removeRoute(this.actor, target.closest("[data-route]").dataset.route); }
   static async #onLiftSiege() { if (game.user.isGM) await ARMY.liftSiege(null, this.actor); }

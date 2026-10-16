@@ -19,13 +19,13 @@ town.sheet.tab = "economy"; await town.sheet.render({ force: true }); await wait
 
 stepName("числа и шкалы");
 await town.update({ "system.stock.Еда": 20 }); await wait(150);
-const food = [...town.sheet.element.querySelectorAll(".sv-res li")].find(li => li.querySelector(".nm")?.textContent.trim() === "Еда");
-ok(anims(food?.querySelector("input[type=number], .sv-res-main > b")) > 0, "еда убыла — число на складе вспыхнуло");
-ok(anims(food?.querySelector(".sv-bar i")) > 0, "шкала еды перетекает к новой длине");
+// Лист поселения по холсту (PLAN 4.230): склад плитками без шкалы — вспыхивает число; шкалы — у нужд и стройки
+const food = town.sheet.element.querySelector('.rs-stock .rs-res[data-name="Еда"]');
+ok(anims(food?.querySelector(":scope > input[type=number], :scope > b")) > 0, "еда убыла — число на складе вспыхнуло");
 
 stepName("вкладка");
-town.sheet.element.querySelector('.sv-tabs a[data-tab="buildings"]').click(); await wait(250);
-ok(anims(town.sheet.element.querySelector(".sv-scroll")) > 0, "новая вкладка проявляется со сдвигом");
+town.sheet.element.querySelector('.rs-tabs [data-tab="buildings"]').click(); await wait(250);
+ok(anims(town.sheet.element.querySelector(".rs-scroll")) > 0, "новая вкладка проявляется со сдвигом");
 
 stepName("звуки");
 played.length = 0;

@@ -127,3 +127,50 @@
 .bt-log li { position: relative; background-color: #17181b; background-image: var(--rg-plate); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
 .bt-log li::before { content: ""; position: absolute; left: -22px; top: 13px; width: 9px; height: 9px; transform: rotate(45deg);
   background: linear-gradient(135deg, #f1ece0, #8f897d); box-shadow: 0 0 0 1px #050506, 0 0 0 4px #121316; }
+
+/* ─── Лист отряда по макету (PLAN 4.230): командир в шапке, значки ступеней и цена следующей, полоса званий ─── */
+.ar-cmdr { display: flex; align-items: center; gap: 10px; padding: 7px 10px 7px 8px; border-radius: 5px; background: rgba(0, 0, 0, .38);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .85), 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 1px 0 rgba(255, 240, 215, .06); }
+.ar-cmdr .sv-sock.sm { --s: 50px; }
+.ar-cmdr .sv-sock > i { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; font-size: 18px; color: #6f6a60; }
+.ar-cmdr-t { display: grid; gap: 2px; min-width: 0; }
+.ar-cmdr-t > span { font: 600 9px/1 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #a8987d; }
+.ar-cmdr-t b { font: 400 17px/1.1 var(--vd-font-head); color: var(--sv-silver); white-space: nowrap; }
+.ar-cmdr-t em { font-style: normal; font-size: 11px; color: #bcd3a3; }
+.ar-cmdr .sv-demolish { align-self: flex-start; margin-left: 0; }
+.ar-cmdr.empty { outline: 1px dashed rgba(214, 190, 150, .32); outline-offset: -4px; }
+.ar-cmdr.empty b { color: #9d968a; }
+.ar-cmdr.empty em { color: var(--sv-ash); }
+.ar-tier-i { width: 26px; height: 26px; color: #cfc8b8; filter: drop-shadow(0 1px 0 #000); }
+.ar-tiers li.current .ar-tier-i { color: var(--sv-silver); }
+.ar-tiers li.next { opacity: 1; box-shadow: inset 0 0 0 1px rgba(214, 190, 150, .4), var(--rg-lift); }
+.ar-cost { display: grid; gap: 3px; margin-top: 4px; }
+.ar-cost small { font-size: 10px; line-height: 1.25; }
+.ar-cost.ok .sv-bar i { background: linear-gradient(90deg, #6f8a55, #c7d9ad); }
+.ar-cost.bad .sv-bar i { background: linear-gradient(90deg, #9a4a38, #f0a08c); }
+.ar-cost.ok small { color: #bcd3a3; }
+.ar-cost.bad small { color: #e8b09d; }
+.ar-ranks { list-style: none; margin: 0 0 4px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-radius: 6px;
+  background-color: #17181b; background-image: var(--rg-plate); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
+.ar-ranks li { position: relative; display: grid; justify-items: center; align-content: start; gap: 4px; padding: 11px 8px 12px; text-align: center; }
+.ar-ranks li + li::before { content: ""; position: absolute; left: 0; top: 12px; bottom: 12px; width: 2px; background: var(--rg-groove); }
+.ar-gem { width: 12px; height: 12px; margin-bottom: 2px; transform: rotate(45deg); background: #0b0c0e; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .95), 0 0 0 1px #3a3c42; }
+.ar-ranks li.on .ar-gem { background: linear-gradient(135deg, #f1ece0, #8f897d); box-shadow: 0 0 0 1px #050506; }
+.ar-ranks li.now .ar-gem { background: linear-gradient(135deg, #eef5e2, #5f7448); box-shadow: 0 0 0 1px #050506, 0 0 0 4px rgba(143, 176, 122, .25); }
+.ar-ranks b { font: 400 15px/1.1 var(--vd-font-head); color: var(--sv-ash); }
+.ar-ranks li.on b, .ar-ranks li.now b { color: var(--sv-silver); }
+.ar-ranks small { font-size: 10.5px; color: var(--sv-dim); }
+.ar-ranks li.now small { color: #bcd3a3; }
+.ar-ranks .sv-bar { justify-self: stretch; margin: 2px 6px 0; }
+.ar-ranks .sv-bar i { background: linear-gradient(90deg, #6f8a55, #c7d9ad); }
+@media (max-width: 760px) { .ar-ranks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Командир в шапке — компактнее, под ужатую шапку */
+.ar-cmdr { padding: 5px 9px 5px 6px; gap: 8px; }
+.ar-cmdr .sv-sock.sm { --s: 42px; }
+.ar-cmdr-t b { font-size: 16px; }
+.ar .sv-plaque .ar-label { font-size: 15px; line-height: 1.1; }
+.ar .sv-plaque .ar-small { width: 42px; height: 20px; font-size: 12px; }
+.ar .sv-plaque .sv-pips { margin: 1px 0; }
+.ar .sv-plaque .sv-mini-acts { margin-top: 1px; }
+.ar .sv-plaque .sv-mini-acts a { padding: 3px 8px; }

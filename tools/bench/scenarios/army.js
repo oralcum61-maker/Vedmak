@@ -57,16 +57,16 @@ await militia.sheet.render({ force: true }); await wait(500);
 ok(!!militia.sheet.element.querySelector(".sv-plaques .sv-ring") && !!militia.sheet.element.querySelector(".ar-tiers"), "лист отряда открылся");
 await militia.sheet.close();
 await town.sheet.render({ force: true }); town.sheet.tab = "army"; await town.sheet.render(); await wait(500);
-ok(town.sheet.element.querySelectorAll(".ar-units li").length === 3, "вкладка «Войско»: три отряда");
+ok(town.sheet.element.querySelectorAll(".rs-units .rs-urow").length === 3, "вкладка «Войско»: три отряда");
 // Кнопка «Набрать» с окном по умолчанию (Ополчение, 10), когда в Ополчении меньше: отказ без ошибки (раньше лист
 // принимал уведомление за отряд — «Cannot read properties of undefined (reading 'render')», 4.0.1)
 { const before = town.system.militia; await town.update({ "system.militia": 3 });
   town.sheet.element.querySelector("[data-action=recruit]")?.click(); await wait(1200);
-  ok(town.system.militia === 3 && town.sheet.element.querySelectorAll(".ar-units li").length === 3, "«Набрать» при нехватке — отказ, отряды те же");
+  ok(town.system.militia === 3 && town.sheet.element.querySelectorAll(".rs-units .rs-urow").length === 3, "«Набрать» при нехватке — отказ, отряды те же");
   await town.update({ "system.militia": before }); }
 // Правая кнопка по отряду: меню с листом, картинкой, жетоном, роспуском и удалением; «Удалить» убирает отряд
 { const extra = await ARMY.recruit(town, { origin: "militia", count: 1, kind: "infantry", name: "Прогон: на удаление" }); await town.sheet.render(); await wait(800);
-  const row = town.sheet.element.querySelector(`.ar-units li[data-id="${extra.id}"]`);
+  const row = town.sheet.element.querySelector(`.rs-units .rs-urow[data-id="${extra.id}"]`);
   row?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 300, clientY: 300 })); await wait(400);
   const items = [...document.querySelectorAll("#context-menu .context-item")];
   ok(items.map(i => i.textContent.trim()).join("|") === "Лист отряда|Сменить картинку|Настроить жетон|Распустить|Удалить", `меню отряда: ${items.map(i => i.textContent.trim()).join(", ")}`);

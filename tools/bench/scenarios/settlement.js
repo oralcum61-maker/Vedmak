@@ -43,7 +43,7 @@ ok(town.system.buildingActors.length === 3 && town.img.includes("house-manor") &
   "новое поселение: два дома и лесорубы — актёры «Постройка» в папке поселения");
 ok(townFolder?.folder?.id === folder.id && town.system.summary.houses === 2, "папка построек — внутри папки поселения; сводка видит дома");
 const sheet = town.sheet; await sheet.render({ force: true }); await wait(500);
-ok(!!sheet.element.querySelector(".sv-plaques .sv-ring") && !!sheet.element.querySelector(".sv-res"), "лист открылся: пластины, кольцо одобрения, склад");
+ok(!!sheet.element.querySelector(".rs-stats .rs-medal.arc") && !!sheet.element.querySelector(".rs-stock .rs-res"), "лист открылся: пластины, кольцо одобрения, склад");
 await town.update({ "system.stock.Древесина": 40, "system.stock.Камень": 30 });
 await S.build(town, "manor");
 const manor = bOf(town, "manor");
@@ -132,7 +132,7 @@ stepName("склад: добавить и убрать ресурс");
 // Строгая совместимость: устаревший вызов не предупреждает, а обрывает обновление — как в мире автора
 const compat = CONFIG.compatibility.mode; CONFIG.compatibility.mode = CONST.COMPATIBILITY_MODES.FAILURE;
 sheet.tab = "economy"; await sheet.render(); await wait(400);
-sheet.element.querySelector(".sv-new-res").value = "Прогон-ресурс"; sheet.element.querySelector(".sv-new-qty").value = "3";
+sheet.element.querySelector(".rs-new-res").value = "Прогон-ресурс"; sheet.element.querySelector(".rs-new-qty").value = "3";
 sheet.element.querySelector("[data-action=addResource]").click(); await wait(500);
 ok(town.system.stock["Прогон-ресурс"] === 3, "«Добавить» кладёт новый ресурс на склад");
 sheet.element.querySelector(`[data-action=removeResource][data-name="Прогон-ресурс"]`)?.click(); await wait(500);
@@ -143,7 +143,31 @@ stepName("вкладки листа");
 // Настоящий щелчок: обработчик действия вызывает ядро (раньше «tab» перехватывало оно и падало без data-group)
 for (const id of ["army", "buildings", "economy"]) {
   sheet.element.querySelector(`nav [data-tab="${id}"]`)?.click(); await wait(300);
-  ok(sheet.tab === id && !!sheet.element.querySelector(`nav [data-tab="${id}"].active`), `вкладка «${id}» открывается щелчком`);
+  ok(sheet.tab === id && !!sheet.element.querySelector(`nav [data-tab="${id}"].on`), `вкладка «${id}» открывается щелчком`);
+}
+
+stepName("караван и «Торговать по»");
+// Лист по холсту (PLAN 4.230) сменил классы полей — код листа искал старые: караван не добавлялся, «−/+» молчали
+{
+  const other = await Actor.create({ name: "Прогон: Гарвена", type: "settlement", folder: folder.id }, { vedmakStarter: false });
+  sheet.tab = "economy"; await sheet.render(); await wait(400);
+  const el = sheet.element;
+  const to = el.querySelector(".rs-route-to");
+  ok(!!to, "форма каравана на листе");
+  if (to) {
+    to.value = other.uuid;
+    el.querySelector(".rs-route-res").value = "Еда";
+    el.querySelector(".rs-route-qty").value = "4";
+    el.querySelector("[data-action=addRoute]").click(); await wait(500);
+    ok(town.system.routes.length === 1 && town.system.routes[0].to === other.uuid && town.system.routes[0].qty === 4, "«Отправлять» добавляет караван");
+  }
+  const plus = sheet.element.querySelector('[data-action=tradeStep][data-delta="1"]');
+  if (plus) {
+    const q0 = sheet.tradeQty;
+    plus.click(); await wait(400);
+    ok(sheet.tradeQty === q0 + 1 && sheet.element.querySelector(".rs-mini-step output")?.textContent.trim() === String(q0 + 1), `«+» у «Торговать по»: ${q0} → ${sheet.tradeQty}`);
+  }
+  await other.delete();
 }
 
 await sheet.close();

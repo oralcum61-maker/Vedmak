@@ -14,6 +14,15 @@ import { animateRealm } from "../fx/realm-fx.mjs";
 import { once, refuse } from "../util.mjs";
 import { realmPrompt } from "../apps/realm-dialog.mjs";
 
+/** Значки ступеней снаряжения (24×24, контур): вилы → копьё → два копья → пика; рубаха → стёганка → кольчуга → латы. */
+const SHIRT = "M8.5 4L4 7l2 3.2 2-1V20h8V9.2l2 1L20 7l-4.5-3c-.9 1.4-2 2-3.5 2s-2.6-.6-3.5-2z";
+const TIER_ICONS = {
+  weapons: ["M12 21V10M7 3v3.5a5 5 0 0 0 10 0V3M12 3v7", "M12 22V9M12 2l2.4 5.5h-4.8zM9.5 11h5",
+    "M8.5 22V9M8.5 2l2 5.5h-4zM15.5 22V9M15.5 2l2 5.5h-4zM6.5 11h4M13.5 11h4", "M12 23V7M12 1l2 6h-4zM8 9.5h8M9.5 12.5h5"],
+  armor: [SHIRT, SHIRT + "M9.5 11h5M9.5 14h5M9.5 17h5", SHIRT + "M9 10.5l6 6M15 10.5l-6 6M12 8.5v10",
+    "M6 5h12v6c0 5-3 8-6 9-3-1-6-4-6-9zM12 5v15M6 9.5h12"]
+};
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
@@ -88,14 +97,19 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const rank = sys.rank ?? 0;
     const next = RANKS[rank + 1];
 
-    // Оружие и броня — две шкалы
+    // Оружие и броня — две шкалы; у ступени значок, у следующей — полоса цены «хватает / не хватает» (макет, PLAN 4.230)
     const gear = Object.entries(GEAR).map(([track, g]) => {
       const level = sys[track];
       const up = level < MAX_GEAR ? level + 1 : null;
       const cost = up ? equipCost(sys.kind, track, level, up, sys.soldiers) : [];
+      const short = cost.filter(c => !have(c));
+      const costPct = cost.length ? Math.round(Math.min(...cost.map(c => Math.min(1, (stock[c.resource] ?? 0) / (c.qty || 1)))) * 100) : 100;
+      const costText = !home ? "нет родного поселения" : !short.length ? "на складе хватает"
+        : `не хватает: ${short.map(c => `${c.resource} ${Math.ceil(c.qty - (stock[c.resource] ?? 0))}`).join(", ")}`;
       return {
-        track, label: g.label, level, current: g.tiers[level].label,
+        track, label: g.label, level, current: g.tiers[level].label, costPct, costText,
         tiers: g.tiers.map((t, i) => ({ label: t.label, power: t.power, saves: track === "armor" ? armorDice(i, sys.soldiers) : 0, on: i <= level, current: i === level,
+          isNext: i === up, icon: TIER_ICONS[track]?.[i] ?? "",
           gear: i ? (kind.gear?.[track]?.[i - 1] ?? []).map(x => `${x.resource} ${x.qty}`).join(", ") + " на бойца" : "ничего" })),
         next: up ? g.tiers[up].label : "",
         cost: cost.map(c => ({ img: resourceIcon(c.resource), name: c.resource, qty: c.qty, short: !have(c) })),
@@ -113,6 +127,8 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         canDrill: (home?.system.summary.drill ?? 0) > 0, drill: home?.system.summary.drill ?? 0 },
       rank: { label: RANKS[rank].label, xp: sys.xp, next: next ? `${next.label} — с ${next.xp}` : "высшее звание",
         pct: next ? Math.round(((sys.xp - RANKS[rank].xp) / (next.xp - RANKS[rank].xp)) * 100) : 100,
+        arc: next ? Math.round(((sys.xp - RANKS[rank].xp) / (next.xp - RANKS[rank].xp)) * 360) : 360,
+        list: RANKS.map((r, i) => ({ label: r.label, xp: r.xp, power: r.power, on: i < rank, now: i === rank })),
         pips: RANKS.map((r, i) => ({ on: i <= rank, label: `${r.label} (${r.xp})` })) },
       gear,
       morale: { value: sys.morale, max: MORALE_MAX, arc: Math.round((sys.morale / MORALE_MAX) * 360),

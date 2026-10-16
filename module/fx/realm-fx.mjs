@@ -7,8 +7,10 @@ import { playSound } from "./sounds.mjs";
 
 const motionOn = () => !document.body.classList.contains("vd-no-anim");
 const EASE = "cubic-bezier(.2, .8, .2, 1)";
-const NUMS = ".sv-plaque input[type='number'].big, .sv-plaque b.big, .sv-ring b, .sv-res-main input[type='number'], .sv-res-main > b, .sv-workers b, .bt-num";
-const BARS = ".sv-bar i";
+// Лист поселения по холсту (PLAN 4.230) — классы rs-*: медальоны показателей, плитки склада, шкалы нужд и стройки
+const NUMS = ".sv-plaque input[type='number'].big, .sv-plaque b.big, .sv-ring b, .sv-res-main input[type='number'], .sv-res-main > b, .sv-workers b, .bt-num, "
+  + ".rs-medal > input[type='number'], .rs-medal > b, .rs-res > input[type='number'], .rs-res > b, .rs-num > b";
+const BARS = ".sv-bar i, .rs-meter i";
 
 /** Ключ элемента внутри листа: ближайшие data-id/node/name, имя ресурса, номер пластины — и порядок среди таких же. */
 function keyOf(el, root, kind) {
@@ -18,7 +20,7 @@ function keyOf(el, root, kind) {
     const own = d.id || d.node || d.name || d.decision || d.order;
     if (own) { parts.push(own); break; }
     if (n.matches?.(".sv-res li")) { parts.push(n.querySelector(".nm")?.textContent.trim() ?? ""); break; }
-    if (n.classList?.contains("sv-plaque")) { parts.push("pl" + [...n.parentElement.children].indexOf(n)); break; }
+    if (n.classList?.contains("sv-plaque") || n.classList?.contains("rs-stat")) { parts.push("pl" + [...n.parentElement.children].indexOf(n)); break; }
   }
   return `${kind}:${parts.join("/")}`;
 }
@@ -55,7 +57,7 @@ export function animateRealm(app, root, key, tab = "") {
   if (!prev || !motionOn()) return;
   // Новая вкладка — проявляется, как у листа персонажа
   if (tab && prev.tab !== tab) {
-    root.querySelector(".sv-scroll")?.animate([{ opacity: 0, translate: "0 8px" }, { opacity: 1, translate: "0 0" }], { duration: 240, easing: EASE });
+    root.querySelector(".sv-scroll, .rs-scroll")?.animate([{ opacity: 0, translate: "0 8px" }, { opacity: 1, translate: "0 0" }], { duration: 240, easing: EASE });
     return;
   }
   for (const [k, { el, p }] of now.bars) {

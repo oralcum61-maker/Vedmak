@@ -1,0 +1,473 @@
+/* ============================== Листы королевства по артефакту (PLAN 4.230) ==============================
+   Стили взяты из холста Claude Design https://claude.ai/artifact/TAKQ3Hu849YKHt4En1Bn7N без пересказа: доска
+   «Лист поселения — Хозяйство», доски вкладок (постройки, войско, летопись, пустые состояния) и «Описание».
+   Рамка окна артефакта (.rs-win, .rs-bar) не перенесена — окно даёт Foundry; приспособление к окну — в конце файла.
+   Значки ресурсов — картинки Foundry (img в гнезде), не контурные рисунки холста. */
+.rs{--rs-head:var(--vd-font-head,"Forum",serif);--rs-body:var(--vd-font-body,"IBM Plex Sans",system-ui,sans-serif);--rs-dim:#8d887e;--rs-ash:#a8a296;
+  font-family:var(--rs-body);color:var(--vd-text,#e2ddd0);font-variant-numeric:tabular-nums;font-size:13px;line-height:1.4}
+.rs *{box-sizing:border-box}
+.rs-x{width:26px;height:26px;display:grid;place-items:center;padding:0;border:0;border-radius:3px;background:none;color:var(--rs-ash);cursor:pointer}
+.rs-x:hover{color:var(--vd-silver,#f1ece0)}
+.rs-head{display:flex;align-items:center;gap:18px;padding:18px 22px 16px;
+  background:radial-gradient(120% 140% at 15% 0%,rgba(255,240,215,.07),transparent 60%),#241f1b;
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,.7),0 1px 0 rgba(255,240,215,.05)}
+.rs-head h1{margin:0;font:400 34px/1.05 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 2px 0 rgba(0,0,0,.8)}
+.rs-sub{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:7px;font:600 10.5px/1 var(--rs-body);letter-spacing:.16em;text-transform:uppercase;color:#c7b99f}
+.rs-sub i{width:5px;height:5px;transform:rotate(45deg);background:#8f7f62}
+.rs-sock{--s:72px;position:relative;flex:none;width:var(--s);height:var(--s);border-radius:50%;
+  background:conic-gradient(from 210deg,#f3eee2,#6f6a60 12%,#d8d1c2 25%,#47443d 38%,#e9e3d5 52%,#6a655c 66%,#cdc6b6 80%,#514d45 90%,#f3eee2);
+  box-shadow:0 0 0 1px #060708,inset 0 0 0 1px rgba(0,0,0,.5),0 5px 10px rgba(0,0,0,.6)}
+.rs-sock::before{content:"";position:absolute;inset:4px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#3a3c42,#121316 75%);
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.95),inset 0 0 0 1px #050506}
+.rs-sock svg{position:absolute;inset:18px;z-index:1;width:calc(100% - 36px);height:calc(100% - 36px);color:#d8d1c2;filter:drop-shadow(0 1px 0 #000)}
+.rs-sock.sm{--s:34px}
+.rs-sock.sm svg{inset:9px;width:16px;height:16px}
+.rs-cap{font:600 9.5px/1.2 var(--rs-body);letter-spacing:.18em;text-transform:uppercase;color:var(--rs-dim)}
+.rs-hint{margin:0;font-size:11.5px;line-height:1.45;color:var(--vd-text-dim,#bab4a8)}
+.rs-metal{font-family:var(--rs-head);font-weight:400;color:transparent;-webkit-background-clip:text;background-clip:text;
+  background-image:var(--vd-metal,linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%))}
+.rs-up{color:var(--vd-green,#8fb07a)}
+.rs-down{color:var(--vd-blood-lite,#e0937f)}
+.rs-go{--rs-go:#b8432c;height:38px;padding:0 18px;border:1px solid #060708;border-radius:2px;cursor:pointer;white-space:nowrap;
+  font:600 11px/1 var(--rs-body);letter-spacing:.16em;text-transform:uppercase;color:#fff3ea;text-shadow:0 -1px 0 rgba(0,0,0,.5);
+  background-color:var(--rs-go);background-image:var(--vd-gloss,linear-gradient(rgba(255,255,255,.12),transparent 55%));
+  box-shadow:inset 0 1px 0 rgba(255,235,220,.4),inset 0 -2px 0 rgba(0,0,0,.3),0 5px 12px -4px rgba(0,0,0,.9)}
+.rs-go:hover{filter:brightness(1.12)}
+.rs-go.steel{--rs-go:#4a4d55}
+.rs-btn{height:28px;padding:0 10px;border:1px solid var(--vd-line,#3a3c42);border-radius:2px;background:transparent;color:var(--vd-text-dim,#bab4a8);
+  font:500 11.5px/1 var(--rs-body);cursor:pointer}
+.rs-btn:hover{color:var(--vd-silver,#f1ece0);border-color:#6f6b62}
+/* Учёт: утопленная полоса ячеек вместо отдельных пластин */
+.rs-ledger{display:grid;gap:1px;margin:16px 22px 0;border-radius:5px;overflow:hidden;background:#08090a;box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-cell{display:flex;flex-direction:column;gap:6px;min-width:0;padding:11px 13px 12px;background:#121316}
+.rs-num{display:flex;align-items:baseline;gap:6px}
+.rs-num .rs-metal{font-size:30px;line-height:1}
+.rs-num small{font-size:11px;color:var(--rs-ash)}
+.rs-note{font-size:11px;line-height:1.35;color:var(--rs-ash)}
+.rs-acts{display:flex;gap:4px;margin-top:auto}
+.rs-ring{--arc:220deg;position:relative;flex:none;width:58px;height:58px;border-radius:50%;
+  background:conic-gradient(var(--vd-green,#8fb07a) var(--arc),#26282d 0);box-shadow:0 0 0 1px #050506,0 3px 8px rgba(0,0,0,.7)}
+.rs-ring::before{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2a2c31,#101114 75%);box-shadow:inset 0 2px 5px rgba(0,0,0,.9)}
+.rs-ring b{position:absolute;inset:0;z-index:1;display:grid;place-items:center;font-size:24px}
+.rs-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;padding:3px;border-radius:4px;background:rgba(0,0,0,.45);box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-seg button{height:26px;border:0;border-radius:3px;background:none;color:var(--rs-ash);font:500 11.5px/1 var(--rs-body);cursor:pointer}
+.rs-seg button.on{color:var(--vd-silver,#f1ece0);background:#2a2c31;box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+/* Вкладки: ярлыки на утопленной рейке */
+.rs-tabs{display:flex;gap:4px;margin:16px 22px 0;padding:4px;border-radius:5px;background:rgba(0,0,0,.45);box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-tabs button{position:relative;flex:1;height:34px;border:0;border-radius:3px;background:none;color:var(--rs-ash);font:400 16px/1 var(--rs-head);letter-spacing:.02em;cursor:pointer}
+.rs-tabs button:hover{color:var(--vd-silver,#f1ece0)}
+.rs-tabs button.on{color:var(--vd-silver,#f1ece0);background:#2a2c31;box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-badge{position:absolute;top:5px;right:10px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#b8432c;color:#fff3ea;font:600 10px/16px var(--rs-body)}
+.rs-scroll{flex:1;min-height:0;display:flex;flex-direction:column;gap:16px;padding:16px 22px 20px;overflow:hidden}
+.rs-sec{display:flex;flex-direction:column;gap:9px}
+.rs-sec-h{display:flex;align-items:baseline;gap:12px}
+.rs-sec-h h2{margin:0;font:400 19px/1 var(--rs-head);color:var(--vd-silver,#f1ece0)}
+.rs-sec-h span{font-size:11.5px;color:var(--rs-ash)}
+.rs-sec-h .rs-btn{margin-left:auto}
+/* Событие: нить сверху, решение — плитками */
+.rs-event{display:flex;gap:14px;padding:14px 16px;border-radius:5px;background:#1c1d21;
+  box-shadow:inset 0 2px 0 var(--vd-blood,#b8432c),var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-event-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.rs-event h3{margin:0;font:400 20px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0)}
+.rs-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.rs-tile{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:9px 11px 10px;border:0;border-radius:4px;cursor:pointer;text-align:left;
+  font:inherit;color:var(--vd-text,#e2ddd0);background-color:#24262b;background-image:var(--vd-s-plate,none);
+  box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-tile:hover{filter:brightness(1.1)}
+.rs-tile b{font:400 15px/1.15 var(--rs-head);color:var(--vd-silver,#f1ece0)}
+.rs-tile small{font-size:11px;line-height:1.3;color:var(--rs-ash)}
+.rs-tile.on{background:#111215;box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9)),inset 0 0 0 1px rgba(241,236,224,.32);filter:none}
+/* Склад: плитки ресурсов */
+.rs-stock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.rs-res{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:4px 10px;padding:9px 11px;border-radius:4px;background:#1c1d21;
+  box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-res-name{font-size:12px;color:var(--vd-text-dim,#bab4a8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rs-res .rs-metal{font-size:22px;line-height:1}
+.rs-res-d{grid-column:3;grid-row:1 / span 2;align-self:center;font:600 11.5px/1 var(--rs-body)}
+.rs-cap-bar{display:flex;align-items:center;gap:10px}
+.rs-meter{flex:1;height:6px;border-radius:3px;background:#08090a;box-shadow:inset 0 1px 2px rgba(0,0,0,.9);overflow:hidden}
+.rs-meter i{display:block;height:100%;background:linear-gradient(180deg,#d8d1c2,#8f897d);border-radius:3px}
+.rs-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.rs-list{display:flex;flex-direction:column;gap:1px;border-radius:4px;overflow:hidden;background:#08090a;box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#121316}
+.rs-row b{font:400 15px/1 var(--rs-head);color:var(--vd-silver,#f1ece0)}
+.rs-row span{flex:1;min-width:0;font-size:11.5px;color:var(--rs-ash)}
+.rs-row em{font-style:normal;font:600 11.5px/1 var(--rs-body)}
+.rs-qty{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--rs-ash)}
+.rs-qty input{width:56px;height:28px;padding:0 8px;border:0;border-radius:3px;background:rgba(0,0,0,.45);box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9));
+  color:var(--vd-text,#e2ddd0);font:400 14px var(--rs-body);text-align:center}
+/* Фактуры облика: кожа со строчкой — событие; шлифованный металл со светом сверху — плитки; зерно — ячейки и строки */
+.rs-cell,.rs-row{background-color:#121316;background-image:linear-gradient(180deg,rgba(255,245,225,.03),transparent 60%),var(--vd-grain,none);background-blend-mode:normal,soft-light}
+.rs-res,.rs-tile{background-color:#25272c;background-image:linear-gradient(180deg,rgba(255,245,225,.08),transparent 42%,rgba(0,0,0,.24)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay}
+.rs-event{position:relative;background-color:#2b2420;background-image:radial-gradient(120% 90% at 25% 0%,rgba(255,225,190,.11),transparent 60%),var(--vd-t-leather,none);background-size:auto,180px;background-blend-mode:normal,overlay}
+.rs-event::after{content:"";position:absolute;inset:4px;border:1px dashed rgba(214,190,150,.28);border-radius:3px;pointer-events:none}
+.rs-event .rs-tile{background-color:#2f2a25}
+/* Шапка — главная пластина: кожа со светом от герба, строчка, желобок снизу, водяной знак, название металлом */
+.rs-head{position:relative;overflow:hidden;background-color:#2a231e;
+  background-image:radial-gradient(70% 170% at 7% 50%,rgba(255,232,200,.15),transparent 60%),linear-gradient(90deg,transparent 50%,rgba(0,0,0,.38)),var(--vd-t-leather,none);
+  background-size:auto,auto,200px;background-blend-mode:normal,normal,overlay;
+  box-shadow:inset 0 1px 0 rgba(255,240,215,.08),0 1px 0 rgba(255,240,215,.05)}
+.rs-head::before{content:"";position:absolute;inset:6px 6px 9px;border:1px dashed rgba(214,190,150,.24);border-radius:4px;pointer-events:none}
+.rs-head::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(180deg,#070708,rgba(255,240,215,.09));pointer-events:none}
+.rs-head > *{position:relative;z-index:1}
+.rs-head .rs-mark{position:absolute;z-index:0;right:170px;top:50%;width:200px;height:200px;transform:translateY(-50%) rotate(-8deg);color:#f1ece0;opacity:.06;pointer-events:none}
+.rs-head h1{color:transparent;-webkit-background-clip:text;background-clip:text;text-shadow:none;
+  background-image:var(--vd-metal,linear-gradient(180deg,#fdf9ef 0%,#dcd6c8 44%,#9b958a 56%,#ebe6d9 100%));filter:drop-shadow(0 2px 0 rgba(0,0,0,.85))}
+/* Кнопки — как «Бросить» в окне проверки (sheet.css): стальная планка на фактуре, блик, кованая рамка, заклёпки по краям */
+.rs-go{height:40px;padding:0 30px;border:0;border-radius:2px;cursor:pointer;white-space:nowrap;
+  font:600 11.5px/1 var(--rs-body);letter-spacing:.22em;text-transform:uppercase;color:#f6f1e6;text-shadow:0 1px 0 rgba(0,0,0,.95);
+  background-color:#3b3d43;background-image:var(--vd-rivet,none),var(--vd-rivet,none),var(--vd-gloss,none),var(--vd-s-btn,none);
+  background-position:left 7px center,right 7px center,0 0,0 0;background-size:7px 7px,7px 7px,100% 100%,512px 512px;background-repeat:no-repeat,no-repeat,no-repeat,repeat;
+  box-shadow:inset 0 1px 0 rgba(255,250,240,.35),inset 0 -2px 0 rgba(0,0,0,.32),0 0 0 2px #303137,0 0 0 3px #060708,0 8px 14px -6px rgba(0,0,0,.95)}
+.rs-go:hover{filter:brightness(1.1)}
+.rs-go.blood{color:#fff6ef;text-shadow:0 -1px 0 rgba(60,10,0,.7);background-color:#b8432c;background-image:var(--vd-rivet,none),var(--vd-rivet,none),var(--vd-gloss,none),var(--vd-s-go,none);
+  box-shadow:inset 0 1px 0 rgba(255,215,195,.55),inset 0 -2px 0 rgba(0,0,0,.32),0 0 0 2px #303137,0 0 0 3px #060708,0 8px 14px -6px rgba(0,0,0,.95)}
+.rs-go:disabled{cursor:not-allowed;filter:grayscale(.8) brightness(.6)}
+.rs-btn{height:26px;padding:0 15px;border:0;border-radius:2px;cursor:pointer;white-space:nowrap;
+  font:600 9.5px/1 var(--rs-body);letter-spacing:.16em;text-transform:uppercase;color:#f6f1e6;text-shadow:0 1px 0 rgba(0,0,0,.95);
+  background-color:#3b3d43;background-image:var(--vd-rivet,none),var(--vd-rivet,none),var(--vd-gloss,none),var(--vd-s-btn,none);
+  background-position:left 5px center,right 5px center,0 0,0 0;background-size:5px 5px,5px 5px,100% 100%,512px 512px;background-repeat:no-repeat,no-repeat,no-repeat,repeat;
+  box-shadow:inset 0 1px 0 rgba(255,250,240,.3),inset 0 -2px 0 rgba(0,0,0,.32),0 0 0 1px #303137,0 0 0 2px #060708,0 5px 9px -5px rgba(0,0,0,.95)}
+.rs-btn:hover{filter:brightness(1.12);color:#fff}
+.rs-acts{gap:8px;padding:2px}
+/* «±1» у одобрения: два знака — без разрядки и с узкими полями, чтобы пара кнопок помещалась в ячейку */
+.rs-ring + div .rs-btn{min-width:40px;padding:0 12px;letter-spacing:0;font-size:11px}
+/* Решение по событию: холодные стальные пластины в кованой рамке на тёплой коже; последствия — цветными метками */
+.rs-event .rs-tile.rs-choice{position:relative;gap:7px;padding:11px 13px 12px 26px;background-color:#34363c;
+  background-image:linear-gradient(180deg,rgba(255,250,240,.12),transparent 40%,rgba(0,0,0,.28)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay;
+  box-shadow:inset 0 1px 0 rgba(255,250,240,.28),inset 0 -2px 0 rgba(0,0,0,.3),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 6px 12px -6px rgba(0,0,0,.95)}
+.rs-event .rs-tile.rs-choice::before{content:"";position:absolute;left:11px;top:16px;width:6px;height:6px;transform:rotate(45deg);background:#6f6a60;box-shadow:0 0 0 1px #0a0a0b}
+.rs-event .rs-tile.rs-choice b{font-size:16.5px}
+.rs-event .rs-tile.rs-choice.on{background:#141518;box-shadow:inset 0 2px 5px rgba(0,0,0,.85),inset 0 0 0 1px rgba(241,236,224,.4),0 0 0 1px #2a2b30,0 0 0 2px #060708}
+.rs-event .rs-tile.rs-choice.on::before{background:var(--vd-silver,#f1ece0);box-shadow:0 0 6px rgba(241,236,224,.5)}
+.rs-fx{display:flex;flex-wrap:wrap;gap:5px}
+.rs-fx em{font-style:normal;padding:3px 8px;border-radius:10px;font:600 10px/1 var(--rs-body);letter-spacing:.06em;white-space:nowrap}
+.rs-fx em.up{color:#d6e6c2;background:rgba(143,176,122,.16);box-shadow:inset 0 0 0 1px rgba(143,176,122,.4)}
+.rs-fx em.down{color:#f6c2b4;background:rgba(184,67,44,.22);box-shadow:inset 0 0 0 1px rgba(224,147,127,.45)}
+/* Нужды и торговля — самостоятельные пластины (шлифованный металл), а не строки на тёмном: не сливаются */
+.rs-cards{display:flex;flex-direction:column;gap:7px}
+.rs-need,.rs-deal{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:5px;background-color:#25272c;
+  background-image:linear-gradient(180deg,rgba(255,245,225,.08),transparent 42%,rgba(0,0,0,.24)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay;
+  box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-need.bad{box-shadow:inset 0 2px 0 var(--vd-blood,#b8432c),var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-need-main,.rs-deal-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.rs-need-top{display:flex;align-items:center;gap:8px}
+.rs-need b,.rs-deal b{font:400 17px/1 var(--rs-head);color:var(--vd-silver,#f1ece0)}
+.rs-pill{margin-left:auto;padding:4px 9px;border-radius:10px;font:600 9.5px/1 var(--rs-body);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.rs-pill.ok{color:#d6e6c2;background:rgba(143,176,122,.16);box-shadow:inset 0 0 0 1px rgba(143,176,122,.4)}
+.rs-pill.bad{color:#f6c2b4;background:rgba(184,67,44,.2);box-shadow:inset 0 0 0 1px rgba(224,147,127,.45)}
+.rs-need .rs-meter{height:5px}
+.rs-meter i.ok{background:linear-gradient(180deg,#c7d9ad,#6f8a55)}
+.rs-meter i.bad{background:linear-gradient(180deg,#f0a08c,#9a4a38)}
+.rs-price{display:flex;align-items:baseline;gap:5px;padding:0 4px}
+.rs-price .rs-metal{font-size:26px;line-height:1}
+.rs-price small{font-size:11px;color:var(--rs-ash)}
+.rs-qty-row{display:flex;align-items:center;gap:10px;margin-top:3px}
+.rs-mini-step{display:flex;align-items:stretch;height:30px;border-radius:4px;background-color:#0f1012;background-image:var(--vd-t-plate,none);background-size:200px;background-blend-mode:overlay;
+  box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-mini-step button{width:30px;border:0;background:none;color:var(--rs-ash);font:400 18px/1 var(--rs-head);cursor:pointer}
+.rs-mini-step button:hover{color:var(--vd-silver,#f1ece0)}
+.rs-mini-step output{min-width:38px;display:grid;place-items:center;font-size:20px;border-inline:1px solid rgba(0,0,0,.6)}
+/* Компактнее (просьба автора): меньше поля, гнёзда, шрифт и метки */
+.rs-cards{gap:5px}
+.rs-need,.rs-deal{gap:10px;padding:6px 10px}
+.rs-need .rs-sock.sm,.rs-deal .rs-sock.sm{--s:28px}
+.rs-need .rs-sock.sm svg,.rs-deal .rs-sock.sm svg{inset:7px;width:14px;height:14px}
+.rs-need-main,.rs-deal-main{gap:3px}
+.rs-need b,.rs-deal b{font-size:15px}
+.rs-need .rs-note,.rs-deal .rs-note{font-size:10.5px}
+.rs-need .rs-meter{height:4px}
+.rs-pill{padding:3px 7px;font-size:9px}
+.rs-price .rs-metal{font-size:21px}
+.rs-price small{font-size:10.5px}
+.rs-deal .rs-btn{height:24px;padding:0 13px}
+/* Налог: шире ячейка, воздух в кнопках — подписи не упираются в края */
+.rs-seg{gap:4px;padding:4px}
+.rs-seg button{height:30px;padding:0 12px;font-size:12px}
+/* Главные кнопки действия — киноварь (просьба автора): «Набрать», «Внести», «Заказать»…; мелкие кнопки — сталь */
+.rs-go,.rs-go.steel{color:#fff6ef;text-shadow:0 -1px 0 rgba(60,10,0,.7);background-color:#b8432c;background-image:var(--vd-rivet,none),var(--vd-rivet,none),var(--vd-gloss,none),var(--vd-s-go,none);
+  box-shadow:inset 0 1px 0 rgba(255,215,195,.55),inset 0 -2px 0 rgba(0,0,0,.32),0 0 0 2px #303137,0 0 0 3px #060708,0 8px 14px -6px rgba(0,0,0,.95)}
+/* Полоса учёта: у ячейки каркас — гравированная плашка подписи сверху, значение, пояснения утопленными метками */
+.rs-ledger .rs-cell{padding:0;gap:0}
+.rs-cell-h{display:block;padding:7px 12px 6px;font:600 9.5px/1.2 var(--rs-body);letter-spacing:.18em;text-transform:uppercase;color:#a8a296;text-shadow:0 1px 0 #000;
+  background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.28));border-bottom:1px solid #050506;box-shadow:0 1px 0 rgba(255,240,215,.05)}
+.rs-cell-b{flex:1;display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px}
+.rs-cell-b .rs-num .rs-metal{font-size:32px}
+.rs-tags{display:flex;flex-wrap:wrap;gap:4px}
+.rs-tags em{font-style:normal;padding:3px 7px;border-radius:3px;background:rgba(0,0,0,.42);box-shadow:inset 0 1px 2px rgba(0,0,0,.85),0 1px 0 rgba(255,240,215,.05);
+  font-size:10.5px;line-height:1.25;color:#bdb6a8}
+.rs-tags em.ok{color:#cfe0b8}
+.rs-tags em.warn{color:#eab7a5}
+.rs-cell-b .rs-acts{margin-top:auto}
+/* Полоса показателей — одна кованая пластина; у каждого показателя медальон с числом, рядом название и пояснение */
+.rs-stats{display:grid;grid-template-columns:0.95fr 1.1fr 1.15fr 1.55fr 0.95fr;margin:16px 22px 0;border-radius:6px;
+  background-color:#17181b;background-image:linear-gradient(180deg,rgba(255,245,225,.05),transparent 45%,rgba(0,0,0,.25)),var(--vd-t-plate,none);background-size:auto,220px;background-blend-mode:normal,overlay;
+  box-shadow:inset 0 1px 0 rgba(255,245,225,.08),inset 0 -2px 0 rgba(0,0,0,.35),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 8px 16px -8px rgba(0,0,0,.9)}
+.rs-stat{position:relative;display:flex;align-items:center;gap:12px;min-width:0;padding:13px 14px}
+.rs-stat + .rs-stat::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:2px;background:linear-gradient(90deg,#060607 50%,rgba(255,240,215,.07) 50%)}
+.rs-medal{position:relative;flex:none;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(from 210deg,#f3eee2,#6f6a60 12%,#d8d1c2 25%,#47443d 38%,#e9e3d5 52%,#6a655c 66%,#cdc6b6 80%,#514d45 90%,#f3eee2);
+  box-shadow:0 0 0 1px #060708,inset 0 0 0 1px rgba(0,0,0,.5),0 4px 9px rgba(0,0,0,.65)}
+.rs-medal::before{content:"";position:absolute;inset:4px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#33353b,#101114 75%);
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.95),inset 0 0 0 1px #050506}
+.rs-medal.arc{background:conic-gradient(var(--vd-green,#8fb07a) var(--arc),#2a2c31 0)}
+.rs-medal.arc::before{inset:5px}
+.rs-medal b{position:relative;z-index:1;font-size:24px;line-height:1;filter:drop-shadow(0 1px 0 #000)}
+.rs-medal.sm{width:38px;height:38px}
+.rs-medal.sm::before{inset:3px}
+.rs-medal svg{position:relative;z-index:1;width:18px;height:18px;color:#d8d1c2}
+.rs-stat-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rs-stat-t > b{font:400 17px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-stat-t > span{font-size:11px;line-height:1.3;color:#b3ac9f}
+.rs-stat-t > span.up{color:#bcd3a3}
+.rs-stat-t > span.warn{color:#e8b09d}
+.rs-stat-t .rs-acts{margin-top:5px;gap:6px;padding:2px}
+.rs-stat .rs-btn{height:22px;padding:0 11px;font-size:9px;letter-spacing:.1em;background-size:4px 4px,4px 4px,100% 100%,512px 512px;background-position:left 4px center,right 4px center,0 0,0 0}
+.rs-stat.tax{flex-direction:column;align-items:stretch;justify-content:center;gap:9px}
+.rs-stat-row{display:flex;align-items:center;gap:10px}
+.rs-stat.tax .rs-seg{background-image:none}
+/* Варианты решения — в формате кнопки «Неделя прошла» (фактура, блик, кованая рамка, заклёпки), цвет прежний — сталь */
+.rs-event .rs-tile.rs-choice{padding:11px 28px 12px;background-color:#34363c;
+  background-image:var(--vd-rivet,none),var(--vd-rivet,none),var(--vd-gloss,none),var(--vd-s-btn,none);
+  background-position:left 10px center,right 10px center,0 0,0 0;background-size:7px 7px,7px 7px,100% 100%,512px 512px;background-repeat:no-repeat,no-repeat,no-repeat,repeat;background-blend-mode:normal;
+  box-shadow:inset 0 1px 0 rgba(255,250,240,.35),inset 0 -2px 0 rgba(0,0,0,.32),0 0 0 2px #303137,0 0 0 3px #060708,0 8px 14px -6px rgba(0,0,0,.95)}
+.rs-event .rs-tile.rs-choice::before{content:none}
+.rs-event .rs-tile.rs-choice.on{background-color:#2a2c31;
+  background-image:var(--vd-rivet,none),var(--vd-rivet,none),var(--vd-s-btn,none);background-position:left 10px center,right 10px center,0 0;background-size:7px 7px,7px 7px,512px 512px;background-repeat:no-repeat,no-repeat,repeat;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.75),inset 0 0 0 1px rgba(241,236,224,.42),0 0 0 2px #303137,0 0 0 3px #060708}
+/* Последствия решения — утопленная полоса на кнопке: ресурс капителью, изменение металлом (убыль — кровь, прибавка — зелень) */
+.rs-event .rs-tile.rs-choice .rs-fx{display:flex;align-items:stretch;flex-wrap:nowrap;gap:0;align-self:stretch;margin-top:3px;padding:5px 0;border-radius:4px;
+  background:rgba(0,0,0,.45);box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,240,215,.07)}
+.rs-event .rs-tile.rs-choice .rs-fx em,.rs-event .rs-tile.rs-choice .rs-fx em.up,.rs-event .rs-tile.rs-choice .rs-fx em.down{
+  display:flex;align-items:baseline;gap:7px;padding:1px 12px;border-radius:0;background:none;box-shadow:none;font-style:normal;white-space:nowrap}
+.rs-event .rs-tile.rs-choice .rs-fx em + em{border-left:1px solid #060607;box-shadow:inset 1px 0 0 rgba(255,240,215,.07)}
+.rs-event .rs-tile.rs-choice .rs-fx em span{font:600 9px/1 var(--rs-body);letter-spacing:.16em;text-transform:uppercase;color:#a8a296}
+.rs-event .rs-tile.rs-choice .rs-fx em b{font:400 18px/1 var(--rs-head);color:transparent;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #000)}
+.rs-event .rs-tile.rs-choice .rs-fx em.down b{background-image:var(--vd-metal-blood,linear-gradient(180deg,#ffe1d8 0%,#e79a86 44%,#9a4a38 56%,#f3b9aa 100%))}
+.rs-event .rs-tile.rs-choice .rs-fx em.up b{background-image:var(--vd-metal-green,linear-gradient(180deg,#eef5e2 0%,#b4c79c 44%,#5f7448 56%,#cfe0b8 100%))}
+/* Метка «ждёт решения» на вкладке — по вертикальному центру, цифра — по центру кружка */
+.rs-badge{top:50%;transform:translateY(-50%);display:grid;place-items:center;width:18px;min-width:18px;height:18px;padding:0;border-radius:50%;line-height:1}
+/* Полоса вертикально (просьба автора: тесно): медальон сверху, под ним название, пояснение и кнопки — по центру */
+.rs-stat{flex-direction:column;align-items:center;justify-content:flex-start;gap:9px;padding:15px 10px 14px;text-align:center}
+.rs-stat-t{align-items:center;gap:3px}
+.rs-stat-t > b{font-size:16px}
+.rs-stat-t > span{font-size:10.5px}
+.rs-stat-t .rs-acts{justify-content:center}
+.rs-stat .rs-slots,.rs-stat .rs-pips{justify-content:center;margin:2px 0}
+.rs-stat.tax{align-items:stretch}
+.rs-stat.tax .rs-stat-row{flex-direction:column;align-items:center;gap:9px}
+.rs-stat.tax .rs-medal.sm{width:60px;height:60px}
+.rs-stat.tax .rs-medal.sm::before{inset:4px}
+.rs-stat.tax .rs-medal svg{width:22px;height:22px}
+.rs-stat.tax .rs-seg{margin-top:2px}
+.rs-stat.tax .rs-seg button{padding:0 4px;font-size:11px}
+/* Крупнее (просьба автора): изображение актёра в шапке */
+.rs-head > .rs-sock{--s:88px}
+.rs-head > .rs-sock svg{inset:22px;width:44px;height:44px}
+/* Склад: свои значки ресурсов, гнёзда крупнее; у тающих запасов — сколько недель осталось */
+.rs-res{grid-template-columns:46px minmax(0,1fr) auto;gap:3px 11px;padding:9px 11px 9px 9px}
+.rs-res .rs-sock.sm{--s:46px}
+.rs-res .rs-sock.sm svg{inset:12px;width:22px;height:22px}
+.rs-res-left{grid-column:2 / span 2;margin-top:3px;padding:3px 7px 2px;justify-self:start;border-radius:3px;
+  font:600 9.5px/1.1 var(--rs-body);letter-spacing:.12em;text-transform:uppercase;color:#f0b3a2;background:rgba(122,26,10,.38);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.7),0 0 0 1px rgba(184,67,44,.45)}
+.rs-res:has(.rs-res-left) .rs-sock{grid-row:1 / span 3 !important;box-shadow:0 0 0 1px #060708,0 0 0 2px rgba(184,67,44,.55),0 5px 10px rgba(0,0,0,.6)}
+/* Гнёзда в нуждах и торговле — тоже крупнее */
+.rs-need .rs-sock.sm,.rs-deal .rs-sock.sm{--s:38px}
+.rs-need .rs-sock.sm svg,.rs-deal .rs-sock.sm svg{inset:9.5px;width:19px;height:19px}
+/* Наведение и нажатие: кнопки чуть светлеют под курсором и вдавливаются при нажатии; плитки и вкладки — так же */
+.rs-go,.rs-btn,.rs-tile,.rs-tabs button,.rs-res,.rs-order,.rs-tier,.rs-seg button,.rs-x{transition:filter .12s ease,transform .08s ease,background-color .12s ease,color .12s ease}
+.rs-go:not(:disabled):active,.rs-btn:not(:disabled):active{transform:translateY(1px);filter:brightness(.88)}
+.rs-tile:hover{filter:brightness(1.1)}
+.rs-tile:active{transform:translateY(1px);filter:brightness(.92)}
+.rs-tabs button:not(.on):hover{background:rgba(255,240,215,.05)}
+.rs-tabs button:not(.on):active{background:rgba(0,0,0,.35);transform:translateY(1px)}
+.rs-res:hover,.rs-order:hover,.rs-tier:not(.ahead):hover{filter:brightness(1.08)}
+.rs-seg button:not(.on):hover{color:var(--vd-silver,#f1ece0);background:rgba(255,240,215,.05)}
+.rs-go:focus-visible,.rs-btn:focus-visible,.rs-tile:focus-visible,.rs-tabs button:focus-visible,.rs-seg button:focus-visible{outline:1px solid #8a8578;outline-offset:3px}
+@media (prefers-reduced-motion: reduce) {.rs-go,.rs-btn,.rs-tile,.rs-tabs button,.rs-res,.rs-order,.rs-tier,.rs-seg button,.rs-x{transition:none}
+  .rs-go:active,.rs-btn:active,.rs-tile:active,.rs-tabs button:active{transform:none}}
+/* ── Вкладки, дорисованные по списку улучшений ── */
+.rs-toolbar{display:flex;align-items:center;gap:10px}
+.rs-toolbar .rs-hint{flex:1;min-width:0}
+.rs-hint b{font-weight:600;color:var(--vd-silver,#f1ece0)}
+.rs-toolbar .rs-go{height:32px;padding:0 22px;font-size:10.5px;letter-spacing:.18em;background-size:5px 5px,5px 5px,100% 100%,512px 512px;background-position:left 6px center,right 6px center,0 0,0 0}
+.rs-ico{width:13px;height:13px;flex:none;vertical-align:-2px}
+.rs-lv{display:inline-flex;gap:5px;flex:none}
+.rs-lv i{width:8px;height:8px;transform:rotate(45deg);background:#0b0c0e;box-shadow:inset 0 1px 2px rgba(0,0,0,.95),0 0 0 1px #3a3c42}
+.rs-lv i.on{background:linear-gradient(135deg,#f1ece0,#8f897d);box-shadow:0 0 0 1px #050506}
+.rs-lv i.next{background:rgba(199,185,159,.2);box-shadow:0 0 0 1px #c7b99f}
+.rs-warn{color:#e8b09d}
+.rs-ok{color:#bcd3a3}
+.rs-bprog{display:flex;flex-direction:column;gap:3px}
+.rs-bprog .rs-meter{flex:none;height:5px}
+.rs-bprog small{font-size:10.5px;color:var(--rs-ash)}
+.rs-meter i.ok{background:linear-gradient(180deg,#c7d9ad,#6f8a55)}
+.rs-meter i.bad{background:linear-gradient(180deg,#f0a08c,#9a4a38)}
+.rs-meter i.work{background:linear-gradient(180deg,#f1e2c4,#a8875a)}
+.rs-cost-chips{display:flex;flex-wrap:wrap;gap:4px}
+.rs-cost-chips span{padding:3px 7px 2px;border-radius:3px;background:rgba(0,0,0,.45);box-shadow:inset 0 1px 2px rgba(0,0,0,.8),0 1px 0 rgba(255,240,215,.05);font-size:10.5px;color:#cfc8b8;white-space:nowrap}
+.rs-cost-chips span.short{color:#f0b3a2;box-shadow:inset 0 0 0 1px rgba(184,67,44,.55)}
+/* Постройки поселения — карточки по группам */
+.rs-bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.rs-bcard{position:relative;display:flex;gap:11px;padding:11px 11px 10px;border-radius:5px;background-color:#25272c;background-image:linear-gradient(180deg,rgba(255,245,225,.08),transparent 42%,rgba(0,0,0,.24)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-bcard.building{box-shadow:inset 0 0 0 1px rgba(214,190,150,.42),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-bcard .rs-sock.sm{--s:46px}
+.rs-bcard .rs-sock.sm svg{inset:12px;width:22px;height:22px}
+.rs-bcard-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.rs-bcard-top{display:flex;align-items:center;gap:8px}
+.rs-bcard-top b{flex:1;min-width:0;font:400 16px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-gives{font-size:11px;line-height:1.35;color:#c9c2b3}
+.rs-who{display:flex;align-items:center;gap:6px;font-size:11px;color:#bcd3a3}
+.rs-who.none{color:var(--rs-dim)}
+.rs-bcard-acts{display:flex;align-items:center;gap:6px;margin-top:2px}
+.rs-bcard-acts .rs-btn{height:24px;padding:0 12px;font-size:9px}
+.rs-bcard-acts .rs-x{width:22px;height:22px}
+.rs-bcard-acts .rs-x.first{margin-left:auto}
+.rs-x.danger:hover{color:#e8b09d}
+.rs-work{display:inline-flex;align-items:center;height:24px;padding:0 1px;border-radius:3px;background:rgba(0,0,0,.45);box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9));font-size:11px;color:var(--rs-ash)}
+.rs-work button{width:22px;height:24px;padding:0;border:0;background:none;color:var(--rs-ash);font:400 17px/1 var(--rs-head);cursor:pointer}
+.rs-work button:hover{color:var(--vd-silver,#f1ece0)}
+.rs-work button:disabled{opacity:.3;cursor:not-allowed}
+.rs-work b{font:400 15px/1 var(--rs-head);color:var(--vd-silver,#f1ece0);margin-right:1px}
+/* Войско поселения — строки отрядов */
+.rs-units{display:flex;flex-direction:column;gap:7px}
+.rs-urow{display:grid;grid-template-columns:54px minmax(0,1fr) repeat(3,58px) 138px;align-items:center;gap:12px;padding:10px 14px 10px 10px;border-radius:5px;background-color:#25272c;background-image:linear-gradient(180deg,rgba(255,245,225,.08),transparent 42%,rgba(0,0,0,.24)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-urow.away{box-shadow:inset 0 0 0 1px rgba(214,190,150,.38),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-urow .rs-sock.sm{--s:54px}
+.rs-urow .rs-sock.sm svg{inset:14px;width:26px;height:26px}
+.rs-urow-main{min-width:0}
+.rs-urow-main b{font:400 18px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-urow-main small{display:block;margin-top:4px;font-size:11px;line-height:1.35;color:var(--rs-ash)}
+.rs-num{display:flex;flex-direction:column;align-items:center;gap:4px}
+.rs-num b{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:400 19px/1 var(--rs-head);color:var(--vd-silver,#f1ece0);
+  background:radial-gradient(circle at 50% 38%,#33353b,#101114 75%);box-shadow:inset 0 3px 6px rgba(0,0,0,.95),0 0 0 2px #8f897d,0 0 0 3px #060708,0 3px 7px rgba(0,0,0,.6)}
+.rs-num span{font:600 8.5px/1 var(--rs-body);letter-spacing:.14em;text-transform:uppercase;color:var(--rs-dim)}
+.rs-urow .rs-btn{justify-self:stretch}
+/* Летопись — недели на кованом желобке */
+.rs-chron{position:relative;margin:0;padding:0 0 0 30px;list-style:none;display:flex;flex-direction:column;gap:10px}
+.rs-chron::before{content:"";position:absolute;left:10px;top:8px;bottom:8px;width:2px;background:linear-gradient(90deg,#060607 50%,rgba(255,240,215,.07) 50%)}
+.rs-chron li{position:relative;padding:11px 14px 12px;border-radius:5px;background-color:#17181b;background-image:linear-gradient(180deg,rgba(255,245,225,.05),transparent 45%,rgba(0,0,0,.25)),var(--vd-t-plate,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:inset 0 1px 0 rgba(255,245,225,.08),inset 0 -2px 0 rgba(0,0,0,.35),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 8px 16px -8px rgba(0,0,0,.9)}
+.rs-chron li::before{content:"";position:absolute;left:-25px;top:15px;width:10px;height:10px;transform:rotate(45deg);background:linear-gradient(135deg,#f1ece0,#8f897d);box-shadow:0 0 0 1px #050506,0 0 0 4px #0f1012}
+.rs-chron li.month::before{background:linear-gradient(135deg,#ffd9c9,#b8432c)}
+.rs-chron header{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
+.rs-chron header b{font:400 18px/1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-chron header span{font-size:11px;color:var(--rs-ash)}
+.rs-chron header em{margin-left:auto;padding:3px 8px;border-radius:10px;font:600 9px/1 var(--rs-body);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:#f6c2b4;background:rgba(184,67,44,.2);box-shadow:inset 0 0 0 1px rgba(224,147,127,.45)}
+.rs-chron p{display:flex;gap:10px;margin:0;font-size:12px;line-height:1.5;color:#d3ccbc}
+.rs-chron p + p{margin-top:3px}
+.rs-chron p > i{flex:none;width:74px;font:600 9px/1.85 var(--rs-body);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--rs-dim)}
+.rs-chron p.warn{color:#e8b09d}
+.rs-chron p.up{color:#bcd3a3}
+/* Древо — ветки колонками, ступени цепочкой (постройка и обучение отряда) */
+.rs-tree{display:grid;gap:10px;align-items:start}
+.rs-branch{display:flex;flex-direction:column;padding:12px 11px 12px;border-radius:6px;background-color:#17181b;background-image:linear-gradient(180deg,rgba(255,245,225,.05),transparent 45%,rgba(0,0,0,.25)),var(--vd-t-plate,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:inset 0 1px 0 rgba(255,245,225,.08),inset 0 -2px 0 rgba(0,0,0,.35),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 8px 16px -8px rgba(0,0,0,.9)}
+.rs-branch-h{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.rs-branch-h .rs-sock.sm{--s:40px}
+.rs-branch-h .rs-sock.sm svg{inset:10.5px;width:19px;height:19px}
+.rs-branch-h b{flex:1;min-width:0;font:400 17px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-branch-h small{font-size:10.5px;color:var(--rs-ash);white-space:nowrap}
+.rs-nodes{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px}
+.rs-node{position:relative;display:flex;flex-direction:column;gap:5px;padding:9px 10px 10px;border-radius:4px;background-color:#25272c;background-image:linear-gradient(180deg,rgba(255,245,225,.08),transparent 42%,rgba(0,0,0,.24)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-node + .rs-node::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:14px;margin-left:-1px;background:linear-gradient(90deg,#060607 50%,rgba(255,240,215,.1) 50%)}
+.rs-node-h{display:flex;align-items:baseline;gap:6px}
+.rs-node-h b{flex:1;min-width:0;font:400 15px/1.15 var(--rs-head);color:var(--vd-silver,#f1ece0)}
+.rs-node-h span{font:600 8.5px/1 var(--rs-body);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:var(--rs-dim)}
+.rs-node.bought{box-shadow:inset 0 2px 0 var(--vd-green,#8fb07a),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-node.bought .rs-node-h span{color:#bcd3a3}
+.rs-node.work{box-shadow:inset 0 0 0 1px rgba(214,190,150,.45),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-node.work .rs-node-h span{color:#e6cfa3}
+.rs-node.open{box-shadow:inset 0 0 0 1px rgba(241,236,224,.32),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-node.open .rs-node-h span{color:var(--vd-silver,#f1ece0)}
+.rs-node.locked{background:#141518;background-image:var(--vd-grain,none);background-blend-mode:soft-light;box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-node.locked .rs-node-h b,.rs-node.locked .rs-node-fx,.rs-node.locked .rs-node-d,.rs-node.locked .rs-cost-chips{opacity:.55}
+.rs-node-req{font-size:10.5px;color:var(--rs-ash)}
+.rs-node-req .rs-warn{color:#e8b09d}
+.rs-node-fx{font-size:11.5px;line-height:1.35;color:#d6e6c2}
+.rs-node-d{font-size:10.5px;line-height:1.35;font-style:italic;color:#9d968a}
+.rs-node .rs-btn{align-self:flex-start;height:24px;margin-top:2px;padding:0 13px;font-size:9px}
+/* Звания отряда — кованая пластина, ромб у каждого */
+.rs-ranks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-radius:6px;background-color:#17181b;background-image:linear-gradient(180deg,rgba(255,245,225,.05),transparent 45%,rgba(0,0,0,.25)),var(--vd-t-plate,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:inset 0 1px 0 rgba(255,245,225,.08),inset 0 -2px 0 rgba(0,0,0,.35),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 8px 16px -8px rgba(0,0,0,.9)}
+.rs-rank{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 8px 13px;text-align:center}
+.rs-rank + .rs-rank::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:2px;background:linear-gradient(90deg,#060607 50%,rgba(255,240,215,.07) 50%)}
+.rs-rank > i{width:12px;height:12px;margin-bottom:2px;transform:rotate(45deg);background:#0b0c0e;box-shadow:inset 0 1px 2px rgba(0,0,0,.95),0 0 0 1px #3a3c42}
+.rs-rank.on > i{background:linear-gradient(135deg,#f1ece0,#8f897d);box-shadow:0 0 0 1px #050506}
+.rs-rank.now > i{background:linear-gradient(135deg,#eef5e2,#5f7448);box-shadow:0 0 0 1px #050506,0 0 0 4px rgba(143,176,122,.25)}
+.rs-rank b{font:400 16px/1.1 var(--rs-head);color:var(--rs-ash)}
+.rs-rank.on b,.rs-rank.now b{color:var(--vd-silver,#f1ece0)}
+.rs-rank small{font-size:10.5px;color:var(--rs-dim)}
+.rs-rank.now small{color:#bcd3a3}
+.rs-rank .rs-meter{flex:none;width:84%;height:5px;margin-top:2px}
+/* Ступени постройки — лестница строками */
+.rs-ladder{display:flex;flex-direction:column;gap:8px}
+.rs-lrow{display:grid;grid-template-columns:60px minmax(0,1fr) 190px;align-items:center;gap:16px;padding:13px 16px 13px 13px;border-radius:5px;background-color:#25272c;background-image:linear-gradient(180deg,rgba(255,245,225,.08),transparent 42%,rgba(0,0,0,.24)),var(--vd-t-brushed,none);background-size:auto,220px;background-blend-mode:normal,overlay;box-shadow:var(--vd-lift-sm,inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85))}
+.rs-lrow.done{box-shadow:inset 0 2px 0 var(--vd-green,#8fb07a),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-lrow.now{box-shadow:inset 0 0 0 1px rgba(241,236,224,.32),inset 0 1px 0 rgba(255,245,225,.13),0 3px 8px -3px rgba(0,0,0,.85)}
+.rs-lrow.locked{background:#141518;background-image:var(--vd-grain,none);background-blend-mode:soft-light;box-shadow:var(--vd-sink-sm,inset 0 1px 3px rgba(0,0,0,.9))}
+.rs-lrow.locked .rs-lrow-main{opacity:.6}
+.rs-lrow .rs-medal{width:56px;height:56px}
+.rs-lrow .rs-medal b{font-size:21px}
+.rs-lrow-main{min-width:0;display:flex;flex-direction:column;gap:6px}
+.rs-lrow-main > b{font:400 19px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-facts{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:11.5px;color:var(--rs-ash)}
+.rs-facts span{display:inline-flex;align-items:center;gap:5px}
+.rs-lrow-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;text-align:right}
+.rs-lrow-side .rs-cap{letter-spacing:.14em}
+.rs-lrow-side .rs-go{height:32px;padding:0 20px;font-size:10px;letter-spacing:.16em;background-size:5px 5px,5px 5px,100% 100%,512px 512px;background-position:left 6px center,right 6px center,0 0,0 0}
+/* Пустые и крайние состояния: пунктирная ниша, бледное гнездо, что сделать — словами и кнопкой */
+.rs-empty{display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:6px;background:rgba(0,0,0,.26);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.85);outline:1px dashed rgba(214,190,150,.24);outline-offset:-5px}
+.rs-empty .rs-sock{--s:56px;filter:grayscale(.4) brightness(.8)}
+.rs-empty .rs-sock svg{inset:15px;width:26px;height:26px;color:#9d968a}
+.rs-empty-t{flex:1;min-width:0}
+.rs-empty-t b{display:block;font:400 18px/1.1 var(--rs-head);color:#d3ccbc}
+.rs-empty-t p{margin:4px 0 0;font-size:12px;line-height:1.45;color:var(--rs-ash)}
+.rs-empty .rs-go,.rs-empty .rs-btn{flex:none}
+.rs-empty .rs-go{height:32px;padding:0 20px;font-size:10px;letter-spacing:.16em;background-size:5px 5px,5px 5px,100% 100%,512px 512px;background-position:left 6px center,right 6px center,0 0,0 0}
+.rs-empty.quiet{padding:10px 16px;gap:12px}
+.rs-empty.quiet .rs-sock{--s:38px}
+.rs-empty.quiet .rs-sock svg{inset:10px;width:18px;height:18px}
+.rs-empty.quiet .rs-empty-t b{display:inline;font-size:15px}
+.rs-empty.quiet .rs-empty-t p{display:inline;margin:0 0 0 8px}
+.rs-medal.empty{background:#2a2c31;box-shadow:0 0 0 1px #060708,0 4px 9px rgba(0,0,0,.65);outline:1px dashed rgba(214,190,150,.35);outline-offset:3px}
+.rs-medal.empty svg{color:#6f6a60}
+.rs-cmdr.empty{outline:1px dashed rgba(214,190,150,.32);outline-offset:-4px}
+.rs-cmdr.empty .rs-sock{filter:grayscale(.5) brightness(.75)}
+.rs-cmdr.empty .rs-cmdr-t b{color:#9d968a}
+/* Вид правителя: без кнопок ведущего; на месте «Неделя прошла» — табличка, кто правит */
+.rs-ruler{display:flex;align-items:center;gap:10px;padding:7px 14px 7px 9px;border-radius:5px;background:rgba(0,0,0,.38);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.85),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 1px 0 rgba(255,240,215,.06)}
+.rs-ruler .rs-sock.sm{--s:50px}
+.rs-ruler .rs-sock.sm svg{inset:13px;width:24px;height:24px}
+.rs-ruler-t{display:flex;flex-direction:column;gap:2px}
+.rs-ruler-t span{font:600 9px/1 var(--rs-body);letter-spacing:.18em;text-transform:uppercase;color:#a8987d}
+.rs-ruler-t b{font:400 17px/1.1 var(--rs-head);color:var(--vd-silver,#f1ece0);text-shadow:0 1px 0 rgba(0,0,0,.8)}
+.rs-ruler-t em{font-style:normal;font-size:11px;color:var(--rs-ash)}
+
+.rs-notes{display:flex;flex-direction:column;gap:9px;padding:16px 20px;border-radius:6px;background-color:#2b2420;
+  background-image:radial-gradient(120% 90% at 25% 0%,rgba(255,225,190,.11),transparent 60%),var(--vd-t-leather,none);background-size:auto,180px;background-blend-mode:normal,overlay;
+  box-shadow:inset 0 1px 0 rgba(255,240,215,.08),0 0 0 1px #2a2b30,0 0 0 2px #060708,0 8px 16px -8px rgba(0,0,0,.9);outline:1px dashed rgba(214,190,150,.26);outline-offset:-6px}
+.rs-notes p{margin:0;font:400 16px/1.5 var(--rs-head);color:#e6dccb}
+.rs-notes-gm{padding:8px 12px;border-radius:4px;background:rgba(0,0,0,.3);font-size:14px !important;color:#c7b99f !important}
+
+/* ─── Приспособление к окну Foundry ─── */
+.vedmak.realm-sheet .window-content { padding: 0; overflow: hidden; }
+.rs-sheet { display: flex; flex-direction: column; height: 100%; min-height: 0; background-color: var(--vd-bg, #17181b);
+  background-image: radial-gradient(130% 100% at 50% 0%, rgba(255, 240, 215, .04), transparent 50%, rgba(0, 0, 0, .35)), var(--vd-s-window, none); }
+.rs-sheet .rs-scroll { overflow-y: auto; scrollbar-width: thin; }
+.rs-sheet a { text-decoration: none; }
+/* Гнездо с картинкой Foundry (герб, ресурс, постройка, отряд): картинка — приглушённой гравюрой, как в листах системы */
+.rs-sock > img { position: absolute; inset: 5px; z-index: 1; width: calc(100% - 10px); height: calc(100% - 10px); border: 0; border-radius: 50%;
+  object-fit: cover; filter: sepia(.45) saturate(.7) contrast(1.1) brightness(.92); }
+.rs-head > .rs-sock > img { inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); cursor: pointer; }
+.rs-sock > i { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; font-size: 18px; color: #d8d1c2; }
+/* Поля ведущего — внутри облика: без рамки, числом металла, утопленной ямкой */
+.rs input[type="number"], .rs input[type="text"], .rs select { height: 26px; padding: 0 6px; border: 0; border-radius: 3px; color: var(--vd-silver, #f1ece0);
+  background: rgba(0, 0, 0, .45); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9), 0 1px 0 rgba(255, 240, 215, .05); font: 400 13px/1 var(--rs-body); }
+.rs input[type="number"] { -moz-appearance: textfield; text-align: center; }
+.rs input[type="number"]::-webkit-inner-spin-button, .rs input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.rs-head h1 input, .rs-head input.rs-name { width: 100%; height: auto; padding: 0; background: none; box-shadow: none; font: inherit; color: var(--vd-silver, #f1ece0); text-align: left; }
+.rs-medal input[type="number"] { position: relative; z-index: 1; width: 46px; height: 30px; padding: 0; background: none; box-shadow: none; font: 400 22px/1 var(--rs-head); }
+.rs-sub select, .rs-sub input { height: 20px; padding: 0 4px; font: 600 10.5px/1 var(--rs-body); letter-spacing: .12em; text-transform: uppercase; color: #e7d9bd; }
+.rs-sub input[type="number"] { width: 38px; }
+.rs-res input[type="number"] { width: 60px; height: 24px; font: 400 19px/1 var(--rs-head); }

@@ -17,7 +17,7 @@ const card = () => ui.chat.element?.querySelector(`[data-message-id="${msg.id}"]
 await until(() => card()?.querySelector("button[data-se-choice]"));
 ok(card()?.querySelectorAll("button[data-se-choice]").length === 3, "в карточке события — три кнопки вариантов");
 town.sheet.tab = "economy"; await town.sheet.render({ force: true }); await wait(500);
-ok(town.sheet.element.querySelector(".sv-tabs .sv-badge")?.textContent.trim() === "1", "на вкладке «Хозяйство» — метка «1»");
+ok(town.sheet.element.querySelector(".rs-tabs .rs-badge")?.textContent.trim() === "1", "на вкладке «Хозяйство» — метка «1»");
 ui.actors.render(); await wait(500);
 ok(!!document.querySelector(`#actors [data-entry-id="${town.id}"] .vd-pending, .directory-item[data-entry-id="${town.id}"] .vd-pending`), "в списке актёров у поселения — метка «ждёт решения»");
 card().querySelector('button[data-se-choice="1"]').click();
@@ -26,7 +26,7 @@ ok(!town.system.decisions.length && town.system.stock["Снадобья"] === 2,
 await until(() => card()?.querySelector(".se-done"));
 ok(!!card()?.querySelector(".se-done"), "карточка события перерисовалась: «Решено»");
 await town.sheet.render(); await wait(300);
-ok(!town.sheet.element.querySelector(".sv-tabs .sv-badge"), "метка на вкладке ушла");
+ok(!town.sheet.element.querySelector(".rs-tabs .rs-badge"), "метка на вкладке ушла");
 await town.sheet.close();
 
 stepName("связанные жетоны отрядов");

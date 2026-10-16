@@ -12,16 +12,30 @@
         {{#if home}}<i></i><a class="ar-home" data-action="openActor" data-uuid="{{home.uuid}}">{{home.name}}</a>{{/if}}
       </div>
     </div>
+    {{#if commander}}
+    <div class="ar-cmdr">
+      <span class="sv-sock sm"><img src="{{commander.img}}" alt=""></span>
+      <div class="ar-cmdr-t"><span>Командир</span><a data-action="openActor" data-uuid="{{commander.uuid}}"><b>{{commander.name}}</b></a>
+        <em data-tooltip="(Эмпатия + Лидерство) / 3">сила +{{commander.bonus}}</em></div>
+      {{#if editable}}<a class="sv-demolish" data-action="clearCommander" data-tooltip="Снять командира">×</a>{{/if}}
+    </div>
+    {{else}}
+    <div class="ar-cmdr empty" data-tooltip="Перетащите на лист персонажа: его Эмпатия и Лидерство прибавят силы отряду">
+      <span class="sv-sock sm"><i class="fa-solid fa-user" aria-hidden="true"></i></span>
+      <div class="ar-cmdr-t"><span>Командир</span><b>Нет командира</b><em>перетащите персонажа</em></div>
+    </div>
+    {{/if}}
     {{#if gm}}<button type="button" class="sv-next" data-action="battle" data-tooltip="Открыть окно битвы с этим отрядом">В бой</button>{{/if}}
   </header>
 
   <section class="sv-plaques ar-plaques">
     <div class="sv-plaque">
+      <span class="sv-medal">{{#if gm}}<input type="number" name="system.soldiers" value="{{sys.soldiers}}" min="0" step="1" class="big" aria-label="Бойцы">{{else}}<b class="big">{{sys.soldiers}}</b>{{/if}}</span>
       <span class="cap">Бойцы</span>
-      {{#if gm}}<input type="number" name="system.soldiers" value="{{sys.soldiers}}" min="0" step="1" class="big">{{else}}<b class="big">{{sys.soldiers}}</b>{{/if}}
       <small>{{kind.label}}{{#if sys.routed}} · <span class="warn">бежали</span>{{/if}}</small>
     </div>
     <div class="sv-plaque" data-tooltip="Тренировка идёт каждую неделю поселения, пока отряд тренируется и есть плац или казарма">
+      <span class="sv-medal"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
       <span class="cap">Выучка</span>
       <b class="ar-label">{{training.label}}</b>
       <span class="sv-pips">{{#each training.pips}}<i class="{{#if on}}on{{/if}}" data-tooltip="{{label}}"></i>{{/each}}</span>
@@ -30,9 +44,9 @@
       {{#if sys.drilling}}{{#unless training.canDrill}}<small class="warn">нет плаца или казармы</small>{{/unless}}{{/if}}
     </div>
     <div class="sv-plaque" data-tooltip="Опыт: неделя на плацу +1, раунд битвы +2, победа +5. Звание открывает ступени обучения">
+      <span class="sv-ring" style="--arc: {{rank.arc}}deg"><b>{{rank.xp}}</b></span>
       <span class="cap">Опыт</span>
       <b class="ar-label">{{rank.label}}</b>
-      <span class="sv-bar"><i style="width: {{rank.pct}}%"></i></span>
       <small>{{#if gm}}<input type="number" name="system.xp" value="{{sys.xp}}" min="0" step="1" class="ar-small" aria-label="Опыт">{{else}}{{rank.xp}}{{/if}} · {{rank.next}}</small>
     </div>
     <div class="sv-plaque sv-approval tone-{{morale.tone}}">
@@ -44,8 +58,8 @@
       </div>
     </div>
     <div class="sv-plaque" data-tooltip="{{power.parts}}">
+      <span class="sv-medal"><b class="big">{{power.total}}</b></span>
       <span class="cap">Сила</span>
-      <b class="big">{{power.total}}</b>
       <small>d10 + сила в каждом раунде</small>
     </div>
   </section>
@@ -63,8 +77,8 @@
         <div class="ar-track">
           <header><b>{{label}}</b><span>{{current}}</span></header>
           <ol class="ar-tiers">
-            {{#each tiers}}<li class="{{#if on}}on{{/if}}{{#if current}} current{{/if}}"><b>{{label}}</b>
-              <span>{{#if power}}сила +{{power}}{{/if}}{{#if saves}}{{#if power}} · {{/if}}<span data-tooltip="Кубики 1d2−1: каждый спасает 0 или 1 бойца в раунд; их больше у большого отряда">спасает {{saves}}d2−{{saves}}</span>{{/if}}{{#unless power}}{{#unless saves}}—{{/unless}}{{/unless}}</span><small>{{gear}}</small></li>{{/each}}
+            {{#each tiers}}<li class="{{#if on}}on{{/if}}{{#if current}} current{{/if}}{{#if isNext}} next{{/if}}">{{#if icon}}<svg class="ar-tier-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="{{icon}}"></path></svg>{{/if}}<b>{{label}}</b>
+              <span>{{#if power}}сила +{{power}}{{/if}}{{#if saves}}{{#if power}} · {{/if}}<span data-tooltip="Кубики 1d2−1: каждый спасает 0 или 1 бойца в раунд; их больше у большого отряда">спасает {{saves}}d2−{{saves}}</span>{{/if}}{{#unless power}}{{#unless saves}}—{{/unless}}{{/unless}}</span><small>{{gear}}</small>{{#if isNext}}<span class="ar-cost {{#if ../ok}}ok{{else}}bad{{/if}}"><span class="sv-bar"><i style="width: {{../costPct}}%"></i></span><small>{{../costText}}</small></span>{{/if}}</li>{{/each}}
           </ol>
           {{#if next}}
           <div class="ar-track-foot">
@@ -91,31 +105,23 @@
       </div>
     </section>
 
-    <div class="sv-cols">
-      <section class="sv-block">
-        <h3><span class="sv-tag">Командир</span><small>перетащите персонажа</small></h3>
-        {{#if commander}}
-        <div class="ar-commander">
-          <span class="sv-sock sm"><img src="{{commander.img}}" alt=""></span>
-          <a data-action="openActor" data-uuid="{{commander.uuid}}"><b>{{commander.name}}</b></a>
-          <span>сила +{{commander.bonus}} <small>(Эмпатия + Лидерство) / 3</small></span>
-          {{#if editable}}<a class="sv-demolish" data-action="clearCommander" data-tooltip="Снять командира">×</a>{{/if}}
-        </div>
-        {{else}}<p class="sv-hint">Без командира. Перетащите сюда персонажа: его Эмпатия и Лидерство прибавят силы отряду.</p>{{/if}}
-      </section>
-      <section class="sv-block">
-        <h3><span class="sv-tag">Содержание</span><small>в неделю</small></h3>
-        <ul class="sv-parts">
-          <li><span>Еда со склада поселения</span><b>{{upkeep.food}}</b></li>
-          {{#if upkeep.pay}}<li><span>Плата наёмникам, Богатство</span><b>{{upkeep.pay}}</b></li>{{/if}}
-          {{#unless home}}<li class="warn"><span>Нет родного поселения — кормить и тренировать некому</span></li>{{/unless}}
-        </ul>
-      </section>
-    </div>
+    <section class="sv-block">
+      <h3><span class="sv-tag">Содержание</span><small>в неделю</small></h3>
+      <ul class="sv-parts">
+        <li><span>Еда со склада поселения</span><b>{{upkeep.food}}</b></li>
+        {{#if upkeep.pay}}<li><span>Плата наёмникам, Богатство</span><b>{{upkeep.pay}}</b></li>{{/if}}
+        {{#unless home}}<li class="warn"><span>Нет родного поселения — кормить и тренировать некому</span></li>{{/unless}}
+      </ul>
+    </section>
     {{#if editable}}<div class="ar-foot"><a class="sv-btn" data-action="disband">Распустить отряд</a></div>{{/if}}
   {{/if}}
 
   {{#if (eq tab "training")}}
+    <ol class="ar-ranks" aria-label="Звания">
+      {{#each rank.list}}<li class="{{#if on}}on{{/if}}{{#if now}} now{{/if}}"><span class="ar-gem"></span><b>{{label}}</b>
+        {{#if now}}<span class="sv-bar"><i style="width: {{@root.rank.pct}}%"></i></span><small>{{@root.rank.xp}} опыта · {{@root.rank.next}}</small>
+        {{else}}<small>с {{xp}} опыта{{#if power}} · сила +{{power}}{{/if}}</small>{{/if}}</li>{{/each}}
+    </ol>
     <div class="bl-tree-bar">
       <span class="sv-hint">Ступень — цена со склада родного поселения сразу, недели — на плацу (отряд должен тренироваться). Звание, оружие и броня открывают новые ступени.</span>
       {{#if gm}}<a class="sv-btn {{#if treeEdit}}on{{/if}}" data-action="treeEdit">{{#if treeEdit}}Готово{{else}}Править дерево{{/if}}</a>{{/if}}
