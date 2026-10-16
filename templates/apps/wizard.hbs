@@ -177,9 +177,20 @@
       <div class="group-head"><span class="bronze-tag">{{profession.name}}</span><span class="rule"></span></div>
       <div class="prof-cols">
         <div class="prof-main">
+          {{#if profInfo.covers}}
+          {{!-- Тайный агент: Легенда — профессия, которой он притворяется (PLAN 4.224) --}}
+          <fieldset class="choice-set cover-set">
+            <legend class="cap">Легенда — кем притворяется</legend>
+            <select data-field="cover" aria-label="Легенда">
+              <option value="" {{#unless profInfo.cover}}selected{{/unless}}>— выберите профессию прикрытия —</option>
+              {{#each profInfo.covers}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+            </select>
+            <p class="hint">{{#if profInfo.cover}}От Легенды — 4 навыка на выбор, её определяющий навык как свой, {{profInfo.cover.gearCount}} предмета её снаряжения и её капитал ({{profInfo.cover.money}} × 2d6 крон).{{else}}По книге агент берёт у профессии прикрытия 4 навыка, её определяющий навык, 4 предмета снаряжения и капитал.{{/if}}</p>
+          </fieldset>
+          {{/if}}
           <div class="defining">
             <span class="stamp"><span class="cap">{{profInfo.definingAbbr}}</span></span>
-            <div><span class="cap">Определяющий навык</span><b>{{profInfo.defining.name}}</b><span class="dim" data-tooltip="{{profInfo.defining.effect}}">{{profInfo.defining.effect}}</span></div>
+            <div><span class="cap">Определяющий навык{{#if profInfo.cover}} · Легенда «{{profInfo.cover.name}}»{{/if}}</span><b>{{profInfo.defining.name}}</b><span class="dim" data-tooltip="{{profInfo.defining.effect}}">{{profInfo.defining.effect}}</span></div>
           </div>
           <span class="cap">Навыки профессии · 44 очка</span>
           <span class="chips">{{#each profInfo.skillList}}<span class="chip">{{this}}</span>{{/each}}</span>
@@ -338,7 +349,7 @@
     </div>
     {{#if gearOptions.length}}
     <div class="vd-panel">
-      <div class="group-head"><span class="bronze-tag">Снаряжение профессии</span><span class="rule"></span>
+      <div class="group-head"><span class="bronze-tag">Снаряжение {{#if gearCover}}Легенды «{{gearCover}}»{{else}}профессии{{/if}}</span><span class="rule"></span>
         <span class="budget{{#if (ne state.gear.length gearCount)}} off{{/if}}">выбрано <b>{{state.gear.length}}</b> из {{gearCount}}</span></div>
       <div class="gear-picks">
         {{#each gearOptions}}<label class="gear-pick{{#if checked}} on{{/if}}"><input type="checkbox" data-field="gear" data-name="{{name}}" {{checked checked}}> {{name}}</label>{{/each}}

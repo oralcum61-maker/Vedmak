@@ -61,7 +61,9 @@ for (const [race, prof] of pairs.slice(Number(window.__from ?? 0), Number(window
     await go("profession");
     if (!click(`[data-action='pickProfession'][data-uuid='${prof.uuid}']`)) log("нет кнопки профессии", prof.name);
     await wait(400);
-    prof.system.skillChoices.forEach((c, i) => { s.skillChoices[i] = c.options.slice(0, c.count); });
+    // Тайный агент — с Легендой (первая подходящая профессия прикрытия); выбор навыков и снаряжения — из набора мастера
+    if (wiz.isSecretAgent) { s.coverUuid = wiz.element.querySelector("select[data-field='cover'] option[value]:not([value=''])")?.value ?? ""; await wiz.render({ force: true }); await wait(250); }
+    wiz.kit.skillChoices.forEach((c, i) => { s.skillChoices[i] = c.options.slice(0, c.count); });
     // Параметры: ровно бюджет очков, каждый 1–10
     stepName(`мастер ${label}: параметры`);
     s.statMode = "points";
@@ -73,7 +75,7 @@ for (const [race, prof] of pairs.slice(Number(window.__from ?? 0), Number(window
     // Навыки профессии: каждый ≥ 1, ровно бюджет вместе с определяющим
     stepName(`мастер ${label}: навыки`);
     const pkeys = [...prof.system.skills];
-    prof.system.skillChoices.forEach((c, i) => { for (const k of s.skillChoices[i] ?? []) if (!pkeys.includes(k)) pkeys.push(k); });
+    wiz.kit.skillChoices.forEach((c, i) => { for (const k of s.skillChoices[i] ?? []) if (!pkeys.includes(k)) pkeys.push(k); });
     s.profSkills = Object.fromEntries(pkeys.map(k => [k, 1]));
     s.defining = 1;
     const spent = () => pkeys.reduce((n, k) => n + cost(s.profSkills[k], k), 0) + s.defining;
@@ -96,7 +98,7 @@ for (const [race, prof] of pairs.slice(Number(window.__from ?? 0), Number(window
     stepName(`мастер ${label}: снаряжение`);
     await go("gear");
     click("[data-action='rollMoney']"); await wait(500);
-    s.gear = (prof.system.gearChoice?.options ?? []).slice(0, prof.system.gearChoice?.count ?? 0);
+    s.gear = (wiz.kit.gearChoice?.options ?? []).slice(0, wiz.kit.gearChoice?.count ?? 0);
     stepName(`мастер ${label}: применить`);
     await go("summary");
     const problem = wiz.element.querySelector(".summary .warning, .problem, [data-problem]")?.textContent?.trim();
