@@ -7,10 +7,12 @@ fs.mkdirSync(path.join(OUT, "dist"), { recursive: true }); fs.mkdirSync(path.joi
 const MIME = { ".webp": "image/webp", ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".cur": "image/x-icon" };
 let css = "";
 let inlined = 0;
-for (const f of ["styles/vedmak.css", "styles/sheet.css"]) {
+// Все стили, которые подключает система (system.json → styles): худ, нексус, пауза, поселение, войско — тоже облик
+const SYSTEM = JSON.parse(fs.readFileSync(path.join(ROOT, "system.json"), "utf8"));
+for (const f of SYSTEM.styles) {
   const src = fs.readFileSync(path.join(ROOT, f), "utf8");
   css += `\n/* ═══ ${f} ═══ */\n` + src.replace(/url\(\s*(["']?)([^"')]+)\1\s*\)/g, (all, q, u) => {
-    if (/^(data:|#|https?:)/.test(u)) return all;
+    if (/^(data:|#|%23|https?:)/.test(u)) return all;
     const file = path.join(ROOT, "styles", u.split(/[?#]/)[0]);
     if (/\.woff2?$/.test(u)) { fs.copyFileSync(file, path.join(OUT, "fonts", path.basename(file))); return `url("./fonts/${path.basename(file)}")`; }
     const mime = MIME[path.extname(file).toLowerCase()]; if (!mime) throw new Error("тип? " + u);
