@@ -11,6 +11,7 @@ import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common
 import { unitsWeek, clearBesieging } from "../army/army.mjs";
 import { autoResolve, rollMonthEvent, postPending, SETTLEMENT_EVENTS } from "./events.mjs";
 import { playSound } from "../fx/sounds.mjs";
+import { refuse } from "../util.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 const LOG_LIMIT = 40;
@@ -134,9 +135,9 @@ async function pay(actor, cost) {
 export async function build(actor, src) {
   const data = await buildingSource(src);
   const check = canBuild(actor, data);
-  if (!check.ok) return ui.notifications.warn(check.why);
+  if (!check.ok) return refuse(check.why);
   Object.assign(data.system, { level: check.weeks ? 0 : 1, constructing: !!check.weeks, progress: 0, workers: 0 });
-  if (!game.user.isGM && !game.users.activeGM) return ui.notifications.warn("Заложить постройку можно, когда ведущий в игре.");
+  if (!game.user.isGM && !game.users.activeGM) return refuse("Заложить постройку можно, когда ведущий в игре.");
   await pay(actor, check.cost);
   if (!game.user.isGM) { await asGM("settlementBuild", { settlementUuid: actor.uuid, data }); return true; }
   const [made] = await createBuildings(actor, [data]);
@@ -152,7 +153,7 @@ export async function upgrade(actor, id) {
   const next = levelDef(b, b.level + 1);
   if (b.constructing || !next || b.level >= b.levels.length) return;
   const miss = affordable(actor, next.cost);
-  if (miss) return ui.notifications.warn(miss.why);
+  if (miss) return refuse(miss.why);
   await pay(actor, next.cost);
   playSound("ui-coin");
   if (!next.weeks) await item.update({ "system.level": b.level + 1 });
@@ -186,7 +187,7 @@ export async function research(settlement, buildingId, nodeId) {
   const building = buildingOf(settlement, buildingId);
   if (!building) return;
   const check = canResearch(settlement, building, nodeId);
-  if (!check.ok) return ui.notifications.warn(check.why);
+  if (!check.ok) return refuse(check.why);
   await pay(settlement, check.node.cost);
   playSound("ui-coin");
   if (!check.node.weeks) await building.update({ "system.upgrades": [...building.system.upgrades, nodeId] });
@@ -208,12 +209,12 @@ export async function placeOrder(settlement, buildingId, item, forActor, qty = 1
   const b = buildingOf(settlement, buildingId);
   if (!b || !item) return;
   const types = orderTypes(b.system.key, b.system.group);
-  if (!types.includes(item.type)) return ui.notifications.warn(`«${b.name}» не делает такого: ${types.map(t => ORDER_TYPES[t]).join(", ") || "заказов не берёт"}.`);
-  if (!b.system.level) return ui.notifications.warn("Сначала постройте.");
+  if (!types.includes(item.type)) return refuse(`«${b.name}» не делает такого: ${types.map(t => ORDER_TYPES[t]).join(", ") || "заказов не берёт"}.`);
+  if (!b.system.level) return refuse("Сначала постройте.");
   qty = Math.max(1, Math.floor(Number(qty) || 1));
   const { cost, weeks } = orderCost(item.type, item.system.cost, qty, item.name);
   const miss = affordable(settlement, cost);
-  if (miss) return ui.notifications.warn(miss.why);
+  if (miss) return refuse(miss.why);
   await pay(settlement, cost);
   playSound("ui-coin");
   const order = { id: foundry.utils.randomID(), uuid: item.uuid, name: item.name, img: item.img, type: item.type, qty,
@@ -263,8 +264,8 @@ async function ordersWeek(settlement) {
 export async function addRoute(settlement, to, resource, qty) {
   resource = String(resource ?? "").trim();
   qty = Math.max(0, Number(qty) || 0);
-  if (!to || to === settlement.uuid || !resource || !qty) return ui.notifications.warn("Укажите, куда, какой ресурс и сколько.");
-  if (resource.includes(".")) return ui.notifications.warn("Название ресурса — без точек.");
+  if (!to || to === settlement.uuid || !resource || !qty) return refuse("Укажите, куда, какой ресурс и сколько.");
+  if (resource.includes(".")) return refuse("Название ресурса — без точек.");
   await settlement.update({ "system.routes": [...settlement.system.toObject().routes, { id: foundry.utils.randomID(), to, resource, qty }] });
 }
 
@@ -304,20 +305,20 @@ async function caravansWeek(settlement, stock) {
  */
 export async function trade(actor, resource, qty, mode) {
   const sys = actor.system;
-  if (!sys.summary.trade) return ui.notifications.warn("Без торгового поста купцы не заезжают.");
+  if (!sys.summary.trade) return refuse("Без торгового поста купцы не заезжают.");
   qty = Math.floor(Number(qty) || 0);
   if (!resource || qty <= 0 || resource === WEALTH) return;
   const have = sys.stockMap[resource] ?? 0;
   if (mode === "sell") {
-    if (have < qty) return ui.notifications.warn("На складе меньше: " + have + ".");
+    if (have < qty) return refuse("На складе меньше: " + have + ".");
     const gain = (priceOf(resource) * qty) / WEALTH_RATE;
     await actor.update({ ["system.stock." + resource]: have - qty, "system.wealth": Math.round((sys.wealth + gain) * 1000) / 1000 });
     playSound("ui-coin");
   } else {
     const price = (Math.ceil(priceOf(resource) * BUY_MARKUP) * qty) / WEALTH_RATE;
-    if (sys.wealth < price) return ui.notifications.warn("В казне меньше " + Math.round(price * 1000) / 1000 + " Богатства.");
+    if (sys.wealth < price) return refuse("В казне меньше " + Math.round(price * 1000) / 1000 + " Богатства.");
     const room = Math.max(0, sys.summary.storage - have);
-    if (qty > room) return ui.notifications.warn("На складе места на " + room + ".");
+    if (qty > room) return refuse("На складе места на " + room + ".");
     await actor.update({ ["system.stock." + resource]: have + qty, "system.wealth": Math.round((sys.wealth - price) * 1000) / 1000 });
     playSound("ui-coin");
   }
@@ -349,8 +350,9 @@ export async function setWorkers(actor, id, value) {
 /** Склад (ведущий): поставить количество ресурса, добавить новый или убрать. */
 export async function setStock(actor, name, qty) {
   name = String(name ?? "").trim();
-  if (!name || name.includes(".")) return ui.notifications.warn("Название ресурса — без точек.");
-  if (qty === null) return actor.update({ [`system.stock.-=${name}`]: null });
+  if (!name || name.includes(".")) return refuse("Название ресурса — без точек.");
+  // Удаление ключа в v14 — значением _del (ключ «-=имя» устарел и при строгой совместимости обрывает обновление)
+  if (qty === null) return actor.update({ [`system.stock.${name}`]: _del });
   return actor.update({ [`system.stock.${name}`]: Math.max(0, Math.round((Number(qty) || 0) * 10) / 10) });
 }
 
@@ -360,20 +362,20 @@ export async function setStock(actor, name, qty) {
  */
 export async function moveWealth(actor, units, mode) {
   const hero = game.user.character;
-  if (!hero) return ui.notifications.warn("Назначьте себе персонажа (настройки пользователя), чтобы вносить и брать Богатство.");
-  if (!hero.isOwner) return ui.notifications.warn(`${hero.name} — не ваш персонаж.`);
+  if (!hero) return refuse("Назначьте себе персонажа (настройки пользователя), чтобы вносить и брать Богатство.");
+  if (!hero.isOwner) return refuse(`${hero.name} — не ваш персонаж.`);
   const cur = worldCurrency();
   const n = Math.floor(Number(units) || 0);
   if (n <= 0) return;
   const purse = hero.system.money?.[cur.key] ?? 0;
   const coins = n * WEALTH_RATE;
   if (mode === "deposit") {
-    if (purse < coins) return ui.notifications.warn(`Нужно ${coins} ${cur.abbr}, у ${hero.name} — ${purse}.`);
+    if (purse < coins) return refuse(`Нужно ${coins} ${cur.abbr}, у ${hero.name} — ${purse}.`);
     await hero.update({ [`system.money.${cur.key}`]: purse - coins });
     await actor.update({ "system.wealth": actor.system.wealth + n });
     playSound("ui-coin");
   } else {
-    if (actor.system.wealth < n) return ui.notifications.warn(`В казне только ${actor.system.wealth} Богатства.`);
+    if (actor.system.wealth < n) return refuse(`В казне только ${actor.system.wealth} Богатства.`);
     await actor.update({ "system.wealth": actor.system.wealth - n });
     await hero.update({ [`system.money.${cur.key}`]: purse + coins });
     playSound("ui-coin");
@@ -382,7 +384,7 @@ export async function moveWealth(actor, units, mode) {
 
 /** Ход недели (ведущий): броски построек, нужды, итоги месяца, стройка, летопись и карточка в чат. */
 export async function advanceWeek(actor) {
-  if (!game.user.isGM) return ui.notifications.warn("Время двигает ведущий.");
+  if (!game.user.isGM) return refuse("Время двигает ведущий.");
   // События месяца (PLAN 4.206): правитель не решил до хода — решение по умолчанию
   const resolved = await autoResolve(actor);
   const needsApproval = (() => { try { return game.settings.get("vedmak", "settlementNeedsApproval"); } catch { return false; } })();

@@ -127,6 +127,18 @@ await game.folders.find(x => x.getFlag("vedmak", "settlement") === old.uuid)?.de
 if (sample?.folder && !sample.folder.contents?.length) await sample.folder.delete?.();
 await old.delete();
 
+stepName("склад: добавить и убрать ресурс");
+// Щелчками, как ведущий; удаление ключа — значением _del (старый «-=имя» в v14 устарел и обрывал обновление)
+// Строгая совместимость: устаревший вызов не предупреждает, а обрывает обновление — как в мире автора
+const compat = CONFIG.compatibility.mode; CONFIG.compatibility.mode = CONST.COMPATIBILITY_MODES.FAILURE;
+sheet.tab = "economy"; await sheet.render(); await wait(400);
+sheet.element.querySelector(".sv-new-res").value = "Прогон-ресурс"; sheet.element.querySelector(".sv-new-qty").value = "3";
+sheet.element.querySelector("[data-action=addResource]").click(); await wait(500);
+ok(town.system.stock["Прогон-ресурс"] === 3, "«Добавить» кладёт новый ресурс на склад");
+sheet.element.querySelector(`[data-action=removeResource][data-name="Прогон-ресурс"]`)?.click(); await wait(500);
+ok(!("Прогон-ресурс" in town.system.stock) && !("Прогон-ресурс" in town._source.system.stock), "«×» убирает ресурс со склада");
+CONFIG.compatibility.mode = compat;
+
 stepName("вкладки листа");
 // Настоящий щелчок: обработчик действия вызывает ядро (раньше «tab» перехватывало оно и падало без data-group)
 for (const id of ["army", "buildings", "economy"]) {

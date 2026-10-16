@@ -43,7 +43,7 @@ const fam = await ARMY.recruit(town, { origin: "families", count: 1, kind: "pike
 ok(fam?.system.soldiers === AC.FAMILY_SOLDIERS && town.system.families === 5, "из семей: одна семья — 5 бойцов");
 const merc = await ARMY.recruit(town, { origin: "mercenary", count: 10, kind: "archers", name: "Прогон: наёмники" });
 ok(merc?.system.training === AC.MERCENARY.training && Math.abs(town.system.wealth - 1.6) < 1e-6, "наёмники: обучены, найм 0,4 Богатства");
-await ARMY.recruit(town, { origin: "militia", count: 50 });
+ok(await ARMY.recruit(town, { origin: "militia", count: 50 }) === null, "отказ в наборе — null, а не уведомление");
 ok(town.system.militia === 10, "больше, чем есть в Ополчении, не набрать");
 
 stepName("снаряжение и лист");
@@ -58,6 +58,12 @@ ok(!!militia.sheet.element.querySelector(".sv-plaques .sv-ring") && !!militia.sh
 await militia.sheet.close();
 await town.sheet.render({ force: true }); town.sheet.tab = "army"; await town.sheet.render(); await wait(500);
 ok(town.sheet.element.querySelectorAll(".ar-units li").length === 3, "вкладка «Войско»: три отряда");
+// Кнопка «Набрать» с окном по умолчанию (Ополчение, 10), когда в Ополчении меньше: отказ без ошибки (раньше лист
+// принимал уведомление за отряд — «Cannot read properties of undefined (reading 'render')», 4.0.1)
+{ const before = town.system.militia; await town.update({ "system.militia": 3 });
+  town.sheet.element.querySelector("[data-action=recruit]")?.click(); await wait(1200);
+  ok(town.system.militia === 3 && town.sheet.element.querySelectorAll(".ar-units li").length === 3, "«Набрать» при нехватке — отказ, отряды те же");
+  await town.update({ "system.militia": before }); }
 await town.sheet.close();
 
 stepName("неделя поселения");

@@ -61,6 +61,15 @@ function checkCode() {
     if (r.status !== 0) err(S, `${rel(f)}: ${r.stderr.split("\n").find(l => /Error/.test(l)) ?? r.stderr.trim()}`);
   }
 
+  // Удаление ключа старым видом «-=имя»: в v14 устарело (_del), при строгой совместимости обновление обрывается —
+  // так «не работала» кнопка удаления ресурса со склада поселения
+  for (const f of files) {
+    if (!/[/\\]module[/\\]|vedmak\.mjs$/.test(f)) continue;
+    read(f).split("\n").forEach((line, i) => {
+      if (/["'`.]-=[\w$]/.test(line) && !/^\s*\/\//.test(line)) err(S, `${rel(f)}:${i + 1}: удаление ключа «-=…» устарело — передайте значение _del`);
+    });
+  }
+
   // Именованные импорты между модулями системы
   const exportsOf = new Map();
   for (const f of files) {

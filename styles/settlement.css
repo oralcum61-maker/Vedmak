@@ -245,6 +245,10 @@
 .sv .bl-mini input[type="text"] { width: 96px; height: 22px; }
 .sv .bl-mini input[type="checkbox"] { width: 14px; height: 14px; margin: 0; }
 .bl-mini-row { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+/* Поле уровня на пластине постройки: в узкой колонке рядом с кольцом — без подписи (над ним «Уровень»), не шире колонки */
+.sv-approval-text { min-width: 0; }
+.sv .bl-level-set { max-width: 100%; }
+.sv .bl-level-set input[type="number"] { width: 52px; max-width: 100%; }
 .bl-goto { color: var(--sv-ash); font-size: 12px; } .bl-goto:hover { color: var(--sv-silver); }
 .bl-flags { display: flex; flex-wrap: wrap; gap: 4px; }
 .bl-flags span { padding: 2px 7px; border-radius: 3px; background: rgba(0, 0, 0, .4); box-shadow: var(--vd-sink-sm); color: var(--sv-ink); }

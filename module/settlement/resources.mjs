@@ -2,6 +2,7 @@
 // переопределяют библиотеку); добавить ресурс на склад поселения.
 
 import { CUSTOM_RESOURCES } from "../config/resources.mjs";
+import { refuse } from "../util.mjs";
 
 /** Пересобрать реестр своих ресурсов и перерисовать открытые листы поселений. */
 export function refreshCustomResources() {
@@ -16,7 +17,7 @@ export function refreshCustomResources() {
 /** Начать учитывать ресурс на складе поселения (с нуля); уже учтённый — как есть. */
 export async function addResource(settlement, name) {
   name = String(name ?? "").trim();
-  if (!name || name.includes(".")) return ui.notifications.warn("Название ресурса — без точек.");
+  if (!name || name.includes(".")) return refuse("Название ресурса — без точек.");
   if (!settlement.isOwner) return null;
   if (name in (settlement.system.stock ?? {})) { ui.notifications.info(`«${name}» уже на складе «${settlement.name}».`); return false; }
   await settlement.update({ [`system.stock.${name}`]: 0 });

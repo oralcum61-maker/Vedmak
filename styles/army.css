@@ -37,6 +37,8 @@
 .ar-drill { flex: none; padding: 6px 10px; }
 .ar-drill.on { color: var(--sv-green, #8fb07a); }
 .bt-side li.routed { opacity: .45; }
+/* Подсказка пустого списка — не строка отряда: без сетки, иначе текст сжат в колонку картинки (44px) по слову в строке */
+.ar-units li.sv-hint, .bt-side li.sv-hint { display: block; padding: 10px 12px; line-height: 1.4; }
 
 .battle-app .window-content { padding: 0; }
 .bt { height: 100%; }

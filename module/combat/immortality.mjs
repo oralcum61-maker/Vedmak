@@ -114,7 +114,7 @@ export async function revive(actor) {
   for (const s of ["dead", "dying", "unconscious"]) if (actor.statuses.has(s)) await actor.toggleStatusEffect(s, { active: false });
   const wounds = actor.items.filter(i => i.type === "critWound").map(i => i.id);
   if (wounds.length) await actor.deleteEmbeddedDocuments("Item", wounds);
-  await actor.update({ "system.hp.value": actor.system.hp.max, [`flags.${SYS}.-=revival`]: null });
+  await actor.update({ "system.hp.value": actor.system.hp.max, [`flags.${SYS}.revival`]: _del });
   await note(actor, "Бессмертие", [`${actor.name} возвращается к жизни.`]);
 }
 

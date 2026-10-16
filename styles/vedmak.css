@@ -6214,3 +6214,12 @@ body.system-vedmak .combat-tracker {
 }
 .vedmak .gear-tab .purse .coin.empty { opacity: .45; }
 .vedmak .gear-tab .purse .coin.empty:focus-within, .vedmak .gear-tab .purse .coin.empty:hover { opacity: 1; }
+
+/* ─── Выпадающие списки окон системы ───
+   Список пунктов рисует Windows (серый фон, голубая подсветка) — тёмная схема и цвета пунктов приводят его к облику
+   системы. Правило по тегу option: Blink кладёт его в корзину тега, дёшево. */
+.vedmak select, .vedmak-dialog select { color-scheme: dark; }
+.vedmak option, .vedmak-dialog option { background-color: var(--vd-panel); color: var(--vd-text); }
+.vedmak option:checked, .vedmak-dialog option:checked { background-color: #3a332b; color: var(--vd-silver); }
+.vedmak option:disabled, .vedmak-dialog option:disabled { color: #6f695f; }
+.vedmak optgroup, .vedmak-dialog optgroup { background-color: var(--vd-bg); color: var(--vd-gold); font-style: normal; }

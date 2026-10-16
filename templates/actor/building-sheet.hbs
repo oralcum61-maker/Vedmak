@@ -28,7 +28,7 @@
       <div class="sv-approval-text">
         <span class="cap">Уровень</span>
         <small>{{#if level.value}}из {{level.max}}{{else}}не построена{{/if}}</small>
-        {{#if gm}}<label class="bl-mini">уровень <input type="number" name="system.level" value="{{level.value}}" min="0" max="{{level.max}}" step="1"></label>{{/if}}
+        {{#if gm}}<label class="bl-mini bl-level-set" data-tooltip="Поставить уровень (ведущий)"><input type="number" name="system.level" value="{{level.value}}" min="0" max="{{level.max}}" step="1" aria-label="Уровень"></label>{{/if}}
       </div>
     </div>
     <div class="sv-plaque" data-tooltip="Семей ставят на работу на листе поселения">

@@ -502,7 +502,7 @@ export class SceneNexus extends HandlebarsApplicationMixin(ApplicationV2) {
     const open = openToPlayers(scene);
     const ownership = { default: open ? NONE : LIMITED };
     // Закрывая — снимаем и выдачи отдельным игрокам, иначе сцена осталась бы открытой им
-    if (open) for (const u of game.users) if (!u.isGM && u.id in scene.ownership) ownership[`-=${u.id}`] = null;
+    if (open) for (const u of game.users) if (!u.isGM && u.id in scene.ownership) ownership[u.id] = _del;
     await scene.update({ ownership });
   }
 

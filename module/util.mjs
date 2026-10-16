@@ -98,6 +98,15 @@ export function setting(key, fallback) {
 /** Текст для вставки в HTML. */
 export const esc = s => foundry.utils.escapeHTML(String(s ?? ""));
 
+/**
+ * Отказ с предупреждением: показать и вернуть null. Не «return ui.notifications.warn(…)» — то возвращает объект
+ * уведомления, и вызывающий принимает отказ за успех (набор войск открывал «лист» уведомления и падал, 4.0.1).
+ */
+export function refuse(message) {
+  ui.notifications.warn(message);
+  return null;
+}
+
 /** HTML → строка без тегов; описаний немного, а читаются они на каждую перерисовку — с запоминанием. */
 const PLAIN_CACHE = new Map();
 export function plainText(html) {

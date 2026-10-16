@@ -8,6 +8,7 @@ import { RANKS, unitTree, kindBranch } from "../config/unit-upgrades.mjs";
 import { unitState, unitWeek, equipCost, unitFood, unitPay, unitNodes } from "./rules.mjs";
 import { asGM, registerGMHandler } from "../combat/common.mjs";
 import { playSound } from "../fx/sounds.mjs";
+import { refuse } from "../util.mjs";
 
 const r3 = n => Math.round(n * 1000) / 1000;
 const r1 = n => Math.round(n * 10) / 10;
@@ -42,25 +43,25 @@ export async function recruit(settlement, { origin, count, kind = "infantry", na
   if (count <= 0) return null;
   let soldiers = count, update = {};
   if (origin === "militia") {
-    if (sys.militia < count) return ui.notifications.warn(`В Ополчении только ${sys.militia}.`);
+    if (sys.militia < count) return refuse(`В Ополчении только ${sys.militia}.`);
     update["system.militia"] = sys.militia - count;
   } else if (origin === "families") {
-    if (sys.summary.idle < count) return ui.notifications.warn(`Без дела только ${sys.summary.idle} сем. — снимите семьи с работы.`);
+    if (sys.summary.idle < count) return refuse(`Без дела только ${sys.summary.idle} сем. — снимите семьи с работы.`);
     update["system.families"] = sys.families - count;
     soldiers = count * FAMILY_SOLDIERS;
   } else if (origin === "mercenary") {
     const price = r3(count * MERCENARY.hire);
-    if (sys.wealth < price) return ui.notifications.warn(`Найм стоит ${price} Богатства, в казне ${sys.wealth}.`);
+    if (sys.wealth < price) return refuse(`Найм стоит ${price} Богатства, в казне ${sys.wealth}.`);
     update["system.wealth"] = r3(sys.wealth - price);
     playSound("ui-coin");
   } else return null;
 
   if (unit) {
-    if (unit.system.origin !== origin) return ui.notifications.warn(`«${unit.name}» набран иначе (${ORIGINS[unit.system.origin].label.toLowerCase()}) — наберите новый отряд.`);
+    if (unit.system.origin !== origin) return refuse(`«${unit.name}» набран иначе (${ORIGINS[unit.system.origin].label.toLowerCase()}) — наберите новый отряд.`);
     const gear = origin === "mercenary" ? [] : [...equipCost(unit.system.kind, "weapons", 0, unit.system.weapons, soldiers),
       ...equipCost(unit.system.kind, "armor", 0, unit.system.armor, soldiers)];
     const miss = missing(settlement, gear);
-    if (miss) return ui.notifications.warn(`Новичков нечем снарядить как отряд: не хватает ${miss}.`);
+    if (miss) return refuse(`Новичков нечем снарядить как отряд: не хватает ${miss}.`);
     await take(settlement, gear);
     await settlement.update(update);
     const was = unit.system.soldiers;
@@ -108,10 +109,10 @@ export async function equip(unit, track, tier) {
   tier = Math.max(0, Math.min(MAX_GEAR, tier));
   if (tier <= sys[track]) return;
   const home = sys.settlementActor;
-  if (!home) return ui.notifications.warn("У отряда нет родного поселения — снаряжение берётся с его склада.");
+  if (!home) return refuse("У отряда нет родного поселения — снаряжение берётся с его склада.");
   const cost = equipCost(sys.kind, track, sys[track], tier, sys.soldiers);
   const miss = missing(home, cost);
-  if (miss) return ui.notifications.warn(`На складе «${home.name}» не хватает: ${miss}.`);
+  if (miss) return refuse(`На складе «${home.name}» не хватает: ${miss}.`);
   await take(home, cost);
   playSound("ui-coin");
   await unit.update({ [`system.${track}`]: tier });
@@ -145,7 +146,7 @@ export function canTrain(unit, nodeId) {
 /** Начать ступень обучения: цена со склада поселения сразу; недели — на плацу (отряд должен тренироваться). */
 export async function train(unit, nodeId) {
   const check = canTrain(unit, nodeId);
-  if (!check.ok) return ui.notifications.warn(check.why);
+  if (!check.ok) return refuse(check.why);
   await take(unit.system.settlementActor, check.node.cost);
   playSound("ui-coin");
   if (!check.node.weeks) await unit.update({ "system.upgrades": [...unit.system.upgrades, nodeId] });
@@ -162,7 +163,7 @@ export async function marchOut(unit, weeks) {
   const need = r1(unitFood(unitState(unit)) * weeks);
   if (home && need) {
     const have = home.system.stockMap[FOOD] ?? 0;
-    if (have < need) return ui.notifications.warn(`На складе «${home.name}» еды ${have}, нужно ${need}.`);
+    if (have < need) return refuse(`На складе «${home.name}» еды ${have}, нужно ${need}.`);
     await home.update({ [`system.stock.${FOOD}`]: r1(have - need) });
   }
   await unit.update({ "system.campaign": true, "system.drilling": false, "system.supplies": r1(unit.system.supplies + need) });
@@ -182,7 +183,7 @@ export async function returnHome(unit) {
  * приходят, одобрение падает каждый месяц. Битва у стен — с укреплениями поселения.
  */
 export async function besiege(unit, target) {
-  if (!unit.system.campaign) return ui.notifications.warn("Осадить можно только из похода.");
+  if (!unit.system.campaign) return refuse("Осадить можно только из похода.");
   if (target?.type !== "settlement" || target.uuid === unit.system.settlement) return;
   if (unit.system.besieging) await liftSiege(unit);
   const units = [...new Set([...target.system.siege.units, unit.uuid])];

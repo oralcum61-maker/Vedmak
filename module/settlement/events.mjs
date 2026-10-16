@@ -7,6 +7,7 @@ import { APPROVAL_MAX } from "../config/settlement.mjs";
 import { rollFormula, costLabel, WEALTH } from "./rules.mjs";
 import { postCard } from "../combat/common.mjs";
 import { playSound } from "../fx/sounds.mjs";
+import { refuse } from "../util.mjs";
 
 const rand = () => (CONFIG.Dice.randomUniform ?? Math.random)();
 const r1 = n => Math.round(n * 10) / 10;
@@ -124,7 +125,7 @@ export async function decide(actor, decisionId, index, { auto = false } = {}) {
   const d = actor.system.decisions.find(x => x.id === decisionId);
   const ev = d ? SETTLEMENT_EVENTS[d.key] : null;
   if (!ev) return null;
-  if (!actor.isOwner) return ui.notifications.warn("Решает правитель — владелец поселения.");
+  if (!actor.isOwner) return refuse("Решает правитель — владелец поселения.");
   if (auto) index = defaultChoice(actor, d);
   const choice = ev.choices[index];
   const update = {};
@@ -133,7 +134,7 @@ export async function decide(actor, decisionId, index, { auto = false } = {}) {
   let check = null;
   if (choice) {
     const can = canChoose(actor, choice);
-    if (!can.ok) return ui.notifications.warn(can.why);
+    if (!can.ok) return refuse(can.why);
     for (const c of choice.cost ?? []) {
       if (c.resource === WEALTH) update["system.wealth"] = r3((update["system.wealth"] ?? actor.system.wealth) - c.qty);
       else update[`system.stock.${c.resource}`] = r1((update[`system.stock.${c.resource}`] ?? actor.system.stockMap[c.resource] ?? 0) - c.qty);
@@ -192,7 +193,7 @@ export function makeDecision(key, cal) {
 export async function addEvent(actor, key = "") {
   if (!game.user.isGM) return;
   key ||= rollEvent(eventState(actor), 100, rand);
-  if (!SETTLEMENT_EVENTS[key]) return ui.notifications.warn("Подходящих событий нет.");
+  if (!SETTLEMENT_EVENTS[key]) return refuse("Подходящих событий нет.");
   const d = makeDecision(key, actor.system.calendar);
   await actor.update({ "system.decisions": [...actor.system.toObject().decisions, d] });
   await postPending(actor, d);
