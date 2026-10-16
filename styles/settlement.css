@@ -548,14 +548,14 @@
   background-color: #b8432c; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-go, none);
   background-position: left 7px center, right 7px center, 0 0, 0 0; background-size: 7px 7px, 7px 7px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
   box-shadow: inset 0 1px 0 rgba(255, 215, 195, .55), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 2px #303137, 0 0 0 3px #060708, 0 8px 14px -6px rgba(0, 0, 0, .95);
-  transition: filter .12s ease, transform .08s ease; }
+  transition: transform .08s ease; }
 .sv .sv-next:hover { filter: brightness(1.1); }
 .sv .sv-btn, .sv .sv-trade a, .sv .sv-choices button { display: inline-flex; align-items: center; justify-content: center; min-height: 26px; padding: 0 15px; border: 0; border-radius: 2px; white-space: nowrap;
   font: 600 9.5px/1 var(--vd-font-body); letter-spacing: .16em; text-transform: uppercase; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
   background-color: #3b3d43; background-image: var(--vd-rivet, none), var(--vd-rivet, none), var(--vd-gloss, none), var(--vd-s-btn, none);
   background-position: left 5px center, right 5px center, 0 0, 0 0; background-size: 5px 5px, 5px 5px, 100% 100%, 512px 512px; background-repeat: no-repeat, no-repeat, no-repeat, repeat;
   box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 1px #303137, 0 0 0 2px #060708, 0 5px 9px -5px rgba(0, 0, 0, .95);
-  transition: filter .12s ease, transform .08s ease; }
+  transition: transform .08s ease; }
 .sv .sv-btn:hover, .sv .sv-trade a:hover, .sv .sv-choices button:hover { color: #fff; filter: brightness(1.12); }
 .sv .sv-btn.on { color: #f6f1e6; background-color: #4b4e55; box-shadow: inset 0 2px 4px rgba(0, 0, 0, .6), 0 0 0 1px #303137, 0 0 0 2px #060708; }
 .sv .sv-build-bar .sv-btn, .sv .bl-tree-bar .sv-btn, .sv .rc-town > header .sv-btn { min-height: 30px; padding: 0 18px; font-size: 10px; }
@@ -587,7 +587,7 @@
 .sv-tabs a.active { background: #2a2c31; box-shadow: var(--vd-lift-sm); border-bottom-color: transparent; }
 /* ─── Плитки: шлифованный металл с бликом сверху ─── */
 .sv-res li, .sv-card, .sv-catalog li, .bl-step, .bl-node, .bl-order-list li, .bl-chip { background-color: #25272c; background-image: var(--rg-brushed); background-size: auto, 220px; background-blend-mode: normal, overlay; }
-.sv-res li, .sv-card, .sv-catalog li, .bl-step, .bl-node, .bl-order-list li { box-shadow: var(--rg-lift); transition: filter .12s ease; }
+.sv-res li, .sv-card, .sv-catalog li, .bl-step, .bl-node, .bl-order-list li { box-shadow: var(--rg-lift); }
 .sv-res li:hover, .sv-card:hover, .bl-order-list li:hover { filter: brightness(1.07); }
 .sv .sv-res li { grid-template-columns: 48px 1fr; }
 .sv .sv-res li .sv-sock.sm { --s: 48px; }
@@ -664,7 +664,7 @@
 .vd-realm .form-footer button:focus { outline: none; }
 .vd-realm .form-footer button:focus-visible { outline: 1px solid #8a8578; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
-  .sv .sv-next, .sv .sv-btn, .sv .sv-trade a, .sv .sv-choices button, .sv-tabs a, .sv-res li, .sv-card, .bl-order-list li { transition: none; }
+  .sv .sv-next, .sv .sv-btn, .sv .sv-trade a, .sv .sv-choices button, .sv-tabs a { transition: none; }
 }
 @media (max-width: 760px) {
   .sv-plaque:nth-child(odd)::before { display: none; }

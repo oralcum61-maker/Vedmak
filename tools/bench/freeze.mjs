@@ -131,6 +131,13 @@ const ACTIONS = [
   { name: "Поселение: открыть лист", prep: `openSettlement()`, act: async () => 0, measurePrep: true, freezeMs: 250, after: `closeApps()` },
   { name: "Поселение: вкладки по очереди", prep: `settlementTabs()`,
     act: async (m, p) => { let n = 0; for (const t of p.tabs) { n += await m.click(t.x, t.y); await sleep(300); } return n; }, after: `closeApps()` },
+  // Наведение и прокрутка по листам королевства: плитки, кнопки и вкладки светлеют под курсором (облик PLAN 4.228)
+  { name: "Поселение: наведение по листу", prep: `settlementRect()`,
+    act: async (m, p) => m.sweep(Array.from({ length: 60 }, (_, i) => [p.x + (i % 12 + .5) * p.w / 12, p.y + Math.floor(i / 12) * p.h / 5])), after: `closeApps()` },
+  { name: "Поселение: прокрутка колесом", prep: `settlementRect()`,
+    act: async (m, p) => { for (let i = 0; i < 10; i++) { await m.wheel(p.x + p.w * .5, p.y + p.h * .6, i < 5 ? 200 : -200); await sleep(40); } return 10; }, after: `closeApps()` },
+  { name: "Отряд: наведение по листу", prep: `unitRect()`,
+    act: async (m, p) => m.sweep(Array.from({ length: 60 }, (_, i) => [p.x + (i % 12 + .5) * p.w / 12, p.y + Math.floor(i / 12) * p.h / 5])), after: `closeApps()` },
   { name: "Постройка: вкладки по очереди", prep: `buildingTabs()`,
     act: async (m, p) => { let n = 0; for (const t of p.tabs) { n += await m.click(t.x, t.y); await sleep(300); } return n; }, after: `closeApps()` },
   { name: "Отряд: вкладки по очереди", prep: `unitTabs()`,
@@ -189,6 +196,10 @@ window.__vf = {
   settlementTabs() { return this.docTabs("settlement"); },
   buildingTabs() { return this.docTabs("building"); },
   unitTabs() { return this.docTabs("unit"); },
+  async docRect(type) { await this.openDoc(type); const r = fromUuidSync(window.__vfDoc).sheet.element.getBoundingClientRect();
+    return { x: Math.round(r.left), y: Math.round(r.top + 60), w: Math.round(r.width), h: Math.round(r.height - 80) }; },
+  settlementRect() { return this.docRect("settlement"); },
+  unitRect() { return this.docRect("unit"); },
   libraryRect() { return this.toolRect("resources"); },
   councilRect() { return this.toolRect("council"); },
   async toolRect(kind) { await this.closeApps(); const realm = await this.realm();

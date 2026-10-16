@@ -104,7 +104,7 @@
 .sv .bt-bar .sv-btn { min-height: 30px; padding: 0 18px; font-size: 10px; }
 /* ─── Плитки: шлифованный металл с бликом сверху ─── */
 .ar-units li, .bt-side li, .ar-tiers li.on { background-color: #25272c; background-image: var(--rg-brushed); background-size: auto, 220px; background-blend-mode: normal, overlay; }
-.ar-units li, .bt-side li { box-shadow: var(--rg-lift); transition: filter .12s ease; }
+.ar-units li, .bt-side li { box-shadow: var(--rg-lift); }
 .ar-units li:hover { filter: brightness(1.07); }
 /* ─── Кованые пластины: событие, производственная линия, дорожки снаряжения, стороны битвы, поселения совета ─── */
 .ar-track, .bt-side, .bt-bar { background-color: #17181b; background-image: var(--rg-plate); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
@@ -127,6 +127,3 @@
 .bt-log li { position: relative; background-color: #17181b; background-image: var(--rg-plate); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: var(--rg-forged); }
 .bt-log li::before { content: ""; position: absolute; left: -22px; top: 13px; width: 9px; height: 9px; transform: rotate(45deg);
   background: linear-gradient(135deg, #f1ece0, #8f897d); box-shadow: 0 0 0 1px #050506, 0 0 0 4px #121316; }
-@media (prefers-reduced-motion: reduce) {
-  .ar-units li { transition: none; }
-}
