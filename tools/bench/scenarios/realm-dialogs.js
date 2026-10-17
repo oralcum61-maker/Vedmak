@@ -21,7 +21,7 @@ try {
   let dlg = await wait1;
   const input = dlg.element.querySelector("input[name=units]");
   ok(input?.max === "7.4" && input.step === "0.1", `казна: взять до 7,4 десятыми (max ${input?.max}, step ${input?.step})`);
-  ok(dlg.element.querySelector(".hint")?.textContent.includes("В казне 7,4"), "казна: подсказка — сколько в казне");
+  ok(dlg.element.querySelector(".hint")?.textContent.includes("в казне 7,4"), "казна: подсказка — сколько в казне");
   await dlg.close();
 
   // Событие (ведущий)
