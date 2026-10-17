@@ -146,16 +146,19 @@ export function registerCouncilUi() {
  * бездомные. Строки «Поселение: что».
  */
 export function realmAlerts() {
+  return game.actors.filter(x => x.type === "settlement" && x.visible).flatMap(a => townAlerts(a).map(t => `${a.name}: ${t}`));
+}
+
+/** Тревоги одного поселения (Совет и карта, PLAN 4.249): решение, осада, нехватка, бунт, бездомные. */
+export function townAlerts(a) {
+  const sys = a.system, sum = sys.summary, fc = sys.forecast;
   const out = [];
-  for (const a of game.actors.filter(x => x.type === "settlement" && x.visible)) {
-    const sys = a.system, sum = sys.summary, fc = sys.forecast;
-    if (sys.decisions.length) out.push(`${a.name}: ждёт решения правителя`);
-    if (sys.siege.units.length) out.push(`${a.name}: в осаде ${sys.siege.weeks} нед.`);
-    const short = [...new Set((fc.shortages ?? []).map(s => String(s.resource).toLowerCase()))];
-    if (short.length) out.push(`${a.name}: не хватит — ${short.join(", ")}`);
-    if (sum.revolt) out.push(`${a.name}: шанс бунта ${sum.revolt}%`);
-    if (sum.homeless) out.push(`${a.name}: бездомных ${sum.homeless}`);
-  }
+  if (sys.decisions.length) out.push("ждёт решения правителя");
+  if (sys.siege.units.length) out.push(`в осаде ${sys.siege.weeks} нед.`);
+  const short = [...new Set((fc.shortages ?? []).map(s => String(s.resource).toLowerCase()))];
+  if (short.length) out.push(`не хватит — ${short.join(", ")}`);
+  if (sum.revolt) out.push(`шанс бунта ${sum.revolt}%`);
+  if (sum.homeless) out.push(`бездомных ${sum.homeless}`);
   return out;
 }
 
