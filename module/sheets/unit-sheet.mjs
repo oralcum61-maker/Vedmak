@@ -10,7 +10,7 @@ import { resourceIcon } from "../config/settlement.mjs";
 import { equipCost, routAt } from "../army/rules.mjs";
 import * as ARMY from "../army/army.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
-import { animateRealm } from "../fx/realm-fx.mjs";
+import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
 import { once, refuse } from "../util.mjs";
 import { realmPrompt, afterNum } from "../apps/realm-dialog.mjs";
 
@@ -205,6 +205,9 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     animateRealm(this, this.element, this.actor.uuid, this.tab);
+    // Только что взятая ступень обучения и новая ступень снаряжения — вспыхивают (PLAN 4.240)
+    animateNew(this, this.element, ".rs-node.bought[data-node]", el => el.dataset.node);
+    animateNew(this, this.element, ".rs-tier.current", el => el.closest("[data-track]")?.dataset.track + ":" + el.textContent.trim().slice(0, 30));
   }
   static async #onEquip(event, target) {
     const track = target.dataset.track;

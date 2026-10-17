@@ -8,6 +8,7 @@ import { upgradeNodes } from "../settlement/rules.mjs";
 import { settlementUnits } from "../army/army.mjs";
 import { SETTLEMENT_EVENTS } from "../config/settlement-events.mjs";
 import { once } from "../util.mjs";
+import { animateRealm } from "../fx/realm-fx.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const fmt = n => (Math.round(n * 10) / 10).toLocaleString("ru-RU");
@@ -28,6 +29,12 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   static PARTS = { body: { template: "systems/vedmak/templates/apps/ruler-council.hbs", scrollable: [".rc-list"] } };
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    // Числа поселений после «Прошла неделя» — вспыхивают, полосы перетекают (PLAN 4.240)
+    animateRealm(this, this.element, "council");
+  }
 
   static open() {
     const app = foundry.applications.instances.get("vedmak-council") ?? new RulerCouncil();

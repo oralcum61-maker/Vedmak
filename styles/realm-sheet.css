@@ -908,3 +908,5 @@
 .vd-realm .realm-delta em { font-style: normal; font-size: 11px; color: #9d968a; }
 .vd-realm .realm-cell.bad .realm-delta b { color: #f0a08c; }
 .vd-realm .realm-cell.bad { box-shadow: inset 0 -2px 0 rgba(184, 67, 44, .7); }
+/* Угол дуги медальона — типизированное свойство: анимация доводит дугу от прежнего значения (fx/realm-fx.mjs, PLAN 4.240) */
+@property --arc { syntax: "<angle>"; inherits: false; initial-value: 0deg; }

@@ -191,7 +191,7 @@ window.__vf = {
   async openDoc(type) { await this.closeApps(); const doc = (await this.realm())[type]; await doc.sheet.render({ force: true }); await new Promise(r => setTimeout(r, 1200));
     doc.sheet.setPosition({ left: 300, top: 40 }); window.__vfDoc = doc.uuid; return {}; },
   async docTabs(type) { await this.openDoc(type); const el = fromUuidSync(window.__vfDoc).sheet.element;
-    return { tabs: [...el.querySelectorAll(".sv-tabs a[data-tab]")].map(a => { const r = a.getBoundingClientRect(); return { name: a.textContent.trim(), x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; }) }; },
+    return { tabs: [...el.querySelectorAll(".rs-tabs [data-tab], .sv-tabs a[data-tab]")].map(a => { const r = a.getBoundingClientRect(); return { name: a.textContent.trim(), x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; }) }; },
   openSettlement() { return this.openDoc("settlement"); },
   settlementTabs() { return this.docTabs("settlement"); },
   buildingTabs() { return this.docTabs("building"); },

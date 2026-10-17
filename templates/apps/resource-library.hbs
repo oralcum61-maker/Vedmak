@@ -1,9 +1,14 @@
-{{!-- Библиотека ресурсов (PLAN 4.201): разделы, поиск, перетаскивание на лист поселения --}}
-<div class="sv rl">
+{{!-- Библиотека ресурсов (PLAN 4.201) в облике окон королевства (PLAN 4.238): шапка из кожи, поиск и разделы — кованой
+     полосой, разделы — заголовками листа, ресурсы — плашками шлифованного металла с картинкой в кольце. Классы rl-* — для кода --}}
+<div class="rs rl">
+  <header class="rl-head">
+    <span class="rs-sock sm rl-sock"><i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i></span>
+    <div class="rl-head-t"><h2>Библиотека ресурсов</h2><div class="rl-sub"><span>{{#if town}}склад «{{town.name}}»{{else}}перетащите на лист поселения{{/if}}</span></div></div>
+    {{#if gm}}<button type="button" class="rs-btn" data-action="create" data-tooltip="Свой ресурс — предмет «Ресурс»: имя, значок, цена, раздел">Свой ресурс</button>{{/if}}
+  </header>
   <div class="rl-bar">
     <input type="search" class="rl-search" value="{{query}}" placeholder="Найти ресурс…" aria-label="Поиск">
-    <span class="sv-hint">{{#if town}}«+» — на склад «{{town.name}}»; или перетащите на лист любого поселения{{else}}Перетащите ресурс на лист поселения — склад начнёт его учитывать{{/if}}</span>
-    {{#if gm}}<a class="sv-btn" data-action="create" data-tooltip="Свой ресурс — предмет «Ресурс»: имя, значок, цена, раздел">Свой ресурс</a>{{/if}}
+    <span class="rl-hint">{{#if town}}«+» — на склад «{{town.name}}»; или перетащите на лист любого поселения{{else}}Перетащите ресурс на лист поселения — склад начнёт его учитывать{{/if}}</span>
   </div>
   <nav class="rl-tabs">
     {{#each tabs}}<a class="{{#if active}}active{{/if}}" data-action="category" data-key="{{key}}">{{label}} <small>{{count}}</small></a>{{/each}}
@@ -11,7 +16,7 @@
   <div class="rl-list">
     {{#each groups}}
     <section class="rl-group">
-      <h3><span class="sv-tag">{{label}}</span></h3>
+      <h3>{{label}}</h3>
       <ul class="rl-items">
         {{#each items}}
         <li class="rl-item {{#if have}}have{{/if}} {{#if custom}}custom{{/if}}" draggable="true" data-name="{{name}}" data-search="{{search}}" {{#if uuid}}data-uuid="{{uuid}}"{{/if}}

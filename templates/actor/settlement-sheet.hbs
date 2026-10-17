@@ -213,7 +213,8 @@
           <div class="rs-bcard-main">
             <div class="rs-bcard-top"><b>{{label}}{{#if mine}} <em class="rs-mine">своя</em>{{/if}}</b></div>
             <span class="rs-gives">{{hint}}</span>
-            <span class="rs-gives rs-ok">{{cost}} · {{weeks}} нед.{{#if (gt levels 1)}} · уровней {{levels}}{{/if}}</span>
+            <div class="rs-cost-chips">{{#each costs}}<span class="{{#if short}}short{{/if}}" data-tooltip="{{name}}: на складе {{have}}{{#if short}} — не хватает{{/if}}">{{name}} {{qty}}</span>{{else}}<span>даром</span>{{/each}}<span>{{weeks}} нед.</span>{{#if (gt levels 1)}}<span>уровней {{levels}}</span>{{/if}}</div>
+            {{#unless ok}}{{#if why}}<span class="rs-gives rs-warn">{{why}}</span>{{/if}}{{/unless}}
             <div class="rs-bcard-acts"><button type="button" class="rs-btn" data-action="build" data-src="{{src}}" {{#unless ok}}disabled data-tooltip="{{why}}"{{/unless}}>{{#if taken}}Есть{{else}}Заложить{{/if}}</button></div>
           </div>
         </div>

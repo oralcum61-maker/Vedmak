@@ -9,7 +9,9 @@ const motionOn = () => !document.body.classList.contains("vd-no-anim");
 const EASE = "cubic-bezier(.2, .8, .2, 1)";
 // Лист поселения по холсту (PLAN 4.230) — классы rs-*: медальоны показателей, плитки склада, шкалы нужд и стройки
 const NUMS = ".sv-plaque input[type='number'].big, .sv-plaque b.big, .sv-ring b, .sv-res-main input[type='number'], .sv-res-main > b, .sv-workers b, .bt-num, "
-  + ".rs-medal > input[type='number'], .rs-medal > b, .rs-res > input[type='number'], .rs-res > b, .rs-num > b";
+  + ".rs-medal > input[type='number'], .rs-medal > b, .rs-res > input[type='number'], .rs-res > b, .rs-num > b, .rs-work > b, .rc-stats b";
+/** Дуги медальонов (одобрение, опыт, дух, уровень) — угол --arc: доезжает от прежнего (PLAN 4.240) */
+const ARCS = ".rs-medal.arc";
 const BARS = ".sv-bar i, .rs-meter i";
 
 /** Ключ элемента внутри листа: ближайшие data-id/node/name, имя ресурса, номер пластины — и порядок среди таких же. */
@@ -38,7 +40,12 @@ function snapshot(root) {
     const p = parseFloat(el.style.width);
     if (Number.isFinite(p)) bars.set(uniq(keyOf(el, root, "b")), { el, p });
   }
-  return { nums, bars };
+  const arcs = new Map();
+  for (const el of root.querySelectorAll(ARCS)) {
+    const a = parseFloat(el.style.getPropertyValue("--arc"));
+    if (Number.isFinite(a)) arcs.set(uniq(keyOf(el, root, "a")), { el, a });
+  }
+  return { nums, bars, arcs };
 }
 
 /**
@@ -53,7 +60,8 @@ export function animateRealm(app, root, key, tab = "") {
   if (!root) return;
   const prev = app._vdRealm?.key === key ? app._vdRealm : null;
   const now = snapshot(root);
-  app._vdRealm = { key, tab, nums: new Map([...now.nums].map(([k, x]) => [k, x.v])), bars: new Map([...now.bars].map(([k, x]) => [k, x.p])) };
+  app._vdRealm = { key, tab, nums: new Map([...now.nums].map(([k, x]) => [k, x.v])), bars: new Map([...now.bars].map(([k, x]) => [k, x.p])),
+    arcs: new Map([...now.arcs].map(([k, x]) => [k, x.a])) };
   if (!prev || !motionOn()) return;
   // Новая вкладка — проявляется, как у листа персонажа
   if (tab && prev.tab !== tab) {
@@ -64,6 +72,11 @@ export function animateRealm(app, root, key, tab = "") {
     const was = prev.bars.get(k);
     if (was === undefined || was === p) continue;
     el.animate([{ width: `${was}%` }, { width: `${p}%` }], { duration: 520, easing: EASE });
+  }
+  for (const [k, { el, a }] of now.arcs) {
+    const was = prev.arcs?.get(k);
+    if (was === undefined || was === a) continue;
+    el.animate([{ "--arc": `${was}deg` }, { "--arc": `${a}deg` }], { duration: 700, easing: EASE });
   }
   for (const [k, { el, v }] of now.nums) {
     const was = prev.nums.get(k);

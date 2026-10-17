@@ -6223,3 +6223,32 @@ body.system-vedmak .combat-tracker {
 .vedmak option:checked, .vedmak-dialog option:checked { background-color: #3a332b; color: var(--vd-silver); }
 .vedmak option:disabled, .vedmak-dialog option:disabled { color: #6f695f; }
 .vedmak optgroup, .vedmak-dialog optgroup { background-color: var(--vd-bg); color: var(--vd-gold); font-style: normal; }
+
+/* Подсказки по холсту окон (PLAN 4.237, доска «Подсказки под курсором»): кованая пластина — тёмный металл с фактурой,
+   кованая рамка в два кольца, блик сверху; заголовки — шрифтом заголовков серебром, разделитель — желобок */
+body.system-vedmak #tooltip,
+body.system-vedmak .locked-tooltip {
+  padding: .5rem .75rem .55rem;
+  color: #d8d0c0;
+  font-size: .8rem;
+  line-height: 1.4;
+  background-color: #17181b;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .06), transparent 45%, rgba(0, 0, 0, .25)), var(--vd-t-plate, none);
+  background-size: auto, 220px;
+  background-blend-mode: normal, overlay;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 245, 225, .1), inset 0 -2px 0 rgba(0, 0, 0, .35),
+    0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 10px 22px -6px rgba(0, 0, 0, .85);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .8);
+}
+body.system-vedmak #tooltip :is(h1, h2, h3, h4),
+body.system-vedmak .locked-tooltip :is(h1, h2, h3, h4) {
+  margin: 0 0 .3rem; padding-bottom: .25rem; border-bottom: 0;
+  font-family: var(--vd-font-head); font-size: 1rem; font-weight: 400; letter-spacing: 0; color: var(--vd-silver, #f1ece0);
+  background: linear-gradient(90deg, #060607 50%, rgba(255, 240, 215, .08) 50%) 0 100% / 100% 2px no-repeat;
+}
+body.system-vedmak #tooltip :is(strong, b),
+body.system-vedmak .locked-tooltip :is(strong, b) { color: var(--vd-silver, #f1ece0); font-weight: 600; }
+body.system-vedmak #tooltip hr,
+body.system-vedmak .locked-tooltip hr { height: 2px; border: 0; margin: .4rem 0; background: linear-gradient(180deg, #060607 50%, rgba(255, 240, 215, .08) 50%); }

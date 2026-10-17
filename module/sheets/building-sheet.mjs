@@ -12,7 +12,7 @@ import { buildingState, levelDef, WEALTH } from "../settlement/rules.mjs";
 import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
-import { animateRealm } from "../fx/realm-fx.mjs";
+import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
 import { once } from "../util.mjs";
 import { realmPrompt, afterNum } from "../apps/realm-dialog.mjs";
 
@@ -344,6 +344,10 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     animateRealm(this, this.element, this.actor.uuid, this.tab);
+    // Новый заказ, взятая ступень обустройства, достроенная ступень — въезжают (PLAN 4.240)
+    animateNew(this, this.element, ".rs-order[data-order]", el => el.dataset.order);
+    animateNew(this, this.element, ".rs-node.bought[data-node]", el => el.dataset.node);
+    animateNew(this, this.element, ".rs-step.done[data-level]", el => el.dataset.level);
   }
   static async #onClearManager() { await this.actor.update({ "system.manager": "" }); }
   static async #onCancelOrder(event, target) {

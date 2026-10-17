@@ -149,7 +149,12 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       const b = buildingState(data);
       const first = b.levels[0] ?? { cost: [], weeks: 1 };
       const check = S.canBuild(actor, data);
-      return { src, mine, label: data.name, img: data.img, hint: plain(data.system.description), cost: S.priceLabel(first.cost),
+      // Цена плашками: каждого ли ресурса хватает на складе (PLAN 4.239)
+      const costs = (first.cost ?? []).map(c => {
+        const have = c.resource === WEALTH ? sys.wealth : stock[c.resource] ?? 0;
+        return { name: c.resource, qty: fmt(c.qty), short: have < c.qty, have: fmt(have) };
+      });
+      return { src, mine, label: data.name, img: data.img, hint: plain(data.system.description), cost: S.priceLabel(first.cost), costs,
         weeks: first.weeks, levels: b.levels.length, ok: check.ok, why: check.ok ? "" : check.why,
         taken: b.unique && sys.buildings.some(x => x.key === b.key) };
     };
