@@ -8,6 +8,7 @@ import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_P
   resourceIcon, buildingItemData, priceOf } from "../config/settlement.mjs";
 import { buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "../settlement/rules.mjs";
 import * as S from "../settlement/settlement.mjs";
+import { saveTemplate } from "../settlement/templates.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { compareRu, once, refuse } from "../util.mjs";
 import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
@@ -77,7 +78,8 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       removeModifier: SettlementSheet.#onRemoveModifier,
       openChronicle: SettlementSheet.#onOpenChronicle,
       moveChronicle: SettlementSheet.#onMoveChronicle,
-      undoWeek: SettlementSheet.#onUndoWeek
+      undoWeek: SettlementSheet.#onUndoWeek,
+      saveTemplate: SettlementSheet.#onSaveTemplate
     }
   };
 
@@ -372,6 +374,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
   static async #onOpenChronicle() { await S.openChronicle(this.actor); }
   static async #onUndoWeek() { await S.undoWeek(this.actor); }
+  static async #onSaveTemplate() { await saveTemplate(this.actor); }
   static async #onMoveChronicle() {
     const ok = await realmConfirm("chronicle", { title: "Летопись — в журнал", head: { img: this.actor.img, name: "Летопись", sub: [this.actor.name, "в журнал"] },
       text: "Все недели с листа перейдут в журнал «Летопись», а лист очистится. Продолжить?" });

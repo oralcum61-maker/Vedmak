@@ -1,0 +1,7 @@
+{{!-- Сохранить поселение шаблоном (settlement/templates.mjs, PLAN 4.246): имя шаблона; такое же имя — замена --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <div class="form-group"><label>Название шаблона</label><input type="text" name="name" value="{{name}}" required autofocus></div>
+  <p class="hint">В шаблон войдут семьи, одобрение, Контроль, Ополчение, казна, налоги, склад, описание и постройки ({{buildings}}) —
+    с уровнями, работниками и готовым обустройством. Стройки, заказы, управляющие, летопись, караваны и войско не войдут.</p>
+  {{#if names.length}}<p class="hint">Уже есть: {{#each names}}«{{this}}»{{#unless @last}}, {{/unless}}{{/each}} — то же имя заменит шаблон.</p>{{/if}}
+</div>

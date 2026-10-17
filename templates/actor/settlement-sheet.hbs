@@ -15,6 +15,7 @@
         <span>год {{#if gm}}<input type="number" name="system.year" value="{{cal.year}}" min="1" step="1" aria-label="Год">{{else}}{{cal.year}}{{/if}}</span>
       </div>
     </div>
+    {{#if gm}}<button type="button" class="rs-x rs-stamp" data-action="saveTemplate" aria-label="Сохранить как шаблон" data-tooltip="Сохранить как шаблон — основывать новые поселения такими же"><i class="fa-solid fa-stamp" aria-hidden="true"></i></button>{{/if}}
     {{#if undo}}<button type="button" class="rs-x rs-undo" data-action="undoWeek" aria-label="Отменить прошлую неделю" data-tooltip="Отменить прошлую неделю — вернуться к «{{undo}}»"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>{{/if}}
     {{#if gm}}<button type="button" class="rs-go" data-action="week" data-tooltip="Бросить выработку построек, посчитать нужды, стройку и — в конце месяца — приход семей и бунт; итог — в чат">Неделя прошла</button>{{/if}}
   </header>

@@ -23,13 +23,17 @@ async function withHead(head, content) {
  * Окно ввода: шаблон name с данными data; кнопка okLabel; read(form) — что вернуть по нажатию.
  * @returns {Promise<*>} значение read или null (закрыли)
  */
-export async function realmPrompt(name, { title, data = {}, okLabel, read, head = null, live = null }) {
+export async function realmPrompt(name, { title, data = {}, okLabel, read, head = null, live = null, onRender = null }) {
   let content = await withHead(head, await renderTemplate(path(name), { ...data, dlg: name }));
   if (live) content += `<section class="realm-after" data-realm-after></section>`;
   return DialogV2.prompt({
     window: { title }, classes: classes(name), content,
     ok: { label: okLabel, callback: (event, button) => read(button.form) },
-    render: live ? (event, dialog) => bindLive(dialog?.element ?? event?.target?.element, live) : undefined,
+    render: live || onRender ? (event, dialog) => {
+      const root = dialog?.element ?? event?.target?.element;
+      if (live) bindLive(root, live);
+      if (root) onRender?.(root);
+    } : undefined,
     rejectClose: false
   });
 }

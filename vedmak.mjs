@@ -29,6 +29,7 @@ import { BattleApp, registerMapBattle } from "./module/apps/battle-app.mjs";
 import * as ARMY from "./module/army/army.mjs";
 import * as settlement from "./module/settlement/settlement.mjs";
 import * as settlementEvents from "./module/settlement/events.mjs";
+import * as settlementTemplates from "./module/settlement/templates.mjs";
 import { registerRealmFx } from "./module/fx/realm-fx.mjs";
 import { VedmakItemSheet } from "./module/sheets/item-sheet.mjs";
 import { VedmakEffectConfig } from "./module/sheets/effect-sheet.mjs";
@@ -275,6 +276,7 @@ Hooks.once("init", () => {
     hint: "Шанс события в конце месяца, %: ярмарка, мор, разбойники, пожар… Правитель решает на листе поселения до следующего хода. 0 — событий нет.",
     scope: "world", config: true, type: Number, default: 40, range: { min: 0, max: 100, step: 5 }
   });
+  settlementTemplates.registerTemplateSetting();
   game.settings.register(SYSTEM_ID, "settlementWeekPreview", {
     name: "Поселения: предпросмотр недели",
     hint: "Перед «Неделя прошла» — окно: что изменится на складе и в казне, чего не хватит, что достроится, что будет в конце месяца (по средним броскам).",
@@ -373,7 +375,7 @@ Hooks.once("init", () => {
     hud: CombatHud,
     nexus: SceneNexus,
     setVisionSpeedups,
-    settlement: { ...settlement, events: settlementEvents },
+    settlement: { ...settlement, events: settlementEvents, templates: settlementTemplates },
     resources: ResourceLibrary,
     council: RulerCouncil,
     army: { ...ARMY, battle: units => BattleApp.open(units), battleAt: (scene, point, opts) => BattleApp.fromScene(scene, point, opts) },

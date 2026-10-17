@@ -1,0 +1,14 @@
+{{!-- Новое поселение (Совет правителя → settlement/templates.mjs, PLAN 4.246): имя и шаблон карточками; ✕ — удалить шаблон --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <div class="form-group"><label>Название</label><input type="text" name="name" placeholder="по шаблону" autofocus></div>
+  <div class="form-group"><label>Шаблон</label>
+    <div class="realm-tpls">
+      <label class="realm-tpl"><input type="radio" name="tpl" value="" checked><span class="realm-tpl-img"><i class="fa-solid fa-chess-rook" aria-hidden="true"></i></span>
+        <span class="realm-tpl-t"><b>С нуля</b><small>два жилых дома и лагерь лесорубов</small></span></label>
+      {{#each templates}}<label class="realm-tpl"><input type="radio" name="tpl" value="{{id}}"><span class="realm-tpl-img"><img src="{{img}}" alt=""></span>
+        <span class="realm-tpl-t"><b>{{name}}</b><small>{{sub}}</small></span>
+        <button type="button" class="realm-tpl-x" data-tpl-delete="{{id}}" aria-label="Удалить шаблон {{name}}" data-tooltip="Удалить шаблон"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></label>{{/each}}
+    </div></div>
+  {{#unless templates.length}}<p class="hint">Шаблонов пока нет: настройте поселение и на его листе нажмите «Сохранить как шаблон» (значок печати в шапке).</p>{{/unless}}
+  <p class="hint">Календарь — как у остальных поселений мира.</p>
+</div>

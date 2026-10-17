@@ -24,7 +24,8 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
     actions: {
       openActor: RulerCouncil.#onOpen,
       week: RulerCouncil.#onWeek,
-      weekAll: RulerCouncil.#onWeekAll
+      weekAll: RulerCouncil.#onWeekAll,
+      newTown: RulerCouncil.#onNewTown
     }
   };
 
@@ -92,6 +93,12 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
     const town = await fromUuid(target.closest("[data-uuid]").dataset.uuid);
     if (town) await game.vedmak.settlement.askWeek(town);
     this.render();
+  }
+
+  /** Новое поселение из шаблона или с нуля (PLAN 4.246). */
+  static async #onNewTown() {
+    if (!game.user.isGM) return;
+    if (await once(this, "newTown", () => game.vedmak.settlement.templates.askNewSettlement())) this.render();
   }
 
   /** Неделя для всех поселений по очереди (караваны везут в уже прошедшие — как и вручную). */

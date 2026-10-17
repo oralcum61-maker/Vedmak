@@ -96,6 +96,74 @@ await council.close();
   ok(town.system.week !== w[0] && town2.system.week !== w[1], "«Неделя для всех»: неделя сдвинулась у обоих");
 }
 
+stepName("шаблоны поселений");
+{ // Шаблоны (PLAN 4.246): печать в шапке листа сохраняет поселение, «Новое поселение…» в Совете основывает из шаблона
+  const T = S.templates;
+  const nextDialog = name => new Promise(res => {
+    const id = Hooks.on("renderDialogV2", app => {
+      if (!app.element?.classList.contains(`vd-realm-${name}`)) return;
+      Hooks.off("renderDialogV2", id); setTimeout(() => res(app), 150);
+    });
+  });
+  const had = T.templates().length;
+  window.__noAutoDialog = true;
+  let made = null;
+  try {
+    await town.sheet.render({ force: true }); await wait(600);
+    let next = nextDialog("template-save");
+    town.sheet.element.querySelector('[data-action="saveTemplate"]').click();
+    let dlg = await next;
+    dlg.element.querySelector("input[name=name]").value = "Прогон: шаблон";
+    dlg.element.querySelector("footer button").click();
+    await until(() => T.templates().some(t => t.name === "Прогон: шаблон"));
+    const tpl = T.templates().find(t => t.name === "Прогон: шаблон");
+    const levels = d => d.map(b => `${b.system.key}:${b.system.level}`).sort().join(",");
+    ok(tpl?.buildings.length === town.system.buildingActors.length && tpl.system.families === town.system.families
+      && levels(tpl.buildings) === levels(town.system.buildingActors),
+      `шаблон: постройки с уровнями и семьи (${tpl?.buildings.length} построек, семей ${tpl?.system.families})`);
+    ok(tpl && !tpl.buildings.some(b => b.system.manager || b.system.orders?.length || b.system.settlement) && !("log" in tpl.system),
+      "шаблон: без управляющих, заказов, связи с поселением и летописи");
+    await town.sheet.close();
+
+    const council = game.vedmak.council.open(); await wait(600);
+    next = nextDialog("template-new");
+    council.element.querySelector("[data-action=newTown]").click();
+    dlg = await next;
+    ok(dlg.element.querySelectorAll(".realm-tpl").length === had + 2, `новое поселение: «С нуля» и шаблоны (${dlg.element.querySelectorAll(".realm-tpl").length})`);
+    dlg.element.querySelector(`input[name=tpl][value="${tpl.id}"]`).checked = true;
+    dlg.element.querySelector("input[name=name]").value = "Прогон: Новгородок";
+    dlg.element.querySelector("footer button").click();
+    await until(() => (made = game.actors.find(a => a.name === "Прогон: Новгородок")) && made.system.buildingActors.length === tpl.buildings.length, 6000);
+    const peer = game.actors.find(a => a.type === "settlement");
+    ok(!!made && levels(made.system.buildingActors) === levels(tpl.buildings) && made.system.stockMap["Еда"] === tpl.system.stock["Еда"]
+      && made.system.week === peer.system.week && made.system.month === peer.system.month,
+      `новое из шаблона: те же постройки и склад, календарь как у мира (${made?.system.buildingActors.length} построек)`);
+    ok(made && !made.system.log.length && !made.system.routes.length, "новое из шаблона: летопись и караваны пустые");
+    await made?.sheet.close();
+
+    next = nextDialog("template-new");
+    council.element.querySelector("[data-action=newTown]").click();
+    dlg = await next;
+    const sure = nextDialog("confirm");
+    dlg.element.querySelector(`[data-tpl-delete="${tpl.id}"]`).click();
+    const yes = await sure;
+    yes.element.querySelector("footer button[data-action=yes]").click();
+    await until(() => !T.templates().some(t => t.id === tpl.id) && !dlg.element.querySelector(`[data-tpl-delete="${tpl.id}"]`));
+    ok(!T.templates().some(t => t.id === tpl.id) && !dlg.element.querySelector(`[data-tpl-delete="${tpl.id}"]`), "✕ удаляет шаблон и его карточку");
+    await dlg.close();
+    await council.close();
+  } finally {
+    window.__noAutoDialog = false;
+    for (const t of T.templates().filter(t => t.name.startsWith("Прогон"))) await game.settings.set("vedmak", "settlementTemplates",
+      Object.fromEntries(T.templates().filter(x => x.id !== t.id).map(x => [x.id, x])));
+    if (made) {
+      for (const b of made.system.buildingActors) await b.delete();
+      await game.folders.find(x => x.getFlag("vedmak", "settlement") === made.uuid)?.delete();
+      await made.delete();
+    }
+  }
+}
+
 for (const b of [...town.system.buildingActors, ...town2.system.buildingActors]) await b.delete();
 for (const t of [town, town2]) await game.folders.find(x => x.getFlag("vedmak", "settlement") === t.uuid)?.delete();
 for (const d of [unit, sword, shield, hero, town2, town]) if (d && (game.actors.get(d.id) || game.items.get(d.id))) await d.delete();

@@ -5,6 +5,7 @@
   <header class="rc-head">
     <span class="rs-sock sm rc-sock"><i class="fa-solid fa-crown" aria-hidden="true"></i></span>
     <div class="rc-head-t"><h2>Совет правителя</h2><div class="rc-sub"><span>поселений {{towns.length}}</span></div></div>
+    {{#if gm}}<button type="button" class="rs-btn rc-new" data-action="newTown" data-tooltip="Основать поселение — из шаблона или с нуля">Новое поселение…</button>{{/if}}
     {{#if gm}}{{#unless empty}}<button type="button" class="rs-go rc-go" data-action="weekAll" data-tooltip="Прошла неделя во всех поселениях по очереди">Неделя для всех</button>{{/unless}}{{/if}}
   </header>
   <div class="rc-list">
@@ -34,7 +35,7 @@
       </div>
     </section>
     {{else}}
-    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-chess-rook" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Поселений нет</b><p>Создайте актёра «Поселение» — он появится здесь.</p></div></div>
+    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-chess-rook" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Поселений нет</b><p>{{#if gm}}Нажмите «Новое поселение…» или создайте{{else}}Создайте{{/if}} актёра «Поселение» — он появится здесь.</p></div></div>
     {{/each}}
   </div>
 </div>
