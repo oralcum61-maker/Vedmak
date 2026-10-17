@@ -8,6 +8,13 @@ const nextDialog = name => new Promise(res => {
     setTimeout(() => res(app), 150);
   });
 });
+// «После…» (PLAN 4.236): ввести число в поле и прочитать раздел — пересчитан ли
+const typeIn = async (dlg, name, value) => {
+  const el = dlg.element.querySelector(`[name=${name}]`); el.value = String(value);
+  el.dispatchEvent(new Event(el.tagName === "SELECT" ? "change" : "input", { bubbles: true })); await wait(300);
+  const box = dlg.element.querySelector("[data-realm-after]");
+  return { text: box?.textContent.replace(/\s+/g, " ").replace(/\s*→\s*/g, " → ").trim() ?? "", bad: !!box?.querySelector(".realm-cell.bad") };
+};
 const town = await Actor.create({ name: "Прогон: окна <Липов>", type: "settlement", folder: folder.id,
   system: { militia: 30, families: 4, wealth: 7.4, stock: { "Еда": 40 } } }, { vedmakStarter: false });
 const sheet = town.sheet;
@@ -44,7 +51,14 @@ try {
   ok(origin?.options[0].textContent.includes("есть 30"), "набор: Ополчение — 30 чел.");
   ok(dlg.element.querySelector("input[name=name]")?.placeholder === "Ополчение Прогон: окна <Липов>", "набор: имя поселения экранировано");
   ok(dlg.element.querySelectorAll("select[name=kind] option").length >= 4, "набор: роды войск");
-  dlg.element.querySelector("input[name=count]").value = "6";
+  { let a = await typeIn(dlg, "count", 6);
+    ok(/Ополчение\s*30\s*→\s*24/.test(a.text) && /Бойцов в новом отряде\s*0\s*→\s*6/.test(a.text) && !a.bad, `набор: «После…» — Ополчение 30 → 24, бойцов 0 → 6 (${a.text})`);
+    a = await typeIn(dlg, "count", 40);
+    ok(/30\s*→\s*-10/.test(a.text) && a.bad, `набор: больше, чем есть, — строка красная (${a.text})`);
+    await typeIn(dlg, "origin", "mercenary");
+    a = await typeIn(dlg, "count", 2);
+    ok(a.text.includes("Казна") && !a.text.includes("Ополчение"), `набор: наёмники — «После…» о казне (${a.text})`);
+    await typeIn(dlg, "origin", "militia"); await typeIn(dlg, "count", 6); }
   dlg.element.querySelector("input[name=name]").value = "Прогон: окна — дружина";
   dlg.element.querySelector('footer button[data-action="ok"], footer button[autofocus], footer button').click();
   await wait(1500);
@@ -61,6 +75,14 @@ try {
     us.element.querySelector('[data-action="march"]')?.click();
     dlg = await wait1;
     ok(dlg.element.querySelector("input[name=weeks]")?.value === "2", "поход: припасов на 2 недели по умолчанию");
+    { const food = unit.system.food, have = town.system.stockMap["Еда"], need = Math.round(food * 3 * 10) / 10;
+      let a = await typeIn(dlg, "weeks", 3);
+      const n = v => (Math.round(v * 10) / 10).toLocaleString("ru-RU");
+      ok(a.text.includes(`${n(have)} → ${n(have - need)}`) && a.text.includes("Припасы отряда") && !a.bad,
+        `поход: «После…» — еда ${n(have)} → ${n(have - need)} за 3 нед. (${a.text})`);
+      a = await typeIn(dlg, "weeks", Math.ceil(have / Math.max(food, 0.1)) + 5);
+      ok(a.bad, "поход: еды на складе не хватит — строка красная");
+      await typeIn(dlg, "weeks", 2); }
     dlg.element.querySelector("footer button").click();
     await wait(1200);
     ok(unit.system.campaign, "«В поход» из окна — отряд в походе");
@@ -72,6 +94,33 @@ try {
     await dlg.close();
     await us.close();
     await other.delete();
+  }
+  // Заказ мастерской (перетащили предмет на лист постройки): «После…» — склад за штуку × сколько и срок
+  {
+    const SC = await import("/systems/vedmak/module/config/settlement.mjs");
+    const d = SC.buildingItemData("smithy"); Object.assign(d.system, { level: 1, workers: 1 });
+    const [smithy] = await game.vedmak.settlement.createBuildings(town, [d]);
+    const sword = await Item.create({ name: "Прогон: окна — меч", type: "weapon", folder: folder.id, system: { cost: 100 } });
+    try {
+      const { cost, weeks } = SC.orderCost("weapon", 100, 1, sword.name);
+      const iron = cost.find(c => c.resource === "Железо");
+      // На складе — ровно на три штуки: две — хватает, четыре — нет
+      await town.update(Object.fromEntries(cost.filter(c => c.resource !== "Богатство").map(c => [`system.stock.${c.resource}`, c.qty * 3])));
+      const have = iron.qty * 3;
+      const wo = nextDialog("order");
+      smithy.sheet._onDropItem(new Event("drop"), sword);
+      const o = await wo;
+      let a = await typeIn(o, "qty", 2);
+      ok(a.text.includes(`Железо ${have} → ${have - iron.qty * 2}`) && a.text.includes(`0 → ${weeks * 2}`) && !a.bad,
+        `заказ: «После…» — железо ${have} → ${have - iron.qty * 2}, срок ${weeks * 2} нед. (${a.text})`);
+      a = await typeIn(o, "qty", 4);
+      ok(a.bad, "заказ: железа не хватит — строка красная");
+      await o.close(); await wait(300);
+      ok(!smithy.system.orders.length, "заказ: окно закрыли — заказа нет");
+    } finally {
+      await sword.delete(); await smithy.delete();
+      await game.folders.find(x => x.getFlag("vedmak", "settlement") === town.uuid)?.delete();
+    }
   }
   // Предпросмотр недели (PLAN 4.239): окно с прогнозом; «Отмена» — неделя стоит, «Неделя прошла» — идёт
   {
