@@ -79,6 +79,7 @@
             <a data-action="itemToggleStored" class="{{#if w.stored}}active{{/if}}" data-tooltip="{{#if w.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
             {{#if @root.isCharacter}}<a data-action="repairItem" data-tooltip="Починить (СЛ чертежа − 5)"><i class="fa-solid fa-screwdriver-wrench"></i></a>
             <a data-action="disassembleItem" data-tooltip="Разобрать на компоненты"><i class="fa-solid fa-hammer"></i></a>{{/if}}
+            <a data-action="itemEdit" data-tooltip="Править: название, урон, свойства, описание"><i class="fa-solid fa-pen-to-square"></i></a>
             <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
           </div>
@@ -143,6 +144,7 @@
             <a data-action="itemToggleStored" class="{{#if a.stored}}active{{/if}}" data-tooltip="{{#if a.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
             {{#if @root.isCharacter}}<a data-action="repairItem" data-tooltip="Починить (СЛ чертежа − 5)"><i class="fa-solid fa-screwdriver-wrench"></i></a>
             <a data-action="disassembleItem" data-tooltip="Разобрать на компоненты"><i class="fa-solid fa-hammer"></i></a>{{/if}}
+            <a data-action="itemEdit" data-tooltip="Править: название, урон, свойства, описание"><i class="fa-solid fa-pen-to-square"></i></a>
             <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
             <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
           </div>
@@ -201,7 +203,8 @@
           {{#if (and @root.isCharacter item.handCannon)}}<a data-action="handCannon" data-tooltip="Подорвать бомбу в протезе: конус длиной в радиус бомбы, Атлетика; −10 Надёжности протеза"><i class="fa-solid fa-burst"></i></a>{{/if}}
           {{#if (and @root.isCharacter item.prosRel)}}<a data-action="repairItem" data-tooltip="Починить протез: Ремесло + Изготовление СЛ 18, Надёжность до {{item.prosRel.max}}"><i class="fa-solid fa-screwdriver-wrench"></i></a>{{/if}}
           <a data-action="itemToggleStored" class="{{#if item.system.stored}}active{{/if}}" data-tooltip="{{#if item.system.stored}}Не при себе (вес не считается) — взять с собой{{else}}Оставить не при себе: в повозке, на лошади, дома{{/if}}"><i class="fa-solid fa-box-archive"></i></a>
-          <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
+          <a data-action="itemEdit" data-tooltip="Править: название, урон, свойства, описание"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a data-action="itemPost" data-tooltip="В чат"><i class="fa-solid fa-comment"></i></a>
           <a data-action="itemDelete" data-tooltip="Удалить"><i class="fa-solid fa-trash"></i></a>
         </div>
       </div>
