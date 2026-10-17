@@ -1,50 +1,70 @@
-{{!-- Окно битвы (PLAN 4.187) --}}
-<div class="sv bt">
-  {{#if viewer}}<div class="vd-view-banner"><i class="fa-solid fa-eye"></i> {{#if viewCanAct}}Общий стол: окно ведёт {{viewHost}}, ваши нажатия идут к нему{{else}}Смотрите вместе со всеми: битву ведёт {{viewHost}}{{/if}}</div>{{/if}}
-  <div class="bt-bar">
-    <label>Местность <select name="terrain">{{#each terrains}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
-    <label data-tooltip="Бой у стен поселения: его укрепления (частокол, башни, ров) — прибавка обороняющейся стороне">У стен <select name="battleTown"><option value="">— в поле —</option>{{#each towns}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select>{{#if fort}} <b class="bt-fort">+{{fort}}</b>{{/if}}</label>
-    <span class="bt-round">Раунд {{round}}</span>
-    <button type="button" class="sv-next" data-action="round" {{#unless ready}}disabled{{/unless}}>Раунд</button>
-    <a class="sv-btn" data-action="reset" data-tooltip="Раунды с первого, бегство снято">Новая битва</a>
-    {{#if canField}}<a class="sv-btn {{#if field}}on{{/if}}" data-action="fieldSync" data-tooltip="Поле битвы на сцене: отряды в {{#if field}}{{field.cells}}{{else}}4{{/if}} клетках от выделенных жетонов (или от середины экрана), местность — из региона">Со сцены</a>{{/if}}
-    {{#unless viewer}}<a class="sv-btn {{#if showAll}}on{{/if}}" data-action="showAll" data-tooltip="Битву и так видят владельцы отрядов; так — все игроки в игре">{{#if showAll}}Видят все ✓{{else}}Показать всем{{/if}}</a>{{/unless}}
+{{!-- Окно битвы (PLAN 4.187) по холсту окон (PLAN 4.233, доска «Битва»): шапка из кожи с раундом, полоса настроек,
+     две стороны пластинами с ромбом между ними, отряды — строками с числами в кругах, журнал раундов на желобке.
+     Классы bt-* — для кода и общего стола; облик — army.css (.rs.bt) --}}
+<div class="rs bt">
+  {{#if viewer}}<div class="bt-view"><i class="fa-solid fa-eye" aria-hidden="true"></i><span>{{#if viewCanAct}}Общий стол: окно ведёт <b>{{viewHost}}</b>, ваши нажатия идут к нему{{else}}Смотрите вместе со всеми: битву ведёт <b>{{viewHost}}</b>{{/if}}</span></div>{{/if}}
+  <header class="bt-head">
+    <span class="rs-sock sm bt-sock"><i class="fa-solid fa-khanda" aria-hidden="true"></i></span>
+    <div class="bt-head-t">
+      <h2>Битва{{#each towns}}{{#if selected}} у стен {{name}}{{/if}}{{/each}}</h2>
+      <div class="bt-sub">{{#each terrains}}{{#if selected}}<span>{{label}}</span>{{/if}}{{/each}}<i></i><span>{{#if field}}на сцене «{{field.scene}}»{{else}}без сцены{{/if}}</span>{{#if fort}}<i></i><span>укрепления <b class="bt-fort">+{{fort}}</b></span>{{/if}}</div>
+    </div>
+    <div class="bt-round"><span>Раунд</span><span class="rs-medal bt-medal"><b class="rs-metal">{{round}}</b></span></div>
+    <button type="button" class="rs-go bt-go" data-action="round" {{#unless ready}}disabled{{/unless}}>Раунд</button>
+  </header>
+
+  <div class="bt-body">
+    <div class="bt-bar">
+      <label class="bt-pick">Местность <select name="terrain">{{#each terrains}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+      <label class="bt-pick" data-tooltip="Бой у стен поселения: его укрепления (частокол, башни, ров) — прибавка обороняющейся стороне">У стен <select name="battleTown"><option value="">— в поле —</option>{{#each towns}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+      <span class="bt-tools">
+        <button type="button" class="rs-btn" data-action="reset" data-tooltip="Раунды с первого, бегство снято">Новая битва</button>
+        {{#if canField}}<button type="button" class="rs-btn{{#if field}} on{{/if}}" data-action="fieldSync" data-tooltip="Поле битвы на сцене: отряды в {{#if field}}{{field.cells}}{{else}}4{{/if}} клетках от выделенных жетонов (или от середины экрана), местность — из региона">Со сцены</button>{{/if}}
+        {{#unless viewer}}<button type="button" class="rs-btn{{#if showAll}} on{{/if}}" data-action="showAll" data-tooltip="Битву и так видят владельцы отрядов; так — все игроки в игре">{{#if showAll}}Видят все ✓{{else}}Показать всем{{/if}}</button>{{/unless}}
+      </span>
+    </div>
+    {{#if field}}<div class="bt-field"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i><span>Битва на сцене «{{field.scene}}»{{#if field.region}} · {{field.region}}{{/if}}: в бою отряды в {{field.cells}} клетках от середины поля — отошедшие выходят, подошедшие вступают перед раундом.</span>
+      {{#if canField}}<button type="button" class="rs-btn" data-action="fieldOff" data-tooltip="Вести битву без сцены — состав только вручную">Без сцены</button>{{/if}}</div>{{/if}}
+
+    <div class="bt-sides">
+      {{#each sides}}
+      <section class="bt-side{{#if defender}} def{{/if}}" data-side="{{index}}">
+        <header class="bt-side-h">
+          <h3>{{label}}</h3>
+          <button type="button" class="bt-def{{#if defender}} on{{/if}}" data-action="defender" data-side="{{index}}" data-tooltip="Обороняющимся — прибавка местности">{{#if defender}}обороняется{{else}}наступает{{/if}}</button>
+        </header>
+        <div class="bt-side-sum"><span>бойцов <b>{{soldiers}}</b></span><span>сила <b>{{power}}</b></span></div>
+        <ul>
+          {{#each units}}
+          <li class="{{#if routed}}routed{{/if}}" data-id="{{id}}">
+            <span class="rs-sock sm bt-usock"><img src="{{img}}" alt=""></span>
+            <div class="bt-unit"><a data-action="open"><b>{{name}}</b></a><small>{{#if routed}}бегут · {{/if}}{{kind}} · {{training}} · {{equipment}}</small></div>
+            <span class="bt-n"><b class="bt-num" data-tooltip="Бойцы">{{soldiers}}</b><span>бойцы</span></span>
+            <span class="bt-n"><b class="bt-num" data-tooltip="Боевой дух">{{morale}}</b><span>дух</span></span>
+            <span class="bt-n"><b class="bt-num pow" data-tooltip="Сила">{{power}}</b><span>сила</span></span>
+            <button type="button" class="rs-x" data-action="remove" aria-label="Убрать из битвы" data-tooltip="Убрать из битвы"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </li>
+          {{else}}<li class="bt-empty">Перетащите сюда отряды из списка актёров или выделите их жетоны.</li>{{/each}}
+        </ul>
+        <button type="button" class="rs-btn bt-add" data-action="addSelected" data-side="{{index}}">Добавить выделенные жетоны</button>
+      </section>
+      {{#unless @last}}<span class="bt-vs" aria-hidden="true"><b>×</b></span>{{/unless}}
+      {{/each}}
+    </div>
+
+    {{#if log.length}}
+    <div class="bt-log-h"><span class="rs-cap">Журнал битвы</span></div>
+    <ol class="bt-log">
+      {{#each log}}
+      <li class="{{#if over}}over{{/if}}">
+        <div class="bt-log-r"><b>Раунд {{round}}</b>{{#if tie}}<em class="bt-tie">ничья</em>{{/if}}
+          {{#each sides}}<span class="bt-roll">{{name}}: d10 {{d10}} + {{power}}{{#if ground}} + {{ground}}{{/if}} = <b class="{{#if win}}win{{/if}}">{{total}}</b></span>{{/each}}</div>
+        {{#each units}}<small class="{{#if routed}}warn{{/if}}">{{name}}: −{{lost}} (осталось {{soldiers}}, дух {{morale}}){{#if routed}} — бегут!{{/if}}</small>{{/each}}
+        {{#each notes}}<small class="bt-note">{{this}}</small>{{/each}}
+        {{#if over}}<em>Битва окончена{{#if victor}}: победа — {{victor}}{{/if}}.</em>{{/if}}
+      </li>
+      {{/each}}
+    </ol>
+    {{/if}}
   </div>
-  {{#if field}}<div class="bt-field"><i class="fa-solid fa-map-location-dot"></i><span>Битва на сцене «{{field.scene}}»{{#if field.region}} · {{field.region}}{{/if}}: в бою отряды в {{field.cells}} клетках от середины поля — отошедшие выходят, подошедшие вступают перед раундом.</span>
-    {{#if canField}}<a class="sv-btn" data-action="fieldOff" data-tooltip="Вести битву без сцены — состав только вручную">Без сцены</a>{{/if}}</div>{{/if}}
-  <div class="bt-sides">
-    {{#each sides}}
-    <section class="bt-side" data-side="{{index}}">
-      <header>
-        <span class="sv-tag">{{label}}</span>
-        <a class="bt-def {{#if defender}}on{{/if}}" data-action="defender" data-side="{{index}}" data-tooltip="Обороняющимся — прибавка местности">{{#if defender}}обороняется{{else}}наступает{{/if}}</a>
-        <small>бойцов {{soldiers}} · сила {{power}}</small>
-      </header>
-      <ul>
-        {{#each units}}
-        <li class="{{#if routed}}routed{{/if}}" data-id="{{id}}">
-          <span class="sv-sock sm"><img src="{{img}}" alt=""></span>
-          <div><a data-action="open"><b>{{name}}</b></a><small>{{kind}} · {{training}} · {{equipment}}</small></div>
-          <span class="bt-num" data-tooltip="Бойцы">{{soldiers}}</span>
-          <span class="bt-num" data-tooltip="Боевой дух">{{morale}}</span>
-          <span class="bt-num pow" data-tooltip="Сила">{{power}}</span>
-          <a class="sv-demolish" data-action="remove" data-tooltip="Убрать из битвы">×</a>
-        </li>
-        {{else}}<li class="sv-hint">Перетащите сюда отряды из списка актёров или выделите их жетоны.</li>{{/each}}
-      </ul>
-      <a class="sv-btn" data-action="addSelected" data-side="{{index}}">Добавить выделенные жетоны</a>
-    </section>
-    {{/each}}
-  </div>
-  <ol class="bt-log">
-    {{#each log}}
-    <li>
-      <b>Раунд {{round}}</b>{{#if tie}} — ничья{{/if}}
-      {{#each sides}}<span class="{{#if win}}up{{/if}}">{{name}}: {{d10}} + {{power}}{{#if ground}} + {{ground}}{{/if}} = {{total}}</span>{{/each}}
-      {{#each units}}<small>{{name}}: −{{lost}} (осталось {{soldiers}}, дух {{morale}}){{#if routed}} — бегут!{{/if}}</small>{{/each}}
-      {{#each notes}}<small class="bt-note">{{this}}</small>{{/each}}
-      {{#if over}}<em>Битва окончена{{#if victor}}: победа — {{victor}}{{/if}}.</em>{{/if}}
-    </li>
-    {{/each}}
-  </ol>
 </div>

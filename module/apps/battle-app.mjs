@@ -134,7 +134,7 @@ export class BattleApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   };
 
-  static PARTS = { body: { template: "systems/vedmak/templates/apps/battle.hbs", scrollable: [".bt-sides", ".bt-log"] } };
+  static PARTS = { body: { template: "systems/vedmak/templates/apps/battle.hbs", scrollable: [".bt-body"] } };
 
   /** Открыть окно (одно на клиента) и добавить отряды на первую сторону. */
   static open(units = []) {

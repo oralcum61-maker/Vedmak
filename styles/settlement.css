@@ -737,3 +737,49 @@
 .sv-plaque .sv-mini-acts { margin-top: 1px; }
 .sv-plaque .sv-mini-acts a { padding: 3px 8px; }
 .sv .bl-mini input[type="number"] { height: 20px; }
+
+/* ============================== Совет правителя по холсту окон (PLAN 4.233, доска «Совет правителя») ==============================
+   Шапка — кожа с короной и «Неделя для всех»; поселения — кованые пластины (в осаде — красная нить): герб и тревоги,
+   полоса показателей с желобками, ресурсы плашками с картинками, работы · войско · караваны */
+.ruler-council .window-content { padding: 0; }
+.rs.rc { display: flex; flex-direction: column; height: 100%; min-height: 0; color: var(--vd-text, #e2ddd0); font: 400 13px/1.4 var(--vd-font-body); background-color: var(--vd-bg, #17181b); background-image: radial-gradient(130% 100% at 50% 0%, rgba(255, 240, 215, .04), transparent 50%, rgba(0, 0, 0, .35)), var(--vd-s-window, none); }
+.rs.rc .rc-head { position: relative; display: flex; align-items: center; gap: 14px; padding: 12px 18px 11px; overflow: hidden; background-color: #2a231e; background-image: radial-gradient(70% 170% at 8% 50%, rgba(255, 232, 200, .15), transparent 60%), linear-gradient(90deg, transparent 50%, rgba(0, 0, 0, .38)), var(--vd-t-leather, none); background-size: auto, auto, 200px; background-blend-mode: normal, normal, overlay; }
+.rs.rc .rc-head::before { content: ""; position: absolute; inset: 5px 5px 8px; border: 1px dashed rgba(214, 190, 150, .24); border-radius: 4px; pointer-events: none; }
+.rs.rc .rc-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(180deg, #070708, rgba(255, 240, 215, .09)); pointer-events: none; }
+.rs.rc .rc-head > * { position: relative; z-index: 1; }
+.rs.rc .rc-sock { --s: 50px; }
+.rs.rc .rc-head-t { flex: 1; min-width: 0; }
+.rs.rc .rc-head h2 { margin: 0; padding: 0; border: 0; font: 400 24px/1.1 var(--vd-font-head); color: #f1ece0; text-shadow: 0 1px 0 #000, 0 2px 3px rgba(0, 0, 0, .8); }
+.rs.rc .rc-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 5px; font: 600 10px/1.1 var(--vd-font-body); letter-spacing: .15em; text-transform: uppercase; color: #c7b99f; }
+.rs.rc .rc-go { height: 34px; padding: 0 22px; }
+.rs.rc .rc-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 16px; scrollbar-width: thin; }
+.rs.rc .rc-hint { margin: 0; font-size: 11.5px; color: #a8a296; }
+.rs.rc .rc-town { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 13px; border-radius: 6px; background-color: #17181b; background-image: linear-gradient(180deg, rgba(255, 245, 225, .05), transparent 45%, rgba(0, 0, 0, .25)), var(--vd-t-plate, none); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: inset 0 1px 0 rgba(255, 245, 225, .08), inset 0 -2px 0 rgba(0, 0, 0, .35), 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 8px 16px -8px rgba(0, 0, 0, .9); }
+.rs.rc .rc-town.siege { box-shadow: inset 0 2px 0 #b8432c, 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 8px 16px -8px rgba(0, 0, 0, .9); }
+.rs.rc .rc-town-h { display: flex; align-items: center; gap: 12px; }
+.rs.rc .rc-tsock { --s: 52px; }
+.rs.rc .rc-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rs.rc .rc-title b { font: 400 21px/1 var(--vd-font-head); color: #f1ece0; text-shadow: 0 1px 0 #000, 0 2px 3px rgba(0, 0, 0, .7); }
+.rs.rc .rc-title small { font-size: 11px; color: #a8a296; }
+.rs.rc .rc-warn { display: flex; flex-wrap: wrap; gap: 5px; }
+.rs.rc .rc-warn i { padding: 3px 8px; border-radius: 10px; font: 600 9px/1 var(--vd-font-body); font-style: normal; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+  color: #f6c2b4; background: rgba(184, 67, 44, .2); box-shadow: inset 0 0 0 1px rgba(224, 147, 127, .45); }
+.rs.rc .rc-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-radius: 4px; background: rgba(0, 0, 0, .3); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .85); }
+.rs.rc .rc-stats > div { position: relative; display: flex; flex-direction: column; gap: 3px; padding: 8px 12px; }
+.rs.rc .rc-stats > div + div::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(90deg, #060607 50%, rgba(255, 240, 215, .07) 50%); }
+.rs.rc .rc-stats small { font: 600 9px/1 var(--vd-font-body); letter-spacing: .14em; text-transform: uppercase; color: #8d887e; }
+.rs.rc .rc-stats b { font: 400 22px/1.05 var(--vd-font-head); color: var(--vd-silver, #f1ece0); }
+.rs.rc .rc-stats em { font-style: normal; font-size: 10.5px; color: #a8a296; }
+.rs.rc .rc-stats em.warn, .rs.rc .rc-stats .warn { color: #e8b09d; }
+.rs.rc .rc-res { display: flex; flex-wrap: wrap; gap: 5px; }
+.rs.rc .rc-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 3px; border-radius: 16px; background-color: #25272c; background-image: linear-gradient(180deg, rgba(255, 245, 225, .08), transparent 42%, rgba(0, 0, 0, .24)), var(--vd-t-brushed, none); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: inset 0 1px 0 rgba(255, 245, 225, .13), 0 3px 8px -3px rgba(0, 0, 0, .85), 0 0 0 1px #050506; }
+.rs.rc .rc-chip img { width: 24px; height: 24px; border: 0; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px #8f897d, 0 0 0 2px #060708; }
+.rs.rc .rc-chip b { font: 400 15px/1 var(--vd-font-head); color: var(--vd-silver, #f1ece0); }
+.rs.rc .rc-chip small { font-size: 10.5px; color: #bcd3a3; }
+.rs.rc .rc-chip small.down { color: #e8b09d; }
+.rs.rc .rc-chip.short { box-shadow: inset 0 0 0 1px rgba(224, 147, 127, .5), 0 3px 8px -3px rgba(0, 0, 0, .85), 0 0 0 1px #050506; }
+.rs.rc .rc-cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; }
+.rs.rc .rc-cols > div { display: flex; flex-direction: column; gap: 3px; }
+.rs.rc .rc-cols p { margin: 0; font-size: 11.5px; line-height: 1.4; color: #d3ccbc; }
+.rs.rc .rc-cols p.dim { color: #8d887e; font-style: normal; }
+@media (max-width: 760px) { .rs.rc .rc-stats, .rs.rc .rc-cols { grid-template-columns: 1fr 1fr; } }

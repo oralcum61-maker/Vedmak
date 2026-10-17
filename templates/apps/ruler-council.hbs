@@ -1,39 +1,40 @@
-{{!-- Совет правителя (PLAN 4.203): все поселения одним окном --}}
-<div class="sv rc">
-  <div class="rc-bar">
-    <span class="sv-hint">Поселения, которые вы видите: хозяйство, стройки, войско и что случится в конце месяца.</span>
-    {{#if gm}}{{#unless empty}}<button type="button" class="sv-next" data-action="weekAll" data-tooltip="Прошла неделя во всех поселениях по очереди">Неделя для всех</button>{{/unless}}{{/if}}
-  </div>
+{{!-- Совет правителя (PLAN 4.203) по холсту окон (PLAN 4.233, доска «Совет правителя»): все поселения одним окном —
+     каждое кованой пластиной: шапка с гербом и тревогами, полоса показателей с желобками, ресурсы плашками, работы,
+     войско и караваны. Классы rc-* — для кода; облик — settlement.css (.rs.rc) --}}
+<div class="rs rc">
+  <header class="rc-head">
+    <span class="rs-sock sm rc-sock"><i class="fa-solid fa-crown" aria-hidden="true"></i></span>
+    <div class="rc-head-t"><h2>Совет правителя</h2><div class="rc-sub"><span>поселений {{towns.length}}</span></div></div>
+    {{#if gm}}{{#unless empty}}<button type="button" class="rs-go rc-go" data-action="weekAll" data-tooltip="Прошла неделя во всех поселениях по очереди">Неделя для всех</button>{{/unless}}{{/if}}
+  </header>
   <div class="rc-list">
+    <p class="rc-hint">Поселения, которые вы видите: хозяйство, стройки, войско и что случится в конце месяца.</p>
     {{#each towns}}
-    <section class="rc-town" data-uuid="{{uuid}}">
-      <header>
-        <span class="sv-sock"><img src="{{img}}" alt=""></span>
+    <section class="rc-town{{#if siege}} siege{{/if}}" data-uuid="{{uuid}}">
+      <header class="rc-town-h">
+        <span class="rs-sock sm rc-tsock"><img src="{{img}}" alt=""></span>
         <div class="rc-title"><a data-action="openActor"><b>{{name}}</b></a><small>{{when}}</small>
-          {{#if warn.length}}<span class="rc-warn">{{#each warn}}<i>{{this}}</i>{{/each}}</span>{{/if}}</div>
-        {{#if siege}}<span class="rc-siege"><i class="fa-solid fa-chess-rook"></i> в осаде {{siege}}</span>{{/if}}
-        {{#if @root.gm}}<a class="sv-btn" data-action="week">Прошла неделя</a>{{/if}}
+          {{#if (or warn.length siege)}}<span class="rc-warn">{{#if siege}}<i>в осаде {{siege}}</i>{{/if}}{{#each warn}}<i>{{this}}</i>{{/each}}</span>{{/if}}</div>
+        {{#if @root.gm}}<button type="button" class="rs-btn" data-action="week">Прошла неделя</button>{{/if}}
       </header>
       <div class="rc-stats">
-        <span><small>Семьи</small><b>{{families}}</b><em>домов {{houses}}{{#if homeless}} · бездомных {{homeless}}{{/if}} · без дела {{idle}}</em></span>
-        <span><small>Одобрение</small><b>{{approval}}</b><em>{{#if revolt}}бунт {{revolt}}%{{else if arrival}}приход {{arrival}}%{{else}}спокойно{{/if}}</em></span>
-        <span><small>Казна</small><b>{{wealth}}</b><em>{{coins}}{{#if wealthNet}} · {{wealthNet}}/нед.{{/if}}</em></span>
-        <span><small>Контроль · укрепления</small><b>{{control}} · {{defense}}</b><em>&nbsp;</em></span>
+        <div><small>Семьи</small><b>{{families}}</b><em>домов {{houses}}{{#if homeless}} · <span class="warn">бездомных {{homeless}}</span>{{/if}} · без дела {{idle}}</em></div>
+        <div><small>Одобрение</small><b>{{approval}}</b><em class="{{#if revolt}}warn{{/if}}">{{#if revolt}}бунт {{revolt}}%{{else if arrival}}приход {{arrival}}%{{else}}спокойно{{/if}}</em></div>
+        <div><small>Казна</small><b>{{wealth}}</b><em>{{coins}}{{#if wealthNet}} · {{wealthNet}}/нед.{{/if}}</em></div>
+        <div><small>Контроль · укрепления</small><b>{{control}} · {{defense}}</b><em>&nbsp;</em></div>
       </div>
-      <div class="rc-row">
-        <div class="rc-res">
-          {{#each needs}}<span class="bl-chip sm {{#if low}}short{{/if}}" data-tooltip="{{name}}"><img src="{{img}}" alt=""><b>{{value}}</b>{{#if netLabel}}<small class="{{#if down}}down{{/if}}">{{netLabel}}</small>{{/if}}</span>{{/each}}
-          {{#each top}}<span class="bl-chip sm" data-tooltip="{{name}}"><img src="{{img}}" alt=""><b>{{value}}</b>{{#if net}}<small>{{net}}</small>{{/if}}</span>{{/each}}
-        </div>
+      <div class="rc-res">
+        {{#each needs}}<span class="rc-chip{{#if low}} short{{/if}}" data-tooltip="{{name}}"><img src="{{img}}" alt=""><b>{{value}}</b>{{#if netLabel}}<small class="{{#if down}}down{{/if}}">{{netLabel}}</small>{{/if}}</span>{{/each}}
+        {{#each top}}<span class="rc-chip" data-tooltip="{{name}}"><img src="{{img}}" alt=""><b>{{value}}</b>{{#if net}}<small>{{net}}</small>{{/if}}</span>{{/each}}
       </div>
       <div class="rc-cols">
-        <div><span class="cap">Работы</span>{{#each works}}<p>{{this}}</p>{{else}}<p class="dim">ничего не строится</p>{{/each}}</div>
-        <div><span class="cap">Войско</span>{{#if army}}<p>отрядов {{army.units}}, бойцов {{army.soldiers}}{{#if army.away}} · в походе {{army.away}}{{/if}}</p>{{else}}<p class="dim">нет</p>{{/if}}</div>
-        <div><span class="cap">Караваны</span>{{#each routes}}<p>{{this}}</p>{{else}}<p class="dim">нет</p>{{/each}}</div>
+        <div><span class="rs-cap">Работы</span>{{#each works}}<p>{{this}}</p>{{else}}<p class="dim">ничего не строится</p>{{/each}}</div>
+        <div><span class="rs-cap">Войско</span>{{#if army}}<p>отрядов {{army.units}}, бойцов {{army.soldiers}}{{#if army.away}} · в походе {{army.away}}{{/if}}</p>{{else}}<p class="dim">нет</p>{{/if}}</div>
+        <div><span class="rs-cap">Караваны</span>{{#each routes}}<p>{{this}}</p>{{else}}<p class="dim">нет</p>{{/each}}</div>
       </div>
     </section>
     {{else}}
-    <p class="sv-hint">Поселений нет — создайте актёра «Поселение».</p>
+    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-chess-rook" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Поселений нет</b><p>Создайте актёра «Поселение» — он появится здесь.</p></div></div>
     {{/each}}
   </div>
 </div>
