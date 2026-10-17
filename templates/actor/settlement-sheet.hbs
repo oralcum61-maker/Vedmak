@@ -18,7 +18,7 @@
     {{#if gm}}<button type="button" class="rs-go" data-action="week" data-tooltip="Бросить выработку построек, посчитать нужды, стройку и — в конце месяца — приход семей и бунт; итог — в чат">Неделя прошла</button>{{/if}}
   </header>
 
-  <div class="rs-stats" style="grid-template-columns: 1fr 1fr 1fr 1.35fr 1fr;">
+  <div class="rs-stats" style="grid-template-columns: 1fr 1fr 1fr 1.75fr 1fr;">
     <div class="rs-stat" data-tooltip="Работают: {{families.assigned}} · без дела: {{families.idle}}{{#if families.builders}} (строят: {{families.builders}}){{/if}}">
       <span class="rs-medal">{{#if gm}}<input type="number" name="system.families" value="{{sys.families}}" min="0" step="1" aria-label="Семьи">{{else}}<b class="rs-metal">{{families.value}}</b>{{/if}}</span>
       <div class="rs-stat-t">

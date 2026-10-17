@@ -118,7 +118,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         sellN: priceOf(name), buyN: Math.ceil(priceOf(name) * BUY_MARKUP) };
     });
     const needs = Object.entries(fc.needs).map(([k, n]) => ({
-      label: k, need: fmt(n.need), got: fmt(n.got), ok: n.short <= 0, pct: n.need ? Math.round((n.got / n.need) * 100) : 100
+      label: k, img: resourceIcon(k), need: fmt(n.need), got: fmt(n.got), ok: n.short <= 0, pct: n.need ? Math.round((n.got / n.need) * 100) : 100
     }));
 
     // Конец месяца

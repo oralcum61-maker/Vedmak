@@ -276,7 +276,7 @@
 .rs-need .rs-sock.sm,.rs-deal .rs-sock.sm{--s:38px}
 .rs-need .rs-sock.sm svg,.rs-deal .rs-sock.sm svg{inset:9.5px;width:19px;height:19px}
 /* Наведение и нажатие: кнопки чуть светлеют под курсором и вдавливаются при нажатии; плитки и вкладки — так же */
-.rs-go,.rs-btn,.rs-tile,.rs-tabs button,.rs-res,.rs-order,.rs-tier,.rs-seg button,.rs-x{transition:filter .12s ease,transform .08s ease,background-color .12s ease,color .12s ease}
+.rs-go,.rs-btn,.rs-tile,.rs-tabs button,.rs-res,.rs-order,.rs-tier,.rs-seg button,.rs-x{transition:transform .08s ease,background-color .12s ease,color .12s ease}
 .rs-go:not(:disabled):active,.rs-btn:not(:disabled):active{transform:translateY(1px);filter:brightness(.88)}
 .rs-tile:hover{filter:brightness(1.1)}
 .rs-tile:active{transform:translateY(1px);filter:brightness(.92)}
@@ -471,3 +471,30 @@
 .rs-sub select, .rs-sub input { height: 20px; padding: 0 4px; font: 600 10.5px/1 var(--rs-body); letter-spacing: .12em; text-transform: uppercase; color: #e7d9bd; }
 .rs-sub input[type="number"] { width: 38px; }
 .rs-res input[type="number"] { width: 60px; height: 24px; font: 400 19px/1 var(--rs-head); }
+/* Календарь в шапке — одной строкой */
+.rs-sub > span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.rs-sub select { width: auto; max-width: 120px; }
+.rs-sub input[type="number"] { width: 32px; }
+/* Налог — сегменты как в холсте: радиокнопки спрятаны, подписи — кнопки в один ряд */
+.rs-seg { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); grid-template-columns: none; }
+.rs-seg label { position: relative; display: grid; place-items: center; height: 28px; padding: 0 3px; border-radius: 3px; cursor: pointer;
+  font: 500 10.5px/1.05 var(--rs-body); text-align: center; color: var(--rs-ash); transition: background-color .12s ease, color .12s ease; }
+.rs-seg label input { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+.rs-seg label.on { color: var(--vd-silver, #f1ece0); background: #2a2c31; box-shadow: var(--vd-lift-sm, inset 0 1px 0 rgba(255,245,225,.13), 0 3px 8px -3px rgba(0,0,0,.85)); }
+.rs-seg label:not(.on):hover { color: var(--vd-silver, #f1ece0); background: rgba(255, 240, 215, .05); }
+.rs-seg label:has(input:focus-visible) { outline: 1px solid #8a8578; outline-offset: 2px; }
+.rs-seg label:has(input:disabled) { cursor: default; }
+/* Склад: крестик ведущего — в углу плитки; поле количества — на месте числа */
+.rs-res { position: relative; }
+.rs-res .rs-res-x { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; opacity: .55; }
+.rs-res:hover .rs-res-x { opacity: 1; }
+.rs-res input[type="number"] { justify-self: start; width: 56px; height: 24px; }
+/* Контроль у ведущего — маленьким полем в строке */
+.rs input.rs-inline { width: 34px; height: 18px; padding: 0 2px; font-size: 11px; }
+/* Новый ресурс и караван — поля по содержимому */
+.rs-qty-row input[type="text"] { flex: 1 1 160px; min-width: 0; max-width: 240px; }
+.rs-qty-row input[type="number"] { width: 60px; flex: none; }
+.rs-qty-row select { flex: 1 1 120px; min-width: 0; }
+.rs-qty-row .rs-btn { flex: none; }
+.rs-stat.tax .rs-seg { gap: 2px; }
+.rs-stat.tax .rs-seg label { padding: 0 5px; font-size: 10.5px; white-space: nowrap; }
