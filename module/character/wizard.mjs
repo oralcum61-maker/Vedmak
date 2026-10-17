@@ -1,7 +1,7 @@
 // Мастер создания персонажа (корник стр. 20–71, 237–245):
 // раса → происхождение → жизненный путь → профессия → параметры → навыки → магия → снаряжение → итог.
 
-import { variantsOf, variantDefining, EASY_SKILL_RACES, EASY_SKILL_PROFESSIONS } from "../config/profession-variants.mjs";
+import { variantsOf, variantDefining, EASY_SKILL_RACES, EASY_SKILL_PROFESSIONS, START_MAGIC_ELEMENTS } from "../config/profession-variants.mjs";
 import { STATS, STAT_POINT_BUY } from "../config/stats.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import {
@@ -181,7 +181,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     };
     const magic = [];
     for (const pack of game.packs.filter(p => p.documentName === "Item")) {
-      const index = await pack.getIndex({ fields: ["type", "system.kind", "system.level", "system.danger", "system.branch", "system.staCost", "system.source.book"] });
+      const index = await pack.getIndex({ fields: ["type", "system.kind", "system.level", "system.danger", "system.branch", "system.staCost", "system.source.book",
+        "system.element", "system.description"] });
       for (const e of index) if (e.type === "spell") magic.push({ ...e, uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}` });
     }
     for (const i of game.items.filter(i => i.type === "spell")) {
@@ -592,8 +593,13 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (q.allBasicSigns) groups.push({ kind: "sign", label: "Все базовые знаки", count: 0, auto: true,
       items: pick("sign").filter(i => all.find(e => e.uuid === i.uuid)?.system?.source?.book === "Корник") });
     const labels = { spell: "Заклинания новичка", invocation: "Инвокации новичка", ritual: "Ритуалы новичка", hex: "Порча низкой опасности", sign: "Знаки" };
+    const only = START_MAGIC_ELEMENTS[prof.system.key] ?? {};
     for (const kind of ["spell", "invocation", "ritual", "hex", "sign"]) {
-      if (q[kind] > 0) groups.push({ kind, label: labels[kind], count: q[kind], auto: false, items: pick(kind) });
+      if (!(q[kind] > 0)) continue;
+      // Стихия по книге (золотой дракон — огонь): только она, стихия — в подписи группы
+      const items = only[kind] ? pick(kind).filter(i => only[kind].includes(i.element)) : pick(kind);
+      const label = only[kind] ? `${labels[kind]}: ${only[kind].map(e => ELEMENT_LABELS[e]?.toLowerCase() ?? e).join(", ")}` : labels[kind];
+      groups.push({ kind, label, count: q[kind], auto: false, items });
     }
     // Путь мага «Тома Хаоса»: заклинания сверх квоты (lifepath.mjs, effects.spells)
     if (extra) {

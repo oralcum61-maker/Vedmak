@@ -44,3 +44,6 @@ export function variantDefining(prof, key) {
 /** Раса или профессия, у которой сложные навыки при создании стоят как простые («Простые навыки»: марид, золотой дракон). */
 export const EASY_SKILL_RACES = ["marid", "goldenDragon"];
 export const EASY_SKILL_PROFESSIONS = ["maridProf", "goldenDragonProf"];
+
+/** Стихии стартовой магии по книге: золотой дракон начинает с заклинания огня (PLAN 4.252). */
+export const START_MAGIC_ELEMENTS = { goldenDragonProf: { spell: ["fire"] } };

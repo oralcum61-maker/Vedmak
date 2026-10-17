@@ -117,6 +117,15 @@ try {
   ok(/сложные навыки стоят как простые/.test(w2.element.textContent), "на шаге навыков — подсказка о простых навыках");
   w2.wiz.raceUuid = human.uuid; await w2.render({ force: true }); await wait(300);
   ok(!w2.easySkills && w2.hardAtCreation(hard), "человек: сложный навык — сложный");
+  const dragon = profs.find(p => p.system.key === "goldenDragonProf");
+  if (dragon) {
+    w2.wiz.raceUuid = races.find(r => r.system.key === "goldenDragon")?.uuid ?? human.uuid; w2.wiz.professionUuid = dragon.uuid; w2.wiz.step = "magic";
+    await w2.render({ force: true }); await wait(400);
+    const picks = [...w2.element.querySelectorAll("[data-magic-group] .magic-pick")];
+    ok(picks.length > 0 && picks.every(el => el.dataset.element === "fire") && /огонь/.test(w2.element.querySelector("[data-magic-group] .bronze-tag")?.textContent ?? ""),
+      `золотой дракон: заклинания только огня (${picks.length})`);
+    ok(picks.some(el => (el.dataset.tooltip ?? "").length > 20), "у заклинаний — описание подсказкой");
+  }
   await w2.close();
 } finally {
   if (wiz.rendered) await wiz.close();
