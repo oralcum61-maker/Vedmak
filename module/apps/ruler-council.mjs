@@ -25,7 +25,8 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
       openActor: RulerCouncil.#onOpen,
       week: RulerCouncil.#onWeek,
       weekAll: RulerCouncil.#onWeekAll,
-      newTown: RulerCouncil.#onNewTown
+      newTown: RulerCouncil.#onNewTown,
+      worldCheck: RulerCouncil.#onWorldCheck
     }
   };
 
@@ -99,6 +100,12 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onNewTown() {
     if (!game.user.isGM) return;
     if (await once(this, "newTown", () => game.vedmak.settlement.templates.askNewSettlement())) this.render();
+  }
+
+  /** Проверка мира (PLAN 4.248): порванные связи королевства — список и «Починить». */
+  static async #onWorldCheck() {
+    if (!game.user.isGM) return;
+    if (await once(this, "worldCheck", () => game.vedmak.worldCheck.askWorldCheck())) this.render();
   }
 
   /** Неделя для всех поселений по очереди (караваны везут в уже прошедшие — как и вручную). */

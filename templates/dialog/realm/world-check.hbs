@@ -1,0 +1,8 @@
+{{!-- Проверка мира (apps/world-check.mjs, PLAN 4.248): неполадки королевства по актёрам; что починится и что только показано --}}
+<div class="vedmak-roll-dialog realm-dlg" data-dlg="{{dlg}}">
+  <ul class="realm-check">
+    {{#each rows}}<li class="{{#unless fix}}info{{/unless}}"><img src="{{img}}" alt=""><span><b>{{name}}</b><small>{{text}}</small></span>
+      <i class="fa-solid {{#if fix}}fa-wrench{{else}}fa-circle-info{{/if}}" aria-hidden="true" data-tooltip="{{#if fix}}Починится{{else}}Только показано{{/if}}"></i></li>{{/each}}
+  </ul>
+  <p class="hint">{{#if fixable}}Починка ничего не удаляет: ссылка на удалённого актёра обнуляется, постройка без поселения уходит образцом в «Каталог построек», кривое число склада становится 0.{{else}}Здесь нечего чинить автоматически.{{/if}}</p>
+</div>

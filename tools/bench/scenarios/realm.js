@@ -96,6 +96,43 @@ await council.close();
   ok(town.system.week !== w[0] && town2.system.week !== w[1], "«Неделя для всех»: неделя сдвинулась у обоих");
 }
 
+stepName("проверка мира");
+{ // Проверка мира (PLAN 4.248): ссылки на удалённых актёров и кривой склад находятся и чинятся без удаления
+  const W = game.vedmak.worldCheck;
+  const ghost = "Actor.vdGhostTown00000";
+  const hadCatalog = !!game.folders.find(f => f.type === "Actor" && f.name === "Каталог построек");
+  const lost = await Actor.create({ name: "Прогон: отряд-сирота", type: "unit", folder: folder.id, system: { settlement: ghost, commander: "Actor.vdGhostHero00000" } });
+  const ruin = await Actor.create({ ...mk("house", { level: 1 }), name: "Прогон: постройка-сирота", folder: folder.id, system: { ...mk("house", { level: 1 }).system, settlement: ghost } });
+  await town2.update({ "system.routes": [...town2.system.toObject().routes, { id: "ghost", to: ghost, resource: "Еда", qty: 1 }], "system.stock.Камень": -5 });
+  try {
+    const mine = () => W.scanWorld().filter(p => [lost.id, ruin.id, town2.id].includes(p.actor.id));
+    const found = mine();
+    const has = (doc, word) => found.some(p => p.actor === doc && p.text.includes(word) && p.fix);
+    ok(has(lost, "поселению") && has(lost, "командир") && has(ruin, "Каталог") && has(town2, "караван") && has(town2, "Камень"),
+      `проверка мира: нашла отряд, командира, постройку, караван и склад (${found.length}: ${found.map(p => p.text.split(" — ")[0]).join("; ")})`);
+    // Окно со списком: подтверждение Foundry выделяет «Нет» — «Починить» нажимаем сами
+    window.__noAutoDialog = true;
+    const hook = Hooks.on("renderDialogV2", app => {
+      if (!app.element?.classList.contains("vd-realm-world-check")) return;
+      Hooks.off("renderDialogV2", hook);
+      setTimeout(() => {
+        ok(app.element.querySelectorAll(".realm-check li").length >= 5 && app.element.querySelector("footer [data-action=yes]")?.textContent.includes("Починить"),
+          `окно проверки: список неполадок и «Починить» (${app.element.querySelectorAll(".realm-check li").length})`);
+        app.element.querySelector("footer [data-action=yes]").click();
+      }, 200);
+    });
+    const n = await W.askWorldCheck().finally(() => { window.__noAutoDialog = false; }); await wait(400);
+    ok(n >= 5 && !lost.system.settlement && !lost.system.commander && !ruin.system.settlement && ruin.folder?.name === "Каталог построек",
+      `«Починить»: ссылки обнулены, постройка — образцом в каталоге (починено ${n})`);
+    ok(!town2.system.routes.some(r => r.to === ghost) && town2.system.stock["Камень"] === 0 && !!game.actors.get(lost.id) && !!game.actors.get(ruin.id),
+      "«Починить»: караван отменён, Камень 0, актёры не удалены");
+    ok(!mine().some(p => p.fix), "после починки — чинить нечего");
+  } finally {
+    for (const d of [lost, ruin]) if (game.actors.get(d.id)) await d.delete();
+    if (!hadCatalog) await game.folders.find(f => f.type === "Actor" && f.name === "Каталог построек")?.delete();
+  }
+}
+
 stepName("шаблоны поселений");
 { // Шаблоны (PLAN 4.246): печать в шапке листа сохраняет поселение, «Новое поселение…» в Совете основывает из шаблона
   const T = S.templates;

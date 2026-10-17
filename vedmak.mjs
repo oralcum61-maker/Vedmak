@@ -24,6 +24,7 @@ import { registerBuildingHooks } from "./module/settlement/buildings.mjs";
 import { registerResourceHooks } from "./module/settlement/resources.mjs";
 import { ResourceLibrary } from "./module/apps/resource-library.mjs";
 import { RulerCouncil, registerCouncilUi } from "./module/apps/ruler-council.mjs";
+import * as worldCheck from "./module/apps/world-check.mjs";
 import { registerSettlementGMHandlers } from "./module/settlement/settlement.mjs";
 import { BattleApp, registerMapBattle } from "./module/apps/battle-app.mjs";
 import * as ARMY from "./module/army/army.mjs";
@@ -338,6 +339,7 @@ Hooks.once("init", () => {
   registerBuildingHooks();
   registerResourceHooks();
   registerCouncilUi();
+  worldCheck.registerWorldCheck();
   registerSettlementGMHandlers();
   registerRealmFx();
   settlementEvents.registerEventHooks();
@@ -378,6 +380,7 @@ Hooks.once("init", () => {
     settlement: { ...settlement, events: settlementEvents, templates: settlementTemplates },
     resources: ResourceLibrary,
     council: RulerCouncil,
+    worldCheck,
     army: { ...ARMY, battle: units => BattleApp.open(units), battleAt: (scene, point, opts) => BattleApp.fromScene(scene, point, opts) },
     investigation: { ...investigation, open: () => InvestigationApp.open() },
     tavern: { open: () => TavernApp.open() },

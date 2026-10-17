@@ -5,6 +5,7 @@
   <header class="rc-head">
     <span class="rs-sock sm rc-sock"><i class="fa-solid fa-crown" aria-hidden="true"></i></span>
     <div class="rc-head-t"><h2>Совет правителя</h2><div class="rc-sub"><span>поселений {{towns.length}}</span></div></div>
+    {{#if gm}}<button type="button" class="rs-x rc-check" data-action="worldCheck" aria-label="Проверить мир" data-tooltip="Проверить мир: отряды, постройки, караваны и осада без удалённых актёров"><i class="fa-solid fa-stethoscope" aria-hidden="true"></i></button>{{/if}}
     {{#if gm}}<button type="button" class="rs-btn rc-new" data-action="newTown" data-tooltip="Основать поселение — из шаблона или с нуля">Новое поселение…</button>{{/if}}
     {{#if gm}}{{#unless empty}}<button type="button" class="rs-go rc-go" data-action="weekAll" data-tooltip="Прошла неделя во всех поселениях по очереди">Неделя для всех</button>{{/unless}}{{/if}}
   </header>
