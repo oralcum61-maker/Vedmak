@@ -195,7 +195,7 @@ async function applyDoneMark(source, result) {
   const def = result.flags.vedmak?.defense;
   const dmg = result.flags.vedmak?.damage;
   const duel = result.flags.vedmak?.verbal;
-  if (def?.attackMessageId === source.id) {
+  if (def?.attackMessageId === source.id || (def && source.flags.vedmak?.defensePrompt?.attackMessageId === def.attackMessageId)) {
     await source.update({ [`flags.vedmak.defended.${doneKey(def.defender.tokenUuid ?? def.defender.actorUuid)}`]: result.id });
   } else if (dmg?.defenseMessageId === source.id) {
     await source.update({ "flags.vedmak.damaged": result.id });

@@ -141,6 +141,40 @@ try {
   ok(menu.n >= 5 && menu.stored === true, `у игрока меню предмета по правой кнопке: пунктов ${menu.n}, «не при себе» сработало`);
   await gm.ev(`(async () => { const a = game.actors.get(${JSON.stringify(hero)}); await a?.sheet.close(); await a?.delete(); return 1; })()`);
 
+  // Скрытая атака (PLAN 4.263): ведущий бьёт «вслепую» по жетону героя игрока — игрок не видит карточку атаки, но
+  // получает приглашение защищаться без числа атаки; защита с него — итог без числа, кнопки гаснут на обеих карточках
+  const hid = await gm.ev(`(async () => {
+    const A = await import("/systems/vedmak/module/combat/attack.mjs"); const C = await import("/systems/vedmak/module/combat/common.mjs");
+    const was = canvas.scene?.id;
+    const scene = await Scene.create({ name: "Правитель: поле", width: 1600, height: 1000, padding: 0, grid: { type: 1, size: 100 } });
+    await scene.view(); for (let i = 0; i < 80 && !(canvas.ready && canvas.scene?.id === scene.id); i++) await new Promise(r => setTimeout(r, 100));
+    const hero = await Actor.create({ name: "Правитель: защитник", type: "character", ownership: { default: 0, ${P}: 3 }, system: { stats: { ref: { value: 6 } }, skills: { dodge: { value: 4 } } } });
+    const foe = await Actor.create({ name: "Правитель: бандит", type: "monster" });
+    const [ht] = await scene.createEmbeddedDocuments("Token", [{ ...(await hero.getTokenDocument()).toObject(), x: 300, y: 300, actorLink: true }]);
+    const [ft] = await scene.createEmbeddedDocuments("Token", [{ ...(await foe.getTokenDocument()).toObject(), x: 400, y: 300 }]);
+    await new Promise(r => setTimeout(r, 600));
+    const card = await A.attack(ft.actor, { kind: "unarmed" }, { skipDialog: true, messageMode: "blind", targets: [C.targetInfo(canvas.tokens.get(ht.id))] });
+    await new Promise(r => setTimeout(r, 800));
+    const prompt = game.messages.contents.findLast(m => m.flags.vedmak?.defensePrompt?.attackMessageId === card?.id);
+    window.__hid = { scene: scene.id, was, hero: hero.id, foe: foe.id, card: card?.id, prompt: prompt?.id, total: card?.flags.vedmak?.attack?.roll?.total };
+    return { card: !!card, prompt: !!prompt, whisper: prompt?.whisper.length ?? 0 }; })()`);
+  await sleep(1200);
+  const seen2 = await pl.ev(`(async () => { const h = ${JSON.stringify(await gm.ev("window.__hid"))};
+    const card = game.messages.get(h.card), prompt = game.messages.get(h.prompt);
+    const visibleCard = !!card && card.isContentVisible; const html = prompt ? (await prompt.renderHTML()).outerHTML : "";
+    const btn = prompt ? ui.chat.element?.querySelector('[data-message-id="' + h.prompt + '"] [data-vedmak="defend"][data-defense="dodge"]') : null;
+    btn?.dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true })); await new Promise(r => setTimeout(r, 2500));
+    const def = game.messages.contents.findLast(m => m.flags.vedmak?.defense?.attackMessageId === h.card);
+    return { visibleCard, prompt: !!prompt, promptHasTotal: html.includes(">" + h.total + "<"), btn: !!btn, def: !!def,
+      defHidden: def?.flags.vedmak.defense.attack.hidden, defText: def ? def.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 160) : "" }; })()`);
+  ok(seen2.prompt && !seen2.visibleCard && !seen2.promptHasTotal, `скрытая атака: игрок не видит содержимого карточки атаки, приглашение без числа (${JSON.stringify(seen2).slice(0, 160)})`);
+  ok(seen2.btn && seen2.def && seen2.defHidden === true, `игрок защитился с приглашения: ${seen2.defText}`);
+  const marks = await gm.ev(`(async () => { await new Promise(r => setTimeout(r, 800)); const h = window.__hid;
+    const dk = Object.keys(game.messages.get(h.card)?.flags.vedmak?.defended ?? {}).length, dp = Object.keys(game.messages.get(h.prompt)?.flags.vedmak?.defended ?? {}).length;
+    if (h.was) await game.scenes.get(h.was)?.view(); await game.scenes.get(h.scene)?.delete(); for (const id of [h.hero, h.foe]) await game.actors.get(id)?.delete();
+    return { dk, dp }; })()`);
+  ok(marks.dk === 1 && marks.dp === 1, `защита отмечена на скрытой карточке и на приглашении (${JSON.stringify(marks)})`);
+
   const errs = await pl.ev("window.__errs ?? []");
   ok(!errs.length, `у игрока без ошибок${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 } catch (e) {

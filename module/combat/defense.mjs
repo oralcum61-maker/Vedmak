@@ -101,15 +101,21 @@ function resolveDefense(actor, attack, defense) {
 
 /** Знает ли защищающийся «Рассеивание» (стр. 102). */
 export const knowsDispel = actor => !!actor?.items?.some(i => i.type === "spell" && i.name === "Рассеивание");
+/** Карточка настоящей атаки: приглашение защищаться от скрытой атаки ссылается на неё (PLAN 4.263). */
+const realAttackId = message => message.flags.vedmak?.defensePrompt?.attackMessageId ?? message.id;
+/** Число атаки для защищающегося: у скрытой — «?». */
+const shownTotal = attack => (attack.hidden ? "?" : attack.roll.total);
+
 /** Цена Рассеивания: половина Вын, потраченной на рассеиваемое заклинание (не меньше 1). */
 const dispelCost = attack => Math.max(1, Math.floor((attack.spell?.cost ?? 0) / 2));
 
 /** Есть ли уже карточка защиты этой цели от этой атаки. Поиск по чату, а не отметка: её может не быть без ведущего. */
 function priorDefense(message, defender) {
+  const attackId = realAttackId(message);
   const same = d => (defender.tokenUuid && d?.tokenUuid ? d.tokenUuid === defender.tokenUuid : d?.actorUuid === defender.actorUuid);
   return game.messages.some(m => {
     const def = m.flags.vedmak?.defense;
-    return def?.attackMessageId === message.id && same(def.defender);
+    return def?.attackMessageId === attackId && same(def.defender);
   });
 }
 
@@ -258,7 +264,7 @@ async function defenseDialog(actor, attack, cfg, items) {
     attack, cfg, items: gear, types,
     head: {
       title: `${attack.attacker.name}: ${attack.label}`, img: attack.img, base,
-      subtitle: `${attack.typeLabel} · результат атаки ${attack.roll.total}${attack.aimLabel ? ` · ${attack.aimLabel}` : ""}`,
+      subtitle: `${attack.typeLabel} · результат атаки ${shownTotal(attack)}${attack.aimLabel ? ` · ${attack.aimLabel}` : ""}`,
       note: attack.isRanged ? "Дистанционная атака" : ""
     },
     situations: Object.keys(DEFENSE_SITUATIONS).map(key => ({ key, ...situationFor(actor, key) })),
@@ -267,7 +273,7 @@ async function defenseDialog(actor, attack, cfg, items) {
     statusMods: [...statusRollMods(actor, "defense"),
       ...armWoundParts(actor).map(p => ({ ...p, label: `${p.label}: блок и парирование` }))],
     extraCost: defenseCostInfo(actor).cost,
-    total: { base, hint: `Нужно больше ${attack.roll.total}` },
+    total: { base, hint: attack.hidden ? "Атака скрыта — ведущий знает, сколько нужно" : `Нужно больше ${attack.roll.total}` },
     ...commonFields({ luckMax: actor.system.luck?.value ?? 0 })
   });
   const result = await foundry.applications.api.DialogV2.wait({
@@ -437,6 +443,9 @@ async function postDefense(message, data, actor, { rolls = [], messageMode }) {
     template: "systems/vedmak/templates/chat/defense.hbs", data, actor, flags: { defense: data }, rolls, messageMode
   });
   await markDone(message, card);
+  // Защита с приглашения — гасим кнопки и на настоящей (скрытой) карточке атаки
+  const realId = realAttackId(message);
+  if (realId !== message.id) await markDone(game.messages.get(realId) ?? { id: realId, isOwner: false }, card);
   return card;
 }
 
@@ -453,7 +462,7 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
       <header class="dlg-head">
         <div class="dlg-ident">
           <span class="dlg-title">${actor.name}: без защиты</span>
-          <span class="dlg-sub">${attack.attacker.name}: ${attack.label} · результат атаки ${attack.roll.total}</span>
+          <span class="dlg-sub">${attack.attacker.name}: ${attack.label} · результат атаки ${shownTotal(attack)}</span>
         </div>
         <div class="dlg-base"><span class="cap">ПОПАДАЕТ ОТ</span><b data-against-dc>${dc}</b></div>
       </header>
@@ -468,7 +477,7 @@ async function defendAgainstDC(message, attack, actor, defender, { skipDialog, d
         </div>
       </div>
       <footer class="dlg-total">
-        <div class="tot"><span class="cap">АТАКА</span><b>${attack.roll.total}</b></div>
+        <div class="tot"><span class="cap">АТАКА</span><b>${shownTotal(attack)}</b></div>
         <span class="tot-hint">Попадание, если атака больше итоговой СЛ</span>
       </footer></div>`;
     const res = await foundry.applications.api.DialogV2.wait({
@@ -516,8 +525,9 @@ function buildOutcome(message, attack, defender, r) {
   const canApplyEffects = r.hit && !!spell && attack.noDamage && !!(spell.statuses?.length || spell.regen || spell.hex || spell.buff);
   return {
     kind: "defense",
-    attackMessageId: message.id,
+    attackMessageId: realAttackId(message),
     attack: {
+      hidden: !!attack.hidden,
       attacker: attack.attacker, label: attack.label, img: attack.img, typeLabel: attack.typeLabel,
       weapon: attack.weapon, attackType: attack.attackType, aim: attack.aim, isRanged: attack.isRanged,
       damageFormula: attack.damageFormula, damageMult: attack.damageMult, nonLethal: attack.nonLethal,

@@ -3,7 +3,7 @@
     <img src="{{defender.img}}" alt="">
     <div class="card-ident">
       <span class="card-name">{{defender.name}}: {{label}}</span>
-      <span class="card-sub">против «{{attack.label}}» · {{attack.attacker.name}} {{attack.total}}</span>
+      <span class="card-sub">против «{{attack.label}}» · {{attack.attacker.name}}{{#unless attack.hidden}} {{attack.total}}{{/unless}}</span>
     </div>
     {{#if roll}}
     <div class="card-value">{{vedmakRing roll.dice}}<b>{{total}}</b><span class="cap">защита</span></div>
@@ -18,13 +18,13 @@
     {{else}}{{#if auto}}
       <p class="note dim">Защиты нет — эффект срабатывает, раз сотворение не провалено.</p>
     {{else}}
-      <p class="note dim">Без защиты: атака {{attack.total}} против СЛ {{dc}}.</p>
+      <p class="note dim">Без защиты: атака {{#if attack.hidden}}(скрыта){{else}}{{attack.total}}{{/if}} против СЛ {{dc}}.</p>
     {{/if}}{{/if}}
 
     {{#if fumbleText}}<div class="fumble-note"><b>{{fumbleLabel}}:</b> {{fumbleText}}{{#if fumbleAuto}} <button type="button" class="fumble-apply" data-vedmak="applyFumble" data-tooltip="Применить к персонажу: состояние, надёжность, оружие, испытание Уст, удар по себе">Применить</button>{{/if}}</div>{{/if}}
 
     {{#if hit}}
-      <div class="outcome failure">Попадание{{#if (gt margin 0)}} · атака выше на {{margin}}{{/if}}</div>
+      <div class="outcome failure">Попадание{{#unless attack.hidden}}{{#if (gt margin 0)}} · атака выше на {{margin}}{{/if}}{{/unless}}</div>
       {{#if critLevel}}<div class="badge crit">Критическое ранение: {{critLabel}}</div>{{/if}}
     {{else}}
       <div class="outcome success">Защита удалась</div>

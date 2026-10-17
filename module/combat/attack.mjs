@@ -575,7 +575,30 @@ export async function rollAttack(actor, src, targets, cfg) {
     actor, flags: { attack: data }, rolls: roll.rolls ?? [], messageMode: cfg.messageMode
   });
   if (unveil) await dropInvisibility(actor, "attack");
+  // Скрытая атака (ведущему, вслепую, себе) — владельцам цели отдельная карточка с кнопками защиты, без числа атаки
+  // (PLAN 4.263): ведущий бросает попадание скрыто, игрок защищается сам
+  if (card && HIDDEN_MODES.has(cfg.messageMode) && targets.length) await postDefensePrompt(card, data, targets, actor);
   return card;
+}
+
+/** Режимы чата, в которых карточку атаки видит не каждый. */
+const HIDDEN_MODES = new Set(["gm", "blind", "self", "gmroll", "blindroll", "selfroll"]);
+
+/**
+ * Приглашение защищаться от скрытой атаки: владельцам целей (игрокам) и ведущим. В отметках — копия данных атаки
+ * (защита бросается по ней) со ссылкой на настоящую карточку; число атаки на карточке не показано.
+ */
+async function postDefensePrompt(card, data, targets, actor) {
+  const owners = new Set();
+  for (const t of targets) {
+    const a = resolveActor(t.tokenUuid) ?? resolveActor(t.actorUuid);
+    for (const u of game.users) if (!u.isGM && a?.testUserPermission(u, "OWNER")) owners.add(u.id);
+  }
+  if (!owners.size) return null;
+  const whisper = [...owners, ...game.users.filter(u => u.isGM).map(u => u.id)];
+  const content = await renderTemplate("systems/vedmak/templates/chat/defense-prompt.hbs", { ...data, hasTargets: true });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, whisper,
+    flags: { vedmak: { attack: { ...data, hidden: true }, defensePrompt: { attackMessageId: card.id } } } });
 }
 
 /** Повторить атаку с теми же настройками (вторая быстрая атака, СА чудовища). */
