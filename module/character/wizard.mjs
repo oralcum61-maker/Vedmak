@@ -1,6 +1,7 @@
 // Мастер создания персонажа (корник стр. 20–71, 237–245):
 // раса → происхождение → жизненный путь → профессия → параметры → навыки → магия → снаряжение → итог.
 
+import { variantsOf, variantDefining, EASY_SKILL_RACES, EASY_SKILL_PROFESSIONS } from "../config/profession-variants.mjs";
 import { STATS, STAT_POINT_BUY } from "../config/stats.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import {
@@ -53,12 +54,14 @@ function coverAllowed(p) {
  * (PLAN 4.224) берёт по книге у профессии прикрытия: 4 навыка из её навыков, 4 предмета из её снаряжения, её капитал и
  * её определяющий навык как свой («Легенда»). Без Легенды — как есть у профессии.
  */
-function professionKit(prof, cover) {
+function professionKit(prof, cover, variant = "") {
   if (!prof) return null;
   const sys = prof.system;
+  // Выбор профессии по книге (традиция ведьмы, предмет учёного, PLAN 4.251) — у агента с Легендой это выбор Легенды
+  const chosen = variantDefining(cover ?? prof, variant);
   if (sys.key !== SECRET_AGENT || !cover) {
     return { skillChoices: sys.skillChoices, gearChoice: sys.gearChoice, gearFixed: sys.gearFixed,
-      startingMoney: sys.startingMoney, definingSkill: sys.definingSkill, cover: null };
+      startingMoney: sys.startingMoney, definingSkill: chosen ?? sys.definingSkill, cover: null, variant: chosen ? variant : "" };
   }
   const c = cover.system;
   const own = new Set(sys.skills);
@@ -69,8 +72,8 @@ function professionKit(prof, cover) {
     gearChoice: { count: Math.min(4, gear.length), options: gear },
     gearFixed: [],
     startingMoney: c.startingMoney,
-    definingSkill: { ...c.definingSkill, effect: `Легенда «${cover.name}» — определяющий навык прикрытия как свой. ${c.definingSkill.effect ?? ""}`.trim() },
-    cover
+    definingSkill: { ...(chosen ?? c.definingSkill), effect: `Легенда «${cover.name}» — определяющий навык прикрытия как свой. ${(chosen ?? c.definingSkill).effect ?? ""}`.trim() },
+    cover, variant: chosen ? variant : ""
   };
 }
 
@@ -106,7 +109,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       lifepath: true, rolls: {}, notes: {}, lifepathKind: "",
       // Возраст 80 выставила раса «ведьмак», а не игрок: при смене расы вернём прежний (ageAuto — признак, ageBefore — прежний)
       ageAuto: false, ageBefore: null,
-      professionUuid: "", coverUuid: "", skillChoices: {},
+      professionUuid: "", coverUuid: "", variant: "", skillChoices: {},
       statMode: "points", level: "average",
       stats: Object.fromEntries(STAT_KEYS.map(k => [k, 5])),
       pool: [], assign: {},
@@ -218,7 +221,13 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
   /** Легенда тайного агента — профессия прикрытия. */
   get cover() { return this.isSecretAgent ? this.data?.professions.find(p => p.uuid === this.wiz.coverUuid) ?? null : null; }
   /** Выбор навыков, снаряжение, капитал и определяющий навык — с Легендой у тайного агента. */
-  get kit() { return professionKit(this.profession, this.cover); }
+  get kit() { return professionKit(this.profession, this.cover, this.wiz.variant); }
+  /** Выбор профессии по книге (у агента — выбор его Легенды). */
+  get variants() { return variantsOf(this.cover ?? this.profession); }
+  /** «Простые навыки» (марид, золотой дракон): при создании сложный навык стоит как простой. */
+  get easySkills() { return EASY_SKILL_RACES.includes(this.raceKey) || EASY_SKILL_PROFESSIONS.includes(this.profession?.system.key); }
+  /** Сложный ли навык при создании — с учётом «Простых навыков». */
+  hardAtCreation(k) { return !!SKILLS[k]?.difficult && !this.easySkills; }
   get raceKey() { return this.race?.system.key ?? ""; }
   get isWitcher() { return this.raceKey === "witcher"; }
   /** Высший вампир: свой жизненный путь («Высший вампир. Вторая редакция»). */
@@ -430,6 +439,9 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
           covers: this.isSecretAgent ? this.data.professions.filter(coverAllowed).map(p => ({ uuid: p.uuid, name: p.name,
             selected: p.uuid === s.coverUuid })) : null,
           cover: kit.cover ? { name: kit.cover.name, img: kit.cover.img, money: kit.startingMoney, gearCount: kit.gearChoice.count } : null,
+          variant: this.variants ? { label: this.variants.label, prompt: this.variants.prompt, hint: this.variants.hint,
+            about: this.variants.options.find(o => o.key === s.variant)?.about ?? "",
+            options: this.variants.options.map(o => ({ key: o.key, label: o.stat ? `${o.label} (${STATS[o.stat]?.abbr})` : o.label, selected: o.key === s.variant })) } : null,
           skills: prof.system.skills.map(k => SKILLS[k]?.label ?? k).join(", "),
           skillList: prof.system.skills.map(k => SKILLS[k]?.label ?? k),
           money: kit.startingMoney,
@@ -480,26 +492,27 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const profKeys = this.#professionSkillKeys();
       const bonuses = this.#skillBonuses(lp);
       const native = this.nativeLanguageKey;
-      const profSpent = profKeys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0) + (s.defining || 0);
+      const profSpent = profKeys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, this.hardAtCreation(k)), 0) + (s.defining || 0);
       const pickupBudget = final.int + final.ref;
-      const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, SKILLS[k]?.difficult), 0);
+      const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, this.hardAtCreation(k)), 0);
       const finalSkills = this.#finalSkills(lp);
       context.definingSkill = prof ? { name: this.kit.definingSkill.name, stat: STATS[this.kit.definingSkill.stat]?.abbr, value: s.defining,
         minOff: s.defining <= 1, maxOff: !this.#canRaise("defining") } : null;
       context.profSkillRows = profKeys.map(k => ({
-        key: k, label: SKILLS[k].label, stat: STATS[SKILLS[k].stat].abbr, difficult: SKILLS[k].difficult,
+        key: k, label: SKILLS[k].label, stat: STATS[SKILLS[k].stat].abbr, difficult: this.hardAtCreation(k),
         value: s.profSkills[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native,
         minOff: (s.profSkills[k] ?? 0) <= 1, maxOff: !this.#canRaise(`profSkills.${k}`)
       }));
       context.pickupRows = Object.entries(SKILLS).filter(([k]) => !profKeys.includes(k)).map(([k, def]) => ({
-        key: k, label: def.label, stat: STATS[def.stat].abbr, difficult: def.difficult,
+        key: k, label: def.label, stat: STATS[def.stat].abbr, difficult: this.hardAtCreation(k),
         value: s.pickup[k] ?? 0, bonus: bonuses[k] ?? 0, final: finalSkills[k], native: k === native,
         minOff: !(s.pickup[k] > 0), maxOff: !this.#canRaise(`pickup.${k}`)
       }));
       Object.assign(context, {
         profSpent, profBudget: CREATION.professionSkillPoints, profRemaining: CREATION.professionSkillPoints - profSpent,
         pickupBudget, pickupSpent, pickupRemaining: pickupBudget - pickupSpent, cap: CREATION.skillCapCreation,
-        nativeLabel: SKILLS[native]?.label
+        nativeLabel: SKILLS[native]?.label,
+        easySkills: this.easySkills ? `${this.race && EASY_SKILL_RACES.includes(this.raceKey) ? this.race.name : this.profession?.name}: при создании сложные навыки стоят как простые.` : ""
       });
     }
 
@@ -603,6 +616,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       if (race && allowed.length && !allowed.includes(race.system.key)) out.profession = `${prof.name} недоступен для расы «${race.name}».`;
       else if (race?.system.key === "witcher" && prof.system.key !== "witcher") out.profession = "Ведьмаку доступна только профессия «Ведьмак».";
       if (this.isSecretAgent && !this.cover) out.profession ??= "Тайный агент: выберите Легенду — профессию, которой он притворяется.";
+      if (this.variants && !this.kit.variant) out.profession ??= `${this.variants.label}: выберите.`;
       this.kit.skillChoices.forEach((c, i) => {
         if ((s.skillChoices[i] ?? []).length !== c.count) out.profession ??= `${c.label}: выбрано ${(s.skillChoices[i] ?? []).length} из ${c.count}.`;
       });
@@ -617,20 +631,20 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     else if (new Set(Object.values(s.assign)).size !== 9) out.stats = "Каждый результат можно использовать один раз.";
     if (prof) {
       const keys = this.#professionSkillKeys();
-      const spent = keys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0) + (s.defining || 0);
+      const spent = keys.reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, this.hardAtCreation(k)), 0) + (s.defining || 0);
       // Профессия без списка навыков (из модуля, где книги нет — «Крестьянин», «Аристократ»): все очки в один навык
       // не вложить, так что проверяется только определяющий; остальное ведущий доберёт по книге
       const listed = prof.system.skills.length || this.kit.skillChoices.length;
       // Навыков так мало, что бюджет не вместить даже на максимуме («Тайный агент»: остальное даёт его «легенда»
       // по книге) — как без списка: не больше бюджета, остальное ведущий доберёт по книге
       const cap = CREATION.skillCapCreation ?? 6;
-      const reachable = keys.reduce((sum, k) => sum + creationSkillCost(cap, SKILLS[k]?.difficult), 0) + cap;
+      const reachable = keys.reduce((sum, k) => sum + creationSkillCost(cap, this.hardAtCreation(k)), 0) + cap;
       const exact = listed && reachable >= CREATION.professionSkillPoints;
       if (keys.some(k => (s.profSkills[k] ?? 0) < 1) || s.defining < 1) out.skills = "В каждый навык профессии — хотя бы 1 очко.";
       else if (exact && spent !== CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
       else if (!exact && spent > CREATION.professionSkillPoints) out.skills = `Навыки профессии: потрачено ${spent} из ${CREATION.professionSkillPoints}.`;
       const final = this.#finalStats(lp);
-      const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, SKILLS[k]?.difficult), 0);
+      const pickupSpent = Object.entries(s.pickup).reduce((sum, [k, v]) => sum + creationSkillCost(v || 0, this.hardAtCreation(k)), 0);
       if (!out.skills && pickupSpent > final.int + final.ref) out.skills = `Освоенные навыки: потрачено ${pickupSpent} из ${final.int + final.ref}.`;
       for (const g of this.#magicGroups()) {
         if (g.auto) continue;
@@ -721,7 +735,8 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       gearList: [...(this.kit?.gearFixed ?? []), ...s.gear, ...(lp.effects?.items ?? []), ...s.shop.map(x => x.qty > 1 ? `${x.name} ×${x.qty}` : x.name)],
       definingName: this.kit?.definingSkill.name ?? "", definingValue: prof ? s.defining + (lp.effects?.definingBonus ?? 0) : 0,
       moneyRoll: s.money ? `${this.kit?.startingMoney ?? 0} × ${s.money.sum}` : "",
-      name: s.name, race: this.race?.name, profession: this.cover ? `${prof.name} (Легенда: ${this.cover.name})` : prof?.name, age: s.age, gender: s.gender,
+      name: s.name, race: this.race?.name, profession: this.cover ? `${prof.name} (Легенда: ${this.cover.name})`
+        : this.kit?.variant ? `${prof.name} (${this.variants?.options.find(o => o.key === s.variant)?.label})` : prof?.name, age: s.age, gender: s.gender,
       homeland: HOMELANDS[s.homeland]?.label ?? "—",
       stats: STAT_KEYS.map(k => ({ abbr: STATS[k].abbr, value: final[k] })),
       skills: Object.entries(skills).filter(([, v]) => v > 0).map(([k, v]) => `${SKILLS[k].label} ${v}`).join(", "),
@@ -790,6 +805,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     else if (field.startsWith("pickup.")) s.pickup[field.slice(7)] = clamp(value, 0, CREATION.skillCapCreation);
     else if (field === "defining") s.defining = clamp(value, 0, CREATION.skillCapCreation);
     else if (field === "cover") this.#setCover(value);
+    else if (field === "variant") s.variant = this.variants?.options.some(o => o.key === value) ? value : "";
     else if (field.startsWith("skillChoice.")) {
       const [, idx, key] = field.split(".");
       const list = new Set(s.skillChoices[idx] ?? []);
@@ -863,6 +879,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (s.professionUuid === uuid) return;
     s.professionUuid = uuid;
     s.coverUuid = "";
+    s.variant = "";
     s.skillChoices = {};
     s.profSkills = {};
     s.defining = 1;
@@ -877,6 +894,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const s = this.wiz;
     if (s.coverUuid === uuid) return;
     s.coverUuid = uuid;
+    s.variant = "";
     s.skillChoices = {};
     s.gear = [];
     s.money = null;
@@ -1048,7 +1066,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     const s = this.wiz;
     const [group, key] = field.split(".");
     const cap = CREATION.skillCapCreation;
-    const next = (k, v) => creationSkillCost(v + 1, SKILLS[k]?.difficult) - creationSkillCost(v, SKILLS[k]?.difficult);
+    const next = (k, v) => creationSkillCost(v + 1, this.hardAtCreation(k)) - creationSkillCost(v, this.hardAtCreation(k));
     if (group === "stats") {
       if ((s.stats[key] ?? 0) >= CREATION.statCap) return false;
       if (s.statMode !== "points") return true;
@@ -1058,7 +1076,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (group === "profSkills" || field === "defining") {
       const v = field === "defining" ? s.defining : s.profSkills[key] ?? 0;
       if (v >= cap) return false;
-      const spent = this.#professionSkillKeys().reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, SKILLS[k]?.difficult), 0)
+      const spent = this.#professionSkillKeys().reduce((sum, k) => sum + creationSkillCost(s.profSkills[k] ?? 0, this.hardAtCreation(k)), 0)
         + (s.defining || 0);
       return spent + (field === "defining" ? 1 : next(key, v)) <= CREATION.professionSkillPoints;
     }
@@ -1066,7 +1084,7 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       const v = s.pickup[key] ?? 0;
       if (v >= cap) return false;
       const final = this.#finalStats(this.#lifepath());
-      const spent = Object.entries(s.pickup).reduce((sum, [k, x]) => sum + creationSkillCost(x || 0, SKILLS[k]?.difficult), 0);
+      const spent = Object.entries(s.pickup).reduce((sum, [k, x]) => sum + creationSkillCost(x || 0, this.hardAtCreation(k)), 0);
       return spent + next(key, v) <= final.int + final.ref;
     }
     return true;
@@ -1411,10 +1429,10 @@ async function applyCharacter(wizard, lp, { clearBio = false } = {}) {
   if (profession) {
     const p = profession.toObject();
     // Тайный агент: определяющий навык — навык Легенды как свой (тот же параметр и действие), Легенда — во флаге
-    if (kit?.cover) {
-      p.system.definingSkill = foundry.utils.deepClone(kit.definingSkill);
-      foundry.utils.setProperty(p, "flags.vedmak.cover", { name: kit.cover.name, key: kit.cover.system.key });
-    }
+    if (kit?.cover || kit?.variant) p.system.definingSkill = foundry.utils.deepClone(kit.definingSkill);
+    if (kit?.cover) foundry.utils.setProperty(p, "flags.vedmak.cover", { name: kit.cover.name, key: kit.cover.system.key });
+    // Выбор профессии по книге (PLAN 4.251): традиция ведьмы, предмет учёного
+    if (kit?.variant) foundry.utils.setProperty(p, "flags.vedmak.variant", { key: kit.variant, name: kit.definingSkill.name });
     p.system.definingSkill.value = s.defining + fx.definingBonus;
     items.push(p);
   }

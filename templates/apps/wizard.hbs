@@ -188,6 +188,16 @@
             <p class="hint">{{#if profInfo.cover}}От Легенды — 4 навыка на выбор, её определяющий навык как свой, {{profInfo.cover.gearCount}} предмета её снаряжения и её капитал ({{profInfo.cover.money}} × 2d6 крон).{{else}}По книге агент берёт у профессии прикрытия 4 навыка, её определяющий навык, 4 предмета снаряжения и капитал.{{/if}}</p>
           </fieldset>
           {{/if}}
+          {{#if profInfo.variant}}
+          <fieldset class="choice-set cover-set variant-set">
+            <legend class="cap">{{profInfo.variant.label}}</legend>
+            <select data-field="variant" aria-label="{{profInfo.variant.label}}">
+              <option value="" {{#unless profInfo.variant.about}}selected{{/unless}}>{{profInfo.variant.prompt}}</option>
+              {{#each profInfo.variant.options}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+            <p class="hint">{{profInfo.variant.hint}}</p>
+          </fieldset>
+          {{/if}}
           <div class="defining">
             <span class="stamp"><span class="cap">{{profInfo.definingAbbr}}</span></span>
             <div><span class="cap">Определяющий навык{{#if profInfo.cover}} · Легенда «{{profInfo.cover.name}}»{{/if}}</span><b>{{profInfo.defining.name}}</b><span class="dim" data-tooltip="{{profInfo.defining.effect}}">{{profInfo.defining.effect}}</span></div>
@@ -308,6 +318,7 @@
         </div>
         {{/each}}
         <p class="hint">Родной язык ({{nativeLabel}}) — 8 бесплатно. Бонусы родины и жизненного пути не поднимают навык выше 6.</p>
+        {{#if easySkills}}<p class="hint">{{easySkills}}</p>{{/if}}
       </div>
     </div>
   {{/if}}
