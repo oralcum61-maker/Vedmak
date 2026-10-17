@@ -316,6 +316,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const max = Math.floor((mode === "deposit" ? purse / WEALTH_RATE : this.actor.system.wealth) * 10) / 10;
     const units = await realmPrompt("wealth", {
       title: mode === "deposit" ? "Внести в казну" : "Взять из казны", okLabel: mode === "deposit" ? "Внести" : "Взять",
+      head: { img: this.actor.img, name: `Казна: ${this.actor.name}`, sub: [`${fmt(this.actor.system.wealth)} Богатства`, `${Math.round(this.actor.system.wealth * WEALTH_RATE).toLocaleString("ru-RU")} ${cur.abbr}`] },
       data: { max, value: Math.min(1, max) || 1, rate: WEALTH_RATE, abbr: cur.abbr, treasury: fmt(this.actor.system.wealth),
         hero: hero?.name ?? "", purse, verb: mode === "deposit" ? "внести" : "взять", maxLabel: fmt(max) },
       read: form => form.elements.units.valueAsNumber
@@ -342,7 +343,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
   static async #onOpenChronicle() { await S.openChronicle(this.actor); }
   static async #onMoveChronicle() {
-    const ok = await realmConfirm("chronicle", { title: "Летопись — в журнал",
+    const ok = await realmConfirm("chronicle", { title: "Летопись — в журнал", head: { img: this.actor.img, name: "Летопись", sub: [this.actor.name, "в журнал"] },
       text: "Все недели с листа перейдут в журнал «Летопись», а лист очистится. Продолжить?" });
     if (ok) await S.moveChronicle(this.actor);
   }
@@ -356,6 +357,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       return { key, label: e.label, fits };
     });
     const key = await realmPrompt("event", { title: `Событие: ${this.actor.name}`, okLabel: "Случилось", data: { events },
+      head: { img: this.actor.img, name: this.actor.name, sub: ["событие месяца", `${this.actor.system.calendar.monthLabel}, ${this.actor.system.calendar.week}-я неделя`] },
       read: form => form.elements.key.value });
     if (key !== null && key !== undefined) await EV.addEvent(this.actor, key);
   }
@@ -377,6 +379,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const units = ARMY.settlementUnits(town);
     const data = await realmPrompt("recruit", {
       title: `Набор войска: ${town.name}`, okLabel: "Набрать",
+      head: { img: town.img, name: "Набор войска", sub: [town.name, `Ополчение ${sys.militia}`, `без дела ${sys.summary.idle}`] },
       data: { town: town.name, militia: sys.militia, idle: sys.summary.idle, familySoldiers: FAMILY_SOLDIERS, hire: MERCENARY.hire, wealth: sys.wealth,
         units: units.map(u => ({ id: u.id, name: u.name, origin: ORIGINS[u.system.origin].label.toLowerCase() })),
         kinds: Object.entries(UNIT_KINDS).map(([key, v]) => ({ key, label: v.label, selected: key === "infantry" })) },

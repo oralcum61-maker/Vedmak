@@ -1,0 +1,8 @@
+{{!-- Шапка окна поселения и войска (module/apps/realm-dialog.mjs, PLAN 4.232): кожа, гнездо, название металлом --}}
+<header class="realm-head{{#if danger}} danger{{/if}}">
+  <span class="realm-sock">{{#if img}}<img src="{{img}}" alt="">{{else}}<i class="fa-solid {{#if icon}}{{icon}}{{else}}fa-chess-rook{{/if}}" aria-hidden="true"></i>{{/if}}</span>
+  <div class="realm-head-t">
+    <h2>{{name}}</h2>
+    {{#if sub.length}}<div class="realm-sub">{{#each sub}}<span>{{this}}</span>{{#unless @last}}<i></i>{{/unless}}{{/each}}</div>{{/if}}
+  </div>
+</header>

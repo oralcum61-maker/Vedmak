@@ -220,6 +220,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onMarch() {
     const weeks = await realmPrompt("march", { title: `В поход: ${this.actor.name}`, okLabel: "В поход",
+      head: { img: this.actor.img, name: this.actor.name, sub: ["в поход", `еды ${this.actor.system.food} в нед.`] },
       data: { food: this.actor.system.food }, read: form => form.elements.weeks.valueAsNumber });
     if (weeks !== null && weeks !== undefined) await ARMY.marchOut(this.actor, weeks);
   }
@@ -228,6 +229,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const towns = game.actors.filter(a => a.type === "settlement" && a.uuid !== this.actor.system.settlement && a.visible);
     if (!towns.length) return refuse("Осаждать некого.");
     const uuid = await realmPrompt("siege", { title: `Осада: ${this.actor.name}`, okLabel: "Осадить",
+      head: { img: this.actor.img, name: this.actor.name, sub: ["осада", `бойцов ${this.actor.system.soldiers}`], danger: true },
       data: { towns: towns.map(t => ({ uuid: t.uuid, name: t.name })) }, read: form => form.elements.town.value });
     if (uuid) await ARMY.besiege(this.actor, fromUuidSync(uuid));
   }

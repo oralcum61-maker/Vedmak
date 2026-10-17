@@ -237,6 +237,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const mine = game.user.character?.id ?? item.parent?.id;
     const { cost, weeks } = orderCost(item.type, item.system.cost, 1, item.name);
     const data = await realmPrompt("order", { title: `Заказ: ${item.name}`, okLabel: "Заказать",
+      head: { img: item.img, name: item.name, sub: [this.actor.name, town.name, `${weeks} нед.`] },
       data: { heroes: heroes.map(a => ({ uuid: a.uuid, name: a.name, selected: a.id === mine })), town: town.name, weeks,
         cost: cost.map(c => `${c.resource} ${c.qty}`).join(", ") },
       read: form => Object.fromEntries(new FormData(form)) });

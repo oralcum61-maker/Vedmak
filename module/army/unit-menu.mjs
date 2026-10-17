@@ -25,6 +25,7 @@ function tokenConfig(unit) {
 
 async function remove(unit) {
   const ok = await realmConfirm("delete", { title: `Удалить: ${unit.name}`,
+    head: { img: unit.img, name: unit.name, sub: ["удалить отряд", `бойцов ${unit.system.soldiers}`], danger: true },
     text: "Отряд исчезнет вместе с бойцами — они не вернутся ни в Ополчение, ни в семьи.", hint: "Вернуть бойцов — «Распустить»." });
   // Игроку удалять актёров Foundry не даёт — removeUnit отдаёт это ведущему
   if (ok) await removeUnit(unit);

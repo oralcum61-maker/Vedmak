@@ -329,6 +329,7 @@ export async function demolish(actor, id) {
   const item = buildingOf(actor, id);
   if (!item) return;
   const ok = await realmConfirm("demolish", { title: `Снести: ${item.name}`,
+    head: { img: item.img, name: item.name, sub: [item.system.level ? `уровень ${item.system.level}` : "стройка", actor.name], danger: true },
     text: `${item.system.level ? "Постройка будет снесена" : "Стройка будет брошена"}; потраченное не вернётся.` });
   if (!ok) return;
   if (game.user.isGM || item.canUserModify(game.user, "delete")) await item.delete();

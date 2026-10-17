@@ -101,7 +101,8 @@ async function createUnit(settlement, data) {
 export async function disband(unit) {
   const back = { militia: "Бойцы вернутся в Ополчение поселения.", families: `Семьи вернутся домой (${Math.floor(unit.system.soldiers / FAMILY_SOLDIERS)} сем.).`,
     mercenary: "Наёмники уйдут." }[unit.system.origin] ?? "";
-  const ok = await realmConfirm("disband", { title: `Распустить: ${unit.name}`, text: `${back} Снаряжение не вернётся на склад.`.trim() });
+  const ok = await realmConfirm("disband", { title: `Распустить: ${unit.name}`,
+    head: { img: unit.img, name: unit.name, sub: ["распустить отряд", `бойцов ${unit.system.soldiers}`] }, text: `${back} Снаряжение не вернётся на склад.`.trim() });
   if (!ok) return;
   return removeUnit(unit, { returnPeople: true });
 }
@@ -382,7 +383,7 @@ export function registerMapSiege() {
     const key = `${unit.uuid}|${town.uuid}`;
     if (declined.has(key) || asking.has(key)) return;
     asking.add(key);
-    const ok = await realmConfirm("walls", { title: "Под стенами", text: `«${unit.name}» подошёл к «${town.name}». Начать осаду?` })
+    const ok = await realmConfirm("walls", { title: "Под стенами", head: { img: town.img, name: town.name, sub: ["под стенами", unit.name], danger: true }, text: `«${unit.name}» подошёл к «${town.name}». Начать осаду?` })
       .finally(() => asking.delete(key));
     if (ok) await besiege(unit, town);
     else declined.add(key);

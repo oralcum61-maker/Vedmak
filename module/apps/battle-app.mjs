@@ -105,6 +105,7 @@ export function registerMapBattle() {
     if (declined.has(key) || asking.has(key)) return;
     asking.add(key);
     const ok = await realmConfirm("clash", { title: "Отряды сошлись",
+      head: { img: tokenDoc.texture?.src, name: "Отряды сошлись", sub: [tokenDoc.name, "против", enemies.map(e => e.name).join(", ")] },
       text: `«${tokenDoc.name}» сошёлся с «${enemies.map(e => e.name).join("», «")}». Начать битву на этом месте?`,
       hint: `В бою — все отряды в ${FIELD_CELLS} клетках; местность — из региона сцены.` }).finally(() => asking.delete(key));
     if (!ok) { declined.add(key); return; }
