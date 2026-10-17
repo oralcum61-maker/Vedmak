@@ -971,3 +971,15 @@ input.vd-fx-slider { flex: 1 1 auto; width: 120px; min-width: 80px; height: 16px
 /* Подвкладка уже ставит шаг .5rem между блоками — свои отступы снизу у шапки и определяющего навыка его удваивали */
 .application.vedmak .skills-tab .vp-head, .application.vedmak .skills-tab .vp-defining { margin-bottom: 0; }
 .application.vedmak .skills-tab .vp-alt, .application.vedmak .skills-tab .vp-hint { margin-top: .1rem; }
+/* Меню предмета по правой кнопке (PLAN 4.258): на строке — только «снять / надеть», остальное — в меню */
+.application.vedmak :is(.gear-item .item-tools, .gear-tile .tile-tools) > a[data-action]:not([data-action="itemToggleEquip"]) { display: none; }
+.vd-item-menu { position: fixed; z-index: 10000; display: flex; flex-direction: column; min-width: 210px; max-width: 320px; padding: 5px;
+  border-radius: 5px; background: #1b1c20; box-shadow: 0 0 0 1px #060708, inset 0 1px 0 rgba(255, 240, 215, .07), 0 10px 26px rgba(0, 0, 0, .7);
+  font: 400 13px/1.3 var(--vd-font-body, sans-serif); color: #e2ddd0; }
+.vd-item-menu > b { padding: 4px 9px 6px; font: 400 15px/1.2 var(--vd-font-head, serif); color: #f1ece0;
+  box-shadow: inset 0 -1px 0 #060607, 0 1px 0 rgba(255, 240, 215, .05); margin-bottom: 3px; }
+.vd-item-menu > a { display: flex; align-items: center; gap: 9px; padding: 6px 9px; border-radius: 3px; cursor: pointer; color: #d3ccbc; }
+.vd-item-menu > a:hover { background: #2c2d33; color: #fff; }
+.vd-item-menu > a i { width: 16px; text-align: center; color: #bab4a8; }
+.vd-item-menu > a.on i { color: #e6c48a; }
+.vd-item-menu > a:has(.fa-trash):hover { background: rgba(184, 67, 44, .25); color: #f0b3a2; }

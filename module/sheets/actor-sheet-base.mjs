@@ -20,6 +20,7 @@ import { profileSheet } from "../apps/perf.mjs";
 import { verbalAction, verbalContext, resetDuel, setDuelResolve } from "../combat/verbal.mjs";
 import { detachEnhancement, detachCrossbowMod } from "../crafting/enhancements.mjs";
 import { markLockedActions, guardLockedActions } from "./view-only.mjs";
+import { bindItemMenu } from "./item-menu.mjs";
 import { animateTab, animateVitals } from "../fx/sheet-motion.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -403,6 +404,55 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (item) await detachCrossbowMod(this.actor, item, Number(target.dataset.index));
   }
 
+  /* ------------------------- Чужие правки во время набора ------------------------- */
+
+  /** Перерисовка отложена до выхода из поля (PLAN 4.258). */
+  #typingHold = false;
+
+  /** Поле листа, где сейчас набирают текст, или null. */
+  #typingField() {
+    const el = document.activeElement;
+    if (!el || !this.element?.contains(el)) return null;
+    if (el.matches?.('input:not([type="checkbox"]):not([type="radio"]):not([type="button"]), textarea, select') || el.isContentEditable) return el;
+    return null;
+  }
+
+  /**
+   * Другой человек поменял этого персонажа, пока здесь набирают текст в поле, — перерисовать после выхода из поля:
+   * раньше лист перерисовывался сразу, и набранное пропадало (поле возвращалось к прежнему значению).
+   */
+  render(options = {}, _options = {}) {
+    const force = typeof options === "boolean" ? options : !!options?.force;
+    const field = this.rendered && !force ? this.#typingField() : null;
+    if (field && Date.now() - (this.actor?._vdRemoteAt ?? 0) < 2000) {
+      if (!this.#typingHold) {
+        this.#typingHold = true;
+        field.addEventListener("focusout", () => setTimeout(() => {
+          this.#typingHold = false;
+          if (this.rendered) this.render();
+        }, 0), { once: true });
+      }
+      return Promise.resolve(this);
+    }
+    return super.render(options, _options);
+  }
+
+  /**
+   * Пока перерисовка отложена, форма листа хранит прежние значения других полей — отправить всю форму значило бы
+   * откатить чужую правку. Поэтому отправляется только изменённое поле.
+   */
+  async _onChangeForm(formConfig, event) {
+    const el = event.target;
+    if (this.#typingHold && el?.name && el.form === this.form) {
+      const data = new foundry.applications.ux.FormDataExtended(this.form).object;
+      if (el.name in data) {
+        await this.document.update({ [el.name]: data[el.name] });
+        return;
+      }
+    }
+    return super._onChangeForm(formConfig, event);
+  }
+
   /** Показывать только изученные навыки (состояние окна, не документа). */
   trainedOnly = false;
 
@@ -775,6 +825,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
     // Наблюдатель: кнопки правки спрятаны, строки с проверками и переключателями видны, но не нажимаются
     markLockedActions(this, { view: VIEW_ACTIONS, inert: INERT_ACTIONS });
+    // Редкие кнопки предметов — в меню по правой кнопке (PLAN 4.258)
+    bindItemMenu(this);
     // Устаревшие скрытые вкладки держат прежние значения, а форма листа отправляется целиком: их поля ушли бы
     // вместе с правкой на открытой вкладке и откатили бы чужие изменения (кроны от ведущего, навыки из мастера).
     // Отключённые поля в форму не попадают; вкладку перерисует changeTab, когда её откроют.

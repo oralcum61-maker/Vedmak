@@ -245,7 +245,29 @@ export class VedmakActor extends Actor {
     return super._preUpdate(changed, options, user);
   }
 
+  /**
+   * Чужая правка (PLAN 4.258): метка времени — лист, где этот пользователь сейчас набирает текст, отложит перерисовку
+   * до выхода из поля (иначе набранное пропадало). Ставится до super: перерисовку листа запускает он.
+   */
+  #markRemote(userId) { if (userId !== game.user.id) this._vdRemoteAt = Date.now(); }
+
+  _onUpdateDescendantDocuments(parent, collection, documents, changes, options, userId) {
+    this.#markRemote(userId);
+    super._onUpdateDescendantDocuments(parent, collection, documents, changes, options, userId);
+  }
+
+  _onCreateDescendantDocuments(parent, collection, documents, data, options, userId) {
+    this.#markRemote(userId);
+    super._onCreateDescendantDocuments(parent, collection, documents, data, options, userId);
+  }
+
+  _onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId) {
+    this.#markRemote(userId);
+    super._onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId);
+  }
+
   _onUpdate(changed, options, userId) {
+    this.#markRemote(userId);
     super._onUpdate(changed, options, userId);
     if (userId !== game.user.id) return;
     if (foundry.utils.getProperty(changed, "system.hp.value") === undefined) return;

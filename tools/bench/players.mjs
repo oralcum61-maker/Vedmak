@@ -117,6 +117,30 @@ try {
   ok(!seen.gmScreen && !seen.tool, `экран ведущего игроку не открывается, кнопки на панели нет (${seen.gmScreen}, ${seen.tool})`);
   ok(!seen.council.newTown && !seen.council.check && !seen.council.weekAll, `в Совете у игрока нет кнопок ведущего (${JSON.stringify(seen.council)})`);
 
+  // Лист во время чужой правки (PLAN 4.258): ведущий набирает в поле листа персонажа игрока, игрок в это время меняет
+  // персонажа — набранное не пропадает, после выхода из поля уходит только это поле (правка игрока не откатывается)
+  const hero = await gm.ev(`(async () => { const a = await Actor.create({ name: "Правитель: герой", type: "character", ownership: { default: 0, ${P}: 3 } });
+    await a.createEmbeddedDocuments("Item", [{ name: "Меч", type: "weapon" }]);
+    const s = a.sheet; await s.render({ force: true }); await new Promise(r => setTimeout(r, 1000)); s.element.querySelector('[data-tab="bio"]')?.click();
+    await new Promise(r => setTimeout(r, 700)); const f = s.element.querySelector('input[name="name"]'); f.focus(); f.value = "Правитель: набранное имя"; return a.id; })()`);
+  await pl.ev(`(async () => { await game.actors.get(${JSON.stringify(hero)}).update({ "system.hp.value": 17 }); return 1; })()`);
+  await sleep(1500);
+  const typing = await gm.ev(`(async () => { const a = game.actors.get(${JSON.stringify(hero)}); const f = a.sheet.element.querySelector('input[name="name"]');
+    const kept = f?.value; f.dispatchEvent(new Event("change", { bubbles: true })); f.blur(); await new Promise(r => setTimeout(r, 1500));
+    return { kept, name: a.name, hp: a.system.hp.value }; })()`);
+  ok(typing.kept === "Правитель: набранное имя" && typing.name === "Правитель: набранное имя" && typing.hp === 17,
+    `чужая правка во время набора: текст не пропал, сохранился, ПЗ игрока не откатились (${JSON.stringify(typing)})`);
+  // Меню предмета по правой кнопке — у игрока на своём листе
+  const menu = await pl.ev(`(async () => { const a = game.actors.get(${JSON.stringify(hero)}); const s = a.sheet; await s.render({ force: true });
+    await new Promise(r => setTimeout(r, 1000)); s.element.querySelector('[data-tab="gear"]')?.click(); await new Promise(r => setTimeout(r, 800));
+    const row = s.element.querySelector(".gear-item"); const r = row.getBoundingClientRect();
+    row.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: r.left + 60, clientY: r.top + 20 }));
+    const m = document.querySelector(".vd-item-menu"); const n = m?.querySelectorAll("a").length ?? 0;
+    [...(m?.querySelectorAll("a") ?? [])].find(x => /не при себе/i.test(x.textContent))?.click(); await new Promise(z => setTimeout(z, 900));
+    await s.close(); return { n, stored: a.items.find(i => i.type === "weapon")?.system.stored }; })()`);
+  ok(menu.n >= 5 && menu.stored === true, `у игрока меню предмета по правой кнопке: пунктов ${menu.n}, «не при себе» сработало`);
+  await gm.ev(`(async () => { const a = game.actors.get(${JSON.stringify(hero)}); await a?.sheet.close(); await a?.delete(); return 1; })()`);
+
   const errs = await pl.ev("window.__errs ?? []");
   ok(!errs.length, `у игрока без ошибок${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 } catch (e) {
