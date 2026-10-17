@@ -47,13 +47,32 @@
 
   {{else}}
 
+  {{!-- НИП (PLAN 4.259): с профессией — подвкладки «Навыки» и «Профессия», как у персонажа --}}
   <div class="skills-head">
+    {{#if prof}}
+    <nav class="tabs pane-switch" aria-label="Навыки и профессия">
+      <a class="{{skillTabs.list.cssClass}}" data-action="tab" data-group="skills" data-tab="list"><span>Навыки</span></a>
+      <a class="{{skillTabs.profession.cssClass}}" data-action="tab" data-group="skills" data-tab="profession">
+        <span>{{prof.name}}</span><span class="count">{{prof.learned}}/{{prof.total}}</span>
+      </a>
+    </nav>
+    {{/if}}
     <span class="grow"></span>
     <a class="toggle trained-toggle{{#if trainedOnly}} active{{/if}}" data-action="toggleTrainedOnly">
       {{#if trainedOnly}}Показать все{{else}}Только изученные{{/if}}
     </a>
   </div>
+  {{#if prof}}
+  <div class="tab pane {{skillTabs.list.cssClass}}" data-group="skills" data-tab="list">
+    {{> "systems/vedmak/templates/actor/parts/skill-list.hbs"}}
+  </div>
+  <div class="tab pane {{skillTabs.profession.cssClass}}" data-group="skills" data-tab="profession">
+    {{> "systems/vedmak/templates/actor/parts/profession.hbs"}}
+  </div>
+  {{else}}
   {{> "systems/vedmak/templates/actor/parts/skill-list.hbs"}}
+  <p class="hint npc-prof-hint">Перетащите на лист профессию из компендиума — у НИП появятся определяющий навык и древо способностей.</p>
+  {{/if}}
 
   {{/if}}
 </section>

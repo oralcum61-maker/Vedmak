@@ -6,6 +6,8 @@ import { BODY_TYPES, RESIST_KEYS, SIZE_MODS } from "../config/combat.mjs";
 import { currencyForName, lootCoins } from "../character/money.mjs";
 import { asGM } from "../combat/common.mjs";
 import { traitSummary } from "../combat/monster-traits.mjs";
+import { professionContext, swapBranch } from "./profession-context.mjs";
+import { setAbilityValue } from "../character/advancement.mjs";
 
 /** Списки объектов на форме (name="system.abilities.0.name") — собираются обратно в массивы. */
 const OBJECT_ARRAYS = ["abilities", "loot"];
@@ -40,7 +42,10 @@ export class MonsterSheet extends VedmakActorSheet {
       toggleAbilityEdit: MonsterSheet.#onToggleAbilityEdit,
       abilityPost: MonsterSheet.#onAbilityPost,
       lootCoins: MonsterSheet.#onLootCoins,
-      lootReset: MonsterSheet.#onLootReset
+      lootReset: MonsterSheet.#onLootReset,
+      rollDefining: MonsterSheet.#onRollDefining,
+      rollAbility: MonsterSheet.#onRollAbility,
+      swapBranch: MonsterSheet.#onSwapBranch
     }
   };
 
@@ -71,6 +76,14 @@ export class MonsterSheet extends VedmakActorSheet {
         { id: "effects", label: "Эффекты" }
       ],
       initial: "stats"
+    },
+    // Подвкладки «Навыков» (PLAN 4.259): навыки и профессия НИП — как у персонажа
+    skills: {
+      tabs: [
+        { id: "list", label: "Навыки" },
+        { id: "profession", label: "Профессия" }
+      ],
+      initial: "list"
     },
     // Подвкладки «Боя»: обычный бой и словесная дуэль — как у персонажа
     combat: {
@@ -112,6 +125,9 @@ export class MonsterSheet extends VedmakActorSheet {
     });
     context.stats = context.stats.filter(s => s.key !== "luck");
     context.editAbilities = this.editAbilities;
+    // Профессия НИП (PLAN 4.259): тот же блок, что у персонажа, без развития за О.У
+    context.prof = professionContext(this.actor);
+    context.skillTabs = this._prepareTabs("skills");
     context.abilityKinds = ABILITY_KINDS;
     context.hasResistText = !!(system.info.resistText || system.info.immunityText || system.info.susceptText);
     return context;
@@ -168,6 +184,44 @@ export class MonsterSheet extends VedmakActorSheet {
   }
 
   /* ------------------------------ Действия ------------------------------ */
+
+  static async #onRollDefining(event) { await this.actor.rollDefining({ skipDialog: event.shiftKey }); }
+
+  static async #onSwapBranch(event, target) {
+    await swapBranch(this.actor, Number(target.dataset.alt), Number(target.dataset.branch));
+  }
+
+  static async #onRollAbility(event, target) {
+    await this.actor.rollAbility(Number(target.dataset.branch), Number(target.dataset.index), { skipDialog: event.shiftKey });
+  }
+
+  _onRender(context, options) {
+    super._onRender(context, options);
+    // Значения древа и определяющего навыка хранятся в предмете профессии — как у персонажа
+    this._listen("input.ability-value", "change", (event, input) => {
+      event.stopPropagation();
+      const prof = this.actor.system.profession;
+      if (prof) setAbilityValue(prof, Number(input.dataset.branch), Number(input.dataset.index), input.value);
+    });
+    this._listen("input.defining-value", "change", (event, input) => {
+      event.stopPropagation();
+      this.actor.system.profession?.update({ "system.definingSkill.value": Math.max(0, Number(input.value) || 0) });
+    });
+  }
+
+  /** Профессия у НИП одна: новая заменяет прежнюю (очки древа прежней пропадут). */
+  async _onDropItem(event, item) {
+    if (item.type === "profession" && this.actor.isOwner && item.parent?.uuid !== this.actor.uuid) {
+      const old = this.actor.itemTypes.profession;
+      if (old.length) {
+        const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Сменить профессию" },
+          content: `<p>Заменить «${old[0].name}» на «${item.name}»? Очки, вложенные в древо прежней профессии, пропадут.</p>` });
+        if (!ok) return null;
+        await this.actor.deleteEmbeddedDocuments("Item", old.map(i => i.id));
+      }
+    }
+    return super._onDropItem(event, item);
+  }
 
   static async #onRowAdd(event, target) {
     const field = target.dataset.field;

@@ -44,6 +44,10 @@ export const ABILITY_KINDS = {
 
 export class MonsterData extends foundry.abstract.TypeDataModel {
 
+  /** Профессия НИП (PLAN 4.259): предмет «Профессия» на актёре — определяющий навык и древо, как у персонажа. */
+  get profession() { return this.parent?.itemTypes?.profession?.[0] ?? null; }
+  get professionKey() { return this.profession?.system.key ?? ""; }
+
   static defineSchema() {
     const keys = () => new ArrayField(new StringField({ required: true, blank: false }));
     return {

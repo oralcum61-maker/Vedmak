@@ -2,6 +2,7 @@
 
 import { VedmakActorSheet } from "./actor-sheet-base.mjs";
 import { STATS, STAT_GROUPS } from "../config/stats.mjs";
+import { professionContext, swapBranch } from "./profession-context.mjs";
 import { REGIONS, HOMELANDS, witcherSchools, schoolMechanics, modTargets, SOCIAL_SKILLS, socialModifier, abilityBonus } from "../config/character.mjs";
 import { SKILLS } from "../config/skills.mjs";
 import {
@@ -342,46 +343,8 @@ export class CharacterSheet extends VedmakActorSheet {
       for (const g of context.skillGroups) for (const s of g.skills) s.offer = skillOffer(actor, s.key);
     }
 
-    // Профессия и древо
-    const prof = system.profession;
-    if (prof) {
-      const ps = prof.system;
-      const ds = ps.definingSkill;
-      context.prof = {
-        id: prof.id, name: prof.name, img: prof.img, vigor: ps.vigor, magicAbilities: ps.magicAbilities,
-        defining: {
-          name: ds.name, value: ds.value, effect: ds.effect, statLabel: STATS[ds.stat]?.label ?? "",
-          statAbbr: STATS[ds.stat]?.abbr ?? "", base: (system.stats[ds.stat]?.effective ?? 0) + ds.value,
-          offer: this.advanceMode ? definingOffer(actor) : null
-        },
-        branches: ps.branches.map((b, bi) => ({
-          name: b.name, index: bi,
-          abilities: b.abilities.map((ab, ai) => {
-            const bonus = abilityBonus(ab.mechanic, ab.value);
-            const unlocked = ps.isUnlocked(bi, ai);
-            const prev = ai === 0 ? ds.name : b.abilities[ai - 1].name;
-            return {
-              ...ab, index: ai, unlocked,
-              lockNote: `Нужно 5 очков в «${prev}».`,
-              // Застёжка к следующей ступени: открыта, когда вложено 5
-              gate: ai < b.abilities.length - 1, gateOpen: ab.value >= 5,
-              statAbbr: STATS[ab.stat]?.abbr ?? "",
-              base: ab.stat ? (system.stats[ab.stat]?.effective ?? 0) + ab.value : null,
-              mechanicNote: bonus.vigor ? `+${bonus.vigor} Эн.` : bonus.toxicity ? `+${bonus.toxicity}%` : "",
-              offer: this.advanceMode ? abilityOffer(actor, bi, ai) : null
-            };
-          })
-        }))
-      };
-      context.prof.altBranches = (ps.altBranches ?? []).map((a, ai) => ({
-        ...a, index: ai,
-        abilities: a.abilities.map(x => ({ ...x, statAbbr: STATS[x.stat]?.abbr ?? "" })),
-        targets: ps.branches.map((b, bi) => ({ index: bi, name: b.name }))
-      }));
-      const abilities = context.prof.branches.flatMap(b => b.abilities);
-      context.prof.learned = abilities.filter(ab => ab.value > 0).length;
-      context.prof.total = abilities.length;
-    }
+    // Профессия и древо — общий блок с листом НИП (sheets/profession-context.mjs)
+    context.prof = professionContext(actor, this.advanceMode ? { definingOffer, abilityOffer } : {});
 
     // Расовые навыки (высший вампир)
     context.vamp = racePowersContext(actor);
@@ -877,23 +840,7 @@ export class CharacterSheet extends VedmakActorSheet {
 
   /** Взять дополнительную ветвь вместо основной: ветви меняются местами вместе с вложенными очками. */
   static async #onSwapBranch(event, target) {
-    const prof = this.actor.system.profession;
-    if (!prof) return;
-    const ai = Number(target.dataset.alt), bi = Number(target.dataset.branch);
-    const data = prof.system.toObject();
-    const alt = data.altBranches[ai], old = data.branches[bi];
-    if (!alt || !old) return;
-    if (old.abilities.some(a => a.value > 0)) {
-      const ok = await foundry.applications.api.DialogV2.confirm({
-        window: { title: "Сменить ветвь" },
-        content: `<p>В ветви «${foundry.utils.escapeHTML(old.name)}» уже вложены очки. Ветвь уйдёт в «Другие ветви» вместе с ними — её можно вернуть. Сменить на «${foundry.utils.escapeHTML(alt.name)}»?</p>`
-      });
-      if (!ok) return;
-    }
-    data.branches[bi] = { name: alt.name, extra: alt.extra ?? "", source: alt.source ?? "", abilities: alt.abilities };
-    // Своя книга ветви; у основной ветви профессии её нет — книга профессии
-    data.altBranches[ai] = { name: old.name, source: old.source || prof.system.source?.book || "", extra: old.extra ?? "", abilities: old.abilities };
-    await prof.update({ "system.branches": data.branches, "system.altBranches": data.altBranches });
+    await swapBranch(this.actor, Number(target.dataset.alt), Number(target.dataset.branch));
   }
 
   /* Истинная форма высшего вампира */
