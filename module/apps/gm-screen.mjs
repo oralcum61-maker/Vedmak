@@ -149,7 +149,7 @@ export class GmScreen extends HandlebarsApplicationMixin(ApplicationV2) {
     });
     on(notes, "change", () => { clearTimeout(timer); game.settings.set(SYS, "gmNotes", notes.value); });
     on(root.querySelector("select[name=skill]"), "change", e => { this.check.skill = e.target.value; });
-    on(root.querySelector("input[name=dc]"), "change", e => { this.check.dc = e.target.value; });
+    on(root.querySelector("input[name=dc]"), "input", e => { this.check.dc = e.target.value; });
     for (const box of root.querySelectorAll("input[data-pick]")) on(box, "change", () => {
       if (box.checked) this.picked.add(box.dataset.pick); else this.picked.delete(box.dataset.pick);
     });

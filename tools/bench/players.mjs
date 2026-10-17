@@ -104,6 +104,19 @@ try {
   await sleep(2000);
   ok(await gm.ev(`${T}.system.buildingActors.length`) === was, "игрок снёс постройку");
 
+  // Что только для ведущего (PLAN 4.240–4.250): у игрока нет печати шаблона и отмены недели, экрана ведущего, кнопок Совета
+  const seen = await pl.ev(`(async () => { const s = ${T}.sheet; await s.render({ force: true }); await new Promise(r => setTimeout(r, 1200));
+    const sheet = { stamp: !!s.element.querySelector("[data-action=saveTemplate]"), undo: !!s.element.querySelector("[data-action=undoWeek]") }; await s.close();
+    const gmApp = game.vedmak.gmScreen.open(); await new Promise(r => setTimeout(r, 500));
+    const c = game.vedmak.council.open(); await new Promise(r => setTimeout(r, 1000));
+    const council = { newTown: !!c.element.querySelector("[data-action=newTown]"), check: !!c.element.querySelector("[data-action=worldCheck]"), weekAll: !!c.element.querySelector("[data-action=weekAll]") };
+    await c.close();
+    return { sheet, gmScreen: !!gmApp || !!foundry.applications.instances.get("vedmak-gm-screen")?.rendered, council,
+      tool: !!ui.controls?.controls?.tokens?.tools?.vedmakGmScreen }; })()`);
+  ok(!seen.sheet.stamp && !seen.sheet.undo, `у игрока на листе нет печати шаблона и отмены недели (${JSON.stringify(seen.sheet)})`);
+  ok(!seen.gmScreen && !seen.tool, `экран ведущего игроку не открывается, кнопки на панели нет (${seen.gmScreen}, ${seen.tool})`);
+  ok(!seen.council.newTown && !seen.council.check && !seen.council.weekAll, `в Совете у игрока нет кнопок ведущего (${JSON.stringify(seen.council)})`);
+
   const errs = await pl.ev("window.__errs ?? []");
   ok(!errs.length, `у игрока без ошибок${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 } catch (e) {

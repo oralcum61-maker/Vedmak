@@ -145,7 +145,22 @@ const ACTIONS = [
   { name: "Библиотека ресурсов: прокрутка", prep: `libraryRect()`,
     act: async (m, p) => { for (let i = 0; i < 10; i++) { await m.wheel(p.x, p.y, i < 5 ? 240 : -240); await sleep(40); } return 10; }, after: `closeApps()` },
   { name: "Совет правителя: прокрутка", prep: `councilRect()`,
-    act: async (m, p) => { for (let i = 0; i < 10; i++) { await m.wheel(p.x, p.y, i < 5 ? 240 : -240); await sleep(40); } return 10; }, after: `closeApps()` }
+    act: async (m, p) => { for (let i = 0; i < 10; i++) { await m.wheel(p.x, p.y, i < 5 ? 240 : -240); await sleep(40); } return 10; }, after: `closeApps()` },
+  // Экран ведущего (PLAN 4.250): открыть, наведение и прокрутка по столбцам, поиск генераторов
+  { name: "Экран ведущего: открыть", prep: `openGmScreen()`, act: async () => 0, measurePrep: true, freezeMs: 250, after: `closeApps()` },
+  { name: "Экран ведущего: наведение и прокрутка", prep: `gmScreenRect()`,
+    act: async (m, p) => { let n = await m.sweep(Array.from({ length: 60 }, (_, i) => [p.x + (i % 12 + .5) * p.w / 12, p.y + Math.floor(i / 12) * p.h / 5]));
+      for (const x of p.cols) for (let i = 0; i < 6; i++) { await m.wheel(x, p.y + p.h * .5, i < 3 ? 240 : -240); await sleep(40); n++; } return n; }, after: `closeApps()` },
+  { name: "Экран ведущего: поиск генераторов", prep: `gmScreenFind()`,
+    act: async (m, p, b) => { await m.click(p.x, p.y); for (const ch of "заказ таверна") { await b.send("Input.dispatchKeyEvent", { type: "char", text: ch }); await sleep(30); } return 14; }, after: `closeApps()` },
+  // Поселения на карте (PLAN 4.249): жетон поселения тащат — плашка и стрелки каравана перерисовываются
+  { name: "Карта: перетаскивание жетона поселения", prep: `realmMapToken()`,
+    act: async (m, p) => m.drag(p.x, p.y, p.x + 200, p.y + 80, { steps: 30 }), after: `clearRealmMap()` },
+  // Мастер создания (PLAN 4.252): фильтр шага «Магия» — плашки и поиск без перерисовки окна
+  { name: "Мастер: фильтр магии", prep: `wizardMagic()`,
+    act: async (m, p, b) => { let n = 0; for (const c of p.chips) { n += await m.click(c.x, c.y); await sleep(150); }
+      await m.click(p.find.x, p.find.y); for (const ch of "благословение") { await b.send("Input.dispatchKeyEvent", { type: "char", text: ch }); await sleep(30); n++; } return n; },
+    after: `closeApps()` }
 ];
 
 // Помощники в странице: координаты и подготовка
@@ -187,7 +202,33 @@ window.__vf = {
     }
     return { settlement: town, building: town.system.buildingActors[0], unit };
   },
-  async closeApps() { for (const app of [...foundry.applications.instances.values()]) if (app.document || ["vedmak-resources", "vedmak-council"].includes(app.id)) await app.close(); },
+  async closeApps() { for (const app of [...foundry.applications.instances.values()]) if (app.document || ["vedmak-resources", "vedmak-council", "vedmak-gm-screen"].includes(app.id) || app.constructor.name === "CharacterWizard") await app.close();
+    for (const id of window.__vfWizActors ?? []) await game.actors.get(id)?.delete(); window.__vfWizActors = []; },
+  async openGmScreen() { await this.closeApps(); const app = game.vedmak.gmScreen.open(); await new Promise(r => setTimeout(r, 1500)); app.setPosition({ left: 200, top: 40 }); return {}; },
+  async gmScreenRect() { await this.openGmScreen(); const el = foundry.applications.instances.get("vedmak-gm-screen").element; const r = el.getBoundingClientRect();
+    const cols = [...el.querySelectorAll(".gs-col")].map(c => { const q = c.getBoundingClientRect(); return Math.round(q.left + q.width / 2); });
+    return { x: Math.round(r.left), y: Math.round(r.top + 80), w: Math.round(r.width), h: Math.round(r.height - 100), cols }; },
+  async gmScreenFind() { await this.openGmScreen(); const r = foundry.applications.instances.get("vedmak-gm-screen").element.querySelector("input[name=genFind]").getBoundingClientRect();
+    return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; },
+  /** Два жетона поселений с караванами туда и обратно на текущей сцене; точка — первый жетон. */
+  async realmMapToken() { await this.clearRealmMap(); ui.sidebar.collapse?.();
+    const mk = name => Actor.create({ name, type: "settlement", system: { families: 4, stock: { "Еда": 0 } } }, { vedmakStarter: false });
+    const a = await mk("Фриз: карта А"), b = await mk("Фриз: карта Б");
+    await a.update({ "system.routes": [{ id: "r1", to: b.uuid, resource: "Еда", qty: 2 }] }); await b.update({ "system.routes": [{ id: "r2", to: a.uuid, resource: "Топливо", qty: 1 }] });
+    const c = canvas.scene.dimensions; const gs = canvas.grid.size; const view = canvas.stage.pivot;
+    const [ta] = await canvas.scene.createEmbeddedDocuments("Token", [{ ...(await a.getTokenDocument()).toObject(), x: Math.round(view.x - gs * 3), y: Math.round(view.y), actorLink: true }]);
+    await canvas.scene.createEmbeddedDocuments("Token", [{ ...(await b.getTokenDocument()).toObject(), x: Math.round(view.x + gs * 3), y: Math.round(view.y - gs), actorLink: true }]);
+    window.__vfMap = [a.id, b.id]; await new Promise(r => setTimeout(r, 1200)); void c;
+    return this.toClient(canvas.tokens.get(ta.id).center); },
+  async clearRealmMap() { for (const id of window.__vfMap ?? []) { for (const t of canvas.scene.tokens.filter(t => t.actorId === id)) await t.delete(); await game.actors.get(id)?.delete(); } window.__vfMap = []; },
+  /** Мастер создания временного героя: человек, ведьма, шаг «Магия»; плашки фильтра инвокаций и поле поиска. */
+  async wizardMagic() { await this.closeApps(); const a = await Actor.create({ name: "Фриз: мастер", type: "character" }); window.__vfWizActors = [a.id];
+    const { CharacterWizard } = await import("/systems/vedmak/module/character/wizard.mjs"); const w = new CharacterWizard({ actor: a });
+    await w.render({ force: true }); await new Promise(r => setTimeout(r, 1000));
+    w.wiz.raceUuid = w.data.races.find(r => r.system.key === "human").uuid; w.wiz.professionUuid = w.data.professions.find(p => p.system.key === "witch-leo").uuid; w.wiz.step = "magic";
+    await w.render({ force: true }); w.setPosition({ left: 150, top: 30 }); await new Promise(r => setTimeout(r, 800));
+    const panel = w.element.querySelector("[data-magic-group]"); const pt = el => { const r = el.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; };
+    return { chips: [...panel.querySelectorAll("[data-mf]")].map(pt), find: pt(panel.querySelector("[data-magic-find]")) }; },
   async openDoc(type) { await this.closeApps(); const doc = (await this.realm())[type]; await doc.sheet.render({ force: true }); await new Promise(r => setTimeout(r, 1200));
     doc.sheet.setPosition({ left: 300, top: 40 }); window.__vfDoc = doc.uuid; return {}; },
   async docTabs(type) { await this.openDoc(type); const el = fromUuidSync(window.__vfDoc).sheet.element;
