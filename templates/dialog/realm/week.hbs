@@ -1,0 +1,18 @@
+{{!-- Предпросмотр недели (settlement.mjs → askWeek, PLAN 4.239): что будет по средним броскам — склад, казна, нехватки,
+     стройка, конец месяца; отметка «больше не спрашивать» --}}
+<div class="vedmak-roll-dialog realm-dlg realm-dlg-week" data-dlg="{{dlg}}">
+  <p class="realm-lead">{{when}}. Так пройдёт неделя по средним броскам — точные числа выпадут при ходе.</p>
+  {{#if rows.length}}
+  <section class="realm-after">
+    <span class="realm-after-cap">Склад и казна</span>
+    <div class="realm-ledger">
+      {{#each rows}}<div class="realm-cell{{#if bad}} bad{{/if}}"><span class="realm-cell-l">{{label}}</span>
+        <span class="realm-delta"><s>{{before}}</s><i>→</i><b class="{{dir}}">{{after}}</b>{{#if unit}}<em>{{unit}}</em>{{/if}}</span></div>{{/each}}
+    </div>
+  </section>
+  {{else}}<p class="hint">Склад не изменится.</p>{{/if}}
+  {{#each warn}}<p class="hint realm-warn">{{this}}</p>{{/each}}
+  {{#each good}}<p class="hint realm-good">{{this}}</p>{{/each}}
+  {{#each notes}}<p class="hint">{{this}}</p>{{/each}}
+  <label class="realm-skip"><input type="checkbox" name="skip"> Больше не спрашивать — вернуть можно в настройках системы</label>
+</div>

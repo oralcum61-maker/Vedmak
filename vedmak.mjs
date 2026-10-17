@@ -275,6 +275,11 @@ Hooks.once("init", () => {
     hint: "Шанс события в конце месяца, %: ярмарка, мор, разбойники, пожар… Правитель решает на листе поселения до следующего хода. 0 — событий нет.",
     scope: "world", config: true, type: Number, default: 40, range: { min: 0, max: 100, step: 5 }
   });
+  game.settings.register(SYSTEM_ID, "settlementWeekPreview", {
+    name: "Поселения: предпросмотр недели",
+    hint: "Перед «Неделя прошла» — окно: что изменится на складе и в казне, чего не хватит, что достроится, что будет в конце месяца (по средним броскам).",
+    scope: "client", config: true, type: Boolean, default: true
+  });
   game.settings.register(SYSTEM_ID, "settlementNeedsApproval", {
     name: "Поселения: одобрение от нужд",
     hint: "Если за месяц хоть раз не хватило еды или топлива, в конце месяца одобрение падает на 1. Выключено — как в журнале мира: одобрение от нужд сдвигает ведущий.",

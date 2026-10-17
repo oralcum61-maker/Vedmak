@@ -90,7 +90,7 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onWeek(event, target) {
     if (!game.user.isGM) return;
     const town = await fromUuid(target.closest("[data-uuid]").dataset.uuid);
-    if (town) await game.vedmak.settlement.advanceWeek(town);
+    if (town) await game.vedmak.settlement.askWeek(town);
     this.render();
   }
 

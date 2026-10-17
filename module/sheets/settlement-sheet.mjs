@@ -285,7 +285,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   // Действия с ценой — через once: двойной щелчок не платит и не двигает неделю дважды
   static #onTab(event, target) { this.tab = target.dataset.tab; this.render(); }
   static #onCatalog() { this.showCatalog = !this.showCatalog; this.render(); }
-  static async #onWeek() { await S.advanceWeek(this.actor); }
+  static async #onWeek() { await S.askWeek(this.actor); }
   static async #onBuild(event, target) {
     if (await once(this.actor, "build", () => S.build(this.actor, target.dataset.src))) { this.showCatalog = false; this.render(); }
   }

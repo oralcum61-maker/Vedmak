@@ -62,7 +62,9 @@ export const afterNum = n => (Math.round((Number(n) || 0) * 10) / 10).toLocaleSt
  * Подтверждение: вопрос text и пояснение hint (строки; экранирует шаблон).
  * @returns {Promise<boolean>} true — «Да»
  */
-export async function realmConfirm(name, { title, text, hint = "", head = null }) {
-  const content = await withHead(head, await renderTemplate(path("confirm"), { text, hint, dlg: name }));
-  return !!(await DialogV2.confirm({ window: { title }, classes: classes(name), content, rejectClose: false }));
+export async function realmConfirm(name, { title, text, hint = "", head = null, template = "confirm", data = {}, yesLabel = null, noLabel = null, onYes = null }) {
+  const content = await withHead(head, await renderTemplate(path(template), { text, hint, ...data, dlg: name }));
+  return !!(await DialogV2.confirm({ window: { title }, classes: classes(name), content, rejectClose: false,
+    yes: { ...(yesLabel ? { label: yesLabel } : {}), callback: (event, button) => { onYes?.(button.form); return true; } },
+    no: noLabel ? { label: noLabel } : undefined }));
 }

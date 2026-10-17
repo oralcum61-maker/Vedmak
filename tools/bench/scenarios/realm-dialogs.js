@@ -73,6 +73,23 @@ try {
     await us.close();
     await other.delete();
   }
+  // Предпросмотр недели (PLAN 4.239): окно с прогнозом; «Отмена» — неделя стоит, «Неделя прошла» — идёт
+  {
+    sheet.tab = "economy"; await sheet.render(); await wait(400);
+    const week0 = town.system.week;
+    let wp = nextDialog("week");
+    sheet.element.querySelector('[data-action="week"]')?.click();
+    let w = await wp;
+    ok(!!w.element.querySelector(".realm-dlg-week") && w.element.querySelector(".realm-lead")?.textContent.includes("неделя"), "неделя: предпросмотр открылся");
+    ok(w.element.querySelectorAll(".realm-cell").length >= 1, `неделя: в предпросмотре строки склада (${w.element.querySelectorAll(".realm-cell").length})`);
+    w.element.querySelector('[data-action="no"]')?.click(); await wait(600);
+    ok(town.system.week === week0, "неделя: «Отмена» — неделя не сдвинулась");
+    wp = nextDialog("week");
+    sheet.element.querySelector('[data-action="week"]')?.click();
+    w = await wp;
+    w.element.querySelector('[data-action="yes"]')?.click(); await wait(2500);
+    ok(town.system.week !== week0 || town.system.month !== 4, `неделя: «Неделя прошла» — неделя сдвинулась (${week0} → ${town.system.week})`);
+  }
 } finally {
   window.__noAutoDialog = false;
   await sheet.close();

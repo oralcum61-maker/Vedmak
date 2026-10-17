@@ -5,10 +5,10 @@
 // только ведущему — это делает его клиент (asGM). Неделю двигает ведущий, он же правит одобрение, Контроль и склад.
 
 import { BUILDINGS, WEALTH_RATE, BUY_MARKUP, resourceIcon, buildingItemData, priceOf, orderTypes, orderCost, ORDER_TYPES } from "../config/settlement.mjs";
-import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "./rules.mjs";
+import { simulateWeek, canAfford, costLabel, buildingState, levelDef, activeLevel, upgradeNodes, WEALTH, FOOD } from "./rules.mjs";
 import { worldCurrency } from "../config/money.mjs";
 import { postCard, asGM, registerGMHandler, userOwnsAny } from "../combat/common.mjs";
-import { unitsWeek, clearBesieging } from "../army/army.mjs";
+import { unitsWeek, clearBesieging, settlementUnits } from "../army/army.mjs";
 import { autoResolve, rollMonthEvent, postPending, SETTLEMENT_EVENTS } from "./events.mjs";
 import { playSound } from "../fx/sounds.mjs";
 import { refuse, once } from "../util.mjs";
@@ -387,6 +387,55 @@ export async function moveWealth(actor, units, mode) {
  */
 export function advanceWeek(actor) {
   return once(actor, "week", () => runWeek(actor));
+}
+
+/**
+ * «Неделя прошла» с листа и из Совета (PLAN 4.239): сначала предпросмотр по прогнозу (средние броски), потом ход.
+ * Предпросмотр выключается настройкой или отметкой «больше не спрашивать» в самом окне.
+ */
+export async function askWeek(actor) {
+  if (!game.user.isGM) return refuse("Время двигает ведущий.");
+  let ask = true;
+  try { ask = game.settings.get("vedmak", "settlementWeekPreview"); } catch { /* настройки нет — спрашивать */ }
+  if (!ask) return advanceWeek(actor);
+  const ok = await realmConfirm("week", {
+    title: `Неделя прошла: ${actor.name}`, template: "week", data: weekPreview(actor), yesLabel: "Неделя прошла", noLabel: "Отмена",
+    head: { img: actor.img, name: actor.name, sub: ["неделя прошла", weekPreview(actor).when] },
+    onYes: form => { if (form?.elements?.skip?.checked) game.settings.set("vedmak", "settlementWeekPreview", false); }
+  });
+  if (ok) return advanceWeek(actor);
+}
+
+/** Данные предпросмотра недели: по прогнозу листа (sys.forecast — средние броски). */
+export function weekPreview(actor) {
+  const sys = actor.system;
+  const fc = sys.forecast;
+  const sum = sys.summary;
+  const stock = sys.stockMap;
+  const n = v => (Math.round((Number(v) || 0) * 10) / 10).toLocaleString("ru-RU");
+  // Еда войска (отряды дома) — тоже со склада: в строку «Еда»
+  const units = settlementUnits(actor);
+  const armyFood = units.reduce((s, u) => s + (u.system.campaign ? 0 : u.system.food), 0);
+  const net = { ...(fc.net ?? {}) };
+  if (armyFood) net[FOOD] = (net[FOOD] ?? 0) - armyFood;
+  const rows = Object.entries(net).filter(([k, v]) => v && k !== WEALTH).map(([k, v]) => {
+    const before = stock[k] ?? 0;
+    return { label: k, before: n(before), after: n(Math.max(0, before + v)), dir: v > 0 ? "up" : "down", bad: before + v < 0 };
+  });
+  if (fc.wealthGain) rows.push({ label: "Казна, Богатство", before: n(sys.wealth), after: n(sys.wealth + fc.wealthGain), dir: fc.wealthGain > 0 ? "up" : "down" });
+  const warn = (fc.shortages ?? []).map(s => `Не хватит: ${s.building ? `${s.building} — ` : ""}${String(s.resource).toLowerCase()} ${n(s.got)} из ${n(s.need)}.`);
+  if (armyFood && (stock[FOOD] ?? 0) + (net[FOOD] ?? 0) < 0) warn.push(`Войску нужно еды ${n(armyFood)} — на складе не хватит, боевой дух упадёт.`);
+  if (sys.decisions.length) warn.push(`Ждёт решения: ${sys.decisions.length} — не решат до хода, будет решение по умолчанию.`);
+  const good = (fc.built ?? []).length ? [`Достроится: ${fc.built.map(b => b.name ?? b).join(", ")}.`] : [];
+  const notes = [];
+  if (armyFood) notes.push(`Из них войско съест ${n(armyFood)} еды.`);
+  if (fc.monthEnd) {
+    notes.push("Конец месяца: налоги, приход семей и шанс бунта.");
+    if (sum.arrival?.chance) notes.push(`Приход семей — шанс ${sum.arrival.chance}%.`);
+    if (sum.revolt) warn.push(`Шанс бунта ${sum.revolt}%.`);
+  }
+  const cal = sys.calendar;
+  return { when: `${cal.monthLabel}, ${cal.week}-я неделя`, rows, warn, good, notes };
 }
 
 async function runWeek(actor) {
