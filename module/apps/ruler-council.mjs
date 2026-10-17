@@ -98,7 +98,7 @@ export class RulerCouncil extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onWeekAll() {
     if (!game.user.isGM) return;
     await once(this, "weekAll", async () => {
-      for (const town of game.actors.filter(a => a.type === "settlement")) await game.vedmak.settlement.advanceWeek(town);
+      await game.vedmak.settlement.advanceAll(game.actors.filter(a => a.type === "settlement"));
     });
     this.render();
   }

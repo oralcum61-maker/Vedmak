@@ -386,8 +386,33 @@ export async function moveWealth(actor, units, mode) {
  * Ход недели (ведущий): броски построек, нужды, итоги месяца, стройка, летопись и карточка в чат. Одна неделя за раз:
  * двойной щелчок (лист, Совет правителя) гнал две недели с одного и того же состояния.
  */
-export function advanceWeek(actor) {
-  return once(actor, "week", () => runWeek(actor));
+export function advanceWeek(actor, { quiet = false } = {}) {
+  return once(actor, "week", () => runWeek(actor, { quiet }));
+}
+
+/**
+ * Неделя для всех поселений (Совет правителя, PLAN 4.241): каждое проходит ход без своей карточки, в чат — одна сводная.
+ * Караваны везут в уже прошедшие — как и вручную, по очереди.
+ */
+export async function advanceAll(towns) {
+  if (!game.user.isGM) return refuse("Время двигает ведущий.");
+  const done = [];
+  for (const town of towns) {
+    const report = await advanceWeek(town, { quiet: true });
+    if (report) done.push({ town, report });
+  }
+  if (!done.length) return;
+  const first = done[0].report;
+  await postCard({
+    template: "systems/vedmak/templates/chat/settlement-weekall.hbs",
+    data: { when: `${first.monthLabel}, ${first.week}-я неделя`, towns: done.map(({ town, report }) => {
+      const d = weekCardData(town, report);
+      return { name: town.name, img: town.img, net: [...d.net].sort((a, b) => Math.abs(b.net) - Math.abs(a.net)).slice(0, 6),
+        wealth: d.wealth, wealthUp: report.wealthGain > 0, shortages: d.shortages, built: (report.built ?? []).map(b => b.name ?? b).join(", "),
+        events: (report.events ?? []).filter(e => e.danger || e.kind === "event") };
+    }) },
+    speaker: ChatMessage.getSpeaker({ alias: "Совет правителя" })
+  });
 }
 
 /**
@@ -439,7 +464,7 @@ export function weekPreview(actor) {
   return { when: `${cal.monthLabel}, ${cal.week}-я неделя`, rows, warn, good, notes };
 }
 
-async function runWeek(actor) {
+async function runWeek(actor, { quiet = false } = {}) {
   if (!game.user.isGM) return refuse("Время двигает ведущий.");
   // Снимок для «Отменить неделю» (PLAN 4.240): всё, что ход меняет; сообщения и выданные предметы — по ходу
   const snap = weekSnapshot(actor);
@@ -490,7 +515,7 @@ async function runWeek(actor) {
   });
   if (changes.length) await Actor.implementation.updateDocuments(changes);
   if (decision) await postPending(actor, decision);
-  await postCard({
+  if (!quiet) await postCard({
     template: "systems/vedmak/templates/chat/settlement-week.hbs",
     data: weekCardData(actor, report),
     actor, speaker: ChatMessage.getSpeaker({ alias: actor.name })

@@ -1,0 +1,21 @@
+{{!-- Неделя для всех поселений (Совет правителя, PLAN 4.241): одна сводная карточка вместо карточки на каждое поселение --}}
+<div class="vedmak-card settlement-week settlement-weekall">
+  <header class="card-head">
+    <div class="card-ident">
+      <span class="card-name">Неделя прошла</span>
+      <span class="card-sub">поселений {{towns.length}}{{#if when}} · {{when}}{{/if}}</span>
+    </div>
+  </header>
+  <div class="card-body">
+    {{#each towns}}
+    <section class="swa-town">
+      <div class="swa-head"><img src="{{img}}" alt=""><b>{{name}}</b>{{#if wealth}}<em class="{{#if wealthUp}}up{{else}}down{{/if}}">{{wealth}}</em>{{/if}}</div>
+      {{#if net.length}}<ul class="sw-res">{{#each net}}<li><img src="{{img}}" alt=""><span>{{label}}</span><b class="{{#if plus}}up{{else}}down{{/if}}">{{#if plus}}+{{/if}}{{net}}</b></li>{{/each}}</ul>{{/if}}
+      {{#if shortages}}<p class="note warn">Не хватило: {{shortages}}.</p>{{/if}}
+      {{#if built}}<p class="note up"><b>Достроено:</b> {{built}}.</p>{{/if}}
+      {{#each events}}<p class="note{{#if danger}} warn{{/if}}">{{text}}</p>{{/each}}
+    </section>
+    {{/each}}
+    <p class="note dim">Подробности недели — в летописи на листе каждого поселения.</p>
+  </div>
+</div>

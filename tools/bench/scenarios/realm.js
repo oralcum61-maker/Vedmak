@@ -80,6 +80,15 @@ const council = game.vedmak.council.open(); await wait(600);
 ok(council.element.querySelectorAll(".rc-town").length >= 2 && council.element.textContent.includes("Вышгород"), "в Совете — оба поселения");
 ok(!!council.element.querySelector("[data-action=weekAll]"), "у ведущего — «Неделя для всех»");
 await council.close();
+{ // «Неделя для всех» (PLAN 4.241): одна сводная карточка вместо карточки на поселение, неделя сдвинулась у обоих
+  const w = [town.system.week, town2.system.week];
+  const msgs = game.messages.size;
+  await game.vedmak.settlement.advanceAll([town, town2]); await wait(500);
+  const card = game.messages.contents.at(-1)?.content ?? "";
+  ok(game.messages.size === msgs + 1 && card.includes("settlement-weekall") && card.includes(town.name) && card.includes(town2.name),
+    `«Неделя для всех»: одна сводная карточка с обоими поселениями (+${game.messages.size - msgs})`);
+  ok(town.system.week !== w[0] && town2.system.week !== w[1], "«Неделя для всех»: неделя сдвинулась у обоих");
+}
 
 for (const b of [...town.system.buildingActors, ...town2.system.buildingActors]) await b.delete();
 for (const t of [town, town2]) await game.folders.find(x => x.getFlag("vedmak", "settlement") === t.uuid)?.delete();
