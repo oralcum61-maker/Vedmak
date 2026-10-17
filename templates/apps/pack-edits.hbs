@@ -1,0 +1,33 @@
+{{!-- Правки компендиумов системы (apps/pack-edits.mjs, PLAN 4.255): сохранённые правки и перенос из копии компендиума --}}
+<div class="pe-root">
+  <p class="pe-lead">Правки, новые и удалённые записи в компендиумах системы сохраняются в мире (компендиумы «Правки компендиумов: …»)
+    и возвращаются, когда обновление системы заменяет её компендиумы.</p>
+  <div class="pe-scroll">
+    <h3 class="pe-cap">Сохранённые правки <small>{{edits.length}}</small></h3>
+    {{#each edits}}
+    <div class="pe-row{{#if deleted}} deleted{{/if}}" data-uuid="{{uuid}}">
+      <img src="{{img}}" alt="">
+      <span class="pe-name"><b>{{name}}</b><small>{{pack}}{{#if from}} · из копии «{{from}}»{{/if}}{{#if when}} · {{when}}{{/if}}{{#if by}} · {{by}}{{/if}}</small></span>
+      <button type="button" class="pe-x" data-action="forget" data-tooltip="Забыть: больше не возвращать после обновлений"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    {{else}}<p class="pe-hint">Правок пока нет. Откройте компендиум системы (снимите замок), правьте записи — копии появятся здесь.</p>{{/each}}
+
+    <h3 class="pe-cap">Правки из копии компендиума</h3>
+    <p class="pe-hint">Правки, сделанные до этой версии, обновление уже заменило бы. Если перед обновлением компендиум продублировали
+      в мир (правая кнопка по компендиуму → «Дублировать»), выберите копию: отличающиеся записи можно перенести обратно.</p>
+    <div class="pe-pick">
+      <select name="copy">{{#each worldPacks}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{else}}<option value="">— копий компендиумов в мире нет —</option>{{/each}}</select>
+      <button type="button" data-action="compare">Сравнить</button>
+    </div>
+    {{#if compared}}
+      {{#if compared.items.length}}
+      <p class="pe-hint">Отличается от «{{compared.source}}»: {{compared.items.length}}.</p>
+      <div class="pe-list">{{#each compared.items}}<label class="pe-check{{#unless edited}} other{{/unless}}"><input type="checkbox" name="adopt" value="{{id}}" {{#if edited}}checked{{/if}}> {{name}}{{#if isNew}} <em>новая</em>{{else if edited}} <em>правлена</em>{{else}} <i>изменена обновлением</i>{{/if}}</label>{{/each}}</div>
+      <p class="pe-hint">Отмечены записи, которые правили в Foundry. «Изменена обновлением» — в копии старая запись, а новая версия её поправила;
+        такие лучше не переносить.</p>
+      <button type="button" class="pe-go" data-action="adopt">Перенести отмеченные в компендиум системы</button>
+      {{else}}<p class="pe-hint">{{#if compared.source}}Копия совпадает с «{{compared.source}}» — переносить нечего.{{else}}В копии нет записей компендиумов системы.{{/if}}</p>{{/if}}
+    {{/if}}
+  </div>
+  <footer class="pe-foot"><button type="button" data-action="restore">Вернуть правки сейчас</button></footer>
+</div>

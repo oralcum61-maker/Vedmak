@@ -59,6 +59,16 @@ try {
   ok(card(geralt)?.querySelector(".gs-bar.hp b")?.textContent.startsWith("3 /") && app.element.querySelector("textarea[name=gmNotes]") === ta,
     "ПЗ героя изменились — столбец героев обновился, поле заметок то же");
   ok(!!ui.controls?.controls?.tokens?.tools?.vedmakGmScreen, "кнопка «Экран ведущего» на панели токенов");
+  { // Кнопка на панели актёров: щелчок закрывает открытый экран и открывает снова
+    await ui.actors.render(true); await wait(500);
+    const btn = document.querySelector("#actors .vd-gm-screen, .actors-sidebar .vd-gm-screen, .vd-gm-screen");
+    ok(!!btn, "кнопка «Экран ведущего» на панели актёров");
+    btn?.click(); await wait(500);
+    const closed = !foundry.applications.instances.get("vedmak-gm-screen")?.rendered;
+    btn?.click(); await until(() => foundry.applications.instances.get("vedmak-gm-screen")?.rendered);
+    ok(closed && foundry.applications.instances.get("vedmak-gm-screen")?.rendered, "щелчок по кнопке закрывает и открывает экран");
+    app = foundry.applications.instances.get("vedmak-gm-screen");
+  }
   ok(!!game.keybindings.get("vedmak", "gmScreen")?.length, "клавиши экрана ведущего (Shift+G)");
 } finally {
   await app?.close();

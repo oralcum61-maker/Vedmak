@@ -46,7 +46,8 @@ export class BuildingData extends foundry.abstract.TypeDataModel {
       group: str("craft", { choices: Object.keys(BUILDING_GROUPS) }),
       unique: new BooleanField({ initial: false }),
       trade: new BooleanField({ initial: false }),
-      levels: new ArrayField(buildingLevel(), { initial: () => [{}] }),
+      // Первая ступень — со значениями полей по умолчанию: пустой {} не проходит проверку при «Создать актёра» (PLAN 4.256)
+      levels: new ArrayField(buildingLevel(), { initial: () => [buildingLevel().getInitialValue({})] }),
       // Состояние в поселении: уровень 0 — ещё строится первый
       level: int(0, { min: 0 }),
       constructing: new BooleanField({ initial: false }),

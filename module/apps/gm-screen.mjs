@@ -281,6 +281,20 @@ export function registerGmScreen() {
     tokens.tools.vedmakGmScreen = { name: "vedmakGmScreen", title: "Экран ведущего (Shift+G)", icon: "fa-solid fa-book-open-reader",
       order: 99, button: true, visible: true, onChange: () => GmScreen.open() };
   });
+  // Кнопка на панели актёров рядом с «Советом правителя» — её видно сразу, не надо искать в инструментах токенов
+  Hooks.on("renderActorDirectory", (app, html) => {
+    if (!game.user.isGM) return;
+    const root = html instanceof HTMLElement ? html : html?.[0];
+    const header = root?.querySelector(".directory-header .header-actions") ?? root?.querySelector(".directory-header");
+    if (!header || header.querySelector(".vd-gm-screen")) return;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "vd-gm-screen";
+    btn.dataset.tooltip = "Экран ведущего (Shift+G): герои, тайные проверки, справочник, генераторы, заметки";
+    btn.innerHTML = '<i class="fa-solid fa-book-open-reader"></i> Экран ведущего';
+    btn.addEventListener("click", () => GmScreen.toggle());
+    header.append(btn);
+  });
   // Герои изменились — открытый экран перерисовать (не чаще раза в кадр)
   let queued = false;
   const again = () => {

@@ -14,6 +14,15 @@ $foundryRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $Targe
 $running = @(Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -like "$foundryRoot\*" -or $_.CommandLine -like "*$foundryRoot*main.mjs*" }).Count -gt 0
 $xd = @(".git", "node_modules", "packs-src", "dist", "$source\.claude")
 if ($running) { $xd += "$source\packs" }
+# Packs are replaced wholesale: keep a timestamped copy of the target packs first (GM edits live there; PLAN 4.255).
+# The newest 10 copies are kept in <repo parent>\_backups.
+if (-not $running -and (Test-Path "$Target\packs")) {
+  $backups = Join-Path (Split-Path -Parent $source) "_backups"
+  $copy = Join-Path $backups ("vedmak-packs-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
+  New-Item -ItemType Directory -Force $copy | Out-Null
+  robocopy "$Target\packs" $copy /E /XF LOCK /R:1 /W:1 /NFL /NDL /NJH /NJS /NP | Out-Null
+  Get-ChildItem $backups -Directory -Filter "vedmak-packs-*" | Sort-Object Name -Descending | Select-Object -Skip 10 | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+}
 robocopy $source $Target /MIR /XD @xd /XF LOCK LOG LOG.old /R:2 /W:1 /NFL /NDL /NJH /NP | Out-Null
 # Коды robocopy 0–7 — успех (1 = файлы скопированы), 8+ — ошибка
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed with code $LASTEXITCODE" }

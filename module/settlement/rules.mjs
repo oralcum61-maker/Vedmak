@@ -79,7 +79,7 @@ const normLevel = (l = {}) => ({
  */
 export function upgradeMods(branches = [], upgrades = []) {
   const bought = new Set(upgrades);
-  const m = { produce: {}, consume: {}, upkeep: {}, produceAdd: [], families: 0, housing: 0, control: 0, storage: 0, drill: 0,
+  const m = { produce: {}, consume: {}, upkeep: {}, produceAdd: [], consumeAdd: [], upkeepAdd: [], families: 0, housing: 0, control: 0, storage: 0, drill: 0,
     taxes: 0, approval: 0, revolt: [], arrival: [], trade: false, defense: 0 };
   for (const br of branches) for (const nd of br.nodes ?? []) {
     if (!bought.has(nd.id)) continue;
@@ -92,8 +92,8 @@ export function upgradeMods(branches = [], upgrades = []) {
       } else if (e.type === "revolt" || e.type === "arrival") {
         const d = effectDice(e);
         if (d) m[e.type].push(d);
-      } else if (e.type === "produceAdd") {
-        if (String(e.resource ?? "").trim()) m.produceAdd.push(normRow({ resource: e.resource, formula: e.formula, per: e.per, period: e.period }));
+      } else if (e.type === "produceAdd" || e.type === "consumeAdd" || e.type === "upkeepAdd") {
+        if (String(e.resource ?? "").trim()) m[e.type].push(normRow({ resource: e.resource, formula: e.formula, per: e.per, period: e.period }));
       } else if (e.type === "trade") m.trade = true;
       else if (e.type in m) m[e.type] += v;
     }
@@ -149,6 +149,8 @@ export function activeLevel(b) {
     families: lv.families + m.families, housing: lv.housing + m.housing, control: lv.control + m.control,
     storage: lv.storage + m.storage, drill: lv.drill ? lv.drill + m.drill : m.drill, defense: (lv.defense ?? 0) + m.defense,
     produce: [...lv.produce, ...m.produceAdd],
+    consume: [...lv.consume, ...(m.consumeAdd ?? [])],
+    upkeep: [...lv.upkeep, ...(m.upkeepAdd ?? [])],
     bonus: { produce: m.produce, consume: m.consume, upkeep: m.upkeep, times: b.level }
   };
 }

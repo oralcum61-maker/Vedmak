@@ -47,6 +47,23 @@ ok(monthEnd.next.approval === 6 && monthEnd.report.events.some(e => e.kind === "
 ok(R.summarize({ ...base, buildings: [st("lumber", { level: 1, upgrades: ["b2n1"] })] }).workers !== undefined
   && R.activeLevel(st("lumber", { level: 1, upgrades: ["b2n1"] })).families === 4, "«Подсека»: рабочих мест 3 → 4");
 
+{ // Новое сырьё и новое содержание от ступени (PLAN 4.256): строки встают в сырьё и содержание постройки
+  const d = SC.buildingItemData("lumber");
+  d.system.branches = [{ id: "x", name: "Прогон", icon: "fa-star", nodes: [{ id: "xn1", name: "Смолокурня", level: 1, requires: "", cost: [], weeks: 1,
+    effects: [{ type: "consumeAdd", resource: "Зерно", formula: "2", per: "building", period: "week" },
+      { type: "upkeepAdd", resource: "Топливо", formula: "3", per: "building", period: "week" },
+      { type: "produceAdd", resource: "Еда", formula: "1", per: "building", period: "week" }] }] }];
+  Object.assign(d.system, { level: 1, workers: 2, upgrades: ["xn1"] });
+  const lv = R.activeLevel(R.buildingState({ ...d, id: "lx" }));
+  ok(lv.consume.some(r => r.resource === "Зерно") && lv.upkeep.some(r => r.resource === "Топливо") && lv.produce.some(r => r.resource === "Еда"),
+    "ступень: новое сырьё, новое содержание и новая выработка — в строках постройки");
+  const was = R.simulateWeek({ ...base, buildings: [st("lumber", { level: 1, workers: 2 })] }, { forecast: true }).report;
+  const now = R.simulateWeek({ ...base, buildings: [R.buildingState({ ...d, id: "lx" })] }, { forecast: true }).report;
+  ok((now.consumed["Зерно"] ?? 0) - (was.consumed["Зерно"] ?? 0) === 2 && (now.consumed["Топливо"] ?? 0) - (was.consumed["Топливо"] ?? 0) === 3,
+    `неделя: зерна +${(now.consumed["Зерно"] ?? 0) - (was.consumed["Зерно"] ?? 0)}, топлива +${(now.consumed["Топливо"] ?? 0) - (was.consumed["Топливо"] ?? 0)}`);
+  ok(U.BUILDING_EFFECTS.consumeAdd?.kind === "row" && U.BUILDING_EFFECTS.upkeepAdd?.kind === "row", "в списке эффектов — «Новое сырьё» и «Новое содержание»");
+}
+
 stepName("взять ступень");
 const town = await Actor.create({ name: "Прогон: прокачка", type: "settlement", folder: folder.id,
   system: { families: 6, stock: { "Еда": 40, "Топливо": 20, "Древесина": 30, "Камень": 20, "Инструменты": 10 } } });
@@ -91,6 +108,41 @@ const mill = await S.build(town, own.uuid);
 await S.setWorkers(town, mill.id, 1);
 await S.research(town, mill.id, "x1");
 ok(mill.system.upgrades.includes("x1") && town.system.forecast.produced["Мука"] === 4.5, `своя постройка: ступень ведущего даёт +1d4 муки (${town.system.forecast.produced["Мука"]})`);
+
+stepName("чертёж ступени: плюсики и пустые строки");
+{ // PLAN 4.256: новая пустая строка видна сразу (редактор — по хранимой ступени), крестик убирает её же; «Создать актёра»
+  const blank = await Actor.create({ name: "Прогон: постройка через «Создать актёра»", type: "building", folder: folder.id });
+  ok(blank?.system.levels.length === 1 && blank.system.levels[0].weeks === 1 && Array.isArray(blank.system.levels[0].consume),
+    `«Создать актёра»: постройка с одной ступенью по умолчанию (${blank?.system.levels.length})`);
+  const sh = own.sheet; await sh.render({ force: true }); await wait(600);
+  sh.element.querySelector("[data-action=editLevel]")?.click(); await wait(700);
+  const rowsOf = list => list === "cost" ? sh.element.querySelectorAll(".bl-cost-row").length
+    : [...sh.element.querySelectorAll(".bl-group")].find(g => g.querySelector(`[data-action=blAdd][data-list="${list}"]`))?.querySelectorAll("tbody tr").length ?? 0;
+  const seen = {};
+  for (const list of ["cost", "consume", "produce", "upkeep"]) {
+    const n0 = rowsOf(list);
+    sh.element.querySelector(`[data-action=blAdd][data-list="${list}"]`)?.click(); await wait(700);
+    seen[list] = `${n0}→${rowsOf(list)}`;
+  }
+  ok(Object.values(seen).every(s => { const [x, y] = s.split("→").map(Number); return y === x + 1; }), `плюсики: новая строка видна сразу (${JSON.stringify(seen)})`);
+  // Ресурс в новой строке сырья и крестик у пустой строки выработки: уходит именно она
+  const consumeIn = [...sh.element.querySelectorAll('input[name^="system.levels.0.consume."][name$=".resource"]')].at(-1);
+  consumeIn.value = "Зерно"; consumeIn.dispatchEvent(new Event("change", { bubbles: true })); await wait(800);
+  ok(own._source.system.levels[0].consume.some(r => r.resource === "Зерно"), "ресурс вписан в новую строку сырья");
+  const prod0 = own._source.system.levels[0].produce.map(r => r.resource);
+  const xs = [...sh.element.querySelectorAll('[data-action=blDelete][data-list="produce"]')];
+  xs.at(-1)?.click(); await wait(700);
+  ok(JSON.stringify(own._source.system.levels[0].produce.map(r => r.resource)) === JSON.stringify(prod0.slice(0, -1)), `крестик убрал свою строку (${prod0.join(", ")} → ${own._source.system.levels[0].produce.map(r => r.resource).join(", ")})`);
+  await sh.close();
+  // Проверка мира: пустые строки ступеней находятся и убираются
+  const found = game.vedmak.worldCheck.scanWorld().filter(p => p.actor === own && /пустых строк/.test(p.text));
+  ok(found.length === 1, `проверка мира: ${found[0]?.text ?? "пустые строки не найдены"}`);
+  await game.vedmak.worldCheck.repairWorld(found);
+  const lv0 = own._source.system.levels[0];
+  ok(["cost", "consume", "produce", "upkeep"].every(k => (lv0[k] ?? []).every(r => String(r.resource).trim())) && lv0.consume.some(r => r.resource === "Зерно"),
+    "после починки пустых строк нет, заполненные на месте");
+  await blank.delete();
+}
 
 for (const b of town.system.buildingActors) await b.delete();
 await game.folders.find(x => x.getFlag("vedmak", "settlement") === town.uuid)?.delete();

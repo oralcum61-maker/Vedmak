@@ -27,6 +27,7 @@ import { RulerCouncil, registerCouncilUi } from "./module/apps/ruler-council.mjs
 import * as worldCheck from "./module/apps/world-check.mjs";
 import { registerRealmMap, drawRealmMap } from "./module/fx/realm-map.mjs";
 import * as gmScreen from "./module/apps/gm-screen.mjs";
+import * as packEdits from "./module/apps/pack-edits.mjs";
 import { registerSettlementGMHandlers } from "./module/settlement/settlement.mjs";
 import { BattleApp, registerMapBattle } from "./module/apps/battle-app.mjs";
 import * as ARMY from "./module/army/army.mjs";
@@ -344,6 +345,7 @@ Hooks.once("init", () => {
   worldCheck.registerWorldCheck();
   registerRealmMap();
   gmScreen.registerGmScreen();
+  packEdits.registerPackEdits();
   registerSettlementGMHandlers();
   registerRealmFx();
   settlementEvents.registerEventHooks();
@@ -387,6 +389,7 @@ Hooks.once("init", () => {
     worldCheck,
     realmMap: drawRealmMap,
     gmScreen: { ...gmScreen, open: () => gmScreen.GmScreen.open() },
+    packEdits: { ...packEdits, open: () => new packEdits.PackEditsApp().render({ force: true }) },
     army: { ...ARMY, battle: units => BattleApp.open(units), battleAt: (scene, point, opts) => BattleApp.fromScene(scene, point, opts) },
     investigation: { ...investigation, open: () => InvestigationApp.open() },
     tavern: { open: () => TavernApp.open() },

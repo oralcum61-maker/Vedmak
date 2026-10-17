@@ -36,6 +36,17 @@ export function scanWorld() {
     if (a.type === "building") {
       if (s.settlement && !alive(s.settlement, "settlement")) add(a, "постройка удалённого поселения — уйдёт образцом в «Каталог построек»", { "system.settlement": "" }, { catalog: true });
       if (s.manager && !alive(s.manager, "character")) add(a, "управляющий удалён — постройка без управляющего", { "system.manager": "" });
+      // Пустые строки ступеней (PLAN 4.256): плюсики чертежа добавляли строку, а редактор её не показывал — накликанные
+      // строки без ресурса правилами не считаются, только мешают в чертеже
+      const levels = foundry.utils.deepClone(a._source.system.levels ?? []);
+      let blank = 0;
+      for (const lv of levels) for (const list of ["cost", "consume", "produce", "upkeep"]) {
+        const rows = lv[list] ?? [];
+        const kept = rows.filter(r => String(r.resource ?? "").trim());
+        blank += rows.length - kept.length;
+        lv[list] = kept;
+      }
+      if (blank) add(a, `пустых строк в ступенях: ${blank} (без ресурса) — уберутся`, { "system.levels": levels });
     }
     if (a.type === "settlement") {
       const routes = s.routes.filter(r => alive(r.to, "settlement") && r.to !== a.uuid);

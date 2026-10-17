@@ -70,7 +70,10 @@ export function effectLabel(e) {
   const v = Number(e.value) || 0;
   switch (e.type) {
     case "produce": return `+${effectDice(e)} ${res ? `выработки: ${res}` : "к каждой выработке"} за уровень`;
-    case "produceAdd": return `${e.resource || "?"} ${e.formula}${e.per === "family" ? " за семью" : ""}${e.period !== "week" ? ` ${PERIODS[e.period]?.toLowerCase() ?? ""}` : ""}`;
+    case "produceAdd": case "consumeAdd": case "upkeepAdd": {
+      const what = { produceAdd: "", consumeAdd: "сырьё: ", upkeepAdd: "содержание: " }[e.type];
+      return `${what}${e.resource || "?"} ${e.formula}${e.per === "family" ? " за семью" : ""}${e.period !== "week" ? ` ${PERIODS[e.period]?.toLowerCase() ?? ""}` : ""}`;
+    }
     case "consume": return `−${effectDice(e)} сырья${res ? `: ${res}` : ""} за уровень`;
     case "upkeep": return `−${effectDice(e)} содержания${res ? `: ${res}` : ""} за уровень`;
     case "families": return `+${v} рабочих мест`;
@@ -87,6 +90,9 @@ export function effectLabel(e) {
     default: return `${BUILDING_EFFECTS[e.type]?.label ?? e.type} ${v}`;
   }
 }
+
+/** Ступень из данных актёра без отбора строк: пустые списки и поля — по умолчанию. */
+const rawLevel = (l = {}) => ({ ...l, cost: l.cost ?? [], consume: l.consume ?? [], produce: l.produce ?? [], upkeep: l.upkeep ?? [] });
 
 /** Чертёж ступени для правки: имена полей формы готовые, чтобы в шаблоне не было путей через ../. */
 function blueprint(lv, i) {
@@ -187,7 +193,9 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       flow: lv ? { built: b.level > 0, n: shown, consume: lv.consume.map(chip), produce: lv.produce.map(chip), upkeep: lv.upkeep.map(chip),
         tags: tagsOf(lv, b.trade) } : null,
       track, canDelete: b.levels.length > 1,
-      edit: gm && this.editing !== null ? blueprint(b.levels[this.editing], this.editing) : null,
+      // Чертёж — ступень как хранится: правила отбрасывают строки без ресурса, и новая пустая строка пропадала с экрана,
+      // а номера строк расходились с данными (PLAN 4.256)
+      edit: gm && this.editing !== null ? blueprint(rawLevel(actor._source.system.levels?.[this.editing]), this.editing) : null,
       perOptions: { building: "за постройку", family: "за семью" }, periodOptions: PERIODS,
       resourceNames: [...resourceNames(), WEALTH], codePlaceholder: actor.name.toLowerCase(),
       manager: this.#manager(lv),
@@ -283,7 +291,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
           cost: nd.cost.map((c, ci) => ({ index: ci, path: `${npath}.cost.${ci}`, resource: c.resource, qty: c.qty, img: resourceIcon(c.resource),
             short: town && !bought && !working && !have(c) })),
           effects: nd.effects.map((e, ei) => ({ index: ei, path: `${npath}.effects.${ei}`, ...e, label: effectLabel(e),
-            row: e.type === "produceAdd", dice: BUILDING_EFFECTS[e.type]?.kind === "dice", res: !!BUILDING_EFFECTS[e.type]?.resource,
+            row: BUILDING_EFFECTS[e.type]?.kind === "row", dice: BUILDING_EFFECTS[e.type]?.kind === "dice", res: !!BUILDING_EFFECTS[e.type]?.resource,
             diceFormula: effectDice(e) }))
         };
       });
