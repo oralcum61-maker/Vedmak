@@ -32,6 +32,10 @@ const STEPS = [
 
 const STAT_KEYS = Object.keys(STATS);
 
+/** Подписи плашек фильтра магии: путь инвокации и стихия заклинания (PLAN 4.252). */
+const BRANCH_LABELS = { druid: "Друид", preacher: "Проповедник" };
+const ELEMENT_LABELS = { air: "Воздух", earth: "Земля", fire: "Огонь", water: "Вода", mixed: "Смешанная" };
+
 /** Горные народы: родина по умолчанию — Махакам (краснолюды — корник, гномы, враны, боболаки — «Книга сказаний»). */
 const MOUNTAIN_RACES = ["dwarf", "gnome", "vran", "bobolak"];
 
@@ -517,10 +521,20 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     if (s.step === "magic") {
-      context.magicGroups = this.#magicGroups().map(g => ({
-        ...g, chosen: g.items.filter(i => s.magic.includes(i.uuid)).length,
-        items: g.items.map(i => ({ ...i, checked: g.auto || s.magic.includes(i.uuid) }))
-      }));
+      context.magicGroups = this.#magicGroups().map((g, gi) => {
+        const f = this.#magicFilter[gi] ?? {};
+        const facet = (key, labels) => {
+          const keys = [...new Set(g.items.map(i => i[key]).filter(Boolean))];
+          return keys.length > 1 ? [{ key: "", label: "все", on: !f[key] }, ...keys.sort(compareRu).map(k => ({ key: k, label: labels?.[k] ?? k, on: f[key] === k }))] : null;
+        };
+        return {
+          ...g, gi, chosen: g.items.filter(i => s.magic.includes(i.uuid)).length,
+          items: g.items.map(i => ({ ...i, checked: g.auto || s.magic.includes(i.uuid) })),
+          // Фильтр — когда выбирать есть из чего
+          filter: !g.auto && g.items.length > 8 ? { q: f.q ?? "", books: facet("book"), branches: g.kind === "invocation" ? facet("branch", BRANCH_LABELS) : null,
+            elements: g.kind === "spell" ? facet("element", ELEMENT_LABELS) : null } : null
+        };
+      });
     }
 
     if (s.step === "gear" && prof) {
@@ -567,7 +581,10 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
       if (sys.kind === "hex") return HEX_DANGER_LEVEL[String(sys.danger ?? "").toLowerCase()] ?? sys.level;
       return sys.level;
     };
-    const row = e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(e.system.kind, e.system.level), cost: e.system.staCost });
+    // Для фильтра шага (PLAN 4.252): книга, путь инвокации, стихия; описание — подсказкой
+    const row = e => ({ uuid: e.uuid, name: e.name, img: e.img, level: levelLabel(e.system.kind, e.system.level), cost: e.system.staCost,
+      search: e.name.toLowerCase(), book: e.system.source?.book ?? "", branch: e.system.branch ?? "", element: e.system.element ?? "",
+      about: plainText(e.system.description ?? e.system.effect ?? "").slice(0, 320) });
     const pick = (kind, level = "novice") => all.filter(e => e.system?.kind === kind && levelOf(e) === level)
       .map(row).sort((a, b) => compareRu(a.name, b.name));
     const groups = [];
@@ -750,9 +767,42 @@ export class CharacterWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   /* ------------------------------ Ввод ------------------------------ */
 
+  /** Фильтр шага «Магия» по группам: { q, book, branch, element } — переживает перерисовку. */
+  #magicFilter = {};
+
+  /** Показать в группе только подходящее под фильтр; отмеченное видно всегда. */
+  #applyMagicFilter(panel) {
+    const gi = panel.dataset.magicGroup;
+    const f = this.#magicFilter[gi] ?? {};
+    const q = (f.q ?? "").trim().toLowerCase();
+    let shown = 0;
+    for (const el of panel.querySelectorAll(".magic-pick")) {
+      const d = el.dataset;
+      const fit = (!q || d.name.includes(q)) && (!f.book || d.book === f.book) && (!f.branch || d.branch === f.branch) && (!f.element || d.element === f.element);
+      const on = fit || el.querySelector("input")?.checked;
+      el.hidden = !on;
+      if (on) shown++;
+    }
+    const none = panel.querySelector("[data-magic-none]");
+    if (none) none.hidden = shown > 0;
+  }
+
   _onRender(context, options) {
     super._onRender(context, options);
     const s = this.wiz;
+    // Шаг «Магия»: поиск и плашки фильтра — без перерисовки окна (фокус остаётся в поле)
+    for (const panel of this.element.querySelectorAll("[data-magic-group]")) {
+      const gi = panel.dataset.magicGroup;
+      const find = panel.querySelector("[data-magic-find]");
+      find?.addEventListener("input", () => { (this.#magicFilter[gi] ??= {}).q = find.value; this.#applyMagicFilter(panel); });
+      for (const chip of panel.querySelectorAll("[data-mf]")) chip.addEventListener("click", () => {
+        const f = (this.#magicFilter[gi] ??= {});
+        f[chip.dataset.mf] = chip.dataset.value;
+        for (const c of panel.querySelectorAll(`[data-mf="${chip.dataset.mf}"]`)) c.classList.toggle("on", c === chip);
+        this.#applyMagicFilter(panel);
+      });
+      this.#applyMagicFilter(panel);
+    }
     // Лавка: поиск и разделы фильтруют товары без перерисовки окна (фокус остаётся в поле)
     const shopSearch = this.element.querySelector("[data-shop-search]");
     if (shopSearch) {

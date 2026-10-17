@@ -326,15 +326,24 @@
   {{!-- ================================ МАГИЯ =========================== --}}
   {{#if is_magic}}
     {{#each magicGroups as |g|}}
-    <div class="vd-panel">
+    <div class="vd-panel" data-magic-group="{{g.gi}}">
       <div class="group-head"><span class="bronze-tag">{{g.label}}</span><span class="rule"></span>
         {{#unless g.auto}}<span class="budget{{#if (ne g.chosen g.count)}} off{{/if}}">выбрано <b>{{g.chosen}}</b> из {{g.count}}</span>{{/unless}}</div>
+      {{#if g.filter}}
+      <div class="magic-filter">
+        <input type="search" data-magic-find value="{{g.filter.q}}" placeholder="Найти по названию…" aria-label="Найти: {{g.label}}">
+        {{#if g.filter.branches}}<div class="shop-cats"><span class="cap">путь</span>{{#each g.filter.branches}}<button type="button" class="shop-cat{{#if on}} on{{/if}}" data-mf="branch" data-value="{{key}}">{{label}}</button>{{/each}}</div>{{/if}}
+        {{#if g.filter.elements}}<div class="shop-cats"><span class="cap">стихия</span>{{#each g.filter.elements}}<button type="button" class="shop-cat{{#if on}} on{{/if}}" data-mf="element" data-value="{{key}}">{{label}}</button>{{/each}}</div>{{/if}}
+        {{#if g.filter.books}}<div class="shop-cats"><span class="cap">книга</span>{{#each g.filter.books}}<button type="button" class="shop-cat{{#if on}} on{{/if}}" data-mf="book" data-value="{{key}}">{{label}}</button>{{/each}}</div>{{/if}}
+      </div>
+      {{/if}}
       <div class="magic-grid">
         {{#each g.items}}
-        <label class="magic-pick{{#if checked}} on{{/if}}"><input type="checkbox" data-field="magic" data-uuid="{{uuid}}" {{checked checked}} {{#if g.auto}}disabled{{/if}}>
+        <label class="magic-pick{{#if checked}} on{{/if}}" data-name="{{search}}" data-book="{{book}}" data-branch="{{branch}}" data-element="{{element}}"{{#if about}} data-tooltip="{{about}}"{{/if}}><input type="checkbox" data-field="magic" data-uuid="{{uuid}}" {{checked checked}} {{#if g.auto}}disabled{{/if}}>
           <img src="{{img}}" alt=""><span class="mp-name">{{name}}</span>{{#if cost}}<span class="mp-cost">{{cost}} Вын</span>{{/if}}</label>
         {{else}}<p class="warning">В компендиумах нет подходящей магии.</p>
         {{/each}}
+        {{#if g.filter}}<p class="hint" data-magic-none hidden>Ничего не подходит — смените фильтр.</p>{{/if}}
       </div>
     </div>
     {{else}}

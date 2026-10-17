@@ -62,6 +62,22 @@ try {
     if (k) s.profSkills[k]++; else if (s.defining < 6) s.defining++; else break;
   }
   await go("magic");
+  { // Фильтр магии (PLAN 4.252): путь инвокаций, книга, поиск; отмеченное видно всегда
+    const panel = [...wiz.element.querySelectorAll("[data-magic-group]")].find(p => p.querySelector("[data-mf=branch]"));
+    const visible = () => [...panel.querySelectorAll(".magic-pick")].filter(el => !el.hidden);
+    ok(!!panel && !!panel.querySelector("[data-mf=book]"), "инвокации: плашки пути и книги, поиск");
+    const all = visible().length;
+    panel.querySelector("[data-mf=branch][data-value=druid]").click(); await wait(150);
+    ok(visible().length > 0 && visible().length < all && visible().every(el => el.dataset.branch === "druid"), `путь «Друид»: ${visible().length} из ${all}`);
+    const box = visible()[0].querySelector("input"); box.checked = true; box.dispatchEvent(new Event("change", { bubbles: true })); await wait(500);
+    const panel2 = [...wiz.element.querySelectorAll("[data-magic-group]")].find(p => p.querySelector("[data-mf=branch]"));
+    ok(panel2.querySelector("[data-mf=branch][data-value=druid]")?.classList.contains("on"), "фильтр пережил перерисовку после выбора");
+    panel2.querySelector("[data-mf=branch][data-value='']").click();
+    const find = panel2.querySelector("[data-magic-find]"); find.value = "благослов"; find.dispatchEvent(new Event("input", { bubbles: true })); await wait(150);
+    const vis2 = [...panel2.querySelectorAll(".magic-pick")].filter(el => !el.hidden);
+    ok(vis2.length > 0 && vis2.every(el => el.dataset.name.includes("благослов") || el.querySelector("input").checked), `поиск «благослов»: ${vis2.length}, отмеченное не спрятано`);
+    s.magic = [];
+  }
   // Магия: по квоте каждой группы — первые в списке
   const ctx = await wiz._prepareContext({});
   s.magic = (ctx.magicGroups ?? []).filter(g => !g.auto).flatMap(g => g.items.slice(0, g.count).map(i => i.uuid));

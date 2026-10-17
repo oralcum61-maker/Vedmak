@@ -4080,7 +4080,8 @@ body.system-vedmak #tooltip, body.system-vedmak .locked-tooltip {
 }
 .vedmak-wizard :is(.magic-pick, .gear-pick) input { flex: none; margin: 0; }
 .vedmak-wizard .magic-pick img { width: 28px; height: 28px; flex: none; border: 0; border-radius: 2px; }
-.vedmak-wizard .mp-name { flex: 1; min-width: 0; font-size: .78rem; color: #d6d0c2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Название — до двух строк: шесть «Благословений…» обрезкой не различить (PLAN 4.252) */
+.vedmak-wizard .mp-name { flex: 1; min-width: 0; font-size: .78rem; line-height: 1.2; color: #d6d0c2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 .vedmak-wizard .mp-cost { font-size: .62rem; color: #a8a296; white-space: nowrap; }
 .vedmak-wizard .magic-pick.on { background-color: #1b1726; box-shadow: var(--vd-sink-sm), 0 0 0 1px rgba(134,118,176,.6); }
 .vedmak-wizard .magic-pick.on .mp-name { color: #f2edff; }
@@ -6252,3 +6253,9 @@ body.system-vedmak #tooltip :is(strong, b),
 body.system-vedmak .locked-tooltip :is(strong, b) { color: var(--vd-silver, #f1ece0); font-weight: 600; }
 body.system-vedmak #tooltip hr,
 body.system-vedmak .locked-tooltip hr { height: 2px; border: 0; margin: .4rem 0; background: linear-gradient(180deg, #060607 50%, rgba(255, 240, 215, .08) 50%); }
+/* Мастер, шаг «Магия»: поиск и плашки фильтра (PLAN 4.252) */
+.vedmak-wizard .magic-filter { display: flex; flex-direction: column; gap: .35rem; margin-top: .45rem; }
+.vedmak-wizard .magic-filter input[type="search"] { width: 100%; }
+.vedmak-wizard .magic-filter .shop-cats { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
+.vedmak-wizard .magic-filter .shop-cats > .cap { min-width: 3.6rem; }
+.vedmak-wizard .magic-pick[hidden] { display: none; }
