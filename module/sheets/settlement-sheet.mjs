@@ -9,7 +9,7 @@ import { BUILDINGS, BUILDING_GROUPS, PERIODS, WEALTH_RATE, APPROVAL_MAX, WEEKS_P
 import { buildingState, levelDef, activeLevel, upgradeNodes, WEALTH } from "../settlement/rules.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { worldCurrency } from "../config/money.mjs";
-import { compareRu, once } from "../util.mjs";
+import { compareRu, once, refuse } from "../util.mjs";
 import { UNIT_KINDS, TRAINING, WEAPONS, ARMOR, ORIGINS, FAMILY_SOLDIERS, MERCENARY } from "../config/army.mjs";
 import { RANKS } from "../config/unit-upgrades.mjs";
 import * as ARMY from "../army/army.mjs";
@@ -437,7 +437,17 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Перетащенный образец постройки (актёр без поселения или старый предмет) закладывается со списанием цены. */
   async _onDropActor(event, actor) {
     if (!this.actor.isOwner) return null;
-    if (actor.type !== "building") { ui.notifications.warn("На лист поселения можно перетащить постройку."); return null; }
+    // Персонаж на карточку постройки — управляющий этой постройки (PLAN 4.244), как на её собственном листе
+    if (actor.type === "character") {
+      const card = event.target?.closest?.(".rs-bcard[data-id]");
+      const building = card ? game.actors.get(card.dataset.id) : null;
+      if (!building) { ui.notifications.warn("Персонажа — на карточку постройки во вкладке «Постройки»: он станет её управляющим."); return null; }
+      if (!building.isOwner) return refuse("Назначать управляющего может владелец постройки.");
+      await building.update({ "system.manager": actor.uuid });
+      ui.notifications.info(`«${actor.name}» — управляющий постройки «${building.name}».`);
+      return actor;
+    }
+    if (actor.type !== "building") { ui.notifications.warn("На лист поселения можно перетащить постройку или персонажа (на карточку постройки — управляющим)."); return null; }
     if (actor.system.settlement === this.actor.uuid) return null;
     return S.build(this.actor, actor.toObject());
   }

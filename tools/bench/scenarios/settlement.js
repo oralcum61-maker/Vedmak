@@ -170,6 +170,18 @@ stepName("караван и «Торговать по»");
   await other.delete();
 }
 
+stepName("управляющий перетаскиванием");
+{ // Персонаж на карточку постройки на листе поселения — управляющий этой постройки (PLAN 4.244)
+  const hero = await Actor.create({ name: "Прогон: управляющий", type: "character", folder: folder.id });
+  sheet.tab = "buildings"; await sheet.render(); await wait(400);
+  const card = sheet.element.querySelector(".rs-bcard[data-id]");
+  const b = game.actors.get(card?.dataset.id);
+  await sheet._onDropActor({ target: card.querySelector("b") ?? card }, hero); await wait(300);
+  ok(b?.system.manager === hero.uuid, `перетаскивание: «${hero.name}» — управляющий «${b?.name}»`);
+  await b?.update({ "system.manager": "" });
+  await hero.delete();
+}
+
 stepName("отмена недели");
 {
   // Ход недели и отмена (PLAN 4.240): склад, казна, календарь, семьи, стройки — как до хода; карточка недели убрана
