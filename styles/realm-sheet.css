@@ -852,3 +852,40 @@
 .vd-realm .realm-dlg .hint { margin: 0; font-size: 11.5px; line-height: 1.45; color: #bab4a8; }
 .vd-realm .realm-lead { margin: 0; font-size: 14px; line-height: 1.5; color: #e2ddd0; }
 .vd-realm .form-footer { margin: 12px 0 0; padding: 12px 18px 16px; background-color: #131417; background-image: var(--vd-s-header, none); background-size: 512px 512px; }
+
+/* ─── Узкий лист (PLAN 4.235, доска «Узкий лист — 640»): раскладка по ширине окна листа, а не экрана — контейнер ───
+   ≤ 760: показатели в три колонки, склад в три, нужды и торговля друг под другом, карточки построек в две, дерево в две;
+   ≤ 560: склад и карточки в две и одну, звания в три, кнопка отряда — под строкой */
+.rs-sheet { container-type: inline-size; container-name: rs-sheet; }
+@container rs-sheet (max-width: 760px) {
+  .rs-head { flex-wrap: wrap; row-gap: 8px; }
+  .rs-head > div[style] { flex: 1 1 calc(100% - 90px) !important; }
+  .rs-head .rs-cmdr { margin-left: 80px; }
+  .rs-head .rs-go { margin-left: auto; }
+  .rs-head .rs-cmdr + .rs-go { margin-left: 0; }
+  .rs-stats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; row-gap: 4px; }
+  .rs-stat:nth-child(3n + 1)::before { display: none; }
+  .rs-stock { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rs-cols { grid-template-columns: minmax(0, 1fr); }
+  .rs-bgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rs-tree { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; row-gap: 14px; }
+  .rs-tiers { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .rs-steps { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .rs-flow { grid-template-columns: minmax(0, 1fr) !important; justify-items: center; row-gap: 8px; }
+  .rs-flow .rs-arrow { transform: rotate(90deg); }
+  .rs-urow { grid-template-columns: 44px minmax(0, 1fr) repeat(3, 40px); row-gap: 8px; }
+  .rs-urow > .rs-btn, .rs-urow > span:last-child:empty { grid-column: 1 / -1; justify-self: end; }
+  .rs-tabs button { font-size: 14px; }
+  .rs-toolbar { flex-wrap: wrap; }
+}
+@container rs-sheet (max-width: 560px) {
+  .rs-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .rs-stat::before { display: none; }
+  .rs-stock { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rs-bgrid { grid-template-columns: minmax(0, 1fr); }
+  .rs-tree { grid-template-columns: minmax(0, 1fr) !important; }
+  .rs-ranks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rs-steps { grid-template-columns: minmax(0, 1fr) !important; }
+  .rs-tabs { flex-wrap: wrap; }
+  .rs-tabs button { flex: 1 1 30%; }
+}
