@@ -172,7 +172,8 @@
         <img src="{{img}}" alt="">
         <span class="name">{{name}}</span>
         <span class="cap">прочность</span>
-        <b>{{reliability}}</b>
+        {{#if @root.editable}}<input type="number" class="item-field shield-rel" data-field="system.reliability.value" value="{{relValue}}" min="0" step="1" aria-label="Прочность щита"><span class="of">/ {{relMax}}</span>
+        {{else}}<b>{{reliability}}</b>{{/if}}
       </div>
       {{/each}}
     </section>

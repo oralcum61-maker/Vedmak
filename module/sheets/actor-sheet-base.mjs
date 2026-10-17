@@ -180,7 +180,7 @@ function magicContext(actor, spells) {
       focus: d.focus ?? 0, focusItem: d.focusItem ?? "", showFocus: !!d.focus || sorted.some(x => x.system.kind !== "sign"),
       signNote: `Воля + Сотворение заклинаний · ${skill("spellCasting")}`,
       kinds: Object.entries(CONFIG.VEDMAK.MAGIC_KINDS).map(([kind, label]) => ({ kind, label })),
-      shield: system.shield?.value ?? 0, shieldLeft, showShield: !!(system.shield?.value || has("sign")),
+      shield: system.shield?.value ?? 0, shieldLeft, showShield: !!(system.shield?.value || has("sign") || actor.type === "monster"),
       maintained,
       // Двимерит: касание и его последствия (стр. 167); ячейка — у тех, кто владеет магией
       showDimeritium: !!sorted.length || (d.vigor ?? 0) > 0 || !!d.dimeritium,
@@ -760,7 +760,8 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       .map(k => CONFIG.VEDMAK.DAMAGE_TYPES[k]?.label ?? k).join(", ");
     context.shields = (system.derived.shields ?? []).map(i => ({
       id: i.id, name: i.name, img: i.img,
-      reliability: `${i.system.reliability.value}/${i.system.reliability.max}`
+      reliability: `${i.system.reliability.value}/${i.system.reliability.max}`,
+      relValue: i.system.reliability.value, relMax: i.system.reliability.max
     }));
     const locTable = system.derived.bodyType === "monster" ? LOCATIONS_MONSTER : LOCATIONS_HUMANOID;
     context.critWounds = (actor.itemTypes.critWound ?? []).map(item => {
@@ -846,6 +847,12 @@ export class VedmakActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (!(await setDuelResolve(this.actor, input.value))) this.render();
     });
     // Поля предметов прямо в списках (количество): пишем в предмет, а не в актора
+    // Магический щит (Квен и т. п.) правится прямо на вкладке «Магия»; максимум не меньше значения (PLAN 4.261)
+    this._listen("input.shield-value", "change", async (event, input) => {
+      event.stopPropagation();
+      const v = Math.max(0, Math.round(Number(input.value) || 0));
+      await this.actor.update({ "system.shield.value": v, "system.shield.max": Math.max(v, this.actor.system.shield?.max ?? 0) });
+    });
     this._listen("input.item-field", "change", async (event, input) => {
       event.stopPropagation();
       const item = this.actor.items.get(input.closest("[data-item-id]")?.dataset.itemId);

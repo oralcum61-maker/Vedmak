@@ -983,3 +983,7 @@ input.vd-fx-slider { flex: 1 1 auto; width: 120px; min-width: 80px; height: 16px
 .vd-item-menu > a i { width: 16px; text-align: center; color: #bab4a8; }
 .vd-item-menu > a.on i { color: #e6c48a; }
 .vd-item-menu > a:has(.fa-trash):hover { background: rgba(184, 67, 44, .25); color: #f0b3a2; }
+/* Щиты правятся на листе (PLAN 4.261): магический щит на «Магии», прочность физического щита на «Бою» */
+.application.vedmak .cell.shield .num input.shield-value { width: 3.4em; height: 1.7em; padding: 0 .3em; text-align: center; font-size: 1.15em; }
+.application.vedmak .shield-line input.shield-rel { width: 3em; height: 1.6em; padding: 0 .25em; text-align: center; }
+.application.vedmak .shield-line .of { color: #9d968a; font-size: .85em; }

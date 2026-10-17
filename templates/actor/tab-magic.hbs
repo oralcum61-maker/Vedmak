@@ -33,7 +33,7 @@
       <span class="cap">Щит</span>
       <span class="num">
         <svg class="ico" viewBox="0 0 24 26" aria-hidden="true"><path d="M3 3h18v8.5C21 18 12 23.5 12 23.5S3 18 3 11.5Z" fill="{{#if magic.shield}}#b08a4a{{else}}#17181b{{/if}}" stroke="{{#if magic.shield}}#050607{{else}}#3a3c42{{/if}}" stroke-width="1.4"/><path d="M12 6v14" stroke="#050607" stroke-width=".9"/></svg>
-        <b>{{magic.shield}}</b><span class="of">ПЗ</span>
+        {{#if editable}}<input type="number" class="shield-value" value="{{magic.shield}}" min="0" step="1" aria-label="Щит, ПЗ" data-tooltip="Щит, ПЗ — можно править">{{else}}<b>{{magic.shield}}</b>{{/if}}<span class="of">ПЗ</span>
       </span>
       <span class="dim">{{#if magic.shieldLeft}}{{magic.shieldLeft}}{{else}}&nbsp;{{/if}}</span>
     </div>

@@ -43,6 +43,21 @@ try {
   ok(npc.itemTypes.profession.length === 1 && npc.system.profession?.name === mage.name, `вторая профессия заменила первую (${npc.itemTypes.profession.map(i => i.name).join(", ")})`);
   await sheet.close();
 
+  stepName("щиты НИП правятся");
+  { // PLAN 4.261: магический щит (Квен) на «Магии» и прочность щита на «Бою» — полями
+    const [sh] = await npc.createEmbeddedDocuments("Item", [{ name: "Прогон: щит", type: "armor", system: { isShield: true, equipped: true, reliability: { value: 10, max: 10 } } }]);
+    const s2 = npc.sheet; await s2.render({ force: true }); await wait(600);
+    s2.changeTab("magic", "primary"); await wait(600);
+    const sv = s2.element.querySelector("input.shield-value");
+    if (sv) { sv.value = "12"; sv.dispatchEvent(new Event("change", { bubbles: true })); await wait(800); }
+    ok(!!sv && npc.system.shield.value === 12 && npc.system.shield.max >= 12, `магический щит НИП: поле ${!!sv}, значение ${npc.system.shield.value}`);
+    s2.changeTab("combat", "primary"); await wait(600);
+    const rel = s2.element.querySelector(`.shield-line[data-item-id="${sh?.id}"] input.shield-rel`);
+    if (rel) { rel.value = "6"; rel.dispatchEvent(new Event("change", { bubbles: true })); await wait(800); }
+    ok(!!rel && npc.items.get(sh.id)?.system.reliability.value === 6, `прочность щита НИП: поле ${!!rel}, значение ${npc.items.get(sh?.id)?.system.reliability.value}`);
+    await s2.close();
+  }
+
   stepName("персонаж — как раньше");
   await hero.createEmbeddedDocuments("Item", [bard.toObject()]);
   const hs = hero.sheet; await hs.render({ force: true }); await wait(800);
