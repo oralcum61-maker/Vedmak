@@ -117,6 +117,7 @@
           {{#if @root.gm}}<input type="number" name="system.stock.{{name}}" value="{{raw}}" min="0" step="any" aria-label="{{name}}">{{else}}<b class="rs-metal">{{value}}</b>{{/if}}
           <span class="rs-res-d{{#if up}} rs-up{{/if}}{{#if down}} rs-down{{/if}}">{{#if net}}{{net}}{{else}}—{{/if}}</span>
           {{#if left}}<span class="rs-res-left" data-tooltip="При нынешней убыли за неделю">{{left}}</span>{{/if}}
+          {{#if spark}}<svg class="rs-spark" viewBox="0 0 60 16" preserveAspectRatio="none" aria-hidden="true" data-tooltip="Запас за последние недели"><polyline points="{{spark}}"></polyline></svg>{{/if}}
           {{#if @root.gm}}{{#unless need}}<button type="button" class="rs-x rs-res-x" data-action="removeResource" data-name="{{name}}" aria-label="Убрать {{name}}" data-tooltip="Убрать ресурс со склада"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>{{/unless}}{{/if}}
         </div>
         {{/each}}

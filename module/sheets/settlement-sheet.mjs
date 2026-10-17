@@ -104,6 +104,15 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const stock = sys.stockMap;
     const names = new Set([...RESOURCE_ORDER, ...Object.keys(stock), ...Object.keys(fc.net)]);
     const order = n => { const i = RESOURCE_ORDER.indexOf(n); return i < 0 ? 99 : i; };
+    // Кривая запаса за последние недели (PLAN 4.243): от нынешнего назад по изменениям недель из летописи
+    const log = sys.log.slice(-8);
+    const spark = name => {
+      const vals = [stock[name] ?? 0];
+      for (let i = log.length - 1; i >= 0; i--) vals.unshift(Math.max(0, vals[0] - (log[i].net?.[name] ?? 0)));
+      if (vals.length < 3 || vals.every(v => v === vals[0])) return "";
+      const max = Math.max(...vals), min = Math.min(...vals), span = max - min || 1;
+      return vals.map((v, i) => `${Math.round((i / (vals.length - 1)) * 60)},${Math.round(14 - ((v - min) / span) * 12)}`).join(" ");
+    };
     const resources = [...names].sort((a, b) => order(a) - order(b) || compareRu(a, b)).map(name => {
       const net = fc.net[name] ?? 0;
       const value = stock[name] ?? 0;
@@ -111,7 +120,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       const weeks = net < 0 ? Math.floor(value / -net) : Infinity;
       const left = weeks > 6 ? "" : value <= 0 ? "на складе нет" : weeks === 0 ? "кончится на этой неделе"
         : weeks === 1 ? "хватит на неделю" : `хватит на ${weeks} нед.`;
-      return { name, img: resourceIcon(name), value: fmt(value), raw: value, cap: sum.storage, left,
+      return { name, img: resourceIcon(name), value: fmt(value), raw: value, cap: sum.storage, left, spark: spark(name),
         pct: Math.min(100, Math.round((value / sum.storage) * 100)), full: value >= sum.storage,
         net: net ? `≈ ${signed(net)}` : "", up: net > 0, down: net < 0, need: RESOURCE_ORDER.includes(name),
         sell: `${priceOf(name)} ${cur.abbr}`, buy: `${Math.ceil(priceOf(name) * BUY_MARKUP)} ${cur.abbr}`,

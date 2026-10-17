@@ -916,3 +916,8 @@
 .vd-realm .realm-dlg .realm-good { padding: 3px 8px; border-left: 2px solid #8fb07a; border-radius: 0 3px 3px 0; color: #cfe0b8; background: rgba(143, 176, 122, .1); }
 .vd-realm .realm-skip { display: flex; align-items: center; gap: 7px; margin-top: 2px; font-size: 11px; color: #8d887e; cursor: pointer; }
 .vd-realm .realm-skip input { width: 14px; height: 14px; margin: 0; }
+/* Кривая запаса на плитке склада (PLAN 4.243): тонкая линия серебром за последние недели */
+.rs-res .rs-spark { grid-column: 2 / span 2; width: 100%; height: 14px; margin-top: 1px; overflow: visible; }
+.rs-res .rs-spark polyline { fill: none; stroke: rgba(214, 205, 185, .55); stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.rs-res:has(.rs-res-d.rs-down) .rs-spark polyline { stroke: rgba(240, 160, 140, .7); }
+.rs-res:has(.rs-res-d.rs-up) .rs-spark polyline { stroke: rgba(188, 211, 163, .7); }
