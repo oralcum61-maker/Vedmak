@@ -126,6 +126,19 @@ try {
       `золотой дракон: заклинания только огня (${picks.length})`);
     ok(picks.some(el => (el.dataset.tooltip ?? "").length > 20), "у заклинаний — описание подсказкой");
   }
+  stepName("аристократ по книге");
+  const noble = profs.find(p => p.system.key === "aristocrat");
+  w2.wiz.raceUuid = human.uuid; w2.wiz.professionUuid = noble?.uuid ?? ""; w2.wiz.step = "profession";
+  await w2.render({ force: true }); await wait(400);
+  const nk = w2.kit;
+  ok(noble?.system.skills.length === 9 && nk.skillChoices[0]?.count === 1 && nk.skillChoices[0].options.includes("swordsmanship")
+    && nk.gearChoice.count === 5 && nk.gearChoice.options.length === 9 && nk.startingMoney === 200,
+    `аристократ: навыков ${noble?.system.skills.length} + 1 боевой, снаряжение ${nk.gearChoice.count} из ${nk.gearChoice.options.length}, ${nk.startingMoney} × 2d6`);
+  const names = new Set();
+  for (const pack of game.packs.filter(p => p.documentName === "Item" && p.metadata.packageName === "vedmak")) for (const e of await pack.getIndex()) names.add(e.name);
+  const missing = nk.gearChoice.options.filter(n => !names.has(n));
+  ok(!missing.length, `снаряжение аристократа есть в компендиумах${missing.length ? ": нет " + missing.join(", ") : ""}`);
+  ok(!/не указаны/.test(noble?.system.description ?? "") && /200 крон/.test(noble?.system.description ?? ""), "в описании — навыки, снаряжение и деньги по книге");
   await w2.close();
 } finally {
   if (wiz.rendered) await wiz.close();

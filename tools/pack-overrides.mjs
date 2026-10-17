@@ -24,6 +24,13 @@ const A = "systems/vedmak/assets/fan/armor/";
 const H = "icons/equipment/head/";
 const p = text => `<p>${text}</p>`;
 
+/** Заглушка модуля в описании «Аристократа» и замена по книге «Лорды и земли», стр. 10 (PLAN 4.253). */
+const ARISTOCRAT_STUB = "<p>Навыки профессии, снаряжение и стартовые деньги в модуле не указаны — добавьте их по книге «Лорды и земли».</p>";
+const ARISTOCRAT_KIT = "<h2>Навыки, снаряжение, деньги</h2><p><b>Навыки:</b> Внимание, 1 боевой навык на выбор, Обман, Образование, Внешний вид, "
+  + "Понимание людей, Лидерство, Убеждение, Верховая езда, Этикет.</p><p><b>Снаряжение (5 на выбор):</b> эсбода, модная одежда, лошадь, "
+  + "невидимые чернила, дневник с замком, набор для макияжа, духи или одеколон, потайной карман, письменные принадлежности.</p>"
+  + "<p><b>Стартовые деньги:</b> 200 крон × 2d6 (в среднем 1200).</p>";
+
 /** Сохранённые части «Тома Хаоса»: [имя, значок (icons/commodities/…), что это]. */
 const PRESERVED = [
   ["Сохранённая голова", "bones/skull-canine-beige.webp", "Голова чудовища, сохранённая алхимически: мозг и железы годны для пересадки."],
@@ -249,7 +256,20 @@ export const OVERRIDES = [
   } },
   // «Маг огня» («Офир и Зеррикания», стр. 26–27): «Магические способности: 0» — опечатка книги (Энергия 5, ветви
   // магические); стартовая магия как у «Мага воды» той же книги — 6 заклинаний и 2 ритуала (решение 10.10)
-  { op: "set", pack: "professions", name: "Маг огня", set: { "system.magicQuota.spell": 6, "system.magicQuota.ritual": 2 } }
+  { op: "set", pack: "professions", name: "Маг огня", set: { "system.magicQuota.spell": 6, "system.magicQuota.ritual": 2 } },
+  // «Аристократ» («Лорды и земли», стр. 10): в модуле не было навыков, снаряжения и денег — по книге (PLAN 4.253).
+  // Навыки: Внимание, 1 боевой, Обман, Образование, Внешний вид, Понимание людей, Лидерство, Убеждение, Верховая езда,
+  // Этикет; снаряжение — 5 из 9; 200 × 2d6 крон
+  { op: "set", pack: "professions", name: "Аристократ", set: {
+    "system.skills": ["awareness", "deceit", "education", "grooming", "perception", "leadership", "persuasion", "riding", "etiquette"],
+    "system.skillChoices": [{ label: "Боевой навык (выберите 1)", count: 1,
+      options: ["melee", "brawling", "staffSpear", "smallBlades", "swordsmanship", "athletics", "crossbow", "archery"] }],
+    "system.gearChoice": { count: 5, options: ["Эсбода", "Модная одежда", "Лошадь", "Невидимые чернила", "Дневник/гроссбух",
+      "Набор для макияжа", "Духи/одеколон", "Потайной карман", "Письменные принадлежности"] },
+    "system.startingMoney": 200
+  } },
+  { op: "deep", set: {}, where: o => o?.key === "aristocrat" && typeof o.description === "string" && o.description.includes(ARISTOCRAT_STUB),
+    fix: o => { o.description = o.description.replace(ARISTOCRAT_STUB, ARISTOCRAT_KIT); } }
 ];
 
 /* -------------------------------------------------------------------------- */
