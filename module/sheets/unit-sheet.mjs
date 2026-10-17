@@ -11,6 +11,7 @@ import { equipCost, routAt } from "../army/rules.mjs";
 import * as ARMY from "../army/army.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
+import { bindRealmKeys, restoreTabFocus } from "./realm-keys.mjs";
 import { once, refuse } from "../util.mjs";
 import { realmPrompt, afterNum } from "../apps/realm-dialog.mjs";
 
@@ -204,6 +205,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают. */
   _onRender(context, options) {
     super._onRender(context, options);
+    bindRealmKeys(this); restoreTabFocus(this);
     animateRealm(this, this.element, this.actor.uuid, this.tab);
     // Только что взятая ступень обучения и новая ступень снаряжения — вспыхивают (PLAN 4.240)
     animateNew(this, this.element, ".rs-node.bought[data-node]", el => el.dataset.node);

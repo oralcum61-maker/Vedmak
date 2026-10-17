@@ -13,6 +13,7 @@ import { BUILDING_EFFECTS, effectDice } from "../config/building-upgrades.mjs";
 import * as S from "../settlement/settlement.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
+import { bindRealmKeys, restoreTabFocus } from "./realm-keys.mjs";
 import { once } from "../util.mjs";
 import { realmPrompt, afterNum } from "../apps/realm-dialog.mjs";
 
@@ -343,6 +344,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают. */
   _onRender(context, options) {
     super._onRender(context, options);
+    bindRealmKeys(this); restoreTabFocus(this);
     animateRealm(this, this.element, this.actor.uuid, this.tab);
     // Новый заказ, взятая ступень обустройства, достроенная ступень — въезжают (PLAN 4.240)
     animateNew(this, this.element, ".rs-order[data-order]", el => el.dataset.order);

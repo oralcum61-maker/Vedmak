@@ -170,6 +170,17 @@ stepName("караван и «Торговать по»");
   await other.delete();
 }
 
+stepName("горячие клавиши");
+{ // ← / → на вкладке и Alt+цифра (PLAN 4.245)
+  sheet.tab = "economy"; await sheet.render(); await wait(400);
+  const tab = sheet.element.querySelector('.rs-tabs [data-tab="economy"]');
+  tab.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", code: "ArrowRight", bubbles: true })); await wait(500);
+  ok(sheet.tab === "buildings", `клавиши: → на вкладке — следующая (${sheet.tab})`);
+  sheet.element.querySelector(".rs-scroll").dispatchEvent(new KeyboardEvent("keydown", { key: "4", code: "Digit4", altKey: true, bubbles: true })); await wait(500);
+  ok(sheet.tab === "chronicle", `клавиши: Alt+4 — четвёртая вкладка (${sheet.tab})`);
+  ok(sheet.element.contains(document.activeElement) && document.activeElement?.dataset?.tab === "chronicle", `клавиши: фокус на выбранной вкладке (${document.activeElement?.dataset?.tab ?? document.activeElement?.tagName})`);
+}
+
 stepName("управляющий перетаскиванием");
 { // Персонаж на карточку постройки на листе поселения — управляющий этой постройки (PLAN 4.244)
   const hero = await Actor.create({ name: "Прогон: управляющий", type: "character", folder: folder.id });

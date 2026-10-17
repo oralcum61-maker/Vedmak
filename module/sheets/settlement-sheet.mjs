@@ -19,6 +19,7 @@ import { bindUnitMenu } from "../army/unit-menu.mjs";
 import * as EV from "../settlement/events.mjs";
 import { effectLabel } from "../config/settlement-events.mjs";
 import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
+import { bindRealmKeys, restoreTabFocus } from "./realm-keys.mjs";
 import { realmPrompt, realmConfirm, afterNum } from "../apps/realm-dialog.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -283,6 +284,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   _onRender(context, options) {
     super._onRender(context, options);
+    bindRealmKeys(this); restoreTabFocus(this);
     // Движение, как у листа персонажа (PLAN 4.212): вкладка проявляется, числа и шкалы — перетекают и вспыхивают
     animateRealm(this, this.element, this.actor.uuid, this.tab);
     animateNew(this, this.element, ".rs-bcard[data-id]");
