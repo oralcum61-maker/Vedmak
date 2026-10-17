@@ -141,7 +141,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       campaign: { on: sys.campaign, supplies: sys.supplies, weeks: sys.food ? Math.floor(sys.supplies / sys.food) : 0,
         siege: sys.besieging ? fromUuidSync(sys.besieging)?.name ?? "?" : "" },
       ...(() => { const tree = this.#tree(home, have);
-        return { tree, treeCols: Math.min(4, Math.max(1, tree.length)), treeDone: tree.reduce((n, b) => n + b.done, 0), treeTotal: tree.reduce((n, b) => n + b.total, 0) }; })(),
+        return { tree, treeCols: Math.min(4, Math.max(1, tree.length)), treeRows: 1 + Math.max(0, ...tree.map(b => b.nodes.length)) + (gm && this.treeEdit ? 1 : 0), treeDone: tree.reduce((n, b) => n + b.done, 0), treeTotal: tree.reduce((n, b) => n + b.total, 0) }; })(),
       treeEdit: gm && this.treeEdit,
       effectTypes: Object.fromEntries(Object.entries(UNIT_EFFECTS).map(([k, v]) => [k, v.label])),
       rankOptions: Object.fromEntries(RANKS.map((r, i) => [i, r.label])),

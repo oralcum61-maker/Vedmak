@@ -18,7 +18,7 @@
     {{#if gm}}<button type="button" class="rs-go" data-action="week" data-tooltip="Бросить выработку построек, посчитать нужды, стройку и — в конце месяца — приход семей и бунт; итог — в чат">Неделя прошла</button>{{/if}}
   </header>
 
-  <div class="rs-stats" style="grid-template-columns: 1fr 1fr 1fr 1.75fr 1fr;">
+  <div class="rs-stats" style="grid-template-columns: repeat(5, minmax(0, 1fr));">
     <div class="rs-stat" data-tooltip="Работают: {{families.assigned}} · без дела: {{families.idle}}{{#if families.builders}} (строят: {{families.builders}}){{/if}}">
       <span class="rs-medal">{{#if gm}}<input type="number" name="system.families" value="{{sys.families}}" min="0" step="1" aria-label="Семьи">{{else}}<b class="rs-metal">{{families.value}}</b>{{/if}}</span>
       <div class="rs-stat-t">
@@ -47,13 +47,12 @@
         </div>{{/if}}
       </div>
     </div>
-    <div class="rs-stat tax">
-      <div class="rs-stat-row">
-        <span class="rs-medal sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><path d="M12 8.5v7M9.8 10.2c0-1 1-1.7 2.2-1.7s2.2.6 2.2 1.6c0 2.2-4.4 1.2-4.4 3.5 0 1 1 1.6 2.2 1.6s2.2-.7 2.2-1.7"></path></svg></span>
-        <div class="rs-stat-t"><b>Налог</b><span>{{taxNote}}</span></div>
-      </div>
-      <div class="rs-seg" role="radiogroup" aria-label="Налог">
-        {{#each taxes}}<label class="{{#if selected}}on{{/if}}"><input type="radio" name="system.taxes" value="{{key}}" {{#if selected}}checked{{/if}} {{#unless @root.editable}}disabled{{/unless}}>{{label}}</label>{{/each}}
+    <div class="rs-stat tax" data-tooltip="Монет налога с каждой семьи в неделю (нужна усадьба)">
+      <span class="rs-medal"><b class="rs-metal">{{taxRate}}</b></span>
+      <div class="rs-stat-t">
+        <b>Налог</b>
+        <select class="rs-pick" name="system.taxes" aria-label="Налог" {{#unless editable}}disabled{{/unless}}>{{#each taxes}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+        <span>{{taxNote}}</span>
       </div>
     </div>
     <div class="rs-stat" data-tooltip="Уровень Контроля: каждый снимает 5% шанса бунта. Свой — от событий и стражи; постройки добавляют сверху">

@@ -639,3 +639,130 @@
 .rs-stat.tax .rs-seg label { height: 24px; }
 .rs-tabs { margin: 10px 18px 0; padding: 3px; }
 .rs-tabs button { height: 30px; font-size: 15px; }
+/* Лист постройки — связки (PLAN 4.231): строка ведущего, картинки ресурсов в линии, управляющий в медальоне, «+ ступень» */
+.rs-gm-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 8px 18px 0; padding: 7px 12px; border-radius: 5px;
+  background: rgba(0, 0, 0, .3); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .85); font-size: 11px; color: var(--rs-ash); }
+.rs-gm-row label { display: inline-flex; align-items: center; gap: 5px; }
+.rs-gm-row input[type="text"] { width: 120px; height: 22px; }
+.rs-stat-t select { max-width: 100%; height: 22px; margin-top: 3px; font-size: 10.5px; }
+.rs-stat-t label { display: inline-flex; align-items: center; gap: 3px; }
+.rs-stat-t a { color: inherit; }
+.rs-sock.rs-mgr { --s: 46px; }
+.rs-sock.xs { --s: 28px; flex: none; }
+.rs-sock.xs > img { inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); }
+.rs-sock.xs::after { display: none; }
+.rs-sock.md > img { inset: 9px; width: calc(100% - 18px); height: calc(100% - 18px); }
+.rs-sec.ghost .rs-flow { opacity: .62; }
+.rs-step-h .rs-x { margin-left: auto; width: 20px; height: 20px; }
+.rs-step.editing { box-shadow: inset 0 0 0 1px rgba(224, 196, 143, .7), 0 3px 8px -3px rgba(0, 0, 0, .85); }
+.rs-step.add { display: grid; place-items: center; min-height: 90px; border: 0; border-radius: 5px; cursor: pointer; background: none;
+  outline: 1px dashed rgba(214, 190, 150, .3); outline-offset: -4px; font: 600 10px/1 var(--rs-body); letter-spacing: .14em; text-transform: uppercase; color: var(--rs-dim); }
+.rs-step.add:hover { color: var(--vd-silver, #f1ece0); }
+.rs-cost span.short { color: #f0b3a2; box-shadow: inset 0 0 0 1px rgba(184, 67, 44, .55); }
+.rs-branch-h.rs-branch-edit { flex-wrap: wrap; }
+.rs-branch-h.rs-branch-edit input[type="text"] { flex: 1 1 100px; min-width: 0; }
+/* Карточки ступеней одинаковой высоты по всем веткам (автор: «карточки улучшений сделай одинаковыми по размеру»):
+   ветки — подсетки общей сетки, ряд на ступень; кнопка — внизу карточки */
+.rs-tree { column-gap: 10px; row-gap: 0; align-items: stretch; }
+.rs-branch { display: grid; grid-row: span var(--rows, 4); grid-template-rows: subgrid; row-gap: 14px; }
+.rs-branch-h { margin-bottom: 0; }
+.rs-nodes { display: contents; }
+.rs-node { min-width: 0; }
+.rs-node > .rs-btn, .rs-node > .rs-bprog { margin-top: auto; }
+.rs-node > .rs-bprog + .rs-btn { margin-top: 4px; }
+/* Звания — полоса ниже (автор: «сделай менее широкой») */
+.rs-rank { gap: 3px; padding: 7px 6px 8px; }
+.rs-rank + .rs-rank::before { top: 8px; bottom: 8px; }
+.rs-rank > i { width: 9px; height: 9px; margin-bottom: 1px; }
+.rs-rank b { font-size: 14px; }
+.rs-rank small { font-size: 10px; line-height: 1.25; }
+.rs-rank .rs-meter { height: 4px; margin-top: 1px; }
+/* Налог: кнопка шириной по своему тексту — «Без налога» не вылезает за край (автор) */
+.rs-stat.tax .rs-seg { display: flex; }
+.rs-stat.tax .rs-seg label { flex: 1 1 auto; min-width: max-content; padding: 0 5px; font-size: 10px; }
+.rs-stat.tax .rs-seg { max-width: 100%; overflow: hidden; }
+/* Налог — выпадающим списком (автор: «заменить на выпадающий список, это слишком много места занимает»): кованая
+   планка со стрелкой, как кнопки листа; селектор сильнее общего .vedmak.sheet select. Раскрытый список — тёмная
+   пластина (appearance: base-select там, где Chromium его знает; иначе — тёмные строки системного списка) */
+.vedmak.sheet .rs-stat select.rs-pick, .vedmak.sheet .rs-stat select.rs-pick:focus {
+  width: auto; min-width: 112px; max-width: 100%; height: 24px; margin: 3px auto 1px; padding: 0 26px 0 12px; border: 0; border-radius: 2px;
+  appearance: none; -webkit-appearance: none; cursor: pointer; text-align: center; text-align-last: center;
+  font: 600 10px/24px var(--rs-body); letter-spacing: .14em; text-transform: uppercase; color: #f6f1e6; text-shadow: 0 1px 0 rgba(0, 0, 0, .95);
+  background-color: #3b3d43;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23e2ddd0' stroke-width='1.5'/%3E%3C/svg%3E"), var(--vd-gloss, none), var(--vd-s-btn, none);
+  background-repeat: no-repeat, no-repeat, repeat; background-position: right 10px center, 0 0, 0 0; background-size: 10px 6px, 100% 100%, 512px 512px;
+  box-shadow: inset 0 1px 0 rgba(255, 250, 240, .3), inset 0 -2px 0 rgba(0, 0, 0, .32), 0 0 0 1px #303137, 0 0 0 2px #060708, 0 5px 9px -5px rgba(0, 0, 0, .95);
+  outline: none; }
+.vedmak.sheet .rs-stat select.rs-pick:hover { filter: brightness(1.12); }
+.vedmak.sheet .rs-stat select.rs-pick:focus-visible { outline: 1px solid #8a8578; outline-offset: 3px; }
+.vedmak.sheet .rs-stat select.rs-pick:disabled { cursor: default; filter: none; opacity: 1; }
+.vedmak.sheet .rs-stat select.rs-pick option { color: #e2ddd0; background-color: #1c1d21; text-transform: none; letter-spacing: .02em; font: 400 15px/1.2 var(--rs-head); text-align: left; }
+.vedmak.sheet .rs-stat select.rs-pick option:checked { color: #fff6ef; background-color: #7a2a1b; }
+@supports (appearance: base-select) {
+  .vedmak.sheet .rs-stat select.rs-pick, .vedmak.sheet .rs-stat select.rs-pick::picker(select) { appearance: base-select; }
+  .vedmak.sheet .rs-stat select.rs-pick::picker-icon { display: none; }
+  .vedmak.sheet .rs-stat select.rs-pick::picker(select) { margin-top: 4px; padding: 4px; border: 0; border-radius: 4px; color: #e2ddd0;
+    background-color: #17181b; background-image: linear-gradient(180deg, rgba(255, 245, 225, .05), transparent 45%, rgba(0, 0, 0, .25)), var(--vd-t-plate, none);
+    background-size: auto, 220px; background-blend-mode: normal, overlay;
+    box-shadow: inset 0 1px 0 rgba(255, 245, 225, .08), 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 12px 24px -8px rgba(0, 0, 0, .95); }
+  .vedmak.sheet .rs-stat select.rs-pick option { display: flex; align-items: center; min-width: 140px; padding: 6px 14px; border-radius: 3px; background: none; cursor: pointer; }
+  .vedmak.sheet .rs-stat select.rs-pick option::checkmark { display: none; }
+  .vedmak.sheet .rs-stat select.rs-pick option:hover, .vedmak.sheet .rs-stat select.rs-pick option:focus-visible { color: #fff; background-color: #2a2c31; outline: none; }
+  .vedmak.sheet .rs-stat select.rs-pick option:checked { color: #fff6ef; background-color: rgba(184, 67, 44, .45); box-shadow: inset 2px 0 0 #b8432c; }
+}
+/* Римские цифры — шрифтом с засечками-перекладинами, где «I» не читается как «!» (выучка, ступени постройки) */
+.rs-medal b.rs-roman, .rs-step-h em { font-family: "Times New Roman", Georgia, serif; font-weight: 600; letter-spacing: .04em; }
+.rs-medal b.rs-roman { font-size: 17px; }
+.rs-step-h em { font-size: 22px; }
+/* Ступень дерева: метка состояния — под названием, название не переносится из-за неё */
+.rs-node-h { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; column-gap: 6px; row-gap: 2px; }
+.rs-node-h > b { grid-column: 1; grid-row: 1; }
+.rs-node-h > span { grid-column: 1; grid-row: 2; }
+.rs-node-h > .rs-x { grid-column: 2; grid-row: 1 / span 2; width: 20px; height: 20px; }
+/* Налог — по центру колонки, как остальные показатели (было растяжение под старые сегменты) */
+.rs-stat.tax { align-items: center; }
+.rs-stat.tax .rs-stat-t { align-items: center; width: 100%; }
+/* Значки в медальонах (монета налога, молот стройки, управляющий) — крупнее (автор: «цифра очень маленькая») */
+.rs-stat .rs-medal svg, .rs-stat.tax .rs-medal svg { width: 28px; height: 28px; stroke-width: 1.4; }
+/* Числа отряда в строке «Войско» — одного размера (сила была крупнее из-за .rs-metal) */
+.rs-num b, .rs-num b.rs-metal { font: 400 18px/1 var(--rs-head); }
+/* Описание — страница хроники (автор: «тетрадный лист не подходит по стилю ведьмака»): тёмный пергамент в кованой
+   рамке с заклёпками по углам, орнамент «ромб между чертами» сверху и снизу, едва видные чернильные линейки, на которых
+   лежат строки (строка 28px). Правка: редактор Foundry — гибкий столбец, его раскладку не трогаем (иначе текст пропадал) */
+.rs-notes { --rs-line: 28px; position: relative; display: block; min-height: 340px; padding: 38px 40px 40px; border-radius: 4px;
+  color: #eadcc3; background-color: #2b241d;
+  background-image:
+    repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--rs-line) - 1px), rgba(214, 190, 150, .085) calc(var(--rs-line) - 1px), rgba(214, 190, 150, .085) var(--rs-line)),
+    radial-gradient(140% 110% at 50% 0%, rgba(255, 228, 190, .10), transparent 55%),
+    radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0, 0, 0, .45)),
+    var(--vd-t-leather, none);
+  background-size: 100% var(--rs-line), auto, auto, 200px;
+  background-position: 0 31px, 0 0, 0 0, 0 0;
+  background-repeat: repeat-y, no-repeat, no-repeat, repeat;
+  background-blend-mode: normal, normal, normal, overlay;
+  box-shadow: inset 0 0 0 1px rgba(214, 190, 150, .18), inset 0 0 0 5px #2b241d, inset 0 0 0 6px rgba(214, 190, 150, .12),
+    inset 0 1px 0 rgba(255, 240, 215, .08), 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 10px 18px -8px rgba(0, 0, 0, .9);
+  outline: none; }
+/* заклёпки по углам и орнамент сверху/снизу */
+.rs-notes::before { content: ""; position: absolute; inset: 0; border-radius: 4px; pointer-events: none;
+  background: radial-gradient(circle at 12px 12px, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.2px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 12px) 12px, #fbf7ec 0, #8e887c 1.3px, #2a2824 2.2px, transparent 2.7px),
+    radial-gradient(circle at 12px calc(100% - 12px), #fbf7ec 0, #8e887c 1.3px, #2a2824 2.2px, transparent 2.7px),
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px), #fbf7ec 0, #8e887c 1.3px, #2a2824 2.2px, transparent 2.7px); }
+.rs-notes::after { content: ""; position: absolute; left: 50%; top: 13px; width: 240px; height: 14px; margin-left: -120px; pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='14'%3E%3Cpath d='M8 7h96M136 7h96' stroke='%23d6be96' stroke-opacity='.45'/%3E%3Cpath d='M4 7l4-4 4 4-4 4z M228 7l4-4 4 4-4 4z' fill='%23d6be96' fill-opacity='.45'/%3E%3Cpath d='M120 1l6 6-6 6-6-6z' fill='%23b8432c'/%3E%3Cpath d='M120 4l3 3-3 3-3-3z' fill='%23ffd9c9' fill-opacity='.55'/%3E%3C/svg%3E") no-repeat; }
+.rs-notes:has(prose-mirror.active)::after { display: none; }
+.rs-notes :is(p, li, blockquote) { margin: 0; font: 400 17.5px/var(--rs-line) var(--rs-head); letter-spacing: .01em; word-spacing: .04em;
+  color: #eadcc3; text-shadow: 0 1px 0 rgba(0, 0, 0, .6); }
+.rs-notes :is(h1, h2, h3, h4) { margin: 0; font: 400 21px/var(--rs-line) var(--rs-head); color: transparent; -webkit-background-clip: text; background-clip: text; background-image: var(--vd-metal); }
+.rs-notes :is(ul, ol) { margin: 0; padding-left: 22px; }
+.rs-notes .secret, .rs-notes .rs-notes-gm { margin: 0; padding: 0 10px; border-left: 2px solid rgba(184, 67, 44, .6); background: rgba(0, 0, 0, .25); color: #c7b99f; }
+/* редактор: не ломаем его столбец; панель кнопок — тёмной планкой, текст правки — тем же шрифтом на линейках */
+.rs-notes prose-mirror { min-height: calc(var(--rs-line) * 10); background: none; border: 0; }
+.rs-notes prose-mirror.inactive .editor-content { min-height: calc(var(--rs-line) * 10); padding: 0; }
+.rs-notes prose-mirror.active { display: flex; flex-direction: column; }
+.rs-notes prose-mirror.active .editor-container { flex: 1; min-height: calc(var(--rs-line) * 9); }
+.rs-notes prose-mirror.active .ProseMirror { padding: 0; min-height: calc(var(--rs-line) * 9); outline: none; }
+.rs-notes prose-mirror .menu-container { box-sizing: border-box; height: 46px; margin: -24px -16px 34px; }
+.rs-notes prose-mirror .editor-menu { height: 100%; }
+.rs-notes prose-mirror .editor-menu { border-radius: 3px; background: rgba(0, 0, 0, .55); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .85), 0 0 0 1px #2a2b30; }
+.rs-notes button.toggle { position: absolute; top: -24px; right: -20px; }

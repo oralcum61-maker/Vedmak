@@ -84,9 +84,9 @@ const herb = await Actor.create({ name: "Прогон: хата травника
   levels: [{ cost: [{ resource: "Древесина", qty: 2 }], weeks: 0, families: 1,
     produce: [{ resource: "Мандрагора", formula: "1d6", per: "family", noWinter: true }] }] } });
 await herb.sheet.render({ force: true }); await wait(400);
-ok(!!herb.sheet.element.querySelector(".bl-line .bl-side.out .bl-chip") && herb.sheet.element.querySelectorAll(".bl-steps .bl-step:not(.add)").length === 1,
+ok(!!herb.sheet.element.querySelector(".rs-flow .rs-side:last-child .rs-chip") && herb.sheet.element.querySelectorAll(".rs-steps .rs-step:not(.add)").length === 1,
   "лист постройки: линия выработки и лестница из одной ступени");
-herb.sheet.element.querySelector(".bl-step [data-action=editLevel]")?.click(); await wait(400);
+herb.sheet.element.querySelector(".rs-step [data-action=editLevel]")?.click(); await wait(400);
 ok(!!herb.sheet.element.querySelector(".bl-blueprint .bl-rows input[name='system.levels.0.produce.0.formula']"), "«Править» раскрывает чертёж ступени со строками выработки");
 { const input = herb.sheet.element.querySelector("input[name='system.levels.0.produce.0.formula']");
   input.value = "1d6+1"; input.dispatchEvent(new Event("change", { bubbles: true })); await wait(500); }

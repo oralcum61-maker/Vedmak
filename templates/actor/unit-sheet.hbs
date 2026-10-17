@@ -34,7 +34,7 @@
       <div class="rs-stat-t"><b>Бойцы</b><span>{{kind.label}}</span>{{#if sys.routed}}<span class="warn">бежали с поля</span>{{else}}<span>в строю</span>{{/if}}</div>
     </div>
     <div class="rs-stat" data-tooltip="Тренировка идёт каждую неделю поселения, пока отряд на плацу и есть плац или казарма">
-      <span class="rs-medal"><b class="rs-metal" style="font-size: 22px;">{{training.roman}}</b></span>
+      <span class="rs-medal"><b class="rs-metal rs-roman">{{training.roman}}</b></span>
       <div class="rs-stat-t"><b>Выучка</b><span class="rs-pips" aria-label="{{training.label}}">{{#each training.pips}}<i class="{{#if on}}on{{/if}}" data-tooltip="{{label}}"></i>{{/each}}</span><span>{{training.lower}} · {{training.progress}}</span>
         {{#if editable}}<div class="rs-acts"><button type="button" class="rs-btn{{#if sys.drilling}} on{{/if}}" aria-pressed="{{#if sys.drilling}}true{{else}}false{{/if}}" data-action="drill">{{#if sys.drilling}}На плацу ✓{{else}}На плац{{/if}}</button></div>{{/if}}
         {{#if sys.drilling}}{{#unless training.canDrill}}<span class="warn">нет плаца или казармы</span>{{/unless}}{{/if}}</div>
@@ -98,8 +98,6 @@
   {{/if}}
 
   {{#if (eq tab "training")}}
-    <div class="rs-toolbar"><p class="rs-hint">Ступень — цена со склада родного поселения сразу, недели — на плацу (отряд должен тренироваться). Звание, оружие и броня — требования ступени.</p>
-      {{#if gm}}<button type="button" class="rs-btn{{#if treeEdit}} on{{/if}}" data-action="treeEdit">{{#if treeEdit}}Готово{{else}}Править дерево{{/if}}</button>{{/if}}</div>
     <section class="rs-sec">
       <div class="rs-sec-h"><h2>Звание</h2><span>опыт: неделя на плацу +1, раунд битвы +2, победа +5</span></div>
       <div class="rs-ranks">
@@ -109,12 +107,12 @@
       </div>
     </section>
     <section class="rs-sec">
-      <div class="rs-sec-h"><h2>Обучение</h2><span>взято {{treeDone}} из {{treeTotal}}</span></div>
-      <div class="rs-tree" style="grid-template-columns: repeat({{treeCols}}, minmax(0, 1fr));">
+      <div class="rs-sec-h"><h2>Обучение</h2><span>взято {{treeDone}} из {{treeTotal}}</span>{{#if @root.gm}}<button type="button" class="rs-btn{{#if @root.treeEdit}} on{{/if}}" data-action="treeEdit">{{#if @root.treeEdit}}Готово{{else}}Править дерево{{/if}}</button>{{/if}}</div>
+      <div class="rs-tree" style="grid-template-columns: repeat({{treeCols}}, minmax(0, 1fr)); --rows: {{treeRows}};">
         {{#each tree as |br|}}
         <section class="rs-branch">
           {{#if @root.treeEdit}}
-          <div class="rs-branch-h bl-branch-edit">
+          <div class="rs-branch-h rs-branch-edit">
             <span class="bl-branch-icon"><i class="fa-solid {{br.icon}}"></i></span>
             {{#if @root.treeEdit}}
             <input type="text" name="{{br.path}}.name" value="{{br.name}}" aria-label="Название ветки">

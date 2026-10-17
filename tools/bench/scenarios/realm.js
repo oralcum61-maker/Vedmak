@@ -30,7 +30,7 @@ await house.update({ "system.manager": hero.uuid }); await wait(300);
 ok(town.system.summary.control === c0 + 2, "дом без выработки: Лидерство 8 — Контроль +2");
 await house.update({ "system.manager": "" });
 await lumber.sheet.render({ force: true }); await wait(400);
-ok(lumber.sheet.element.querySelector(".bl-manager")?.textContent.includes("Кузнец Брасс"), "на листе постройки — управляющий");
+ok(lumber.sheet.element.querySelector(".rs-stats")?.textContent.includes("Кузнец Брасс"), "на листе постройки — управляющий");
 await lumber.sheet.close();
 
 stepName("заказ в мастерской");

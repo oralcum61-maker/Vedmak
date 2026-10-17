@@ -180,6 +180,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       },
       wealth: { value: fmt(sys.wealth), raw: sys.wealth, coins: `≈ ${coins(sys.wealth)}`, rate: `1 Богатство = ${WEALTH_RATE} ${cur.abbr}`,
         gain: fc.wealthGain ? `${signed(fc.wealthGain)} в неделю` : "", hero: game.user.character?.name ?? "" },
+      taxRate: (TAXES[sys.taxes] ?? TAXES.low).perFamily,
       taxes: Object.entries(TAXES).map(([k, t]) => ({ key: k, label: t.label, selected: k === sys.taxes })),
       taxNote: sum.taxMult ? (sum.taxCoins ? `${sum.taxCoins} ${cur.abbr} в неделю` : "налог не берётся") : "без усадьбы налог не собрать",
       resources, needs, month, groups, catalog, chronicle, trade: sum.trade, storage: sum.storage, abbr: cur.abbr,

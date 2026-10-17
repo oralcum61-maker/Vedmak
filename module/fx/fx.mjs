@@ -352,11 +352,18 @@ const CLICKABLE = [
   ".application.vedmak .vh-switch a", ".application.vedmak [data-action='tab']",
   // Листы поселения, постройки, отряда, окна битвы, Совета и Библиотеки (PLAN 4.212)
   ".application.vedmak .sv-tabs a", ".application.vedmak .sv-btn", ".application.vedmak .sv-workers a",
-  ".application.vedmak .sv-mini-acts a", ".application.vedmak [data-action='category']"
+  ".application.vedmak .sv-mini-acts a", ".application.vedmak [data-action='category']",
+  // Листы королевства по холсту (PLAN 4.230–4.231): вкладки, кнопки, сегменты налога, «−/+», плитки решений, крестики;
+  // «Неделя прошла» звонит колоколом сама (fx/realm-fx.mjs)
+  ".application.vedmak .rs-tabs button", ".application.vedmak .rs-btn", ".application.vedmak .rs-go:not([data-action='week'])",
+  ".application.vedmak .rs-seg label", ".application.vedmak .rs-work button", ".application.vedmak .rs-mini-step button",
+  ".application.vedmak .rs-tile", ".application.vedmak .rs-x", ".application.vedmak .rs-step.add", ".application.vedmak select.rs-pick"
 ].join(", ");
 
 function onClick(event) {
   if (event.button !== 0 || !setting("fxUi", true)) return;
+  // Щелчок по подписи налога щёлкает и по её радиокнопке — второй щелчок без звука
+  if (event.target.matches?.(".rs-seg input")) return;
   if (event.target.closest?.(CLICKABLE)) playSound("ui-click");
 }
 

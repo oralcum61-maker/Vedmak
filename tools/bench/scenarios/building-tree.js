@@ -66,10 +66,10 @@ ok(lumber.system.upgrades.includes("b1n1") && lumber.system.research.node === "b
 stepName("вкладка «Обустройство»");
 const sheet = lumber.sheet; sheet.tab = "tree"; await sheet.render({ force: true }); await wait(500);
 const el = () => sheet.element;
-ok(el().querySelectorAll(".bl-branch:not(.add)").length === 3 && !!el().querySelector('.bl-node.bought[data-node="b1n1"]') && !!el().querySelector('.bl-node.working[data-node="b3n1"]'),
+ok(el().querySelectorAll(".rs-branch").length === 3 && !!el().querySelector('.rs-node.bought[data-node="b1n1"]') && !!el().querySelector('.rs-node.work[data-node="b3n1"]'),
   "три ветки; взятая посеребрена, строящаяся — с полосой");
-ok(el().querySelector('.bl-node[data-node="b1n2"]')?.classList.contains("locked") && el().querySelector('.bl-node[data-node="b1n2"] .bl-why')?.textContent.includes("уровень"), "закрытая — с причиной");
-el().querySelector('.bl-node[data-node="b2n1"] [data-action=grant]')?.click(); await wait(500);
+ok(el().querySelector('.rs-node[data-node="b1n2"]')?.classList.contains("locked") && el().querySelector('.rs-node[data-node="b1n2"] .rs-why')?.textContent.includes("уровень"), "закрытая — с причиной");
+el().querySelector('.rs-node[data-node="b2n1"] [data-action=grant]')?.click(); await wait(500);
 ok(lumber.system.upgrades.includes("b2n1"), "ведущий выдал «Подсеку» даром");
 el().querySelector("[data-action=treeEdit]")?.click(); await wait(400);
 ok(!!el().querySelector('input[name="system.branches.0.nodes.0.name"]'), "правка дерева: поля ступеней");

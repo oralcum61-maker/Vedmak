@@ -45,7 +45,7 @@ stepName("постройка и отряд");
 const lumber = town.system.buildingActors.find(b => b.system.key === "lumber");
 await lumber.sheet.render({ force: true }); await wait(600);
 await lumber.update({ "system.workers": 0 }); await wait(150);
-ok(anims(lumber.sheet.element.querySelector(".sv-plaques")?.querySelectorAll(".sv-plaque")[1]?.querySelector("b, input")) >= 0, "лист постройки оживлён без ошибок");
+ok(anims(lumber.sheet.element.querySelector(".rs-stats")?.querySelectorAll(".rs-stat")[1]?.querySelector("b, input")) >= 0, "лист постройки оживлён без ошибок");
 await lumber.sheet.close();
 const unit = await game.vedmak.army.recruit(town, { origin: "militia", count: 0 }) ?? await Actor.create({ name: "Прогон: Ополченцы", type: "unit", folder: folder.id, system: { soldiers: 20, settlement: town.uuid } });
 await unit.sheet.render({ force: true }); await wait(600);

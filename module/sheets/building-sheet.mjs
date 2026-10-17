@@ -35,6 +35,9 @@ const LEVEL_FIELDS = [
   ["defense", "Укрепления", "Прибавка защитникам в битве у стен поселения"]
 ];
 
+/** Римская цифра ступени (холст: I, II, III…). */
+const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
 /** Строка выработки — значком: ресурс, бросок, кому, как часто, условия. */
 function chip(r) {
   const notes = [];
@@ -107,7 +110,7 @@ function blueprint(lv, i) {
 export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static DEFAULT_OPTIONS = {
-    classes: ["vedmak", "sheet", "actor", "settlement", "building"],
+    classes: ["vedmak", "sheet", "actor", "settlement", "realm-sheet", "building"],
     position: { width: 860, height: 820 },
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false },
@@ -131,7 +134,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static PARTS = {
-    body: { template: "systems/vedmak/templates/actor/building-sheet.hbs", scrollable: [".sv-scroll"] }
+    body: { template: "systems/vedmak/templates/actor/building-sheet.hbs", scrollable: [".rs-scroll"] }
   };
 
   tab = "overview";
@@ -160,7 +163,7 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       const n = i + 1;
       const state = n <= b.level ? "done" : n === b.level + 1 ? "next" : "future";
       return {
-        index: i, n, state, current: n === b.level, editing: this.editing === i,
+        index: i, n, state, current: n === b.level, editing: this.editing === i, roman: ROMAN[n] ?? String(n),
         cost: l.cost.map(c => ({ img: resourceIcon(c.resource), name: c.resource, qty: c.qty, short: town && state === "next" && !have(c) })),
         weeks: l.weeks, families: l.families, housing: l.housing,
         produce: l.produce.map(r => ({ img: resourceIcon(r.resource), name: r.resource, amount: r.same ? "=" : r.formula })),
@@ -176,7 +179,9 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       settlements: game.actors.filter(a => a.type === "settlement" && a.isOwner)
         .map(a => ({ uuid: a.uuid, name: a.name, selected: a.uuid === sys.settlement })),
       level: { value: b.level, max: b.levels.length, arc: b.levels.length ? Math.round((b.level / b.levels.length) * 360) : 0 },
-      workers: { value: workers, max: lv && b.level ? lv.families : 0, slots: Array.from({ length: (b.level ? lv?.families : 0) ?? 0 }, (_, i) => i < workers) },
+      nextN: b.level + 1, nextWeeks: next?.weeks ?? 0, nextName: next ? `${b.level + 1}-я ступень` : "",
+      workers: { value: workers, max: lv && b.level ? lv.families : 0,
+        free: (() => { const f = (lv && b.level ? lv.families : 0) - workers; return f > 0 ? `свободно мест: ${f}` : "все места заняты"; })(), slots: Array.from({ length: (b.level ? lv?.families : 0) ?? 0 }, (_, i) => i < workers) },
       build: b.constructing && next ? { n: b.level + 1, done: b.progress, weeks: next.weeks, pct: next.weeks ? Math.round((b.progress / next.weeks) * 100) : 0 } : null,
       flow: lv ? { built: b.level > 0, n: shown, consume: lv.consume.map(chip), produce: lv.produce.map(chip), upkeep: lv.upkeep.map(chip),
         tags: tagsOf(lv, b.trade) } : null,
@@ -186,7 +191,9 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       resourceNames: [...resourceNames(), WEALTH], codePlaceholder: actor.name.toLowerCase(),
       manager: this.#manager(lv),
       orders: this.#orders(),
-      tree: this.#tree(town, stock, have), treeEdit: gm && this.treeEdit,
+      ...(() => { const tree = this.#tree(town, stock, have);
+        return { tree, treeCols: Math.min(4, Math.max(1, tree.length)), treeRows: 1 + Math.max(0, ...tree.map(b => b.nodes.length)) + (gm && this.treeEdit ? 1 : 0), treeDone: tree.reduce((n, x) => n + x.done, 0), treeTotal: tree.reduce((n, x) => n + x.total, 0) }; })(),
+      treeEdit: gm && this.treeEdit,
       effectTypes: Object.fromEntries(Object.entries(BUILDING_EFFECTS).map(([k, v]) => [k, v.label])),
       enrichedDescription: await TextEditor.enrichHTML(sys.description, { relativeTo: actor, secrets: actor.isOwner })
     });
