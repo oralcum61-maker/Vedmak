@@ -783,3 +783,30 @@
 .rs.rc .rc-cols p { margin: 0; font-size: 11.5px; line-height: 1.4; color: #d3ccbc; }
 .rs.rc .rc-cols p.dim { color: #8d887e; font-style: normal; }
 @media (max-width: 760px) { .rs.rc .rc-stats, .rs.rc .rc-cols { grid-template-columns: 1fr 1fr; } }
+
+/* ─── Карточки чата королевства по холсту окон (PLAN 4.234, доска «Карточки в чате») ───
+   Изменения склада — плашки с круглой картинкой ресурса; предупреждения — с красной чертой; списки войска, мастерских и
+   караванов — ромбами; события — варианты планками, цена и итог — строкой под ними; итог проверки — числом металлом */
+.chat-message .vedmak-card.settlement-week .card-body, .chat-message .vedmak-card.battle-round .card-body { display: flex; flex-direction: column; gap: 7px; padding: 9px 10px 11px; }
+.chat-message .vedmak-card.settlement-week .sw-res { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.chat-message .vedmak-card.settlement-week .sw-res li { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 2px; border-radius: 14px; font-size: 11px;
+  color: #d3ccbc; background-color: #25272c; background-image: linear-gradient(180deg, rgba(255, 245, 225, .08), transparent 42%, rgba(0, 0, 0, .24)), var(--vd-t-brushed, none); background-size: auto, 220px; background-blend-mode: normal, overlay; box-shadow: inset 0 1px 0 rgba(255, 245, 225, .13), 0 3px 8px -3px rgba(0, 0, 0, .85), 0 0 0 1px #050506; }
+.chat-message .vedmak-card.settlement-week .sw-res li span { white-space: nowrap; }
+.chat-message .vedmak-card.settlement-week .sw-res img { width: 20px; height: 20px; border: 0; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px #8f897d, 0 0 0 2px #060708; }
+.chat-message .vedmak-card.settlement-week .sw-res b { font: 400 14px/1 var(--vd-font-head); }
+.chat-message .vedmak-card.settlement-week .sw-res b.up { color: #bcd3a3; }
+.chat-message .vedmak-card.settlement-week .sw-res b.down { color: #f0b3a2; }
+.chat-message .vedmak-card.settlement-week .sw-res li:has(b.down) { box-shadow: inset 0 0 0 1px rgba(224, 147, 127, .5), 0 3px 8px -3px rgba(0, 0, 0, .85), 0 0 0 1px #050506; }
+.chat-message .vedmak-card.settlement-week .note, .chat-message .vedmak-card.battle-round .note { margin: 0; font-size: 11.5px; line-height: 1.45; color: #d3ccbc; }
+.chat-message .vedmak-card.settlement-week .note b, .chat-message .vedmak-card.battle-round .note b { color: #f1ece0; font-weight: 600; }
+.chat-message .vedmak-card.settlement-week .note.warn, .chat-message .vedmak-card.battle-round .note.warn { padding: 3px 8px; border-left: 2px solid #b8432c; border-radius: 0 3px 3px 0;
+  color: #f0b3a2; background: rgba(184, 67, 44, .12); }
+.chat-message .vedmak-card.settlement-week .note.up, .chat-message .vedmak-card.battle-round .note.up { color: #bcd3a3; }
+.chat-message .vedmak-card.settlement-week .note.dim { font-size: 10.5px; color: #8d887e; }
+.chat-message .vedmak-card .sw-army { list-style: none; margin: 0; padding: 0 0 0 2px; display: flex; flex-direction: column; gap: 2px; font-size: 11px; line-height: 1.4; color: #d3ccbc; }
+.chat-message .vedmak-card .sw-army li { position: relative; padding-left: 14px; }
+.chat-message .vedmak-card .sw-army li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 5px; height: 5px; transform: rotate(45deg); background: #8f7f62; }
+.chat-message .vedmak-card.settlement-event .se-choices { display: flex; flex-direction: column; gap: 7px; margin: 2px 0 0; }
+.chat-message .vedmak-card.settlement-event .se-choice { display: flex; flex-direction: column; gap: 3px; }
+.chat-message .vedmak-card.settlement-event .se-choice button { width: auto; align-self: flex-start; }
+.chat-message .vedmak-card.settlement-event .se-choice small { font-size: 10.5px; line-height: 1.35; color: #a8a296; }
