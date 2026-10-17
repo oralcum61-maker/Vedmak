@@ -1,0 +1,15 @@
+{{!-- Экран ведущего: Сложности, поправки, критические таблицы, памятки, заметки --}}
+<section class="rs gs-col gs-ref">
+  <div class="gs-scroll">
+    <div class="gs-block"><span class="rs-cap">Сложность проверки</span>
+      <ul class="gs-dc">{{#each difficulties}}<li><b>{{value}}</b><span>{{label}}</span></li>{{/each}}</ul></div>
+    <div class="gs-block"><span class="rs-cap">Поправки к Сложности</span>
+      <ul class="gs-dc mods">{{#each mods}}<li><b>+{{value}}</b><span>{{label}}</span></li>{{/each}}</ul></div>
+    <div class="gs-block"><span class="rs-cap">Критические таблицы — бросок ведущему</span>
+      <div class="gs-chips">{{#each crit}}<button type="button" class="gs-chip" data-action="rollTable" data-uuid="{{uuid}}"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i>{{name}}</button>{{/each}}</div></div>
+    <div class="gs-block"><span class="rs-cap">Памятки по правилам</span>
+      <div class="gs-chips">{{#each rules}}<button type="button" class="gs-chip plain" data-action="openRule" data-uuid="{{uuid}}">{{name}}</button>{{/each}}</div></div>
+    <div class="gs-block gs-notes"><span class="rs-cap">Заметки ведущего</span>
+      <textarea name="gmNotes" placeholder="Имена, долги, обещания, что случилось в прошлый раз…">{{notes}}</textarea></div>
+  </div>
+</section>

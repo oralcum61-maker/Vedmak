@@ -34,7 +34,8 @@
     "styles/pause.css",
     "styles/settlement.css",
     "styles/army.css",
-    "styles/realm-sheet.css"
+    "styles/realm-sheet.css",
+    "styles/gm-screen.css"
   ],
   "languages": [
     {

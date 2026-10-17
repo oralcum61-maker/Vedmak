@@ -1,0 +1,8 @@
+{{!-- Тайная групповая проверка с экрана ведущего (apps/gm-screen.mjs, PLAN 4.250): видит только ведущий --}}
+<div class="vedmak-card gm-check">
+  <header class="card-head"><div class="card-ident"><span class="card-name">{{skill}}</span>
+    <span class="card-sub">тайная проверка{{#if dc}} · СЛ {{dc}} · прошли {{passed}} из {{rows.length}}{{/if}}</span></div></header>
+  <div class="card-body">
+    <ul class="gmc-rows">{{#each rows}}<li class="{{state}}"><img src="{{img}}" alt=""><span>{{name}}</span><small>{{note}}</small><b>{{total}}</b></li>{{/each}}</ul>
+  </div>
+</div>

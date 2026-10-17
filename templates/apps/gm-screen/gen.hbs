@@ -1,0 +1,12 @@
+{{!-- Экран ведущего: генераторы (пакет «Генераторы»), подтаблицы бросаются внутри --}}
+<section class="rs gs-col gs-gen-col">
+  <div class="gs-cap"><span class="rs-cap">Генераторы — бросок ведущему</span></div>
+  <input type="search" name="genFind" class="gs-find" placeholder="Найти таблицу…" aria-label="Найти таблицу">
+  <div class="gs-scroll">
+    {{#each generators}}
+    <div class="gs-gen"><b>{{name}}</b>
+      <div class="gs-chips">{{#each list}}<button type="button" class="gs-chip" data-action="rollTable" data-uuid="{{uuid}}"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i>{{name}}</button>{{/each}}</div>
+    </div>
+    {{else}}<p class="gs-hint">Пакет «Генераторы» не найден.</p>{{/each}}
+  </div>
+</section>

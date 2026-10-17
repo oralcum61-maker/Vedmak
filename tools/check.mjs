@@ -415,7 +415,7 @@ async function checkPacks() {
  * - префикс классов раздела (худ, нексус, пауза, поселение, армия) в общих стилях листа или наоборот (PLAN 4.197):
  *   пауза описала `.vp-chain` — так же называлась колонка веток профессии в листе, и дерево навыков сплющилось.
  */
-const FEATURE_STYLES = new Set(["hud.css", "nexus.css", "pause.css", "settlement.css", "army.css"]);
+const FEATURE_STYLES = new Set(["hud.css", "nexus.css", "pause.css", "settlement.css", "army.css", "gm-screen.css"]);
 function checkStyles() {
   const S = SECTIONS.styles;
   let rules = 0;

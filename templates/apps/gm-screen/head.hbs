@@ -1,0 +1,11 @@
+{{!-- Экран ведущего (apps/gm-screen.mjs, PLAN 4.250): шапка и быстрый запуск окон --}}
+<header class="rs gs-head">
+  <span class="rs-sock sm"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i></span>
+  <div class="gs-head-t"><h2>Экран ведущего</h2><div class="rs-sub gs-sub"><span>героев {{heroes.length}}</span><i></i><span>Shift+G — открыть и закрыть</span></div></div>
+  <nav class="gs-launch">
+    {{#if towns}}<button type="button" class="rs-btn" data-action="launch" data-app="council">Совет правителя</button>{{/if}}
+    <button type="button" class="rs-btn" data-action="launch" data-app="investigation">Расследование</button>
+    <button type="button" class="rs-btn" data-action="launch" data-app="tavern">Таверна</button>
+    <button type="button" class="rs-x" data-action="launch" data-app="check" aria-label="Проверить мир" data-tooltip="Проверить мир: связи королевства"><i class="fa-solid fa-stethoscope" aria-hidden="true"></i></button>
+  </nav>
+</header>

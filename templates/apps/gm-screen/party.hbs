@@ -1,0 +1,37 @@
+{{!-- Экран ведущего: герои игроков и тайная проверка --}}
+<section class="rs gs-col gs-party">
+  <div class="gs-cap"><span class="rs-cap">Герои</span>{{#unless empty}}<button type="button" class="gs-link" data-action="pickAll" data-tooltip="Отметить всех или снять отметки">все / никого</button>{{/unless}}</div>
+  <div class="gs-scroll">
+    {{#each heroes}}
+    <article class="gs-hero{{#if hp.dying}} dying{{/if}}" data-uuid="{{uuid}}">
+      <label class="gs-pick" data-tooltip="В тайную проверку"><input type="checkbox" data-pick="{{id}}" {{#if picked}}checked{{/if}}></label>
+      <img class="gs-face" src="{{img}}" alt="" data-action="openActor">
+      <div class="gs-hero-t">
+        <div class="gs-name"><a data-action="openActor">{{name}}</a>{{#if players}}<small>{{players}}</small>{{/if}}</div>
+        <div class="gs-bars">
+          <span class="gs-bar hp{{#if hp.low}} low{{/if}}" style="--p: {{hp.pct}}%"><em>ПЗ</em><b>{{hp.value}} / {{hp.max}}</b></span>
+          <span class="gs-bar sta" style="--p: {{sta.pct}}%"><em>Вын</em><b>{{sta.value}} / {{sta.max}}</b></span>
+        </div>
+        <div class="gs-facts"><span>Удача <b>{{luck}}</b></span><span>Внимание <b>{{awareness}}</b></span><span>Сопр. магии <b>{{resist}}</b></span><span>{{money}}</span></div>
+        {{#if (or statuses.length critCount)}}<div class="gs-state">
+          {{#each statuses}}<img src="{{img}}" alt="" data-tooltip="{{name}}">{{/each}}
+          {{#if critCount}}<span class="gs-crit" data-tooltip="{{crits}}">крит. ранений {{critCount}}</span>{{/if}}
+        </div>{{/if}}
+      </div>
+    </article>
+    {{else}}
+    <div class="rs-empty"><span class="rs-sock"><i class="fa-solid fa-users" aria-hidden="true"></i></span><div class="rs-empty-t"><b>Героев нет</b><p>Здесь появятся персонажи, которыми владеют игроки.</p></div></div>
+    {{/each}}
+  </div>
+  {{#unless empty}}
+  <footer class="gs-check">
+    <span class="rs-cap">Тайная проверка отмеченных</span>
+    <div class="gs-check-row">
+      <select name="skill" aria-label="Навык">{{#each skills}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}} ({{stat}})</option>{{/each}}</select>
+      <input type="number" name="dc" value="{{dc}}" placeholder="СЛ" min="0" step="1" aria-label="Сложность">
+      <button type="button" class="rs-go" data-action="groupCheck">Бросить</button>
+    </div>
+    <p class="gs-hint">Бросают без окна и карточек; итог — одной карточкой, её видит только ведущий.</p>
+  </footer>
+  {{/unless}}
+</section>

@@ -194,7 +194,7 @@ export class VedmakActor extends Actor {
     return deathSaveDialog(this);
   }
 
-  async #check({ title, subtitle, parts, dc = null, mod = 0, skipDialog = false, flags, optional = [], stubborn = null }) {
+  async #check({ title, subtitle, parts, dc = null, mod = 0, skipDialog = false, flags, optional = [], stubborn = null, toChat = true }) {
     let luck = 0, messageMode;
     if (!skipDialog) {
       const choice = await rollDialog({ title, parts, luckMax: this.luckAvailable, dc, optional });
@@ -206,7 +206,7 @@ export class VedmakActor extends Actor {
       parts.push(...optional.filter(o => o.checked));
     }
     if (mod) parts.push({ label: "Модификатор", value: mod });
-    return performCheck({ actor: this, title, subtitle, parts, dc, luck, messageMode, flags, stubborn });
+    return performCheck({ actor: this, title, subtitle, parts, dc, luck, messageMode, flags, stubborn, toChat });
   }
 
   /** Пометка о состоянии, влияющем на параметры. */
