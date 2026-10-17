@@ -50,7 +50,7 @@ await lumber.sheet.close();
 const unit = await game.vedmak.army.recruit(town, { origin: "militia", count: 0 }) ?? await Actor.create({ name: "Прогон: Ополченцы", type: "unit", folder: folder.id, system: { soldiers: 20, settlement: town.uuid } });
 await unit.sheet.render({ force: true }); await wait(600);
 await unit.update({ "system.soldiers": 15 }); await wait(150);
-ok(anims(unit.sheet.element.querySelector(".sv-plaque .big")) > 0, "у отряда убыли бойцы — число вспыхнуло");
+ok(anims(unit.sheet.element.querySelector(".rs-stat .rs-medal > input, .rs-stat .rs-medal > b")) > 0, "у отряда убыли бойцы — число вспыхнуло");
 await unit.sheet.close();
 
 stepName("битва");

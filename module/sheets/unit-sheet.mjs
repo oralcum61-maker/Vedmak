@@ -51,7 +51,7 @@ export function unitEffectLabel(e) {
 export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static DEFAULT_OPTIONS = {
-    classes: ["vedmak", "sheet", "actor", "settlement", "unit"],
+    classes: ["vedmak", "sheet", "actor", "settlement", "realm-sheet", "unit"],
     position: { width: 860, height: 820 },
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false },
@@ -77,7 +77,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static PARTS = {
-    body: { template: "systems/vedmak/templates/actor/unit-sheet.hbs", scrollable: [".sv-scroll"] }
+    body: { template: "systems/vedmak/templates/actor/unit-sheet.hbs", scrollable: [".rs-scroll"] }
   };
 
   tab = "unit";
@@ -122,16 +122,17 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       tabs: Object.entries(TABS).map(([id, label]) => ({ id, label, active: id === this.tab })),
       kind: { ...kind, key: sys.kind }, kinds: Object.entries(UNIT_KINDS).map(([k, v]) => ({ key: k, label: v.label, selected: k === sys.kind })),
       origin: ORIGINS[sys.origin], home: home ? { uuid: home.uuid, name: home.name } : null,
-      training: { label: tr.label, pips: TRAINING.map((t, i) => ({ on: i <= sys.training, label: t.label })),
+      training: { label: tr.label, lower: tr.label.toLowerCase(), roman: ["—", "I", "II", "III", "IV", "V"][sys.training] ?? String(sys.training), pips: TRAINING.map((t, i) => ({ on: i <= sys.training, label: t.label })),
         progress: sys.training < MAX_TRAINING ? `${sys.progress} из ${tr.weeks} нед.` : "выше некуда",
         canDrill: (home?.system.summary.drill ?? 0) > 0, drill: home?.system.summary.drill ?? 0 },
-      rank: { label: RANKS[rank].label, xp: sys.xp, next: next ? `${next.label} — с ${next.xp}` : "высшее звание",
+      rank: { label: RANKS[rank].label, lower: RANKS[rank].label.toLowerCase(), xp: sys.xp,
+        next: next ? `до «${next.label.toLowerCase()}» ${next.xp - sys.xp}` : "высшее звание",
         pct: next ? Math.round(((sys.xp - RANKS[rank].xp) / (next.xp - RANKS[rank].xp)) * 100) : 100,
         arc: next ? Math.round(((sys.xp - RANKS[rank].xp) / (next.xp - RANKS[rank].xp)) * 360) : 360,
         list: RANKS.map((r, i) => ({ label: r.label, xp: r.xp, power: r.power, on: i < rank, now: i === rank })),
         pips: RANKS.map((r, i) => ({ on: i <= rank, label: `${r.label} (${r.xp})` })) },
       gear,
-      morale: { value: sys.morale, max: MORALE_MAX, arc: Math.round((sys.morale / MORALE_MAX) * 360),
+      morale: { value: sys.morale, max: MORALE_MAX, rout: routAt(sys), arc: Math.round((sys.morale / MORALE_MAX) * 360),
         tone: sys.morale >= 7 ? "high" : sys.morale > routAt(sys) + 2 ? "ok" : sys.morale > routAt(sys) ? "low" : "bad",
         note: sys.routed ? "бежали с поля" : sys.morale <= routAt(sys) ? "побегут при первой неудаче" : sys.morale >= 7 ? "рвутся в бой" : "держатся" },
       power: { total: sys.power.total, parts: sys.power.parts.map(p => `${p.label} ${p.value > 0 ? "+" : ""}${p.value}`).join(" · ") },
@@ -139,7 +140,9 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       upkeep: { food: sys.food, pay: sys.pay },
       campaign: { on: sys.campaign, supplies: sys.supplies, weeks: sys.food ? Math.floor(sys.supplies / sys.food) : 0,
         siege: sys.besieging ? fromUuidSync(sys.besieging)?.name ?? "?" : "" },
-      tree: this.#tree(home, have), treeEdit: gm && this.treeEdit,
+      ...(() => { const tree = this.#tree(home, have);
+        return { tree, treeCols: Math.min(4, Math.max(1, tree.length)), treeDone: tree.reduce((n, b) => n + b.done, 0), treeTotal: tree.reduce((n, b) => n + b.total, 0) }; })(),
+      treeEdit: gm && this.treeEdit,
       effectTypes: Object.fromEntries(Object.entries(UNIT_EFFECTS).map(([k, v]) => [k, v.label])),
       rankOptions: Object.fromEntries(RANKS.map((r, i) => [i, r.label])),
       weaponOptions: Object.fromEntries(GEAR.weapons.tiers.map((t, i) => [i, i ? t.label : "любое"])),

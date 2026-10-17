@@ -54,10 +54,10 @@ ok(militia.system.armor === 0, "на кольчуги для 20 бойцов н�
 ok(merc.system.weapons === 2 && merc.system.armor === 2, "наёмники — со своим оружием и бронёй");
 await militia.update({ "system.drilling": true });
 await militia.sheet.render({ force: true }); await wait(500);
-ok(!!militia.sheet.element.querySelector(".sv-plaques .sv-ring") && !!militia.sheet.element.querySelector(".ar-tiers"), "лист отряда открылся");
+ok(!!militia.sheet.element.querySelector(".rs-stats .rs-medal.arc") && !!militia.sheet.element.querySelector(".rs-tiers"), "лист отряда открылся");
 // Полоса цены следующей ступени снаряжения (PLAN 4.230): у оружия и брони, подпись — хватает ли склада
-{ const bars = [...militia.sheet.element.querySelectorAll(".ar-cost")];
-  ok(bars.length === 2 && bars.every(b => /хватает|не хватает|нет родного/.test(b.textContent) && b.querySelector(".sv-bar i")),
+{ const bars = [...militia.sheet.element.querySelectorAll(".rs-cost")];
+  ok(bars.length === 2 && bars.every(b => /хватает|не хватает|нет родного/.test(b.textContent) && b.querySelector(".rs-meter i")),
     `полоса цены у оружия и брони: ${bars.map(b => b.textContent.trim()).join(" | ")}`); }
 await militia.sheet.close();
 await town.sheet.render({ force: true }); town.sheet.tab = "army"; await town.sheet.render(); await wait(500);
@@ -108,7 +108,7 @@ ok(AR.unitDice(AR.unitState(militia), "losses") === 3, "«Сомкнутый с�
 await fam.update({ "system.kind": "cavalry" });
 ok(fam.system.branches.find(b => b.id === "kind")?.name === "Удар", "смена рода войск — ветка рода «Удар»");
 militia.sheet.tab = "training"; await militia.sheet.render({ force: true }); await wait(500);
-ok(militia.sheet.element.querySelectorAll(".bl-branch:not(.add)").length === 4 && !!militia.sheet.element.querySelector('.bl-node.bought[data-node="discipline-1"]'),
+ok(militia.sheet.element.querySelectorAll(".rs-branch").length === 4 && !!militia.sheet.element.querySelector('.rs-node.bought[data-node="discipline-1"]'),
   "вкладка «Обучение»: четыре ветки, освоенная ступень посеребрена");
 await militia.sheet.close(); militia.sheet.tab = "unit";
 const legacy = await Actor.create({ name: "Прогон: старый отряд", type: "unit", folder: folder.id, system: { kind: "infantry", soldiers: 10, equipment: 2 } });
