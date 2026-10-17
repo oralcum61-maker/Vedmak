@@ -849,3 +849,7 @@
 .chat-message .vedmak-card.settlement-weekall .swa-head b { flex: 1; font: 400 16px/1.1 var(--vd-font-head); color: #f1ece0; }
 .chat-message .vedmak-card.settlement-weekall .swa-head em { font-style: normal; font-size: 11px; color: #bcd3a3; }
 .chat-message .vedmak-card.settlement-weekall .swa-head em.down { color: #f0b3a2; }
+/* Тревоги королевства на кнопке «Совет правителя» (PLAN 4.242): красная метка с числом */
+.vd-council { position: relative; }
+.vd-council .vd-council-badge { display: inline-block; min-width: 17px; height: 17px; margin-left: 6px; padding: 0 5px; border-radius: 9px;
+  font: 700 10px/17px var(--vd-font-body); text-align: center; color: #fff; background: #b8432c; box-shadow: 0 0 0 1px #060708, 0 0 6px rgba(184, 67, 44, .6); }

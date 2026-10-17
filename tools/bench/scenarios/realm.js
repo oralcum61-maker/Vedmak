@@ -79,6 +79,12 @@ stepName("Совет правителя");
 const council = game.vedmak.council.open(); await wait(600);
 ok(council.element.querySelectorAll(".rc-town").length >= 2 && council.element.textContent.includes("Вышгород"), "в Совете — оба поселения");
 ok(!!council.element.querySelector("[data-action=weekAll]"), "у ведущего — «Неделя для всех»");
+{ // Тревоги на кнопке Совета (PLAN 4.242): поселение в осаде или с нехваткой — красная метка с числом и списком
+  await town2.update({ "system.stock.Еда": 0 }); await wait(600);
+  const badge = document.querySelector(".vd-council .vd-council-badge");
+  ok(!!badge && Number(badge.textContent) > 0 && badge.closest(".vd-council")?.dataset.tooltip?.includes(town2.name),
+    `тревоги: метка на кнопке Совета (${badge?.textContent ?? "нет"}) — ${badge?.closest(".vd-council")?.dataset.tooltip?.slice(0, 80) ?? ""}`);
+}
 await council.close();
 { // «Неделя для всех» (PLAN 4.241): одна сводная карточка вместо карточки на поселение, неделя сдвинулась у обоих
   const w = [town.system.week, town2.system.week];

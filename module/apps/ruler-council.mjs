@@ -117,8 +117,40 @@ export function registerCouncilUi() {
     btn.innerHTML = '<i class="fa-solid fa-crown"></i> Совет правителя';
     btn.addEventListener("click", () => RulerCouncil.open());
     header.append(btn);
+    paintAlerts(btn);
   });
-  // Окно открыто — поселения и постройки меняются: перерисовать
-  const again = foundry.utils.debounce(() => { const app = foundry.applications.instances.get("vedmak-council"); if (app?.rendered) app.render(); }, 200);
-  Hooks.on("updateActor", doc => { if (["settlement", "building", "unit"].includes(doc.type)) again(); });
+  // Окно открыто — поселения и постройки меняются: перерисовать; тревоги на кнопке — пересчитать
+  const again = foundry.utils.debounce(() => {
+    const app = foundry.applications.instances.get("vedmak-council"); if (app?.rendered) app.render();
+    for (const btn of document.querySelectorAll(".vd-council")) paintAlerts(btn);
+  }, 200);
+  for (const hook of ["updateActor", "createActor", "deleteActor"]) Hooks.on(hook, doc => { if (["settlement", "building", "unit"].includes(doc.type)) again(); });
+}
+
+/**
+ * Тревоги королевства (PLAN 4.242): по видимым поселениям — ждёт решения, нехватка по прогнозу, шанс бунта, осада,
+ * бездомные. Строки «Поселение: что».
+ */
+export function realmAlerts() {
+  const out = [];
+  for (const a of game.actors.filter(x => x.type === "settlement" && x.visible)) {
+    const sys = a.system, sum = sys.summary, fc = sys.forecast;
+    if (sys.decisions.length) out.push(`${a.name}: ждёт решения правителя`);
+    if (sys.siege.units.length) out.push(`${a.name}: в осаде ${sys.siege.weeks} нед.`);
+    const short = [...new Set((fc.shortages ?? []).map(s => String(s.resource).toLowerCase()))];
+    if (short.length) out.push(`${a.name}: не хватит — ${short.join(", ")}`);
+    if (sum.revolt) out.push(`${a.name}: шанс бунта ${sum.revolt}%`);
+    if (sum.homeless) out.push(`${a.name}: бездомных ${sum.homeless}`);
+  }
+  return out;
+}
+
+/** Значок тревог на кнопке Совета: число и подсказка со списком; тревог нет — значка нет. */
+function paintAlerts(btn) {
+  const list = realmAlerts();
+  let badge = btn.querySelector(".vd-council-badge");
+  if (!list.length) { badge?.remove(); btn.removeAttribute("data-tooltip"); return; }
+  if (!badge) { badge = document.createElement("b"); badge.className = "vd-council-badge"; btn.append(badge); }
+  badge.textContent = String(list.length);
+  btn.dataset.tooltip = list.join("<br>");
 }
