@@ -14,7 +14,7 @@ import * as S from "../settlement/settlement.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 import { animateRealm } from "../fx/realm-fx.mjs";
 import { once } from "../util.mjs";
-import { realmPrompt } from "../apps/realm-dialog.mjs";
+import { realmPrompt, afterNum } from "../apps/realm-dialog.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -240,7 +240,16 @@ export class BuildingSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       head: { img: item.img, name: item.name, sub: [this.actor.name, town.name, `${weeks} нед.`] },
       data: { heroes: heroes.map(a => ({ uuid: a.uuid, name: a.name, selected: a.id === mine })), town: town.name, weeks,
         cost: cost.map(c => `${c.resource} ${c.qty}`).join(", ") },
-      read: form => Object.fromEntries(new FormData(form)) });
+      read: form => Object.fromEntries(new FormData(form)),
+      live: form => {
+        const qty = Math.max(0, Math.floor(form.elements.qty.valueAsNumber || 0));
+        const stock = town.system.stockMap;
+        return cost.map(c => {
+          const before = c.resource === "Богатство" ? town.system.wealth : stock[c.resource] ?? 0;
+          const after = before - c.qty * qty;
+          return { label: c.resource, before: afterNum(before), after: afterNum(after), dir: "down", bad: after < 0 };
+        }).concat([{ label: "Готово через", before: 0, after: weeks * qty, unit: "нед.", dir: "up" }]);
+      } });
     if (!data) return null;
     return game.vedmak.settlement.placeOrder(town, this.actor.id, item, fromUuidSync(data.for), data.qty);
   }

@@ -22,6 +22,8 @@ try {
   const input = dlg.element.querySelector("input[name=units]");
   ok(input?.max === "7.4" && input.step === "0.1", `казна: взять до 7,4 десятыми (max ${input?.max}, step ${input?.step})`);
   ok(dlg.element.querySelector(".hint")?.textContent.includes("в казне 7,4"), "казна: подсказка — сколько в казне");
+  { const box = dlg.element.querySelector("[data-realm-after]"); input.value = "2"; input.dispatchEvent(new Event("input", { bubbles: true })); await wait(300);
+    ok(/7,4\s*→\s*5,4/.test(box?.textContent ?? ""), `казна: «После…» пересчитывается при вводе (${box?.textContent.replace(/\s+/g, " ").trim()})`); }
   await dlg.close();
 
   // Событие (ведущий)

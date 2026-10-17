@@ -889,3 +889,22 @@
   .rs-tabs { flex-wrap: wrap; }
   .rs-tabs button { flex: 1 1 30%; }
 }
+/* «После…» в окнах (PLAN 4.236): кованая пластина, разделы желобками; «было» — утопленной меткой, «стало» — крупно */
+.vd-realm .realm-after { display: flex; flex-direction: column; gap: 6px; padding: 2px 18px 2px; }
+.vd-realm .realm-after[hidden] { display: none; }
+.vd-realm .realm-after-cap { font: 600 9.5px/1.2 var(--vd-font-body); letter-spacing: .18em; text-transform: uppercase; color: #8d887e; }
+.vd-realm .realm-ledger { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border-radius: 6px; background-color: #17181b;
+  background-image: linear-gradient(180deg, rgba(255, 245, 225, .05), transparent 45%, rgba(0, 0, 0, .25)), var(--vd-t-plate, none); background-size: auto, 220px; background-blend-mode: normal, overlay;
+  box-shadow: inset 0 1px 0 rgba(255, 245, 225, .08), inset 0 -2px 0 rgba(0, 0, 0, .35), 0 0 0 1px #2a2b30, 0 0 0 2px #060708, 0 8px 16px -8px rgba(0, 0, 0, .9); }
+.vd-realm .realm-cell { position: relative; display: flex; flex-direction: column; gap: 7px; padding: 10px 12px 11px; }
+.vd-realm .realm-cell + .realm-cell::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(90deg, #060607 50%, rgba(255, 240, 215, .07) 50%); }
+.vd-realm .realm-cell-l { font: 400 14px/1.15 var(--vd-font-head); color: #d3ccbc; text-shadow: 0 1px 0 rgba(0, 0, 0, .85); }
+.vd-realm .realm-delta { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.vd-realm .realm-delta s { padding: 3px 7px; border-radius: 3px; text-decoration: none; font: 400 13px/1.1 var(--vd-font-head); color: #9d968a; background: rgba(0, 0, 0, .45); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .85); }
+.vd-realm .realm-delta i { font-style: normal; color: #6f6a60; }
+.vd-realm .realm-delta b { font: 400 24px/1 var(--vd-font-head); color: #f1ece0; text-shadow: 0 1px 0 #000; }
+.vd-realm .realm-delta b.up { color: #cfe0b8; }
+.vd-realm .realm-delta b.down { color: #f1d8c8; }
+.vd-realm .realm-delta em { font-style: normal; font-size: 11px; color: #9d968a; }
+.vd-realm .realm-cell.bad .realm-delta b { color: #f0a08c; }
+.vd-realm .realm-cell.bad { box-shadow: inset 0 -2px 0 rgba(184, 67, 44, .7); }

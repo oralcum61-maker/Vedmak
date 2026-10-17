@@ -19,7 +19,7 @@ import { bindUnitMenu } from "../army/unit-menu.mjs";
 import * as EV from "../settlement/events.mjs";
 import { effectLabel } from "../config/settlement-events.mjs";
 import { animateRealm, animateNew } from "../fx/realm-fx.mjs";
-import { realmPrompt, realmConfirm } from "../apps/realm-dialog.mjs";
+import { realmPrompt, realmConfirm, afterNum } from "../apps/realm-dialog.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -319,7 +319,19 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       head: { img: this.actor.img, name: `Казна: ${this.actor.name}`, sub: [`${fmt(this.actor.system.wealth)} Богатства`, `${Math.round(this.actor.system.wealth * WEALTH_RATE).toLocaleString("ru-RU")} ${cur.abbr}`] },
       data: { max, value: Math.min(1, max) || 1, rate: WEALTH_RATE, abbr: cur.abbr, treasury: fmt(this.actor.system.wealth),
         hero: hero?.name ?? "", purse, verb: mode === "deposit" ? "внести" : "взять", maxLabel: fmt(max) },
-      read: form => form.elements.units.valueAsNumber
+      read: form => form.elements.units.valueAsNumber,
+      live: form => {
+        const u = Math.max(0, form.elements.units.valueAsNumber || 0);
+        const dep = mode === "deposit";
+        const w = this.actor.system.wealth;
+        const town = dep ? w + u : w - u;
+        const rows = [{ label: "Казна, Богатство", before: afterNum(w), after: afterNum(town), dir: dep ? "up" : "down", bad: town < 0 }];
+        if (hero) {
+          const left = dep ? purse - u * WEALTH_RATE : purse + u * WEALTH_RATE;
+          rows.push({ label: `Кошелёк ${hero.name}`, before: afterNum(purse), after: afterNum(left), unit: cur.abbr, dir: dep ? "down" : "up", bad: left < 0 });
+        }
+        return rows;
+      }
     });
     if (units) await S.moveWealth(this.actor, units, mode);
   }
@@ -383,7 +395,22 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       data: { town: town.name, militia: sys.militia, idle: sys.summary.idle, familySoldiers: FAMILY_SOLDIERS, hire: MERCENARY.hire, wealth: sys.wealth,
         units: units.map(u => ({ id: u.id, name: u.name, origin: ORIGINS[u.system.origin].label.toLowerCase() })),
         kinds: Object.entries(UNIT_KINDS).map(([key, v]) => ({ key, label: v.label, selected: key === "infantry" })) },
-      read: form => Object.fromEntries(new FormData(form))
+      read: form => Object.fromEntries(new FormData(form)),
+      live: form => {
+        const origin = form.elements.origin.value;
+        const count = Math.max(0, Math.floor(form.elements.count.valueAsNumber || 0));
+        const into = units.find(u => u.id === form.elements.unit.value);
+        const soldiers = origin === "families" ? count * FAMILY_SOLDIERS : count;
+        const rows = [];
+        if (origin === "militia") rows.push({ label: "Ополчение", before: sys.militia, after: sys.militia - count, dir: "down", bad: sys.militia - count < 0 });
+        if (origin === "families") {
+          rows.push({ label: "Семьи", before: sys.families, after: sys.families - count, dir: "down" });
+          rows.push({ label: "Без дела", before: sys.summary.idle, after: sys.summary.idle - count, dir: "down", bad: sys.summary.idle - count < 0 });
+        }
+        if (origin === "mercenary") rows.push({ label: "Казна, Богатство", before: afterNum(sys.wealth), after: afterNum(sys.wealth - count * MERCENARY.hire), dir: "down", bad: sys.wealth - count * MERCENARY.hire < 0 });
+        rows.push({ label: into ? `Бойцов: ${into.name}` : "Бойцов в новом отряде", before: into?.system.soldiers ?? 0, after: (into?.system.soldiers ?? 0) + soldiers, dir: "up" });
+        return rows;
+      }
     });
     if (!data) return;
     const unit = await ARMY.recruit(town, { origin: data.origin, count: data.count, kind: data.kind, name: data.name.trim(),

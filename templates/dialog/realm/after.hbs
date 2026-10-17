@@ -1,0 +1,10 @@
+{{!-- «После…» окна поселения и войска (realm-dialog.mjs, PLAN 4.236): что станет при введённом числе — пересчёт на каждый ввод --}}
+<span class="realm-after-cap">После</span>
+<div class="realm-ledger">
+  {{#each rows}}
+  <div class="realm-cell{{#if bad}} bad{{/if}}">
+    <span class="realm-cell-l">{{label}}</span>
+    <span class="realm-delta"><s>{{before}}</s><i>→</i><b class="{{dir}}">{{after}}</b>{{#if unit}}<em>{{unit}}</em>{{/if}}</span>
+  </div>
+  {{/each}}
+</div>

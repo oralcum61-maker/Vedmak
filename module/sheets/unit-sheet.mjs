@@ -12,7 +12,7 @@ import * as ARMY from "../army/army.mjs";
 import { patchFormArrays, treeAdd, treeDel } from "./upgrade-tree.mjs";
 import { animateRealm } from "../fx/realm-fx.mjs";
 import { once, refuse } from "../util.mjs";
-import { realmPrompt } from "../apps/realm-dialog.mjs";
+import { realmPrompt, afterNum } from "../apps/realm-dialog.mjs";
 
 /** Значки ступеней снаряжения (24×24, контур): вилы → копьё → два копья → пика; рубаха → стёганка → кольчуга → латы. */
 const SHIRT = "M8.5 4L4 7l2 3.2 2-1V20h8V9.2l2 1L20 7l-4.5-3c-.9 1.4-2 2-3.5 2s-2.6-.6-3.5-2z";
@@ -221,7 +221,16 @@ export class UnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onMarch() {
     const weeks = await realmPrompt("march", { title: `В поход: ${this.actor.name}`, okLabel: "В поход",
       head: { img: this.actor.img, name: this.actor.name, sub: ["в поход", `еды ${this.actor.system.food} в нед.`] },
-      data: { food: this.actor.system.food }, read: form => form.elements.weeks.valueAsNumber });
+      data: { food: this.actor.system.food }, read: form => form.elements.weeks.valueAsNumber,
+      live: form => {
+        const weeks = Math.max(0, Math.floor(form.elements.weeks.valueAsNumber || 0));
+        const need = Math.round(this.actor.system.food * weeks * 10) / 10;
+        const home = this.actor.system.settlementActor;
+        const have = home?.system.stockMap["Еда"] ?? 0;
+        const rows = [{ label: "Припасы отряда", before: afterNum(this.actor.system.supplies), after: afterNum(this.actor.system.supplies + need), unit: "еды", dir: "up" }];
+        if (home) rows.unshift({ label: `Еда на складе ${home.name}`, before: afterNum(have), after: afterNum(have - need), dir: "down", bad: have - need < 0 });
+        return rows;
+      } });
     if (weeks !== null && weeks !== undefined) await ARMY.marchOut(this.actor, weeks);
   }
   static async #onReturnHome() { await ARMY.returnHome(this.actor); }
