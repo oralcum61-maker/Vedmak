@@ -15,6 +15,7 @@
         <span>год {{#if gm}}<input type="number" name="system.year" value="{{cal.year}}" min="1" step="1" aria-label="Год">{{else}}{{cal.year}}{{/if}}</span>
       </div>
     </div>
+    {{#if undo}}<button type="button" class="rs-x rs-undo" data-action="undoWeek" aria-label="Отменить прошлую неделю" data-tooltip="Отменить прошлую неделю — вернуться к «{{undo}}»"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>{{/if}}
     {{#if gm}}<button type="button" class="rs-go" data-action="week" data-tooltip="Бросить выработку построек, посчитать нужды, стройку и — в конце месяца — приход семей и бунт; итог — в чат">Неделя прошла</button>{{/if}}
   </header>
 
@@ -288,6 +289,7 @@
       <button type="button" class="rs-btn" data-action="openChronicle" data-tooltip="Журнал «Летопись»: недели, что не поместились на лист">Вся летопись</button>
       {{#if gm}}<button type="button" class="rs-btn" data-action="moveChronicle" data-tooltip="Перенести все недели с листа в журнал">В журнал</button>
       <button type="button" class="rs-btn" data-action="addEvent">Событие…</button>{{/if}}
+      {{#if undo}}<button type="button" class="rs-btn" data-action="undoWeek" data-tooltip="Вернуть поселение к «{{undo}}»">Отменить неделю</button>{{/if}}
       <p class="rs-hint">На листе — последние недели; старые уходят в журнал «Летопись».</p>
     </div>
     {{#if chronicle.length}}

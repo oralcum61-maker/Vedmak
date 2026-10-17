@@ -170,6 +170,25 @@ stepName("караван и «Торговать по»");
   await other.delete();
 }
 
+stepName("отмена недели");
+{
+  // Ход недели и отмена (PLAN 4.240): склад, казна, календарь, семьи, стройки — как до хода; карточка недели убрана
+  const pick = () => JSON.stringify({ s: town.system.toObject().stock, w: town.system.wealth, cal: [town.system.year, town.system.month, town.system.week],
+    f: town.system.families, a: town.system.approval, log: town.system.log.length,
+    b: town.system.buildingActors.map(b => [b.id, b.system.level, b.system.constructing, b.system.progress]).sort() });
+  const before = pick();
+  const msgs = game.messages.size;
+  const D = foundry.applications.api.DialogV2; const c = D.confirm; D.confirm = async () => true;
+  try {
+    await S.advanceWeek(town); await wait(400);
+    ok(pick() !== before && !!S.lastWeek(town), "отмена: неделя прошла и запомнена");
+    await S.undoWeek(town); await wait(400);
+  } finally { D.confirm = c; }
+  ok(pick() === before, `отмена: поселение как до хода (склад, казна, календарь, семьи, стройки, летопись)${pick() === before ? "" : ` — было ${before}, стало ${pick()}`}`);
+  ok(game.messages.size === msgs, `отмена: карточки недели убраны (${msgs} → ${game.messages.size})`);
+  ok(!S.lastWeek(town), "отмена: второй раз отменять нечего");
+}
+
 await sheet.close();
 for (const b of town.system.buildingActors) await b.delete();
 await townFolder?.delete();

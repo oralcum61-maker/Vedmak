@@ -233,7 +233,7 @@ export async function cancelOrder(settlement, buildingId, orderId) {
  * Неделя мастерских (ведущий): у каждой постройки с заказами и людьми на работе первый заказ — на неделю ближе;
  * готовый — предметом у заказчика. Строки отчёта.
  */
-async function ordersWeek(settlement) {
+async function ordersWeek(settlement, given = []) {
   const lines = [];
   const workers = settlement.system.summary.workers;
   for (const b of settlement.system.buildingActors) {
@@ -251,7 +251,8 @@ async function ordersWeek(settlement) {
         const data = src.toObject();
         delete data._id;
         if (data.system && "quantity" in data.system) data.system.quantity = o.qty;
-        await who.createEmbeddedDocuments("Item", [data]);
+        const [made] = await who.createEmbeddedDocuments("Item", [data]);
+        if (made) given.push(made.uuid);
         lines.push(`${b.name}: готово «${o.name}»${o.qty > 1 ? ` ×${o.qty}` : ""} — у ${who.name}`);
       } else lines.push(`${b.name}: готово «${o.name}», но ${src ? "заказчика нет" : "образца больше нет"} — выдайте вручную`);
     } else lines.push(`${b.name}: «${o.name}» — ${o.progress} из ${o.weeks} нед.`);
@@ -440,6 +441,9 @@ export function weekPreview(actor) {
 
 async function runWeek(actor) {
   if (!game.user.isGM) return refuse("Время двигает ведущий.");
+  // Снимок для «Отменить неделю» (PLAN 4.240): всё, что ход меняет; сообщения и выданные предметы — по ходу
+  const snap = weekSnapshot(actor);
+  const msgsBefore = new Set(game.messages.map(m => m.id));
   // События месяца (PLAN 4.206): правитель не решил до хода — решение по умолчанию
   const resolved = await autoResolve(actor);
   const needsApproval = (() => { try { return game.settings.get("vedmak", "settlementNeedsApproval"); } catch { return false; } })();
@@ -455,7 +459,7 @@ async function runWeek(actor) {
   const army = await unitsWeek(actor, { stock: next.stock, wealth: next.wealth, drill: actor.system.summary.drill, rand });
   next.stock = army.stock; next.wealth = army.wealth;
   report.army = army.lines; report.armyFood = army.food ?? 0; report.armyFed = army.fed ?? 1;
-  report.orders = await ordersWeek(actor);
+  report.orders = await ordersWeek(actor, snap.given);
   // Осада (PLAN 4.203): под стенами остаются отряды в походе, не бежавшие; нет никого — осада снята
   const besiegers = actor.system.siege.units.map(u => fromUuidSync(u)).filter(u => u?.system.campaign && !u.system.routed && u.system.soldiers > 0
     && u.system.besieging === actor.uuid);
@@ -491,7 +495,64 @@ async function runWeek(actor) {
     data: weekCardData(actor, report),
     actor, speaker: ChatMessage.getSpeaker({ alias: actor.name })
   });
+  snap.messages = game.messages.filter(m => !msgsBefore.has(m.id)).map(m => m.id);
+  await actor.setFlag("vedmak", "lastWeek", snap);
   return report;
+}
+
+/* ------------------------------ Отмена недели (PLAN 4.240) ------------------------------ */
+
+const WEEK_FIELDS = ["year", "month", "week", "families", "approval", "monthShort", "wealth", "stock", "log", "modifiers", "siege", "decisions"];
+const BUILDING_FIELDS = ["level", "constructing", "progress", "research", "upgrades", "orders"];
+const UNIT_FIELDS = ["training", "progress", "morale", "soldiers", "routed", "xp", "research", "upgrades", "supplies", "besieging"];
+const pick = (sys, keys) => Object.fromEntries(keys.map(k => [k, foundry.utils.deepClone(sys[k])]));
+
+/** Снимок поселения, его построек, отрядов и складов, куда идут караваны, — до хода недели. */
+function weekSnapshot(actor) {
+  const sys = actor.system.toObject();
+  return {
+    when: `${actor.system.calendar.monthLabel}, ${actor.system.calendar.week}-я неделя`,
+    settlement: pick(sys, WEEK_FIELDS),
+    buildings: actor.system.buildingActors.map(b => ({ uuid: b.uuid, ...pick(b.system.toObject(), BUILDING_FIELDS) })),
+    units: settlementUnits(actor).map(u => ({ uuid: u.uuid, ...pick(u.system.toObject(), UNIT_FIELDS) })),
+    routes: [...new Set(actor.system.routes.map(r => r.to))].map(uuid => fromUuidSync(uuid)).filter(Boolean)
+      .map(t => ({ uuid: t.uuid, stock: foundry.utils.deepClone(t.system.toObject().stock) })),
+    given: [], messages: []
+  };
+}
+
+/** Есть ли что отменить (только последняя неделя, только ведущему). */
+export function lastWeek(actor) {
+  return game.user.isGM ? actor.getFlag("vedmak", "lastWeek") ?? null : null;
+}
+
+/** Отменить последнюю неделю: вернуть снимок, убрать выданные по заказам предметы и сообщения хода. */
+export async function undoWeek(actor) {
+  const snap = lastWeek(actor);
+  if (!snap) return refuse("Отменять нечего: неделя ещё не проходила или уже отменена.");
+  const ok = await realmConfirm("undo-week", {
+    title: `Отменить неделю: ${actor.name}`, yesLabel: "Отменить неделю", noLabel: "Оставить",
+    head: { img: actor.img, name: actor.name, sub: ["отменить неделю", snap.when], danger: true },
+    text: `Поселение вернётся к «${snap.when}»: склад, казна, семьи, стройки, заказы, отряды и караваны — как до хода.`,
+    hint: `${snap.given.length ? `Выданное по заказам (${snap.given.length}) заберётся у персонажей. ` : ""}Карточки недели в чате удалятся. Летопись, уже перенесённая в журнал, останется там.`
+  });
+  if (!ok) return;
+  // Объекты-словари (склад) — заменой целиком (оператор «==»): ресурсы, появившиеся за неделю, уходят; остальное — обычным
+  // обновлением полей (recursive: false заменил бы весь system — пропадали постройки и караваны)
+  const replace = new Set(["stock"]);
+  const update = Object.fromEntries(Object.entries(snap.settlement).map(([k, v]) => [replace.has(k) ? `system.==${k}` : `system.${k}`, v]));
+  await actor.update(update, { diff: false });
+  const docs = [...snap.buildings, ...snap.units].map(s => {
+    const doc = fromUuidSync(s.uuid);
+    return doc ? { _id: doc.id, ...Object.fromEntries(Object.entries(s).filter(([k]) => k !== "uuid").map(([k, v]) => [`system.${k}`, v])) } : null;
+  }).filter(Boolean);
+  if (docs.length) await Actor.implementation.updateDocuments(docs, { diff: false });
+  for (const r of snap.routes) await fromUuidSync(r.uuid)?.update({ "system.==stock": r.stock }, { diff: false });
+  for (const uuid of snap.given) await (await fromUuid(uuid))?.delete();
+  const msgs = snap.messages.filter(id => game.messages.has(id));
+  if (msgs.length) await ChatMessage.implementation.deleteDocuments(msgs);
+  await actor.unsetFlag("vedmak", "lastWeek");
+  ui.notifications.info(`«${actor.name}»: неделя отменена — снова ${snap.when}.`);
 }
 
 /* ------------------------------ Летопись в журнале (PLAN 4.210) ------------------------------ */

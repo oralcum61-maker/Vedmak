@@ -75,7 +75,8 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       addEvent: SettlementSheet.#onAddEvent,
       removeModifier: SettlementSheet.#onRemoveModifier,
       openChronicle: SettlementSheet.#onOpenChronicle,
-      moveChronicle: SettlementSheet.#onMoveChronicle
+      moveChronicle: SettlementSheet.#onMoveChronicle,
+      undoWeek: SettlementSheet.#onUndoWeek
     }
   };
 
@@ -172,7 +173,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }));
 
     Object.assign(context, {
-      actor, sys, systemFields: sys.schema.fields, gm, editable, tab: this.tab, tradeQty: this.tradeQty,
+      actor, sys, systemFields: sys.schema.fields, gm, editable, tab: this.tab, tradeQty: this.tradeQty, undo: S.lastWeek(actor)?.when ?? "",
       showCatalog: this.showCatalog || !sys.buildings.length,
       tabs: Object.entries(TABS).map(([id, label]) => ({ id, label, active: id === this.tab, badge: id === "economy" ? sys.decisions.length : 0 })),
       cal: { ...cal, months: MONTHS.map((label, i) => ({ n: i + 1, label, on: i + 1 === cal.month })) },
@@ -359,6 +360,7 @@ export class SettlementSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     await once(this.actor, "decide", () => EV.decide(this.actor, target.closest("[data-decision]").dataset.decision, Number(target.dataset.choice)));
   }
   static async #onOpenChronicle() { await S.openChronicle(this.actor); }
+  static async #onUndoWeek() { await S.undoWeek(this.actor); }
   static async #onMoveChronicle() {
     const ok = await realmConfirm("chronicle", { title: "Летопись — в журнал", head: { img: this.actor.img, name: "Летопись", sub: [this.actor.name, "в журнал"] },
       text: "Все недели с листа перейдут в журнал «Летопись», а лист очистится. Продолжить?" });
