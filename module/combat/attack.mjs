@@ -339,7 +339,8 @@ async function attackDialog(actor, src, targets, cfg, suggested) {
     statusMods: [...statusRollMods(actor, "attack"),
       ...armWoundParts(actor).map(p => ({ ...p, label: `${p.label}: атаки рукой` }))],
     weights: Object.entries(WEIGHT_MODS).map(([key, w]) => ({ key, label: w.label, selected: key === cfg.weight })),
-    staCost: actor.type === "character",
+    // Доп. действие атаки: у персонажа всегда, у НИП — если ведущий включил настройку (PLAN 4.264)
+    staCost: actor.type === "character" || (actor.type === "monster" && monsterExtraAction()),
     isMonster: actor.type === "monster",
     drain: drainOption(actor, src),
     total: { base: current.base, damage: current.damage },
@@ -599,6 +600,11 @@ async function postDefensePrompt(card, data, targets, actor) {
   const content = await renderTemplate("systems/vedmak/templates/chat/defense-prompt.hbs", { ...data, hasTargets: true });
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, whisper,
     flags: { vedmak: { attack: { ...data, hidden: true }, defensePrompt: { attackMessageId: card.id } } } });
+}
+
+/** Настройка «НИП: дополнительное действие атаки». */
+function monsterExtraAction() {
+  try { return !!game.settings.get("vedmak", "monsterExtraAction"); } catch { return false; }
 }
 
 /** Повторить атаку с теми же настройками (вторая быстрая атака, СА чудовища). */

@@ -135,6 +135,12 @@ Hooks.once("init", () => {
     choices: Object.fromEntries(Object.entries(CHARACTER_CFG.REGIONS).map(([k, v]) => [k, v.label])),
     onChange: () => game.actors.forEach(a => { a.prepareData(); if (a.sheet?.rendered) a.sheet.render(); })
   });
+  // НИП могут брать дополнительное действие атаки, как персонаж: 3 Вын, −3 (стр. 151; по желанию ведущего, PLAN 4.264)
+  game.settings.register(SYSTEM_ID, "monsterExtraAction", {
+    name: "НИП: дополнительное действие атаки",
+    hint: "Чудовища и НИП могут, как персонажи, атаковать дополнительным действием: 3 Вын и −3 к атаке. По книге у них вместо этого Скорость атаки оружия — включайте по желанию.",
+    scope: "world", config: true, type: Boolean, default: false
+  });
   game.settings.register(SYSTEM_ID, "combatHud", {
     name: "Боевой худ",
     hint: "Пульт внизу экрана: показатели, оружие, защиты, магия, алхимия, действия и состояния того, кем вы играете.",
